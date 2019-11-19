@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SDG Login Form</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        .item > div {
+            height: auto;
+        }
+        .item > div > img {
+            background-size: 100% 100%;
+            -o-background-size: cover;
+            -ms-background-size: cover;
+            -moz-background-size: cover;
+            -webkit-background-size: cover;
+        }
+        mid {
+            display: table-cell;
+            vertical-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span8">
+                <div class="carousel slide" id="myCarousel">
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <div>
+                                <img th:src="@{/img/slider/air_bersih.jpg}" class="img-polaroid">
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div>
+                                <img th:src="@{/img/slider/education.jpg}" class="img-polaroid">
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div>
+                                <img th:src="@{/img/slider/poverty.jpg}" class="img-polaroid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form method="post" th:action="@{/login}">
+                <div class="span4">
+                    <input name="username" type="text" class="span4" placeholder="Username" required>
+                    <input name="password" type="password" class="span4" placeholder="Password" required>
+                    <button type="submit" name="submit" class="btn btn-info btn-block">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.carousel').carousel({
+                interval: 5000
+            })
+        });
+    </script>
+</body>
+</html>
