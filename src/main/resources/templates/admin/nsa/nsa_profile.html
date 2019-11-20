@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/layout :: header">
+    <title th:text="NSA Profile"></title>
+</head>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>NSA / Profile</a></div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>Table Profil NSA</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div class="table">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center;">No.</th>
+                                                <th style="text-align:center;">Pencapaian</th>
+                                                <th style="text-align:center;">Lokasi</th>
+                                                <th style="text-align:center;">Penerima Manfaat</th>
+                                                <th style="text-align:center;">Thn Implementasi</th>
+                                                <th style="text-align:center;">Partner</th>
+                                                <th style="text-align:center;">Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th>1</th>
+                                                <th>Nomenklatur Pencapaian</th>
+                                                <th>Jawa Tengah</th>
+                                                <th>Masyarakat</th>
+                                                <th>2019</th>
+                                                <th>Kementerian Pendidikan</th>
+                                                <th>
+                                                    <a href="#" title="update"><i class="icon-pencil"></i></a>
+                                                </th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:include="admin/layout :: footer"></div>
+</body>
+</html>

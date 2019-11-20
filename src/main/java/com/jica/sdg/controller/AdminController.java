@@ -15,4 +15,10 @@ public class AdminController {
         return "admin/dashboard";
     }
 
+    @GetMapping("admin/nsa/profile")
+    public String nsa_profile(Model model) {
+        model.addAttribute("title", "NSA Profile");
+        return "admin/nsa/nsa_profile";
+    }
+
 }
