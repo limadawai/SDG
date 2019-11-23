@@ -12,4 +12,10 @@ public class FrontController {
         model.addAttribute("title", "Login Page");
         return "login";
     }
+
+    @GetMapping("/")
+    public String beranda(Model model) {
+        model.addAttribute("title", "Beranda");
+        return "beranda";
+    }
 }

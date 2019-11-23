@@ -26,7 +26,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .dataSource(dataSource).passwordEncoder(bCryptPasswordEncoder());
     }
 
-    String[] resources = {"/css/**","/img/**","/js/**","/font/**"};
+    String[] resources = {"/","/css/**","/img/**","/js/**","/font/**"};
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()

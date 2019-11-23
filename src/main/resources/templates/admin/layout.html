@@ -12,6 +12,7 @@
     <link rel="stylesheet" th:href="@{/css/maruti-style.css}"/>
     <link rel="stylesheet" th:href="@{/css/maruti-media.css}" class="skin-color"/>
     <link rel="stylesheet" th:href="@{/css/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}" />
 
     <script th:src="@{/js/excanvas.min.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
@@ -24,6 +25,7 @@
     <script th:src="@{/js/maruti.js}"></script>
     <script th:src="@{/js/maruti.dashboard.js}"></script>
     <script th:src="@{/js/maruti.chat.js}"></script>
+    <script th:src="@{/js/jquery.dataTables.min.js}"></script>
 
     <script th:src="@{/js/highchart/highmaps.js}"></script>
     <script th:src="@{/js/highchart/exporting.js}"></script>
@@ -62,11 +64,11 @@
             <ul>
                 <li class="active">
                     <a th:href="@{/admin/dashboard}">
-                        <span>Dashboard</span>
+                        <span><i class="icon icon-dashboard " style="background:none"></i> Dashboard</span>
                     </a>
                 </li>
                 <li class="submenu">
-                    <a href="#"><span>NSA</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#003bb3;background:none;"></i></a>
+                    <a href="#"><span>NSA</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
                     <ul>
                         <li><a th:href="@{/admin/nsa/profile}">NSA Profile</a></li>
                         <li><a href="">NSA Institution</a></li>
@@ -74,7 +76,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><span>RAN / RAD</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#003bb3;background:none;"></i></a>
+                    <a href="#"><span>RAN / RAD</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
                     <ul>
                         <li><a href="#">SDG Indicators</a></li>
                         <li><a href="#">Government Programs</a></li>
@@ -83,7 +85,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><span>Data Entry</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#003bb3;background:none;"></i></a>
+                    <a href="#"><span>Data Entry</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
                     <ul>
                         <li><a href="#">SDG Indicators Monitoring</a></li>
                         <li><a href="#">Gov. Program Monitoring</a></li>
@@ -95,7 +97,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><span>Data Approval</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#003bb3;background:none;"></i></a>
+                    <a href="#"><span>Data Approval</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
                     <ul>
                         <li><a href="#">SDG Indicators Monitoring</a></li>
                         <li><a href="#">Gov. Program Monitoring</a></li>
@@ -107,7 +109,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><span>Submission Rate</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#003bb3;background:none;"></i></a>
+                    <a href="#"><span>Submission Rate</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
                     <ul>
                         <li><a href="#">Gov. Program Monitoring</a></li>
                         <li><a href="#">Non-Gov. Program Monitoring</a></li>
@@ -115,7 +117,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><span>Report</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#003bb3;background:none;"></i></a>
+                    <a href="#"><span>Report</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
                     <ul>
                         <li><a href="#">Monitoring Report</a></li>
                         <li><a href="#">Problem & Solve</a></li>
