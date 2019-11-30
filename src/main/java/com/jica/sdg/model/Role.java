@@ -3,7 +3,7 @@ package com.jica.sdg.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "mst_role")
+@Table(name = "ref_role")
 public class Role {
 
     @Id

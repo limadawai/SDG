@@ -3,7 +3,8 @@
 <html lang="en"
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="header">
+<head th:fragment="header(title)">
+    <title>Dashboard SDG</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
@@ -48,84 +49,58 @@
             <a class="top_message tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
         </div>
         <div id="user-nav" class="navbar navbar-inverse">
-            <span class="nav">Welcome, Admin</span>
-            <ul class="nav" style="margin-right:10px;">
-                <form method="post" th:action="@{/logout}">
-                    <li class="">
-                        <button type="submit" class="btn btn-link" style="margin-top:14px;">
-                            <i class="icon icon-share-alt"></i><span class="text"> Logout</span>
-                        </button>
-                    </li>
-                </form>
+            <ul class="nav">
+                <li class="" style="margin-top:12px;background:none;padding:10px;">
+                    <form id="logoutform" method="post" th:action="@{/logout}">
+                        <a href="javascript:;" onclick="document.getElementById('logoutform').submit()">
+                            <i class="icon icon-share-alt"></i> <span class="text">Logout</span>
+                        </a>
+                    </form>
+                </li>
             </ul>
         </div>
         <div id="sidebar">
-            <a href="#" class="visible-phone"><i class="icon icon-home"></i> Dashboard</a>
-            <ul>
+            <script>
+                window.onload = function() {
+                    $.ajax({
+                        url: 'menu',
+                        type: 'get',
+                        dataType: 'json',
+                        cache: false,
+                        success: function(response) {
+                            for (var i=0; i<response.length; i++) {
+                                var menuRow = '<li class="submenu">' +
+                                    '<a href="#"><span id="'+response[i].submenu+'">'+response[i].menu_indo+'</span>' +
+                                    '&nbsp;&nbsp;&nbsp;<i style="background:none;color:#FFFFFF;" class="icon icon-caret-down"></i></a>'
+                                '</li>';
+                                $.ajax({
+                                    url: 'submenu',
+                                    type: 'get',
+                                    data: 'id='+response[i].id_menu,
+                                    dataType: 'json',
+                                    cache: false,
+                                    success: function(result) {
+                                        // console.log(JSON.stringify(result));
+                                        console.log(result[0].submenu_indo);
+                                        for (var j=0; j<result.length; j++) {
+                                            var submenu = '<ul>' +
+                                                '<li>' +
+                                                    '<a href="#">'+result[0].submenu_indo+'</a>'
+                                                '</li>' +
+                                            '</ul>';
+                                            $(".submenu").append(submenu);
+                                        }
+                                    }
+                                });
+                                $('#menuatas').append(menuRow);
+                            }
+                        }
+                    });
+                }
+            </script>
+            <ul id="menuatas">
                 <li class="active">
-                    <a th:href="@{/admin/dashboard}">
-                        <span><i class="icon icon-dashboard " style="background:none"></i> Dashboard</span>
-                    </a>
-                </li>
-                <li class="submenu">
-                    <a href="#"><span>NSA</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
-                    <ul>
-                        <li><a th:href="@{/admin/nsa/profile}">NSA Profile</a></li>
-                        <li><a href="">NSA Institution</a></li>
-                        <li><a href="">NSA Collaboration</a></li>
-                    </ul>
-                </li>
-                <li class="submenu">
-                    <a href="#"><span>RAN / RAD</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
-                    <ul>
-                        <li><a th:href="@{/admin/ran_rad/sdg/goals}">SDG Indicators</a></li>
-                        <li><a th:href="@{/admin/ran_rad/gov/program}">Government Programs</a></li>
-                        <li><a th:href="@{/admin/ran_rad/non_gov/program}">Non-Government Programs</a></li>
-                        <li><a th:href="@{/admin/ran_rad/goals}">RAN / RAD</a></li>
-                    </ul>
-                </li>
-                <li class="submenu">
-                    <a href="#"><span>Data Entry</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
-                    <ul>
-                        <li><a href="#">SDG Indicators Monitoring</a></li>
-                        <li><a href="#">Gov. Program Monitoring</a></li>
-                        <li><a href="#">Non-Gov. Program Monitoring</a></li>
-                        <li><a href="#">Program Identification & Follow Up</a></li>
-                        <li><a href="#">Evaluation</a></li>
-                        <li><a href="#">Best Practice</a></li>
-                        <li><a href="#">GRI/OJK Sustainability Report</a></li>
-                    </ul>
-                </li>
-                <li class="submenu">
-                    <a href="#"><span>Data Approval</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
-                    <ul>
-                        <li><a href="#">SDG Indicators Monitoring</a></li>
-                        <li><a href="#">Gov. Program Monitoring</a></li>
-                        <li><a href="#">Non-Gov. Program Monitoring</a></li>
-                        <li><a href="#">Program Identification & Follow Up</a></li>
-                        <li><a href="#">Evaluation</a></li>
-                        <li><a href="#">Best Practice</a></li>
-                        <li><a href="#">GRI/OJK Sustainability Report</a></li>
-                    </ul>
-                </li>
-                <li class="submenu">
-                    <a href="#"><span>Submission Rate</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
-                    <ul>
-                        <li><a href="#">Gov. Program Monitoring</a></li>
-                        <li><a href="#">Non-Gov. Program Monitoring</a></li>
-                        <li><a href="#">Gov. Program Evaluation</a></li>
-                    </ul>
-                </li>
-                <li class="submenu">
-                    <a href="#"><span>Report</span>&nbsp;&nbsp;&nbsp;&nbsp;<i class="icon-caret-down" style="color:#FFF5F5;background:none;"></i></a>
-                    <ul>
-                        <li><a href="#">Monitoring Report</a></li>
-                        <li><a href="#">Problem & Solve</a></li>
-                        <li><a href="#">Evaluation</a></li>
-                        <li><a href="#">Best Practice</a></li>
-                        <li><a href="#">GRI/OJK Sustainability Report</a></li>
-                        <li><a href="#">Map & Graph</a></li>
-                    </ul>
+                    <a href="dashboard"><span>Dashboard</span></a>
                 </li>
             </ul>
         </div>

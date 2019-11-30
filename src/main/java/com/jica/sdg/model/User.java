@@ -5,7 +5,7 @@ import java.util.Set;
 
 @Entity
 
-@Table(name="mst_user")
+@Table(name="ref_user")
 public class User {
 
     @Id
@@ -18,12 +18,10 @@ public class User {
     private String password;
     @Column(name = "nama")
     private String nama;
-    @Column(name = "email")
-    private String email;
+    @Column(name = "level")
+    private String level;
     @Column(name = "id_inst")
     private String id_inst;
-    @Column(name = "id_prov")
-    private String id_prov;
     @Column(name = "enabled")
     private short enabled;
 
@@ -63,12 +61,12 @@ public class User {
         this.nama = nama;
     }
 
-    public String getEmail() {
-        return email;
+    public String getLevel() {
+        return level;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setLevel(String level) {
+        this.level = level;
     }
 
     public String getId_inst() {
@@ -77,14 +75,6 @@ public class User {
 
     public void setId_inst(String id_inst) {
         this.id_inst = id_inst;
-    }
-
-    public String getId_prov() {
-        return id_prov;
-    }
-
-    public void setId_prov(String id_prov) {
-        this.id_prov = id_prov;
     }
 
     public short getEnabled() {

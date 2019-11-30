@@ -1,16 +1,47 @@
 package com.jica.sdg.controller;
 
+import com.google.gson.Gson;
+import com.jica.sdg.model.Menu;
+import com.jica.sdg.model.Submenu;
+import com.jica.sdg.service.IMenuService;
+import com.jica.sdg.service.ISubmenuService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class AdminController {
 
+    @Autowired
+    IMenuService menuService;
+
+    @GetMapping("admin/menu")
+    public @ResponseBody List<Menu> menuList() {
+        List<Menu> list = menuService.findAllMenu();
+        return list;
+    }
+
+    @Autowired
+    ISubmenuService submenuService;
+
+    @GetMapping("admin/submenu")
+    public @ResponseBody List<Submenu> submenuList(@RequestParam int id) {
+        List<Submenu> list = submenuService.findSubmenu(id);
+        return list;
+    }
+
     @GetMapping("admin/dashboard")
     public String dashboard(Model model, Authentication auth) {
-        model.addAttribute("userName", "Admin");
+        auth = SecurityContextHolder.getContext().getAuthentication();
+        String uname = auth.getName();
+        model.addAttribute("userName", uname);
         model.addAttribute("title", "Dashboard SDG Bappenas");
         return "admin/dashboard";
     }

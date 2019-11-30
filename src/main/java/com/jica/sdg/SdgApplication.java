@@ -9,6 +9,10 @@ public class SdgApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SdgApplication.class, args);
+//        BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+//        System.out.println(b.encode("super"));
+//        System.out.println(b.encode("admin"));
+//        System.out.println(b.encode("user"));
     }
 
 }
