@@ -18,16 +18,14 @@ public class User {
     private String password;
     @Column(name = "nama")
     private String nama;
+    @Column(name = "role")
+    private String role;
     @Column(name = "level")
     private String level;
     @Column(name = "id_inst")
     private String id_inst;
     @Column(name = "enabled")
     private short enabled;
-
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "auth_user_role", joinColumns = @JoinColumn(name = "auth_user_id"), inverseJoinColumns = @JoinColumn(name = "auth_role_id"))
-    private Set<Role> roles;
 
     public int getId_user() {
         return id_user;
@@ -61,6 +59,14 @@ public class User {
         this.nama = nama;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public String getLevel() {
         return level;
     }
@@ -85,11 +91,4 @@ public class User {
         this.enabled = enabled;
     }
 
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
 }

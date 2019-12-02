@@ -61,48 +61,69 @@
         </div>
         <div id="sidebar">
             <script>
-                window.onload = function() {
-                    $.ajax({
-                        url: 'menu',
-                        type: 'get',
-                        dataType: 'json',
-                        cache: false,
-                        success: function(response) {
-                            for (var i=0; i<response.length; i++) {
-                                var menuRow = '<li class="submenu">' +
-                                    '<a href="#"><span id="'+response[i].submenu+'">'+response[i].menu_indo+'</span>' +
-                                    '&nbsp;&nbsp;&nbsp;<i style="background:none;color:#FFFFFF;" class="icon icon-caret-down"></i></a>'
-                                '</li>';
+                $.ajax({
+                    url: 'menu',
+                    type: 'get',
+                    dataType: 'json',
+                    cache: false,
+                    success: function(response) {
+                        for (var i=0; i<response.length; i++) {
+                            var menuRow = '<li id="'+response[i].id_menu+'" class="'+response[i].submenu+'">' +
+                                '<a id="'+response[i].id_menu+'" href="'+response[i].tautan+'"><span id="'+response[i].submenu+'">'+response[i].menu_indo+'</span></a>'
+                            '</li>';
+                            $('#menuatas').append(menuRow);
+                        }
+                        $('span[id*=1]:visible').each(function() {
+                            $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
+                        });
+                        $('li[class*=1]:visible').each(function() {
+                            $(this).addClass('submenu');
+                            var ul = '<ul id="drop"></ul>'
+                            $(this).append(ul);
+                            $(this).on('hover', function() {
+                                // alert($(this).attr('id'));
                                 $.ajax({
                                     url: 'submenu',
                                     type: 'get',
-                                    data: 'id='+response[i].id_menu,
+                                    data: 'id='+$(this).attr('id'),
                                     dataType: 'json',
                                     cache: false,
                                     success: function(result) {
-                                        // console.log(JSON.stringify(result));
-                                        console.log(result[0].submenu_indo);
                                         for (var j=0; j<result.length; j++) {
-                                            var submenu = '<ul>' +
-                                                '<li>' +
-                                                    '<a href="#">'+result[0].submenu_indo+'</a>'
-                                                '</li>' +
-                                            '</ul>';
-                                            $(".submenu").append(submenu);
+                                            var li = '<li><a href="#">'+result[j].submenu_indo+'</a></li>';
+                                            $("#drop").append();
+                                            $("#drop").append(li);
                                         }
                                     }
                                 });
-                                $('#menuatas').append(menuRow);
-                            }
-                        }
-                    });
-                }
+                            });
+                        });
+                    }
+                });
+                // $(document).ready(function() {
+                //     $('li[class*=1]:visible').each(function() {
+                //         $(this).on('click', function() {
+                //             alert($(this).attr('id'));
+                //             // console.log($(this).attr('id'));
+                //             // $.ajax({
+                //             //     url: 'submenu',
+                //             //     type: 'get',
+                //             //     data: 'id='+$(this).attr('id'),
+                //             //     dataType: 'json',
+                //             //     cache: false,
+                //             //     success: function(result) {
+                //             //         for (var j=0; j<result.length; j++) {
+                //             //             var li = '<li><a href="#">'+result[j].submenu_indo+'</a></li>';
+                //             //             $("#drop").append();
+                //             //             $("#drop").append(li);
+                //             //         }
+                //             //     }
+                //             // });
+                //         });
+                //     });
+                // });
             </script>
-            <ul id="menuatas">
-                <li class="active">
-                    <a href="dashboard"><span>Dashboard</span></a>
-                </li>
-            </ul>
+            <ul id="menuatas"></ul>
         </div>
     </div>
     <!--*************************** Content ***************************-->

@@ -22,7 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .usersByUsernameQuery("select username, password, '1' as enabled from ref_user where username=?")
-                .authoritiesByUsernameQuery("select u.username, r.role from ref_user u inner join auth_user_role ur on(u.id_user=ur.auth_user_id) inner join ref_role r on(ur.auth_role_id=r.id_role) where u.username=?")
+                .authoritiesByUsernameQuery("select username, role from ref_user where username=?")
                 .dataSource(dataSource).passwordEncoder(bCryptPasswordEncoder());
     }
 
