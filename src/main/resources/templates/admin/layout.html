@@ -13,6 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/maruti-style.css}"/>
     <link rel="stylesheet" th:href="@{/css/maruti-media.css}" class="skin-color"/>
     <link rel="stylesheet" th:href="@{/css/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap2-toggle.min.css}" />
     <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}" />
 
     <script th:src="@{/js/excanvas.min.js}"></script>
@@ -26,6 +27,7 @@
     <script th:src="@{/js/maruti.js}"></script>
     <script th:src="@{/js/maruti.dashboard.js}"></script>
     <script th:src="@{/js/maruti.chat.js}"></script>
+    <script th:src="@{/js/bootstrap2-toggle.min.js}"></script>
     <script th:src="@{/js/jquery.dataTables.min.js}"></script>
 
     <script th:src="@{/js/highchart/highmaps.js}"></script>
@@ -34,6 +36,7 @@
     <script th:src="@{/js/highchart/highcharts.js}"></script>
     <script th:src="@{/js/highchart/export-data.js}"></script>
     <script th:src="@{/js/highchart/accessibility.js}"></script>
+
 </head>
 <body>
     <div th:fragment="menu">
@@ -51,6 +54,12 @@
         <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav">
                 <li class="" style="margin-top:12px;background:none;padding:10px;">
+                    <span style="color:#FFFFFF;">Bahasa / Language :</span>&nbsp;&nbsp;
+                    <input type="checkbox" id="toggle-two" data-toggle="toggle"
+                           checked data-on="Indonesia" data-off="English" data-onstyle="success"
+                           data-offstyle="primary" data-size="small" style="padding:none">
+                </li>
+                <li class="" style="margin-top:12px;background:none;padding:10px;">
                     <form id="logoutform" method="post" th:action="@{/logout}">
                         <a href="javascript:;" onclick="document.getElementById('logoutform').submit()">
                             <i class="icon icon-share-alt"></i> <span class="text">Logout</span>
@@ -61,50 +70,141 @@
         </div>
         <div id="sidebar">
             <script>
+                $(function() {
+                    $('#toggle-two').bootstrapToggle({
+                        on: 'Indonesia',
+                        off: 'English'
+                    });
+                });
                 $.ajax({
                     url: 'menu',
                     type: 'get',
                     dataType: 'json',
                     cache: false,
-                    success: function(response) {
-                        for (var i=0; i<response.length; i++) {
-                            var menuRow = '<li id="'+response[i].id_menu+'" class="'+response[i].submenu+'">' +
-                                '<a id="'+response[i].id_menu+'" href="'+response[i].tautan+'"><span id="'+response[i].submenu+'">'+response[i].menu_indo+'</span></a>'
+                    success: function (response) {
+                        $('#menuatas').empty();
+                        for (var i = 0; i < response.length; i++) {
+                            var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
+                                '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
                             '</li>';
                             $('#menuatas').append(menuRow);
                         }
-                        $('span[id*=aktif]:visible').each(function() {
+                        $('span[id*=aktif]:visible').each(function () {
                             $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
                         });
-                        $('li[class*=aktif]:visible').each(function() {
+                        $('li[class*=aktif]:visible').each(function () {
                             $(this).addClass('submenu');
-                            var ul = '<ul id="'+$(this).attr('id')+'" class="drop"></ul>';
+                            var ul = '<ul id="' + $(this).attr('id') + '" class="drop"></ul>';
                             $(this).append(ul);
                         });
-                        $('li[class*=aktif]:visible').each(function() {
-                            $(this).on('hover', function() {
-                                // console.log($(this).attr('id'));
-                                // $("li.aktif > ul").empty();
+                        $('li[class*=aktif]:visible').each(function () {
+                            $(this).on('hover', function () {
                                 $.ajax({
                                     url: 'submenu',
                                     type: 'get',
-                                    data: 'id='+$(this).attr('id'),
+                                    data: 'id=' + $(this).attr('id'),
                                     dataType: 'json',
                                     cache: false,
-                                    success: function(result) {
+                                    success: function (result) {
                                         $("li.aktif > ul").empty();
-                                        for (var j=0; j<result.length; j++) {
-                                            var li = '<li><a href="'+result[j].submenu_link+'">'+result[j].submenu_indo+'</a></li>';
+                                        for (var j = 0; j < result.length; j++) {
+                                            var li = '<li><a href="' + result[j].submenu_link + '">' + result[j].submenu_indo + '</a></li>';
                                             $("li.aktif > ul").append(li);
                                         }
                                     }
                                 });
                             });
-                            // $(this).on('mouseleave', function() {
-                            //     $("li.aktif > ul").empty();
-                            // });
                         });
                     }
+                });
+                $(function() {
+                    $('#toggle-two').change(function() {
+                        if($(this).is(':checked')) {
+                            $.ajax({
+                                url: 'menu',
+                                type: 'get',
+                                dataType: 'json',
+                                cache: false,
+                                success: function (response) {
+                                    $('#menuatas').empty();
+                                    for (var i = 0; i < response.length; i++) {
+                                        var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
+                                            '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
+                                        '</li>';
+                                        $('#menuatas').append(menuRow);
+                                    }
+                                    $('span[id*=aktif]:visible').each(function () {
+                                        $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
+                                    });
+                                    $('li[class*=aktif]:visible').each(function () {
+                                        $(this).addClass('submenu');
+                                        var ul = '<ul id="' + $(this).attr('id') + '" class="drop"></ul>';
+                                        $(this).append(ul);
+                                    });
+                                    $('li[class*=aktif]:visible').each(function () {
+                                        $(this).on('hover', function () {
+                                            $.ajax({
+                                                url: 'submenu',
+                                                type: 'get',
+                                                data: 'id=' + $(this).attr('id'),
+                                                dataType: 'json',
+                                                cache: false,
+                                                success: function (result) {
+                                                    $("li.aktif > ul").empty();
+                                                    for (var j = 0; j < result.length; j++) {
+                                                        var li = '<li><a href="' + result[j].submenu_link + '">' + result[j].submenu_indo + '</a></li>';
+                                                        $("li.aktif > ul").append(li);
+                                                    }
+                                                }
+                                            });
+                                        });
+                                    });
+                                }
+                            });
+                        } else {
+                            $.ajax({
+                                url: 'menu',
+                                type: 'get',
+                                dataType: 'json',
+                                cache: false,
+                                success: function (response) {
+                                    $('#menuatas').empty();
+                                    for (var i = 0; i < response.length; i++) {
+                                        var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
+                                            '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_eng + '</span></a>'
+                                        '</li>';
+                                        $('#menuatas').append(menuRow);
+                                    }
+                                    $('span[id*=aktif]:visible').each(function () {
+                                        $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
+                                    });
+                                    $('li[class*=aktif]:visible').each(function () {
+                                        $(this).addClass('submenu');
+                                        var ul = '<ul id="' + $(this).attr('id') + '" class="drop"></ul>';
+                                        $(this).append(ul);
+                                    });
+                                    $('li[class*=aktif]:visible').each(function () {
+                                        $(this).on('hover', function () {
+                                            $.ajax({
+                                                url: 'submenu',
+                                                type: 'get',
+                                                data: 'id=' + $(this).attr('id'),
+                                                dataType: 'json',
+                                                cache: false,
+                                                success: function (result) {
+                                                    $("li.aktif > ul").empty();
+                                                    for (var j = 0; j < result.length; j++) {
+                                                        var li = '<li><a href="' + result[j].submenu_link + '">' + result[j].submenu_eng + '</a></li>';
+                                                        $("li.aktif > ul").append(li);
+                                                    }
+                                                }
+                                            });
+                                        });
+                                    });
+                                }
+                            });
+                        }
+                    });
                 });
             </script>
             <ul id="menuatas"></ul>
