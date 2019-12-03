@@ -73,15 +73,18 @@
                             '</li>';
                             $('#menuatas').append(menuRow);
                         }
-                        $('span[id*=1]:visible').each(function() {
+                        $('span[id*=aktif]:visible').each(function() {
                             $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
                         });
-                        $('li[class*=1]:visible').each(function() {
+                        $('li[class*=aktif]:visible').each(function() {
                             $(this).addClass('submenu');
-                            var ul = '<ul id="drop"></ul>'
+                            var ul = '<ul id="'+$(this).attr('id')+'" class="drop"></ul>';
                             $(this).append(ul);
+                        });
+                        $('li[class*=aktif]:visible').each(function() {
                             $(this).on('hover', function() {
-                                // alert($(this).attr('id'));
+                                // console.log($(this).attr('id'));
+                                // $("li.aktif > ul").empty();
                                 $.ajax({
                                     url: 'submenu',
                                     type: 'get',
@@ -89,39 +92,20 @@
                                     dataType: 'json',
                                     cache: false,
                                     success: function(result) {
+                                        $("li.aktif > ul").empty();
                                         for (var j=0; j<result.length; j++) {
-                                            var li = '<li><a href="#">'+result[j].submenu_indo+'</a></li>';
-                                            $("#drop").append();
-                                            $("#drop").append(li);
+                                            var li = '<li><a href="'+result[j].submenu_link+'">'+result[j].submenu_indo+'</a></li>';
+                                            $("li.aktif > ul").append(li);
                                         }
                                     }
                                 });
                             });
+                            // $(this).on('mouseleave', function() {
+                            //     $("li.aktif > ul").empty();
+                            // });
                         });
                     }
                 });
-                // $(document).ready(function() {
-                //     $('li[class*=1]:visible').each(function() {
-                //         $(this).on('click', function() {
-                //             alert($(this).attr('id'));
-                //             // console.log($(this).attr('id'));
-                //             // $.ajax({
-                //             //     url: 'submenu',
-                //             //     type: 'get',
-                //             //     data: 'id='+$(this).attr('id'),
-                //             //     dataType: 'json',
-                //             //     cache: false,
-                //             //     success: function(result) {
-                //             //         for (var j=0; j<result.length; j++) {
-                //             //             var li = '<li><a href="#">'+result[j].submenu_indo+'</a></li>';
-                //             //             $("#drop").append();
-                //             //             $("#drop").append(li);
-                //             //         }
-                //             //     }
-                //             // });
-                //         });
-                //     });
-                // });
             </script>
             <ul id="menuatas"></ul>
         </div>
