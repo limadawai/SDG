@@ -52,7 +52,7 @@ public class AdminController {
         return "admin/nsa/nsa_profile";
     }
     
-    //RAN RAD
+    //*********************** RAN RAD ***********************
     @GetMapping("admin/ran_rad/sdg/goals")
     public String goals(Model model) {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");

@@ -3,7 +3,7 @@
 <html lang="en"
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="header(title)">
+<head th:fragment="header">
     <title>Dashboard SDG</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +13,7 @@
     <link rel="stylesheet" th:href="@{/css/maruti-style.css}"/>
     <link rel="stylesheet" th:href="@{/css/maruti-media.css}" class="skin-color"/>
     <link rel="stylesheet" th:href="@{/css/font-awesome.css}" />
-    <link rel="stylesheet" th:href="@{/css/bootstrap2-toggle.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/switch-bahasa.css}" />
     <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}" />
 
     <script th:src="@{/js/excanvas.min.js}"></script>
@@ -27,7 +27,6 @@
     <script th:src="@{/js/maruti.js}"></script>
     <script th:src="@{/js/maruti.dashboard.js}"></script>
     <script th:src="@{/js/maruti.chat.js}"></script>
-    <script th:src="@{/js/bootstrap2-toggle.min.js}"></script>
     <script th:src="@{/js/jquery.dataTables.min.js}"></script>
 
     <script th:src="@{/js/highchart/highmaps.js}"></script>
@@ -36,12 +35,11 @@
     <script th:src="@{/js/highchart/highcharts.js}"></script>
     <script th:src="@{/js/highchart/export-data.js}"></script>
     <script th:src="@{/js/highchart/accessibility.js}"></script>
-
 </head>
 <body>
     <div th:fragment="menu">
         <div id="header">
-            <h3><a href="#">SDG - Bappenas</a></h3>
+            <h3><a href="#">SDG E-Monev</a></h3>
         </div>
         <div class="btn-group rightzero">
             <a class="top_message tip-left" title="Manage Files"><i class="icon-file"></i></a>
@@ -53,74 +51,83 @@
         </div>
         <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav">
-                <li class="" style="margin-top:12px;background:none;padding:10px;">
-                    <span style="color:#FFFFFF;">Bahasa / Language :</span>&nbsp;&nbsp;
-                    <input type="checkbox" id="toggle-two" data-toggle="toggle"
-                           checked data-on="Indonesia" data-off="English" data-onstyle="success"
-                           data-offstyle="primary" data-size="small" style="margin-top:-15px;">
+                <li class="" style="margin-top:5px;background:none;padding:10px;">
+                    <div class="flipswitch">
+                        <input id="fs" type="checkbox" name="flipswitch" class="flipswitch-cb"  checked>
+                        <label class="flipswitch-label" for="fs">
+                            <div class="flipswitch-inner"></div>
+                            <div class="flipswitch-switch"></div>
+                        </label>
+                    </div>
                 </li>
                 <li class="" style="margin-top:12px;background:none;padding:10px;">
                     <form id="logoutform" method="post" th:action="@{/logout}">
                         <a href="javascript:;" onclick="document.getElementById('logoutform').submit()">
-                            <i class="icon icon-share-alt"></i> <span class="text">Logout</span>
+                            <i class="icon icon-share-alt"></i> <span id="keluar" class="text">Logout</span>
                         </a>
                     </form>
                 </li>
             </ul>
         </div>
         <div id="sidebar">
-            <script>
-                $.ajax({
-                    url: 'menu',
-                    type: 'get',
-                    dataType: 'json',
-                    cache: false,
-                    success: function (response) {
-                        $('#menuatas').empty();
-                        for (var i = 0; i < response.length; i++) {
-                            var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
-                                '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
-                            '</li>';
-                            $('#menuatas').append(menuRow);
-                        }
-                        $('span[id*=aktif]:visible').each(function () {
-                            $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
-                        });
-                        $('li[class*=aktif]:visible').each(function () {
-                            $(this).addClass('submenu');
-                            var ul = '<ul id="' + $(this).attr('id') + '" class="drop"></ul>';
-                            $(this).append(ul);
-                        });
-                        $('li[class*=aktif]:visible').each(function () {
-                            $(this).on('hover', function () {
-                                $.ajax({
-                                    url: 'submenu',
-                                    type: 'get',
-                                    data: 'id=' + $(this).attr('id'),
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (result) {
-                                        $("li.aktif > ul").empty();
-                                        for (var j = 0; j < result.length; j++) {
-                                            var li = '<li><a href="' + result[j].submenu_link + '">' + result[j].submenu_indo + '</a></li>';
-                                            $("li.aktif > ul").append(li);
+            <script th:inline="javascript">
+                var urls = "http://localhost:8080/admin/";
+                window.onload = function () {
+                    $("#keluar").html("Keluar");
+                    $("#bhs").html("Bahasa :");
+                    $.ajax({
+                        url: urls+'menu',
+                        type: 'get',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (response) {
+                            $('#menuatas').empty();
+                            for (var i = 0; i < response.length; i++) {
+                                var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
+                                    '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
+                                '</li>';
+                                $('#menuatas').append(menuRow);
+                            }
+                            $('span[id*=aktif]:visible').each(function () {
+                                $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
+                            });
+                            $('li[class*=aktif]:visible').each(function () {
+                                $(this).addClass('submenu');
+                                var ul = '<ul id="' + $(this).attr('id') + '" class="drop"></ul>';
+                                $(this).append(ul);
+                            });
+                            $('li[class*=aktif]:visible').each(function () {
+                                $(this).on('hover', function () {
+                                    $.ajax({
+                                        url: urls+'submenu',
+                                        type: 'get',
+                                        data: 'id=' + $(this).attr('id'),
+                                        dataType: 'json',
+                                        cache: false,
+                                        success: function (result) {
+                                            $("li.aktif > ul").empty();
+                                            for (var j = 0; j < result.length; j++) {
+                                                var li = '<li><a href="' + result[j].submenu_link + '">' + result[j].submenu_indo + '</a></li>';
+                                                $("li.aktif > ul").append(li);
+                                            }
                                         }
-                                    }
+                                    });
                                 });
                             });
-                        });
-                    }
-                });
-                $(function() {
-                    $('#toggle-two').change(function() {
+                        }
+                    });
+                    //********************************* Switch Language *********************************
+                    $('#fs').change(function() {
                         if($(this).is(':checked')) {
                             $.ajax({
-                                url: 'menu',
+                                url: urls+'menu',
                                 type: 'get',
                                 dataType: 'json',
                                 cache: false,
                                 success: function (response) {
                                     $('#menuatas').empty();
+                                    $("#keluar").html("Keluar");
+                                    $("#bhs").html("Bahasa :");
                                     for (var i = 0; i < response.length; i++) {
                                         var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
                                             '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
@@ -138,7 +145,7 @@
                                     $('li[class*=aktif]:visible').each(function () {
                                         $(this).on('hover', function () {
                                             $.ajax({
-                                                url: 'submenu',
+                                                url: urls+'submenu',
                                                 type: 'get',
                                                 data: 'id=' + $(this).attr('id'),
                                                 dataType: 'json',
@@ -157,12 +164,14 @@
                             });
                         } else {
                             $.ajax({
-                                url: 'menu',
+                                url: urls+'menu',
                                 type: 'get',
                                 dataType: 'json',
                                 cache: false,
                                 success: function (response) {
                                     $('#menuatas').empty();
+                                    $("#keluar").html("logout");
+                                    $("#bhs").html("Language :");
                                     for (var i = 0; i < response.length; i++) {
                                         var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
                                             '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_eng + '</span></a>'
@@ -180,7 +189,7 @@
                                     $('li[class*=aktif]:visible').each(function () {
                                         $(this).on('hover', function () {
                                             $.ajax({
-                                                url: 'submenu',
+                                                url: urls+'submenu',
                                                 type: 'get',
                                                 data: 'id=' + $(this).attr('id'),
                                                 dataType: 'json',
@@ -199,7 +208,7 @@
                             });
                         }
                     });
-                });
+                };
             </script>
             <ul id="menuatas"></ul>
         </div>
