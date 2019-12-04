@@ -57,7 +57,7 @@
                     <span style="color:#FFFFFF;">Bahasa / Language :</span>&nbsp;&nbsp;
                     <input type="checkbox" id="toggle-two" data-toggle="toggle"
                            checked data-on="Indonesia" data-off="English" data-onstyle="success"
-                           data-offstyle="primary" data-size="small" style="padding:none">
+                           data-offstyle="primary" data-size="small" style="margin-top:-15px;">
                 </li>
                 <li class="" style="margin-top:12px;background:none;padding:10px;">
                     <form id="logoutform" method="post" th:action="@{/logout}">
@@ -70,12 +70,6 @@
         </div>
         <div id="sidebar">
             <script>
-                $(function() {
-                    $('#toggle-two').bootstrapToggle({
-                        on: 'Indonesia',
-                        off: 'English'
-                    });
-                });
                 $.ajax({
                     url: 'menu',
                     type: 'get',
