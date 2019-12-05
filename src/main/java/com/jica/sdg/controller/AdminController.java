@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Submenu;
 import com.jica.sdg.service.IMenuService;
+import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.ISubmenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -19,9 +20,9 @@ import java.util.List;
 @Controller
 public class AdminController {
 
+    //*********************** Menu Dari DB ***********************
     @Autowired
     IMenuService menuService;
-
     @GetMapping("admin/menu")
     public @ResponseBody List<Menu> menuList() {
         List<Menu> list = menuService.findAllMenu();
@@ -30,12 +31,13 @@ public class AdminController {
 
     @Autowired
     ISubmenuService submenuService;
-
     @GetMapping("admin/submenu")
     public @ResponseBody List<Submenu> submenuList(@RequestParam int id) {
         List<Submenu> list = submenuService.findSubmenu(id);
         return list;
     }
+
+    //*********************** Dashboard ***********************
 
     @GetMapping("admin/dashboard")
     public String dashboard(Model model, Authentication auth) {
@@ -46,10 +48,24 @@ public class AdminController {
         return "admin/dashboard";
     }
 
+    //*********************** NSA ***********************
+
+    @Autowired
+    IProvinsiService provinsiService;
+
     @GetMapping("admin/nsa/profile")
     public String nsa_profile(Model model) {
         model.addAttribute("title", "NSA Profile");
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
         return "admin/nsa/nsa_profile";
+    }
+
+    //*********************** Role Management ***********************
+
+    @GetMapping("admin/role/role_manajemen")
+    public String role_manajemen(Model model) {
+        model.addAttribute("title", "Role Manajemen");
+        return "admin/role_manajemen/manajemen_role";
     }
     
     //*********************** RAN RAD ***********************

@@ -21,16 +21,14 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
-                .usersByUsernameQuery("select username, password, '1' as enabled from ref_user where username=?")
+                .usersByUsernameQuery("select username, password, enabled from ref_user where username=?")
                 .authoritiesByUsernameQuery("select username, role from ref_user where username=?")
                 .dataSource(dataSource).passwordEncoder(bCryptPasswordEncoder());
     }
 
-    String[] resources = {"/","/css/**","/img/**","/js/**","/font/**"};
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-//                .antMatchers(resources).permitAll()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("SUPER","ADMIN","USER")
                 .anyRequest().authenticated()

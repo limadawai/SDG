@@ -85,7 +85,7 @@
                 </div>
                 <form class="form-horizontal">
                     <div class="modal-body">
-                        <span class="control-group">
+                        <div class="control-group">
                             <label for="nsa_name">Nama Organisasi :</label>
                             <input name="nsa_name" id="nsa_name" type="text" class="input-block-level"
                                    placeholder="input nama organisasi..." required>
@@ -99,7 +99,7 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
+    <script th:inline="javascript">
         $(document).ready( function () {
             $('#myTable').DataTable({});
         });

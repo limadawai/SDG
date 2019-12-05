@@ -93,7 +93,7 @@
 
     <div th:include="admin/layout :: footer"></div>
 
-    <script type="text/javascript">
+    <script th:inline="javascript">
         function goPage (newURL) {
             if (newURL != "") {
                 if (newURL == "-" ) {
