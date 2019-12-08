@@ -22,7 +22,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .usersByUsernameQuery("select username, password, enabled from ref_user where username=?")
-                .authoritiesByUsernameQuery("select username, role from ref_user where username=?")
+                .authoritiesByUsernameQuery("select ref_user.username, ref_role.nm_role from ref_user " +
+                        "left join ref_role on ref_user.id_role = ref_role.id_role where ref_user.username=?")
                 .dataSource(dataSource).passwordEncoder(bCryptPasswordEncoder());
     }
 
@@ -30,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers("/login").permitAll()
-                .antMatchers("/admin/**").hasAnyAuthority("SUPER","ADMIN","USER")
+                .antMatchers("/admin/**").hasAnyAuthority("SUPER","ADMINKL","ADMINPROV")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

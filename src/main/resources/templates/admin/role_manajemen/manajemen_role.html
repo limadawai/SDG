@@ -87,27 +87,49 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h2 class="modal-title" id="exampleModalLabel">Add Role Baru</h2>
+                    <h2 class="modal-title" id="exampleModalLabel"><i class="icon-cog"></i> Add Role Baru</h2>
                 </div>
                 <form class="form-horizontal">
                 <div class="modal-body">
                     <div class="control-group">
-                        <label for="nsa_name">Nama Role :</label>
-                        <input name="nama_role" id="nsa_name" type="text" class="input-block-level"
+                        <label for="nama_role">Nama Role :</label>
+                        <input name="nama_role" id="nama_role" type="text" class="input-block-level"
                                placeholder="input nama role..." required>
                     </div>
                     <div class="control-group">
-                        <label for="nsa_name">Deskripsi :</label>
-                        <input name="deskripsi" id="nsa_name" type="text" class="input-block-level"
+                        <label for="deskripsi_role">Deskripsi :</label>
+                        <input name="deskripsi_role" id="deskripsi_role" type="text" class="input-block-level"
                                placeholder="input deskripsi..." required>
                     </div>
                     <div class="control-group">
-                        <label for="nsa_name">Kategori :</label>
-                        <select name="selkategori" class="span3">
+                        <label for="selkategori">Kategori :</label>
+                        <select id="selkategori" name="selkategori" class="span3">
                             <option value="0">pilih kategori</option>
                             <option value="gov">Pemerintahan</option>
                             <option value="non-gov">Non-Pemerintahan</option>
                         </select>
+                    </div><br>
+                    <div class="control-group">
+                        <div>
+                            <label for="cbAll" style="display:inline-block;white-space:nowrap;">
+                                <input id="cbAll" type="checkbox" name="cbAll" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                <span style="vertical-align:middle"><b>Define RAN / RAD</b></span>
+                            </label>
+                            <div style="margin-left:20px">
+                                <label for="cbIndikator" style="display:inline-block;white-space:nowrap;">
+                                    <input id="cbIndikator" type="checkbox" name="cbIndikator" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                    <span style="vertical-align:middle">SDGs Indicator</span>
+                                </label><br>
+                                <label for="cbGov" style="display:inline-block;white-space:nowrap;">
+                                    <input id="cbGov" type="checkbox" name="cbGov" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                    <span style="vertical-align:middle">Program Pemerintah</span>
+                                </label><br>
+                                <label for="cbNonGov" style="display:inline-block;white-space:nowrap;">
+                                    <input id="cbNonGov" type="checkbox" name="cbNonGov" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                    <span style="vertical-align:middle">Program Non-Pemerintah</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
