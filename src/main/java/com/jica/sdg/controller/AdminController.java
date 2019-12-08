@@ -1,7 +1,7 @@
 package com.jica.sdg.controller;
 
-import com.google.gson.Gson;
 import com.jica.sdg.model.Menu;
+import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Submenu;
 import com.jica.sdg.service.IMenuService;
 import com.jica.sdg.service.IProvinsiService;
@@ -66,6 +66,11 @@ public class AdminController {
     public String role_manajemen(Model model) {
         model.addAttribute("title", "Role Manajemen");
         return "admin/role_manajemen/manajemen_role";
+    }
+    @GetMapping("admin/role/provinsi")
+    public @ResponseBody List<Provinsi> provinsi() {
+        List<Provinsi> list = provinsiService.findAllProvinsi();
+        return list;
     }
     
     //*********************** RAN RAD ***********************

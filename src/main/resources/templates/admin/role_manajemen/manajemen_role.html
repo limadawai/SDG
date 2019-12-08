@@ -25,12 +25,25 @@
                                 <input class="span10" id="carirole" type="text">
                                 <button class="btn" type="button">Search</button>
                             </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <select name="selprov" class="span3">
+                            <select id="selprov" name="selprov" class="span3">
                                 <option value="indonesia">Indonesia</option>
-                                <option th:value="1">DKI Jakarta</option>
-                                <option th:value="2">Jawa Barat</option>
-                                <option th:value="3">Jawa Timur</option>
                             </select>
+                            <!-- ************** Ajax Select Content ************** -->
+                            <script type="text/javascript" th:inline="javascript">
+                                $.ajax({
+                                    url: 'provinsi',
+                                    type: 'get',
+                                    dataType: 'json',
+                                    cache: false,
+                                    success: function (result) {
+                                        // console.log(result);
+                                        for (var i=0; i<result.length; i++) {
+                                            var options = '<option value="'+result[i].id_prov+'">'+result[i].nm_prov+'</option>';
+                                            $("#selprov").append(options);
+                                        }
+                                    }
+                                });
+                            </script>
                             <button class="btn btn-warning btn-small pull-right" data-toggle="modal" data-target="#addModal">Add New</button>
                         </div>
                         <div class="row-fluid">
@@ -45,12 +58,17 @@
                                     </thead>
                                     <tbody>
                                         <tr style="font-size:90%;">
-                                            <td></td>
-                                            <td></td>
-                                            <td></td>
+                                            <td>1.</td>
+                                            <td>ADMIN</td>
+                                            <td>Role ini berfungsi untuk membuat akun user</td>
                                         </tr>
                                     </tbody>
                                 </table>
+                                <script type="text/javascript" th:inline="javascript">
+                                    $(document).ready( function () {
+                                        $('#myTable').DataTable({});
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -60,7 +78,9 @@
     </div>
 
     <div th:include="admin/layout :: footer"></div>
-    <div id="addModal" class="modal fade">
+
+    <div id="addModal" class="modal hide fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -98,10 +118,5 @@
             </div>
         </div>
     </div>
-    <script th:inline="javascript">
-        $(document).ready( function () {
-            $('#myTable').DataTable({});
-        });
-    </script>
 </body>
 </html>
