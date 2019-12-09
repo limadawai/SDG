@@ -32,4 +32,18 @@ public class NsaController {
         return "admin/nsa/nsa_profile";
     }
 
+    @GetMapping("admin/nsa/inst-profile")
+    public String nsa_ins_profile(Model model) {
+        model.addAttribute("title", "Institution Profile");
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        return "admin/nsa/ins_profile";
+    }
+
+    @GetMapping("admin/nsa/nsa-collaboration")
+    public String nsa_collaboration(Model model) {
+        model.addAttribute("title", "NSA Collaboration");
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        return "admin/nsa/nsa_collaboration";
+    }
+
 }
