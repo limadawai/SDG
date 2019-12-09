@@ -53,12 +53,6 @@ public class AdminController {
     @Autowired
     IProvinsiService provinsiService;
 
-    @GetMapping("admin/nsa/profile")
-    public String nsa_profile(Model model) {
-        model.addAttribute("title", "NSA Profile");
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
-        return "admin/nsa/nsa_profile";
-    }
 
     //*********************** Role Management ***********************
 
