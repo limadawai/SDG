@@ -3,6 +3,7 @@ package com.jica.sdg.controller;
 import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Submenu;
+import com.jica.sdg.repository.NsaprofilRepository;
 import com.jica.sdg.service.IMenuService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.ISubmenuService;
