@@ -17,20 +17,17 @@ public class Menu implements Serializable {
     private String menu_eng;
     @Column(name = "submenu")
     private String submenu;
-    @Column(name = "posisi")
-    private String posisi;
-    @Column(name = "tautan")
-    private String tautan;
+    @Column(name = "link")
+    private String link;
 
     public Menu() {
     }
 
-    public Menu(String menu_indo, String menu_eng, String submenu, String posisi, String tautan) {
+    public Menu(String menu_indo, String menu_eng, String submenu, String link) {
         this.menu_indo = menu_indo;
         this.menu_eng = menu_eng;
         this.submenu = submenu;
-        this.posisi = posisi;
-        this.tautan = tautan;
+        this.link = link;
     }
 
     public int getId_menu() {
@@ -65,19 +62,11 @@ public class Menu implements Serializable {
         this.submenu = submenu;
     }
 
-    public String getPosisi() {
-        return posisi;
+    public String getLink() {
+        return link;
     }
 
-    public void setPosisi(String posisi) {
-        this.posisi = posisi;
-    }
-
-    public String getTautan() {
-        return tautan;
-    }
-
-    public void setTautan(String tautan) {
-        this.tautan = tautan;
+    public void setLink(String link) {
+        this.link = link;
     }
 }
