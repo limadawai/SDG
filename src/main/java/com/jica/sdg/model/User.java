@@ -12,20 +12,14 @@ public class User {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_user")
     private int id_user;
-    @Column(name = "role")
-    private int role;
+    @Column(name = "id_role")
+    private int id_role;
     @Column(name = "username")
     private String userName;
     @Column(name = "password")
     private String password;
-    @Column(name = "nama")
-    private String nama;
-    @Column(name = "level")
-    private String level;
-    @Column(name = "id_kl")
-    private String id_kl;
-    @Column(name = "id_prov")
-    private String id_prov;
+    @Column(name = "name")
+    private String name;
     @Column(name = "enabled")
     private short enabled;
     @Column(name = "detail")
@@ -39,12 +33,12 @@ public class User {
         this.id_user = id_user;
     }
 
-    public int getRole() {
-        return role;
+    public int getId_role() {
+        return id_role;
     }
 
-    public void setRole(int role) {
-        this.role = role;
+    public void setId_role(int id_role) {
+        this.id_role = id_role;
     }
 
     public String getUserName() {
@@ -63,36 +57,12 @@ public class User {
         this.password = password;
     }
 
-    public String getNama() {
-        return nama;
+    public String getName() {
+        return name;
     }
 
-    public void setNama(String nama) {
-        this.nama = nama;
-    }
-
-    public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
-    }
-
-    public String getId_kl() {
-        return id_kl;
-    }
-
-    public void setId_kl(String id_kl) {
-        this.id_kl = id_kl;
-    }
-
-    public String getId_prov() {
-        return id_prov;
-    }
-
-    public void setId_prov(String id_prov) {
-        this.id_prov = id_prov;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public short getEnabled() {

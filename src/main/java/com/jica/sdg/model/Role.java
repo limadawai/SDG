@@ -19,10 +19,14 @@ public class Role implements Serializable {
     private String cat_role;
     @Column(name = "status_role")
     private String status_role;
-
-    public static long getSerialVersionUID() {
-        return serialVersionUID;
-    }
+    @Column(name = "privilege")
+    private String privilege;
+    @Column(name = "menu")
+    private String menu;
+    @Column(name = "submenu")
+    private String submenu;
+    @Column(name = "id_prov")
+    private String id_prov;
 
     public int getId_role() {
         return id_role;
@@ -62,5 +66,37 @@ public class Role implements Serializable {
 
     public void setStatus_role(String status_role) {
         this.status_role = status_role;
+    }
+
+    public String getPrivilege() {
+        return privilege;
+    }
+
+    public void setPrivilege(String privilege) {
+        this.privilege = privilege;
+    }
+
+    public String getMenu() {
+        return menu;
+    }
+
+    public void setMenu(String menu) {
+        this.menu = menu;
+    }
+
+    public String getSubmenu() {
+        return submenu;
+    }
+
+    public void setSubmenu(String submenu) {
+        this.submenu = submenu;
+    }
+
+    public String getId_prov() {
+        return id_prov;
+    }
+
+    public void setId_prov(String id_prov) {
+        this.id_prov = id_prov;
     }
 }
