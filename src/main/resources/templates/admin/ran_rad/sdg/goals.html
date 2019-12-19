@@ -2,7 +2,10 @@
 <html lang="en"
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
+      <meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <head th:include="admin/layout :: header">
+	
     <title th:text="Define RAN/RAD/SDGs Indicator"></title>
 </head>
 <body>
@@ -12,10 +15,6 @@
             <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/SDGs Indicator</a></div>
         </div>
         <div class="container-fluid">
-        	<div class="row-fluid">
-        		<input readonly="true" value="55. Kementrian PPN/Bappenas" id="appendedInput" type="text"/>
-        		<span style="margin-left:10px"><b>Period : 2019</b></span>
-        	</div>
             <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title">
@@ -26,108 +25,140 @@
                     	<div class="row-fluid">
                     		<div class="span6">
                     			<div class="input-append">
-								  <input placeholder="Search..." class="span12" id="appendedInput" type="text"/>
+								  <input placeholder="Search..." class="span12" id="text-cari" type="text"/>
 								  <span class="add-on"><i class="icon-search"></i></span>
 								</div>
                     		</div>
                     		<div class="span6" align="right">
-                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary"><i class="icon-plus"></i> Tambah Goals</button>
+                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary"><i class="icon-plus"></i> Add Goals</button>
                     		</div>
                     	</div>
                     	<br/>
                         <div class="row-fluid">
                             <div class="span12">
-                                <table class="table table-bordered table-striped">
+                            	<div class="table-responsive">
+                                <table class="table table-bordered table-striped" id="tabel-goals">
                                     <thead>
                                         <tr>
-                                            <th style="text-align:center;font-size:80%;">No.</th>
-                                            <th style="text-align:center;font-size:80%;">Kode</th>
+                                            <th style="text-align:center;font-size:80%;">No</th>
+                                            <th style="text-align:center;font-size:80%;">Code</th>
                                             <th style="text-align:center;font-size:80%;">Goals</th>
                                             <th style="text-align:center;font-size:80%;">Action</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr style="font-size:90%;">
-                                            <td style="text-align:center;">1.</td>
-                                            <td style="text-align:center;">1</td>
-                                            <td>Tanpa Kemiskinan</td>
-                                            <td style="text-align:center;">
-                                                <button type="submit" title="update" class="btn btn-warning btn-mini"><i class="icon-pencil"></i></button>
-                                                <button type="submit" title="detail" class="btn btn-success btn-mini"><i class="icon-edit"></i></button>
-                                                <button type="submit" title="delete" class="btn btn-danger btn-mini"><i class="icon-eraser"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr style="font-size:90%;">
-                                            <td style="text-align:center;">2.</td>
-                                            <td style="text-align:center;">2</td>
-                                            <td>Tanpa Kelaparan</td>
-                                            <td style="text-align:center;">
-                                                <button type="submit" title="update" class="btn btn-warning btn-mini"><i class="icon-pencil"></i></button>
-                                                <button type="submit" title="detail" class="btn btn-success btn-mini"><i class="icon-edit"></i></button>
-                                                <button type="submit" title="delete" class="btn btn-danger btn-mini"><i class="icon-eraser"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr style="font-size:90%;">
-                                            <td style="text-align:center;">3.</td>
-                                            <td style="text-align:center;">3</td>
-                                            <td><a th:href="@{/admin/ran_rad/sdg/goals/target}">Kehidupan sehat dan sejahtera</a></td>
-                                            <td style="text-align:center;">
-                                                <button type="submit" title="update" class="btn btn-warning btn-mini"><i class="icon-pencil"></i></button>
-                                                <button type="submit" title="detail" class="btn btn-success btn-mini"><i class="icon-edit"></i></button>
-                                                <button type="submit" title="delete" class="btn btn-danger btn-mini"><i class="icon-eraser"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr style="font-size:90%;">
-                                            <td style="text-align:center;">4.</td>
-                                            <td style="text-align:center;">4</td>
-                                            <td>Pendidikan berkualitas</td>
-                                            <td style="text-align:center;">
-                                                <button type="submit" title="update" class="btn btn-warning btn-mini"><i class="icon-pencil"></i></button>
-                                                <button type="submit" title="detail" class="btn btn-success btn-mini"><i class="icon-edit"></i></button>
-                                                <button type="submit" title="delete" class="btn btn-danger btn-mini"><i class="icon-eraser"></i></button>
-                                            </td>
-                                        </tr>
-                                        <tr style="font-size:90%;">
-                                            <td style="text-align:center;">5.</td>
-                                            <td style="text-align:center;">5</td>
-                                            <td>Kesetaraan Gender</td>
-                                            <td style="text-align:center;">
-                                                <button type="submit" title="update" class="btn btn-warning btn-mini"><i class="icon-pencil"></i></button>
-                                                <button type="submit" title="detail" class="btn btn-success btn-mini"><i class="icon-edit"></i></button>
-                                                <button type="submit" title="delete" class="btn btn-danger btn-mini"><i class="icon-eraser"></i></button>
-                                            </td>
-                                        </tr>
+                                    <tbody id="tbody-goals">
                                     </tbody>
                                 </table>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
         <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 id="myModalLabel">Add SDGs Goals</h3>
 		  	</div>
 			<div class="modal-body">
-				<form>
+				<form id="form-sdgGoals">
 				  <fieldset>
-				    <label>Kode</label>
-				    <input type="text" placeholder="Input 2 Karakter"/>
+				    <label>Code</label>
+				    <input id="id_goals" name="id_goals" class="input-medium" type="text"/>
 				  </fieldset>
 				  <fieldset>
 				    <label>Goals Name</label>
-				    <input type="text" placeholder="Input name"/>
+				    <input id="nm_goals" name="nm_goals" class="input-xlarge" type="text"/>
 				  </fieldset>
 				</form>
 			</div>
 			<div class="modal-footer">
-		    	<button class="btn" data-dismiss="modal" aria-hidden="true">Tutup</button>
-		    	<button class="btn btn-primary">Submit</button>
+		    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+		    	<button class="btn btn-primary" id="submit">Submit</button>
 		  	</div>
 		</div>
     </div>
     <div th:include="admin/layout :: footer"></div>
 </body>
+<script th:inline="javascript" >
+	// <![CDATA[
+		//$(document).ready(function (e) {
+			var token = $("meta[name='_csrf']").attr("content");
+	        var header = $("meta[name='_csrf_header']").attr("content");
+
+			var table = $('#tabel-goals').DataTable({
+				responsive: true,
+				sDom: 'lrtip',
+				"bLengthChange": false,
+				"cache": false,
+				"autoWidth": true,
+				"responsive":true,
+				"ajax": {
+					"url": urls+'list-sdgGoals',
+					dataSrc: 'content',
+				},
+				"searching": true,
+				"columns": [
+					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+						}},
+					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
+						}},
+					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'><a href='#'>"+row.nm_goals+"</a></div>";
+						}},
+					{"data": function (row, data, index, display) {
+							return "<div style='text-align:center;'>"+'<button data-id="'+row.id_goals+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button type="button" title="detail" class="btn btn-success btn-mini"><i class="icon-edit"></i></button>'+
+                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-eraser"></i></button></div>';
+						}}
+				],
+				"columnDefs": [
+				],
+				select: true
+			});	
+			
+			$('#text-cari').on( 'keyup', function () {
+				var val=$(this).val();
+				table.search(val).draw();
+			});
+			
+			$('#submit').on('click', function(){
+				var id_goals = $('#id_goals').val();
+				var nm_goals = $('#nm_goals').val();
+				var data = JSON.stringify({'id_goals':id_goals,'nm_goals':nm_goals});
+				$.ajax({
+					type: "POST",
+                    url: urls+'save-sdgGoals',
+                    beforeSend : function(xhr){
+                    	xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+					data: data,
+                    success: function (result) {
+                    	table.ajax.url(urls+'list-sdgGoals').load();
+                    	$('#myModal').modal('hide');
+                    },
+                });
+			});
+			
+			$('#tbody-goals').on('click', '.update', function(){
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                    url: urls+'get-sdgGoals/'+id,
+                    success: function (result) {
+                    	var val = result.content;
+                    	$('#id_goals').val(val.id_goals);
+        				$('#nm_goals').val(val.nm_goals);
+						$('#myModal').modal('show');
+                    },
+                });
+			});
+		//});
+		// ]]>
+</script>
 </html>

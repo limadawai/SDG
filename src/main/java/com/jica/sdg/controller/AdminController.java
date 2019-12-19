@@ -126,7 +126,7 @@ public class AdminController {
     @GetMapping("admin/ran_rad/goals")
     public String ran_goals(Model model) {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        return "admin/ran_rad/goals";
+        return "admin/ran_rad/sdg/goals";
     }
     
     @GetMapping("admin/ran_rad/goals/target")
