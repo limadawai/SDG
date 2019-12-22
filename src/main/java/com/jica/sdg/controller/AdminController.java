@@ -75,18 +75,6 @@ public class AdminController {
         return "admin/ran_rad/sdg/goals";
     }
     
-    @GetMapping("admin/ran_rad/sdg/goals/target")
-    public String target(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        return "admin/ran_rad/sdg/target";
-    }
-    
-    @GetMapping("admin/ran_rad/sdg/goals/target/sdgs_indicator")
-    public String sdg(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        return "admin/ran_rad/sdg/sdgs_indicator";
-    }
-    
     @GetMapping("admin/ran_rad/gov/program")
     public String gov_program(Model model) {
         model.addAttribute("title", "Define RAN/RAD/Government Program");

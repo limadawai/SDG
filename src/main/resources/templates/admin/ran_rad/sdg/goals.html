@@ -2,8 +2,6 @@
 <html lang="en"
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-      <meta name="_csrf" th:content="${_csrf.token}"/>
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <head th:include="admin/layout :: header">
 	
     <title th:text="Define RAN/RAD/SDGs Indicator"></title>
@@ -87,7 +85,7 @@
 		//$(document).ready(function (e) {
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
-
+			
 			var table = $('#tabel-goals').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
@@ -108,12 +106,13 @@
 							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='#'>"+row.nm_goals+"</a></div>";
+							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row.id_goals+"/target' class='target' data-id='"+row.id_goals+"'>"+row.nm_goals+"</a></div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='text-align:center;'>"+'<button data-id="'+row.id_goals+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button type="button" title="detail" class="btn btn-success btn-mini"><i class="icon-edit"></i></button>'+
-                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-eraser"></i></button></div>';
+							return "<div style='text-align:center;'>"+
+							'<button data-id="'+row.id_goals+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+							'<button data-id="'+row.id_goals+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -124,6 +123,15 @@
 			$('#text-cari').on( 'keyup', function () {
 				var val=$(this).val();
 				table.search(val).draw();
+			});
+			
+			function clearForm(){
+				$('#id_goals').val("").removeAttr("readonly");
+				$('#nm_goals').val("").removeAttr("readonly");
+			}
+			
+			$('#myModal').on('hidden.bs.modal',function(){
+				clearForm();
 			});
 			
 			$('#submit').on('click', function(){
@@ -152,12 +160,24 @@
                     url: urls+'get-sdgGoals/'+id,
                     success: function (result) {
                     	var val = result.content;
-                    	$('#id_goals').val(val.id_goals);
+                    	$('#id_goals').val(val.id_goals).attr("readonly",true);
         				$('#nm_goals').val(val.nm_goals);
 						$('#myModal').modal('show');
                     },
-                });
-			});
+                })
+             }).on('click', '.detail', function(){
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                    url: urls+'get-sdgGoals/'+id,
+                    success: function (result) {
+                    	var val = result.content;
+                    	$('#id_goals').val(val.id_goals).attr("readonly",true);
+        				$('#nm_goals').val(val.nm_goals).attr("readonly",true);
+						$('#myModal').modal('show');
+                    },
+                })
+             });
 		//});
 		// ]]>
 </script>
