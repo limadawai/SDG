@@ -2,8 +2,6 @@
 <html lang="en"
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-      <meta name="_csrf" th:content="${_csrf.token}"/>
-	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <head th:include="admin/layout :: header">
 	
     <title th:text="Define RAN/RAD/SDGs Indicator"></title>
@@ -19,7 +17,8 @@
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Goals</h5>
+                        <h5 class="lang_eng" style="display:none">Goals</h5>
+                        <h5 class="lang_indo">Sasaran</h5>
                     </div>
                     <div class="widget-content">
                     	<div class="row-fluid">
@@ -30,7 +29,11 @@
 								</div>
                     		</div>
                     		<div class="span6" align="right">
-                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary"><i class="icon-plus"></i> Add Goals</button>
+                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary">
+                    				<i class="icon-plus"></i> 
+                    					<span class="lang_eng" style="display:none">Add Goals</span>
+                    					<span class="lang_indo">Tambah Sasaran</span>
+                    			</button>
                     		</div>
                     	</div>
                     	<br/>
@@ -39,11 +42,17 @@
                             	<div class="table-responsive">
                                 <table class="table table-bordered table-striped" id="tabel-goals">
                                     <thead>
-                                        <tr>
+                                        <tr class="lang_eng" style="display:none">
                                             <th style="text-align:center;font-size:80%;">No</th>
                                             <th style="text-align:center;font-size:80%;">Code</th>
                                             <th style="text-align:center;font-size:80%;">Goals</th>
                                             <th style="text-align:center;font-size:80%;">Action</th>
+                                        </tr>
+                                        <tr class="lang_indo">
+                                            <th style="text-align:center;font-size:80%;">No</th>
+                                            <th style="text-align:center;font-size:80%;">Kode</th>
+                                            <th style="text-align:center;font-size:80%;">Sasaran</th>
+                                            <th style="text-align:center;font-size:80%;">Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody-goals">
@@ -60,23 +69,32 @@
         <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 id="myModalLabel">Add SDGs Goals</h3>
+			    <h3 class="lang_eng" style="display:none">Add SDGs Goals</h3>
+			    <h3 class="lang_indo">Tambah Sasaran</h3>
 		  	</div>
 			<div class="modal-body">
 				<form id="form-sdgGoals">
 				  <fieldset>
-				    <label>Code</label>
+				    <label class="lang_eng" style="display:none">Code</label>
+				    <label class="lang_indo">Kode</label>
 				    <input id="id_goals" name="id_goals" class="input-medium" type="text"/>
 				  </fieldset>
 				  <fieldset>
-				    <label>Goals Name</label>
+				    <label class="lang_eng" style="display:none">Goals Name</label>
+				    <label class="lang_indo">Nama Sasaran</label>
 				    <input id="nm_goals" name="nm_goals" class="input-xlarge" type="text"/>
 				  </fieldset>
 				</form>
 			</div>
 			<div class="modal-footer">
-		    	<button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-		    	<button class="btn btn-primary" id="submit">Submit</button>
+		    	<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<span class="lang_eng" style="display:none">Close</span>
+		    		<span class="lang_indo">Tutup</span>
+		    	</button>
+		    	<button class="btn btn-primary" id="submit">
+		    		<span class="lang_eng" style="display:none">Submit</span>
+		    		<span class="lang_indo">Simpan</span>
+		    	</button>
 		  	</div>
 		</div>
     </div>
@@ -87,7 +105,18 @@
 		//$(document).ready(function (e) {
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
-
+	        
+	        //Bahasa
+	        $('#fs').on('change', function(e){
+	        	if($(this).is(':checked')){
+	        		$(".lang_indo").show();
+	        		$(".lang_eng").hide();
+	        	}else{
+	        		$(".lang_indo").hide();
+	        		$(".lang_eng").show();
+	        	}
+	        });
+			
 			var table = $('#tabel-goals').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
@@ -108,12 +137,13 @@
 							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='#'>"+row.nm_goals+"</a></div>";
+							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row.id_goals+"/target' class='target' data-id='"+row.id_goals+"'>"+row.nm_goals+"</a></div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='text-align:center;'>"+'<button data-id="'+row.id_goals+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button type="button" title="detail" class="btn btn-success btn-mini"><i class="icon-edit"></i></button>'+
-                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-eraser"></i></button></div>';
+							return "<div style='text-align:center;'>"+
+							'<button data-id="'+row.id_goals+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+							'<button data-id="'+row.id_goals+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -124,6 +154,15 @@
 			$('#text-cari').on( 'keyup', function () {
 				var val=$(this).val();
 				table.search(val).draw();
+			});
+			
+			function clearForm(){
+				$('#id_goals').val("").removeAttr("readonly");
+				$('#nm_goals').val("").removeAttr("readonly");
+			}
+			
+			$('#myModal').on('hidden.bs.modal',function(){
+				clearForm();
 			});
 			
 			$('#submit').on('click', function(){
@@ -152,12 +191,24 @@
                     url: urls+'get-sdgGoals/'+id,
                     success: function (result) {
                     	var val = result.content;
-                    	$('#id_goals').val(val.id_goals);
+                    	$('#id_goals').val(val.id_goals).attr("readonly",true);
         				$('#nm_goals').val(val.nm_goals);
 						$('#myModal').modal('show');
                     },
-                });
-			});
+                })
+             }).on('click', '.detail', function(){
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                    url: urls+'get-sdgGoals/'+id,
+                    success: function (result) {
+                    	var val = result.content;
+                    	$('#id_goals').val(val.id_goals).attr("readonly",true);
+        				$('#nm_goals').val(val.nm_goals).attr("readonly",true);
+						$('#myModal').modal('show');
+                    },
+                })
+             });
 		//});
 		// ]]>
 </script>
