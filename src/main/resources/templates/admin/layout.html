@@ -74,7 +74,7 @@
         <div id="sidebar">
             <script th:inline="javascript">
                 var urls = "http://localhost:8080/sdg/admin/";
-                //var urls = "http://156.67.217.34:8080/sdg/admin/";
+                // var urls = "http://156.67.217.34:8080/sdg/admin/";
 
                 window.onload = function () {
                     $("#keluar").html("Keluar");
@@ -88,7 +88,7 @@
                             $('#menuatas').empty();
                             for (var i = 0; i < response.length; i++) {
                                 var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
-                                    '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
+                                    '<a id="' + response[i].id_menu + '" href="' + response[i].link + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
                                 '</li>';
                                 $('#menuatas').append(menuRow);
                             }
@@ -134,7 +134,7 @@
                                     $("#bhs").html("Bahasa :");
                                     for (var i = 0; i < response.length; i++) {
                                         var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
-                                            '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
+                                            '<a id="' + response[i].id_menu + '" href="' + response[i].link + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
                                         '</li>';
                                         $('#menuatas').append(menuRow);
                                     }
@@ -178,7 +178,7 @@
                                     $("#bhs").html("Language :");
                                     for (var i = 0; i < response.length; i++) {
                                         var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
-                                            '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_eng + '</span></a>'
+                                            '<a id="' + response[i].id_menu + '" href="' + response[i].link + '"><span id="' + response[i].submenu + '">' + response[i].menu_eng + '</span></a>'
                                         '</li>';
                                         $('#menuatas').append(menuRow);
                                     }
