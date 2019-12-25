@@ -6,9 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgTarget;
-import com.jica.sdg.repository.SdgGoalsRepository;
 import com.jica.sdg.repository.SdgTargetRepository;
 
 @Service

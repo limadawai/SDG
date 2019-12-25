@@ -6,12 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
-import com.jica.sdg.model.SdgTarget;
-import com.jica.sdg.repository.SdgGoalsRepository;
 import com.jica.sdg.repository.SdgIndicatorRepository;
-import com.jica.sdg.repository.SdgTargetRepository;
 
 @Service
 public class SdgIndicatorService implements ISdgIndicatorService{
