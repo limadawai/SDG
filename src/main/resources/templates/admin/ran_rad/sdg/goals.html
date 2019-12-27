@@ -107,13 +107,31 @@
 	        var header = $("meta[name='_csrf_header']").attr("content");
 	        
 	        //Bahasa
+	        var titleDel = "Anda Yakin";
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
 	        $('#fs').on('change', function(e){
 	        	if($(this).is(':checked')){
 	        		$(".lang_indo").show();
 	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
 	        	}else{
 	        		$(".lang_indo").hide();
 	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
 	        	}
 	        });
 			
@@ -143,7 +161,7 @@
 							return "<div style='text-align:center;'>"+
 							'<button data-id="'+row.id_goals+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
 							'<button data-id="'+row.id_goals+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                            '<button data-id="'+row.id_goals+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -211,19 +229,26 @@
              }).on('click', '.delete', function(){
 				var id = $(this).attr('data-id');
 				swal({
-                    title: 'Anda Yakin ',
-                    text: "Menghapus Data?",
+                    title: titleDel,
+                    text: messDel,
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, Hapus data ini!'
+                    confirmButtonText: buttDel
                 }).then(function () {
                 	$.ajax({
-    					type: "GET",
-                        url: urls+'get-sdgGoals/'+id,
+    					type: "DELETE",
+                        url: urls+'delete-sdgGoals/'+id,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
                         success: function (result) {
-                        	swal('Hapus','Data berhasil dihapus','success');
+                        	swal(titleOk,messOk,'success');
+                        	table.ajax.url(urls+'list-sdgGoals').load();
+                        },
+                        error:function (result) {
+                        	swal(titleOk,messNOk,'error');
                         	table.ajax.url(urls+'list-sdgGoals').load();
                         },
                     })
