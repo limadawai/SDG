@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jica.sdg.model.MonPeriod;
 import com.jica.sdg.model.SdgDisaggre;
 import com.jica.sdg.model.SdgDisaggreDetail;
 import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
+import com.jica.sdg.service.MonPeriodService;
 import com.jica.sdg.service.SdgDisaggreDetailService;
 import com.jica.sdg.service.SdgDisaggreService;
 import com.jica.sdg.service.SdgGoalsService;
@@ -43,6 +45,9 @@ public class RanRadSdgController {
 	
 	@Autowired
 	SdgDisaggreDetailService sdgDisaggreDetailService;
+	
+	@Autowired
+	MonPeriodService monPerService;
 	
 	@GetMapping("admin/list-sdgGoals")
     public @ResponseBody Map<String, Object> sdgGoalsList() {
@@ -193,6 +198,14 @@ public class RanRadSdgController {
     @GetMapping("admin/get-sdgDisaggreDetail/{id}")
     public @ResponseBody Map<String, Object> getSdgDisaggreDetail(@PathVariable("id") Integer id) {
         Optional<SdgDisaggreDetail> list = sdgDisaggreDetailService.findOne(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-monPer/{id}")
+    public @ResponseBody Map<String, Object> monPerList(@PathVariable("id") String id) {
+        List<MonPeriod> list = monPerService.findAll(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;

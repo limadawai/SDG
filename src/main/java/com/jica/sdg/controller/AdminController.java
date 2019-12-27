@@ -7,6 +7,8 @@ import com.jica.sdg.repository.NsaprofilRepository;
 import com.jica.sdg.service.IMenuService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.ISubmenuService;
+import com.jica.sdg.service.ProvinsiService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +22,9 @@ import java.util.List;
 
 @Controller
 public class AdminController {
+	
+	@Autowired
+	ProvinsiService prov;
 
     //*********************** Menu Dari DB ***********************
     @Autowired
@@ -111,10 +116,11 @@ public class AdminController {
         return "admin/ran_rad/non_gov/indikator";
     }
     
-    @GetMapping("admin/ran_rad/goals")
+    @GetMapping("admin/ran_rad")
     public String ran_goals(Model model) {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        return "admin/ran_rad/sdg/goals";
+        model.addAttribute("prov",prov.findAllProvinsi());
+        return "admin/ran_rad/monper";
     }
     
     @GetMapping("admin/ran_rad/goals/target")
