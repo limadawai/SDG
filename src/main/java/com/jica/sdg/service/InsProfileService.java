@@ -23,6 +23,11 @@ public class InsProfileService implements IInsProfileService{
 	}
 	
 	@Override
+	public List<Insprofile> findId(String id) {
+		return (List<Insprofile>) insProfileRepo.findId(id);
+	}
+	
+	@Override
 	public void saveInsProfil(Insprofile ins) {
 		insProfileRepo.save(ins);
 	}
@@ -31,4 +36,10 @@ public class InsProfileService implements IInsProfileService{
 	public Optional<Insprofile> findOne(String id) {
 		return (Optional<Insprofile>) insProfileRepo.findById(id);
 	}
+        
+        @Override
+	public void deleteInsProfil(String id) {
+		insProfileRepo.deleteById(id);
+	}
+        
 }

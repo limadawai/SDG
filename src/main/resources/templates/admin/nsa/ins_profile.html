@@ -13,17 +13,17 @@
 <!--  Content  -->
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb" class="breadcrumb_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>NSA / Institution Profile</a></div>
-            <div id="breadcrumb" class="breadcrumb_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>NSA / Profil Institusi</a></div>
+            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>NSA / Institution Profile</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>NSA / Profil Institusi</a></div>
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="widget-box">
-                    <div class="widget-title" id="judul-eng" style="display: none">
+                    <div class="widget-title lang_eng" id="judul-eng" style="display: none">
                         <span class="icon"><i class="icon-tasks"></i></span>
                         <h5>Table Institution Profile</h5>
                     </div>
-                    <div class="widget-title" id="judul-indo">
+                    <div class="widget-title lang_indo" id="judul-indo">
                         <span class="icon"><i class="icon-tasks"></i></span>
                         <h5>Tabel Profil Institusi</h5>
                     </div>
@@ -33,14 +33,14 @@
                                 <option value="0" >-- Pilih --</option>
                                 <option th:each="f:${listInsProfile}" th:value="${f.id_inst}" th:text="${f.nm_inst}"></option>
                             </select>
-                            <div class="btn-toolbar" style="float:right; display: none" id="btn_eng">
+                            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
                                 <button class="btn btn-warning btn-small tambah">
                                     Add New
                                 </button>
                                 <button class="btn btn-success btn-small">Import</button>
                                 <button class="btn btn-primary btn-small">Export</button>
                             </div>
-                            <div class="btn-toolbar" style="float:right" id="btn_indo">
+                            <div class="btn-toolbar lang_indo" style="float:right" id="btn_indo">
                                 <button class="btn btn-warning btn-small tambah">
                                     Tambah Baru
                                 </button>
@@ -62,7 +62,7 @@
                             <div class="span12">
                                 <table  id="tabel-ins-profile" class="table table-striped table-bordered">
                                     <thead >
-                                        <tr id="thead_eng" style="display: none">
+                                        <tr class="lang_eng" style="display: none">
                                             <th style="text-align:center;font-size:80%;">No.</th>
                                             <th style="text-align:center;font-size:80%;">Achievement</th>
                                             <th style="text-align:center;font-size:80%;">Location</th>
@@ -71,7 +71,7 @@
                                             <th style="text-align:center;font-size:80%;">Major Partners</th>
                                             <th style="text-align:center;font-size:80%;">Action</th>
                                         </tr>
-                                        <tr id="thead_indo">
+                                        <tr class="lang_indo" id="thead_indo">
                                             <th style="text-align:center;font-size:80%;">No.</th>
                                             <th style="text-align:center;font-size:80%;">Pencapaian</th>
                                             <th style="text-align:center;font-size:80%;">Lokasi</th>
@@ -90,72 +90,153 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div th:include="admin/layout :: footer"></div>
-    <div class="modal fade addModal" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h3 class="modal-title label_indo_add" id="exampleModalLabel">Profil Institusi</h3>
-                    <h3 class="modal-title label_eng_add" id="exampleModalLabel" style="display: none">Institution Profile</h3>
+        <div class="modal fade addModal" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title lang_indo" id="exampleModalLabel">Profil Institusi</h3>
+                        <h3 class="modal-title lang_eng" id="exampleModalLabel" style="display: none">Institution Profile</h3>
+                    </div>
+                    <form class="form-horizontal">
+                        <div class="modal-body">
+                            <div class="control-group">
+                                <label for="nm_inst" class="lang_indo">ID Institusi :</label>
+                                <label for="nm_inst" class="lang_eng" style="display: none">Institution ID :</label>
+                                <input name="id_inst" id="id_inst" type="text" class="input-block-level">
+                            </div>
+                            <div class="control-group">
+                                <label for="nm_inst" class="lang_indo">Nama Profil Institusi :</label>
+                                <label for="nm_inst" class="lang_eng" style="display: none">Institution Profile Name :</label>
+                                <input name="nm_inst" id="nm_inst" type="text" class="input-block-level" required>
+                            </div>
+                            <div class="control-group">
+                                <label for="achievement" class="lang_indo">Pencapaian :</label>
+                                <label for="achievement" class="lang_eng" style="display: none">Achievement :</label>
+                                <input name="achievement" id="achievement" type="text" class="input-block-level" >
+                            </div>
+                            <div class="control-group">
+                                <label for="loc_inst" class="lang_indo">Lokasi :</label>
+                                <label for="loc_inst" class="lang_eng" style="display: none">Location:</label>
+                                <input name="loc_inst" id="loc_inst" type="text" class="input-block-level" >
+                            </div>
+                            <div class="control-group">
+                                <label for="beneficiaries" class="lang_indo">Penerima Manfaat :</label>
+                                <label for="beneficiaries" class="lang_eng" style="display: none">Beneficiaries :</label>
+                                <input name="beneficiaries" id="beneficiaries" type="text" class="input-block-level" >
+                            </div>
+                            <div class="control-group">
+                                <label for="year_impl" class="lang_indo">Tahun Implementasi :</label>
+                                <label for="year_impl" class="lang_eng" style="display: none">Year of Implementation :</label>
+                                <input name="year_impl" id="year_impl" type="text" class="input-block-level" >
+                            </div>
+                            <div class="control-group">
+                                <label for="major_part" class="lang_indo">Partner :</label>
+                                <label for="major_part" class="lang_eng" style="display: none">Major Partners :</label>
+                                <input name="major_part" id="major_part" type="text" class="input-block-level" >
+                            </div>
+                        </div>
+                        <div class="modal-footer" id="simpan_">
+                            <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal">Close</button>
+                            <button type="button" id="simpan" class="btn btn-success lang_indo">Simpan</button>
+                            <button type="button" id="simpan" class="btn btn-success lang_eng">Submit</button>
+                        </div>
+                        <div class="modal-footer" id="update_" style="display: none">
+                            <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal">Close</button>
+                            <button type="button" id="update" class="btn btn-success lang_indo">Simpan</button>
+                            <button type="button" id="update" class="btn btn-success lang_eng">Submit</button>
+                        </div>
+                    </form>
                 </div>
-                <form class="form-horizontal">
-                    <div class="modal-body">
-                        <div class="control-group">
-                            <label for="nm_inst" class="nm_inst_indo">ID Institusi :</label>
-                            <label for="nm_inst" class="nm_inst_eng" style="display: none">Institution ID :</label>
-                            <input name="id_inst" id="id_inst" type="text" class="input-block-level">
-                        </div>
-                        <div class="control-group">
-                            <label for="nm_inst" class="nm_inst_indo">Nama Profil Institusi :</label>
-                            <label for="nm_inst" class="nm_inst_eng" style="display: none">Institution Profile Name :</label>
-                            <input name="nm_inst" id="nm_inst" type="text" class="input-block-level" required>
-                        </div>
-                        <div class="control-group">
-                            <label for="achievement" class="achievement_indo">Pencapaian :</label>
-                            <label for="achievement" class="achievement_eng" style="display: none">Achievement :</label>
-                            <input name="achievement" id="achievement" type="text" class="input-block-level" >
-                        </div>
-                        <div class="control-group">
-                            <label for="loc_inst" class="loc_inst_indo">Lokasi :</label>
-                            <label for="loc_inst" class="loc_inst_eng" style="display: none">Location:</label>
-                            <input name="loc_inst" id="loc_inst" type="text" class="input-block-level" >
-                        </div>
-                        <div class="control-group">
-                            <label for="beneficiaries" class="beneficiaries_indo">Penerima Manfaat :</label>
-                            <label for="beneficiaries" class="beneficiaries_eng" style="display: none">Beneficiaries :</label>
-                            <input name="beneficiaries" id="beneficiaries" type="text" class="input-block-level" >
-                        </div>
-                        <div class="control-group">
-                            <label for="year_impl" class="year_impl_indo">Tahun Implementasi :</label>
-                            <label for="year_impl" class="year_impl_eng" style="display: none">Year of Implementation :</label>
-                            <input name="year_impl" id="year_impl" type="text" class="input-block-level" >
-                        </div>
-                        <div class="control-group">
-                            <label for="major_part" class="major_part_indo">Partner :</label>
-                            <label for="major_part" class="major_part_eng" style="display: none">Major Partners :</label>
-                            <input name="major_part" id="major_part" type="text" class="input-block-level" >
-                        </div>
-                    </div>
-                    <div class="modal-footer" id="simpan_">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" id="simpan" class="btn btn-success">Submit</button>
-                    </div>
-                    <div class="modal-footer" id="update_" style="display: none">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" id="update" class="btn btn-success">Submit</button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
+    <div th:include="admin/layout :: footer"></div>
+    
 </body>
 <script th:inline="javascript" >
     // <![CDATA[
             //$(document).ready(function (e) {
+            
+            //Bahasa
+            var titleDel = "Anda Yakin";
+            var messDel = "Menghapus Data?";
+            var buttDel = 'Ya, Hapus data ini!';
+            var titleOk	= "Hapus";
+            var messOk = "Data berhasil dihapus";
+            var messNOk = "Data tidak dapat dihapus";
+            $('#fs').on('change', function(e){
+                    if($(this).is(':checked')){
+                            $(".lang_indo").show();
+                            $(".lang_eng").hide();
+                            titleDel = "Anda Yakin";
+                            messDel = "Menghapus Data?";
+                            buttDel = 'Ya, Hapus data ini!';
+                            titleOk	= "Hapus";
+                    messOk = "Data berhasil dihapus";
+                    messNOk = "Data tidak dapat dihapus";
+                    }else{
+                            $(".lang_indo").hide();
+                            $(".lang_eng").show();
+                            titleDel = "Are you sure";
+                            messDel = "Delete this data?";
+                            buttDel = 'Yes, Delete this data!';
+                            titleOk	= "Delete";
+                    messOk = "Delete successful";
+                    messNOk = "Can't delete data";
+                    }
+            });
+            
+            
+            $("#nm_ins_profil").on('change', function(e){
+                var id = this.value ;
+                $('#tabel-ins-profile').DataTable({
+                    responsive: true,
+                    sDom: 'lrtip',
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "ajax": {
+                        "url": urls+'list-getid-ins-profil/'+id,
+                        dataSrc: 'content',
+                    },
+                    "searching": true,
+                    "columns": [
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+//                            var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part;
+//                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+//                            '<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail"><i class="icon-time"></i></button>'+
+//                            '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                        }}
+                    ],
+                    "columnDefs": [
+                    ],
+                    select: true
+                });	
+            });
             
 
             var table = $('#tabel-ins-profile').DataTable({
@@ -344,36 +425,36 @@
             $("#tabel-ins-profile").on('click', '.delete', function () {
                 var dataid  = $(this).attr('data-id');
                 swal({
-                    title: 'Are You Sure',
-                    text: "Delete Institution Profile",
+                    title: titleDel,
+                    text: messDel,
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',
                     cancelButtonColor: '#d33',
-                    confirmButtonText: 'Yes'
+                    confirmButtonText: buttDel
                 }).then(function () {
-//                    $.ajax({
-//                        type: "DELETE",
-//                        url: sessionStorage.base_url + '/delete-skp/' + id,
-//                        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-//                        success: function (data) {
-//                            grid_rencanaskp();
-//                            grid_skp();
-////                            grid_kinerja();
-//                        }
-//                    });
-                    alert('yees');
-                    swal(
-                        'Delete',
-                        'Success',
-                        'success'
-                    )
+                    $.ajax({
+                        type: "DELETE",
+                        url: urls+'delete-ins-profil/'+dataid,
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header,token);
+                        },
+                        success: function (result) {
+                            swal(titleOk,messOk,'success');
+                            window.location = urls+"nsa/inst-profile";
+                        },
+                        error:function (result) {
+                            swal(titleOk,messNOk,'error');
+                            window.location = urls+"nsa/inst-profile";
+                        },
+                    })
                 }, function (dismiss) {
-                    if (dismiss === 'Cancel') {
+                    if (dismiss === 'cancel') {
                     }
                 })
 
             });
+            
 
         //});
     // ]]>

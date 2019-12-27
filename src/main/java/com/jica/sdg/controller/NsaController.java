@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -48,6 +51,14 @@ public class NsaController {
         return "admin/nsa/ins_profile";
     }
     
+    @GetMapping("admin/list-getid-ins-profil/{id}")
+    public @ResponseBody Map<String, Object> insProfilListid(@PathVariable("id") String id) {
+        List<Insprofile> list = insProfilrService.findId(id);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-ins-profil")
     public @ResponseBody Map<String, Object> insProfilList() {
         List<Insprofile> list = insProfilrService.findAll();
@@ -60,6 +71,12 @@ public class NsaController {
     @ResponseBody
     public void saveInsProfil(@RequestBody Insprofile insprofil) {
         insProfilrService.saveInsProfil(insprofil);
+    }
+    
+    @DeleteMapping("admin/delete-ins-profil/{id}")
+    @ResponseBody
+    public void deleteSdg(@PathVariable("id") String id) {
+        insProfilrService.deleteInsProfil(id);
     }
 
     @GetMapping("admin/nsa/nsa-collaboration")
