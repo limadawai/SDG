@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ProvinsiRepository extends CrudRepository<Provinsi, String> {
 
-    @Query(value = "select * from ref_provinsi", nativeQuery = true)
+    @Query(value = "select * from ref_province", nativeQuery = true)
     List<Provinsi> findAllProvinsi();
 
 }

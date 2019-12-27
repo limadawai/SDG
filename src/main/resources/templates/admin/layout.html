@@ -7,6 +7,8 @@
     <title>Dashboard SDG</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/bootstrap-responsive.min.css}"/>
     <link rel="stylesheet" th:href="@{/css/fullcalendar.css}"/>
@@ -71,7 +73,9 @@
         </div>
         <div id="sidebar">
             <script th:inline="javascript">
-                var urls = "http://localhost:8080/admin/";
+                var urls = "http://localhost:8080/sdg/admin/";
+                // var urls = "http://156.67.217.34:8080/sdg/admin/";
+
                 window.onload = function () {
                     $("#keluar").html("Keluar");
                     $("#bhs").html("Bahasa :");
@@ -84,7 +88,7 @@
                             $('#menuatas').empty();
                             for (var i = 0; i < response.length; i++) {
                                 var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
-                                    '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
+                                    '<a id="' + response[i].id_menu + '" href="' + response[i].link + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
                                 '</li>';
                                 $('#menuatas').append(menuRow);
                             }
@@ -130,7 +134,7 @@
                                     $("#bhs").html("Bahasa :");
                                     for (var i = 0; i < response.length; i++) {
                                         var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
-                                            '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
+                                            '<a id="' + response[i].id_menu + '" href="' + response[i].link + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
                                         '</li>';
                                         $('#menuatas').append(menuRow);
                                     }
@@ -174,7 +178,7 @@
                                     $("#bhs").html("Language :");
                                     for (var i = 0; i < response.length; i++) {
                                         var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
-                                            '<a id="' + response[i].id_menu + '" href="' + response[i].tautan + '"><span id="' + response[i].submenu + '">' + response[i].menu_eng + '</span></a>'
+                                            '<a id="' + response[i].id_menu + '" href="' + response[i].link + '"><span id="' + response[i].submenu + '">' + response[i].menu_eng + '</span></a>'
                                         '</li>';
                                         $('#menuatas').append(menuRow);
                                     }
@@ -208,6 +212,7 @@
                             });
                         }
                     });
+                    $("#sidebar li:first").addClass("active");
                 };
             </script>
             <ul id="menuatas"></ul>

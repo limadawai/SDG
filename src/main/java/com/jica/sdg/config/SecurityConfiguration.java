@@ -16,8 +16,10 @@ import javax.sql.DataSource;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+
     @Autowired
     private DataSource dataSource;
+    
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
@@ -39,7 +41,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .failureUrl("/login?error=true")
                 .usernameParameter("email")
                 .passwordParameter("password")
-                .defaultSuccessUrl("/admin/dashboard")
+                .defaultSuccessUrl("/admin/dashboard", true)
                 .and()
                 .logout()
                 .logoutSuccessUrl("/login")

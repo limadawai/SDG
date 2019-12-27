@@ -13,9 +13,8 @@ public class FrontController {
         return "login";
     }
 
-    @GetMapping("/")
-    public String beranda(Model model) {
-        model.addAttribute("title", "Beranda");
-        return "beranda";
-    }
+	/*
+	 * @GetMapping("/") public String beranda(Model model) {
+	 * model.addAttribute("title", "Beranda"); return "beranda"; }
+	 */
 }
