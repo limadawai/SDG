@@ -17,8 +17,8 @@
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5 class="lang_eng" style="display:none">Goals</h5>
-                        <h5 class="lang_indo">Sasaran</h5>
+                        <h5 class="lang_eng" style="display:none">List Ran/RAD</h5>
+                        <h5 class="lang_indo">Daftar RAN/RAD</h5>
                     </div>
                     <div class="widget-content">
                     	<div class="row-fluid">
@@ -31,8 +31,8 @@
                     		<div class="span6" align="right">
                     			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary">
                     				<i class="icon-plus"></i> 
-                    					<span class="lang_eng" style="display:none">Add Goals</span>
-                    					<span class="lang_indo">Tambah Sasaran</span>
+                    					<span class="lang_eng" style="display:none">Add RAN/RAD</span>
+                    					<span class="lang_indo">Tambah RAN/RAD</span>
                     			</button>
                     		</div>
                     	</div>
@@ -44,14 +44,16 @@
                                     <thead>
                                         <tr class="lang_eng" style="display:none">
                                             <th style="text-align:center;font-size:80%;">No</th>
-                                            <th style="text-align:center;font-size:80%;">Code</th>
-                                            <th style="text-align:center;font-size:80%;">Goals</th>
+                                            <th style="text-align:center;font-size:80%;">Period Year</th>
+                                            <th style="text-align:center;font-size:80%;">Monitoring Period</th>
+                                            <th style="text-align:center;font-size:80%;">Status</th>
                                             <th style="text-align:center;font-size:80%;">Action</th>
                                         </tr>
                                         <tr class="lang_indo">
                                             <th style="text-align:center;font-size:80%;">No</th>
-                                            <th style="text-align:center;font-size:80%;">Kode</th>
-                                            <th style="text-align:center;font-size:80%;">Sasaran</th>
+                                            <th style="text-align:center;font-size:80%;">Periode Tahun</th>
+                                            <th style="text-align:center;font-size:80%;">Periode Monitoring</th>
+                                            <th style="text-align:center;font-size:80%;">Status</th>
                                             <th style="text-align:center;font-size:80%;">Aksi</th>
                                         </tr>
                                     </thead>
@@ -69,21 +71,110 @@
         <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 class="lang_eng" style="display:none">Add SDGs Goals</h3>
-			    <h3 class="lang_indo">Tambah Sasaran</h3>
+			    <h3 class="lang_eng" style="display:none">Add Period & Monitoring Period</h3>
+			    <h3 class="lang_indo">Tambah Periode & Periode Monitoring</h3>
 		  	</div>
 			<div class="modal-body">
-				<form id="form-sdgGoals">
+				<form id="form-sdgGoals" class="form-horizontal">
 				  <fieldset>
-				    <label class="lang_eng" style="display:none">Code</label>
-				    <label class="lang_indo">Kode</label>
-				    <input id="id_goals" name="id_goals" class="input-medium" type="text"/>
+				    <label class="lang_eng control-label" style="display:none"><b>Period</b></label>
+				    <label class="lang_indo control-label"><b>Periode</b></label>
+				    <div class="controls">
+				    	<input id="id_monper" name="id_monper" class="input-medium" type="hidden"/>
+					    <input id="start_year" name="start_year" class="input-small" type="text"/>
+					    -
+					    <input id="end_year" name="end_year" class="input-small" type="text"/>
+				    </div>
 				  </fieldset>
-				  <fieldset>
-				    <label class="lang_eng" style="display:none">Goals Name</label>
-				    <label class="lang_indo">Nama Sasaran</label>
-				    <input id="nm_goals" name="nm_goals" class="input-xlarge" type="text"/>
-				  </fieldset>
+				  <div class="control-group">
+				  	<label class="lang_eng control-label" style="display:none"><b>Monitoring Period</b></label>
+				    <label class="lang_indo control-label"><b>Periode Monitoring</b></label>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">SDGs Indicator</label>
+				    <label class="lang_indo control-label" style="text-align:left">Indikator SDG</label>
+				    <div class="controls">
+				    	<select id="sdg_indicator" name="sdg_indicator">
+				    		<option value="">select</option>
+				    		<option value="yearly">Yearly</option>
+				    		<option value="semesterly">Semesterly</option>
+				    		<option value="quarterly">Quarterly</option>
+				    	</select>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">Govt. Program</label>
+				    <label class="lang_indo control-label" style="text-align:left">Program Pemerintah</label>
+				    <div class="controls">
+				    	<select id="gov_prog" name="gov_prog">
+				    		<option value="">select</option>
+				    		<option value="yearly">Yearly</option>
+				    		<option value="semesterly">Semesterly</option>
+				    		<option value="quarterly">Quarterly</option>
+				    	</select>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">Non Govt. Program</label>
+				    <label class="lang_indo control-label" style="text-align:left">Program Non Pemerintah</label>
+				    <div class="controls">
+				    	<select id="nsa_prog" name="nsa_prog">
+				    		<option value="">select</option>
+				    		<option value="yearly">Yearly</option>
+				    		<option value="semesterly">Semesterly</option>
+				    		<option value="quarterly">Quarterly</option>
+				    	</select>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Govt. Program Budget</label>
+				    <label class="lang_indo control-label" style="text-align:left">Budget Program Pemerintah</label>
+				    <div class="controls">
+				    	<select id="gov_prog_bud" name="gov_prog_bud">
+				    		<option value="">select</option>
+				    		<option value="yearly">Yearly</option>
+				    		<option value="semesterly">Semesterly</option>
+				    		<option value="quarterly">Quarterly</option>
+				    	</select>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">Non Govt. Program Budget</label>
+				    <label class="lang_indo control-label" style="text-align:left">Budget Program Non Pemerintah</label>
+				    <div class="controls">
+				    	<select id="nsa_prog_bud" name="nsa_prog_bud">
+				    		<option value="">select</option>
+				    		<option value="yearly">Yearly</option>
+				    		<option value="semesterly">Semesterly</option>
+				    		<option value="quarterly">Quarterly</option>
+				    	</select>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">Problem Identification</label>
+				    <label class="lang_indo control-label" style="text-align:left">Identifikasi Masalah</label>
+				    <div class="controls">
+				    	<select id="ident_problem" name="ident_problem">
+				    		<option value="">select</option>
+				    		<option value="yearly">Yearly</option>
+				    		<option value="semesterly">Semesterly</option>
+				    		<option value="quarterly">Quarterly</option>
+				    	</select>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">Best Practice</label>
+				    <label class="lang_indo control-label" style="text-align:left">Praktik Terbaik</label>
+				    <div class="controls">
+				    	<input id="best_pract" name="best_pract" type="text"/>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class=" control-label" style="text-align:left">Status</label>
+				    <div class="controls">
+				    	<input id="status" name="status" type="text"/>
+				    </div>
+				  </div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -125,7 +216,7 @@
 				"autoWidth": true,
 				"responsive":true,
 				"ajax": {
-					"url": urls+'list-sdgGoals',
+					"url": urls+'list-monPer/00',
 					dataSrc: 'content',
 				},
 				"searching": true,
@@ -134,16 +225,19 @@
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
+							return "<div style='font-size:90%;'>"+row.start_year+" - "+row.end_year+"</div>";
+						}},
+						{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row.sdg_indicator+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row.id_goals+"/target' class='target' data-id='"+row.id_goals+"'>"+row.nm_goals+"</a></div>";
+							return "<div style='font-size:90%;'>"+row.status+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row.id_goals+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id_goals+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+							'<button data-id="'+row.id_monper+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+							'<button data-id="'+row.id_monper+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -207,30 +301,6 @@
         				$('#nm_goals').val(val.nm_goals).attr("readonly",true);
 						$('#myModal').modal('show');
                     },
-                })
-             }).on('click', '.delete', function(){
-				var id = $(this).attr('data-id');
-				swal({
-                    title: 'Anda Yakin ',
-                    text: "Menghapus Data?",
-                    type: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Ya, Hapus data ini!'
-                }).then(function () {
-                	$.ajax({
-    					type: "GET",
-                        url: urls+'get-sdgGoals/'+id,
-                        success: function (result) {
-                        	swal('Hapus','Data berhasil dihapus','success');
-                        	table.ajax.url(urls+'list-sdgGoals').load();
-                        },
-                    })
-                    
-                }, function (dismiss) {
-                    if (dismiss === 'cancel') {
-                    }
                 })
              });
 		//});
