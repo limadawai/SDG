@@ -61,7 +61,6 @@ public class NsaController {
     public void saveInsProfil(@RequestBody Insprofile insprofil) {
         insProfilrService.saveInsProfil(insprofil);
     }
-    
 
     @GetMapping("admin/nsa/nsa-collaboration")
     public String nsa_collaboration(Model model) {
