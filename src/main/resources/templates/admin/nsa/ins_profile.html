@@ -201,6 +201,7 @@
                     "cache": false,
                     "autoWidth": true,
                     "responsive":true,
+                    "bDestroy": true,
                     "ajax": {
                         "url": urls+'list-getid-ins-profil/'+id,
                         dataSrc: 'content',
@@ -208,28 +209,28 @@
                     "searching": true,
                     "columns": [
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                            return "<div style='font-size:90%;'>"+row.achievement+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                            return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
+                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
+                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
-//                            var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part;
-//                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
-//                            '<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail"><i class="icon-time"></i></button>'+
-//                            '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                            var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part;
+                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                            '<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail"><i class="icon-time"></i></button>'+
+                            '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                         }}
                     ],
                     "columnDefs": [
@@ -246,6 +247,7 @@
                 "cache": false,
                 "autoWidth": true,
                 "responsive":true,
+                "bDestroy": true,
                 "ajax": {
                     "url": urls+'list-ins-profil',
                     dataSrc: 'content',
