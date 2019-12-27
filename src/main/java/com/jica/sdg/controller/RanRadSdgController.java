@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.jica.sdg.model.MonPeriod;
 import com.jica.sdg.model.SdgDisaggre;
 import com.jica.sdg.model.SdgDisaggreDetail;
 import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
+import com.jica.sdg.service.MonPeriodService;
 import com.jica.sdg.service.SdgDisaggreDetailService;
 import com.jica.sdg.service.SdgDisaggreService;
 import com.jica.sdg.service.SdgGoalsService;
@@ -44,6 +47,9 @@ public class RanRadSdgController {
 	@Autowired
 	SdgDisaggreDetailService sdgDisaggreDetailService;
 	
+	@Autowired
+	MonPeriodService monPerService;
+	
 	@GetMapping("admin/list-sdgGoals")
     public @ResponseBody Map<String, Object> sdgGoalsList() {
         List<SdgGoals> list = sdgGoalsService.findAll();
@@ -65,6 +71,12 @@ public class RanRadSdgController {
         hasil.put("content",list);
         return hasil;
     }
+	
+	@DeleteMapping("admin/delete-sdgGoals/{id}")
+	@ResponseBody
+	public void deleteSdg(@PathVariable("id") String id) {
+		sdgGoalsService.deleteSdgGoals(id);
+	}
 	
 	@GetMapping("admin/ran_rad/sdg/goals/{id}/target")
     public String target(Model model, @PathVariable("id") String id) {
@@ -193,6 +205,14 @@ public class RanRadSdgController {
     @GetMapping("admin/get-sdgDisaggreDetail/{id}")
     public @ResponseBody Map<String, Object> getSdgDisaggreDetail(@PathVariable("id") Integer id) {
         Optional<SdgDisaggreDetail> list = sdgDisaggreDetailService.findOne(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-monPer/{id}")
+    public @ResponseBody Map<String, Object> monPerList(@PathVariable("id") String id) {
+        List<MonPeriod> list = monPerService.findAll(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;

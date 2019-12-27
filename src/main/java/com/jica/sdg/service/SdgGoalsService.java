@@ -29,4 +29,9 @@ public class SdgGoalsService implements ISdgGoalsService{
 	public Optional<SdgGoals> findOne(String id) {
 		return (Optional<SdgGoals>) sdgGoalsRepo.findById(id);
 	}
+
+	@Override
+	public void deleteSdgGoals(String id) {
+		sdgGoalsRepo.deleteById(id);
+	}
 }
