@@ -31,6 +31,11 @@ public class SdgDisaggreDetailService implements ISdgDisaggreDetailService{
 	public Optional<SdgDisaggreDetail> findOne(Integer id) {
 		return (Optional<SdgDisaggreDetail>) SdgDisaggreDetailRepository.findById(id);
 	}
+
+	@Override
+	public void deleteSdgDisaggreDetail(Integer id) {
+		SdgDisaggreDetailRepository.deleteById(id);
+	}
 	
 	
 }

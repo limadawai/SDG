@@ -7,7 +7,9 @@ import com.jica.sdg.repository.NsaprofilRepository;
 import com.jica.sdg.service.IMenuService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.ISubmenuService;
+import com.jica.sdg.service.MonPeriodService;
 import com.jica.sdg.service.ProvinsiService;
+import com.jica.sdg.service.RoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,12 @@ public class AdminController {
 	
 	@Autowired
 	ProvinsiService prov;
+	
+	@Autowired
+	MonPeriodService monPeriodService;
+	
+	@Autowired
+	RoleService roleService;
 
     //*********************** Menu Dari DB ***********************
     @Autowired
@@ -83,37 +91,19 @@ public class AdminController {
     @GetMapping("admin/ran_rad/gov/program")
     public String gov_program(Model model) {
         model.addAttribute("title", "Define RAN/RAD/Government Program");
+        model.addAttribute("prov",prov.findAllProvinsi());
+        model.addAttribute("monPer", monPeriodService.findAll("000"));
+        model.addAttribute("role", roleService.findAll());
         return "admin/ran_rad/gov/program";
     }
     
-    @GetMapping("admin/ran_rad/gov/program/kegiatan")
-    public String gov_kegiatan(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/Government Program");
-        return "admin/ran_rad/gov/kegiatan";
-    }
-    
-    @GetMapping("admin/ran_rad/gov/program/kegiatan/indikator")
-    public String gov_indikator(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/Government Program");
-        return "admin/ran_rad/gov/indikator";
-    }
-    
-    @GetMapping("admin/ran_rad/non_gov/program")
+    @GetMapping("admin/ran_rad/non-gov/program")
     public String nongov_program(Model model) {
         model.addAttribute("title", "Define RAN/RAD/Non Government Program");
-        return "admin/ran_rad/non_gov/program";
-    }
-    
-    @GetMapping("admin/ran_rad/non_gov/program/kegiatan")
-    public String nongov_kegiatan(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/Non Government Program");
-        return "admin/ran_rad/non_gov/kegiatan";
-    }
-    
-    @GetMapping("admin/ran_rad/non_gov/program/kegiatan/indikator")
-    public String nongov_indikator(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/Non Government Program");
-        return "admin/ran_rad/non_gov/indikator";
+        model.addAttribute("prov",prov.findAllProvinsi());
+        model.addAttribute("monPer", monPeriodService.findAll("000"));
+        model.addAttribute("role", roleService.findAll());
+        return "admin/ran_rad/non-gov/program";
     }
     
     @GetMapping("admin/ran_rad")
@@ -121,18 +111,6 @@ public class AdminController {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         model.addAttribute("prov",prov.findAllProvinsi());
         return "admin/ran_rad/monper";
-    }
-    
-    @GetMapping("admin/ran_rad/goals/target")
-    public String ran_target(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        return "admin/ran_rad/target";
-    }
-    
-    @GetMapping("admin/ran_rad/goals/target/sdgs_indicator")
-    public String ran_sdg(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        return "admin/ran_rad/sdgs_indicator";
     }
 
 }
