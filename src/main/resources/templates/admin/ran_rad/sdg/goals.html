@@ -40,24 +40,24 @@
                         <div class="row-fluid">
                             <div class="span12">
                             	<div class="table-responsive">
-                                <table class="table table-bordered table-striped" id="tabel-goals">
-                                    <thead>
-                                        <tr class="lang_eng" style="display:none">
-                                            <th style="text-align:center;font-size:80%;">No</th>
-                                            <th style="text-align:center;font-size:80%;">Code</th>
-                                            <th style="text-align:center;font-size:80%;">Goals</th>
-                                            <th style="text-align:center;font-size:80%;">Action</th>
-                                        </tr>
-                                        <tr class="lang_indo">
-                                            <th style="text-align:center;font-size:80%;">No</th>
-                                            <th style="text-align:center;font-size:80%;">Kode</th>
-                                            <th style="text-align:center;font-size:80%;">Sasaran</th>
-                                            <th style="text-align:center;font-size:80%;">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody-goals">
-                                    </tbody>
-                                </table>
+									<table class="table table-bordered table-striped" id="tabel-goals">
+										<thead>
+											<tr class="lang_eng" style="display:none">
+												<th style="text-align:center;font-size:80%;">No</th>
+												<th style="text-align:center;font-size:80%;">Code</th>
+												<th style="text-align:center;font-size:80%;">Goals</th>
+												<th style="text-align:center;font-size:80%;">Action</th>
+											</tr>
+											<tr class="lang_indo">
+												<th style="text-align:center;font-size:80%;">No</th>
+												<th style="text-align:center;font-size:80%;">Kode</th>
+												<th style="text-align:center;font-size:80%;">Sasaran</th>
+												<th style="text-align:center;font-size:80%;">Aksi</th>
+											</tr>
+										</thead>
+										<tbody id="tbody-goals">
+										</tbody>
+									</table>
                                 </div>
                             </div>
                         </div>
@@ -158,7 +158,7 @@
 				"searching": true,
 				"columns": [
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+							return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
