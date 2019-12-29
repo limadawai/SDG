@@ -25,25 +25,9 @@
                                 <input class="span10" id="carirole" type="text">
                                 <button class="btn" type="button">Search</button>
                             </div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                            <select id="selprov" name="selprov" class="span3">
-                                <option value="indonesia">Indonesia</option>
+                            <select th:field="*{listprov}" class="span3">
+                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
-                            <!-- ************** Ajax Select Content ************** -->
-                            <script type="text/javascript" th:inline="javascript">
-                                $.ajax({
-                                    url: 'provinsi',
-                                    type: 'get',
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (result) {
-                                        // console.log(result);
-                                        for (var i=0; i<result.length; i++) {
-                                            var options = '<option value="'+result[i].id_prov+'">'+result[i].nm_prov+'</option>';
-                                            $("#selprov").append(options);
-                                        }
-                                    }
-                                });
-                            </script>
                             <button class="btn btn-warning btn-small pull-right" data-toggle="modal" data-target="#addModal">Add New</button>
                         </div>
                         <div class="row-fluid">
@@ -87,55 +71,86 @@
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                    <h3 class="modal-title" id="exampleModalLabel"><i class="icon-cog"></i> Add Role Baru</h3>
+                    <h3 class="modal-title" id="exampleModalLabel"><i class="icon-cog"></i> Tambahkan Role Baru</h3>
                 </div>
                 <form class="form-horizontal">
-                <div class="modal-body">
-                    <div class="control-group">
-                        <label for="nama_role">Nama Role :</label>
-                        <input name="nama_role" id="nama_role" type="text" class="input-block-level"
-                               placeholder="input nama role..." required>
-                    </div>
-                    <div class="control-group">
-                        <label for="deskripsi_role">Deskripsi :</label>
-                        <input name="deskripsi_role" id="deskripsi_role" type="text" class="input-block-level"
-                               placeholder="input deskripsi..." required>
-                    </div>
-                    <div class="control-group">
-                        <label for="selkategori">Kategori :</label>
-                        <select id="selkategori" name="selkategori" class="span3">
-                            <option value="0">pilih kategori</option>
-                            <option value="gov">Pemerintahan</option>
-                            <option value="non-gov">Non-Pemerintahan</option>
-                        </select>
-                    </div><br>
-                    <div class="control-group">
-                        <div>
-                            <label for="cbAll" style="display:inline-block;white-space:nowrap;">
-                                <input id="cbAll" type="checkbox" name="cbAll" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
-                                <span style="vertical-align:middle"><b>Define RAN / RAD</b></span>
-                            </label>
-                            <div style="margin-left:20px">
-                                <label for="cbIndikator" style="display:inline-block;white-space:nowrap;">
-                                    <input id="cbIndikator" type="checkbox" name="cbIndikator" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
-                                    <span style="vertical-align:middle">SDGs Indicator</span>
-                                </label><br>
-                                <label for="cbGov" style="display:inline-block;white-space:nowrap;">
-                                    <input id="cbGov" type="checkbox" name="cbGov" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
-                                    <span style="vertical-align:middle">Program Pemerintah</span>
-                                </label><br>
-                                <label for="cbNonGov" style="display:inline-block;white-space:nowrap;">
-                                    <input id="cbNonGov" type="checkbox" name="cbNonGov" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
-                                    <span style="vertical-align:middle">Program Non-Pemerintah</span>
+                    <div class="modal-body">
+                        <div class="control-group">
+                            <label for="nama_role">Nama Role :</label>
+                            <input name="nama_role" id="nama_role" type="text" class="input-block-level"
+                                   placeholder="input nama role..." required>
+                        </div>
+                        <div class="control-group">
+                            <label for="deskripsi_role">Deskripsi :</label>
+                            <input name="deskripsi_role" id="deskripsi_role" type="text" class="input-block-level"
+                                   placeholder="input deskripsi..." required>
+                        </div>
+                        <div class="control-group">
+                            <label for="selkategori">Kategori :</label>
+                            <select id="selkategori" name="selkategori" class="span3">
+                                <option value="0">pilih kategori</option>
+                                <option value="gov">Pemerintahan</option>
+                                <option value="non-gov">Non-Pemerintahan</option>
+                            </select>
+                        </div><br>
+                        <div class="control-group">
+                            <div>
+                                <label for="cbAll" style="display:inline-block;white-space:nowrap;">
+                                    <input id="cbAll" type="checkbox" name="cbAll" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                    <span style="vertical-align:middle"><b>Define RAN / RAD</b></span>
                                 </label>
+                                <div style="margin-left:20px">
+                                    <label for="cbIndikator" style="display:inline-block;white-space:nowrap;">
+                                        <input id="cbIndikator" type="checkbox" name="cbIndikator" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                        <span style="vertical-align:middle">SDGs Indicator</span>
+                                    </label><br>
+                                    <label for="cbGov" style="display:inline-block;white-space:nowrap;">
+                                        <input id="cbGov" type="checkbox" name="cbGov" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                        <span style="vertical-align:middle">Program Pemerintah</span>
+                                    </label><br>
+                                    <label for="cbNonGov" style="display:inline-block;white-space:nowrap;">
+                                        <input id="cbNonGov" type="checkbox" name="cbNonGov" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                        <span style="vertical-align:middle">Program Non-Pemerintah</span>
+                                    </label>
+                                </div>
+                                <script>
+                                    $("#cbAll").click(function(){
+                                        if ($(this).is(":checked")) {
+                                            $("#cbIndikator").prop("checked", true);
+                                            $("#cbGov").prop("checked", true);
+                                            $("#cbNonGov").prop("checked", true);
+                                        } else {
+                                            $("#cbIndikator").prop("checked", false);
+                                            $("#cbGov").prop("checked", false);
+                                            $("#cbNonGov").prop("checked", false);
+                                        }
+                                    });
+                                    $("#cbIndikator").click(function(){
+                                        if ($(this).is(":checked")) {
+                                            $("#cbAll").prop("checked", true);
+                                            $("#cbAll").attr("disabled", true);
+                                        }
+                                    });
+                                    $("#cbGov").click(function(){
+                                        if ($(this).is(":checked")) {
+                                            $("#cbAll").prop("checked", true);
+                                            $("#cbAll").attr("disabled", true);
+                                        }
+                                    });
+                                    $("#cbNonGov").click(function(){
+                                        if ($(this).is(":checked")) {
+                                            $("#cbAll").prop("checked", true);
+                                            $("#cbAll").attr("disabled", true);
+                                        }
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-success">Submit</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-success">Submit</button>
+                    </div>
                 </form>
             </div>
         </div>

@@ -53,25 +53,6 @@ public class AdminController {
         model.addAttribute("title", "Dashboard SDG Bappenas");
         return "admin/dashboard";
     }
-
-    //*********************** NSA ***********************
-
-    @Autowired
-    IProvinsiService provinsiService;
-
-
-    //*********************** Role Management ***********************
-
-    @GetMapping("admin/role/role_manajemen")
-    public String role_manajemen(Model model) {
-        model.addAttribute("title", "Role Manajemen");
-        return "admin/role_manajemen/manajemen_role";
-    }
-    @GetMapping("admin/role/provinsi")
-    public @ResponseBody List<Provinsi> provinsi() {
-        List<Provinsi> list = provinsiService.findAllProvinsi();
-        return list;
-    }
     
     //*********************** RAN RAD ***********************
     @GetMapping("admin/ran_rad/sdg/goals")
