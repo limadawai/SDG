@@ -12,4 +12,6 @@ public interface IMonPeriodService {
     void saveMonPeriod(MonPeriod sdg);
     
     Optional<MonPeriod> findOne(Integer id);
+    
+    void deleteMonPeriod(Integer id);
 }

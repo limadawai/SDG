@@ -12,4 +12,6 @@ public interface ISdgDisaggreService {
     void saveSdgDisaggre(SdgDisaggre sdg);
     
     Optional<SdgDisaggre> findOne(String id);
+    
+    void deleteSdgDisaggre(String id);
 }

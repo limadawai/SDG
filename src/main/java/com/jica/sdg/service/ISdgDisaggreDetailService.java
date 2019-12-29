@@ -12,4 +12,6 @@ public interface ISdgDisaggreDetailService {
     void saveSdgDisaggreDetail(SdgDisaggreDetail sdg);
     
     Optional<SdgDisaggreDetail> findOne(Integer id);
+    
+    void deleteSdgDisaggreDetail(Integer id);
 }
