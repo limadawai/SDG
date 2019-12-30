@@ -3,8 +3,11 @@ package com.jica.sdg.controller;
 import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Submenu;
+import com.jica.sdg.service.IMenuService;
+import com.jica.sdg.service.IProvinsiService;
+import com.jica.sdg.service.ISubmenuService;
+import com.jica.sdg.service.ProvinsiService;
 import com.jica.sdg.model.User;
-import com.jica.sdg.repository.NsaprofilRepository;
 import com.jica.sdg.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,13 +79,11 @@ public class AdminController {
     @PostMapping("admin/bahasa")
     public @ResponseBody void bahasa(@RequestParam("bhs") String bhs, HttpServletRequest request, HttpSession session) {
         request.getSession().setAttribute("bahasa", bhs);
-        System.out.println("Bahasa : "+session.getAttribute("bahasa"));
     }
 
     @PostMapping("admin/english")
     public @ResponseBody void english(@RequestParam("bhs") String bhs, HttpServletRequest request, HttpSession session) {
         request.getSession().setAttribute("bahasa", bhs);
-        System.out.println("Language : "+session.getAttribute("bahasa"));
     }
     
     //*********************** RAN RAD ***********************
