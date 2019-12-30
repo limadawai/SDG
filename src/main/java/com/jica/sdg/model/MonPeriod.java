@@ -11,7 +11,7 @@ public class MonPeriod implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, length = 11)
-    private Integer id;
+    private Integer id_monper;
     
     @Column(nullable = false, length = 11)
     private Integer start_year;
@@ -49,11 +49,11 @@ public class MonPeriod implements Serializable {
 	public MonPeriod() {
 	}
 
-	public MonPeriod(Integer id, Integer start_year, Integer end_year, String sdg_indicator, String gov_prog,
+	public MonPeriod(Integer id_monper, Integer start_year, Integer end_year, String sdg_indicator, String gov_prog,
 			String nsa_prog, String gov_prog_bud, String nsa_prog_bud, String ident_problem, String best_pract,
 			String status, String id_prov) {
 		super();
-		this.id = id;
+		this.id_monper = id_monper;
 		this.start_year = start_year;
 		this.end_year = end_year;
 		this.sdg_indicator = sdg_indicator;
@@ -67,12 +67,12 @@ public class MonPeriod implements Serializable {
 		this.id_prov = id_prov;
 	}
 
-	public Integer getId() {
-		return id;
+	public Integer getId_monper() {
+		return id_monper;
 	}
 
-	public void setId(Integer id) {
-		this.id = id;
+	public void setId_monper(Integer id_monper) {
+		this.id_monper = id_monper;
 	}
 
 	public Integer getStart_year() {

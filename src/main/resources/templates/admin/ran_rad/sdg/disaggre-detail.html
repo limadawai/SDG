@@ -20,9 +20,9 @@
 					<div class="widget-content">
 							<span class="lang_eng" style="display:none">Goals : </span><span class="lang_indo">Sasaran : </span><a th:href="@{/admin/ran_rad/sdg/goals}" th:text="${goals.id_goals+' - '+goals.nm_goals}"></a>
 							<br/>
-							Target : <a th:href="@{/admin/ran_rad/sdg/goals/${goals.id_goals}/target}" th:text="${target.id_target+' - '+target.nm_target}"></a>
+							Target : <a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id_goals}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}"></a>
 							<br/>
-							<span class="lang_eng" style="display:none">Indicator : </span><span class="lang_indo">Indikator : </span><a th:href="@{/admin/ran_rad/sdg/goals/${goals.id_goals}/target/${target.id_target}/indicator}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator}"></a>
+							<span class="lang_eng" style="display:none">Indicator : </span><span class="lang_indo">Indikator : </span><a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id_goals}+'/target/'+${target.id_target}+'/indicator'}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator}"></a>
 					</div>
 				</div>
 			</div>
@@ -83,7 +83,7 @@
 		  	</div>
 			<div class="modal-body">
 				<form>
-				  <fieldset>
+				  <div class="control-group">
 				    <label class="lang_eng" style="display:none">Disaggregation</label>
 				    <label class="lang_indo">Disaggregation</label>
 				    <input type="text" readonly="true" th:value="${disaggre.nm_disaggre}" class="input-xlarge" />
@@ -92,12 +92,15 @@
 				    <input type="hidden" id="id_indicator" name="id_indicator" th:value="${indicator.id_indicator}"/>
 				    <input type="hidden" id="id_disaggre" name="id_disaggre" th:value="${disaggre.id_disaggre}"/>
 				    <input type="hidden" id="id" name="id" class="input-medium"/>
-				  </fieldset>
-				  <fieldset>
-				    <label class="lang_eng" style="display:none">Aggregation Detail Name</label>
-				    <label class="lang_indo">Nama Aggregation Detail</label>
-				    <input type="text" id="desc_disaggre" name="desc_disaggre" class="input-xlarge"/>
-				  </fieldset>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Aggregation Detail Name</label>
+				    <label class="lang_indo control-label">Nama Aggregation Detail</label>
+				    <div class="controls">
+				    	<input type="text" id="desc_disaggre" name="desc_disaggre" class="input-xlarge"/>
+				    	<span class="help-block" id="error_desc_disaggre"></span>
+				    </div>
+				  </div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -125,13 +128,34 @@
 			var id_disaggre = $('#id_disaggre').val();
 			var id = $('#id').val();
 			//Bahasa
+			var titleDel = "Anda Yakin";
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
 	        $('#fs').on('change', function(e){
 	        	if($(this).is(':checked')){
 	        		$(".lang_indo").show();
 	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
 	        	}else{
 	        		$(".lang_indo").hide();
 	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
 	        	}
 	        });
 			var table = $('#tabel-indicator').DataTable({
@@ -157,7 +181,7 @@
 							return "<div style='text-align:center;'>"+
 							'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
 							'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></div>';
+                            '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -173,6 +197,8 @@
 			function clearForm(){
 				$('#id').val("").removeAttr("readonly");
 				$('#desc_disaggre').val("").removeAttr("readonly");
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
 			}
 			
 			$('#myModal').on('hidden.bs.modal',function(){
@@ -183,24 +209,34 @@
 				var id_disaggre = $('#id_disaggre').val();
 				var id = ($('#id').val())?$('#id').val():null;
 				var desc_disaggre = $('#desc_disaggre').val();
-				var data = JSON.stringify({
-					'id_disaggre':id_disaggre,
-					'id':id,
-					'desc_disaggre':desc_disaggre
-					});
-				$.ajax({
-					type: "POST",
-                    url: urls+'save-sdgDisaggreDetail',
-                    beforeSend : function(xhr){
-                    	xhr.setRequestHeader(header,token);
-                    },
-                    headers:{'Accept':'application/json','Content-Type':'application/json'},
-					data: data,
-                    success: function (result) {
-                    	table.ajax.url(urls+'list-sdgDisaggreDetail/'+id_disaggre).load();
-                    	$('#myModal').modal('hide');
-                    },
-                });
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+				var cek = 0;
+				if (desc_disaggre == ""){
+                    $("#error_desc_disaggre").parents(".control-group").first().addClass("error");
+                    $("#error_desc_disaggre").text(required);
+                    cek += 1;
+                }
+				if(cek==0){
+					var data = JSON.stringify({
+						'id_disaggre':id_disaggre,
+						'id':id,
+						'desc_disaggre':desc_disaggre
+						});
+					$.ajax({
+						type: "POST",
+	                    url: urls+'save-sdgDisaggreDetail',
+	                    beforeSend : function(xhr){
+	                    	xhr.setRequestHeader(header,token);
+	                    },
+	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+						data: data,
+	                    success: function (result) {
+	                    	table.ajax.url(urls+'list-sdgDisaggreDetail/'+id_disaggre).load();
+	                    	$('#myModal').modal('hide');
+	                    },
+	                });
+				}
 			});
 			
 			$('#tbody-indicator').on('click', '.update', function(){
@@ -226,6 +262,35 @@
                     	$('#desc_disaggre').val(val.desc_disaggre);
 						$('#myModal').modal('show');
                     },
+                })
+             }).on('click', '.delete', function(){
+				var id = $(this).attr('data-id');
+				swal({
+                    title: titleDel,
+                    text: messDel,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttDel
+                }).then(function () {
+                	$.ajax({
+    					type: "DELETE",
+                        url: urls+'delete-sdgDisaggreDetail/'+id,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        success: function (result) {
+                        	swal(titleOk,messOk,'success');
+                        	table.ajax.url(urls+'list-sdgDisaggreDetail/'+id_disaggre).load();
+                        },
+                        error:function (result) {
+                        	swal(titleOk,messNOk,'error');
+                        },
+                    })
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
                 })
              });
 		//});

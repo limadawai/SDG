@@ -20,7 +20,7 @@
 					<div class="widget-content">
 							<span class="lang_eng" style="display:none">Goals : </span><span class="lang_indo">Sasaran : </span><a th:href="@{/admin/ran_rad/sdg/goals}" th:text="${goals.id_goals+' - '+goals.nm_goals}"></a>
 							<br/>
-							Target : <a th:href="@{/admin/ran_rad/sdg/goals/${goals.id_goals}/target}" th:text="${target.id_target+' - '+target.nm_target}"></a>
+							Target : <a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id_goals}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}"></a>
 					</div>
 				</div>
 			</div>
@@ -105,55 +105,79 @@
 		  	</div>
 			<div class="modal-body">
 				<form>
-				  <fieldset>
+				  <div class="control-group">
 				    <label>Target</label>
 				    <input type="text" readonly="true" th:value="${target.nm_target}" class="input-xlarge" />
 				    <input type="hidden" id="id_goals" name="id_goals" th:value="${target.id_goals}"/>
 				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id_target}"/>
-				  </fieldset>
-				  <fieldset>
-				    <label class="lang_eng" style="display:none">Code</label>
-				    <label class="lang_indo">Kode</label>
-				    <input type="text" id="id_indicator" name="id_indicator" class="input-medium"/>
-				  </fieldset>
-				  <fieldset>
-				    <label class="lang_eng" style="display:none">SDGs Indicator Name</label>
-				    <label class="lang_indo">Nama Indikator SDG</label>
-				    <input type="text" id="nm_indicator" name="nm_indicator" class="input-xlarge"/>
-				  </fieldset>
-				  <fieldset>
-				    <label class="lang_eng" style="display:none">Unit</label>
-				    <label class="lang_indo">Satuan</label>
-				    <select placeholder="Pilih satuan" id="unit" name="unit" class="input-xlarge">
-				    	<option>Orang</option>
-				    </select>
-				  </fieldset>
-				  <fieldset>
-				    <label class="lang_eng" style="display:none">5 Years Target</label>
-				    <label class="lang_indo">Target 5 Tahunan</label>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Code</label>
+				    <label class="lang_indo control-label">Kode</label>
+				    <div class="controls">
+				    	<input type="text" id="id_indicator" name="id_indicator" class="input-medium"/>
+				    	<span class="help-block" id="error_id_indicator"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">SDGs Indicator Name</label>
+				    <label class="lang_indo control-label">Nama Indikator SDG</label>
+				    <div class="controls">
+				    	<input type="text" id="nm_indicator" name="nm_indicator" class="input-xlarge"/>
+				    	<span class="help-block" id="error_nm_indicator"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Unit</label>
+				    <label class="lang_indo control-label">Satuan</label>
+				    <div class="controls">
+				    	<select placeholder="Pilih satuan" id="unit" name="unit" class="input-xlarge">
+					    	<option value="">select</option>
+					    	<option value="orang">Orang</option>
+					    </select>
+					    <span class="help-block" id="error_unit"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">5 Years Target</label>
+				    <label class="lang_indo control-label">Target 5 Tahunan</label>
 				    <input type="text" id="target_year1" name="target_year1" class="input-small" placeholder="First"/>
 				    <input type="text" id="target_year2" name="target_year2" class="input-small" placeholder="Second"/>
 				    <input type="text" id="target_year3" name="target_year3" class="input-small" placeholder="Third"/>
 				    <input type="text" id="target_year4" name="target_year4" class="input-small" placeholder="Fourth"/>
 				    <input type="text" id="target_year5" name="target_year5" class="input-small" placeholder="Fifth"/>
-				  </fieldset>
-				  <fieldset>
-				    <label>Baseline</label>
-				    <input type="text" id="baseline" name="baseline" class="input-xlarge"/>
-				  </fieldset>
-				  <fieldset>
-				    <label>Funding Source</label>
-				    <select id="budsource" name="budsource" class="input-xlarge">
-				    	<option value="Funding Source1">Funding Source</option>
-				    </select>
-				  </fieldset>
-				  <fieldset>
-				    <label>Increment/Decrement</label>
-				    <select id="increment_decrement" name="increment_decrement" class="input-xlarge">
-				    	<option value="Increment">Increment</option>
-				    	<option value="Decrement">Decrement</option>
-				    </select>
-				  </fieldset>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Baseline</label>
+				    <label class="lang_indo control-label">Baseline</label>
+				    <div class="controls">
+				    	<input type="text" id="baseline" name="baseline" class="input-xlarge"/>
+				    	<span class="help-block" id="error_baseline"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Funding Source</label>
+				    <label class="lang_indo control-label">Funding Source</label>
+				    <div class="controls">
+				    	<select id="budsource" name="budsource" class="input-xlarge">
+					    	<option value="">select</option>
+					    	<option value="Funding Source1">Funding Source</option>
+					    </select>
+					    <span class="help-block" id="error_budsource"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Increment/Decrement</label>
+				    <label class="lang_indo control-label">Increment/Decrement</label>
+				    <div class="controls">
+				    	<select id="increment_decrement" name="increment_decrement" class="input-xlarge">
+				    		<option value="">select</option>
+					    	<option value="Increment">Increment</option>
+					    	<option value="Decrement">Decrement</option>
+					    </select>
+					    <span class="help-block" id="error_increment_decrement"></span>
+				    </div>
+				  </div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -178,13 +202,34 @@
 			var id_goals = $('#id_goals').val();
 			var id_target = $('#id_target').val();
 			//Bahasa
+			var titleDel = "Anda Yakin";
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
 	        $('#fs').on('change', function(e){
 	        	if($(this).is(':checked')){
 	        		$(".lang_indo").show();
 	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
 	        	}else{
 	        		$(".lang_indo").hide();
 	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
 	        	}
 	        });
 			var table = $('#tabel-indicator').DataTable({
@@ -243,7 +288,7 @@
 							return "<div style='text-align:center;'>"+
 							'<button data-id="'+row.id_indicator+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
 							'<button data-id="'+row.id_indicator+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></div>';
+                            '<button data-id="'+row.id_indicator+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -268,6 +313,8 @@
 				$('#baseline').val("").removeAttr("readonly");
 				$('#budsource').val("").removeAttr("disabled");
 				$('#increment_decrement').val("").removeAttr("disabled");
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
 			}
 			
 			$('#myModal').on('hidden.bs.modal',function(){
@@ -288,34 +335,69 @@
 				var baseline = $('#baseline').val();
 				var budsource = $('#budsource').val();
 				var increment_decrement = $('#increment_decrement').val();
-				var data = JSON.stringify({
-					'id_goals':id_goals,
-					'id_target':id_target,
-					'id_indicator':id_indicator,
-					'nm_indicator':nm_indicator,
-					'unit':unit,
-					'target_year1':target_year1,
-					'target_year2':target_year2,
-					'target_year3':target_year3,
-					'target_year4':target_year4,
-					'target_year5':target_year5,
-					'baseline':baseline,
-					'budsource':budsource,
-					'increment_decrement':increment_decrement,
-					});
-				$.ajax({
-					type: "POST",
-                    url: urls+'save-sdgIndicator',
-                    beforeSend : function(xhr){
-                    	xhr.setRequestHeader(header,token);
-                    },
-                    headers:{'Accept':'application/json','Content-Type':'application/json'},
-					data: data,
-                    success: function (result) {
-                    	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
-                    	$('#myModal').modal('hide');
-                    },
-                });
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+				var cek = 0;
+				if (id_indicator == ""){
+                    $("#error_id_indicator").parents(".control-group").first().addClass("error");
+                    $("#error_id_indicator").text(required);
+                    cek += 1;
+                }
+				if (nm_indicator == ""){
+                    $("#error_nm_indicator").parents(".control-group").first().addClass("error");
+                    $("#error_nm_indicator").text(required);
+                    cek += 1;
+                }
+				if (unit == ""){
+                    $("#error_unit").parents(".control-group").first().addClass("error");
+                    $("#error_unit").text(required);
+                    cek += 1;
+                }
+				if (baseline == ""){
+                    $("#error_baseline").parents(".control-group").first().addClass("error");
+                    $("#error_baseline").text(required);
+                    cek += 1;
+                }
+				if (budsource == ""){
+                    $("#error_budsource").parents(".control-group").first().addClass("error");
+                    $("#error_budsource").text(required);
+                    cek += 1;
+                }
+				if (increment_decrement == ""){
+                    $("#error_increment_decrement").parents(".control-group").first().addClass("error");
+                    $("#error_increment_decrement").text(required);
+                    cek += 1;
+                }
+				if(cek==0){
+					var data = JSON.stringify({
+						'id_goals':id_goals,
+						'id_target':id_target,
+						'id_indicator':id_indicator,
+						'nm_indicator':nm_indicator,
+						'unit':unit,
+						'target_year1':target_year1,
+						'target_year2':target_year2,
+						'target_year3':target_year3,
+						'target_year4':target_year4,
+						'target_year5':target_year5,
+						'baseline':baseline,
+						'budsource':budsource,
+						'increment_decrement':increment_decrement,
+						});
+					$.ajax({
+						type: "POST",
+	                    url: urls+'save-sdgIndicator',
+	                    beforeSend : function(xhr){
+	                    	xhr.setRequestHeader(header,token);
+	                    },
+	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+						data: data,
+	                    success: function (result) {
+	                    	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
+	                    	$('#myModal').modal('hide');
+	                    },
+	                });
+				}
 			});
 			
 			$('#tbody-indicator').on('click', '.update', function(){
@@ -363,6 +445,35 @@
         				$('#increment_decrement').val(val.increment_decrement).attr("disabled",true);
 						$('#myModal').modal('show');
                     },
+                })
+             }).on('click', '.delete', function(){
+				var id = $(this).attr('data-id');
+				swal({
+                    title: titleDel,
+                    text: messDel,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttDel
+                }).then(function () {
+                	$.ajax({
+    					type: "DELETE",
+                        url: urls+'delete-sdgIndicator/'+id,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        success: function (result) {
+                        	swal(titleOk,messOk,'success');
+                        	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
+                        },
+                        error:function (result) {
+                        	swal(titleOk,messNOk,'error');
+                        },
+                    })
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
                 })
              });
 		//});

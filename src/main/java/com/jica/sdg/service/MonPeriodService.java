@@ -33,6 +33,11 @@ public class MonPeriodService implements IMonPeriodService{
 	public Optional<MonPeriod> findOne(Integer id) {
 		return (Optional<MonPeriod>) monPer.findById(id);
 	}
+
+	@Override
+	public void deleteMonPeriod(Integer id) {
+		monPer.deleteById(id);
+	}
 	
 	
 }

@@ -81,22 +81,30 @@
 		  	</div>
 			<div class="modal-body">
 				<form>
-				  <fieldset>
-				  	<label class="lang_eng" style="display:none">Goals Name</label>
-				    <label class="lang_indo">Nama Sasaran</label>
-				    <input type="text" readonly="true" th:value="${content.nm_goals}" class="input-xlarge"/>
-				    <input type="hidden" id="id_goals" name="id_goals" th:value="${content.id_goals}"/>
-				  </fieldset>
-				  <fieldset>
-				  	<label class="lang_eng" style="display:none">Code</label>
-				    <label class="lang_indo">Kode</label>
-				    <input type="text" id="id_target" name="id_target" class="input-medium"/>
-				  </fieldset>
-				  <fieldset>
-				  	<label class="lang_eng" style="display:none">Target Name</label>
-				    <label class="lang_indo">Nama Target</label>
-				    <input type="text" id="nm_target" name="nm_target" class="input-xlarge"/>
-				  </fieldset>
+				  <div class="control-group">
+				  	<label class="lang_eng control-label" style="display:none">Goals Name</label>
+				    <label class="lang_indo control-label">Nama Sasaran</label>
+				    <div class="controls">
+				    	<input type="text" readonly="true" th:value="${content.nm_goals}" class="input-xlarge"/>
+				    	<input type="hidden" id="id_goals" name="id_goals" th:value="${content.id_goals}"/>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				  	<label class="lang_eng control-label" style="display:none">Code</label>
+				    <label class="lang_indo control-label">Kode</label>
+				    <div class="controls">
+				    	<input type="text" id="id_target" name="id_target" class="input-medium"/>
+				    	<span class="help-block" id="error_id_target"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				  	<label class="lang_eng control-label" style="display:none">Target Name</label>
+				    <label class="lang_indo control-label">Nama Target</label>
+				    <div class="controls">
+				    	<input type="text" id="nm_target" name="nm_target" class="input-xlarge"/>
+				    	<span class="help-block" id="error_nm_target"></span>
+				    </div>
+				  </div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -120,13 +128,34 @@
 	        var header = $("meta[name='_csrf_header']").attr("content");
 			var id_goals = $('#id_goals').val();
 			//Bahasa
+			var titleDel = "Anda Yakin";
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
 	        $('#fs').on('change', function(e){
 	        	if($(this).is(':checked')){
 	        		$(".lang_indo").show();
 	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
 	        	}else{
 	        		$(".lang_indo").hide();
 	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
 	        	}
 	        });
 			var table = $('#tabel-target').DataTable({
@@ -155,7 +184,7 @@
 							return "<div style='text-align:center;'>"+
 							'<button data-id="'+row.id_target+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
 							'<button data-id="'+row.id_target+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button type="button" title="delete" class="btn btn-danger btn-mini"><i class="icon-trash"></i></button></div>';
+                            '<button data-id="'+row.id_target+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -171,6 +200,8 @@
 			function clearForm(){
 				$('#id_target').val("").removeAttr("readonly");
 				$('#nm_target').val("").removeAttr("readonly");
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
 			}
 			
 			$('#myModal').on('hidden.bs.modal',function(){
@@ -181,20 +212,35 @@
 				var id_goals = $('#id_goals').val();
 				var id_target = $('#id_target').val();
 				var nm_target = $('#nm_target').val();
-				var data = JSON.stringify({'id_goals':id_goals,'id_target':id_target,'nm_target':nm_target});
-				$.ajax({
-					type: "POST",
-                    url: urls+'save-sdgTarget',
-                    beforeSend : function(xhr){
-                    	xhr.setRequestHeader(header,token);
-                    },
-                    headers:{'Accept':'application/json','Content-Type':'application/json'},
-					data: data,
-                    success: function (result) {
-                    	table.ajax.url(urls+'list-sdgTarget/'+id_goals).load();
-                    	$('#myModal').modal('hide');
-                    },
-                });
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+				var cek = 0;
+				if (id_target == ""){
+                    $("#error_id_target").parents(".control-group").first().addClass("error");
+                    $("#error_id_target").text(required);
+                    cek += 1;
+                }
+				if (nm_target == ""){
+                    $("#error_nm_target").parents(".control-group").first().addClass("error");
+                    $("#error_nm_target").text(required);
+                    cek += 1;
+                }
+				if(cek==0){
+					var data = JSON.stringify({'id_goals':id_goals,'id_target':id_target,'nm_target':nm_target});
+					$.ajax({
+						type: "POST",
+	                    url: urls+'save-sdgTarget',
+	                    beforeSend : function(xhr){
+	                    	xhr.setRequestHeader(header,token);
+	                    },
+	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+						data: data,
+	                    success: function (result) {
+	                    	table.ajax.url(urls+'list-sdgTarget/'+id_goals).load();
+	                    	$('#myModal').modal('hide');
+	                    },
+	                });
+				}
 			});
 			
 			$('#tbody-target').on('click', '.update', function(){
@@ -222,6 +268,35 @@
         				$('#nm_target').val(val.nm_target).attr("readonly",true);
 						$('#myModal').modal('show');
                     },
+                })
+             }).on('click', '.delete', function(){
+				var id = $(this).attr('data-id');
+				swal({
+                    title: titleDel,
+                    text: messDel,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttDel
+                }).then(function () {
+                	$.ajax({
+    					type: "DELETE",
+                        url: urls+'delete-sdgTarget/'+id,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        success: function (result) {
+                        	swal(titleOk,messOk,'success');
+                        	table.ajax.url(urls+'list-sdgTarget/'+id_goals).load();
+                        },
+                        error:function (result) {
+                        	swal(titleOk,messNOk,'error');
+                        },
+                    })
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
                 })
              });
 		//});

@@ -29,6 +29,11 @@ public class SdgDisaggreService implements ISdgDisaggreService{
 	public Optional<SdgDisaggre> findOne(String id) {
 		return (Optional<SdgDisaggre>) sdgDisaggreRepository.findById(id);
 	}
+
+	@Override
+	public void deleteSdgDisaggre(String id) {
+		sdgDisaggreRepository.deleteById(id);
+	}
 	
 	
 }

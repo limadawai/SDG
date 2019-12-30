@@ -12,4 +12,6 @@ public interface ISdgTargetService {
     void saveSdgTarget(SdgTarget sdg);
     
     Optional<SdgTarget> findOne(String id);
+    
+    void deleteSdgTarget(String id);
 }

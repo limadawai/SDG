@@ -40,24 +40,24 @@
                         <div class="row-fluid">
                             <div class="span12">
                             	<div class="table-responsive">
-                                <table class="table table-bordered table-striped" id="tabel-goals">
-                                    <thead>
-                                        <tr class="lang_eng" style="display:none">
-                                            <th style="text-align:center;font-size:80%;">No</th>
-                                            <th style="text-align:center;font-size:80%;">Code</th>
-                                            <th style="text-align:center;font-size:80%;">Goals</th>
-                                            <th style="text-align:center;font-size:80%;">Action</th>
-                                        </tr>
-                                        <tr class="lang_indo">
-                                            <th style="text-align:center;font-size:80%;">No</th>
-                                            <th style="text-align:center;font-size:80%;">Kode</th>
-                                            <th style="text-align:center;font-size:80%;">Sasaran</th>
-                                            <th style="text-align:center;font-size:80%;">Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tbody-goals">
-                                    </tbody>
-                                </table>
+									<table class="table table-bordered table-striped" id="tabel-goals">
+										<thead>
+											<tr class="lang_eng" style="display:none">
+												<th style="text-align:center;font-size:80%;">No</th>
+												<th style="text-align:center;font-size:80%;">Code</th>
+												<th style="text-align:center;font-size:80%;">Goals</th>
+												<th style="text-align:center;font-size:80%;">Action</th>
+											</tr>
+											<tr class="lang_indo">
+												<th style="text-align:center;font-size:80%;">No</th>
+												<th style="text-align:center;font-size:80%;">Kode</th>
+												<th style="text-align:center;font-size:80%;">Sasaran</th>
+												<th style="text-align:center;font-size:80%;">Aksi</th>
+											</tr>
+										</thead>
+										<tbody id="tbody-goals">
+										</tbody>
+									</table>
                                 </div>
                             </div>
                         </div>
@@ -74,16 +74,22 @@
 		  	</div>
 			<div class="modal-body">
 				<form id="form-sdgGoals">
-				  <fieldset>
-				    <label class="lang_eng" style="display:none">Code</label>
-				    <label class="lang_indo">Kode</label>
-				    <input id="id_goals" name="id_goals" class="input-medium" type="text"/>
-				  </fieldset>
-				  <fieldset>
-				    <label class="lang_eng" style="display:none">Goals Name</label>
-				    <label class="lang_indo">Nama Sasaran</label>
-				    <input id="nm_goals" name="nm_goals" class="input-xlarge" type="text"/>
-				  </fieldset>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Code</label>
+				    <label class="lang_indo control-label">Kode</label>
+				    <div class="controls">
+				    	<input id="id_goals" name="id_goals" class="input-medium" type="text"/>
+				    	<span class="help-block" id="error_id_goals"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Goals Name</label>
+				    <label class="lang_indo control-label">Nama Sasaran</label>
+				    <div class="controls">
+				    	<input id="nm_goals" name="nm_goals" class="input-xlarge" type="text"/>
+				    	<span class="help-block" id="error_nm_goals"></span>
+				    </div>
+				  </div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -113,6 +119,7 @@
 	        var titleOk	= "Hapus";
 	        var messOk = "Data berhasil dihapus";
 	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
 	        $('#fs').on('change', function(e){
 	        	if($(this).is(':checked')){
 	        		$(".lang_indo").show();
@@ -123,6 +130,7 @@
 	        		titleOk	= "Hapus";
 	    	        messOk = "Data berhasil dihapus";
 	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
 	        	}else{
 	        		$(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -132,6 +140,7 @@
 	        		titleOk	= "Delete";
 	    	        messOk = "Delete successful";
 	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
 	        	}
 	        });
 			
@@ -149,7 +158,7 @@
 				"searching": true,
 				"columns": [
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+							return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
@@ -177,6 +186,8 @@
 			function clearForm(){
 				$('#id_goals').val("").removeAttr("readonly");
 				$('#nm_goals').val("").removeAttr("readonly");
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
 			}
 			
 			$('#myModal').on('hidden.bs.modal',function(){
@@ -186,20 +197,37 @@
 			$('#submit').on('click', function(){
 				var id_goals = $('#id_goals').val();
 				var nm_goals = $('#nm_goals').val();
-				var data = JSON.stringify({'id_goals':id_goals,'nm_goals':nm_goals});
-				$.ajax({
-					type: "POST",
-                    url: urls+'save-sdgGoals',
-                    beforeSend : function(xhr){
-                    	xhr.setRequestHeader(header,token);
-                    },
-                    headers:{'Accept':'application/json','Content-Type':'application/json'},
-					data: data,
-                    success: function (result) {
-                    	table.ajax.url(urls+'list-sdgGoals').load();
-                    	$('#myModal').modal('hide');
-                    },
-                });
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+				var cek = 0;
+				
+				if (id_goals == ""){
+                    $("#error_id_goals").parents(".control-group").first().addClass("error");
+                    $("#error_id_goals").text(required);
+                    cek += 1;
+                }
+				if (nm_goals == ""){
+                    $("#error_nm_goals").parents(".control-group").first().addClass("error");
+                    $("#error_nm_goals").text(required);
+                    cek += 1;
+                }
+				
+				if(cek==0){
+					var data = JSON.stringify({'id_goals':id_goals,'nm_goals':nm_goals});
+					$.ajax({
+						type: "POST",
+	                    url: urls+'save-sdgGoals',
+	                    beforeSend : function(xhr){
+	                    	xhr.setRequestHeader(header,token);
+	                    },
+	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+						data: data,
+	                    success: function (result) {
+	                    	table.ajax.url(urls+'list-sdgGoals').load();
+	                    	$('#myModal').modal('hide');
+	                    },
+	                });
+				}
 			});
 			
 			$('#tbody-goals').on('click', '.update', function(){

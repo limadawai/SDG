@@ -12,4 +12,6 @@ public interface ISdgIndicatorService {
     void saveSdgIndicator(SdgIndicator sdg);
     
     Optional<SdgIndicator> findOne(String id);
+    
+    void deleteSdgIndicator(String id);
 }
