@@ -20,4 +20,9 @@ public class RoleService implements IRoleService{
 		return (List<Role>) role.findAll();
 	}
 
+	@Override
+	public Optional<Role> findOne(Integer id) {
+		return (Optional<Role>) role.findById(id);
+	}
+
 }

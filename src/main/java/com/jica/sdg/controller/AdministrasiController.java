@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpSession;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,8 +26,9 @@ public class AdministrasiController {
 
     //*********************** Manajemen Role & User ***********************
     @GetMapping("admin/manajemen/role")
-    public String rolemanajemen(Model model) {
+    public String rolemanajemen(Model model, HttpSession session) {
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/role_manajemen/manajemen_role";
     }
 
@@ -39,19 +41,22 @@ public class AdministrasiController {
     }
 
     @GetMapping("admin/manajemen/user")
-    public String usermanajemen(Model model) {
+    public String usermanajemen(Model model, HttpSession session) {
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/role_manajemen/manajemen_user";
     }
 
     @GetMapping("admin/manajemen/assignment")
-    public String assignment(Model model) {
+    public String assignment(Model model, HttpSession session) {
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/role_manajemen/manajemen_assignment";
     }
 
     @GetMapping("admin/manajemen/request")
-    public String requestlist(Model model) {
+    public String requestlist(Model model, HttpSession session) {
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/role_manajemen/manajemen_request_list";
     }
 

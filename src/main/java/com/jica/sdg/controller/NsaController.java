@@ -32,6 +32,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class NsaController {
 
@@ -53,6 +55,13 @@ public class NsaController {
     NsaCollaborationService nsaCollaborationService;
 
     @GetMapping("admin/nsa/profile")
+    public String nsa_profile(Model model, HttpSession session) {
+        model.addAttribute("title", "NSA Profile");
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        return "admin/nsa/nsa_profile";
+    }
+
     public String nsa_profile(Model model) {
 //        model.addAttribute("title", "NSA Profile");
         model.addAttribute("listNsaProfile", nsaProfilrService.findAll());
@@ -92,9 +101,10 @@ public class NsaController {
     }
 
     @GetMapping("admin/nsa/inst-profile")
-    public String nsa_ins_profile(Model model) {
+    public String nsa_ins_profile(Model model, HttpSession session) {
 //        model.addAttribute("title", "Institution Profile");
         model.addAttribute("listInsProfile", insProfilrService.findAll());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/nsa/ins_profile";
     }
     
@@ -157,9 +167,10 @@ public class NsaController {
     }
 
     @GetMapping("admin/nsa/nsa-collaboration")
-    public String nsa_collaboration(Model model) {
+    public String nsa_collaboration(Model model, HttpSession session) {
         model.addAttribute("title", "NSA Collaboration");
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/nsa/nsa_collaboration";
     }
 

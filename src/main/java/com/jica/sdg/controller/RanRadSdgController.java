@@ -44,6 +44,8 @@ import com.jica.sdg.service.SdgGoalsService;
 import com.jica.sdg.service.SdgIndicatorService;
 import com.jica.sdg.service.SdgTargetService;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class RanRadSdgController {
 
@@ -123,10 +125,11 @@ public class RanRadSdgController {
 	}
 	
 	@GetMapping("admin/ran_rad/sdg/goals/{id}/target")
-    public String target(Model model, @PathVariable("id") String id) {
+    public String target(Model model, @PathVariable("id") String id, HttpSession session) {
 		Optional<SdgGoals> list = sdgGoalsService.findOne(id);
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         list.ifPresent(foundUpdateObject -> model.addAttribute("content", foundUpdateObject));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/sdg/target";
     }
 	
@@ -159,12 +162,13 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator")
-    public String sdg(Model model, @PathVariable("id") String id, @PathVariable("id_target") String id_target) {
+    public String sdg(Model model, @PathVariable("id") String id, @PathVariable("id_target") String id_target, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         list.ifPresent(foundUpdateObject -> model.addAttribute("goals", foundUpdateObject));
         list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/sdg/sdgs_indicator";
     }
     
@@ -197,7 +201,7 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator/{id_indicator}/disaggre")
-    public String disagre(Model model, @PathVariable("id") String id, @PathVariable("id_target") String id_target, @PathVariable("id_indicator") String id_indicator) {
+    public String disagre(Model model, @PathVariable("id") String id, @PathVariable("id_target") String id_target, @PathVariable("id_indicator") String id_indicator, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
     	Optional<SdgIndicator> list2 = sdgIndicatorService.findOne(id_indicator);
@@ -205,6 +209,7 @@ public class RanRadSdgController {
         list.ifPresent(foundUpdateObject -> model.addAttribute("goals", foundUpdateObject));
         list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         list2.ifPresent(foundUpdate1 -> model.addAttribute("indicator", foundUpdate1));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/sdg/disaggre";
     }
     
@@ -237,7 +242,8 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator/{id_indicator}/disaggre/{id_disaggre}")
-    public String disagreDetail(Model model, @PathVariable("id") String id, @PathVariable("id_target") String id_target, @PathVariable("id_indicator") String id_indicator, @PathVariable("id_disaggre") String id_disaggre) {
+    public String disagreDetail(Model model, @PathVariable("id") String id, @PathVariable("id_target") String id_target, @PathVariable("id_indicator") String id_indicator,
+                                @PathVariable("id_disaggre") String id_disaggre, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
     	Optional<SdgIndicator> list2 = sdgIndicatorService.findOne(id_indicator);
@@ -247,6 +253,7 @@ public class RanRadSdgController {
         list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         list2.ifPresent(foundUpdate1 -> model.addAttribute("indicator", foundUpdate1));
         list3.ifPresent(foundUpdate2 -> model.addAttribute("disaggre", foundUpdate2));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/sdg/disaggre-detail";
     }
     
@@ -310,13 +317,14 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/gov/program/{id_program}/activity")
-    public String gov_kegiatan(Model model, @PathVariable("id_program") String id_program) {
+    public String gov_kegiatan(Model model, @PathVariable("id_program") String id_program, HttpSession session) {
     	Optional<GovProgram> list = govProgService.findOne(id_program);
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("prov",prov.findAllProvinsi());
         model.addAttribute("monPer", monPeriodService.findAll("000"));
         model.addAttribute("role", roleService.findAll());
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/gov/activity";
     }
     
@@ -351,7 +359,8 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/gov/program/{id_program}/activity/{id_activity}/indicator")
-    public String gov_indikator(Model model, @PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity) {
+    public String gov_indikator(Model model, @PathVariable("id_program") String id_program,
+                                @PathVariable("id_activity") String id_activity, HttpSession session) {
     	Optional<GovProgram> list = govProgService.findOne(id_program);
     	Optional<GovActivity> list1 = govActivityService.findOne(id_activity);
         model.addAttribute("title", "Define RAN/RAD/Government Program");
@@ -360,6 +369,7 @@ public class RanRadSdgController {
         model.addAttribute("role", roleService.findAll());
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/gov/indicator";
     }
     
@@ -425,13 +435,14 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/non-gov/program/{id_program}/activity")
-    public String nsa_kegiatan(Model model, @PathVariable("id_program") String id_program) {
+    public String nsa_kegiatan(Model model, @PathVariable("id_program") String id_program, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("prov",prov.findAllProvinsi());
         model.addAttribute("monPer", monPeriodService.findAll("000"));
         model.addAttribute("role", roleService.findAll());
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/non-gov/activity";
     }
     
@@ -466,7 +477,8 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/non-gov/program/{id_program}/activity/{id_activity}/indicator")
-    public String nsa_indikator(Model model, @PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity) {
+    public String nsa_indikator(Model model, @PathVariable("id_program") String id_program,
+                                @PathVariable("id_activity") String id_activity, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
     	Optional<NsaActivity> list1 = nsaActivityService.findOne(id_activity);
         model.addAttribute("title", "Define RAN/RAD/Government Program");
@@ -475,6 +487,7 @@ public class RanRadSdgController {
         model.addAttribute("role", roleService.findAll());
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/non-gov/indicator";
     }
     
