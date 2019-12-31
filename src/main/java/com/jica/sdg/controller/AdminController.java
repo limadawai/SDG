@@ -2,9 +2,9 @@ package com.jica.sdg.controller;
 
 import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.Role;
 import com.jica.sdg.model.Submenu;
 import com.jica.sdg.model.User;
-import com.jica.sdg.repository.NsaprofilRepository;
 import com.jica.sdg.service.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class AdminController {
@@ -80,20 +80,28 @@ public class AdminController {
     }
 
     @GetMapping("admin/ran_rad/gov/program")
-    public String gov_program(Model model) {
+    public String gov_program(Model model, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov = list.get().getId_prov();
+    	Optional<Provinsi> list1 = prov.findOne(id_prov);
         model.addAttribute("title", "Define RAN/RAD/Government Program");
-        model.addAttribute("prov",prov.findAllProvinsi());
-        model.addAttribute("monPer", monPeriodService.findAll("000"));
-        model.addAttribute("role", roleService.findAll());
+        model.addAttribute("monPer", monPeriodService.findAll(id_prov));
+        list.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
+        list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
         return "admin/ran_rad/gov/program";
     }
 
     @GetMapping("admin/ran_rad/non-gov/program")
-    public String nongov_program(Model model) {
-        model.addAttribute("title", "Define RAN/RAD/Non Government Program");
-        model.addAttribute("prov",prov.findAllProvinsi());
-        model.addAttribute("monPer", monPeriodService.findAll("000"));
-        model.addAttribute("role", roleService.findAll());
+    public String nongov_program(Model model, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov = list.get().getId_prov();
+    	Optional<Provinsi> list1 = prov.findOne(id_prov);
+        model.addAttribute("title", "Define RAN/RAD/Government Program");
+        model.addAttribute("monPer", monPeriodService.findAll(id_prov));
+        list.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
+        list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
         return "admin/ran_rad/non-gov/program";
     }
 

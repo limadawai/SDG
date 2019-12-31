@@ -8,5 +8,7 @@ import java.util.Optional;
 public interface IRoleService {
 
     List<Role> findAll();
+    
+    Optional<Role> findOne(Integer id);
 
 }
