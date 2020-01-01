@@ -1,9 +1,12 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
+import com.jica.sdg.service.MenuService;
+import com.jica.sdg.service.SubmenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +26,12 @@ public class AdministrasiController {
 
     @Autowired
     IRoleService roleService;
+
+    @Autowired
+    MenuService menuService;
+
+    @Autowired
+    SubmenuService submenuService;
 
     //*********************** Manajemen Role & User ***********************
     @GetMapping("admin/manajemen/role")
@@ -64,6 +73,12 @@ public class AdministrasiController {
     public @ResponseBody List<Provinsi> provinsi() {
         List<Provinsi> list = provinsiService.findAllProvinsi();
         return list;
+    }
+
+    @GetMapping("admin/manajemen/menu")
+    public @ResponseBody void menusubmenu() {
+        List<Menu> listMenu = menuService.findAllMenu();
+        System.out.println(listMenu.size());
     }
 
 }
