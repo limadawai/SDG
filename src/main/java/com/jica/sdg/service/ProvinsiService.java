@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProvinsiService implements IProvinsiService{
@@ -17,4 +18,9 @@ public class ProvinsiService implements IProvinsiService{
         List prov = (List<Provinsi>) repository.findAllProvinsi();
         return prov;
     }
+
+	@Override
+	public Optional<Provinsi> findOne(String id) {
+		return (Optional<Provinsi>) repository.findById(id);
+	}
 }

@@ -3,6 +3,7 @@ package com.jica.sdg.controller;
 import com.jica.sdg.model.Insprofile;
 import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Nsaprofile;
+import com.jica.sdg.model.NsaCollaboration;
 import com.jica.sdg.model.Nsadetail;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Submenu;
@@ -12,6 +13,7 @@ import com.jica.sdg.service.ISubmenuService;
 import com.jica.sdg.service.InsProfileService;
 import com.jica.sdg.service.NsaDetailService;
 import com.jica.sdg.service.NsaProfileService;
+import com.jica.sdg.service.NsaCollaborationService;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -48,6 +50,9 @@ public class NsaController {
     
     @Autowired
     NsaDetailService nsaDetailService;
+    
+    @Autowired
+    NsaCollaborationService nsaCollaborationService;
 
     @GetMapping("admin/nsa/profile")
     public String nsa_profile(Model model, HttpSession session) {
