@@ -1,19 +1,19 @@
 package com.jica.sdg.model;
 
 import javax.persistence.*;
-import java.util.Set;
+
+import java.io.Serializable;
 
 @Entity
-
 @Table(name="ref_user")
-public class User {
+public class User implements Serializable{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_user")
-    private int id_user;
+    private Integer id_user;
     @Column(name = "id_role")
-    private int id_role;
+    private Integer id_role;
     @Column(name = "username")
     private String userName;
     @Column(name = "password")
@@ -25,19 +25,34 @@ public class User {
     @Column(name = "detail")
     private String detail;
 
-    public int getId_user() {
+    public User(Integer id_user, Integer id_role, String userName, String password, String name, short enabled,
+			String detail) {
+		super();
+		this.id_user = id_user;
+		this.id_role = id_role;
+		this.userName = userName;
+		this.password = password;
+		this.name = name;
+		this.enabled = enabled;
+		this.detail = detail;
+	}
+    
+    public User() {
+	}
+
+	public Integer getId_user() {
         return id_user;
     }
 
-    public void setId_user(int id_user) {
+    public void setId_user(Integer id_user) {
         this.id_user = id_user;
     }
 
-    public int getId_role() {
+    public Integer getId_role() {
         return id_role;
     }
 
-    public void setId_role(int id_role) {
+    public void setId_role(Integer id_role) {
         this.id_role = id_role;
     }
 

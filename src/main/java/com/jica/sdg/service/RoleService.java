@@ -25,4 +25,19 @@ public class RoleService implements IRoleService{
 		return (Optional<Role>) role.findById(id);
 	}
 
+	@Override
+	public List<Role> findByProvince(String id_prov) {
+		return (List<Role>) role.findByProvince(id_prov);
+	}
+
+	@Override
+	public void saveRole(Role rol) {
+		role.save(rol);
+	}
+
+	@Override
+	public void deleteRole(Integer id) {
+		role.deleteById(id);
+	}
+
 }

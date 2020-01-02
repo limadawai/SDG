@@ -149,7 +149,12 @@
 	    	        required = "Required";
 	        	}
 	        }
-	        bhs(lang=="0");
+	        if(lang){
+	        	bhs(lang=="0");
+	        }else{
+	        	bhs($('#fs').is(':checked'));
+	        }
+	        
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        });

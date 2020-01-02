@@ -69,7 +69,7 @@
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">Action</span>
-	                                            	<span class="lang_indo">aksi</span>
+	                                            	<span class="lang_indo">Aksi</span>
 	                                            </th>
 	                                        </tr>
 	                                    </thead>
@@ -170,7 +170,11 @@
 	    	        required = "Required";
 	        	}
 	        }
-	        bhs(lang=="0");
+	        if(lang){
+	        	bhs(lang=="0");
+	        }else{
+	        	bhs($('#fs').is(':checked'));
+	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        });

@@ -9,8 +9,10 @@ public class Role implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id_role;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, length = 4)
+    private Integer id_role;
+    
     @Column(name = "nm_role")
     private String nm_role;
     @Column(name = "desc_role")
@@ -28,11 +30,28 @@ public class Role implements Serializable {
     @Column(name = "id_prov")
     private String id_prov;
 
-    public int getId_role() {
+    public Role(Integer id_role, String nm_role, String desc_role, String cat_role, String status_role,
+			String privilege, String menu, String submenu, String id_prov) {
+		super();
+		this.id_role = id_role;
+		this.nm_role = nm_role;
+		this.desc_role = desc_role;
+		this.cat_role = cat_role;
+		this.status_role = status_role;
+		this.privilege = privilege;
+		this.menu = menu;
+		this.submenu = submenu;
+		this.id_prov = id_prov;
+	}
+
+    public Role() {
+	}
+    
+	public Integer getId_role() {
         return id_role;
     }
 
-    public void setId_role(int id_role) {
+    public void setId_role(Integer id_role) {
         this.id_role = id_role;
     }
 
@@ -99,4 +118,8 @@ public class Role implements Serializable {
     public void setId_prov(String id_prov) {
         this.id_prov = id_prov;
     }
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }
