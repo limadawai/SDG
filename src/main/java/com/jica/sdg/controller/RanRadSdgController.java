@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jica.sdg.model.GovActivity;
@@ -29,20 +28,20 @@ import com.jica.sdg.model.SdgDisaggreDetail;
 import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
-import com.jica.sdg.service.GovActivityService;
-import com.jica.sdg.service.GovIndicatorService;
-import com.jica.sdg.service.GovProgramService;
-import com.jica.sdg.service.MonPeriodService;
-import com.jica.sdg.service.NsaActivityService;
-import com.jica.sdg.service.NsaIndicatorService;
-import com.jica.sdg.service.NsaProgramService;
-import com.jica.sdg.service.ProvinsiService;
-import com.jica.sdg.service.RoleService;
-import com.jica.sdg.service.SdgDisaggreDetailService;
-import com.jica.sdg.service.SdgDisaggreService;
-import com.jica.sdg.service.SdgGoalsService;
-import com.jica.sdg.service.SdgIndicatorService;
-import com.jica.sdg.service.SdgTargetService;
+import com.jica.sdg.service.IGovActivityService;
+import com.jica.sdg.service.IGovIndicatorService;
+import com.jica.sdg.service.IGovProgramService;
+import com.jica.sdg.service.IMonPeriodService;
+import com.jica.sdg.service.INsaActivityService;
+import com.jica.sdg.service.INsaIndicatorService;
+import com.jica.sdg.service.INsaProgramService;
+import com.jica.sdg.service.IProvinsiService;
+import com.jica.sdg.service.IRoleService;
+import com.jica.sdg.service.ISdgDisaggreDetailService;
+import com.jica.sdg.service.ISdgDisaggreService;
+import com.jica.sdg.service.ISdgGoalsService;
+import com.jica.sdg.service.ISdgIndicatorService;
+import com.jica.sdg.service.ISdgTargetService;
 
 import javax.servlet.http.HttpSession;
 
@@ -50,49 +49,49 @@ import javax.servlet.http.HttpSession;
 public class RanRadSdgController {
 
 	@Autowired
-	SdgGoalsService sdgGoalsService;
+	ISdgGoalsService sdgGoalsService;
 	
 	@Autowired
-	SdgTargetService sdgTargetService;
+	ISdgTargetService sdgTargetService;
 	
 	@Autowired
-	SdgIndicatorService sdgIndicatorService;
+	ISdgIndicatorService sdgIndicatorService;
 	
 	@Autowired
-	SdgDisaggreService sdgDisaggreService;
+	ISdgDisaggreService sdgDisaggreService;
 	
 	@Autowired
-	SdgDisaggreDetailService sdgDisaggreDetailService;
+	ISdgDisaggreDetailService sdgDisaggreDetailService;
 	
 	@Autowired
-	MonPeriodService monPerService;
+	IMonPeriodService monPerService;
 	
 	@Autowired
-	GovProgramService govProgService;
+	IGovProgramService govProgService;
 	
 	@Autowired
-	ProvinsiService prov;
+	IProvinsiService prov;
 	
 	@Autowired
-	MonPeriodService monPeriodService;
+	IMonPeriodService monPeriodService;
 	
 	@Autowired
-	RoleService roleService;
+	IRoleService roleService;
 	
 	@Autowired
-	GovActivityService govActivityService;
+	IGovActivityService govActivityService;
 	
 	@Autowired
-	GovIndicatorService govIndicatorService;
+	IGovIndicatorService govIndicatorService;
 	
 	@Autowired
-	NsaProgramService nsaProgService;
+	INsaProgramService nsaProgService;
 	
 	@Autowired
-	NsaActivityService nsaActivityService;
+	INsaActivityService nsaActivityService;
 	
 	@Autowired
-	NsaIndicatorService nsaIndicatorService;
+	INsaIndicatorService nsaIndicatorService;
 	
 	//*********************** SDG ***********************
 	
