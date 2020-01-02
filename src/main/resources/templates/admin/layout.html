@@ -85,6 +85,12 @@
                         english();
                     } else if (lang == "0") {
                         bahasa();
+                    }else if(!lang){
+                    	if($('#fs').is(':checked')){
+                    		bahasa();
+                    	}else{
+                    		english();
+                    	}
                     }
                     //********************************* Switch Language *********************************
                     var token = $("meta[name='_csrf']").attr("content");

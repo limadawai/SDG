@@ -50,17 +50,23 @@
                             	<div class="table-responsive">
 	                                <table class="table table-bordered table-striped" id="tabel-target">
 	                                    <thead>
-	                                        <tr class="lang_eng" style="display:none">
-	                                            <th style="text-align:center;font-size:80%;">No.</th>
-	                                            <th style="text-align:center;font-size:80%;">Code</th>
-	                                            <th style="text-align:center;font-size:80%;">Target</th>
-	                                            <th style="text-align:center;font-size:80%;">Action</th>
-	                                        </tr>
-	                                        <tr class="lang_indo">
-	                                            <th style="text-align:center;font-size:80%;">No</th>
-	                                            <th style="text-align:center;font-size:80%;">Kode</th>
-	                                            <th style="text-align:center;font-size:80%;">Target</th>
-	                                            <th style="text-align:center;font-size:80%;">Aksi</th>
+	                                        <tr>
+	                                            <th style="text-align:center;font-size:80%;">
+	                                            	<span class="lang_eng" style="display:none">No</span>
+													<span class="lang_indo">No</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;">
+	                                            	<span class="lang_eng" style="display:none">Code</span>
+	                                            	<span class="lang_indo">Kode</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;">
+	                                            	<span class="lang_eng" style="display:none">Target</span>
+	                                            	<span class="lang_indo">Target</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;">
+	                                            	<span class="lang_eng" style="display:none">Aksi</span>
+	                                            	<span class="lang_indo">No</span>
+	                                            </th>
 	                                        </tr>
 	                                    </thead>
 	                                    <tbody id="tbody-target">
@@ -128,16 +134,16 @@
 	        var header = $("meta[name='_csrf_header']").attr("content");
 			var id_goals = $('#id_goals').val();
 			//Bahasa
-			var titleDel = "Anda Yakin";
+	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
 	        var buttDel = 'Ya, Hapus data ini!';
 	        var titleOk	= "Hapus";
 	        var messOk = "Data berhasil dihapus";
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
-	        $('#fs').on('change', function(e){
-	        	if($(this).is(':checked')){
-	        		$(".lang_indo").show();
+	        function bhs(cek){
+				if(cek){
+					$(".lang_indo").show();
 	        		$(".lang_eng").hide();
 	        		titleDel = "Anda Yakin";
 	        		messDel = "Menghapus Data?";
@@ -146,8 +152,8 @@
 	    	        messOk = "Data berhasil dihapus";
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
-	        	}else{
-	        		$(".lang_indo").hide();
+	        	}else{	    	        
+	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
 	        		titleDel = "Are you sure";
 	        		messDel = "Delete this data?";
@@ -157,6 +163,10 @@
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
 	        	}
+	        }
+	        bhs(lang=="0");
+	        $('#fs').on('change', function(e){
+	        	bhs($(this).is(':checked'));
 	        });
 			var table = $('#tabel-target').DataTable({
 				responsive: true,
