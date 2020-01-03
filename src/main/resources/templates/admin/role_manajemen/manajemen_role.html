@@ -66,7 +66,7 @@
     </div>
 
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -108,21 +108,37 @@
                             </label>
                             <div class="controls">
 	                            <select id="cat_role" name="cat_role" class="span3">
-	                                <option value="">Select role category</option>
+	                                <option value="">-pilih kategori-</option>
 	                                <option value="Government">Government</option>
 	                                <option value="NSA">Non Government : NSA</option>
 	                                <option value="Institution">Non Government : Institution</option>
 	                            </select>
 	                            <span class="help-block" id="error_cat_role"></span>
 	                         </div>
-                        </div><br>
+                        </div>
+                        <div class="control-group">
+                            <label class="control-label" for="selkategori">
+                            	<span class="lang_eng" style="display:none">Privilege :</span>
+                            	<span class="lang_indo">Kategori :</span>
+                            </label>
+                            <div class="controls">
+	                            <select id="privilege" name="privilege" class="span3">
+	                                <option value="">-pilih privilege-</option>
+	                                <option value="ADMINKL">Admin Kementrian Lembaga</option>
+	                                <option value="ADMINPROV">Admin Provinsi</option>
+	                            </select>
+	                            <span class="help-block" id="error_privilege"></span>
+	                         </div>
+                        </div>
                         <div class="control-group">
                             <div>
                                 <label for="cbAll" style="display:inline-block;white-space:nowrap;">
                                     <input id="cbAll" type="checkbox" name="cbAll" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
-                                    <span style="vertical-align:middle"><b>Define RAN / RAD</b></span>
+                                    <span style="vertical-align:middle"><b>Menu</b></span>
                                 </label>
-                                <div style="margin-left:20px">
+                                <div class="menu"></div>
+                                
+                                <!-- <div style="margin-left:20px">
                                     <label for="cbIndikator" style="display:inline-block;white-space:nowrap;">
                                         <input id="cbIndikator" type="checkbox" name="cbIndikator" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
                                         <span style="vertical-align:middle">SDGs Indicator</span>
@@ -135,7 +151,7 @@
                                         <input id="cbNonGov" type="checkbox" name="cbNonGov" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
                                         <span style="vertical-align:middle">Program Non-Pemerintah</span>
                                     </label>
-                                </div>
+                                </div> -->
                                 <script>
                                     $("#cbAll").click(function(){
                                         if ($(this).is(":checked")) {
@@ -235,6 +251,70 @@
     	var id = $(this).val();
     	table.ajax.url(urls+'manajemen/list-role/'+id).load();
     });
+    
+    //Load Select Menu
+    $.ajax({
+        url: urls + 'menu',
+        type: 'get',
+        dataType: 'json',
+        cache: false,
+        async : false,
+        success: function (response) {
+            $('.menu').empty();
+            var menu="";
+            for (var i = 0; i < response.length; i++) {
+            	var bhsMenu="";
+            	if(lang){
+                	if(lang=="0"){
+                		bhsMenu = response[i].menu_eng;
+                	}else{
+                		bhsMenu = response[i].menu_indo;
+                	}
+                }else{
+                	if($('#fs').is(':checked')){
+                		bhsMenu = response[i].menu_indo;
+                	}else{
+                		bhsMenu = response[i].menu_eng;
+                	}
+                }
+            	menu += '<label for="menu'+response[i].id_menu +'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                              '<input id="menu'+response[i].id_menu+'" type="checkbox" name="menu" value="'+response[i].id_menu +'" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
+                              '<span style="vertical-align:middle">'+bhsMenu+'</span>'+
+                        '</label><br/>';
+            	$.ajax({
+                    url: urls + 'submenu',
+                    type: 'get',
+                    data: 'id=' + response[i].id_menu,
+                    dataType: 'json',
+                    cache: false,
+                    async : false,
+                    success: function (result) {
+                        for (var j = 0; j < result.length; j++) {
+                        	var bhsSubMenu="";
+                        	if(lang){
+                            	if(lang=="0"){
+                            		bhsSubMenu = result[j].submenu_eng;
+                            	}else{
+                            		bhsSubMenu = result[j].submenu_indo;
+                            	}
+                            }else{
+                            	if($('#fs').is(':checked')){
+                            		bhsSubMenu = result[j].submenu_indo;
+                            	}else{
+                            		bhsSubMenu = result[j].submenu_eng;
+                            	}
+                            }
+                        	menu += '<label for="submenu'+result[j].id_submenu+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+			                            '<input id="submenu'+result[j].id_submenu+'" type="checkbox" name="submenu" value="'+result[j].id_submenu +'" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
+			                            '<span style="vertical-align:middle">'+bhsSubMenu+'</span>'+
+			                      '</label><br/>';
+                        }
+                    }
+                });
+            }
+            $('.menu').append(menu);
+        }
+    });
 
     var table = $('#tabel-role').DataTable({
         responsive: true,
@@ -279,6 +359,9 @@
 		$('#nm_role').val("").removeAttr("readonly");
 		$('#desc_role').val("").removeAttr("readonly");
 		$('#cat_role').val("").removeAttr("disabled");
+		$('#privilege').val("").removeAttr("disabled");
+		$("input[name='menu']").prop('checked',false).removeAttr("disabled");
+		$("input[name='submenu']").prop('checked',false).removeAttr("disabled");
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
 	}
@@ -292,6 +375,7 @@
 		var nm_role = $('#nm_role').val();
 		var desc_role = $('#desc_role').val();
 		var cat_role = $('#cat_role').val();
+		var privilege = $('#privilege').val();
 		var status_role;
 		if(cat_role=="Government"){
 			status_role = "Admin Government";
@@ -300,6 +384,17 @@
 		}else if(cat_role=="Institution"){
 			status_role = "Admin Institution";
 		} 
+		var menu = [];
+        $.each($("input[name='menu']:checked"), function(){
+        	menu.push($(this).val());
+        });
+        menu = menu.toString();
+        var submenu = [];
+        $.each($("input[name='submenu']:checked"), function(){
+        	submenu.push($(this).val());
+        });
+        submenu = submenu.toString();
+        
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
 		var cek = 0;
@@ -319,6 +414,11 @@
             $("#error_cat_role").text(required);
             cek += 1;
         }
+		if (privilege == ""){
+            $("#error_privilege").parents(".control-group").first().addClass("error");
+            $("#error_privilege").text(required);
+            cek += 1;
+        }
 		
 		if(cek==0){
 			var data = JSON.stringify({
@@ -327,10 +427,9 @@
 				'desc_role':desc_role,
 				'cat_role':cat_role,
 				'status_role':status_role,
-				'privilege':'ADMINKL',
-				'privilege':'ADMINKL',
-				'menu':'1,2,3,4,5,6,7,8',
-				'submenu':'1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29',
+				'privilege':privilege,
+				'menu':menu,
+				'submenu':submenu,
 				'id_prov':$('#id_prov').val()
 				});
 			$.ajax({
@@ -360,6 +459,15 @@
 				$('#nm_role').val(val.nm_role);
 				$('#desc_role').val(val.desc_role);
 				$('#cat_role').val(val.cat_role);
+				$('#privilege').val(val.privilege);
+				var menu = val.menu.split(',');
+				for(i=0;i<menu.length;i++){
+					$('#menu'+menu[i]).prop('checked', true);
+				}
+				var submenu = val.submenu.split(',');
+				for(i=0;i<submenu.length;i++){
+					$('#submenu'+submenu[i]).prop('checked', true);
+				}
 				$('#myModal').modal('show');
             },
         })
@@ -374,6 +482,17 @@
 				$('#nm_role').val(val.nm_role).attr("readonly",true);
 				$('#desc_role').val(val.desc_role).attr("readonly",true);
 				$('#cat_role').val(val.cat_role).attr("disabled",true);
+				$('#privilege').val(val.privilege).attr("disabled",true);
+				var menu = val.menu.split(',');
+				for(i=0;i<menu.length;i++){
+					$('#menu'+menu[i]).prop('checked', true);
+				}
+				var submenu = val.submenu.split(',');
+				for(i=0;i<submenu.length;i++){
+					$('#submenu'+submenu[i]).prop('checked', true);
+				}
+				$("input[name='menu']").attr("disabled",true);
+				$("input[name='submenu']").attr("disabled",true);
 				$('#myModal').modal('show');
             },
         })
