@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface InsProfileRepository extends CrudRepository<Insprofile, String> {
     
-    @Query(value = "select * from nsa_inst where id_inst = :id ",nativeQuery = true)
+    @Query(value = "select * from nsa_inst where id_role = :id ",nativeQuery = true)
     public List<Insprofile> findId(@Param("id") String id);
     
 }

@@ -1,7 +1,9 @@
 package com.jica.sdg.service;
 
 import com.jica.sdg.model.Insprofile;
+import com.jica.sdg.model.Role;
 import com.jica.sdg.repository.InsProfileRepository;
+import com.jica.sdg.repository.RoleRepository;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +18,9 @@ public class InsProfileService implements IInsProfileService{
 	
 	@Autowired
 	InsProfileRepository insProfileRepo;
+	
+	@Autowired
+	RoleRepository roleRepo;
 	
 	@Override
 	public List<Insprofile> findAll() {
@@ -35,6 +40,11 @@ public class InsProfileService implements IInsProfileService{
 	@Override
 	public Optional<Insprofile> findOne(String id) {
 		return (Optional<Insprofile>) insProfileRepo.findById(id);
+	}
+        
+        @Override
+	public List<Role> findRoleInstitusi() {
+            return (List<Role>) roleRepo.findRoleInstitusi();
 	}
         
         @Override
