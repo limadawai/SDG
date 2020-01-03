@@ -16,7 +16,7 @@ public interface IInsProfileService {
 
     void saveInsProfil(Insprofile ins);
     
-    Optional<Insprofile> findOne(String id);
+    Optional<Insprofile> findOne(Integer id);
     
-    void deleteInsProfil(String id);
+    void deleteInsProfil(Integer id);
 }

@@ -38,7 +38,7 @@ public class InsProfileService implements IInsProfileService{
 	}
 
 	@Override
-	public Optional<Insprofile> findOne(String id) {
+	public Optional<Insprofile> findOne(Integer id) {
 		return (Optional<Insprofile>) insProfileRepo.findById(id);
 	}
         
@@ -48,7 +48,7 @@ public class InsProfileService implements IInsProfileService{
 	}
         
         @Override
-	public void deleteInsProfil(String id) {
+	public void deleteInsProfil(Integer id) {
 		insProfileRepo.deleteById(id);
 	}
         

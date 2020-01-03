@@ -168,7 +168,7 @@ public class NsaController {
     
     @DeleteMapping("admin/delete-ins-profil/{id}")
     @ResponseBody
-    public void deleteSdg(@PathVariable("id") String id) {
+    public void deleteSdg(@PathVariable("id") Integer id) {
         insProfilrService.deleteInsProfil(id);
     }
 

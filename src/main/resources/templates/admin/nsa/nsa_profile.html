@@ -455,7 +455,28 @@
                                         return "<div style='font-size:90%;'>"+row.nm_org+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.nsa_type+"</div>";
+                                        if(row.nsa_type == '1'){
+                                            var tipe = 'Civil Society Organization/Organisasi Kepemudaan/Komunitas';
+                                        }else if(row.nsa_type == '2'){
+                                            var tipe = 'Organisasi Non-Pemerintah/LSM';
+                                        }else if(row.nsa_type == '3'){
+                                            var tipe = 'Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)';
+                                        }else if(row.nsa_type == '4'){
+                                            var tipe = 'Sektor bisnis';
+                                        }else if(row.nsa_type == '5'){
+                                            var tipe = 'Institusi akademis';
+                                        }else if(row.nsa_type == '6'){
+                                            var tipe = 'Media dan asosiasi media';
+                                        }else if(row.nsa_type == '7'){
+                                            var tipe = 'Organisasi multilateral atau bilateral';
+                                        }else if(row.nsa_type == '8'){
+                                            var tipe = 'Organisasi filantropi';
+                                        }else if(row.nsa_type == '9'){
+                                            var tipe = 'Lainnya';
+                                        }else{
+                                            
+                                        }
+                                        return "<div style='font-size:90%;'>"+tipe+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row.file_logo+"</div>";

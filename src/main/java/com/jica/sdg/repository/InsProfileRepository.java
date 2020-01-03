@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface InsProfileRepository extends CrudRepository<Insprofile, String> {
+public interface InsProfileRepository extends CrudRepository<Insprofile, Integer> {
     
     @Query(value = "select * from nsa_inst where id_role = :id ",nativeQuery = true)
     public List<Insprofile> findId(@Param("id") String id);
