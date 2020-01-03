@@ -11,12 +11,12 @@ import org.springframework.data.repository.query.Param;
 
 public interface NsadetailRepository extends CrudRepository<Nsadetail, Long> {
 
-    @Query(value = "select * from nsa_detail where id_nsa = :id ",nativeQuery = true)
+    @Query(value = "select * from nsa_detail where id_role = :id ",nativeQuery = true)
     public List<Nsadetail> findId(@Param("id") String id);
     
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "delete from nsa_detail where id_nsa = :id ",nativeQuery = true)
-    void deleteIdNsa(@Param("id") String id);
+    void deleteIdNsa(@Param("id") Integer id);
 
 }

@@ -5,13 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "nsa_inst")
 public class Insprofile implements Serializable {
 
     @Id
-    private String id_inst;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, length = 11)
+    private Integer id_inst;
+    @Column(name = "id_role")
+    private Integer id_role;
     @Column(name = "nm_inst")
     private String nm_inst;
     @Column(name = "achievement")
@@ -28,8 +34,9 @@ public class Insprofile implements Serializable {
     public Insprofile() {
     }
 
-    public Insprofile(String id_inst, String nm_inst, String achievement, String loc_inst, String beneficiaries, Integer year_impl, String major_part ) {
+    public Insprofile(Integer id_inst, Integer id_role, String nm_inst, String achievement, String loc_inst, String beneficiaries, Integer year_impl, String major_part ) {
         this.id_inst        = id_inst;
+        this.id_role        = id_role;
         this.nm_inst        = nm_inst;
         this.achievement    = achievement;
         this.loc_inst       = loc_inst;
@@ -38,11 +45,20 @@ public class Insprofile implements Serializable {
         this.major_part     = major_part;
     }
 
-    public String getId_inst() {
+    public Integer getId_role() {
+        return id_role;
+    }
+
+    public void setId_role(Integer id_role) {
+        this.id_role = id_role;
+    }
+
+    
+    public Integer getId_inst() {
         return id_inst;
     }
 
-    public void setId_inst(String id_inst) {
+    public void setId_inst(Integer id_inst) {
         this.id_inst = id_inst;
     }
 

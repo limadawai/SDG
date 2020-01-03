@@ -16,6 +16,8 @@ public class Nsadetail implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, length = 11)
     private Integer id;
+    @Column(name = "id_role")
+    private Integer id_role;
     @Column(name = "id_nsa")
     private String id_nsa;
     @Column(name = "nm_org")
@@ -40,8 +42,9 @@ public class Nsadetail implements Serializable {
     public Nsadetail() {
     }
 
-    public Nsadetail(Integer id, String id_nsa, String nm_org, String nsa_type, String file_logo, String web_url, String head_office, String name_pic, String pos_pic, String email_pic, String hp_pic) {
+    public Nsadetail(Integer id, Integer id_role, String id_nsa, String nm_org, String nsa_type, String file_logo, String web_url, String head_office, String name_pic, String pos_pic, String email_pic, String hp_pic) {
         this.id             = id;
+        this.id_role        = id_role;
         this.id_nsa         = id_nsa;
         this.nm_org         = nm_org;
         this.nsa_type       = nsa_type;
@@ -54,6 +57,15 @@ public class Nsadetail implements Serializable {
         this.hp_pic         = hp_pic;
     }
 
+    public Integer getId_role() {
+        return id_role;
+    }
+
+    public void setId_role(Integer id_role) {
+        this.id_role = id_role;
+    }
+
+    
     public Integer getId() {
         return id;
     }

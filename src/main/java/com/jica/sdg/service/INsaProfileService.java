@@ -1,6 +1,7 @@
 package com.jica.sdg.service;
 
 import com.jica.sdg.model.Nsaprofile;
+import com.jica.sdg.model.Role;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,7 +14,7 @@ public interface INsaProfileService {
 
     void saveNsaProfil(Nsaprofile ins);
     
-//    Optional<Nsaprofile> findOne(String id);
+    List<Role> findRoleNsa();
 //    
-    void deleteNsaProfil(String id);
+    void deleteNsaProfil(Integer id);
 }
