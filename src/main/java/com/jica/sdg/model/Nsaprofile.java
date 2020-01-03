@@ -5,13 +5,19 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 
 @Entity
 @Table(name = "nsa_profile")
 public class Nsaprofile implements Serializable {
 
     @Id
-    private String id_nsa;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, length = 11)
+    private Integer id_nsa;
+    @Column(name = "id_role")
+    private Integer id_role;
     @Column(name = "nm_nsa")
     private String nm_nsa;
     @Column(name = "achieve_nsa")
@@ -21,15 +27,16 @@ public class Nsaprofile implements Serializable {
     @Column(name = "beneficiaries")
     private String beneficiaries;
     @Column(name = "year_impl")
-    private int year_impl;
+    private Integer year_impl;
     @Column(name = "major_part")
     private String major_part;
 
     public Nsaprofile() {
     }
 
-    public Nsaprofile(String id_nsa, String nm_nsa, String achieve_nsa, String loc_nsa, String beneficiaries, Integer year_impl, String major_part) {
+    public Nsaprofile(Integer id_nsa, Integer id_role, String nm_nsa, String achieve_nsa, String loc_nsa, String beneficiaries, Integer year_impl, String major_part) {
         this.id_nsa         = id_nsa;
+        this.id_role        = id_role;
         this.nm_nsa         = nm_nsa;
         this.achieve_nsa    = achieve_nsa;
         this.loc_nsa        = loc_nsa;
@@ -38,13 +45,17 @@ public class Nsaprofile implements Serializable {
         this.major_part     = major_part;
     }
 
-    public String getId_nsa() {
+    
+    
+    public Integer getId_nsa() {
         return id_nsa;
     }
 
-    public void setId_nsa(String id_nsa) {
+    public void setId_nsa(Integer id_nsa) {
         this.id_nsa = id_nsa;
     }
+
+    
 
     public String getNm_nsa() {
         return nm_nsa;
@@ -78,13 +89,24 @@ public class Nsaprofile implements Serializable {
         this.beneficiaries = beneficiaries;
     }
 
-    public int getYear_impl() {
+    public Integer getId_role() {
+        return id_role;
+    }
+
+    public void setId_role(Integer id_role) {
+        this.id_role = id_role;
+    }
+
+    public Integer getYear_impl() {
         return year_impl;
     }
 
-    public void setYear_impl(int year_impl) {
+    public void setYear_impl(Integer year_impl) {
         this.year_impl = year_impl;
     }
+    
+    
+    
 
     public String getMajor_part() {
         return major_part;

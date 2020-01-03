@@ -1,7 +1,9 @@
 package com.jica.sdg.service;
 
 import com.jica.sdg.model.Nsaprofile;
+import com.jica.sdg.model.Role;
 import com.jica.sdg.repository.NsaprofileRepository;
+import com.jica.sdg.repository.RoleRepository;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,6 +18,9 @@ public class NsaProfileService implements INsaProfileService{
 	
 	@Autowired
 	NsaprofileRepository nsaProfileRepo;
+	
+	@Autowired
+	RoleRepository nsaRoleRepo;
 	
 	@Override
 	public List<Nsaprofile> findAll() {
@@ -32,13 +37,13 @@ public class NsaProfileService implements INsaProfileService{
 		nsaProfileRepo.save(nsa);
 	}
 
-//	@Override
-//	public Optional<Nsaprofile> findOne(String id_nsa) {
-//		return (Optional<Nsaprofile>) nsaProfileRepo.findById(id_nsa);
-//	}
+	@Override
+	public List<Role> findRoleNsa() {
+            return (List<Role>) nsaRoleRepo.findRoleNsa();
+	}
 //        
         @Override
-	public void deleteNsaProfil(String id_nsa) {
+	public void deleteNsaProfil(Integer id_nsa) {
 		nsaProfileRepo.deleteById(id_nsa);
 	}
         

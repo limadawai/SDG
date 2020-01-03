@@ -54,17 +54,20 @@ public class NsaController {
     @Autowired
     NsaCollaborationService nsaCollaborationService;
 
+//    @GetMapping("admin/nsa/profile")
+//    public String nsa_profile(Model model, HttpSession session) {
+//        model.addAttribute("title", "NSA Profile");
+//        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+//        model.addAttribute("lang", session.getAttribute("bahasa"));
+////        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
+//        return "admin/nsa/nsa_profile";
+//    }
+
     @GetMapping("admin/nsa/profile")
     public String nsa_profile(Model model, HttpSession session) {
-        model.addAttribute("title", "NSA Profile");
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
-        model.addAttribute("lang", session.getAttribute("bahasa"));
-        return "admin/nsa/nsa_profile";
-    }
-
-    public String nsa_profile(Model model) {
 //        model.addAttribute("title", "NSA Profile");
-        model.addAttribute("listNsaProfile", nsaProfilrService.findAll());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
         return "admin/nsa/nsa_profile";
     }
     
@@ -99,19 +102,14 @@ public class NsaController {
         hasil.put("content1",list);
         return hasil;
     }
-
-    @GetMapping("admin/nsa/inst-profile")
-    public String nsa_ins_profile(Model model, HttpSession session) {
-//        model.addAttribute("title", "Institution Profile");
-        model.addAttribute("listInsProfile", insProfilrService.findAll());
-        model.addAttribute("lang", session.getAttribute("bahasa"));
-        return "admin/nsa/ins_profile";
-    }
     
     @PostMapping(path = "admin/save-nsa-profil", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveNsaProfil(@RequestBody Nsaprofile nsaprofil) {
+    public Map<String, Object> saveNsaProfil(@RequestBody Nsaprofile nsaprofil) {
         nsaProfilrService.saveNsaProfil(nsaprofil);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("v_id_nsa",nsaprofil.getId_nsa());
+        return hasil;
     }
     
     @PostMapping(path = "admin/save-nsa-detail", consumes = "application/json", produces = "application/json")
@@ -130,13 +128,21 @@ public class NsaController {
     
     @DeleteMapping("admin/delete-nsa-profil/{id}")
     @ResponseBody
-    public void deletensa(@PathVariable("id") String id) {
+    public void deletensa(@PathVariable("id") Integer id) {
         nsaDetailService.deleteIdNsa(id);
         nsaProfilrService.deleteNsaProfil(id);
     }
     
     
     
+
+    @GetMapping("admin/nsa/inst-profile")
+    public String nsa_ins_profile(Model model, HttpSession session) {
+//        model.addAttribute("title", "Institution Profile");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("listInsProfile", insProfilrService.findRoleInstitusi());
+        return "admin/nsa/ins_profile";
+    }
     
     @GetMapping("admin/list-getid-ins-profil/{id}")
     public @ResponseBody Map<String, Object> insProfilListid(@PathVariable("id") String id) {
@@ -162,7 +168,7 @@ public class NsaController {
     
     @DeleteMapping("admin/delete-ins-profil/{id}")
     @ResponseBody
-    public void deleteSdg(@PathVariable("id") String id) {
+    public void deleteSdg(@PathVariable("id") Integer id) {
         insProfilrService.deleteInsProfil(id);
     }
 

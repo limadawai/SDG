@@ -15,7 +15,7 @@ public interface INsaDetailService {
     
 //    Optional<Nsaprofile> findOne(String id);
 //    
-    void deleteIdNsa(String id);
+    void deleteIdNsa(Integer id);
     
     void deleteNsaDetail(Long id);
 }

@@ -33,7 +33,7 @@ public class NsaDetailService implements INsaDetailService{
 	}
         
 	@Override
-	public void deleteIdNsa(String id) {
+	public void deleteIdNsa(Integer id) {
 		nsaDetailRepo.deleteIdNsa(id);
 	}
 
