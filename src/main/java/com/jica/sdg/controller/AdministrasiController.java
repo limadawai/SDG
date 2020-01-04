@@ -3,6 +3,7 @@ package com.jica.sdg.controller;
 import com.jica.sdg.model.AssignGovIndicator;
 import com.jica.sdg.model.AssignNsaIndicator;
 import com.jica.sdg.model.AssignSdgIndicator;
+import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgGoals;
@@ -13,6 +14,8 @@ import com.jica.sdg.service.IAssignSdgIndicatorService;
 import com.jica.sdg.service.IMonPeriodService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
+import com.jica.sdg.service.MenuService;
+import com.jica.sdg.service.SubmenuService;
 import com.jica.sdg.service.IUserService;
 
 import org.json.JSONArray;
@@ -57,6 +60,12 @@ public class AdministrasiController {
     
     @Autowired
     IAssignNsaIndicatorService assignNsaService;
+
+    @Autowired
+    MenuService menuService;
+
+    @Autowired
+    SubmenuService submenuService;
 
     //*********************** Manajemen Role & User ***********************
     @GetMapping("admin/manajemen/role")
@@ -301,6 +310,12 @@ public class AdministrasiController {
     public @ResponseBody List<Provinsi> provinsi() {
         List<Provinsi> list = provinsiService.findAllProvinsi();
         return list;
+    }
+
+    @GetMapping("admin/manajemen/menu")
+    public @ResponseBody void menusubmenu() {
+        List<Menu> listMenu = menuService.findAllMenu();
+        System.out.println(listMenu.size());
     }
 
 }
