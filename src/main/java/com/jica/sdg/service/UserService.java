@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -30,8 +31,8 @@ public class UserService implements IUserService {
 	}
 
 	@Override
-	public List<User> findByProvince(String id_prov) {
-		return (List<User>) userRepository.findByProvince(id_prov);
+	public List findByProvince(String id_prov) {
+		return userRepository.findByProvince(id_prov);
 	}
 
 	@Override
@@ -42,5 +43,10 @@ public class UserService implements IUserService {
 	@Override
 	public void deleteUser(Integer id) {
 		userRepository.deleteById(id);
+	}
+
+	@Override
+	public List findAllGrid() {
+		return userRepository.findAllGrid();
 	}
 }
