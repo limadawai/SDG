@@ -78,55 +78,63 @@
                 var urls = "http://localhost:8080/sdg/admin/";
                 // var urls = "http://156.67.217.34:8080/sdg/admin/";
                 var lang = [[${lang}]];
-                // alert(lang);
 
                 bahasa();
-
-                window.onload = function () {
-                    if (lang == "1") {
-                        english();
-                    } else if (lang == "0") {
-                        bahasa();
-                    }else if(!lang){
-                    	if($('#fs').is(':checked')){                		
-                    		bahasa();
-                    	}else{
-                    		english();
-                    	}
-                    	
+                if (lang == "1") {
+                    english();
+                    if (!localStorage.getItem("reload")) {
+                        localStorage.setItem("reload", "true");
+                        location.reload();
+                    } else {
+                        localStorage.removeItem("reload");
                     }
+                } else if (lang == "0") {
+                    bahasa();
+                    if (!localStorage.getItem("reload")) {
+                        localStorage.setItem("reload", "true");
+                        location.reload();
+                    } else {
+                        localStorage.removeItem("reload");
+                    }
+                }
+                // else if(!lang){
+                //     if($('#fs').is(':checked')){
+                //         bahasa();
+                //     }else{
+                //         english();
+                //     }
+                // }
 
-                    //********************************* Switch Language *********************************
-                    var token = $("meta[name='_csrf']").attr("content");
-                    $('#fs').change(function() {
-                        if($(this).is(':checked')) {
-                            $.ajax({
-                                url: "/sdg/admin/bahasa",
-                                headers: {"X-CSRF-TOKEN": token},
-                                type: "post",
-                                data: {"bhs": "0"},
-                                dataType: "text",
-                                cache: "false",
-                                success: function(data) {
-                                    bahasa();
-                                }
-                            });
-                        } else {
-                            $.ajax({
-                                url: "/sdg/admin/english",
-                                headers: {"X-CSRF-TOKEN": token},
-                                type: "post",
-                                data: {"bhs": "1"},
-                                dataType: "text",
-                                cache: "false",
-                                success: function(data) {
-                                    english();
-                                }
-                            });
-                        }
-                    });
-                    $("#sidebar li:first").addClass("active");
-                };
+                //********************************* Switch Language *********************************
+                var token = $("meta[name='_csrf']").attr("content");
+                $('#fs').change(function() {
+                    if($(this).is(':checked')) {
+                        $.ajax({
+                            url: "/sdg/admin/bahasa",
+                            headers: {"X-CSRF-TOKEN": token},
+                            type: "post",
+                            data: {"bhs": "0"},
+                            dataType: "text",
+                            cache: "false",
+                            success: function(data) {
+                                bahasa();
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: "/sdg/admin/english",
+                            headers: {"X-CSRF-TOKEN": token},
+                            type: "post",
+                            data: {"bhs": "1"},
+                            dataType: "text",
+                            cache: "false",
+                            success: function(data) {
+                                english();
+                            }
+                        });
+                    }
+                });
+                $("#sidebar li:first").addClass("active");
 
                 //===== Fungsi Bahasa Indonesia ======
                 function bahasa() {

@@ -68,5 +68,21 @@ public class DataEntryController {
         entrySdgService.saveEntrySdg(entrySdg);
     }
 
+    @GetMapping("admin/government-program-monitoring")
+    public String govprogram(Model model, HttpSession session) {
+        model.addAttribute("title", "SDG Indicators Monitoring");
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        return "admin/dataentry/govprogram";
+    }
+
+    @GetMapping("admin/government-kegiatan-monitoring")
+    public String govkegiatan(Model model, HttpSession session) {
+        model.addAttribute("title", "SDG Indicators Monitoring");
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        return "admin/dataentry/govactivity";
+    }
+
 
 }
