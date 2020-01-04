@@ -78,7 +78,7 @@
     <div th:include="admin/layout :: footer"></div>
 
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="true">
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -213,19 +213,19 @@
                 return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.name+" ("+row.userName+")")+"</div>";}
+                return "<div style='font-size:90%;'>"+(row[4]+" ("+row[1]+")")+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+""+"</div>";}
+                return "<div style='font-size:90%;'>"+row[2]+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+row.detail+"</div>";}
+                return "<div style='font-size:90%;'>"+row[3]+"</div>";}
             },
             {"data": function (row, data, index, display) {
                 return "<div style='text-align:center;'>"+
-                    '<button data-id="'+row.id_user+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row.id_user+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row.id_user+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';}
+                    '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
+                    '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
+                    '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';}
             }
         ],
         "columnDefs": [
