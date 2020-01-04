@@ -112,9 +112,9 @@ public class AdministrasiController {
     
     @GetMapping("admin/manajemen/list-user/{id_prov}")
     public @ResponseBody Map<String, Object> user(HttpSession session, @PathVariable("id_prov") String id_prov) {
-    	List<User> listUser;
+    	List listUser;
     	if(id_prov.equals("000")) {
-    		listUser = userService.findAll();
+    		listUser = userService.findAllGrid();
     	}else {
     		listUser = userService.findByProvince(id_prov);
     	}
