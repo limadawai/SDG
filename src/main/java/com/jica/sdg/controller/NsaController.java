@@ -4,6 +4,7 @@ import com.jica.sdg.model.Insprofile;
 import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Nsaprofile;
 import com.jica.sdg.model.NsaCollaboration;
+import com.jica.sdg.model.PhilanthropyCollaboration;
 import com.jica.sdg.model.Nsadetail;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Submenu;
@@ -14,6 +15,7 @@ import com.jica.sdg.service.InsProfileService;
 import com.jica.sdg.service.NsaDetailService;
 import com.jica.sdg.service.NsaProfileService;
 import com.jica.sdg.service.NsaCollaborationService;
+import com.jica.sdg.service.PhilanthropyService;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,6 +57,12 @@ public class NsaController {
     
     @Autowired
     NsaCollaborationService nsaCollaborationService;
+    
+    @Autowired
+    PhilanthropyService philanthropyService;
+    
+    @Autowired
+    private EntityManager em;
 
 //    @GetMapping("admin/nsa/profile")
 //    public String nsa_profile(Model model, HttpSession session) {
@@ -172,12 +182,53 @@ public class NsaController {
         insProfilrService.deleteInsProfil(id);
     }
 
+    
+    
+    
+    
     @GetMapping("admin/nsa/nsa-collaboration")
     public String nsa_collaboration(Model model, HttpSession session) {
         model.addAttribute("title", "NSA Collaboration");
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/nsa/nsa_collaboration";
+    }
+    
+    @GetMapping("admin/list-getid-nsa-collaboration/{id}")
+    public @ResponseBody Map<String, Object> listNsaCollaboration(@PathVariable("id") String id) {
+        String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id_program, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy from nsa_program as a \n" +
+                    "left join nsa_collaboration as b on a.id_program = b.id_program\n" +
+                    "left join philanthropy_collaboration as c on b.id_philanthropy = c.id_philanthropy\n" +
+                    "where a.id_role = :id ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-nsa-collaboration", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveNsaCollaboration(@RequestBody NsaCollaboration nsaCollaboration) {
+        nsaCollaborationService.saveNsaCollaboration(nsaCollaboration);
+    }
+    
+    @PostMapping(path = "admin/save-nsa-philanthropy", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public Map<String, Object> saveNsaPhilanthropy(@RequestBody PhilanthropyCollaboration philanthropyCollaboration) {
+        philanthropyService.savePhilanthropyCollaboration(philanthropyCollaboration);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("v_id_phy",philanthropyCollaboration.getId_philanthropy());
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-nsa-collaboration-phy", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveNsaCollaborationPhy(@RequestBody NsaCollaboration nsaCollaboration) {
+        int id_philanthropy = nsaCollaboration.getId_philanthropy();
+        int id              = nsaCollaboration.getId();
+        nsaCollaborationService.updateIdPhilanthropy(id_philanthropy, id);
     }
 
 }

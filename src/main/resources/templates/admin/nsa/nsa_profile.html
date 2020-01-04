@@ -651,7 +651,7 @@
                                     $('#id_nsa').val(result1.content[0].id_nsa);
                                     $('#id_role').val(result1.content[0].id_role);
                                     $('#nm_org').val(result1.content[0].nm_org);
-                                    $('#nsa_type').val(result1.content[0].nsa_type);
+                                    $('#nsa_type').val(result1.content[0].nsa_type).trigger("change");
                                     $('#file_logo').val(result1.content[0].file_logo);
                                     $('#web_url').val(result1.content[0].web_url);
                                     $('#head_office').val(result1.content[0].head_office);

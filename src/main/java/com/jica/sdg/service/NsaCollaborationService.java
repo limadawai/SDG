@@ -31,6 +31,11 @@ public class NsaCollaborationService implements INsaCollaborationService{
 	public void saveNsaCollaboration(NsaCollaboration col) {
             nsaCollaborationRepo.save(col);
 	}
+        
+	@Override
+	public void updateIdPhilanthropy(int id_philanthropy, int id) {
+            nsaCollaborationRepo.updateIdPhilanthropy(id_philanthropy, id);
+	}
 
 	@Override
 	public Optional<NsaCollaboration> findOne(Long id) {

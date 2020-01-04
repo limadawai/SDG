@@ -13,6 +13,8 @@ public interface INsaCollaborationService {
 
     void saveNsaCollaboration(NsaCollaboration col);
     
+    void updateIdPhilanthropy(int id_philanthropy, int id);
+    
     Optional<NsaCollaboration> findOne(Long id);
     
     void deleteNsaCollaboration(Long id);

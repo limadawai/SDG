@@ -20,26 +20,26 @@ public class NsaCollaboration implements Serializable {
     private String sector;
     @Column(name = "id_program")
     private String id_program;
-    @Column(name = "id_activity")
-    private String id_activity;
-    @Column(name = "id_nsa_profile")
-    private String id_nsa_profile;
+    @Column(name = "location")
+    private String location;
+    @Column(name = "beneficiaries")
+    private String beneficiaries;
     @Column(name = "ex_benefit")
     private String ex_benefit;
     @Column(name = "type_support")
     private String type_support;
     @Column(name = "id_philanthropy")
-    private String id_philanthropy;
+    private Integer id_philanthropy;
 
     public NsaCollaboration() {
     }
 
-    public NsaCollaboration(Integer id, String sector, String id_program, String id_activity, String id_nsa_profile, String ex_benefit, String type_support, String id_philanthropy) {
+    public NsaCollaboration(Integer id, String sector, String id_program, String location, String beneficiaries, String ex_benefit, String type_support, Integer id_philanthropy) {
         this.id             = id;
         this.sector         = sector;
         this.id_program     = id_program;
-        this.id_activity    = id_activity;
-        this.id_nsa_profile = id_nsa_profile;
+        this.location       = location;
+        this.beneficiaries  = beneficiaries;
         this.ex_benefit     = ex_benefit;
         this.type_support   = type_support;
         this.id_philanthropy = id_philanthropy;
@@ -69,21 +69,23 @@ public class NsaCollaboration implements Serializable {
         this.id_program = id_program;
     }
 
-    public String getId_activity() {
-        return id_activity;
+    public String getLocation() {
+        return location;
     }
 
-    public void setId_activity(String id_activity) {
-        this.id_activity = id_activity;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-    public String getId_nsa_profile() {
-        return id_nsa_profile;
+    public String getBeneficiaries() {
+        return beneficiaries;
     }
 
-    public void setId_nsa_profile(String id_nsa_profile) {
-        this.id_nsa_profile = id_nsa_profile;
+    public void setBeneficiaries(String beneficiaries) {
+        this.beneficiaries = beneficiaries;
     }
+
+    
 
     public String getEx_benefit() {
         return ex_benefit;
@@ -101,11 +103,11 @@ public class NsaCollaboration implements Serializable {
         this.type_support = type_support;
     }
 
-    public String getId_philanthropy() {
+    public Integer getId_philanthropy() {
         return id_philanthropy;
     }
 
-    public void setId_philanthropy(String id_philanthropy) {
+    public void setId_philanthropy(Integer id_philanthropy) {
         this.id_philanthropy = id_philanthropy;
     }
 

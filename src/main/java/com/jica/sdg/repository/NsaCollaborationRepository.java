@@ -16,7 +16,7 @@ public interface NsaCollaborationRepository extends CrudRepository<NsaCollaborat
     
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "delete from nsa_detail where id_nsa = :id ",nativeQuery = true)
-    void deleteIdNsa(@Param("id") String id);
+    @Query(value = "update nsa_collaboration set id_philanthropy = :id_philanthropy where id = :id ",nativeQuery = true)
+    void updateIdPhilanthropy(@Param("id_philanthropy") int id_philanthropy, @Param("id") int id);
 
 }
