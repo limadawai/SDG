@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +50,18 @@ public class AdminController {
     @Autowired
     IMenuService menuService;
     @GetMapping("admin/menu")
-    public @ResponseBody List<Menu> menuList() {
-        List<Menu> list = menuService.findAllMenu();
-        return list;
+    public @ResponseBody List<Menu> menuList(HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id[] = list.get().getMenu().split(",");
+    	Integer size = id.length;
+    	Integer [] arr = new Integer [size];
+        for(int i=0; i<size; i++) {
+           arr[i] = Integer.parseInt(id[i]);
+        }
+        Iterable<Integer> ids = Arrays.asList(arr);
+        List<Menu> list1 = menuService.findAllByList(ids);
+        return list1;
     }
 
     @Autowired

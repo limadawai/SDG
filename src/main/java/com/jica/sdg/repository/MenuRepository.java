@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface MenuRepository extends CrudRepository<Menu, Long> {
+public interface MenuRepository extends CrudRepository<Menu, Integer> {
 
     @Query(value = "select * from menu", nativeQuery = true)
     List<Menu> findAllMenu();
