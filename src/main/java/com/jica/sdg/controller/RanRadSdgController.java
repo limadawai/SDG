@@ -567,5 +567,47 @@ public class RanRadSdgController {
 	public void deleteMonPer(@PathVariable("id") Integer id) {
     	monPerService.deleteMonPeriod(id);
 	}
+    
+  //*********************** MAPPING ***********************
+    @GetMapping("admin/ran_rad/map/goals/{id_monper}")
+    public String goals(Model model, HttpSession session, @PathVariable("id_monper") Integer id_monper) {
+    	Optional<MonPeriod> monper = monPeriodService.findOne(id_monper);
+    	Optional<Provinsi> provin = prov.findOne(monper.get().getId_prov());
+        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
+        monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        return "admin/ran_rad/map/goals";
+    }
+    
+    @GetMapping("admin/ran_rad/map/goals/{id_monper}/{id}/target")
+    public String targetMap(Model model, @PathVariable("id_monper") Integer id_monper, @PathVariable("id") String id, HttpSession session) {
+		Optional<SdgGoals> list = sdgGoalsService.findOne(id);
+		Optional<MonPeriod> monper = monPeriodService.findOne(id_monper);
+    	Optional<Provinsi> provin = prov.findOne(monper.get().getId_prov());
+    	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
+        monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
+        list.ifPresent(foundUpdateObject -> model.addAttribute("content", foundUpdateObject));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("id_monper", id_monper);
+        return "admin/ran_rad/map/target";
+    }
+    
+    @GetMapping("admin/ran_rad/map/goals/{id_monper}/{id}/target/{id_target}/indicator")
+    public String sdgMap(Model model, @PathVariable("id_monper") Integer id_monper, @PathVariable("id") String id, @PathVariable("id_target") String id_target, HttpSession session) {
+    	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
+    	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
+    	Optional<MonPeriod> monper = monPeriodService.findOne(id_monper);
+    	Optional<Provinsi> provin = prov.findOne(monper.get().getId_prov());
+    	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
+        monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
+        list.ifPresent(foundUpdateObject -> model.addAttribute("goals", foundUpdateObject));
+        list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("id_monper", id_monper);
+        return "admin/ran_rad/map/sdgs_indicator";
+    }
 	
 }

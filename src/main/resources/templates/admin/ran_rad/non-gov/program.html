@@ -217,12 +217,7 @@
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        });
-	        
-	        $('#id_prov').on('change', function(){
-	        	var id = $(this).val();
-	        	//table.ajax.url(urls+'list-monPer/'+id).load();
-	        });
-	        
+
 	        $('#id_prov').on('change', function(){
 	        	var id = $(this).val();
 	        	$.ajax({
@@ -350,7 +345,7 @@
 	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
 						data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-nsaProg').load();
+	                    	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
@@ -406,7 +401,7 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-nsaProg').load();
+                        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');
