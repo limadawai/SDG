@@ -285,9 +285,9 @@ public class RanRadSdgController {
 	}
     
   //*********************** GOV PROGRAM ***********************
-    @GetMapping("admin/list-govProg")
-    public @ResponseBody Map<String, Object> govProgList() {
-        List<GovProgram> list = govProgService.findAll();
+    @GetMapping("admin/list-govProg/{id_role}/{id_monper}")
+    public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
+        List<GovProgram> list = govProgService.findAllBy(id_role,id_monper);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;

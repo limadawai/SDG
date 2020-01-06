@@ -100,11 +100,15 @@ public class AdminController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
-    	Optional<Provinsi> list1 = prov.findOne(id_prov);
+    	if(id_prov.equals("000")) {
+    		model.addAttribute("prov", prov.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = prov.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
+    	}
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
         list.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
-        list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/gov/program";
     }
@@ -114,11 +118,15 @@ public class AdminController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
-    	Optional<Provinsi> list1 = prov.findOne(id_prov);
+    	if(id_prov.equals("000")) {
+    		model.addAttribute("prov", prov.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = prov.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
+    	}
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
         list.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
-        list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/non-gov/program";
     }

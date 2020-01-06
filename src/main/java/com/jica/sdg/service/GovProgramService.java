@@ -34,4 +34,9 @@ public class GovProgramService implements IGovProgramService{
 	public void deleteGovProgram(String id) {
 		govProgRepo.deleteById(id);
 	}
+
+	@Override
+	public List<GovProgram> findAllBy(String id_role,String id_monper) {
+		return (List<GovProgram>) govProgRepo.findAll(id_role,id_monper);
+	}
 }
