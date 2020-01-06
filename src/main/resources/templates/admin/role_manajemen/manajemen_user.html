@@ -98,9 +98,9 @@
                             		<span class="lang_indo">Nama Pengguna</span>
                                 </label>
                                 <div class="controls">
-                                    <input id="username" type="text" name="username"/>
+                                    <input class="input-block-level" id="username" type="text" name="username"/>
                                     <input type="hidden" id="id_user" name="id_user"/>
-                                    <input type="hidden" id="id_role" name="id_role"/>
+                                    <!--<input type="hidden" id="id_role" name="id_role"/>-->
                                     <span class="help-block" id="error_username"></span>
                                 </div>
                             </div>
@@ -110,7 +110,7 @@
                             		<span class="lang_indo">Kata Sandi</span>
                                 </label>
                                 <div class="controls">
-                                    <input id="password" type="password" name="password" />
+                                    <input class="input-block-level" id="password" type="password" name="password" />
                                     <span class="help-block" id="error_password"></span>
                                 </div>
                             </div>
@@ -120,14 +120,26 @@
                             		<span class="lang_indo">Nama Lengkap</span>
                                 </label>
                                 <div class="controls">
-                                    <input id="name" type="text" name="name" />
+                                    <input class="input-block-level" id="name" type="text" name="name" />
                                     <span class="help-block" id="error_name"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label th:class="control-label" for="nama">
+                                	<span class="lang_eng" style="display:none">Role</span>
+                            		<span class="lang_indo">Role</span>
+                                </label>
+                                <div class="controls">
+                                    <select id="id_role" name="id_role" class="form-control input-block-level">
+                                        <option th:each="f:${listRole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+                                    </select>
+                                    <span class="help-block" id="error_id_role"></span>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label th:class="control-label" for="detail">Detail</label>
                                 <div class="controls">
-                                    <textarea id="detail" name="detail" rows="3"></textarea>
+                                    <textarea class="input-block-level" id="detail" name="detail" rows="3"></textarea>
                                 </div>
                             </div>
                         </form>
@@ -244,6 +256,7 @@
 		$('#name').val("").removeAttr("readonly");
 		$('#detail').text("").removeAttr("readonly");
 		$('#password').val("").removeAttr("readonly");
+		$('#id_role').val("").removeAttr("readonly");
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
 	}
@@ -281,6 +294,11 @@
 		if (password == ""){
             $("#error_password").parents(".control-group").first().addClass("error");
             $("#error_password").text(required);
+            cek += 1;
+        }
+		if (id_role == ""){
+            $("#error_id_role").parents(".control-group").first().addClass("error");
+            $("#error_id_role").text(required);
             cek += 1;
         }
 		
@@ -337,7 +355,7 @@
 				$('#username').val(val.userName).attr("readonly",true);
 				$('#name').val(val.name).attr("readonly",true);
 				$('#detail').text(val.detail).attr("readonly",true);
-				$('#id_role').val(val.id_role);
+				$('#id_role').val(val.id_role).attr("readonly",true);
 				$('#password').attr("readonly",true);
 				$('#myModal').modal('show');
             },

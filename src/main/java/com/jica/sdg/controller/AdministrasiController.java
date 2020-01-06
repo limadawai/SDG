@@ -131,6 +131,7 @@ public class AdministrasiController {
     		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
+        model.addAttribute("listRole", roleService.findAll());
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/role_manajemen/manajemen_user";
     }

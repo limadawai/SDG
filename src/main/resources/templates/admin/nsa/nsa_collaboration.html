@@ -52,23 +52,35 @@
                             <div class="span12">
                                 <table  id="tabel-nsa-collaboration" class="table table-striped table-bordered">
                                     <thead >
-                                        <tr class="lang_eng" style="display: none">
-                                            <th style="text-align:center;font-size:80%;">Area / Sector</th>
-                                            <th style="text-align:center;font-size:80%;">Program Name</th>
-                                            <th style="text-align:center;font-size:80%;">Location of the Program Intervention</th>
-                                            <th style="text-align:center;font-size:80%;">Beneficiaries</th>
-                                            <th style="text-align:center;font-size:80%;">Expected Benefits</th>
-                                            <th style="text-align:center;font-size:80%;">Challenges/ Types of Support Needed</th>
-                                            <th style="text-align:center;font-size:80%;">Institution Name</th>
-                                        </tr>
-                                        <tr class="lang_indo" id="thead_indo">
-                                            <th style="text-align:center;font-size:80%;">Area / Sektor</th>
-                                            <th style="text-align:center;font-size:80%;">Nama Program</th>
-                                            <th style="text-align:center;font-size:80%;">Lokasi Intervensi Program</th>
-                                            <th style="text-align:center;font-size:80%;">Penerima Manfaat</th>
-                                            <th style="text-align:center;font-size:80%;">Keuntungan yang Diharapkan</th>
-                                            <th style="text-align:center;font-size:80%;">Tantangan/ Jenis Dukungan yang Dibutuhkan</th>
-                                            <th style="text-align:center;font-size:80%;">Nama Institusi</th>
+                                        <tr>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Area / Sector</span>
+                                                <span class="lang_indo">Area / Sektor</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Program Name</span>
+                                                <span class="lang_indo">Nama Program</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Location of the Program Intervention</span>
+                                                <span class="lang_indo">Lokasi Intervensi Program</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Beneficiaries</span>
+                                                <span class="lang_indo">Penerima Manfaat</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Expected Benefits</span>
+                                                <span class="lang_indo">Keuntungan yang Diharapkan</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Challenges/ Types of Support Needed</span>
+                                                <span class="lang_indo">Tantangan/ Jenis Dukungan yang Dibutuhkan</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Institution Name</span>
+                                                <span class="lang_indo">Nama Institusi</span>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody_ins_profile">
@@ -226,27 +238,35 @@
             var titleOk	= "Hapus";
             var messOk = "Data berhasil dihapus";
             var messNOk = "Data tidak dapat dihapus";
-            $('#fs').on('change', function(e){
-                    if($(this).is(':checked')){
-                            $(".lang_indo").show();
-                            $(".lang_eng").hide();
-                            titleDel = "Anda Yakin";
-                            messDel = "Menghapus Data?";
-                            buttDel = 'Ya, Hapus data ini!';
-                            titleOk	= "Hapus";
+            var required = "Harus diisi";
+            function bhs(cek){
+                if(cek){
+                    $(".lang_indo").show();
+                    $(".lang_eng").hide();
+                    titleDel = "Anda Yakin";
+                    messDel = "Menghapus Data?";
+                    buttDel = 'Ya, Hapus data ini!';
+                    titleOk	= "Hapus";
                     messOk = "Data berhasil dihapus";
                     messNOk = "Data tidak dapat dihapus";
-                    }else{
-                            $(".lang_indo").hide();
-                            $(".lang_eng").show();
-                            titleDel = "Are you sure";
-                            messDel = "Delete this data?";
-                            buttDel = 'Yes, Delete this data!';
-                            titleOk	= "Delete";
+                    required = "Harus diisi";
+                }else{	    	        
+                    $(".lang_indo").hide();
+                    $(".lang_eng").show();
+                    titleDel = "Are you sure";
+                    messDel = "Delete this data?";
+                    buttDel = 'Yes, Delete this data!';
+                    titleOk	= "Delete";
                     messOk = "Delete successful";
                     messNOk = "Can't delete data";
-                    }
-            });
+                    required = "Required";
+                }
+            }
+            if(lang){
+                bhs(lang=="0");
+            }else{
+                bhs($('#fs').is(':checked'));
+            }
             
             
             $("#nm_ins_profil").on('change', function(e){
