@@ -14,6 +14,7 @@ import com.jica.sdg.service.IAssignSdgIndicatorService;
 import com.jica.sdg.service.IMonPeriodService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
+import com.jica.sdg.service.IUserRequestListService;
 import com.jica.sdg.service.MenuService;
 import com.jica.sdg.service.SubmenuService;
 import com.jica.sdg.service.IUserService;
@@ -66,6 +67,9 @@ public class AdministrasiController {
 
     @Autowired
     SubmenuService submenuService;
+    
+    @Autowired
+    IUserRequestListService userReqService;
 
     //*********************** Manajemen Role & User ***********************
     @GetMapping("admin/manajemen/role")
@@ -304,6 +308,19 @@ public class AdministrasiController {
     public String requestlist(Model model, HttpSession session) {
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/role_manajemen/manajemen_request_list";
+    }
+    
+    @GetMapping("admin/manajemen/list-request/{new}")
+    public @ResponseBody Map<String, Object> req(@PathVariable("new") String ok) {
+    	List list;
+    	if(ok.equals("1")) {
+    		list = userReqService.findAllNew();
+    	}else {
+    		list = userReqService.findAll();
+    	}
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content", list);
+        return hasil;
     }
 
     @GetMapping("admin/role/provinsi")
