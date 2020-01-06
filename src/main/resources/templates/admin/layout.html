@@ -56,6 +56,9 @@
         </div>
         <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav">
+                <li class="" style="margin-top:10px;background:none;padding:10px;">
+                    <span id="welcome" style="color:white;">Welcome Super</span>
+                </li>
                 <li class="" style="margin-top:7px;background:none;padding:10px;">
                     <div class="flipswitch">
                         <input id="fs" type="checkbox" name="flipswitch" class="flipswitch-cb" checked>
@@ -79,6 +82,8 @@
                 var urls = "http://localhost:8080/sdg/admin/";
                 // var urls = "http://156.67.217.34:8080/sdg/admin/";
                 var lang = [[${lang}]];
+                var name = [[${name}]];
+                $("#welcome").html("Welcome, "+name);
 
                 bahasa();
                 if (lang == "1") {
