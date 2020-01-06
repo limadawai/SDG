@@ -140,7 +140,7 @@
 				<form>
 				  <div class="control-group">
 				    <label>Program</label>
-				    <input type="text" readonly="true" th:value="${govProg.nm_program}" class="input-xlarge" />
+				    <input type="text" readonly="true" th:value="${govProg.nm_program}" class="input-xlarge input-block-level" />
 				    <input type="hidden" id="id_program" name="id_program" th:value="${govProg.id_program}"/>
 				    <input type="hidden" id="id_activity" name="id_activity" th:value="${govActivity.id_activity}"/>
 				  </div>
@@ -148,7 +148,7 @@
 				    <label class="lang_eng control-label" style="display:none">Code</label>
 				    <label class="lang_indo control-label">Kode</label>
 				    <div class="controls">
-				    	<input type="text" id="id_nsa_indicator" name="id_nsa_indicator" class="input-medium"/>
+				    	<input type="text" id="id_nsa_indicator" name="id_nsa_indicator" class="input-medium input-block-level"/>
 				    	<span class="help-block" id="error_id_nsa_indicator"></span>
 				    </div>
 				  </div>
@@ -156,7 +156,7 @@
 				    <label class="lang_eng control-label" style="display:none">Activity Indicator</label>
 				    <label class="lang_indo control-label">Indikator Kegiatan</label>
 				    <div class="controls">
-				    	<input type="text" id="nm_indicator" name="nm_indicator" class="input-xlarge"/>
+				    	<input type="text" id="nm_indicator" name="nm_indicator" class="input-xlarge input-block-level"/>
 				    	<span class="help-block" id="error_nm_indicator"></span>
 				    </div>
 				  </div>
@@ -164,7 +164,7 @@
 				    <label class="lang_eng control-label" style="display:none">Unit</label>
 				    <label class="lang_indo control-label">Satuan</label>
 				    <div class="controls">
-				    	<select placeholder="Pilih satuan" id="unit" name="unit" class="input-xlarge">
+				    	<select placeholder="Pilih satuan" id="unit" name="unit" class="input-xlarge input-block-level">
 					    	<option value="">select</option>
 					    	<option value="orang">Orang</option>
 					    </select>
@@ -184,7 +184,7 @@
 				    <label class="lang_eng control-label" style="display:none">Baseline</label>
 				    <label class="lang_indo control-label">Baseline</label>
 				    <div class="controls">
-				    	<input type="text" id="baseline" name="baseline" class="input-xlarge"/>
+				    	<input type="text" id="baseline" name="baseline" class="input-xlarge input-block-level"/>
 				    	<span class="help-block" id="error_baseline"></span>
 				    </div>
 				  </div>
@@ -192,7 +192,7 @@
 				    <label class="lang_eng control-label" style="display:none">Funding Source</label>
 				    <label class="lang_indo control-label">Funding Source</label>
 				    <div class="controls">
-				    	<select id="budsource" name="budsource" class="input-xlarge">
+				    	<select id="budsource" name="budsource" class="input-xlarge input-block-level">
 					    	<option value="">select</option>
 					    	<option value="Funding Source1">Funding Source</option>
 					    </select>

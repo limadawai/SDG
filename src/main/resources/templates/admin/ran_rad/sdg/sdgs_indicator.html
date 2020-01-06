@@ -124,7 +124,7 @@
 				<form>
 				  <div class="control-group">
 				    <label>Target</label>
-				    <input type="text" readonly="true" th:value="${target.nm_target}" class="input-xlarge" />
+				    <input type="text" readonly="true" th:value="${target.nm_target}" class="input-xlarge input-block-level" />
 				    <input type="hidden" id="id_goals" name="id_goals" th:value="${target.id_goals}"/>
 				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id_target}"/>
 				  </div>
@@ -132,7 +132,7 @@
 				    <label class="lang_eng control-label" style="display:none">Code</label>
 				    <label class="lang_indo control-label">Kode</label>
 				    <div class="controls">
-				    	<input type="text" id="id_indicator" name="id_indicator" class="input-medium"/>
+				    	<input type="text" id="id_indicator" name="id_indicator" class="input-medium input-block-level"/>
 				    	<span class="help-block" id="error_id_indicator"></span>
 				    </div>
 				  </div>
@@ -140,7 +140,7 @@
 				    <label class="lang_eng control-label" style="display:none">SDGs Indicator Name</label>
 				    <label class="lang_indo control-label">Nama Indikator SDG</label>
 				    <div class="controls">
-				    	<input type="text" id="nm_indicator" name="nm_indicator" class="input-xlarge"/>
+				    	<input type="text" id="nm_indicator" name="nm_indicator" class="input-xlarge input-block-level"/>
 				    	<span class="help-block" id="error_nm_indicator"></span>
 				    </div>
 				  </div>
@@ -148,7 +148,7 @@
 				    <label class="lang_eng control-label" style="display:none">Unit</label>
 				    <label class="lang_indo control-label">Satuan</label>
 				    <div class="controls">
-				    	<select placeholder="Pilih satuan" id="unit" name="unit" class="input-xlarge">
+				    	<select placeholder="Pilih satuan" id="unit" name="unit" class="input-xlarge input-block-level">
 					    	<option value="">select</option>
 					    	<option value="orang">Orang</option>
 					    </select>
@@ -168,7 +168,7 @@
 				    <label class="lang_eng control-label" style="display:none">Baseline</label>
 				    <label class="lang_indo control-label">Baseline</label>
 				    <div class="controls">
-				    	<input type="text" id="baseline" name="baseline" class="input-xlarge"/>
+				    	<input type="text" id="baseline" name="baseline" class="input-xlarge input-block-level"/>
 				    	<span class="help-block" id="error_baseline"></span>
 				    </div>
 				  </div>

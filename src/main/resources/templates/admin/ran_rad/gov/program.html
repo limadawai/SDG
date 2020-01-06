@@ -96,7 +96,7 @@
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Program Code</label>
 				    <label class="lang_indo control-label" style="text-align:left">Kode Program</label>
 				    <div class="controls">
-				    	<input type="text" id="id_program" name="id_program"/>
+                                        <input type="text" id="id_program" name="id_program" class="input-block-level"/>
 				    	<input type="hidden" id="created_by" name="created_by"/>
 				    	<span class="help-block" id="error_id_program"></span>
 				    </div>
@@ -105,7 +105,7 @@
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Program Name</label>
 				    <label class="lang_indo control-label" style="text-align:left">Nama Program</label>
 				    <div class="controls">
-				    	<input type="text" id="nm_program" name="nm_program"/>
+                                        <input type="text" id="nm_program" name="nm_program" class="input-block-level"/>
 				    	<span class="help-block" id="error_nm_program"></span>
 				    </div>
 				  </div>
@@ -118,7 +118,7 @@
 				  </div>
 				  <div class="control-group nasional">
 				    <div class="controls">
-				    	<select name="prov">
+                                        <select name="prov" class="input-block-level">
 				    		<option></option>
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
@@ -128,12 +128,12 @@
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Add National Program</label>
 				    <label class="lang_indo control-label" style="text-align:left">Tambah Program Nasional</label>
 				    <div class="controls">
-				    	<input type="checkbox" id="copy" name="copy"/>
+				    	<input type="checkbox" id="copy" name="copy" />
 				    </div>
 				  </div>
 				  <div class="control-group provinsi">
 				    <div class="controls">
-				    	<select name="role">
+                                        <select name="role" class="input-block-level">
 				    		<option></option>
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
@@ -141,7 +141,7 @@
 				  </div>
 				  <div class="control-group provinsi">
 				    <div class="controls">
-				    	<select name="rel_prog_id" id="rel_prog_id">
+                                        <select name="rel_prog_id" id="rel_prog_id" class="input-block-level">
 				    		<option></option>
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
