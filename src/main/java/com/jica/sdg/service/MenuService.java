@@ -18,4 +18,10 @@ public class MenuService implements IMenuService {
         List menu = (List<Menu>) repository.findAllMenu();
         return menu;
     }
+
+	@Override
+	public List<Menu> findAllByList(Iterable<Integer> ids) {
+		List menu = (List<Menu>) repository.findAllById(ids);
+		return menu;
+	}
 }
