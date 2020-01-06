@@ -34,4 +34,9 @@ public class NsaProgramService implements INsaProgramService{
 	public void deleteNsaProgram(String id) {
 		nsaProgRepo.deleteById(id);
 	}
+
+	@Override
+	public List<NsaProgram> findAllBy(String id_role, String id_monper) {
+		return (List<NsaProgram>) nsaProgRepo.findAll(id_role, id_monper);
+	}
 }

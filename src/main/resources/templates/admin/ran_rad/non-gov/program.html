@@ -222,6 +222,41 @@
 	        	var id = $(this).val();
 	        	//table.ajax.url(urls+'list-monPer/'+id).load();
 	        });
+	        
+	        $('#id_prov').on('change', function(){
+	        	var id = $(this).val();
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'manajemen/list-role/'+id,
+                    async:false,
+                    success: function (result) {
+						$('#id_role').html("");
+						var array = result.content;
+						for(i=0; i<array.length;i++){
+							var selected = (i==0)?'selected':'';
+							$('#id_role').append('<option '+selected+' value="'+array[i].id_role+'">' +array[i].nm_role+'</option>');
+						}
+                    },
+                });
+	        	
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'list-monPer/'+id,
+                    async:false,
+                    success: function (result) {
+						$('#id_monper').html("");
+						var array = result.content;
+						for(i=0; i<array.length;i++){
+							$('#id_monper').append('<option value="'+array[i].id_monper+'">' +array[i].start_year+' - '+array[i].end_year+'</option>');
+						}
+                    },
+                });
+	        	table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        });
+	        
+	        $('#id_role, #id_monper').on('change', function(){
+	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        });
 			
 			var table = $('#tabel-goals').DataTable({
 				responsive: true,
@@ -231,7 +266,7 @@
 				"autoWidth": true,
 				"responsive":true,
 				"ajax": {
-					"url": urls+'list-nsaProg',
+					"url": urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val(),
 					dataSrc: 'content',
 				},
 				"searching": true,

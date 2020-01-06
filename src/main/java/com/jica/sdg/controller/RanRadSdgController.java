@@ -23,6 +23,8 @@ import com.jica.sdg.model.MonPeriod;
 import com.jica.sdg.model.NsaActivity;
 import com.jica.sdg.model.NsaIndicator;
 import com.jica.sdg.model.NsaProgram;
+import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgDisaggre;
 import com.jica.sdg.model.SdgDisaggreDetail;
 import com.jica.sdg.model.SdgGoals;
@@ -318,11 +320,15 @@ public class RanRadSdgController {
     @GetMapping("admin/ran_rad/gov/program/{id_program}/activity")
     public String gov_kegiatan(Model model, @PathVariable("id_program") String id_program, HttpSession session) {
     	Optional<GovProgram> list = govProgService.findOne(id_program);
+    	Integer id_role = list.get().getId_role();
+    	Optional<Role> role = roleService.findOne(id_role);
+    	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
+    	Optional<MonPeriod> monper = monPeriodService.findOne(list.get().getId_monper());
         model.addAttribute("title", "Define RAN/RAD/Government Program");
-        model.addAttribute("prov",prov.findAllProvinsi());
-        model.addAttribute("monPer", monPeriodService.findAll("000"));
-        model.addAttribute("role", roleService.findAll());
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
+        provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
+        monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/gov/activity";
     }
@@ -362,13 +368,17 @@ public class RanRadSdgController {
                                 @PathVariable("id_activity") String id_activity, HttpSession session) {
     	Optional<GovProgram> list = govProgService.findOne(id_program);
     	Optional<GovActivity> list1 = govActivityService.findOne(id_activity);
+    	Integer id_role = list.get().getId_role();
+    	Optional<Role> role = roleService.findOne(id_role);
+    	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
+    	Optional<MonPeriod> monper = monPeriodService.findOne(list.get().getId_monper());
         model.addAttribute("title", "Define RAN/RAD/Government Program");
-        model.addAttribute("prov",prov.findAllProvinsi());
-        model.addAttribute("monPer", monPeriodService.findAll("000"));
-        model.addAttribute("role", roleService.findAll());
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
+        monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         return "admin/ran_rad/gov/indicator";
     }
     
@@ -403,9 +413,9 @@ public class RanRadSdgController {
 	}
     
   //*********************** NON GOV PROGRAM ***********************
-    @GetMapping("admin/list-nsaProg")
-    public @ResponseBody Map<String, Object> nsaProgList() {
-        List<NsaProgram> list = nsaProgService.findAll();
+    @GetMapping("admin/list-nsaProg/{id_role}/{id_monper}")
+    public @ResponseBody Map<String, Object> nsaProgList(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
+        List<NsaProgram> list = nsaProgService.findAllBy(id_role, id_monper);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
@@ -436,10 +446,14 @@ public class RanRadSdgController {
     @GetMapping("admin/ran_rad/non-gov/program/{id_program}/activity")
     public String nsa_kegiatan(Model model, @PathVariable("id_program") String id_program, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
+    	Integer id_role = list.get().getId_role();
+    	Optional<Role> role = roleService.findOne(id_role);
+    	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
+    	Optional<MonPeriod> monper = monPeriodService.findOne(list.get().getId_monper());
+    	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
+        monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         model.addAttribute("title", "Define RAN/RAD/Government Program");
-        model.addAttribute("prov",prov.findAllProvinsi());
-        model.addAttribute("monPer", monPeriodService.findAll("000"));
-        model.addAttribute("role", roleService.findAll());
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/non-gov/activity";
@@ -480,10 +494,14 @@ public class RanRadSdgController {
                                 @PathVariable("id_activity") String id_activity, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
     	Optional<NsaActivity> list1 = nsaActivityService.findOne(id_activity);
+    	Integer id_role = list.get().getId_role();
+    	Optional<Role> role = roleService.findOne(id_role);
+    	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
+    	Optional<MonPeriod> monper = monPeriodService.findOne(list.get().getId_monper());
+    	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
+        monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         model.addAttribute("title", "Define RAN/RAD/Government Program");
-        model.addAttribute("prov",prov.findAllProvinsi());
-        model.addAttribute("monPer", monPeriodService.findAll("000"));
-        model.addAttribute("role", roleService.findAll());
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));

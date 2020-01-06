@@ -108,7 +108,7 @@ public class AdminController {
     	}
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
-        list.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
+        model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/gov/program";
     }
@@ -126,7 +126,7 @@ public class AdminController {
     	}
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
-        list.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
+        model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/ran_rad/non-gov/program";
     }
