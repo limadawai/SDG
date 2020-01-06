@@ -310,6 +310,15 @@ public class AdministrasiController {
         model.addAttribute("lang", session.getAttribute("bahasa"));
         return "admin/role_manajemen/manajemen_request_list";
     }
+
+    @GetMapping("level")
+    public @ResponseBody Map<String, Object> requestLevel() {
+        System.out.println("lala");
+        List list = provinsiService.findAllProvinsi();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content", list);
+        return hasil;
+    }
     
     @GetMapping("admin/manajemen/list-request/{new}")
     public @ResponseBody Map<String, Object> req(@PathVariable("new") String ok) {

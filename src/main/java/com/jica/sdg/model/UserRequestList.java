@@ -38,12 +38,15 @@ public class UserRequestList implements Serializable {
     
     @Column(nullable = false, length = 15)
     private String status;
+    
+    @Column(nullable = false, length = 255)
+    private String detail;
 
 	public UserRequestList() {
 	}
 
 	public UserRequestList(Integer id, Date date, String level, String type, String req_type, String institution,
-			String nm_inst, String contact, String status) {
+			String nm_inst, String contact, String status, String detail) {
 		super();
 		this.id = id;
 		this.date = date;
@@ -54,6 +57,7 @@ public class UserRequestList implements Serializable {
 		this.nm_inst = nm_inst;
 		this.contact = contact;
 		this.status = status;
+		this.detail = detail;
 	}
 
 	public Integer getId() {
@@ -131,4 +135,14 @@ public class UserRequestList implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+        public String getDetail() {
+            return detail;
+        }
+
+        public void setDetail(String detail) {
+            this.detail = detail;
+        }
+
+
 }
