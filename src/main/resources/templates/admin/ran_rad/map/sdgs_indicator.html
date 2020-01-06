@@ -253,10 +253,34 @@
 						}},
 
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/map/goals/"+row.id_goals+"/target/"+row.id_target+"/indicator/"+row.id_indicator+"/disaggre' class='target'>"+row.nm_indicator+"</a></div>";
+							return "<div style='font-size:90%;'>"+row.nm_indicator+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-						return "<div style='font-size:90%;'>"+row.unit+"</div>";
+						var option="<option value=''>-indicator-</option>";
+						$.ajax({
+							type: "GET",
+		                    url: urls+'list-govIndicatorByRole',
+		                    async:false,
+		                    success: function (result) {
+		                    	var selected = '';
+		                    	$.ajax({
+									type: "GET",
+				                    url: urls+'list-getIdGovMap/'+row.id_indicator,
+				                    async:false,
+				                    success: function (result) {
+										var array1 = result.content;
+										for(i=0; i<array1.length;i++){
+											selected = (array1[i].id_indicator==row.id_indicator)?'selected':'';
+										}
+				                    },
+				                });
+								var array = result.content;
+								for(i=0; i<array.length;i++){
+									option += '<option '+selected+' value="'+array[i].id_gov_indicator+'-#-'+array[i].id_program+'-#-'+array[i].id_activity+'">' +array[i].nm_indicator+'</option>';
+								}
+		                    },
+		                });
+						return "<select data-sdg='"+row.id_indicator+"-#-"+row.id_goals+"-#-"+row.id_target+"' class='input-block-level indicator' style='font-size:90%;'>"+option+"</select>";
 					}},
 				],
 				"columnDefs": [
@@ -267,6 +291,30 @@
 			$('#text-cari').on( 'keyup', function () {
 				var val=$(this).val();
 				table.search(val).draw();
+			});
+			
+			$('#tbody-indicator').on('change', '.indicator', function(){
+				var sdg = $(this).data('sdg').split('-#-');
+				var val = $(this).val().split('-#-');
+				var data = JSON.stringify({
+					'id_indicator':sdg[0],
+					'id_goals':sdg[1],
+					'id_target':sdg[2],
+					'id_gov_indicator':val[0],
+					'id_program':val[1],
+					'id_activity':val[2],
+					});
+				$.ajax({
+					type: "POST",
+                    url: urls+'save-govMap',
+                    beforeSend : function(xhr){
+                    	xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+					data: data,
+                    success: function (result) {
+                    },
+                });
 			});
 			
 			function clearForm(){

@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface IGovIndicatorService {
 
     List<GovIndicator> findAll(String id_program, String id_activity);
+    
+    List<GovIndicator> findAllByRole(Integer id_role);
 
     void saveGovIndicator(GovIndicator gov);
     
