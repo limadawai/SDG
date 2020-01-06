@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jica.sdg.model.GovActivity;
 import com.jica.sdg.model.GovIndicator;
+import com.jica.sdg.model.GovMap;
 import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.MonPeriod;
 import com.jica.sdg.model.NsaActivity;
@@ -32,6 +33,7 @@ import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.service.IGovActivityService;
 import com.jica.sdg.service.IGovIndicatorService;
+import com.jica.sdg.service.IGovMapService;
 import com.jica.sdg.service.IGovProgramService;
 import com.jica.sdg.service.IMonPeriodService;
 import com.jica.sdg.service.INsaActivityService;
@@ -94,6 +96,9 @@ public class RanRadSdgController {
 	
 	@Autowired
 	INsaIndicatorService nsaIndicatorService;
+	
+	@Autowired
+	IGovMapService govMapService;
 	
 	//*********************** SDG ***********************
 	
@@ -608,6 +613,29 @@ public class RanRadSdgController {
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("id_monper", id_monper);
         return "admin/ran_rad/map/sdgs_indicator";
+    }
+    
+    @GetMapping("admin/list-govIndicatorByRole")
+    public @ResponseBody Map<String, Object> govIndByRole(HttpSession session) {
+        List <GovIndicator> list = govIndicatorService.findAllByRole((Integer)session.getAttribute("id_role"));
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-govMap", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public void saveGovMap(@RequestBody GovMap sdg) {
+    	govMapService.deleteGovMapBySdgInd(sdg.getId_indicator());
+    	govMapService.saveGovMap(sdg);
+	}
+    
+    @GetMapping("admin/list-getIdGovMap/{id}")
+    public @ResponseBody Map<String, Object> govIndByRole(HttpSession session, @PathVariable("id") String id) {
+        List <GovMap> list = govMapService.findAllBySdgInd(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
     }
 	
 }

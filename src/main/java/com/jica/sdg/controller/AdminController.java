@@ -72,8 +72,10 @@ public class AdminController {
         request.getSession().setAttribute("id_role", userData.get(0).getId_role());
         request.getSession().setAttribute("username", userData.get(0).getUserName());
         request.getSession().setAttribute("name", userData.get(0).getName());
+//        request.getSession().setAttribute("name", uname);
 
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/dashboard";
     }
 

@@ -36,6 +36,11 @@ public class GovIndicatorService implements IGovIndicatorService{
 	public void deleteGovIndicator(String id) {
 		govIndicatorRepo.deleteById(id);
 	}
+
+	@Override
+	public List<GovIndicator> findAllByRole(Integer id_role) {
+		return (List<GovIndicator>) govIndicatorRepo.findAllByRole(id_role);
+	}
 	
 	
 }
