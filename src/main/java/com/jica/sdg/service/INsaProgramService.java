@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface INsaProgramService {
 
     List<NsaProgram> findAll();
+    
+    List<NsaProgram> findAllBy(String id_role, String id_monper);
 
     void saveNsaProgram(NsaProgram gov);
     

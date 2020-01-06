@@ -108,7 +108,7 @@
                             </label>
                             <div class="controls">
 	                            <select id="cat_role" name="cat_role" class="span3">
-	                                <option value="">-pilih kategori-</option>
+	                                <option value="">-- category --</option>
 	                                <option value="Government">Government</option>
 	                                <option value="NSA">Non Government : NSA</option>
 	                                <option value="Institution">Non Government : Institution</option>
@@ -119,13 +119,13 @@
                         <div class="control-group">
                             <label class="control-label" for="selkategori">
                             	<span class="lang_eng" style="display:none">Privilege :</span>
-                            	<span class="lang_indo">Kategori :</span>
+                            	<span class="lang_indo">Hak Akses :</span>
                             </label>
                             <div class="controls">
 	                            <select id="privilege" name="privilege" class="span3">
-	                                <option value="">-pilih privilege-</option>
-	                                <option value="ADMINKL">Admin Kementrian Lembaga</option>
-	                                <option value="ADMINPROV">Admin Provinsi</option>
+	                                <option value="">-- privilege --</option>
+	                                <option value="ADMIN">Admin</option>
+	                                <option value="USER">User</option>
 	                            </select>
 	                            <span class="help-block" id="error_privilege"></span>
 	                         </div>
@@ -133,7 +133,7 @@
                         <div class="control-group">
                             <div>
                                 <label for="cbAll" style="display:inline-block;white-space:nowrap;">
-                                    <input id="cbAll" type="checkbox" name="cbAll" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;
+                                    <!-- <input id="cbAll" type="checkbox" name="cbAll" value="all" style="vertical-align:middle">&nbsp;&nbsp;&nbsp; -->
                                     <span style="vertical-align:middle"><b>Menu</b></span>
                                 </label>
                                 <div class="menu"></div>
@@ -152,7 +152,7 @@
                                         <span style="vertical-align:middle">Program Non-Pemerintah</span>
                                     </label>
                                 </div> -->
-                                <script>
+                                <!-- <script>
                                     $("#cbAll").click(function(){
                                         if ($(this).is(":checked")) {
                                             $("#cbIndikator").prop("checked", true);
@@ -182,7 +182,7 @@
                                             $("#cbAll").attr("disabled", true);
                                         }
                                     });
-                                </script>
+                                </script> -->
                             </div>
                         </div>
                     </div>
@@ -245,6 +245,7 @@
     
     $('#fs').on('change', function(e){
     	bhs($(this).is(':checked'));
+    	loadMenuSelect();
     });
     
     $('#id_prov').on('change', function(){
@@ -253,66 +254,88 @@
     });
     
     //Load Select Menu
-    $.ajax({
-        url: urls + 'menu',
-        type: 'get',
-        dataType: 'json',
-        cache: false,
-        async : false,
-        success: function (response) {
-            $('.menu').empty();
-            var menu="";
-            for (var i = 0; i < response.length; i++) {
-            	var bhsMenu="";
-            	if(lang){
-                	if(lang=="0"){
-                		bhsMenu = response[i].menu_eng;
-                	}else{
-                		bhsMenu = response[i].menu_indo;
-                	}
-                }else{
-                	if($('#fs').is(':checked')){
-                		bhsMenu = response[i].menu_indo;
-                	}else{
-                		bhsMenu = response[i].menu_eng;
-                	}
-                }
-            	menu += '<label for="menu'+response[i].id_menu +'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-                              '<input id="menu'+response[i].id_menu+'" type="checkbox" name="menu" value="'+response[i].id_menu +'" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
-                              '<span style="vertical-align:middle">'+bhsMenu+'</span>'+
-                        '</label><br/>';
-            	$.ajax({
-                    url: urls + 'submenu',
-                    type: 'get',
-                    data: 'id=' + response[i].id_menu,
-                    dataType: 'json',
-                    cache: false,
-                    async : false,
-                    success: function (result) {
-                        for (var j = 0; j < result.length; j++) {
-                        	var bhsSubMenu="";
-                        	if(lang){
-                            	if(lang=="0"){
-                            		bhsSubMenu = result[j].submenu_eng;
-                            	}else{
-                            		bhsSubMenu = result[j].submenu_indo;
-                            	}
-                            }else{
-                            	if($('#fs').is(':checked')){
-                            		bhsSubMenu = result[j].submenu_indo;
-                            	}else{
-                            		bhsSubMenu = result[j].submenu_eng;
-                            	}
-                            }
-                        	menu += '<label for="submenu'+result[j].id_submenu+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-			                            '<input id="submenu'+result[j].id_submenu+'" type="checkbox" name="submenu" value="'+result[j].id_submenu +'" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
-			                            '<span style="vertical-align:middle">'+bhsSubMenu+'</span>'+
-			                      '</label><br/>';
-                        }
+    loadMenuSelect();
+    function loadMenuSelect(){
+    	$.ajax({
+            url: urls + 'menu',
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            async : false,
+            success: function (response) {
+                $('.menu').empty();
+                var menu="";
+                for (var i = 0; i < response.length; i++) {
+                	var bhsMenu="";
+                	if(lang){
+                    	if(lang=="0"){
+                    		bhsMenu = response[i].menu_indo;
+                    	}else{
+                    		bhsMenu = response[i].menu_eng;
+                    	}
+                    }else{
+                    	if($('#fs').is(':checked')){
+                    		bhsMenu = response[i].menu_indo;
+                    	}else{
+                    		bhsMenu = response[i].menu_eng;
+                    	}
                     }
-                });
+                	menu += '<label for="menu'+response[i].id_menu +'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                  '<input class="menu-master" id="menu'+response[i].id_menu+'" data-id="'+response[i].id_menu+'" type="checkbox" name="menu" value="'+response[i].id_menu +'" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
+                                  '<span style="vertical-align:middle">'+bhsMenu+'</span>'+
+                            '</label><br/>';
+                                    
+                	$.ajax({
+                        url: urls + 'submenu',
+                        type: 'get',
+                        data: 'id=' + response[i].id_menu,
+                        dataType: 'json',
+                        cache: false,
+                        async : false,
+                        success: function (result) {
+                            for (var j = 0; j < result.length; j++) {
+                            	var bhsSubMenu="";
+                            	if(lang){
+                                	if(lang=="0"){
+                                		bhsSubMenu = result[j].submenu_indo;
+                                	}else{
+                                		bhsSubMenu = result[j].submenu_eng;
+                                	}
+                                }else{
+                                	if($('#fs').is(':checked')){
+                                		bhsSubMenu = result[j].submenu_indo;
+                                	}else{
+                                		bhsSubMenu = result[j].submenu_eng;
+                                	}
+                                }
+                            	menu += '<label for="submenu'+result[j].id_submenu+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+    			                            '<input data-id="'+response[i].id_menu+'" class="menu'+response[i].id_menu+' menu-slave" id="submenu'+result[j].id_submenu+'" type="checkbox" name="submenu" value="'+result[j].id_submenu +'" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
+    			                            '<span style="vertical-align:middle">'+bhsSubMenu+'</span>'+
+    			                      '</label><br/>';
+                            }
+                        }
+                    });
+                }
+                $('.menu').append(menu);
             }
-            $('.menu').append(menu);
+        });
+    }
+    
+    $('.menu').on('click', '.menu-master', function(){
+    	var id = $(this).data('id');
+    	if ($(this).is(":checked")) {
+            $(".menu").find('.menu'+id).prop("checked", true);
+        } else {
+        	 $(".menu").find('.menu'+id).prop("checked", false);
+        }
+    });
+    
+    $('.menu').on('click', '.menu-slave', function(){
+    	var id = $(this).data('id');
+    	if ($(".menu-slave:checked").length>0) {
+            $(".menu").find('#menu'+id).prop("checked", true);
+        } else {
+        	 $(".menu").find('#menu'+id).prop("checked", false);
         }
     });
 
