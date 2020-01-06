@@ -23,7 +23,7 @@
                         <div class="row-fluid">
                             <div class="span12">
                                 <div class="table-responsive">
-                                    <table id="tabel-role" class="table table-striped table-bordered">
+                                    <table id="tabel-req" class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th style="text-align:center;font-size:80%;width:5%;">No.</th>
@@ -37,6 +37,7 @@
                                                 <th style="text-align:center;font-size:80%;">Status</th>
                                             </tr>
                                         </thead>
+                                        <tbody id="tbody"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -48,4 +49,99 @@
     </div>
     <div th:include="admin/layout :: footer"></div>
 </body>
+<script th:inline="javascript">
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    
+  //Bahasa
+    var titleDel = "Anda Yakin";
+    var messDel = "Menghapus Data?";
+    var buttDel = 'Ya, Hapus data ini!';
+    var titleOk	= "Hapus";
+    var messOk = "Data berhasil dihapus";
+    var messNOk = "Data tidak dapat dihapus";
+    var required = "Harus diisi";
+    function bhs(cek){
+		if(cek){
+			$(".lang_indo").show();
+    		$(".lang_eng").hide();
+    		titleDel = "Anda Yakin";
+    		messDel = "Menghapus Data?";
+    		buttDel = 'Ya, Hapus data ini!';
+    		titleOk	= "Hapus";
+	        messOk = "Data berhasil dihapus";
+	        messNOk = "Data tidak dapat dihapus";
+	        required = "Harus diisi";
+    	}else{	    	        
+	        $(".lang_indo").hide();
+    		$(".lang_eng").show();
+    		titleDel = "Are you sure";
+    		messDel = "Delete this data?";
+    		buttDel = 'Yes, Delete this data!';
+    		titleOk	= "Delete";
+	        messOk = "Delete successful";
+	        messNOk = "Can't delete data";
+	        required = "Required";
+    	}
+    }
+    if(lang){
+    	bhs(lang=="0");
+    }else{
+    	bhs($('#fs').is(':checked'));
+    }
+    
+    $('#fs').on('change', function(e){
+    	bhs($(this).is(':checked'));
+    });
+    
+    var table = $('#tabel-req').DataTable({
+        responsive: true,
+        sDom: 'lrtip',
+        "bLengthChange": false,
+        "cache": false,
+        "autoWidth": true,
+        "responsive":true,
+        "ajax": {
+            "url": '/sdg/admin/manajemen/list-request/1',
+            dataSrc: 'content',
+        },
+        "searching": true,
+        "columns": [
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+(row.date)+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+row.level+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+row.type+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+row.req_type+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+row.institution+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+row.nm_inst+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+row.contact+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+row.status+"</div>";}
+            }
+        ],
+        "columnDefs": [
+        ],
+        select: true
+    });
+    $('#text-cari').on( 'keyup', function () {
+        var val=$(this).val();
+        table.search(val).draw();
+    });
+</script>
 </html>
