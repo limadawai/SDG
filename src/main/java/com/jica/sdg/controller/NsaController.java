@@ -77,6 +77,7 @@ public class NsaController {
     public String nsa_profile(Model model, HttpSession session) {
 //        model.addAttribute("title", "NSA Profile");
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
         return "admin/nsa/nsa_profile";
     }
@@ -150,6 +151,7 @@ public class NsaController {
     public String nsa_ins_profile(Model model, HttpSession session) {
 //        model.addAttribute("title", "Institution Profile");
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("listInsProfile", insProfilrService.findRoleInstitusi());
         return "admin/nsa/ins_profile";
     }
@@ -191,6 +193,7 @@ public class NsaController {
         model.addAttribute("title", "NSA Collaboration");
         model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/nsa/nsa_collaboration";
     }
     

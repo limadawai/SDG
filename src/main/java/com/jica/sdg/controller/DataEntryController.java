@@ -47,6 +47,7 @@ public class DataEntryController {
         model.addAttribute("title", "SDG Indicators Monitoring");
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/dataentry/entry_sdg";
     }
     
@@ -73,6 +74,7 @@ public class DataEntryController {
         model.addAttribute("title", "SDG Indicators Monitoring");
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/dataentry/govprogram";
     }
 
@@ -81,6 +83,7 @@ public class DataEntryController {
         model.addAttribute("title", "SDG Indicators Monitoring");
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/dataentry/govactivity";
     }
 

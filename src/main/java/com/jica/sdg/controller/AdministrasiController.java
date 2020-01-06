@@ -84,6 +84,7 @@ public class AdministrasiController {
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
         model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
         return "admin/role_manajemen/manajemen_role";
     }
 
@@ -133,6 +134,7 @@ public class AdministrasiController {
     	}
         model.addAttribute("listRole", roleService.findAll());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
         return "admin/role_manajemen/manajemen_user";
     }
     
@@ -175,6 +177,7 @@ public class AdministrasiController {
     public String assignment(Model model, HttpSession session) {
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
         Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
@@ -308,6 +311,7 @@ public class AdministrasiController {
     @GetMapping("admin/manajemen/request")
     public String requestlist(Model model, HttpSession session) {
         model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
         return "admin/role_manajemen/manajemen_request_list";
     }
 

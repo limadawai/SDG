@@ -104,6 +104,7 @@ public class AdminController {
     public String goals(Model model, HttpSession session) {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/sdg/goals";
     }
 
@@ -122,6 +123,7 @@ public class AdminController {
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
         model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/gov/program";
     }
 
@@ -140,6 +142,7 @@ public class AdminController {
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
         model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/non-gov/program";
     }
 
@@ -148,6 +151,7 @@ public class AdminController {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         model.addAttribute("prov",prov.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/monper";
     }
 

@@ -136,6 +136,7 @@ public class RanRadSdgController {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         list.ifPresent(foundUpdateObject -> model.addAttribute("content", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/sdg/target";
     }
 	
@@ -175,6 +176,7 @@ public class RanRadSdgController {
         list.ifPresent(foundUpdateObject -> model.addAttribute("goals", foundUpdateObject));
         list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/sdg/sdgs_indicator";
     }
     
@@ -216,6 +218,7 @@ public class RanRadSdgController {
         list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         list2.ifPresent(foundUpdate1 -> model.addAttribute("indicator", foundUpdate1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/sdg/disaggre";
     }
     
@@ -260,6 +263,7 @@ public class RanRadSdgController {
         list2.ifPresent(foundUpdate1 -> model.addAttribute("indicator", foundUpdate1));
         list3.ifPresent(foundUpdate2 -> model.addAttribute("disaggre", foundUpdate2));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/sdg/disaggre-detail";
     }
     
@@ -335,6 +339,7 @@ public class RanRadSdgController {
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
         role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/gov/activity";
     }
     
@@ -381,6 +386,7 @@ public class RanRadSdgController {
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
         role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
@@ -461,6 +467,7 @@ public class RanRadSdgController {
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/non-gov/activity";
     }
     
@@ -510,6 +517,7 @@ public class RanRadSdgController {
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/non-gov/indicator";
     }
     
@@ -580,6 +588,7 @@ public class RanRadSdgController {
     	Optional<Provinsi> provin = prov.findOne(monper.get().getId_prov());
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
         return "admin/ran_rad/map/goals";
@@ -595,6 +604,7 @@ public class RanRadSdgController {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         list.ifPresent(foundUpdateObject -> model.addAttribute("content", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("id_monper", id_monper);
         return "admin/ran_rad/map/target";
     }
@@ -611,6 +621,7 @@ public class RanRadSdgController {
         list.ifPresent(foundUpdateObject -> model.addAttribute("goals", foundUpdateObject));
         list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("id_monper", id_monper);
         return "admin/ran_rad/map/sdgs_indicator";
     }
