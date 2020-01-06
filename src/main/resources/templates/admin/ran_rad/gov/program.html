@@ -347,7 +347,7 @@
 	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
 						data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-govProg').load();
+                                table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
