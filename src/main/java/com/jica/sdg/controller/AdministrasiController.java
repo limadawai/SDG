@@ -85,13 +85,14 @@ public class AdministrasiController {
     	}
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
+		model.addAttribute("id_prov", id_prov);
         return "admin/role_manajemen/manajemen_role";
     }
 
     @GetMapping("admin/manajemen/list-role/{id_prov}")
     public @ResponseBody Map<String, Object> roles(HttpSession session, @PathVariable("id_prov") String id_prov) {
     	List<Role> listRole;
-    	if(id_prov.equals("000")) {
+    	if(id_prov.equals("all")) {
     		listRole = roleService.findAll();
     	}else {
     		listRole = roleService.findByProvince(id_prov);
@@ -126,6 +127,7 @@ public class AdministrasiController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
+    	String privilege = list.get().getPrivilege();
     	if(id_prov.equals("000")) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
@@ -135,13 +137,15 @@ public class AdministrasiController {
         model.addAttribute("listRole", roleService.findAll());
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
+		model.addAttribute("privilege", privilege);
+		model.addAttribute("id_prov", id_prov);
         return "admin/role_manajemen/manajemen_user";
     }
     
     @GetMapping("admin/manajemen/list-user/{id_prov}")
     public @ResponseBody Map<String, Object> user(HttpSession session, @PathVariable("id_prov") String id_prov) {
     	List listUser;
-    	if(id_prov.equals("000")) {
+    	if(id_prov.equals("all")) {
     		listUser = userService.findAllGrid();
     	}else {
     		listUser = userService.findByProvince(id_prov);
