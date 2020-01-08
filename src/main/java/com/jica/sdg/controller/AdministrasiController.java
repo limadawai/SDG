@@ -179,13 +179,18 @@ public class AdministrasiController {
 
     @GetMapping("admin/management/assignment")
     public String assignment(Model model, HttpSession session) {
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
         Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
+        if(id_prov.equals("000")) {
+    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
         return "admin/role_manajemen/manajemen_assignment";
     }
     
