@@ -179,6 +179,27 @@
         	hideBtn();
         });
         
+        $('#id_prov').on('change', function(){
+        	var val = $(this).val();
+        	$('#id_monper').html('');
+        	var option="";
+        	$.ajax({
+                url: urls + 'list-monPer/'+val,
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                async : false,
+                success: function (result) {
+                    for (var k = 0; k < result.content.length; k++) {
+                    	option += '<option value="'+result.content[k].id_monper+'">'
+		                            +result.content[k].start_year+'-'+result.content[k].end_year+
+		                      '</option>';
+                    }
+                    $('#id_monper').append(option);
+                }
+            }); 
+        });
+        
         function hideBtn(){
         	$('.btnsdg').hide();
         	$('.btngov').hide();

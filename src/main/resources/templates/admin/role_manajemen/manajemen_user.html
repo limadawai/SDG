@@ -36,7 +36,7 @@
                             	<option th:if="${id_prov == '000'}" value='all'>-All-</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
-                            <button class="btn btn-warning btn-small pull-right" data-toggle="modal" data-target="#myModal">
+                            <button class="btn btn-warning btn-small pull-right" id="addNew" data-toggle="modal" data-target="#myModal">
                             	<span class="lang_eng" style="display:none">Add New</span>
                             	<span class="lang_indo">Tambah</span>
                             </button>
@@ -203,11 +203,20 @@
     $('#fs').on('change', function(e){
     	bhs($(this).is(':checked'));
     });
-    
+    if($('#id_prov').val()=="all"){
+		$('#addNew').hide();
+	}else{
+		$('#addNew').show();
+	}
     $('#id_prov').on('change', function(){
     	var id = $(this).val();
     	table.ajax.url(urls+'manajemen/list-user/'+id).load();
     	role(id);
+    	if(id=="all"){
+    		$('#addNew').hide();
+    	}else{
+    		$('#addNew').show();
+    	}
     });
     
     function role(id){
