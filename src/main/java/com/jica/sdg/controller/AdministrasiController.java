@@ -72,7 +72,7 @@ public class AdministrasiController {
     IUserRequestListService userReqService;
 
     //*********************** Manajemen Role & User ***********************
-    @GetMapping("admin/manajemen/role")
+    @GetMapping("admin/management/role")
     public String rolemanajemen(Model model, HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
@@ -121,7 +121,7 @@ public class AdministrasiController {
     	roleService.deleteRole(id);
 	}
 
-    @GetMapping("admin/manajemen/user")
+    @GetMapping("admin/management/user")
     public String usermanajemen(Model model, HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
@@ -173,7 +173,7 @@ public class AdministrasiController {
     	userService.deleteUser(id);
 	}
 
-    @GetMapping("admin/manajemen/assignment")
+    @GetMapping("admin/management/assignment")
     public String assignment(Model model, HttpSession session) {
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
@@ -308,7 +308,7 @@ public class AdministrasiController {
         }
 	}
 
-    @GetMapping("admin/manajemen/request")
+    @GetMapping("admin/management/request")
     public String requestlist(Model model, HttpSession session) {
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
