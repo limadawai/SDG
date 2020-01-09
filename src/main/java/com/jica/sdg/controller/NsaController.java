@@ -7,15 +7,18 @@ import com.jica.sdg.model.NsaCollaboration;
 import com.jica.sdg.model.PhilanthropyCollaboration;
 import com.jica.sdg.model.Nsadetail;
 import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.Role;
 import com.jica.sdg.model.Submenu;
 import com.jica.sdg.service.IMenuService;
 import com.jica.sdg.service.IProvinsiService;
+import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.ISubmenuService;
 import com.jica.sdg.service.InsProfileService;
 import com.jica.sdg.service.NsaDetailService;
 import com.jica.sdg.service.NsaProfileService;
 import com.jica.sdg.service.NsaCollaborationService;
 import com.jica.sdg.service.PhilanthropyService;
+import static java.util.Collections.list;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -62,6 +65,9 @@ public class NsaController {
     PhilanthropyService philanthropyService;
     
     @Autowired
+    IRoleService roleService;
+    
+    @Autowired
     private EntityManager em;
 
 //    @GetMapping("admin/nsa/profile")
@@ -78,6 +84,15 @@ public class NsaController {
 //        model.addAttribute("title", "NSA Profile");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov = list.get().getId_prov();
+    	if(id_prov.equals("000")) {
+    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
         return "admin/nsa/nsa_profile";
     }
     
@@ -101,6 +116,19 @@ public class NsaController {
     public @ResponseBody Map<String, Object> nsaProfilList() {
         List<Nsaprofile> list = nsaProfilrService.findAll();
         Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-get-option-role-nsa-profil/{id}")
+    public @ResponseBody Map<String, Object> getOptionNsaProfilList(@PathVariable("id") String id) {
+        
+        String sql  = "select * from ref_role as a where a.id_prov = :id ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
         hasil.put("content",list);
         return hasil;
     }
