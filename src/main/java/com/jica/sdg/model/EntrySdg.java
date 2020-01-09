@@ -19,50 +19,58 @@ public class EntrySdg implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false, length = 11)
     private Integer id;
+    
     @Column(name = "id_sdg_indicator")
     private String id_sdg_indicator;
+    
     @Column(name = "achievement1")
     private Integer achievement1;
+    
     @Column(name = "achievement2")
     private Integer achievement2;
+    
     @Column(name = "achievement3")
     private Integer achievement3;
+    
     @Column(name = "achievement4")
     private Integer achievement4;
+    
     @Column(name = "new_value1")
     private Integer new_value1;
+    
     @Column(name = "new_value2")
     private Integer new_value2;
+    
     @Column(name = "new_value3")
     private Integer new_value3;
+    
     @Column(name = "new_value4")
     private Integer new_value4;
     
-    @Column(name = "approval")
-    private String approval;
-    
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date approval_date;
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date show_report_date;
     
     @Column(name = "year_entry")
     private Integer year_entry;
+    
     @Column(name = "id_role")
     private Integer id_role;
+    
     @Column(name = "created_by")
     private Integer created_by;
     
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date_created;
+    
+    @Column(name = "id_monper")
+    private Integer id_monper;
 
     public EntrySdg() {
     }
 
-    public EntrySdg(Integer id, String id_sdg_indicator, Integer achievement1, Integer achievement2, Integer achievement3, Integer achievement4, Integer new_value1, Integer new_value2, Integer new_value3, Integer new_value4, String approval, Date approval_date, Date show_report_date, Integer year_entry, Integer id_role, Integer created_by, Date date_created) {
+    public EntrySdg(Integer id, String id_sdg_indicator, Integer achievement1, Integer achievement2, Integer achievement3, Integer achievement4, Integer new_value1, Integer new_value2, Integer new_value3, Integer new_value4, Date show_report_date, Integer year_entry, Integer id_role, Integer created_by, Date date_created, Integer id_monper) {
         this.id                 = id;
         this.id_sdg_indicator   = id_sdg_indicator;
         this.achievement1       = achievement1;
@@ -73,13 +81,12 @@ public class EntrySdg implements Serializable {
         this.new_value2         = new_value2;
         this.new_value3         = new_value3;
         this.new_value4         = new_value4;
-        this.approval           = approval;
-        this.approval_date      = approval_date;
         this.show_report_date   = show_report_date;
         this.year_entry         = year_entry;
         this.id_role            = id_role;
         this.created_by         = created_by;
         this.date_created       = date_created;
+        this.id_monper          = id_monper;
     }
 
     public Integer getId() {
@@ -162,22 +169,6 @@ public class EntrySdg implements Serializable {
         this.new_value4 = new_value4;
     }
 
-    public String getApproval() {
-        return approval;
-    }
-
-    public void setApproval(String approval) {
-        this.approval = approval;
-    }
-
-    public Date getApproval_date() {
-        return approval_date;
-    }
-
-    public void setApproval_date(Date approval_date) {
-        this.approval_date = approval_date;
-    }
-
     public Date getShow_report_date() {
         return show_report_date;
     }
@@ -218,6 +209,15 @@ public class EntrySdg implements Serializable {
         this.date_created = date_created;
     }
 
+    public Integer getId_monper() {
+        return id_monper;
+    }
+
+    public void setId_monper(Integer id_monper) {
+        this.id_monper = id_monper;
+    }
+
+    
     
     
 }

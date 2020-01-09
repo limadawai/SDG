@@ -29,6 +29,10 @@
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
+                            <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                                <option value="0" >-- Pilih --</option>
+                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+                            </select>
                             <select id="nm_nsa_profil" name="idrole" class="form-control">
                                 <option value="0" >-- Pilih --</option>
                                 <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
@@ -390,6 +394,23 @@
                 bhs($('#fs').is(':checked'));
             }
             
+            
+            $("#id_prov").on('change', function(e){
+                var id_prov = this.value ;
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-nsa-profil/'+id_prov,
+                    success: function (result) {
+                        $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#nm_nsa_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                    }
+                });
+            });
             
             $("#nm_nsa_profil").on('change', function(e){
                 var id = this.value ;

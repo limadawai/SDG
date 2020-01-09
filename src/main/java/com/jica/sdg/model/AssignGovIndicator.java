@@ -13,7 +13,7 @@ public class AssignGovIndicator implements Serializable {
     @Column(nullable = false, length = 11)
     private Integer id;
     
-    @Column(nullable = false, length = 3)
+    @Column(nullable = false, length = 10)
     private String id_program;
     
     @Column(nullable = false, length = 6)
@@ -28,14 +28,12 @@ public class AssignGovIndicator implements Serializable {
     @Column(nullable = false, length = 15)
     private String id_monper;
     
-    @Column(nullable = false, length = 3)
-    private String 	id_prov;
 
 	public AssignGovIndicator() {
 	}
 
 	public AssignGovIndicator(Integer id, String id_program, String id_activity, String id_gov_indicator,
-			Integer id_role, String id_monper, String id_prov) {
+			Integer id_role, String id_monper) {
 		super();
 		this.id = id;
 		this.id_program = id_program;
@@ -43,7 +41,6 @@ public class AssignGovIndicator implements Serializable {
 		this.id_gov_indicator = id_gov_indicator;
 		this.id_role = id_role;
 		this.id_monper = id_monper;
-		this.id_prov = id_prov;
 	}
 
 	public Integer getId() {
@@ -92,14 +89,6 @@ public class AssignGovIndicator implements Serializable {
 
 	public void setId_monper(String id_monper) {
 		this.id_monper = id_monper;
-	}
-
-	public String getId_prov() {
-		return id_prov;
-	}
-
-	public void setId_prov(String id_prov) {
-		this.id_prov = id_prov;
 	}
 
 	public static long getSerialversionuid() {

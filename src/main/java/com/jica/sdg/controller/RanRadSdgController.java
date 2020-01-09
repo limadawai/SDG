@@ -15,7 +15,7 @@ import com.jica.sdg.model.GovActivity;
 import com.jica.sdg.model.GovIndicator;
 import com.jica.sdg.model.GovMap;
 import com.jica.sdg.model.GovProgram;
-import com.jica.sdg.model.MonPeriod;
+import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.NsaActivity;
 import com.jica.sdg.model.NsaIndicator;
 import com.jica.sdg.model.NsaProgram;
@@ -326,7 +326,7 @@ public class RanRadSdgController {
     	Integer id_role = list.get().getId_role();
     	Optional<Role> role = roleService.findOne(id_role);
     	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
-    	Optional<MonPeriod> monper = monPeriodService.findOne(list.get().getId_monper());
+    	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
@@ -375,7 +375,7 @@ public class RanRadSdgController {
     	Integer id_role = list.get().getId_role();
     	Optional<Role> role = roleService.findOne(id_role);
     	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
-    	Optional<MonPeriod> monper = monPeriodService.findOne(list.get().getId_monper());
+    	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
@@ -454,7 +454,7 @@ public class RanRadSdgController {
     	Integer id_role = list.get().getId_role();
     	Optional<Role> role = roleService.findOne(id_role);
     	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
-    	Optional<MonPeriod> monper = monPeriodService.findOne(list.get().getId_monper());
+    	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
         role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
@@ -503,7 +503,7 @@ public class RanRadSdgController {
     	Integer id_role = list.get().getId_role();
     	Optional<Role> role = roleService.findOne(id_role);
     	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
-    	Optional<MonPeriod> monper = monPeriodService.findOne(list.get().getId_monper());
+    	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
         role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
@@ -549,7 +549,7 @@ public class RanRadSdgController {
     
     @GetMapping("admin/list-monPer/{id_prov}")
     public @ResponseBody Map<String, Object> monPerList(@PathVariable("id_prov") String id_prov) {
-        List<MonPeriod> list = monPerService.findAll(id_prov);
+        List<RanRad> list = monPerService.findAll(id_prov);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
@@ -557,13 +557,13 @@ public class RanRadSdgController {
     
     @PostMapping(path = "admin/save-monPer", consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public void saveMonPer(@RequestBody MonPeriod sdg) {
+	public void saveMonPer(@RequestBody RanRad sdg) {
     	monPerService.saveMonPeriod(sdg);
 	}
     
     @GetMapping("admin/get-monPer/{id}")
     public @ResponseBody Map<String, Object> getMonPer(@PathVariable("id") Integer id) {
-        Optional<MonPeriod> list = monPerService.findOne(id);
+        Optional<RanRad> list = monPerService.findOne(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
@@ -578,7 +578,7 @@ public class RanRadSdgController {
   //*********************** MAPPING ***********************
     @GetMapping("admin/ran_rad/map/goals/{id_monper}")
     public String goals(Model model, HttpSession session, @PathVariable("id_monper") Integer id_monper) {
-    	Optional<MonPeriod> monper = monPeriodService.findOne(id_monper);
+    	Optional<RanRad> monper = monPeriodService.findOne(id_monper);
     	Optional<Provinsi> provin = prov.findOne(monper.get().getId_prov());
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         model.addAttribute("lang", session.getAttribute("bahasa"));
@@ -591,7 +591,7 @@ public class RanRadSdgController {
     @GetMapping("admin/ran_rad/map/goals/{id_monper}/{id}/target")
     public String targetMap(Model model, @PathVariable("id_monper") Integer id_monper, @PathVariable("id") String id, HttpSession session) {
 		Optional<SdgGoals> list = sdgGoalsService.findOne(id);
-		Optional<MonPeriod> monper = monPeriodService.findOne(id_monper);
+		Optional<RanRad> monper = monPeriodService.findOne(id_monper);
     	Optional<Provinsi> provin = prov.findOne(monper.get().getId_prov());
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
@@ -607,7 +607,7 @@ public class RanRadSdgController {
     public String sdgMap(Model model, @PathVariable("id_monper") Integer id_monper, @PathVariable("id") String id, @PathVariable("id_target") String id_target, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
-    	Optional<MonPeriod> monper = monPeriodService.findOne(id_monper);
+    	Optional<RanRad> monper = monPeriodService.findOne(id_monper);
     	Optional<Provinsi> provin = prov.findOne(monper.get().getId_prov());
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));

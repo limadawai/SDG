@@ -16,9 +16,6 @@ public class GovProgram implements Serializable {
     @Column(nullable = false, length = 150)
     private String nm_program;
     
-    @Column(nullable = false, length = 4)
-    private Integer id_role;
-    
     @Column(nullable = false, length = 11)
     private Integer id_monper;
     
@@ -31,16 +28,18 @@ public class GovProgram implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date_created;
+    
+    @Column(nullable = true, length = 50)
+    private String internal_code;
 
 	public GovProgram() {
 	}
 
-	public GovProgram(String id_program, String nm_program, Integer id_role, Integer id_monper, String rel_prog_id,
-			Integer created_by, Date date_created) {
+	public GovProgram(String id_program, String nm_program, Integer id_monper, String rel_prog_id,
+			Integer created_by, Date date_created, String internal_code) {
 		super();
 		this.id_program = id_program;
 		this.nm_program = nm_program;
-		this.id_role = id_role;
 		this.id_monper = id_monper;
 		this.rel_prog_id = rel_prog_id;
 		this.created_by = created_by;
@@ -63,13 +62,14 @@ public class GovProgram implements Serializable {
 		this.nm_program = nm_program;
 	}
 
-	public Integer getId_role() {
-		return id_role;
-	}
+    public String getInternal_code() {
+        return internal_code;
+    }
 
-	public void setId_role(Integer id_role) {
-		this.id_role = id_role;
-	}
+    public void setInternal_code(String internal_code) {
+        this.internal_code = internal_code;
+    }
+        
 
 	public Integer getId_monper() {
 		return id_monper;
