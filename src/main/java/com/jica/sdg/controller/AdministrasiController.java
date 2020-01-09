@@ -158,8 +158,13 @@ public class AdministrasiController {
     @PostMapping(path = "admin/manajemen/save-user", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public void saveUser(@RequestBody User user) {
-    	BCryptPasswordEncoder b = new BCryptPasswordEncoder();
-    	user.setPassword(b.encode(user.getPassword()));
+    	Optional<User> list = userService.findOne(user.getId_user());
+    	if(user.getPassword().equals("")) {
+    		user.setPassword(list.get().getPassword());
+    	}else {
+    		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+        	user.setPassword(b.encode(user.getPassword()));
+    	}
     	userService.saveUsere(user);
 	}
     
