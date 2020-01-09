@@ -25,12 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
@@ -72,7 +67,7 @@ public class AdministrasiController {
     IUserRequestListService userReqService;
 
     //*********************** Manajemen Role & User ***********************
-    @GetMapping("admin/manajemen/role")
+    @GetMapping("admin/management/role")
     public String rolemanajemen(Model model, HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
@@ -84,13 +79,15 @@ public class AdministrasiController {
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
         model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
+		model.addAttribute("id_prov", id_prov);
         return "admin/role_manajemen/manajemen_role";
     }
 
     @GetMapping("admin/manajemen/list-role/{id_prov}")
     public @ResponseBody Map<String, Object> roles(HttpSession session, @PathVariable("id_prov") String id_prov) {
     	List<Role> listRole;
-    	if(id_prov.equals("000")) {
+    	if(id_prov.equals("all")) {
     		listRole = roleService.findAll();
     	}else {
     		listRole = roleService.findByProvince(id_prov);
@@ -120,11 +117,12 @@ public class AdministrasiController {
     	roleService.deleteRole(id);
 	}
 
-    @GetMapping("admin/manajemen/user")
+    @GetMapping("admin/management/user")
     public String usermanajemen(Model model, HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
+    	String privilege = list.get().getPrivilege();
     	if(id_prov.equals("000")) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
@@ -133,13 +131,16 @@ public class AdministrasiController {
     	}
         model.addAttribute("listRole", roleService.findAll());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
+		model.addAttribute("privilege", privilege);
+		model.addAttribute("id_prov", id_prov);
         return "admin/role_manajemen/manajemen_user";
     }
     
     @GetMapping("admin/manajemen/list-user/{id_prov}")
     public @ResponseBody Map<String, Object> user(HttpSession session, @PathVariable("id_prov") String id_prov) {
     	List listUser;
-    	if(id_prov.equals("000")) {
+    	if(id_prov.equals("all")) {
     		listUser = userService.findAllGrid();
     	}else {
     		listUser = userService.findByProvince(id_prov);
@@ -171,14 +172,20 @@ public class AdministrasiController {
     	userService.deleteUser(id);
 	}
 
-    @GetMapping("admin/manajemen/assignment")
+    @GetMapping("admin/management/assignment")
     public String assignment(Model model, HttpSession session) {
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
         Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
+        if(id_prov.equals("000")) {
+    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
         return "admin/role_manajemen/manajemen_assignment";
     }
     
@@ -305,9 +312,10 @@ public class AdministrasiController {
         }
 	}
 
-    @GetMapping("admin/manajemen/request")
+    @GetMapping("admin/management/request")
     public String requestlist(Model model, HttpSession session) {
         model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
         return "admin/role_manajemen/manajemen_request_list";
     }
 

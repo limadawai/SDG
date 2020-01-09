@@ -17,13 +17,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,10 +46,20 @@ public class AdminController {
     //*********************** Menu Dari DB ***********************
     @Autowired
     IMenuService menuService;
+    @CrossOrigin(origins = "http://sdgsemonevdev.com")
     @GetMapping("admin/menu")
-    public @ResponseBody List<Menu> menuList() {
-        List<Menu> list = menuService.findAllMenu();
-        return list;
+    public @ResponseBody List<Menu> menuList(HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id[] = list.get().getMenu().split(",");
+    	Integer size = id.length;
+    	Integer [] arr = new Integer [size];
+        for(int i=0; i<size; i++) {
+           arr[i] = Integer.parseInt(id[i]);
+        }
+        Iterable<Integer> ids = Arrays.asList(arr);
+        List<Menu> list1 = menuService.findAllByList(ids);
+        return list1;
     }
 
     @Autowired
@@ -72,7 +81,6 @@ public class AdminController {
         request.getSession().setAttribute("id_role", userData.get(0).getId_role());
         request.getSession().setAttribute("username", userData.get(0).getUserName());
         request.getSession().setAttribute("name", userData.get(0).getName());
-//        request.getSession().setAttribute("name", uname);
 
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
@@ -94,6 +102,7 @@ public class AdminController {
     public String goals(Model model, HttpSession session) {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/sdg/goals";
     }
 
@@ -112,6 +121,7 @@ public class AdminController {
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
         model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/gov/program";
     }
 
@@ -130,6 +140,7 @@ public class AdminController {
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
         model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/non-gov/program";
     }
 
@@ -138,6 +149,7 @@ public class AdminController {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         model.addAttribute("prov",prov.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/monper";
     }
 

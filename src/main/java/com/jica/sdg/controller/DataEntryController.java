@@ -10,19 +10,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpSession;
 //import org.springframework.data.jpa.repository.Query;
@@ -47,6 +41,7 @@ public class DataEntryController {
         model.addAttribute("title", "SDG Indicators Monitoring");
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/dataentry/entry_sdg";
     }
     
@@ -73,14 +68,16 @@ public class DataEntryController {
         model.addAttribute("title", "SDG Indicators Monitoring");
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/dataentry/govprogram";
     }
 
-    @GetMapping("admin/government-kegiatan-monitoring")
+    @GetMapping("admin/government-activity-monitoring")
     public String govkegiatan(Model model, HttpSession session) {
         model.addAttribute("title", "SDG Indicators Monitoring");
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/dataentry/govactivity";
     }
 

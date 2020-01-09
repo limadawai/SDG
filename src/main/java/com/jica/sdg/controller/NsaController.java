@@ -25,19 +25,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import javax.servlet.http.HttpSession;
 
@@ -83,6 +77,7 @@ public class NsaController {
     public String nsa_profile(Model model, HttpSession session) {
 //        model.addAttribute("title", "NSA Profile");
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
@@ -178,6 +173,7 @@ public class NsaController {
     public String nsa_ins_profile(Model model, HttpSession session) {
 //        model.addAttribute("title", "Institution Profile");
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("listInsProfile", insProfilrService.findRoleInstitusi());
         return "admin/nsa/ins_profile";
     }
@@ -219,6 +215,7 @@ public class NsaController {
         model.addAttribute("title", "NSA Collaboration");
         model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
         model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
         return "admin/nsa/nsa_collaboration";
     }
     

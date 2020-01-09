@@ -29,9 +29,10 @@
                                 <span class="add-on"><i class="icon-search"></i></span>
                             </div>
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                            	<option th:if="${id_prov == '000'}" value="all">-All-</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
-                            <button class="btn btn-warning btn-small pull-right" data-toggle="modal" data-target="#myModal">
+                            <button class="btn btn-warning btn-small pull-right" id="addNew" data-toggle="modal" data-target="#myModal">
                             	<span class="lang_eng" style="display:none">Add New</span>
                             	<span class="lang_indo">Tambah</span>
                             </button>
@@ -205,7 +206,6 @@
 <script th:inline="javascript">
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
-    
   //Bahasa
     var titleDel = "Anda Yakin";
     var messDel = "Menghapus Data?";
@@ -247,10 +247,19 @@
     	bhs($(this).is(':checked'));
     	loadMenuSelect();
     });
-    
+    if($('#id_prov').val()=="all"){
+		$('#addNew').hide();
+	}else{
+		$('#addNew').show();
+	}
     $('#id_prov').on('change', function(){
     	var id = $(this).val();
     	table.ajax.url(urls+'manajemen/list-role/'+id).load();
+    	if(id=="all"){
+    		$('#addNew').hide();
+    	}else{
+    		$('#addNew').show();
+    	}
     });
     
     //Load Select Menu

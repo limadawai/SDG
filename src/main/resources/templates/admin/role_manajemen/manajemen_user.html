@@ -33,9 +33,10 @@
                                 <span class="add-on"><i class="icon-search"></i></span>
                             </div>
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                            	<option th:if="${id_prov == '000'}" value='all'>-All-</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
-                            <button class="btn btn-warning btn-small pull-right" data-toggle="modal" data-target="#myModal">
+                            <button class="btn btn-warning btn-small pull-right" id="addNew" data-toggle="modal" data-target="#myModal">
                             	<span class="lang_eng" style="display:none">Add New</span>
                             	<span class="lang_indo">Tambah</span>
                             </button>
@@ -202,12 +203,44 @@
     $('#fs').on('change', function(e){
     	bhs($(this).is(':checked'));
     });
-    
+    if($('#id_prov').val()=="all"){
+		$('#addNew').hide();
+	}else{
+		$('#addNew').show();
+	}
     $('#id_prov').on('change', function(){
     	var id = $(this).val();
     	table.ajax.url(urls+'manajemen/list-user/'+id).load();
+    	role(id);
+    	if(id=="all"){
+    		$('#addNew').hide();
+    	}else{
+    		$('#addNew').show();
+    	}
     });
-
+    
+    function role(id){
+    	$('#id_role').html("");
+    	var option = "<option value=''>-pilih-</option>";
+    	$.ajax({
+            url: urls + 'manajemen/list-role/'+$('#id_prov').val(),
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            async : false,
+            success: function (result) {
+                for (var k = 0; k < result.content.length; k++) {
+                	var selected = (result.content[k].id_role==id)?'selected':'';
+                	option += '<option value="'+result.content[k].id_role+'" '+selected+'>'
+	                            +result.content[k].nm_role+
+	                      '</option>';
+                }
+            }
+        }); 
+    	$('#id_role').append(option);
+    }
+    
+    var privilege = [[${privilege}]];
     var table = $('#tabel-user').DataTable({
         responsive: true,
         sDom: 'lrtip',
@@ -234,10 +267,19 @@
                 return "<div style='font-size:90%;'>"+row[3]+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='text-align:center;'>"+
+            	if(privilege=="SUPER"){
+            		return "<div style='text-align:center;'>"+
                     '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
                     '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';}
+                    '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+            	}else if(privilege=="ADMIN"){
+            		return "<div style='text-align:center;'>"+
+                    '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
+                    '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button></div>';
+            	}else{
+            		return "";
+            	}
+              }
             }
         ],
         "columnDefs": [
