@@ -96,7 +96,6 @@ public class RanRadSdgController {
 	IGovMapService govMapService;
 	
 	//*********************** SDG ***********************
-	
 	@GetMapping("admin/list-sdgGoals")
     public @ResponseBody Map<String, Object> sdgGoalsList() {
         List<SdgGoals> list = sdgGoalsService.findAll();

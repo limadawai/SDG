@@ -72,7 +72,7 @@ public class DataEntryController {
         return "admin/dataentry/govprogram";
     }
 
-    @GetMapping("admin/government-kegiatan-monitoring")
+    @GetMapping("admin/government-activity-monitoring")
     public String govkegiatan(Model model, HttpSession session) {
         model.addAttribute("title", "SDG Indicators Monitoring");
         model.addAttribute("listprov", provinsiService.findAllProvinsi());

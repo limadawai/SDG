@@ -46,6 +46,7 @@ public class AdminController {
     //*********************** Menu Dari DB ***********************
     @Autowired
     IMenuService menuService;
+    @CrossOrigin(origins = "http://sdgsemonevdev.com")
     @GetMapping("admin/menu")
     public @ResponseBody List<Menu> menuList(HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
