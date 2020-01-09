@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "mon_period")
-public class MonPeriod implements Serializable {
+@Table(name = "ran_rad")
+public class RanRad implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -46,10 +46,10 @@ public class MonPeriod implements Serializable {
     @Column(nullable = false, length = 3)
     private String id_prov;
 
-	public MonPeriod() {
+	public RanRad() {
 	}
 
-	public MonPeriod(Integer id_monper, Integer start_year, Integer end_year, String sdg_indicator, String gov_prog,
+	public RanRad(Integer id_monper, Integer start_year, Integer end_year, String sdg_indicator, String gov_prog,
 			String nsa_prog, String gov_prog_bud, String nsa_prog_bud, String ident_problem, String best_pract,
 			String status, String id_prov) {
 		super();
