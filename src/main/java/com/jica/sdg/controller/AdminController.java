@@ -17,10 +17,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -49,6 +46,7 @@ public class AdminController {
     //*********************** Menu Dari DB ***********************
     @Autowired
     IMenuService menuService;
+    @CrossOrigin(origins = "http://sdgsemonevdev.com")
     @GetMapping("admin/menu")
     public @ResponseBody List<Menu> menuList(HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
