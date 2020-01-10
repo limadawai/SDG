@@ -16,4 +16,7 @@ public interface GovIndicatorRepository extends CrudRepository<GovIndicator, Str
 	
 	@Query(value = "select a.* from gov_indicator a left join gov_program b on a.id_program=b.id_program where b.id_role = :id_role",nativeQuery = true)
 	public List<GovIndicator> findAllByRole(@Param("id_role") Integer id_role);
+	
+	@Query(value = "select a.id_gov_indicator,a.nm_indicator,b.id_unit,b.nm_unit from gov_indicator a left join ref_unit b on a.unit=b.id_unit where a.id_program = :id_program and a.id_activity = :id_activity",nativeQuery = true)
+	public List findAllIndi(@Param("id_program") String id_program, @Param("id_activity") String id_activity);
 }

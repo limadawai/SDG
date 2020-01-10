@@ -24,9 +24,11 @@ public class User implements Serializable{
     private short enabled;
     @Column(name = "detail")
     private String detail;
-
+    @Column(name = "email")
+    private String email;
+    
     public User(Integer id_user, Integer id_role, String userName, String password, String name, short enabled,
-			String detail) {
+			String detail, String email) {
 		super();
 		this.id_user = id_user;
 		this.id_role = id_role;
@@ -35,9 +37,10 @@ public class User implements Serializable{
 		this.name = name;
 		this.enabled = enabled;
 		this.detail = detail;
+		this.email = email;
 	}
-    
-    public User() {
+
+	public User() {
 	}
 
 	public Integer getId_user() {
@@ -95,4 +98,12 @@ public class User implements Serializable{
     public void setDetail(String detail) {
         this.detail = detail;
     }
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 }

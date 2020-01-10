@@ -38,6 +38,11 @@ public class NsaIndicatorService implements INsaIndicatorService{
 	public void deleteNsaIndicator(String id) {
 		nsaIndicatorRepo.deleteById(id);
 	}
+
+	@Override
+	public List findAllIndi(String id_program, String id_activity) {
+		return nsaIndicatorRepo.findAllIndi(id_program, id_activity);
+	}
 	
 	
 }

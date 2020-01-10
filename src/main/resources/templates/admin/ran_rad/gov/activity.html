@@ -18,7 +18,7 @@
         				<select name="id_prov" id="id_prov">
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
-	        			<select name="id_role" id="id_role">
+	        			<select name="id_role" id="id_role" style="display:none">
 	        				<option th:each="f:${role}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
 	        			</select>
 	        			<span> RAN/RAD : </span>
@@ -75,6 +75,10 @@
 	                                            	<span class="lang_indo">Kode</span>
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;">
+	                                            	<span class="lang_eng" style="display:none">Internal Code</span>
+	                                            	<span class="lang_indo">Kode Internal</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">Activity</span>
 	                                            	<span class="lang_indo">Kegiatan</span>
 	                                            </th>
@@ -116,6 +120,14 @@
 				    <div class="controls">
 				    	<input type="text" id="id_activity" name="id_activity" class="input-medium input-block-level"/>
 				    	<span class="help-block" id="error_id_activity"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">Internal Code</label>
+				    <label class="lang_indo control-label" style="text-align:left">Kode Internal</label>
+				    <div class="controls">
+                        <input type="text" id="internal_code" name="internal_code" class="input-block-level"/>
+				    	<span class="help-block" id="error_internal_code"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
@@ -207,6 +219,9 @@
 							return "<div style='font-size:90%;'>"+row.id_activity+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+(row.internal_code?row.internal_code:'')+"</div>";
+					}},
+					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/gov/program/"+row.id_program+"/activity/"+row.id_activity+"/indicator' class='target'>"+row.nm_activity+"</a></div>";
 						}},
 					{"data": function (row, data, index, display) {
@@ -229,6 +244,7 @@
 			function clearForm(){
 				$('#id_activity').val("").removeAttr("readonly");
 				$('#nm_activity').val("").removeAttr("readonly");
+				$('#internal_code').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -241,6 +257,7 @@
 				var id_program = $('#id_program').val();
 				var id_activity = $('#id_activity').val();
 				var nm_activity = $('#nm_activity').val();
+				var internal_code = $('#internal_code').val();
 				var id_role = $('#id_role').val();
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
@@ -256,7 +273,7 @@
                     cek += 1;
                 }
 				if(cek==0){
-					var data = JSON.stringify({'id_program':id_program,'id_activity':id_activity,'nm_activity':nm_activity,'id_role':id_role});
+					var data = JSON.stringify({'id_program':id_program,'id_activity':id_activity,'nm_activity':nm_activity,'id_role':id_role,'internal_code':internal_code});
 					$.ajax({
 						type: "POST",
 	                    url: urls+'save-govActivity',
@@ -282,6 +299,7 @@
                     	var val = result.content;
                     	$('#id_activity').val(val.id_activity).attr("readonly",true);
         				$('#nm_activity').val(val.nm_activity);
+        				$('#internal_code').val(val.internal_code);
 						$('#myModal').modal('show');
                     },
                 })
@@ -294,6 +312,7 @@
                     	var val = result.content;
                     	$('#id_activity').val(val.id_activity).attr("readonly",true);
         				$('#nm_activity').val(val.nm_activity).attr("readonly",true);
+        				$('#internal_code').val(val.internal_code).attr("readonly",true);
 						$('#myModal').modal('show');
                     },
                 })

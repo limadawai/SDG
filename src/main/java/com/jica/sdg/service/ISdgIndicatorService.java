@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface ISdgIndicatorService {
 
     List<SdgIndicator> findAll(String id_goals, String id_target);
+    
+    List<SdgIndicator> findAll();
 
     void saveSdgIndicator(SdgIndicator sdg);
     

@@ -24,27 +24,6 @@ public class SdgIndicator implements Serializable {
     @Column(nullable = false, length = 10)
     private String unit;
     
-    @Column(nullable = true, length = 11)
-    private Integer target_year1;
-    
-    @Column(nullable = true, length = 11)
-    private Integer target_year2;
-    
-    @Column(nullable = true, length = 11)
-    private Integer target_year3;
-    
-    @Column(nullable = true, length = 11)
-    private Integer target_year4;
-    
-    @Column(nullable = true, length = 11)
-    private Integer target_year5;
-    
-    @Column(nullable = false, length = 100)
-    private String baseline;
-    
-    @Column(nullable = false, length = 100)
-    private String budsource;
-    
     @Column(nullable = false, length = 10)
     private String increment_decrement;
 
@@ -52,21 +31,13 @@ public class SdgIndicator implements Serializable {
 	}
 
 	public SdgIndicator(String id_indicator, String id_goals, String id_target, String nm_indicator, String unit,
-			Integer target_year1, Integer target_year2, Integer target_year3, Integer target_year4,
-			Integer target_year5, String baseline, String budsource, String increment_decrement) {
+			 String increment_decrement) {
 		super();
 		this.id_indicator = id_indicator;
 		this.id_goals = id_goals;
 		this.id_target = id_target;
 		this.nm_indicator = nm_indicator;
 		this.unit = unit;
-		this.target_year1 = target_year1;
-		this.target_year2 = target_year2;
-		this.target_year3 = target_year3;
-		this.target_year4 = target_year4;
-		this.target_year5 = target_year5;
-		this.baseline = baseline;
-		this.budsource = budsource;
 		this.increment_decrement = increment_decrement;
 	}
 
@@ -120,61 +91,5 @@ public class SdgIndicator implements Serializable {
 
 	public void setUnit(String unit) {
 		this.unit = unit;
-	}
-
-	public Integer getTarget_year1() {
-		return target_year1;
-	}
-
-	public void setTarget_year1(Integer target_year1) {
-		this.target_year1 = target_year1;
-	}
-
-	public Integer getTarget_year2() {
-		return target_year2;
-	}
-
-	public void setTarget_year2(Integer target_year2) {
-		this.target_year2 = target_year2;
-	}
-
-	public Integer getTarget_year3() {
-		return target_year3;
-	}
-
-	public void setTarget_year3(Integer target_year3) {
-		this.target_year3 = target_year3;
-	}
-
-	public Integer getTarget_year4() {
-		return target_year4;
-	}
-
-	public void setTarget_year4(Integer target_year4) {
-		this.target_year4 = target_year4;
-	}
-
-	public Integer getTarget_year5() {
-		return target_year5;
-	}
-
-	public void setTarget_year5(Integer target_year5) {
-		this.target_year5 = target_year5;
-	}
-
-	public String getBaseline() {
-		return baseline;
-	}
-
-	public void setBaseline(String baseline) {
-		this.baseline = baseline;
-	}
-	
-	public String getBudsource() {
-		return budsource;
-	}
-	
-	public void setBudsource(String budsource) {
-		this.budsource = budsource;
 	}
 }

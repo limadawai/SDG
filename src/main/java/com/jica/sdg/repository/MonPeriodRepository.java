@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MonPeriodRepository extends CrudRepository<RanRad, Integer> {
-	@Query(value = "select * from mon_period where id_prov = :id_prov",nativeQuery = true)
+	@Query(value = "select * from ran_rad where id_prov = :id_prov",nativeQuery = true)
 	public List<RanRad> findAllMonPeriod(@Param("id_prov") String id_prov); 
 }

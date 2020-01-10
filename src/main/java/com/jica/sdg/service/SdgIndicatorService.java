@@ -34,6 +34,9 @@ public class SdgIndicatorService implements ISdgIndicatorService{
 	public void deleteSdgIndicator(String id) {
 		sdgIndicatorRepo.deleteById(id);
 	}
-	
-	
+
+	@Override
+	public List<SdgIndicator> findAll() {
+		return (List<SdgIndicator>) sdgIndicatorRepo.findAll();
+	}
 }

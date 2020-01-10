@@ -11,6 +11,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GovProgramRepository extends CrudRepository<GovProgram, String> {
-	@Query(value = "select * from gov_program where id_role = :id_role and id_monper = :id_monper ",nativeQuery = true)
-	public List<GovProgram> findAll(@Param("id_role") String id_role, @Param("id_monper") String id_monper); 
+	@Query(value = "select * from gov_program where id_monper = :id_monper ",nativeQuery = true)
+	public List<GovProgram> findAll(@Param("id_monper") String id_monper); 
 }

@@ -10,7 +10,8 @@ public interface IGovProgramService {
 
     List<GovProgram> findAll();
     
-    List<GovProgram> findAllBy(String id_role, String id_monper);
+    //List<GovProgram> findAllBy(String id_role, String id_monper);
+    List<GovProgram> findAllBy(String id_monper);
 
     void saveGovProgram(GovProgram gov);
     

@@ -18,6 +18,7 @@ import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.NsaActivity;
 import com.jica.sdg.model.NsaIndicator;
+import com.jica.sdg.model.NsaMap;
 import com.jica.sdg.model.NsaProgram;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
@@ -33,6 +34,7 @@ import com.jica.sdg.service.IGovProgramService;
 import com.jica.sdg.service.IMonPeriodService;
 import com.jica.sdg.service.INsaActivityService;
 import com.jica.sdg.service.INsaIndicatorService;
+import com.jica.sdg.service.INsaMapService;
 import com.jica.sdg.service.INsaProgramService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
@@ -41,6 +43,7 @@ import com.jica.sdg.service.ISdgDisaggreService;
 import com.jica.sdg.service.ISdgGoalsService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.ISdgTargetService;
+import com.jica.sdg.service.IUnitService;
 
 import javax.servlet.http.HttpSession;
 
@@ -94,6 +97,12 @@ public class RanRadSdgController {
 	
 	@Autowired
 	IGovMapService govMapService;
+	
+	@Autowired
+	IUnitService unitService;
+	
+	@Autowired
+	INsaMapService nsaMapService;
 	
 	//*********************** SDG ***********************
 	@GetMapping("admin/list-sdgGoals")
@@ -290,9 +299,11 @@ public class RanRadSdgController {
 	}
     
   //*********************** GOV PROGRAM ***********************
-    @GetMapping("admin/list-govProg/{id_role}/{id_monper}")
-    public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
-        List<GovProgram> list = govProgService.findAllBy(id_role,id_monper);
+    //@GetMapping("admin/list-govProg/{id_role}/{id_monper}")
+    @GetMapping("admin/list-govProg/{id_monper}")
+    //public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
+    public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper) {
+        List<GovProgram> list = govProgService.findAllBy(id_monper);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
@@ -323,9 +334,12 @@ public class RanRadSdgController {
     @GetMapping("admin/ran_rad/gov/program/{id_program}/activity")
     public String gov_kegiatan(Model model, @PathVariable("id_program") String id_program, HttpSession session) {
     	Optional<GovProgram> list = govProgService.findOne(id_program);
-    	Integer id_role = list.get().getId_role();
-    	Optional<Role> role = roleService.findOne(id_role);
-    	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
+    	//Integer id_role = list.get().getId_role();
+    	
+    	//Optional<Role> role = roleService.findOne(id_role);
+    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
+    	Optional<RanRad> ranrad = monPeriodService.findOne(list.get().getId_monper());
+    	Optional<Provinsi> provin = prov.findOne(ranrad.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
@@ -372,35 +386,56 @@ public class RanRadSdgController {
                                 @PathVariable("id_activity") String id_activity, HttpSession session) {
     	Optional<GovProgram> list = govProgService.findOne(id_program);
     	Optional<GovActivity> list1 = govActivityService.findOne(id_activity);
-    	Integer id_role = list.get().getId_role();
-    	Optional<Role> role = roleService.findOne(id_role);
-    	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
+    	//Integer id_role = list.get().getId_role();
+    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
+    	Optional<RanRad> ranrad = monPeriodService.findOne(list.get().getId_monper());
+    	Optional<Provinsi> provin = prov.findOne(ranrad.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("unit", unitService.findAll());
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
         role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
+        model.addAttribute("sdgIndicator", sdgIndicatorService.findAll());
         return "admin/ran_rad/gov/indicator";
     }
     
     @GetMapping("admin/list-govIndicator/{id_program}/{id_activity}")
     public @ResponseBody Map<String, Object> govIndicatorList(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity) {
-        List<GovIndicator> list = govIndicatorService.findAll(id_program, id_activity);
+        List list = govIndicatorService.findAllIndi(id_program, id_activity);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-govIndicator", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-govIndicator/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public void saveGovIndicator(@RequestBody GovIndicator gov) {
+	public void saveGovIndicator(@RequestBody GovIndicator gov,
+			@PathVariable("sdg_indicator") String sdg_indicator,
+			@PathVariable("id_monper") Integer id_monper,
+			@PathVariable("id_prov") String id_prov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	govIndicatorService.saveGovIndicator(gov);
+    	
+    	if(!sdg_indicator.equals("")) {
+    		String[] a = sdg_indicator.split("---");
+    		String id_goals = a[0];
+    		String id_target = a[1];
+    		String id_indicator = a[2];
+    		GovMap map = new GovMap();
+    		map.setId_goals(id_goals);
+    		map.setId_target(id_target);
+    		map.setId_indicator(id_indicator);
+    		map.setId_gov_indicator(gov.getId_gov_indicator());
+    		map.setId_monper(id_monper);
+    		map.setId_prov(id_prov);
+    		govMapService.saveGovMap(map);
+    	}
 	}
     
     @GetMapping("admin/get-govIndicator/{id}")
@@ -512,23 +547,43 @@ public class RanRadSdgController {
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("unit", unitService.findAll());
+        model.addAttribute("sdgIndicator", sdgIndicatorService.findAll());
         return "admin/ran_rad/non-gov/indicator";
     }
     
     @GetMapping("admin/list-nsaIndicator/{id_program}/{id_activity}")
     public @ResponseBody Map<String, Object> nsaIndicatorList(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity) {
-        List<NsaIndicator> list = nsaIndicatorService.findAll(id_program, id_activity);
+        List<NsaIndicator> list = nsaIndicatorService.findAllIndi(id_program, id_activity);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-nsaIndicator", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-nsaIndicator/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public void saveNsaIndicator(@RequestBody NsaIndicator gov) {
+	public void saveNsaIndicator(@RequestBody NsaIndicator gov,
+			@PathVariable("sdg_indicator") String sdg_indicator,
+			@PathVariable("id_monper") Integer id_monper,
+			@PathVariable("id_prov") String id_prov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaIndicatorService.saveNsaIndicator(gov);
+    	
+    	if(!sdg_indicator.equals("")) {
+    		String[] a = sdg_indicator.split("---");
+    		String id_goals = a[0];
+    		String id_target = a[1];
+    		String id_indicator = a[2];
+    		NsaMap map = new NsaMap();
+    		map.setId_goals(id_goals);
+    		map.setId_target(id_target);
+    		map.setId_indicator(id_indicator);
+    		map.setId_nsa_indicator(gov.getId_nsa_indicator());
+    		map.setId_monper(id_monper);
+    		map.setId_prov(id_prov);
+    		nsaMapService.saveNsaMap(map);
+    	}
 	}
     
     @GetMapping("admin/get-nsaIndicator/{id}")

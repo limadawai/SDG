@@ -123,12 +123,7 @@ public class AdministrasiController {
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
     	String privilege = list.get().getPrivilege();
-    	if(id_prov.equals("000")) {
-    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
-    	}else {
-    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
-    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
-    	}
+    	model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("listRole", roleService.findAll());
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
@@ -153,9 +148,14 @@ public class AdministrasiController {
     @PostMapping(path = "admin/manajemen/save-user", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public void saveUser(@RequestBody User user) {
-    	Optional<User> list = userService.findOne(user.getId_user());
-    	if(user.getPassword().equals("")) {
-    		user.setPassword(list.get().getPassword());
+    	if(user.getId_user() != null) {
+    		Optional<User> list = userService.findOne(user.getId_user());
+        	if(user.getPassword().equals("")) {
+        		user.setPassword(list.get().getPassword());
+        	}else {
+        		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
+            	user.setPassword(b.encode(user.getPassword()));
+        	}
     	}else {
     		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
         	user.setPassword(b.encode(user.getPassword()));
@@ -268,7 +268,6 @@ public class AdministrasiController {
         		a.setId_program(id_program);
         		a.setId_activity(id_activity);
         		a.setId_monper(id_monper);
-        		a.setId_prov(id_prov);
         		a.setId_role(Integer.parseInt(id_role));
         		a.setId_gov_indicator(id_gov_indicator);
         		assignGovService.saveAssignGovIndicator(a);
@@ -309,7 +308,6 @@ public class AdministrasiController {
         		a.setId_program(id_program);
         		a.setId_activity(id_activity);
         		a.setId_monper(id_monper);
-        		a.setId_prov(id_prov);
         		a.setId_role(Integer.parseInt(id_role));
         		a.setId_nsa_indicator(id_nsa_indicator);
         		assignNsaService.saveAssignNsaIndicator(a);

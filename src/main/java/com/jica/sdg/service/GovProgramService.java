@@ -36,7 +36,8 @@ public class GovProgramService implements IGovProgramService{
 	}
 
 	@Override
-	public List<GovProgram> findAllBy(String id_role,String id_monper) {
-		return (List<GovProgram>) govProgRepo.findAll(id_role,id_monper);
+	//public List<GovProgram> findAllBy(String id_role,String id_monper) {
+	public List<GovProgram> findAllBy(String id_monper) {
+		return (List<GovProgram>) govProgRepo.findAll(id_monper);
 	}
 }

@@ -1,6 +1,7 @@
 package com.jica.sdg.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,11 @@ public class GovIndicatorService implements IGovIndicatorService{
 	public List<GovIndicator> findAllByRole(Integer id_role) {
 		return (List<GovIndicator>) govIndicatorRepo.findAllByRole(id_role);
 	}
-	
-	
+
+	@Override
+	public List findAllIndi(String id_program, String id_activity) {
+		List list = govIndicatorRepo.findAllIndi(id_program, id_activity);
+		return list;
+	}
+
 }

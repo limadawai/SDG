@@ -18,9 +18,9 @@
         				<select name="id_prov" id="id_prov">
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
-	        			<select name="id_role" id="id_role">
+	        			<!-- <select name="id_role" id="id_role">
 	        				<option th:each="f:${role}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
-	        			</select>
+	        			</select> -->
 	        			<span> RAN/RAD : </span>
 	        			<select name="id_monper" id="id_monper">
 	        				<option th:each="f:${monPer}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year} "></option>
@@ -69,23 +69,23 @@
 	                                <table class="table table-bordered table-striped" id="tabel-indicator">
 	                                    <thead>
 	                                        <tr>
-	                                            <th style="text-align:center;font-size:80%;" width="5%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
 	                                            	<span class="lang_eng" style="display:none">No</span>
 													<span class="lang_indo">No</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="5%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
 	                                            	<span class="lang_eng" style="display:none">Code</span>
 	                                            	<span class="lang_indo">Kode</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="50%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="50%">
 	                                            	<span class="lang_eng" style="display:none">Activity Indicator</span>
 	                                            	<span class="lang_indo">Indikator Kegiatan</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="5%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
 	                                            	<span class="lang_eng" style="display:none">Unit</span>
 	                                            	<span class="lang_indo">Satuan</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="5%" colspan="5">
+	                                            <!-- <th style="text-align:center;font-size:80%;" width="5%" colspan="5">
 	                                            	<span class="lang_eng" style="display:none">Target</span>
 	                                            	<span class="lang_indo">Target</span>
 	                                            </th>
@@ -96,13 +96,13 @@
 	                                            <th style="text-align:center;font-size:80%;" width="10%" rowspan="2">
 	                                            	<span class="lang_eng" style="display:none">Agency</span>
 	                                            	<span class="lang_indo">Agency</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="10%" rowspan="2">
+	                                            </th> -->
+	                                            <th style="text-align:center;font-size:80%;" width="10%">
 	                                            	<span class="lang_eng" style="display:none">Action</span>
 	                                            	<span class="lang_indo">Aksi</span>
 	                                            </th>
 	                                        </tr>
-	                                        <tr>
+	                                        <!-- <tr>
 	                                            <th style="text-align:center;font-size:80%;">
 	                                            	1<span class="lang_eng" style="display:none">st</span>
 	                                            </th>
@@ -118,7 +118,7 @@
 	                                            <th style="text-align:center;font-size:80%;">
 	                                            	5<span class="lang_eng" style="display:none">th</span>
 	                                            </th>
-	                                        </tr>
+	                                        </tr> -->
 	                                    </thead>
 	                                    <tbody id="tbody-indicator">
 	                                    </tbody>
@@ -153,6 +153,14 @@
 				    </div>
 				  </div>
 				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">Internal Code</label>
+				    <label class="lang_indo control-label" style="text-align:left">Kode Internal</label>
+				    <div class="controls">
+                        <input type="text" id="internal_code" name="internal_code" class="input-block-level"/>
+				    	<span class="help-block" id="error_internal_code"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Activity Indicator</label>
 				    <label class="lang_indo control-label">Indikator Kegiatan</label>
 				    <div class="controls">
@@ -164,14 +172,25 @@
 				    <label class="lang_eng control-label" style="display:none">Unit</label>
 				    <label class="lang_indo control-label">Satuan</label>
 				    <div class="controls">
-				    	<select placeholder="Pilih satuan" id="unit" name="unit" class="input-xlarge input-block-level">
-					    	<option value="">select</option>
-					    	<option value="orang">Orang</option>
-					    </select>
+				    	<select name="unit" id="unit" class="input-xlarge input-block-level">
+	        				<option th:each="f:${unit}" th:value="${f.id_unit}" th:text="${f.nm_unit}"></option>
+	        			</select>
 					    <span class="help-block" id="error_unit"></span>
 				    </div>
 				  </div>
+				  <hr/>
 				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">SDGs Indicator for Mapping</label>
+				    <label class="lang_indo control-label">Indikator SDG untuk Mapping</label>
+				    <div class="controls">
+				    	<select name="sdg_indicator" id="sdg_indicator" class="input-xlarge input-block-level">
+				    		<option value="">--select--</option>
+	        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
+	        			</select>
+					    <span class="help-block" id="error_unit"></span>
+				    </div>
+				  </div>
+				  <!-- <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">5 Years Target</label>
 				    <label class="lang_indo control-label">Target 5 Tahunan</label>
 				    <input type="text" id="target_year1" name="target_year1" class="input-small" placeholder="First"/>
@@ -195,7 +214,7 @@
 				    	<input type="text" id="budsource" name="budsource" class="input-xlarge input-block-level"/>
 					    <span class="help-block" id="error_budsource"></span>
 				    </div>
-				  </div>
+				  </div> -->
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -275,16 +294,16 @@
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_gov_indicator+"</div>";
+							return "<div style='font-size:90%;'>"+row[0]+"</div>";
 						}},
 
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.nm_indicator+"</div>";
+							return "<div style='font-size:90%;'>"+row[1]+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-						return "<div style='font-size:90%;'>"+row.unit+"</div>";
+						return "<div style='font-size:90%;'>"+row[3]+"</div>";
 					}},
-					{"data": function (row, data, index, display) {
+					/* {"data": function (row, data, index, display) {
 						var value = (row.target_year1)?row.target_year1:"";
 						return "<div style='font-size:90%;'>"+value+"</div>";
 					}},
@@ -309,12 +328,12 @@
 					}},
 					{"data": function (row, data, index, display) {
 						return "<div style='font-size:90%;'>"+row.budsource+"</div>";
-					}},
+					}}, */
 					{"data": function (row, data, index, display) {
 							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row.id_gov_indicator+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id_gov_indicator+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id_gov_indicator+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+							'<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+							'<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -331,13 +350,14 @@
 				$('#id_gov_indicator').val("").removeAttr("readonly");
 				$('#nm_indicator').val("").removeAttr("readonly");
 				$('#unit').val("").removeAttr("disabled");
-				$('#target_year1').val("").removeAttr("readonly");
+				$('#internal_code').val("").removeAttr("readonly");
+				/* $('#target_year1').val("").removeAttr("readonly");
 				$('#target_year2').val("").removeAttr("readonly");
 				$('#target_year3').val("").removeAttr("readonly");
 				$('#target_year4').val("").removeAttr("readonly");
 				$('#target_year5').val("").removeAttr("readonly");
 				$('#baseline').val("").removeAttr("readonly");
-				$('#budsource').val("").removeAttr("disabled");
+				$('#budsource').val("").removeAttr("disabled"); */
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -352,13 +372,15 @@
 				var id_gov_indicator = $('#id_gov_indicator').val();
 				var nm_indicator = $('#nm_indicator').val();
 				var unit = $('#unit').val();
-				var target_year1 = $('#target_year1').val();
+				var internal_code = $('#internal_code').val();
+				var sdg_indicator = $('#sdg_indicator').val();
+				/* var target_year1 = $('#target_year1').val();
 				var target_year2 = $('#target_year2').val();
 				var target_year3 = $('#target_year3').val();
 				var target_year4 = $('#target_year4').val();
 				var target_year5 = $('#target_year5').val();
 				var baseline = $('#baseline').val();
-				var budsource = $('#budsource').val();
+				var budsource = $('#budsource').val(); */
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -377,7 +399,7 @@
                     $("#error_unit").text(required);
                     cek += 1;
                 }
-				if (baseline == ""){
+				/* if (baseline == ""){
                     $("#error_baseline").parents(".control-group").first().addClass("error");
                     $("#error_baseline").text(required);
                     cek += 1;
@@ -386,7 +408,7 @@
                     $("#error_budsource").parents(".control-group").first().addClass("error");
                     $("#error_budsource").text(required);
                     cek += 1;
-                }
+                } */
 				if(cek==0){
 					var data = JSON.stringify({
 						'id_program':id_program,
@@ -394,17 +416,18 @@
 						'id_gov_indicator':id_gov_indicator,
 						'nm_indicator':nm_indicator,
 						'unit':unit,
-						'target_year1':target_year1,
+						'internal_code':internal_code
+						/* 'target_year1':target_year1,
 						'target_year2':target_year2,
 						'target_year3':target_year3,
 						'target_year4':target_year4,
 						'target_year5':target_year5,
 						'baseline':baseline,
-						'budsource':budsource,
+						'budsource':budsource, */
 						});
 					$.ajax({
 						type: "POST",
-	                    url: urls+'save-govIndicator',
+	                    url: urls+'save-govIndicator/'+sdg_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
 	                    beforeSend : function(xhr){
 	                    	xhr.setRequestHeader(header,token);
 	                    },
@@ -428,13 +451,14 @@
                     	$('#id_gov_indicator').val(val.id_gov_indicator).attr("readonly",true);
         				$('#nm_indicator').val(val.nm_indicator);
         				$('#unit').val(val.unit);
-        				$('#target_year1').val(val.target_year1);
+        				$('#internal_code').val(val.internal_code);
+        				/* $('#target_year1').val(val.target_year1);
         				$('#target_year2').val(val.target_year2);
         				$('#target_year3').val(val.target_year3);
         				$('#target_year4').val(val.target_year4);
         				$('#target_year5').val(val.target_year5);
         				$('#baseline').val(val.baseline);
-        				$('#budsource').val(val.budsource);
+        				$('#budsource').val(val.budsource); */
 						$('#myModal').modal('show');
                     },
                 })
@@ -448,13 +472,14 @@
                     	$('#id_gov_indicator').val(val.id_gov_indicator).attr("readonly",true);
         				$('#nm_indicator').val(val.nm_indicator).attr("readonly",true);
         				$('#unit').val(val.unit).attr("disabled",true);
-        				$('#target_year1').val(val.target_year1).attr("readonly",true);
+        				$('#internal_code').val(val.internal_code).attr("readonly",true);
+        				/* $('#target_year1').val(val.target_year1).attr("readonly",true);
         				$('#target_year2').val(val.target_year2).attr("readonly",true);
         				$('#target_year3').val(val.target_year3).attr("readonly",true);
         				$('#target_year4').val(val.target_year4).attr("readonly",true);
         				$('#target_year5').val(val.target_year5).attr("readonly",true);
         				$('#baseline').val(val.baseline).attr("readonly",true);
-        				$('#budsource').val(val.budsource).attr("disabled",true);
+        				$('#budsource').val(val.budsource).attr("disabled",true); */
 						$('#myModal').modal('show');
                     },
                 })

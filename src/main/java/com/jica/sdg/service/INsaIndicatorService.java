@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface INsaIndicatorService {
 
     List<NsaIndicator> findAll(String id_program, String id_activity);
+    
+    List findAllIndi(String id_program, String id_activity);
 
     void saveNsaIndicator(NsaIndicator gov);
     

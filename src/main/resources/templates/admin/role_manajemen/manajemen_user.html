@@ -33,7 +33,7 @@
                                 <span class="add-on"><i class="icon-search"></i></span>
                             </div>
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
-                            	<option th:if="${id_prov == '000'}" value='all'>-All-</option>
+                            	<option value='all'>-All-</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <button class="btn btn-warning btn-small pull-right" id="addNew" data-toggle="modal" data-target="#myModal">
@@ -126,6 +126,27 @@
                                 </div>
                             </div>
                             <div class="control-group">
+                                <label th:class="control-label" for="username">
+                                	<span>Email</span>
+                                </label>
+                                <div class="controls">
+                                    <input class="input-block-level" id="email" type="text" name="email"/>
+                                    <span class="help-block" id="error_email"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label th:class="control-label" for="nama">
+                                	<span class="lang_eng" style="display:none">Province</span>
+                            		<span class="lang_indo">Provinsi</span>
+                                </label>
+                                <div class="controls">
+                                    <select th:field="*{listprov}" class="span3" id="prov" name="prov">
+		                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+		                            </select>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
                                 <label th:class="control-label" for="nama">
                                 	<span class="lang_eng" style="display:none">Role</span>
                             		<span class="lang_indo">Role</span>
@@ -203,35 +224,42 @@
     $('#fs').on('change', function(e){
     	bhs($(this).is(':checked'));
     });
-    if($('#id_prov').val()=="all"){
-		$('#addNew').hide();
-	}else{
-		$('#addNew').show();
-	}
+    
+    var privilege = [[${privilege}]];
+    var id_prov = [[${id_prov}]];
+    
+    if(privilege=="SUPER"){
+    	$('#addNew').show();
+    	$('#prov').removeAttr('readonly');
+    }else if(privilege=="ADMIN"){
+    	$('#addNew').show();
+    	$('#prov').val(id_prov).attr('disabled', true);
+    }else{
+    	$('#addNew').hide();
+    }
+        
     $('#id_prov').on('change', function(){
     	var id = $(this).val();
     	table.ajax.url(urls+'manajemen/list-user/'+id).load();
-    	role(id);
-    	if(id=="all"){
-    		$('#addNew').hide();
-    	}else{
-    		$('#addNew').show();
-    	}
+    });
+    $('#prov').on('change', function(){
+    	role();
     });
     
-    function role(id){
+    role();
+    function role(){
     	$('#id_role').html("");
     	var option = "<option value=''>-pilih-</option>";
     	$.ajax({
-            url: urls + 'manajemen/list-role/'+$('#id_prov').val(),
+            url: urls + 'manajemen/list-role/'+$('#prov').val(),
             type: 'get',
             dataType: 'json',
             cache: false,
             async : false,
             success: function (result) {
                 for (var k = 0; k < result.content.length; k++) {
-                	var selected = (result.content[k].id_role==id)?'selected':'';
-                	option += '<option value="'+result.content[k].id_role+'" '+selected+'>'
+                	//var selected = (result.content[k].id_role==id)?'selected':'';
+                	option += '<option value="'+result.content[k].id_role+'">'
 	                            +result.content[k].nm_role+
 	                      '</option>';
                 }
@@ -239,8 +267,7 @@
         }); 
     	$('#id_role').append(option);
     }
-    
-    var privilege = [[${privilege}]];
+        
     var table = $('#tabel-user').DataTable({
         responsive: true,
         sDom: 'lrtip',
@@ -272,10 +299,11 @@
                     '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
                     '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
                     '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-            	}else if(privilege=="ADMIN"){
+            	}else if(privilege=="ADMIN" && id_prov==$('#id_prov').val()){
             		return "<div style='text-align:center;'>"+
-                    '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button></div>';
+                    '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+                    '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                    '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
             	}else{
             		return "";
             	}
@@ -294,6 +322,7 @@
     function clearForm(){
     	$('#id_user').val("");
     	$('#id_role').val("");
+    	$('#email').val("");
 		$('#username').val("").removeAttr("readonly");
 		$('#name').val("").removeAttr("readonly");
 		$('#detail').text("").removeAttr("readonly");
@@ -314,6 +343,7 @@
 		var detail = $('#detail').val();
 		var id_role = $('#id_role').val();
 		var password = $('#password').val();
+		var email = $('#email').val();
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
 		var cek = 0;
@@ -333,11 +363,11 @@
             $("#error_detail").text(required);
             cek += 1;
         }
-		if (password == ""){
+		/* if (password == ""){
             $("#error_password").parents(".control-group").first().addClass("error");
             $("#error_password").text(required);
             cek += 1;
-        }
+        } */
 		if (id_role == ""){
             $("#error_id_role").parents(".control-group").first().addClass("error");
             $("#error_id_role").text(required);
@@ -352,7 +382,8 @@
 				'detail':detail,
 				'enabled':1,
 				'id_role':id_role,
-				'password':password
+				'password':password,
+				'email':email
 				});
 			$.ajax({
 				type: "POST",
@@ -383,6 +414,7 @@
 				$('#name').val(val.name);
 				$('#detail').text(val.detail);
 				$('#id_role').val(val.id_role);
+				$('#email').val(val.email);
 				$('#myModal').modal('show');
             },
         })
@@ -399,6 +431,7 @@
 				$('#detail').text(val.detail).attr("readonly",true);
 				$('#id_role').val(val.id_role).attr("readonly",true);
 				$('#password').attr("readonly",true);
+				$('#email').val(val.email).attr("readonly",true);
 				$('#myModal').modal('show');
             },
         })

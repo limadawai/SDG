@@ -32,7 +32,7 @@ public class EntrySdgService implements IEntrySdgService{
 	@Override
 	public void saveEntrySdg(EntrySdg esdg) {
             Date date = new Date();
-            esdg.setApproval_date(date);
+            //esdg.setApproval_date(date);
             esdg.setShow_report_date(date);
             esdg.setDate_created(date);
             entrySdgRepo.save(esdg);
