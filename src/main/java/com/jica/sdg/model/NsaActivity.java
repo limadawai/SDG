@@ -28,12 +28,15 @@ public class NsaActivity implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date_created;
+    
+    @Column(nullable = true, length = 150)
+    private String internal_code;
 
 	public NsaActivity() {
 	}
 
 	public NsaActivity(String id_activity, String id_program, Integer id_role, String nm_activity, Integer created_by,
-			Date date_created) {
+			Date date_created, String internal_code) {
 		super();
 		this.id_activity = id_activity;
 		this.id_program = id_program;
@@ -41,7 +44,10 @@ public class NsaActivity implements Serializable {
 		this.nm_activity = nm_activity;
 		this.created_by = created_by;
 		this.date_created = date_created;
+		this.internal_code = internal_code;
 	}
+
+
 
 	public String getId_activity() {
 		return id_activity;
@@ -93,5 +99,13 @@ public class NsaActivity implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getInternal_code() {
+		return internal_code;
+	}
+
+	public void setInternal_code(String internal_code) {
+		this.internal_code = internal_code;
 	}	
 }

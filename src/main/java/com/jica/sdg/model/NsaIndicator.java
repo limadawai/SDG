@@ -31,12 +31,15 @@ public class NsaIndicator implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date_created;
+    
+    @Column(nullable = true, length = 150)
+    private String internal_code;
 
 	public NsaIndicator() {
 	}
 
 	public NsaIndicator(String id_nsa_indicator, String id_program, String id_activity, String nm_indicator,
-			String unit, Integer created_by, Date date_created) {
+			String unit, Integer created_by, Date date_created, String internal_code) {
 		super();
 		this.id_nsa_indicator = id_nsa_indicator;
 		this.id_program = id_program;
@@ -45,7 +48,9 @@ public class NsaIndicator implements Serializable {
 		this.unit = unit;
 		this.created_by = created_by;
 		this.date_created = date_created;
+		this.internal_code = internal_code;
 	}
+
 
 	public String getId_nsa_indicator() {
 		return id_nsa_indicator;
@@ -105,5 +110,13 @@ public class NsaIndicator implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getInternal_code() {
+		return internal_code;
+	}
+
+	public void setInternal_code(String internal_code) {
+		this.internal_code = internal_code;
 	}
 }

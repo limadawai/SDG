@@ -31,12 +31,15 @@ public class NsaProgram implements Serializable {
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date_created;
+    
+    @Column(nullable = true, length = 150)
+    private String internal_code;
 
 	public NsaProgram() {
 	}
 
 	public NsaProgram(String id_program, String nm_program, Integer id_role, Integer id_monper, String rel_prog_id,
-			Integer created_by, Date date_created) {
+			Integer created_by, Date date_created, String internal_code) {
 		super();
 		this.id_program = id_program;
 		this.nm_program = nm_program;
@@ -45,7 +48,9 @@ public class NsaProgram implements Serializable {
 		this.rel_prog_id = rel_prog_id;
 		this.created_by = created_by;
 		this.date_created = date_created;
+		this.internal_code = internal_code;
 	}
+
 
 	public String getId_program() {
 		return id_program;
@@ -105,5 +110,13 @@ public class NsaProgram implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public String getInternal_code() {
+		return internal_code;
+	}
+
+	public void setInternal_code(String internal_code) {
+		this.internal_code = internal_code;
 	}
 }
