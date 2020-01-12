@@ -355,6 +355,7 @@
             var header = $("meta[name='_csrf_header']").attr("content");
             
             $('#simpan_').on('click', '#simpan', function(e){
+                var id_role         = $('#nm_ins_profil').val();
                 var id              = ($('#id').val())?$('#id').val():null;
                 var sector          = $('#sector').val();
                 var id_program      = $('#id_program').val();
@@ -383,13 +384,91 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        window.location = urls+"nsa/nsa-collaboration";
+                        $('#tabel-nsa-collaboration').DataTable({
+                            responsive: true,
+                            sDom: 'lrtip',
+                            "bLengthChange": false,
+                            "cache": false,
+                            "autoWidth": true,
+                            "responsive":true,
+                            "bDestroy": true,
+                            "ajax": {
+                                "url": urls+'list-getid-nsa-collaboration/'+id_role,
+                                dataSrc: 'content',
+                            },
+                            "searching": true,
+                            "columns": [
+                                {"data": function (row, data, index, display) {
+                                    if(row[0] == null || row[0] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[1] == null || row[1] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[2] == null || row[2] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[3] == null || row[3] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[4] == null || row[4] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[7] == null || row[7] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                    }else{
+                                        if(row[5] == null || row[5] == ""){
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                        }else{
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                        }
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[6] == null || row[6] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                    }else{
+                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
+                                    }
+
+                                }}
+                            ],
+                            "columnDefs": [
+                            ],
+                            select: true
+                        });
+                        $('.addDetail').modal("hide");
+//                        window.location = urls+"nsa/nsa-collaboration";
                     },
                 });
             });
             
             
             $('#simpan1').on('click', '#simpan_support', function(e){
+                var id_role         = $('#nm_ins_profil').val();
                 var id_philanthropy = ($('#id_philanthropy').val())?$('#id_philanthropy').val():null;
                 var type_support    = $('#type_support_1').val();
                 var nm_philanthropy = $('#nm_philanthropy').val();
@@ -428,7 +507,85 @@
                             headers:{'Accept':'application/json','Content-Type':'application/json'},
                             data: data2,
                             success: function (result1) {
-                                window.location = urls+"nsa/nsa-collaboration";
+                                
+                                $('#tabel-nsa-collaboration').DataTable({
+                                    responsive: true,
+                                    sDom: 'lrtip',
+                                    "bLengthChange": false,
+                                    "cache": false,
+                                    "autoWidth": true,
+                                    "responsive":true,
+                                    "bDestroy": true,
+                                    "ajax": {
+                                        "url": urls+'list-getid-nsa-collaboration/'+id_role,
+                                        dataSrc: 'content',
+                                    },
+                                    "searching": true,
+                                    "columns": [
+                                        {"data": function (row, data, index, display) {
+                                            if(row[0] == null || row[0] == ""){
+                                                return "<div style='font-size:90%;'>-</div>";
+                                            }else{
+                                                return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                            }
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            if(row[1] == null || row[1] == ""){
+                                                return "<div style='font-size:90%;'>-</div>";
+                                            }else{
+                                                return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                            }
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            if(row[2] == null || row[2] == ""){
+                                                return "<div style='font-size:90%;'>-</div>";
+                                            }else{
+                                                return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                                            }
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            if(row[3] == null || row[3] == ""){
+                                                return "<div style='font-size:90%;'>-</div>";
+                                            }else{
+                                                return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                            }
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            if(row[4] == null || row[4] == ""){
+                                                return "<div style='font-size:90%;'>-</div>";
+                                            }else{
+                                                return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                            }
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                            }else{
+                                                if(row[5] == null || row[5] == ""){
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                }else{
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                }
+                                            }
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            if(row[6] == null || row[6] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                            }else{
+                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
+                                            }
+
+                                        }}
+                                    ],
+                                    "columnDefs": [
+                                    ],
+                                    select: true
+                                });
+                                $('.addSupport').modal("hide");
+//                                window.location = urls+"nsa/nsa-collaboration";
                             },
                         });
                         
@@ -438,6 +595,7 @@
             
             
             $('#update_').on('click', '#update', function(e){
+                var id_role         = $('#nm_ins_profil').val();
                 var id_inst         = $('#id_inst').val();
                 var nm_inst         = $('#nm_inst').val();
                 var achievement     = $('#achievement').val();
@@ -464,7 +622,83 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        window.location = urls+"nsa/inst-profile";
+                        $('#tabel-nsa-collaboration').DataTable({
+                            responsive: true,
+                            sDom: 'lrtip',
+                            "bLengthChange": false,
+                            "cache": false,
+                            "autoWidth": true,
+                            "responsive":true,
+                            "bDestroy": true,
+                            "ajax": {
+                                "url": urls+'list-getid-nsa-collaboration/'+id_role,
+                                dataSrc: 'content',
+                            },
+                            "searching": true,
+                            "columns": [
+                                {"data": function (row, data, index, display) {
+                                    if(row[0] == null || row[0] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[1] == null || row[1] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[2] == null || row[2] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[3] == null || row[3] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[4] == null || row[4] == ""){
+                                        return "<div style='font-size:90%;'>-</div>";
+                                    }else{
+                                        return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[7] == null || row[7] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                    }else{
+                                        if(row[5] == null || row[5] == ""){
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                        }else{
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                        }
+                                    }
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    if(row[6] == null || row[6] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                    }else{
+                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
+                                    }
+
+                                }}
+                            ],
+                            "columnDefs": [
+                            ],
+                            select: true
+                        });
+//                        window.location = urls+"nsa/inst-profile";
                     	$('.addModal').modal('hide');
                     },
                 });

@@ -353,8 +353,51 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        window.location = urls+"nsa/inst-profile";
-                    	$('.addModal').modal('hide');
+//                        window.location = urls+"nsa/inst-profile";
+                    	$('#tabel-ins-profile').DataTable({
+                            responsive: true,
+                            sDom: 'lrtip',
+                            "bLengthChange": false,
+                            "cache": false,
+                            "autoWidth": true,
+                            "responsive":true,
+                            "bDestroy": true,
+                            "ajax": {
+                                "url": urls+'list-getid-ins-profil/'+id_role,
+                                dataSrc: 'content',
+                            },
+                            "searching": false,
+                            "columns": [
+                                {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                    '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                                }}
+                            ],
+                            "columnDefs": [
+                            ],
+                            select: true
+                        });
+                        $('.addModal').modal('hide');
+                        
                     },
                 });
             });
@@ -388,7 +431,49 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        window.location = urls+"nsa/inst-profile";
+//                        window.location = urls+"nsa/inst-profile";
+                        $('#tabel-ins-profile').DataTable({
+                            responsive: true,
+                            sDom: 'lrtip',
+                            "bLengthChange": false,
+                            "cache": false,
+                            "autoWidth": true,
+                            "responsive":true,
+                            "bDestroy": true,
+                            "ajax": {
+                                "url": urls+'list-getid-ins-profil/'+id_role,
+                                dataSrc: 'content',
+                            },
+                            "searching": false,
+                            "columns": [
+                                {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                                }},
+                                {"data": function (row, data, index, display) {
+                                    var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                    '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                                }}
+                            ],
+                            "columnDefs": [
+                            ],
+                            select: true
+                        });
                     	$('.addModal').modal('hide');
                     },
                 });
@@ -463,6 +548,7 @@
             
             $("#tabel-ins-profile").on('click', '.delete', function () {
                 var dataid  = $(this).attr('data-id');
+                var id_role = $('#id_role').val();
                 swal({
                     title: titleDel,
                     text: messDel,
@@ -484,7 +570,50 @@
                         },
                         error:function (result) {
                             swal(titleOk,messNOk,'error');
-                            window.location = urls+"nsa/inst-profile";
+                            
+                            $('#tabel-ins-profile').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-getid-ins-profil/'+id_role,
+                                    dataSrc: 'content',
+                                },
+                                "searching": false,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                        '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                                    }}
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });
+//                            window.location = urls+"nsa/inst-profile";
                         },
                     })
                 }, function (dismiss) {
