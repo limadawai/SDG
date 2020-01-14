@@ -141,6 +141,7 @@
                                 </label>
                                 <div class="controls">
                                     <select th:field="*{listprov}" class="span3" id="prov" name="prov">
+                                    	<option value="all">--All--</option>
 		                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
 		                            </select>
                                     <span class="help-block"></span>
@@ -192,6 +193,7 @@
     var messOk = "Data berhasil dihapus";
     var messNOk = "Data tidak dapat dihapus";
     var required = "Harus diisi";
+    var messUsername = "Username sudah ada";
     function bhs(cek){
 		if(cek){
 			$(".lang_indo").show();
@@ -203,6 +205,7 @@
 	        messOk = "Data berhasil dihapus";
 	        messNOk = "Data tidak dapat dihapus";
 	        required = "Harus diisi";
+	        messUsername = "Username sudah ada";
     	}else{	    	        
 	        $(".lang_indo").hide();
     		$(".lang_eng").show();
@@ -213,6 +216,7 @@
 	        messOk = "Delete successful";
 	        messNOk = "Can't delete data";
 	        required = "Required";
+	        messUsername = "Username already exist";
     	}
     }
     if(lang){
@@ -251,7 +255,7 @@
     	$('#id_role').html("");
     	var option = "<option value=''>-pilih-</option>";
     	$.ajax({
-            url: urls + 'manajemen/list-role/'+$('#prov').val(),
+            url: urls + 'manajemen/list-role-user/'+$('#prov').val(),
             type: 'get',
             dataType: 'json',
             cache: false,
@@ -358,11 +362,11 @@
             $("#error_name").text(required);
             cek += 1;
         }
-		if (detail == ""){
+		/* if (detail == ""){
             $("#error_detail").parents(".control-group").first().addClass("error");
             $("#error_detail").text(required);
             cek += 1;
-        }
+        } */
 		/* if (password == ""){
             $("#error_password").parents(".control-group").first().addClass("error");
             $("#error_password").text(required);
@@ -373,6 +377,20 @@
             $("#error_id_role").text(required);
             cek += 1;
         }
+		if(id_user==null){
+			$.ajax({
+				type: "GET",
+	            url: urls+'manajemen/cek-username/'+username,
+	            success: function (result) {
+	            	var cek = result.cek;
+	            	if(cek>0){
+	            		$('#myModal').modal('hide');
+	            		swal('Username',messUsername,'error');
+	            		cek += 1;
+	            	}
+	            },
+	        })
+		}
 		
 		if(cek==0){
 			var data = JSON.stringify({

@@ -16,8 +16,8 @@ public class RoleService implements IRoleService{
 	RoleRepository role;
 
 	@Override
-	public List<Role> findAll() {
-		return (List<Role>) role.findAll();
+	public List<Role> findAllGrid() {
+		return (List<Role>) role.findAllGrid();
 	}
 
 	@Override
@@ -38,6 +38,16 @@ public class RoleService implements IRoleService{
 	@Override
 	public void deleteRole(Integer id) {
 		role.deleteById(id);
+	}
+
+	@Override
+	public Integer cekRole(String id_prov, String nm_role) {
+		return role.cekNmRole(id_prov, nm_role);
+	}
+
+	@Override
+	public List<Role> findAll() {
+		return  (List<Role>) role.findAll();
 	}
 
 }

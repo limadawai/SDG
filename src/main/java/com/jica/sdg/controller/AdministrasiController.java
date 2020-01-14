@@ -72,7 +72,8 @@ public class AdministrasiController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
-    	if(id_prov.equals("000")) {
+    	String privilege = list.get().getPrivilege();
+    	if(id_prov.equals("000") && (privilege.equals("SUPER") || privilege.equals("ADMIN"))) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
@@ -81,6 +82,7 @@ public class AdministrasiController {
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
 		model.addAttribute("id_prov", id_prov);
+		model.addAttribute("privilege", privilege);
         return "admin/role_manajemen/manajemen_role";
     }
 
@@ -94,6 +96,27 @@ public class AdministrasiController {
     	}
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content", listRole);
+        return hasil;
+    }
+    
+    @GetMapping("admin/manajemen/list-role-user/{id_prov}")
+    public @ResponseBody Map<String, Object> rolesUser(HttpSession session, @PathVariable("id_prov") String id_prov) {
+    	List<Role> listRole;
+    	if(id_prov.equals("all")) {
+    		listRole = roleService.findAll();
+    	}else {
+    		listRole = roleService.findByProvince(id_prov);
+    	}
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content", listRole);
+        return hasil;
+    }
+    
+    @GetMapping("admin/manajemen/cek-role/{id_prov}/{nm_role}")
+    public @ResponseBody Map<String, Object> cekRoles(HttpSession session, @PathVariable("id_prov") String id_prov, @PathVariable("nm_role") String nm_role) {
+    	Integer cek = roleService.cekRole(id_prov, nm_role);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("cek", cek);
         return hasil;
     }
     
@@ -130,6 +153,14 @@ public class AdministrasiController {
 		model.addAttribute("privilege", privilege);
 		model.addAttribute("id_prov", id_prov);
         return "admin/role_manajemen/manajemen_user";
+    }
+    
+    @GetMapping("admin/manajemen/cek-username/{username}")
+    public @ResponseBody Map<String, Object> cekRoles(HttpSession session, @PathVariable("username") String username) {
+    	Integer cek = userService.cekUsername(username);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("cek", cek);
+        return hasil;
     }
     
     @GetMapping("admin/manajemen/list-user/{id_prov}")
