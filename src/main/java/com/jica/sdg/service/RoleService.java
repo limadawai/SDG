@@ -17,7 +17,7 @@ public class RoleService implements IRoleService{
 
 	@Override
 	public List<Role> findAll() {
-		return (List<Role>) role.findAll();
+		return (List<Role>) role.findAllGrid();
 	}
 
 	@Override

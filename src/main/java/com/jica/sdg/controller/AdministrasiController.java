@@ -72,6 +72,7 @@ public class AdministrasiController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
+    	String privilege = list.get().getPrivilege();
     	if(id_prov.equals("000")) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
@@ -81,6 +82,7 @@ public class AdministrasiController {
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
 		model.addAttribute("id_prov", id_prov);
+		model.addAttribute("privilege", privilege);
         return "admin/role_manajemen/manajemen_role";
     }
 

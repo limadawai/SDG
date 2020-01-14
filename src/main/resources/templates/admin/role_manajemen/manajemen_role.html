@@ -103,6 +103,18 @@
                             </div>
                         </div>
                         <div class="control-group">
+                                <label th:class="control-label" for="nama">
+                                	<span class="lang_eng" style="display:none">Province</span>
+                            		<span class="lang_indo">Provinsi</span>
+                                </label>
+                                <div class="controls">
+                                    <select th:field="*{listprov}" class="span3" id="prov" name="prov">
+		                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+		                            </select>
+                                    <span class="help-block"></span>
+                                </div>
+                            </div>
+                        <div class="control-group">
                             <label class="control-label" for="selkategori">
                             	<span class="lang_eng" style="display:none">Category :</span>
                             	<span class="lang_indo">Kategori :</span>
@@ -247,19 +259,23 @@
     	bhs($(this).is(':checked'));
     	loadMenuSelect();
     });
-    if($('#id_prov').val()=="all"){
-		$('#addNew').hide();
-	}else{
-		$('#addNew').show();
-	}
+    
+    var privilege = [[${privilege}]];
+    var id_prov = [[${id_prov}]];
+    
+    if(privilege=="SUPER"){
+    	$('#addNew').show();
+    	$('#prov').removeAttr('readonly');
+    }else if(privilege=="ADMIN"){
+    	$('#addNew').show();
+    	$('#prov').val(id_prov).attr('disabled', true);
+    }else{
+    	$('#addNew').hide();
+    }
+    
     $('#id_prov').on('change', function(){
     	var id = $(this).val();
     	table.ajax.url(urls+'manajemen/list-role/'+id).load();
-    	if(id=="all"){
-    		$('#addNew').hide();
-    	}else{
-    		$('#addNew').show();
-    	}
     });
     
     //Load Select Menu
@@ -462,7 +478,7 @@
 				'privilege':privilege,
 				'menu':menu,
 				'submenu':submenu,
-				'id_prov':$('#id_prov').val()
+				'id_prov':$('#prov').val()
 				});
 			$.ajax({
 				type: "POST",
