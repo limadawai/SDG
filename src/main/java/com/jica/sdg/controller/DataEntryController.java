@@ -93,5 +93,16 @@ public class DataEntryController {
         return "admin/dataentry/govactivity";
     }
 
+    // ****************** Problem Identification & Follow Up ******************
+    @GetMapping("admin/problem-identification")
+    public String problem(Model model, HttpSession session) {
+        model.addAttribute("title", "SDG Problem Identification & Follow Up");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        return "admin/dataentry/problem";
+    }
+
+    // ****************** Best Practice ******************
+
 
 }
