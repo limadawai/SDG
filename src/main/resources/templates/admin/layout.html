@@ -115,7 +115,7 @@
                 $('#fs').change(function() {
                     if($(this).is(':checked')) {
                         $.ajax({
-                            url: "/sdg/admin/bahasa",
+                            url: urls + "bahasa",
                             headers: {"X-CSRF-TOKEN": token},
                             type: "post",
                             data: {"bhs": "0"},
@@ -127,7 +127,7 @@
                         });
                     } else {
                         $.ajax({
-                            url: "/sdg/admin/english",
+                            url: urls + "english",
                             headers: {"X-CSRF-TOKEN": token},
                             type: "post",
                             data: {"bhs": "1"},
@@ -194,7 +194,7 @@
                     $("#keluar").html("Logout");
                     $("#bhs").html("English :");
                     $.ajax({
-                        url: urls+'menu',
+                        url: urls + 'menu',
                         type: 'get',
                         dataType: 'json',
                         cache: false,

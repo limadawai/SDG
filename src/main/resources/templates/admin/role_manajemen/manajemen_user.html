@@ -299,7 +299,7 @@
                     '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
                     '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
                     '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-            	}else if(privilege=="ADMIN" && id_prov==$('#id_prov').val()){
+            	}else if(privilege=="ADMIN" && id_prov==row[5]){
             		return "<div style='text-align:center;'>"+
                     '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
                     '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
