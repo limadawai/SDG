@@ -192,6 +192,7 @@
     var messOk = "Data berhasil dihapus";
     var messNOk = "Data tidak dapat dihapus";
     var required = "Harus diisi";
+    var messUsername = "Username sudah ada";
     function bhs(cek){
 		if(cek){
 			$(".lang_indo").show();
@@ -203,6 +204,7 @@
 	        messOk = "Data berhasil dihapus";
 	        messNOk = "Data tidak dapat dihapus";
 	        required = "Harus diisi";
+	        messUsername = "Username sudah ada";
     	}else{	    	        
 	        $(".lang_indo").hide();
     		$(".lang_eng").show();
@@ -213,6 +215,7 @@
 	        messOk = "Delete successful";
 	        messNOk = "Can't delete data";
 	        required = "Required";
+	        messUsername = "Username already exist";
     	}
     }
     if(lang){
@@ -373,6 +376,20 @@
             $("#error_id_role").text(required);
             cek += 1;
         }
+		if(id_user==null){
+			$.ajax({
+				type: "GET",
+	            url: urls+'manajemen/cek-username/'+username,
+	            success: function (result) {
+	            	var cek = result.cek;
+	            	if(cek>0){
+	            		$('#myModal').modal('hide');
+	            		swal('Username',messUsername,'error');
+	            		cek += 1;
+	            	}
+	            },
+	        })
+		}
 		
 		if(cek==0){
 			var data = JSON.stringify({

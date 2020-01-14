@@ -40,4 +40,9 @@ public class RoleService implements IRoleService{
 		role.deleteById(id);
 	}
 
+	@Override
+	public Integer cekRole(String id_prov, String nm_role) {
+		return role.cekNmRole(id_prov, nm_role);
+	}
+
 }

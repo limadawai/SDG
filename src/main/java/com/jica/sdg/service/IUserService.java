@@ -21,5 +21,7 @@ public interface IUserService {
     void saveUsere(User rol);
     
     void deleteUser(Integer id);
+    
+    Integer cekUsername(String username);
 
 }

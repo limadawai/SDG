@@ -49,4 +49,9 @@ public class UserService implements IUserService {
 	public List findAllGrid() {
 		return userRepository.findAllGrid();
 	}
+
+	@Override
+	public Integer cekUsername(String username) {
+		return userRepository.cekUsername(username);
+	}
 }
