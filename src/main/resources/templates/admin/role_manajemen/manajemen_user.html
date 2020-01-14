@@ -232,10 +232,10 @@
     var privilege = [[${privilege}]];
     var id_prov = [[${id_prov}]];
     
-    if(privilege=="SUPER"){
+    if((privilege=="SUPER" || privilege=="ADMIN") && id_prov=="000"){
     	$('#addNew').show();
     	$('#prov').removeAttr('readonly');
-    }else if(privilege=="ADMIN"){
+    }else if(privilege=="ADMIN" && id_prov!="000"){
     	$('#addNew').show();
     	$('#prov').val(id_prov).attr('disabled', true);
     }else{

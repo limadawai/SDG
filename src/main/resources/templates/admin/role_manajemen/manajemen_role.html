@@ -267,6 +267,9 @@
     var privilege = [[${privilege}]];
     var id_prov = [[${id_prov}]];
     
+    console.log(privilege);
+    console.log(id_prov);
+    
     if((privilege=="SUPER" || privilege=="ADMIN") && id_prov=="000"){
     	$('#addNew').show();
     	$('#prov').removeAttr('readonly');
@@ -391,10 +394,21 @@
                 return "<div style='font-size:90%;'>"+(row.desc_role)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='text-align:center;'>"+
-                    '<button data-id="'+row.id_role+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row.id_role+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row.id_role+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';}
+            	
+            	if(privilege=="SUPER"){
+            		 return "<div style='text-align:center;'>"+
+                     '<button data-id="'+row.id_role+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id_role+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id_role+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+            	}else if(privilege=="ADMIN" && id_prov==row.id_prov && row.privilege!="SUPER"){
+            		 return "<div style='text-align:center;'>"+
+                     '<button data-id="'+row.id_role+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id_role+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id_role+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+            	}else{
+            		return "";
+            	}
+              }
             }
         ],
         "columnDefs": [
