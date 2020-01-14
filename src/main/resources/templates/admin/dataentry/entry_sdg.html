@@ -170,25 +170,25 @@
             var messOk = "Data berhasil dihapus";
             var messNOk = "Data tidak dapat dihapus";
             $('#fs').on('change', function(e){
-                    if($(this).is(':checked')){
-                            $(".lang_indo").show();
-                            $(".lang_eng").hide();
-                            titleDel = "Anda Yakin";
-                            messDel = "Menghapus Data?";
-                            buttDel = 'Ya, Hapus data ini!';
-                            titleOk	= "Hapus";
+                if($(this).is(':checked')){
+                    $(".lang_indo").show();
+                    $(".lang_eng").hide();
+                    titleDel = "Anda Yakin";
+                    messDel = "Menghapus Data?";
+                    buttDel = 'Ya, Hapus data ini!';
+                    titleOk	= "Hapus";
                     messOk = "Data berhasil dihapus";
                     messNOk = "Data tidak dapat dihapus";
-                    }else{
-                            $(".lang_indo").hide();
-                            $(".lang_eng").show();
-                            titleDel = "Are you sure";
-                            messDel = "Delete this data?";
-                            buttDel = 'Yes, Delete this data!';
-                            titleOk	= "Delete";
+                }else{
+                    $(".lang_indo").hide();
+                    $(".lang_eng").show();
+                    titleDel = "Are you sure";
+                    messDel = "Delete this data?";
+                    buttDel = 'Yes, Delete this data!';
+                    titleOk	= "Delete";
                     messOk = "Delete successful";
                     messNOk = "Can't delete data";
-                    }
+                }
             });
             
             

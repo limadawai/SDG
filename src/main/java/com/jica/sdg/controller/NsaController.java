@@ -76,18 +76,22 @@ public class NsaController {
     @GetMapping("admin/nsa/profile")
     public String nsa_profile(Model model, HttpSession session) {
 //        model.addAttribute("title", "NSA Profile");
+    	Integer id_role = (Integer) session.getAttribute("id_role");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
         model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
-    	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
-    	String id_prov = list.get().getId_prov();
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
     	if(id_prov.equals("000")) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
         return "admin/nsa/nsa_profile";
     }
     
@@ -118,7 +122,7 @@ public class NsaController {
     @GetMapping("admin/list-get-option-role-nsa-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionNsaProfilList(@PathVariable("id") String id) {
         
-        String sql  = "select * from ref_role as a where a.id_prov = :id ";
+        String sql  = "select * from ref_role as a where a.id_prov = :id and cat_role = 'NSA' ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
@@ -175,6 +179,21 @@ public class NsaController {
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("listInsProfile", insProfilrService.findRoleInstitusi());
+        
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        
         return "admin/nsa/ins_profile";
     }
     

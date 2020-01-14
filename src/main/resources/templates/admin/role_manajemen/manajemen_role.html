@@ -125,6 +125,7 @@
 	                                <option value="Government">Government</option>
 	                                <option value="NSA">Non Government : NSA</option>
 	                                <option value="Institution">Non Government : Institution</option>
+	                                <option value="gri_ojk">GRI/OJK</option>
 	                            </select>
 	                            <span class="help-block" id="error_cat_role"></span>
 	                         </div>
@@ -266,6 +267,9 @@
     var privilege = [[${privilege}]];
     var id_prov = [[${id_prov}]];
     
+    console.log(privilege);
+    console.log(id_prov);
+    
     if((privilege=="SUPER" || privilege=="ADMIN") && id_prov=="000"){
     	$('#addNew').show();
     	$('#prov').removeAttr('readonly');
@@ -390,10 +394,20 @@
                 return "<div style='font-size:90%;'>"+(row.desc_role)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='text-align:center;'>"+
-                    '<button data-id="'+row.id_role+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row.id_role+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row.id_role+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';}
+            	if(privilege=="SUPER" && row.privilege!="SUPER"){
+            		 return "<div style='text-align:center;'>"+
+                     '<button data-id="'+row.id_role+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id_role+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id_role+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+            	}else if(privilege=="ADMIN" && id_prov==row.id_prov && row.privilege!="SUPER"){
+            		 return "<div style='text-align:center;'>"+
+                     '<button data-id="'+row.id_role+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id_role+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id_role+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+            	}else{
+            		return "";
+            	}
+              }
             }
         ],
         "columnDefs": [
@@ -427,6 +441,7 @@
 		var desc_role = $('#desc_role').val();
 		var cat_role = $('#cat_role').val();
 		var privilege = $('#privilege').val();
+		var prov = $('#prov').val();
 		var status_role;
 		if(cat_role=="Government"){
 			status_role = "Admin Government";
@@ -473,43 +488,70 @@
 		if(id_role==null){
 			$.ajax({
 				type: "GET",
-	            url: urls+'manajemen/cek-role/'+id_prov+'/'+nm_role,
+	            url: urls+'manajemen/cek-role/'+prov+'/'+nm_role,
 	            success: function (result) {
-	            	var cek = result.cek;
-	            	if(cek>0){
+	            	var ceka = result.cek;
+	            	if(ceka>0){
 	            		$('#myModal').modal('hide');
 	            		swal('Role',messRole,'error');
 	            		cek += 1;
+	            	}else{
+	            		if(cek==0){
+	            			var data = JSON.stringify({
+	            				'id_role':id_role,
+	            				'nm_role':nm_role,
+	            				'desc_role':desc_role,
+	            				'cat_role':cat_role,
+	            				'status_role':status_role,
+	            				'privilege':privilege,
+	            				'menu':menu,
+	            				'submenu':submenu,
+	            				'id_prov':prov
+	            				});
+	            			$.ajax({
+	            				type: "POST",
+	                            url: urls+'manajemen/save-role',
+	                            beforeSend : function(xhr){
+	                            	xhr.setRequestHeader(header,token);
+	                            },
+	                            headers:{'Accept':'application/json','Content-Type':'application/json'},
+	            				data: data,
+	                            success: function (result) {
+	                            	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()).load();
+	                            	$('#myModal').modal('hide');
+	                            },
+	                        });
+	            		}
 	            	}
 	            },
 	        })
-		}
-		
-		if(cek==0){
-			var data = JSON.stringify({
-				'id_role':id_role,
-				'nm_role':nm_role,
-				'desc_role':desc_role,
-				'cat_role':cat_role,
-				'status_role':status_role,
-				'privilege':privilege,
-				'menu':menu,
-				'submenu':submenu,
-				'id_prov':$('#prov').val()
-				});
-			$.ajax({
-				type: "POST",
-                url: urls+'manajemen/save-role',
-                beforeSend : function(xhr){
-                	xhr.setRequestHeader(header,token);
-                },
-                headers:{'Accept':'application/json','Content-Type':'application/json'},
-				data: data,
-                success: function (result) {
-                	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()).load();
-                	$('#myModal').modal('hide');
-                },
-            });
+		}else{
+			if(cek==0){
+    			var data = JSON.stringify({
+    				'id_role':id_role,
+    				'nm_role':nm_role,
+    				'desc_role':desc_role,
+    				'cat_role':cat_role,
+    				'status_role':status_role,
+    				'privilege':privilege,
+    				'menu':menu,
+    				'submenu':submenu,
+    				'id_prov':prov
+    				});
+    			$.ajax({
+    				type: "POST",
+                    url: urls+'manajemen/save-role',
+                    beforeSend : function(xhr){
+                    	xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+    				data: data,
+                    success: function (result) {
+                    	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()).load();
+                    	$('#myModal').modal('hide');
+                    },
+                });
+    		}
 		}
 	});
 	

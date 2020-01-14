@@ -99,10 +99,22 @@ public class DataEntryController {
         model.addAttribute("title", "SDG Problem Identification & Follow Up");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("listRole", roleService.findAll());
+        model.addAttribute("listranrad", ranRadService.findAll());
         return "admin/dataentry/problem";
     }
 
     // ****************** Best Practice ******************
-
+    @GetMapping("admin/best-practice")
+    public String bestpractice(Model model, HttpSession session) {
+        model.addAttribute("title", "Best Practice");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        model.addAttribute("listRole", roleService.findAll());
+        model.addAttribute("listranrad", ranRadService.findAll());
+        return "admin/dataentry/practice";
+    }
 
 }

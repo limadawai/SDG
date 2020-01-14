@@ -141,6 +141,7 @@
                                 </label>
                                 <div class="controls">
                                     <select th:field="*{listprov}" class="span3" id="prov" name="prov">
+                                    	<option value="all">--All--</option>
 		                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
 		                            </select>
                                     <span class="help-block"></span>
@@ -231,10 +232,10 @@
     var privilege = [[${privilege}]];
     var id_prov = [[${id_prov}]];
     
-    if(privilege=="SUPER"){
+    if((privilege=="SUPER" || privilege=="ADMIN") && id_prov=="000"){
     	$('#addNew').show();
     	$('#prov').removeAttr('readonly');
-    }else if(privilege=="ADMIN"){
+    }else if(privilege=="ADMIN" && id_prov!="000"){
     	$('#addNew').show();
     	$('#prov').val(id_prov).attr('disabled', true);
     }else{
@@ -254,7 +255,7 @@
     	$('#id_role').html("");
     	var option = "<option value=''>-pilih-</option>";
     	$.ajax({
-            url: urls + 'manajemen/list-role/'+$('#prov').val(),
+            url: urls + 'manajemen/list-role-user/'+$('#prov').val(),
             type: 'get',
             dataType: 'json',
             cache: false,
@@ -361,11 +362,11 @@
             $("#error_name").text(required);
             cek += 1;
         }
-		if (detail == ""){
+		/* if (detail == ""){
             $("#error_detail").parents(".control-group").first().addClass("error");
             $("#error_detail").text(required);
             cek += 1;
-        }
+        } */
 		/* if (password == ""){
             $("#error_password").parents(".control-group").first().addClass("error");
             $("#error_password").text(required);
@@ -381,40 +382,66 @@
 				type: "GET",
 	            url: urls+'manajemen/cek-username/'+username,
 	            success: function (result) {
-	            	var cek = result.cek;
-	            	if(cek>0){
+	            	var val = result.cek;
+	            	if(val>0){
 	            		$('#myModal').modal('hide');
 	            		swal('Username',messUsername,'error');
 	            		cek += 1;
+	            	}else{
+	            		if(cek==0){
+	            			var data = JSON.stringify({
+	            				'id_user':id_user,
+	            				'userName':username,
+	            				'name':name,
+	            				'detail':detail,
+	            				'enabled':1,
+	            				'id_role':id_role,
+	            				'password':password,
+	            				'email':email
+	            				});
+	            			$.ajax({
+	            				type: "POST",
+	                            url: urls+'manajemen/save-user',
+	                            beforeSend : function(xhr){
+	                            	xhr.setRequestHeader(header,token);
+	                            },
+	                            headers:{'Accept':'application/json','Content-Type':'application/json'},
+	            				data: data,
+	                            success: function (result) {
+	                            	table.ajax.url(urls+'manajemen/list-user/'+$('#id_prov').val()).load();
+	                            	$('#myModal').modal('hide');
+	                            },
+	                        });
+	            		}
 	            	}
 	            },
 	        })
-		}
-		
-		if(cek==0){
-			var data = JSON.stringify({
-				'id_user':id_user,
-				'userName':username,
-				'name':name,
-				'detail':detail,
-				'enabled':1,
-				'id_role':id_role,
-				'password':password,
-				'email':email
-				});
-			$.ajax({
-				type: "POST",
-                url: urls+'manajemen/save-user',
-                beforeSend : function(xhr){
-                	xhr.setRequestHeader(header,token);
-                },
-                headers:{'Accept':'application/json','Content-Type':'application/json'},
-				data: data,
-                success: function (result) {
-                	table.ajax.url(urls+'manajemen/list-user/'+$('#id_prov').val()).load();
-                	$('#myModal').modal('hide');
-                },
-            });
+		}else{
+			if(cek==0){
+    			var data = JSON.stringify({
+    				'id_user':id_user,
+    				'userName':username,
+    				'name':name,
+    				'detail':detail,
+    				'enabled':1,
+    				'id_role':id_role,
+    				'password':password,
+    				'email':email
+    				});
+    			$.ajax({
+    				type: "POST",
+                    url: urls+'manajemen/save-user',
+                    beforeSend : function(xhr){
+                    	xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+    				data: data,
+                    success: function (result) {
+                    	table.ajax.url(urls+'manajemen/list-user/'+$('#id_prov').val()).load();
+                    	$('#myModal').modal('hide');
+                    },
+                });
+    		}
 		}
 	});
 	

@@ -233,40 +233,44 @@
             
             //Bahasa
             var titleDel = "Anda Yakin";
-            var messDel = "Menghapus Data?";
-            var buttDel = 'Ya, Hapus data ini!';
-            var titleOk	= "Hapus";
-            var messOk = "Data berhasil dihapus";
-            var messNOk = "Data tidak dapat dihapus";
-            var required = "Harus diisi";
-            function bhs(cek){
-                if(cek){
-                    $(".lang_indo").show();
-                    $(".lang_eng").hide();
-                    titleDel = "Anda Yakin";
-                    messDel = "Menghapus Data?";
-                    buttDel = 'Ya, Hapus data ini!';
-                    titleOk	= "Hapus";
-                    messOk = "Data berhasil dihapus";
-                    messNOk = "Data tidak dapat dihapus";
-                    required = "Harus diisi";
-                }else{	    	        
-                    $(".lang_indo").hide();
-                    $(".lang_eng").show();
-                    titleDel = "Are you sure";
-                    messDel = "Delete this data?";
-                    buttDel = 'Yes, Delete this data!';
-                    titleOk	= "Delete";
-                    messOk = "Delete successful";
-                    messNOk = "Can't delete data";
-                    required = "Required";
-                }
-            }
-            if(lang){
-                bhs(lang=="0");
-            }else{
-                bhs($('#fs').is(':checked'));
-            }
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
+	        function bhs(cek){
+				if(cek){
+					$(".lang_indo").show();
+	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
+	        	}else{	    	        
+	    	        $(".lang_indo").hide();
+	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
+	        	}
+	        }
+	        if(lang){
+	        	bhs(lang=="0");
+	        }else{
+	        	bhs($('#fs').is(':checked'));
+	        }
+	        
+	        $('#fs').on('change', function(e){
+	        	bhs($(this).is(':checked'));
+	        });
             
             
             $("#nm_ins_profil").on('change', function(e){
