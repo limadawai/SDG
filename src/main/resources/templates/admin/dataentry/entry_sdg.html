@@ -32,19 +32,19 @@
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
-                            <select id="nm_ins_profil" name="idrole" class="form-control">
+                            <select id="daerah" name="idrole" class="form-control">
                                 <option value="0" >-- Pilih Daerah --</option>
-                                <option th:each="f:${listInsProfile}" th:value="${f.id_inst}" th:text="${f.nm_inst}"></option>
+                                <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
                             </select>
                             <select id="nm_ins_profil" name="idrole" class="form-control">
                                 <option value="0" >-- Pilih Role --</option>
-                                <option th:each="f:${listInsProfile}" th:value="${f.id_inst}" th:text="${f.nm_inst}"></option>
+                                <option th:each="f:${listRole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
 <!--                            <div class="lang_indo"><span> Periode</span></div>
                             <div class="lang_eng"><span> Period</span></div>-->
-                            <select id="nm_ins_profil" name="idrole" class="form-control">
+                            <select id="periode" name="idrole" class="form-control">
                                 <option value="0" >-- Pilih Periode --</option>
-                                <option th:each="f:${listInsProfile}" th:value="${f.id_inst}" th:text="${f.nm_inst}"></option>
+                                <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
                             </select>
 <!--                            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
                                 <button class="btn btn-warning btn-small tambah">
@@ -366,9 +366,23 @@
                 $('.addModal').modal("show");
                 $('#simpan_').show();
             });
-            
-            
 
+            // var valdaerah = $("#daerah").val();
+            // $("#daerah").on("change", function() {
+            //     var selectPer = $("#periode option:selected").html();
+            //     var selectVal = $("option:selected", this).val();
+            //     if (selectVal == "000") {
+            //         // $(this).html();
+            //         alert(selectPer);
+            //     }
+            // });
+            var selValDaerah = $("#daerah option:selected").val();
+            $("#periode").on("change", function(){
+                if (selValDaerah == "000") {
+                    // $(this).html("RAN "+teks);
+                    alert("teks");
+                }
+            });
         //});
     // ]]>
 </script>
