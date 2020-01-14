@@ -141,6 +141,7 @@
                                 </label>
                                 <div class="controls">
                                     <select th:field="*{listprov}" class="span3" id="prov" name="prov">
+                                    	<option value="all">--All--</option>
 		                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
 		                            </select>
                                     <span class="help-block"></span>
@@ -254,7 +255,7 @@
     	$('#id_role').html("");
     	var option = "<option value=''>-pilih-</option>";
     	$.ajax({
-            url: urls + 'manajemen/list-role/'+$('#prov').val(),
+            url: urls + 'manajemen/list-role-user/'+$('#prov').val(),
             type: 'get',
             dataType: 'json',
             cache: false,
@@ -361,11 +362,11 @@
             $("#error_name").text(required);
             cek += 1;
         }
-		if (detail == ""){
+		/* if (detail == ""){
             $("#error_detail").parents(".control-group").first().addClass("error");
             $("#error_detail").text(required);
             cek += 1;
-        }
+        } */
 		/* if (password == ""){
             $("#error_password").parents(".control-group").first().addClass("error");
             $("#error_password").text(required);

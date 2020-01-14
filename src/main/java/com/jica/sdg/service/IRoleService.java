@@ -7,6 +7,8 @@ import java.util.Optional;
 
 public interface IRoleService {
 
+    List<Role> findAllGrid();
+    
     List<Role> findAll();
     
     Optional<Role> findOne(Integer id);
