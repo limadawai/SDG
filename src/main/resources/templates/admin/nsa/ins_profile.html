@@ -161,42 +161,124 @@
     // <![CDATA[
             //$(document).ready(function (e) {
             
+            var id_role     = [[${id_role}]];
+            var id_prov     = [[${id_prov}]];
+            var privilege   = [[${privilege}]];
+            
+            if(id_role == '1'){
+//                alert('admin');
+            }else{
+//                alert('bukan '+id_role);
+                $("#nm_ins_profil").val(id_role).trigger("change").attr('disabled',true);
+                
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-getid-ins-profil/'+id_role,
+                    success: function (result1) {
+                        if(result1.content[0] ==  null){
+//                            jika kosong
+                            $('#id_inst').val('');
+                            $('#id_role').val(id_role);
+                            $('#nm_inst').val('');
+                            $('#achievement').val('');
+                            $('#loc_inst').val('');
+                            $('#beneficiaries').val('');
+                            $('#year_impl').val('');
+                            $('#major_part').val('');
+
+                            $('.addModal').modal("show");
+                            $('#simpan_').show();
+                            $('#update_').hide();
+                            //tutup kosong
+                        }else{
+                            $('#tabel-ins-profile').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-getid-ins-profil/'+id_role,
+                                    dataSrc: 'content',
+                                },
+                                "searching": false,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                        '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                                    }}
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });	
+                        }
+                    }
+                });
+                
+            }
+            
             //Bahasa
             var titleDel = "Anda Yakin";
-            var messDel = "Menghapus Data?";
-            var buttDel = 'Ya, Hapus data ini!';
-            var titleOk	= "Hapus";
-            var messOk = "Data berhasil dihapus";
-            var messNOk = "Data tidak dapat dihapus";
-            var required = "Harus diisi";
-            function bhs(cek){
-                if(cek){
-                    $(".lang_indo").show();
-                    $(".lang_eng").hide();
-                    titleDel = "Anda Yakin";
-                    messDel = "Menghapus Data?";
-                    buttDel = 'Ya, Hapus data ini!';
-                    titleOk	= "Hapus";
-                    messOk = "Data berhasil dihapus";
-                    messNOk = "Data tidak dapat dihapus";
-                    required = "Harus diisi";
-                }else{	    	        
-                    $(".lang_indo").hide();
-                    $(".lang_eng").show();
-                    titleDel = "Are you sure";
-                    messDel = "Delete this data?";
-                    buttDel = 'Yes, Delete this data!';
-                    titleOk	= "Delete";
-                    messOk = "Delete successful";
-                    messNOk = "Can't delete data";
-                    required = "Required";
-                }
-            }
-            if(lang){
-                bhs(lang=="0");
-            }else{
-                bhs($('#fs').is(':checked'));
-            }
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
+	        function bhs(cek){
+				if(cek){
+					$(".lang_indo").show();
+	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
+	        	}else{	    	        
+	    	        $(".lang_indo").hide();
+	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
+	        	}
+	        }
+	        if(lang){
+	        	bhs(lang=="0");
+	        }else{
+	        	bhs($('#fs').is(':checked'));
+	        }
+	        
+	        $('#fs').on('change', function(e){
+	        	bhs($(this).is(':checked'));
+	        });
             
             
             $("#nm_ins_profil").on('change', function(e){
