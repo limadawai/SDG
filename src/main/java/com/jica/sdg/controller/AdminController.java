@@ -145,9 +145,14 @@ public class AdminController {
     		Optional<Provinsi> list1 = prov.findOne(id_prov);
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
     	}
+    	if(privilege.equals("SUPER") || privilege.equals("ADMIN")) {
+    		model.addAttribute("role", roleService.findByProvince(id_prov));
+    	}else {
+    		Optional<Role> list1 = roleService.findOne(id_role);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("role", foundUpdateObject1));
+    	}
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
-        model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/non-gov/program";
