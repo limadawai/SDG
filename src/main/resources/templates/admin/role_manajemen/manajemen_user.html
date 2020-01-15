@@ -455,6 +455,7 @@
             	console.log(val);
             	$('#id_user').val(val.id_user);
 				$('#username').val(val.userName);
+				$('#password').val(val.password);
 				$('#name').val(val.name);
 				$('#detail').text(val.detail);
 				$('#id_role').val(val.id_role);
@@ -474,7 +475,7 @@
 				$('#name').val(val.name).attr("readonly",true);
 				$('#detail').text(val.detail).attr("readonly",true);
 				$('#id_role').val(val.id_role).attr("readonly",true);
-				$('#password').attr("readonly",true);
+				$('#password').val(val.password).attr("readonly",true);
 				$('#email').val(val.email).attr("readonly",true);
 				$('#myModal').modal('show');
             },
