@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
@@ -65,8 +67,13 @@ public class AdminController {
     @Autowired
     ISubmenuService submenuService;
     @GetMapping("admin/submenu")
-    public @ResponseBody List<Submenu> submenuList(@RequestParam int id) {
-        List<Submenu> list = submenuService.findSubmenu(id);
+    public @ResponseBody List<Submenu> submenuList(@RequestParam int id, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list1 = roleService.findOne(id_role);
+    	String ids[] = list1.get().getSubmenu().split(",");
+    	List<String> id_submenu = Arrays.asList(ids);
+        //List<Submenu> list = submenuService.findSubmenu(id);
+    	List<Submenu> list = submenuService.findSubmenuByRole(id, id_submenu);
         return list;
     }
 
