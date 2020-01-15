@@ -29,7 +29,7 @@
                                 <span class="add-on"><i class="icon-search"></i></span>
                             </div>
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
-                            	<option th:if="${id_prov == '000'}" value="all">-All-</option>
+                            	<option th:if="${id_prov == '000' && privilege!='USER'}" value="all">-All-</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <button class="btn btn-warning btn-small pull-right" id="addNew" data-toggle="modal" data-target="#myModal">

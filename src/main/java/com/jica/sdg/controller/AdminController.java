@@ -118,7 +118,8 @@ public class AdminController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
-    	if(id_prov.equals("000")) {
+    	String privilege = list.get().getPrivilege();
+    	if(privilege.equals("SUPER")) {
     		model.addAttribute("prov", prov.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = prov.findOne(id_prov);
@@ -137,7 +138,8 @@ public class AdminController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
-    	if(id_prov.equals("000")) {
+    	String privilege = list.get().getPrivilege();
+    	if(privilege.equals("SUPER")) {
     		model.addAttribute("prov", prov.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = prov.findOne(id_prov);

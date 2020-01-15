@@ -423,7 +423,7 @@ public class RanRadSdgController {
     	gov.setDate_created(new Date());
     	govIndicatorService.saveGovIndicator(gov);
     	
-    	if(!sdg_indicator.equals("")) {
+    	if(!sdg_indicator.equals("0")) {
     		String[] a = sdg_indicator.split("---");
     		String id_goals = a[0];
     		String id_target = a[1];
@@ -571,7 +571,7 @@ public class RanRadSdgController {
     	gov.setDate_created(new Date());
     	nsaIndicatorService.saveNsaIndicator(gov);
     	
-    	if(!sdg_indicator.equals("")) {
+    	if(!sdg_indicator.equals("0")) {
     		String[] a = sdg_indicator.split("---");
     		String id_goals = a[0];
     		String id_target = a[1];
