@@ -136,6 +136,7 @@
                             <div class="control-group">
                                 <label for="nm_inst" class="lang_indo">Pencapaian SDG Tahun Ini :</label>
                                 <label for="nm_inst" class="lang_eng" style="display: none">SDGs Achievements For The Year :</label>
+                                <input name="id" id="id" type="text" class="input-block-level">
                                 <input name="achievement1" id="achievement1" type="text" class="input-block-level">
                                 <input name="achievement2" id="achievement2" type="text" class="input-block-level">
                                 <input name="achievement3" id="achievement3" type="text" class="input-block-level">
@@ -362,7 +363,7 @@
                     {"data": function (row, data, index, display) {
                         if(row[13] == 'yearly'){
                             if(row[9] == null || row[9] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                             }else{
                                 var target  = row[8];
                                 var achieve = row[9];
@@ -380,11 +381,11 @@
                                         var color_sts = 'btn btn-danger';
                                     }
                                 }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
                             }
                         }else if(row[13] == 'semesterly'){
                             if(row[9] == null || row[9] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                             }else{
                                 var target  = row[8];
                                 var achieve = row[9];
@@ -402,11 +403,11 @@
                                         var color_sts = 'btn btn-danger';
                                     }
                                 }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
                             }
                         }else if(row[13] == 'quarterly'){
                             if(row[9] == null || row[9] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                             }else{
                                 var target  = row[8];
                                 var achieve = row[9];
@@ -424,7 +425,7 @@
                                         var color_sts = 'btn btn-danger';
                                     }
                                 }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
                             }
                         }else{
                             return "<div style='font-size:90%;'>"+row[9]+"</div>";
@@ -440,7 +441,7 @@
                             
                         }else if(row[13] == 'semesterly'){
                             if(row[10] == null || row[10] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                             }else{
                                 var target  = row[8];
                                 var achieve = row[10];
@@ -458,11 +459,11 @@
                                         var color_sts = 'btn btn-danger';
                                     }
                                 }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
                             }
                         }else if(row[13] == 'quarterly'){
                             if(row[10] == null || row[10] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                             }else{
                                 var target  = row[8];
                                 var achieve = row[10];
@@ -480,7 +481,7 @@
                                         var color_sts = 'btn btn-danger';
                                     }
                                 }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
                             }
                         }else{
                             return "<div style='font-size:90%;'>"+row[10]+"</div>";
@@ -503,7 +504,7 @@
                             }
                         }else if(row[13] == 'quarterly'){
                             if(row[11] == null || row[11] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                             }else{
                                 var target  = row[8];
                                 var achieve = row[11];
@@ -521,7 +522,7 @@
                                         var color_sts = 'btn btn-danger';
                                     }
                                 }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[11]+"</a>";
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[11]+"</a>";
                             }
                         }else{
                             return "<div style='font-size:90%;'>"+row[11]+"</div>";
@@ -543,7 +544,7 @@
                             }
                         }else if(row[13] == 'quarterly'){
                             if(row[12] == null || row[12] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                             }else{
                                 var target  = row[8];
                                 var achieve = row[11];
@@ -561,7 +562,7 @@
                                         var color_sts = 'btn btn-danger';
                                     }
                                 }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
                             }
                         }else{
                             return "<div style='font-size:90%;'>"+row[12]+"</div>";
@@ -616,6 +617,7 @@
             });
             
             $('#simpan_').on('click', '#simpan', function(e){
+                var id                  = ($('#id').val())?$('#id').val():null;
                 var id_sdg_indicator    = $('#id_sdg_indicator').val();
                 var achievement1        = $('#achievement1').val();
                 var achievement2        = $('#achievement2').val();
@@ -627,7 +629,7 @@
                 var id_monper           = v_data_id[0];
                 var tahun               = v_data_id[1];
                 var data    = JSON.stringify({
-                                'id': null,
+                                'id': id,
                                 'id_sdg_indicator': id_sdg_indicator,
                                 'achievement1': achievement1,
                                 'achievement2': achievement2,
@@ -667,6 +669,7 @@
                 var value3          = data[3];
                 var value4          = data[4];
                 var kode            = data[5];
+                var id              = data[6];
                 
                 if(value1 == 'null' || value1 == ""){
                     var achieve1 = '0';
@@ -717,7 +720,7 @@
                     $('#achievement3').val("0").hide();
                     $('#achievement4').val("0").hide();
                 }
-                
+                $('#id').val(id).hide();
                 $('.addModal').modal("show");
                 $('#simpan_').show();
             });

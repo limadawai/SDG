@@ -94,7 +94,7 @@ public class DataEntryController {
     @GetMapping("admin/list-entry-sdg/{id_prov}/{id_role}/{id_monper}/{year}")
     public @ResponseBody Map<String, Object> listEntrySdg(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
         String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
-                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator\n" +
+                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1 \n" +
                     "from assign_sdg_indicator as a\n" +
                     "left join sdg_goals as b on a.id_goals = b.id_goals\n" +
                     "left join sdg_target as c on a.id_target = c.id_target\n" +
@@ -118,7 +118,8 @@ public class DataEntryController {
     
     @PostMapping(path = "admin/save-entry-sdg", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveNsaProfil(@RequestBody EntrySdg entrySdg) {
+    
+    public void saveEntrySdg(@RequestBody EntrySdg entrySdg) {
         String id_sdg_indicator = entrySdg.getId_sdg_indicator();
         int achievement1        = entrySdg.getAchievement1();
         int achievement2        = entrySdg.getAchievement2();
@@ -127,8 +128,8 @@ public class DataEntryController {
         int year_entry          = entrySdg.getYear_entry();
         int id_role             = entrySdg.getId_role();
         int id_monper           = entrySdg.getId_monper();
-//        entrySdgService.deleteEntrySdg(id);
-        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+        entrySdgService.saveEntrySdg(entrySdg);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
 
     @GetMapping("admin/government-program-monitoring")
