@@ -101,7 +101,7 @@ public class DataEntryController {
                     "left join sdg_indicator as d on a.id_indicator = d.id_indicator\n" +
                     "inner join \n" +
                     "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id_indicator = e.id_sdg_indicator \n" +
-                    "inner join \n" +
+                    "left join \n" +
                     "(select * from entry_sdg where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as f on d.id_indicator = f.id_sdg_indicator \n" +
                     "left join ran_rad as g on a.id_monper = g.id_monper \n" +
                     "where a.id_role = :id_role and a.id_monper = :id_monper and a.id_prov = :id_prov ";
