@@ -1,23 +1,18 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.EntryProblemIdentity;
 import com.jica.sdg.model.EntrySdg;
-import com.jica.sdg.model.EntrySdgIndicatorJoin;
-import com.jica.sdg.service.IEntrySdgService;
-import com.jica.sdg.service.IProvinsiService;
+import com.jica.sdg.service.*;
+
 import java.util.HashMap;
 
-import com.jica.sdg.service.IRanRadService;
-import com.jica.sdg.service.IRoleService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -43,6 +38,9 @@ public class DataEntryController {
 
     @Autowired
     IRanRadService ranRadService;
+
+    @Autowired
+    EntryProblemIdentifyService identifyService;
 
     //entry SDG
     @GetMapping("admin/sdg-indicator-monitoring")
@@ -103,6 +101,14 @@ public class DataEntryController {
         model.addAttribute("listRole", roleService.findAll());
         model.addAttribute("listranrad", ranRadService.findAll());
         return "admin/dataentry/problem";
+    }
+
+    @GetMapping("admin/list-problem")
+    public @ResponseBody Map<String, Object> problemList() {
+        List<EntryProblemIdentity> list = identifyService.findGoals();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
     }
 
     // ****************** Best Practice ******************

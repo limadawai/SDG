@@ -4,7 +4,7 @@ import com.jica.sdg.model.EntryProblemIdentity;
 
 import java.util.List;
 
-public interface IEntryProblemIdentityService {
+public interface IEntryProblemIdentifyService {
 
     List<EntryProblemIdentity> findAllProblem();
 
