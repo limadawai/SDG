@@ -9,7 +9,7 @@
     <div th:include="admin/layout :: menu"></div>
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Government Program</a></div>
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Non-Government Program</a></div>
         </div>
         <div class="container-fluid">
         	<div class="row-fluid">
@@ -130,7 +130,7 @@
                 </div>
             </div>
         </div>
-        <div id="myModal" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="myModal"data-backdrop="static" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 class="lang_eng" style="display:none">Add Activity Indicators</h3>
@@ -184,7 +184,7 @@
 				    <label class="lang_indo control-label">Indikator SDG untuk Mapping</label>
 				    <div class="controls">
 				    	<select name="sdg_indicator" id="sdg_indicator" class="input-xlarge input-block-level">
-				    		<option value="">--select--</option>
+				    		<option value="0">--select--</option>
 	        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
 	        			</select>
 					    <span class="help-block" id="error_unit"></span>
@@ -381,6 +381,9 @@
 				var budsource = $('#budsource').val();
 				var internal_code = $('#internal_code').val();
 				var sdg_indicator = $('#sdg_indicator').val();
+				if(internal_code==""){
+					internal_code = id_nsa_indicator;
+				}
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;

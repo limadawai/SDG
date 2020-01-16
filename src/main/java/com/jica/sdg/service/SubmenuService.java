@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class SubmenuService implements ISubmenuService {
@@ -18,4 +19,10 @@ public class SubmenuService implements ISubmenuService {
         List submenu = (List<Submenu>) repository.findSubmenu(id);
         return submenu;
     }
+
+	@Override
+	public List<Submenu> findSubmenuByRole(int id, List<String> ids) {
+		List submenu = (List<Submenu>) repository.findSubmenuByRole(id, ids);
+		return submenu;
+	}
 }

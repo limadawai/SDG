@@ -73,7 +73,7 @@ public class AdministrasiController {
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
     	String privilege = list.get().getPrivilege();
-    	if(id_prov.equals("000") && (privilege.equals("SUPER") || privilege.equals("ADMIN"))) {
+    	if(privilege.equals("SUPER")) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
@@ -181,7 +181,7 @@ public class AdministrasiController {
 	public void saveUser(@RequestBody User user) {
     	if(user.getId_user() != null) {
     		Optional<User> list = userService.findOne(user.getId_user());
-        	if(user.getPassword().equals("")) {
+        	if(user.getPassword().equals(list.get().getPassword())) {
         		user.setPassword(list.get().getPassword());
         	}else {
         		BCryptPasswordEncoder b = new BCryptPasswordEncoder();
@@ -215,8 +215,9 @@ public class AdministrasiController {
         Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
+    	String privilege = list.get().getPrivilege();
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
-        if(id_prov.equals("000")) {
+        if(privilege.equals("SUPER")) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);

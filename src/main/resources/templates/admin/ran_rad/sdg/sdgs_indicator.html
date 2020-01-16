@@ -53,54 +53,25 @@
 	                                <table class="table table-bordered table-striped" id="tabel-indicator">
 	                                    <thead>
 	                                        <tr>
-	                                            <th style="text-align:center;font-size:80%;" width="5%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
 	                                            	<span class="lang_eng" style="display:none">No</span>
 													<span class="lang_indo">No</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="5%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
 	                                            	<span class="lang_eng" style="display:none">Code</span>
 	                                            	<span class="lang_indo">Kode</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="50%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="50%">
 	                                            	<span class="lang_eng" style="display:none">SDGs Indicator</span>
 	                                            	<span class="lang_indo">Indikator SDG</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="5%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
 	                                            	<span class="lang_eng" style="display:none">Unit</span>
 	                                            	<span class="lang_indo">Satuan</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="5%" colspan="5">
-	                                            	<span class="lang_eng" style="display:none">Target</span>
-	                                            	<span class="lang_indo">Target</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="10%" rowspan="2">
-	                                            	<span class="lang_eng" style="display:none">Baseline</span>
-	                                            	<span class="lang_indo">Baseline</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="10%" rowspan="2">
-	                                            	<span class="lang_eng" style="display:none">Funding Resource</span>
-	                                            	<span class="lang_indo">Funding Resource</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="10%" rowspan="2">
+	                                            <th style="text-align:center;font-size:80%;" width="10%">
 	                                            	<span class="lang_eng" style="display:none">Action</span>
 	                                            	<span class="lang_indo">Aksi</span>
-	                                            </th>
-	                                        </tr>
-	                                        <tr>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	1<span class="lang_eng" style="display:none">st</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	2<span class="lang_eng" style="display:none">nd</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	3<span class="lang_eng" style="display:none">rd</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	4<span class="lang_eng" style="display:none">th</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	5<span class="lang_eng" style="display:none">th</span>
 	                                            </th>
 	                                        </tr>
 	                                    </thead>
@@ -114,7 +85,7 @@
                 </div>
             </div>
         </div>
-        <div id="myModal" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="myModal"data-backdrop="static" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 class="lang_eng" style="display:none">Add SDGs Indicators</h3>
@@ -148,43 +119,17 @@
 				    <label class="lang_eng control-label" style="display:none">Unit</label>
 				    <label class="lang_indo control-label">Satuan</label>
 				    <div class="controls">
-				    	<select placeholder="Pilih satuan" id="unit" name="unit" class="input-xlarge input-block-level">
-					    	<option value="">select</option>
-					    	<option value="orang">Orang</option>
-					    </select>
+				    	<select name="unit" id="unit" class="input-xlarge input-block-level">
+	        				<option th:each="f:${unit}" th:value="${f.id_unit}" th:text="${f.nm_unit}"></option>
+	        			</select>
 					    <span class="help-block" id="error_unit"></span>
-				    </div>
-				  </div>
-				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">5 Years Target</label>
-				    <label class="lang_indo control-label">Target 5 Tahunan</label>
-				    <input type="text" id="target_year1" name="target_year1" class="input-small" placeholder="First"/>
-				    <input type="text" id="target_year2" name="target_year2" class="input-small" placeholder="Second"/>
-				    <input type="text" id="target_year3" name="target_year3" class="input-small" placeholder="Third"/>
-				    <input type="text" id="target_year4" name="target_year4" class="input-small" placeholder="Fourth"/>
-				    <input type="text" id="target_year5" name="target_year5" class="input-small" placeholder="Fifth"/>
-				  </div>
-				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Baseline</label>
-				    <label class="lang_indo control-label">Baseline</label>
-				    <div class="controls">
-				    	<input type="text" id="baseline" name="baseline" class="input-xlarge input-block-level"/>
-				    	<span class="help-block" id="error_baseline"></span>
-				    </div>
-				  </div>
-				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Funding Source</label>
-				    <label class="lang_indo control-label">Funding Source</label>
-				    <div class="controls">
-				    	<input type="text" id="budsource" name="budsource" class="input-xlarge input-block-level"/>
-					    <span class="help-block" id="error_budsource"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Increment/Decrement</label>
 				    <label class="lang_indo control-label">Increment/Decrement</label>
 				    <div class="controls">
-				    	<select id="increment_decrement" name="increment_decrement" class="input-xlarge">
+				    	<select id="increment_decrement" name="increment_decrement" class="input-xlarge input-block-level">
 				    		<option value="">select</option>
 					    	<option value="Increment">Increment</option>
 					    	<option value="Decrement">Decrement</option>
@@ -254,6 +199,7 @@
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        });
+	                    
 			var table = $('#tabel-indicator').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
@@ -271,47 +217,21 @@
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_indicator+"</div>";
+							return "<div style='font-size:90%;'>"+row[0]+"</div>";
 						}},
 
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row.id_goals+"/target/"+row.id_target+"/indicator/"+row.id_indicator+"/disaggre' class='target'>"+row.nm_indicator+"</a></div>";
+							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row[1]+"/target/"+row[2]+"/indicator/"+row[0]+"/disaggre' class='target'>"+row[3]+"</a></div>";
 						}},
 					{"data": function (row, data, index, display) {
-						return "<div style='font-size:90%;'>"+row.unit+"</div>";
-					}},
-					{"data": function (row, data, index, display) {
-						var value = (row.target_year1)?row.target_year1:"";
-						return "<div style='font-size:90%;'>"+value+"</div>";
-					}},
-					{"data": function (row, data, index, display) {
-						var value = (row.target_year2)?row.target_year2:"";
-						return "<div style='font-size:90%;'>"+value+"</div>";
-					}},
-					{"data": function (row, data, index, display) {
-						var value = (row.target_year3)?row.target_year3:"";
-						return "<div style='font-size:90%;'>"+value+"</div>";
-					}},
-					{"data": function (row, data, index, display) {
-						var value = (row.target_year4)?row.target_year4:"";
-						return "<div style='font-size:90%;'>"+value+"</div>";
-					}},
-					{"data": function (row, data, index, display) {
-						var value = (row.target_year5)?row.target_year5:"";
-						return "<div style='font-size:90%;'>"+value+"</div>";
-					}},
-					{"data": function (row, data, index, display) {
-						return "<div style='font-size:90%;'>"+row.baseline+"</div>";
-					}},
-					{"data": function (row, data, index, display) {
-						return "<div style='font-size:90%;'>"+row.budsource+"</div>";
+						return "<div style='font-size:90%;'>"+row[4]+"</div>";
 					}},
 					{"data": function (row, data, index, display) {
 							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row.id_indicator+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id_indicator+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id_indicator+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-						}}
+							'<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+							'<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+						}},
 				],
 				"columnDefs": [
 				],
@@ -349,13 +269,6 @@
 				var id_indicator = $('#id_indicator').val();
 				var nm_indicator = $('#nm_indicator').val();
 				var unit = $('#unit').val();
-				var target_year1 = $('#target_year1').val();
-				var target_year2 = $('#target_year2').val();
-				var target_year3 = $('#target_year3').val();
-				var target_year4 = $('#target_year4').val();
-				var target_year5 = $('#target_year5').val();
-				var baseline = $('#baseline').val();
-				var budsource = $('#budsource').val();
 				var increment_decrement = $('#increment_decrement').val();
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
@@ -375,16 +288,6 @@
                     $("#error_unit").text(required);
                     cek += 1;
                 }
-				if (baseline == ""){
-                    $("#error_baseline").parents(".control-group").first().addClass("error");
-                    $("#error_baseline").text(required);
-                    cek += 1;
-                }
-				if (budsource == ""){
-                    $("#error_budsource").parents(".control-group").first().addClass("error");
-                    $("#error_budsource").text(required);
-                    cek += 1;
-                }
 				if (increment_decrement == ""){
                     $("#error_increment_decrement").parents(".control-group").first().addClass("error");
                     $("#error_increment_decrement").text(required);
@@ -397,13 +300,6 @@
 						'id_indicator':id_indicator,
 						'nm_indicator':nm_indicator,
 						'unit':unit,
-						'target_year1':target_year1,
-						'target_year2':target_year2,
-						'target_year3':target_year3,
-						'target_year4':target_year4,
-						'target_year5':target_year5,
-						'baseline':baseline,
-						'budsource':budsource,
 						'increment_decrement':increment_decrement,
 						});
 					$.ajax({
@@ -434,13 +330,6 @@
                     	$('#id_indicator').val(val.id_indicator).attr("readonly",true);
         				$('#nm_indicator').val(val.nm_indicator);
         				$('#unit').val(val.unit);
-        				$('#target_year1').val(val.target_year1);
-        				$('#target_year2').val(val.target_year2);
-        				$('#target_year3').val(val.target_year3);
-        				$('#target_year4').val(val.target_year4);
-        				$('#target_year5').val(val.target_year5);
-        				$('#baseline').val(val.baseline);
-        				$('#budsource').val(val.budsource);
         				$('#increment_decrement').val(val.increment_decrement);
 						$('#myModal').modal('show');
                     },
@@ -457,13 +346,6 @@
                     	$('#id_indicator').val(val.id_indicator).attr("readonly",true);
         				$('#nm_indicator').val(val.nm_indicator).attr("readonly",true);
         				$('#unit').val(val.unit).attr("disabled",true);
-        				$('#target_year1').val(val.target_year1).attr("readonly",true);
-        				$('#target_year2').val(val.target_year2).attr("readonly",true);
-        				$('#target_year3').val(val.target_year3).attr("readonly",true);
-        				$('#target_year4').val(val.target_year4).attr("readonly",true);
-        				$('#target_year5').val(val.target_year5).attr("readonly",true);
-        				$('#baseline').val(val.baseline).attr("readonly",true);
-        				$('#budsource').val(val.budsource).attr("disabled",true);
         				$('#increment_decrement').val(val.increment_decrement).attr("disabled",true);
 						$('#myModal').modal('show');
                     },

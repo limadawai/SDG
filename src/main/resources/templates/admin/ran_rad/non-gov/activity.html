@@ -9,7 +9,7 @@
     <div th:include="admin/layout :: menu"></div>
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Government Program</a></div>
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Non-Government Program</a></div>
         </div>
         <div class="container-fluid">
         	<div class="row-fluid">
@@ -98,7 +98,7 @@
                 </div>
             </div>
         </div>
-        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="myModal" data-backdrop="static"class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 class="lang_eng" style="display:none">Add Government Activity</h3>
@@ -259,6 +259,9 @@
 				var nm_activity = $('#nm_activity').val();
 				var id_role = $('#id_role').val();
 				var internal_code = $('#internal_code').val();
+				if(internal_code==""){
+					internal_code = id_activity;
+				}
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;

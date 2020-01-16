@@ -180,12 +180,13 @@ public class RanRadSdgController {
         list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("unit", unitService.findAll());
         return "admin/ran_rad/sdg/sdgs_indicator";
     }
     
     @GetMapping("admin/list-sdgIndicator/{id_goals}/{id_target}")
     public @ResponseBody Map<String, Object> sdgIndicatorList(@PathVariable("id_goals") String id_goals, @PathVariable("id_target") String id_target) {
-        List<SdgIndicator> list = sdgIndicatorService.findAll(id_goals, id_target);
+        List list = sdgIndicatorService.findAllGrid(id_goals, id_target);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
@@ -422,7 +423,7 @@ public class RanRadSdgController {
     	gov.setDate_created(new Date());
     	govIndicatorService.saveGovIndicator(gov);
     	
-    	if(!sdg_indicator.equals("")) {
+    	if(!sdg_indicator.equals("0")) {
     		String[] a = sdg_indicator.split("---");
     		String id_goals = a[0];
     		String id_target = a[1];
@@ -570,7 +571,7 @@ public class RanRadSdgController {
     	gov.setDate_created(new Date());
     	nsaIndicatorService.saveNsaIndicator(gov);
     	
-    	if(!sdg_indicator.equals("")) {
+    	if(!sdg_indicator.equals("0")) {
     		String[] a = sdg_indicator.split("---");
     		String id_goals = a[0];
     		String id_target = a[1];

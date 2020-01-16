@@ -10,7 +10,7 @@
     <div th:include="admin/layout :: menu"></div>
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Government Program</a></div>
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Non-Government Program</a></div>
         </div>
         <div class="container-fluid">
         	<div class="row-fluid">
@@ -65,6 +65,10 @@
                                             	<span class="lang_indo">Kode</span>
                                             </th>
                                             <th style="text-align:center;font-size:80%;">
+	                                            	<span class="lang_eng" style="display:none">Internal Code</span>
+	                                            	<span class="lang_indo">Kode Internal</span>
+	                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
                                             	Program
                                             </th>
                                             <th style="text-align:center;font-size:80%;">
@@ -84,7 +88,7 @@
             </div>
         </div>
         
-        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="myModal"data-backdrop="static" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 class="lang_eng" style="display:none">Add Government Program</h3>
@@ -99,6 +103,14 @@
                                         <input type="text" id="id_program" name="id_program" class="input-block-level"/>
 				    	<input type="hidden" id="created_by" name="created_by"/>
 				    	<span class="help-block" id="error_id_program"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none;text-align:left">Internal Code</label>
+				    <label class="lang_indo control-label" style="text-align:left">Kode Internal</label>
+				    <div class="controls">
+                        <input type="text" id="internal_code" name="internal_code" class="input-block-level"/>
+				    	<span class="help-block" id="error_internal_code"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
@@ -273,6 +285,9 @@
 							return "<div style='font-size:90%;'>"+row.id_program+"</div>";
 						}},
 						{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row.internal_code+"</div>";
+						}},
+						{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/non-gov/program/"+row.id_program+"/activity' class='target'>"+row.nm_program+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
@@ -314,6 +329,10 @@
 				var id_role = $('#id_role').val();
 				var id_monper = $('#id_monper').val();
 				var rel_prog_id = $('#rel_prog_id').val();
+				var internal_code = $('#internal_code').val();
+				if(internal_code==""){
+					internal_code = id_program;
+				}
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -334,7 +353,8 @@
 						'nm_program':nm_program,
 						'id_role':id_role,
 						'id_monper':id_monper,
-						'rel_prog_id':rel_prog_id
+						'rel_prog_id':rel_prog_id,
+						'internal_code':internal_code
 						});
 					$.ajax({
 						type: "POST",

@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Controller
 public class AdminController {
@@ -65,8 +67,13 @@ public class AdminController {
     @Autowired
     ISubmenuService submenuService;
     @GetMapping("admin/submenu")
-    public @ResponseBody List<Submenu> submenuList(@RequestParam int id) {
-        List<Submenu> list = submenuService.findSubmenu(id);
+    public @ResponseBody List<Submenu> submenuList(@RequestParam int id, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list1 = roleService.findOne(id_role);
+    	String ids[] = list1.get().getSubmenu().split(",");
+    	List<String> id_submenu = Arrays.asList(ids);
+        //List<Submenu> list = submenuService.findSubmenu(id);
+    	List<Submenu> list = submenuService.findSubmenuByRole(id, id_submenu);
         return list;
     }
 
@@ -111,7 +118,8 @@ public class AdminController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
-    	if(id_prov.equals("000")) {
+    	String privilege = list.get().getPrivilege();
+    	if(privilege.equals("SUPER")) {
     		model.addAttribute("prov", prov.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = prov.findOne(id_prov);
@@ -130,15 +138,21 @@ public class AdminController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
-    	if(id_prov.equals("000")) {
+    	String privilege = list.get().getPrivilege();
+    	if(privilege.equals("SUPER")) {
     		model.addAttribute("prov", prov.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = prov.findOne(id_prov);
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
     	}
+    	if(privilege.equals("SUPER") || privilege.equals("ADMIN")) {
+    		model.addAttribute("role", roleService.findByProvince(id_prov));
+    	}else {
+    		Optional<Role> list1 = roleService.findOne(id_role);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("role", foundUpdateObject1));
+    	}
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
-        model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/non-gov/program";
@@ -147,7 +161,16 @@ public class AdminController {
     @GetMapping("admin/ran_rad")
     public String ran_goals(Model model, HttpSession session) {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        model.addAttribute("prov",prov.findAllProvinsi());
+        Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov = list.get().getId_prov();
+    	String privilege = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+    		model.addAttribute("prov", prov.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = prov.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
+    	}
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/monper";

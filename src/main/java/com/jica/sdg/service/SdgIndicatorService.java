@@ -39,4 +39,10 @@ public class SdgIndicatorService implements ISdgIndicatorService{
 	public List<SdgIndicator> findAll() {
 		return (List<SdgIndicator>) sdgIndicatorRepo.findAll();
 	}
+
+	@Override
+	public List findAllGrid(String id_goals, String id_target) {
+		List list = sdgIndicatorRepo.findAllGrid(id_goals, id_target);
+		return list;
+	}
 }
