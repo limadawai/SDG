@@ -47,10 +47,6 @@ public class EntrySdg implements Serializable {
     @Column(name = "new_value4")
     private Integer new_value4;
     
-    @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date show_report_date;
-    
     @Column(name = "year_entry")
     private Integer year_entry;
     
@@ -70,7 +66,7 @@ public class EntrySdg implements Serializable {
     public EntrySdg() {
     }
 
-    public EntrySdg(Integer id, String id_sdg_indicator, Integer achievement1, Integer achievement2, Integer achievement3, Integer achievement4, Integer new_value1, Integer new_value2, Integer new_value3, Integer new_value4, Date show_report_date, Integer year_entry, Integer id_role, Integer created_by, Date date_created, Integer id_monper) {
+    public EntrySdg(Integer id, String id_sdg_indicator, Integer achievement1, Integer achievement2, Integer achievement3, Integer achievement4, Integer new_value1, Integer new_value2, Integer new_value3, Integer new_value4, Integer year_entry, Integer id_role, Integer created_by, Date date_created, Integer id_monper) {
         this.id                 = id;
         this.id_sdg_indicator   = id_sdg_indicator;
         this.achievement1       = achievement1;
@@ -81,7 +77,7 @@ public class EntrySdg implements Serializable {
         this.new_value2         = new_value2;
         this.new_value3         = new_value3;
         this.new_value4         = new_value4;
-        this.show_report_date   = show_report_date;
+//        this.show_report_date   = show_report_date;
         this.year_entry         = year_entry;
         this.id_role            = id_role;
         this.created_by         = created_by;
@@ -167,14 +163,6 @@ public class EntrySdg implements Serializable {
 
     public void setNew_value4(Integer new_value4) {
         this.new_value4 = new_value4;
-    }
-
-    public Date getShow_report_date() {
-        return show_report_date;
-    }
-
-    public void setShow_report_date(Date show_report_date) {
-        this.show_report_date = show_report_date;
     }
 
     public Integer getYear_entry() {

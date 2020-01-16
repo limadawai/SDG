@@ -1,6 +1,6 @@
 package com.jica.sdg.service;
 
-import com.jica.sdg.model.EntryProblemIdentity;
+import com.jica.sdg.model.EntryProblemIdentify;
 import com.jica.sdg.repository.EntryProblemIdentifyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,15 @@ public class EntryProblemIdentifyService implements IEntryProblemIdentifyService
     private EntryProblemIdentifyRepository repository;
 
     @Override
-    public List<EntryProblemIdentity> findAllProblem() {
-        List problem = (List<EntryProblemIdentity>) repository.findAll();
+    public List<EntryProblemIdentify> findAllProblem() {
+        List problem = (List<EntryProblemIdentify>) repository.findAll();
         return problem;
     }
 
-    public List<EntryProblemIdentity> findGoals() {
-        List goals = (List<EntryProblemIdentity>) repository.findGoals();
+    @Override
+    public List<EntryProblemIdentify> findGoals() {
+        List goals = (List<EntryProblemIdentify>) repository.findGoals();
         return goals;
     }
+
 }

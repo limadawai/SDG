@@ -22,5 +22,10 @@ public interface EntrySdgRepository extends CrudRepository<EntrySdg, Long> {
     @Modifying(clearAutomatically = true)
     @Query(value = "delete from entry_sdg where id_sdg_indicator = :id ",nativeQuery = true)
     void deleteEntrySdg(@Param("id") String id);
-
+    
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update entry_sdg set achievement1 = :achievement1, achievement2 = :achievement2, achievement3 = :achievement3, achievement4 = :achievement4 where id_sdg_indicator = :id_sdg_indicator and year_entry = :year_entry and id_role = :id_role and id_monper = :id_monper ",nativeQuery = true)
+    void updateEntrySdg(@Param("id_sdg_indicator") String id_sdg_indicator, @Param("achievement1") Integer achievement1, @Param("achievement2") Integer achievement2, @Param("achievement3") Integer achievement3, @Param("achievement4") Integer achievement4, @Param("year_entry") Integer year_entry, @Param("id_role") Integer id_role, @Param("id_monper") Integer id_monper);
+    
 }

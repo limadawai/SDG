@@ -132,6 +132,19 @@ public class NsaController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-option-role-all-profil/{id}")
+    public @ResponseBody Map<String, Object> getOptionAllProfilList(@PathVariable("id") String id) {
+        
+        String sql  = "select * from ref_role as a where a.id_prov = :id ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-nsa-profil-detail")
     public @ResponseBody Map<String, Object> nsaProfilListDetail() {
         List<Nsadetail> list = nsaDetailService.findAll();

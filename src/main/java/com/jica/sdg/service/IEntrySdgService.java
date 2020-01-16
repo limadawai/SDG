@@ -13,6 +13,8 @@ public interface IEntrySdgService {
 //    List<Nsadetail> findId(String id);
 //
     void saveEntrySdg(EntrySdg esdg);
+    
+    void updateEntrySdg(String id_sdg_indicator, Integer achievement1, Integer achievement2, Integer achievement3, Integer achievement4, Integer year_entry, Integer id_role, Integer id_monper);
 //    
 ////    Optional<Nsaprofile> findOne(String id);
 ////    
