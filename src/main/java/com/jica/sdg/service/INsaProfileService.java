@@ -15,6 +15,7 @@ public interface INsaProfileService {
     void saveNsaProfil(Nsaprofile ins);
     
     List<Role> findRoleNsa();
+    List<Role> findRoleAll();
 //    
     void deleteNsaProfil(Integer id);
 }

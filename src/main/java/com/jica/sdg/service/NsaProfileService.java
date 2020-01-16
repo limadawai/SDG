@@ -41,6 +41,11 @@ public class NsaProfileService implements INsaProfileService{
 	public List<Role> findRoleNsa() {
             return (List<Role>) nsaRoleRepo.findRoleNsa();
 	}
+        
+	@Override
+	public List<Role> findRoleAll() {
+            return (List<Role>) nsaRoleRepo.findRoleAll();
+	}
 //        
         @Override
 	public void deleteNsaProfil(Integer id_nsa) {

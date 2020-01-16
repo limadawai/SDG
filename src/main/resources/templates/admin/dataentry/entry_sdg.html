@@ -19,7 +19,7 @@
             <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / SDG Indicators Monitoring</a></div>
             <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Indikator SDG</a></div>
         </div>
-        <div class="container-fluid">
+        <div class="container-fluid" id="teruskan">
             <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title lang_eng" id="judul-eng" style="display: none">
@@ -32,20 +32,24 @@
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
-                            <select id="daerah" name="idrole" class="form-control">
-                                <option value="0" >-- Pilih Daerah --</option>
-                                <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
+                            <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                                <option value="0" >-- Pilih --</option>
+                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
-                            <select id="nm_ins_profil" name="idrole" class="form-control">
-                                <option value="0" >-- Pilih Role --</option>
-                                <option th:each="f:${listRole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+                            <select id="idrole" name="idrole" class="form-control">
+                                <option value="0" >-- Pilih --</option>
+                                <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
 <!--                            <div class="lang_indo"><span> Periode</span></div>
                             <div class="lang_eng"><span> Period</span></div>-->
-                            <select id="periode" name="idrole" class="form-control">
-                                <option value="0" >-- Pilih Periode --</option>
-                                <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
+                            <select id="periode" name="periode" class="form-control">
+                                <option value="0" >-- Pilih --</option>
+                                <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
                             </select>
+                            <div class="input-append pull-right">
+                                <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
+                                <span class="add-on"><i class="icon-search"></i></span>
+                            </div>
 <!--                            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
                                 <button class="btn btn-warning btn-small tambah">
                                     Add New
@@ -61,7 +65,7 @@
                                 <button class="btn btn-primary btn-small">Ekspor</button>
                             </div>-->
                         </div>
-                        <div class="row-fluid">
+<!--                        <div class="row-fluid">
                             <div class="span6">
                             </div>
                             <div class="span6" align="right">
@@ -70,42 +74,36 @@
                                     <span class="add-on"><i class="icon-search"></i></span>
                                 </div>
                             </div>
-                    	</div>
+                    	</div>-->
                         <div class="row-fluid">
                             <div class="span12">
                                 <table  id="tabel-entri-sdg" class="table table-striped table-bordered">
                                     <thead >
                                         <tr class="lang_eng" style="display: none">
-                                            <th colspan="8" style="text-align:left;font-size:80%;">Goal Name :</th>
-                                        </tr>
-                                        <tr class="lang_indo" id="thead_indo">
-                                            <th colspan="8" style="text-align:left;font-size:80%;">Nama Tujuan :</th>
-                                        </tr>
-                                        <tr class="lang_eng" style="display: none">
-                                            <th colspan="8" style="text-align:left;font-size:80%;">Target Name :</th>
-                                        </tr>
-                                        <tr class="lang_indo" id="thead_indo">
-                                            <th colspan="8" style="text-align:left;font-size:80%;">Nama Target :</th>
-                                        </tr>
-                                        <tr class="lang_eng" style="display: none">
-                                            <th style="text-align:center;font-size:80%;">Indicator Code</th>
-                                            <th style="text-align:center;font-size:80%;">Indicator Name</th>
-                                            <th style="text-align:center;font-size:80%;">Data Source</th>
+                                            <th style="text-align:center;font-size:80%;width: 10%">Indicator Code</th>
+                                            <th style="text-align:center;font-size:80%;width: 45%">Indicator Name</th>
+                                            <!--<th style="text-align:center;font-size:80%;">Data Source</th>-->
                                             <th style="text-align:center;font-size:80%;">Unit</th>
-                                            <th style="text-align:center;font-size:80%;">Baseline</th>
-                                            <th style="text-align:center;font-size:80%;">Target SDGs For The Current Year</th>
-                                            <th style="text-align:center;font-size:80%;">SDGs Achievements For The Year</th>
-                                            <th style="text-align:center;font-size:80%;">Status</th>
+                                            <!--<th style="text-align:center;font-size:80%;">Baseline</th>-->
+                                            <th style="text-align:center;font-size:80%;">Target SDGs</th>
+                                            <th style="text-align:center;font-size:80%;">SDGs Achievements I</th>
+                                            <th style="text-align:center;font-size:80%;">SDGs Achievements II</th>
+                                            <th style="text-align:center;font-size:80%;">SDGs Achievements III</th>
+                                            <th style="text-align:center;font-size:80%;">SDGs Achievements IV</th>
+                                            <!--<th style="text-align:center;font-size:80%;">Status</th>-->
                                         </tr>
                                         <tr class="lang_indo" id="thead_indo">
-                                            <th style="text-align:center;font-size:80%;">Kode Indikator</th>
-                                            <th style="text-align:center;font-size:80%;">Nama Indikator</th>
-                                            <th style="text-align:center;font-size:80%;">Sumber Data</th>
+                                            <th style="text-align:center;font-size:80%;width: 10%">Kode Indikator</th>
+                                            <th style="text-align:center;font-size:80%;width: 45%">Nama Indikator</th>
+                                            <!--<th style="text-align:center;font-size:80%;">Sumber Data</th>-->
                                             <th style="text-align:center;font-size:80%;">Unit</th>
-                                            <th style="text-align:center;font-size:80%;">Garis Dasar</th>
-                                            <th style="text-align:center;font-size:80%;">Target SDG Tahun Ini</th>
-                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG Tahun Ini</th>
-                                            <th style="text-align:center;font-size:80%;">Status</th>
+                                            <!--<th style="text-align:center;font-size:80%;">Garis Dasar</th>-->
+                                            <th style="text-align:center;font-size:80%;">Target SDG</th>
+                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG I</th>
+                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG II</th>
+                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG III</th>
+                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG IV</th>
+                                            <!--<th style="text-align:center;font-size:80%;">Status</th>-->
                                         </tr>
                                     </thead>
                                     <tbody id="tbody_entri-sdg">
@@ -117,13 +115,13 @@
                 </div>
             </div>
             <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
-                <button class="btn btn-success btn-small">Apply</button>
+                <a class="btn btn-success btn-small" id="apply_btn" data-id="#">Apply</a>
             </div>
             <div class="btn-toolbar lang_indo" style="float:right" id="btn_indo">
-                <button class="btn btn-success btn-small">Terapkan</button>
+                <a class="btn btn-success btn-small" id="apply_btn" data-id="#">Terapkan</a>
             </div>
         </div>
-        <div class="modal fade addModal" role="dialog" aria-hidden="true">
+        <div class="modal hide fade addModal" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -139,6 +137,9 @@
                                 <label for="nm_inst" class="lang_indo">Pencapaian SDG Tahun Ini :</label>
                                 <label for="nm_inst" class="lang_eng" style="display: none">SDGs Achievements For The Year :</label>
                                 <input name="achievement1" id="achievement1" type="text" class="input-block-level">
+                                <input name="achievement2" id="achievement2" type="text" class="input-block-level">
+                                <input name="achievement3" id="achievement3" type="text" class="input-block-level">
+                                <input name="achievement4" id="achievement4" type="text" class="input-block-level">
                                 <input name="id_sdg_indicator" id="id_sdg_indicator" type="hidden" class="input-block-level">
                             </div>
                         </div>
@@ -162,84 +163,171 @@
     // <![CDATA[
             //$(document).ready(function (e) {
             
-            //Bahasa
-            var titleDel = "Anda Yakin";
-            var messDel = "Menghapus Data?";
-            var buttDel = 'Ya, Hapus data ini!';
-            var titleOk	= "Hapus";
-            var messOk = "Data berhasil dihapus";
-            var messNOk = "Data tidak dapat dihapus";
-            $('#fs').on('change', function(e){
-                    if($(this).is(':checked')){
-                            $(".lang_indo").show();
-                            $(".lang_eng").hide();
-                            titleDel = "Anda Yakin";
-                            messDel = "Menghapus Data?";
-                            buttDel = 'Ya, Hapus data ini!';
-                            titleOk	= "Hapus";
-                    messOk = "Data berhasil dihapus";
-                    messNOk = "Data tidak dapat dihapus";
-                    }else{
-                            $(".lang_indo").hide();
-                            $(".lang_eng").show();
-                            titleDel = "Are you sure";
-                            messDel = "Delete this data?";
-                            buttDel = 'Yes, Delete this data!';
-                            titleOk	= "Delete";
-                    messOk = "Delete successful";
-                    messNOk = "Can't delete data";
+            //validasi role
+            var id_role     = [[${id_role}]];
+            var id_prov     = [[${id_prov}]];
+            var privilege   = [[${privilege}]];
+            
+            if(id_role == '1'){
+                
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-all-profil/'+id_prov,
+                    success: function (result) {
+                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                        if(privilege == 'ADMIN'){
+                            $("#idrole").val('0').trigger("change").attr('disabled',false);
+                        }else{
+                            $("#idrole").val(id_role).trigger("change").attr('disabled',true);
+                        }
                     }
+                });
+                
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-monper/'+id_prov,
+                    success: function (result1) {
+                        $("#periode").html('<option value="0" >-- Pilih --</option>');
+                        var array1 = result1.content;
+                        if (array1 != '') {
+                            for (i in array1) {
+                                var selisih     = (array1[i][2] - array1[i][1]);
+//                                console.log(array1[i][2]);
+                                var x;
+                                for(x=0; x<=selisih; x++){
+//                                    console.log((array1[i][1]+x));
+                                    $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+                                }
+                                
+                            }
+                        }
+                        
+                    }
+                });
+                
+                $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
+                
+                
+                
+            }
+            
+            
+            $("#id_prov").on('change', function(e){
+                var id_prov = this.value ;
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-all-profil/'+id_prov,
+                    success: function (result) {
+                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                        grid();
+                    }
+                });
+                
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-monper/'+id_prov,
+                    success: function (result1) {
+                        $("#periode").html('<option value="0" >-- Pilih --</option>');
+                        var array1 = result1.content;
+                        if (array1 != '') {
+                            for (i in array1) {
+                                var selisih     = (array1[i][2] - array1[i][1]);
+//                                console.log(array1[i][2]);
+                                var x;
+                                for(x=0; x<=selisih; x++){
+//                                    console.log((array1[i][1]+x));
+                                    $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+                                }
+                                
+                            }
+                        }
+                    }
+                });
+            });
+            
+            $("#periode").on('change', function(e){
+                var data_id     = this.value.split("###");;
+                var id_monper   = data_id[0];
+                var tahun       = data_id[1];
+                grid();
+            });
+            
+            $("#idrole").on('change', function(e){
+                var data_id     = this.value.split("###");;
+                var id_monper   = data_id[0];
+                var tahun       = data_id[1];
+                grid();
             });
             
             
-//            $("#nm_ins_profil").on('change', function(e){
-//                var id = this.value ;
-//                $('#tabel-ins-profile').DataTable({
-//                    responsive: true,
-//                    sDom: 'lrtip',
-//                    "bLengthChange": false,
-//                    "cache": false,
-//                    "autoWidth": true,
-//                    "responsive":true,
-//                    "bDestroy": true,
-//                    "ajax": {
-//                        "url": urls+'list-getid-ins-profil/'+id,
-//                        dataSrc: 'content',
-//                    },
-//                    "searching": true,
-//                    "columns": [
-//                        {"data": function (row, data, index, display) {
-//                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-//                        }},
-//                        {"data": function (row, data, index, display) {
-//                            return "<div style='font-size:90%;'>"+row.achievement+"</div>";
-//                        }},
-//                        {"data": function (row, data, index, display) {
-//                            return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
-//                        }},
-//                        {"data": function (row, data, index, display) {
-//                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-//                        }},
-//                        {"data": function (row, data, index, display) {
-//                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-//                        }},
-//                        {"data": function (row, data, index, display) {
-//                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-//                        }},
-//                        {"data": function (row, data, index, display) {
-//                            var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part;
-//                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
-//                            '<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail"><i class="icon-time"></i></button>'+
-//                            '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-//                        }}
-//                    ],
-//                    "columnDefs": [
-//                    ],
-//                    select: true
-//                });	
-//            });
+            $('#teruskan').on('click', '#apply_btn', function(e){
+                alert('button is not a function');
+            });
+            
+            
+            //tutup validasi role
+            
+            //Bahasa
+            var titleDel = "Anda Yakin";
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
+	        function bhs(cek){
+				if(cek){
+					$(".lang_indo").show();
+	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
+	        	}else{	    	        
+	    	        $(".lang_indo").hide();
+	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
+	        	}
+	        }
+	        if(lang){
+	        	bhs(lang=="0");
+	        }else{
+	        	bhs($('#fs').is(':checked'));
+	        }
+	        
+	        $('#fs').on('change', function(e){
+	        	bhs($(this).is(':checked'));
+	        });
             
 
+            var v_idprov    = $("#id_prov").val();
+            var v_idrole    = $("#idrole").val();
+            var v_dataid    = $("#periode").val();
+            var v_data_id   = v_dataid.split("###");;
+            var id_monper   = v_data_id[0];
+            var tahun       = v_data_id[1];
             var table = $('#tabel-entri-sdg').DataTable({
                 responsive: true,
                 sDom: 'lrtip',
@@ -249,55 +337,269 @@
                 "responsive":true,
                 "bDestroy": true,
                 "ajax": {
-                    "url": urls+'list-entry-sdg',
+                    "url": urls+'list-entry-sdg/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
                     dataSrc: 'content',
                 },
                 "searching": true,
                 "columns": [
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[0]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[1]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[2]+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[11]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[6]+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[10]+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[5]+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[13] == null || row[13] == ""){
-                            return '<a data-id="'+row[0]+'###'+row[13]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                        if(row[8] == null || row[8] == ""){
+                            return "<div style='font-size:90%;'> 0 </div>";
                         }else{
-                            return '<a data-id="'+row[0]+'###'+row[13]+'" title="Update" class="update" href="#"><i class="icon-edit "></i>'+" "+row[13]+"</a>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[13] == null || row[13] == ""){
-                            return '';
-                        }else{
-                            if(row[14] == null || row[14] == ""){
-                                var check = "";
-                            }else{
-                                var check = "checked";
-                            }
-                            var ceklis      = '<input type="checkbox" class="myCheck" id="myCheck'+row[0]+'" data-id ="'+ row[0] +'" '+check+'>';
-                            return ceklis;
+                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
                         }
                         
-                    }}
+                    }},
+                    {"data": function (row, data, index, display) {
+                        if(row[13] == 'yearly'){
+                            if(row[9] == null || row[9] == ""){
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                            }else{
+                                var target  = row[8];
+                                var achieve = row[9];
+                                var sts     = row[7];
+                                if(sts == 'Increment'){
+                                    if(achieve >= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }else{
+                                    if(achieve <= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+                            }
+                        }else if(row[13] == 'semesterly'){
+                            if(row[9] == null || row[9] == ""){
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                            }else{
+                                var target  = row[8];
+                                var achieve = row[9];
+                                var sts     = row[7];
+                                if(sts == 'Increment'){
+                                    if(achieve >= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }else{
+                                    if(achieve <= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+                            }
+                        }else if(row[13] == 'quarterly'){
+                            if(row[9] == null || row[9] == ""){
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                            }else{
+                                var target  = row[8];
+                                var achieve = row[9];
+                                var sts     = row[7];
+                                if(sts == 'Increment'){
+                                    if(achieve >= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }else{
+                                    if(achieve <= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+                            }
+                        }else{
+                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+                        }
+                    }},
+                    {"data": function (row, data, index, display) {
+                        if(row[13] == 'yearly'){
+                            if(row[10] == null || row[10] == ""){
+                                return "<div style='font-size:90%;'> 0 </div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[10]+"</div>";
+                            }
+                            
+                        }else if(row[13] == 'semesterly'){
+                            if(row[10] == null || row[10] == ""){
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                            }else{
+                                var target  = row[8];
+                                var achieve = row[10];
+                                var sts     = row[7];
+                                if(sts == 'Increment'){
+                                    if(achieve >= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }else{
+                                    if(achieve <= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+                            }
+                        }else if(row[13] == 'quarterly'){
+                            if(row[10] == null || row[10] == ""){
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                            }else{
+                                var target  = row[8];
+                                var achieve = row[10];
+                                var sts     = row[7];
+                                if(sts == 'Increment'){
+                                    if(achieve >= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }else{
+                                    if(achieve <= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+                            }
+                        }else{
+                            return "<div style='font-size:90%;'>"+row[10]+"</div>";
+                        }
+                        
+                    }},
+                    {"data": function (row, data, index, display) {
+                        if(row[13] == 'yearly'){
+                            if(row[11] == null || row[11] == ""){
+                                return "<div style='font-size:90%;'> 0 </div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[11]+"</div>";
+                            }
+                            
+                        }else if(row[13] == 'semesterly'){
+                            if(row[11] == null || row[11] == ""){
+                                return "<div style='font-size:90%;'> 0 </div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[11]+"</div>";
+                            }
+                        }else if(row[13] == 'quarterly'){
+                            if(row[11] == null || row[11] == ""){
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                            }else{
+                                var target  = row[8];
+                                var achieve = row[11];
+                                var sts     = row[7];
+                                if(sts == 'Increment'){
+                                    if(achieve >= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }else{
+                                    if(achieve <= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[11]+"</a>";
+                            }
+                        }else{
+                            return "<div style='font-size:90%;'>"+row[11]+"</div>";
+                        }
+                        
+                    }},
+                    {"data": function (row, data, index, display) {
+                        if(row[13] == 'yearly'){
+                            if(row[12] == null || row[12] == ""){
+                                return "<div style='font-size:90%;'> 0 </div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[12]+"</div>";
+                            }
+                        }else if(row[13] == 'semesterly'){
+                            if(row[12] == null || row[12] == ""){
+                                return "<div style='font-size:90%;'> 0 </div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[12]+"</div>";
+                            }
+                        }else if(row[13] == 'quarterly'){
+                            if(row[12] == null || row[12] == ""){
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                            }else{
+                                var target  = row[8];
+                                var achieve = row[11];
+                                var sts     = row[7];
+                                if(sts == 'Increment'){
+                                    if(achieve >= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }else{
+                                    if(achieve <= target){
+                                        var color_sts = 'btn btn-success';
+                                    }else{
+                                        var color_sts = 'btn btn-danger';
+                                    }
+                                }
+                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
+                            }
+                        }else{
+                            return "<div style='font-size:90%;'>"+row[12]+"</div>";
+                        }
+                    }},
+//                    {"data": function (row, data, index, display) {
+////                        if(row[13] == null || row[13] == ""){
+////                            return '';
+////                        }else{
+////                            if(row[14] == null || row[14] == ""){
+////                                var check = "";
+////                            }else{
+////                                var check = "checked";
+////                            }
+////                            var ceklis      = '<input type="checkbox" class="myCheck" id="myCheck'+row[0]+'" data-id ="'+ row[0] +'" '+check+'>';
+////                            return ceklis;
+////                        }
+//                        return "<div style='font-size:90%;'>"+row[13]+"</div>";
+//                    }}
                 ],
                 "columnDefs": [
                 ],
                 select: true
             });	
+
+            //memanggil tb spp
+            function grid()
+            {
+                var v_idprov    = $("#id_prov").val();
+                var v_idrole    = $("#idrole").val();
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                table.ajax.url(urls+'list-entry-sdg/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun ).load();
+                
+            }
+            
 
             $('#text-cari').on( 'keyup', function () {
                 var val=$(this).val();
@@ -316,25 +618,30 @@
             $('#simpan_').on('click', '#simpan', function(e){
                 var id_sdg_indicator    = $('#id_sdg_indicator').val();
                 var achievement1        = $('#achievement1').val();
-                var year                = new Date().getFullYear();
+                var achievement2        = $('#achievement2').val();
+                var achievement3        = $('#achievement3').val();
+                var achievement4        = $('#achievement4').val();
+                var v_idrole            = $("#idrole").val();
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var tahun               = v_data_id[1];
                 var data    = JSON.stringify({
                                 'id': null,
                                 'id_sdg_indicator': id_sdg_indicator,
                                 'achievement1': achievement1,
-                                'achievement2': '0',
-                                'achievement3': '0',
-                                'achievement4': '0',
+                                'achievement2': achievement2,
+                                'achievement3': achievement3,
+                                'achievement4': achievement4,
                                 'new_value1': '0',
                                 'new_value2': '0',
                                 'new_value3': '0',
                                 'new_value4': '0',
-                                'approval': '',
-                                'approval_date': null,
-                                'show_report_date': null,
-                                'year_entry': year,
-                                'id_role': '1',
+                                'year_entry': tahun,
+                                'id_role': v_idrole,
                                 'created_by': '0',
-                                'date_created': null
+                                'date_created': null,
+                                'id_monper': id_monper
                             });
                 $.ajax({
                     type: "POST",
@@ -345,23 +652,71 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        window.location = urls+"sdg-indicator-monitoring";
+                        grid();
                     	$('.addModal').modal('hide');
                     },
                 });
             });
             
             $('#tabel-entri-sdg').on('click', '.update', function(){
-                var dataid  = $(this).data('id');
-                var data    = dataid.split('###');
+                var dataid          = $(this).data('id');
+                var data            = dataid.split('###');
+                var id_indicator    = data[0];
+                var value1          = data[1];
+                var value2          = data[2];
+                var value3          = data[3];
+                var value4          = data[4];
+                var kode            = data[5];
                 
-                if(data[1] == 'null'){
-                    var achieve = '';
+                if(value1 == 'null' || value1 == ""){
+                    var achieve1 = '0';
                 }else{
-                    var achieve = data[1];
+                    var achieve1 = value1;
                 }
-                $('#id_sdg_indicator').val(data[0]);
-                $('#achievement1').val(achieve);
+                
+                if(value2 == 'null' || value2 == ""){
+                    var achieve2 = '0';
+                }else{
+                    var achieve2 = value2;
+                }
+                if(value3 == 'null' || value3 == ""){
+                    var achieve3 = '0';
+                }else{
+                    var achieve3 = value3;
+                }
+                if(value4 == 'null' || value4 == ""){
+                    var achieve4 = '0';
+                }else{
+                    var achieve4 = value4;
+                }
+                
+                $('#id_sdg_indicator').val(id_indicator);
+                if(kode == '1'){
+                    $('#achievement1').val(achieve1).show();
+                    $('#achievement2').val(achieve2).hide();
+                    $('#achievement3').val(achieve3).hide();
+                    $('#achievement4').val(achieve4).hide();
+                }else if(kode == '2'){
+                    $('#achievement1').val(achieve1).hide();
+                    $('#achievement2').val(achieve2).show();
+                    $('#achievement3').val(achieve3).hide();
+                    $('#achievement4').val(achieve4).hide();
+                }else if(kode == '3'){
+                    $('#achievement1').val(achieve1).hide();
+                    $('#achievement2').val(achieve2).hide();
+                    $('#achievement3').val(achieve3).show();
+                    $('#achievement4').val(achieve4).hide();
+                }else if(kode == '4'){
+                    $('#achievement1').val(achieve1).hide();
+                    $('#achievement2').val(achieve2).hide();
+                    $('#achievement3').val(achieve3).hide();
+                    $('#achievement4').val(achieve4).show();
+                }else{
+                    $('#achievement1').val("0").hide();
+                    $('#achievement2').val("0").hide();
+                    $('#achievement3').val("0").hide();
+                    $('#achievement4').val("0").hide();
+                }
                 
                 $('.addModal').modal("show");
                 $('#simpan_').show();

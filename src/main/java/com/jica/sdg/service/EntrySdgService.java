@@ -33,7 +33,7 @@ public class EntrySdgService implements IEntrySdgService{
 	public void saveEntrySdg(EntrySdg esdg) {
             Date date = new Date();
             //esdg.setApproval_date(date);
-            esdg.setShow_report_date(date);
+//            esdg.setShow_report_date(date);
             esdg.setDate_created(date);
             entrySdgRepo.save(esdg);
 	}
@@ -43,6 +43,11 @@ public class EntrySdgService implements IEntrySdgService{
 ////		return (Optional<Nsaprofile>) nsaProfileRepo.findById(id_nsa);
 ////	}
 ////        
+        @Override
+	public void updateEntrySdg(String id_sdg_indicator, Integer achievement1, Integer achievement2, Integer achievement3, Integer achievement4, Integer year_entry, Integer id_role, Integer id_monper) {
+		entrySdgRepo.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+	}
+        
         @Override
 	public void deleteEntrySdg(String id_nsa) {
 		entrySdgRepo.deleteEntrySdg(id_nsa);
