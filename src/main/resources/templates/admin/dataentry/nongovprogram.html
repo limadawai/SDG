@@ -23,11 +23,11 @@
                 <div class="widget-box">
                     <div class="widget-title lang_eng" id="judul-eng" style="display: none">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Government Program Monitoring Table</h5>
+                        <h5>Non Government Program Monitoring Table</h5>
                     </div>
                     <div class="widget-title lang_indo" id="judul-indo">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Tabel Monitor Program Pemerintah</h5>
+                        <h5>Tabel Monitor Program Non Pemerintah</h5>
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
@@ -104,7 +104,7 @@
         }else{
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-role-gov-profil/'+id_prov,
+                url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     var array = result.content;
@@ -154,7 +154,7 @@
             var id_prov = this.value ;
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-role-gov-profil/'+id_prov,
+                url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     var array = result.content;
@@ -252,9 +252,10 @@
                     bhs($(this).is(':checked'));
             });
             
+            
             var v_idrole    = $("#idrole").val();
             var v_dataid    = $("#periode").val();
-            var v_data_id   = v_dataid.split("###");
+            var v_data_id   = v_dataid.split("###");;
             var id_monper   = v_data_id[0];
             var tahun       = v_data_id[1];
             var table = $('#tabel-entri-sdg').DataTable({
@@ -266,7 +267,7 @@
                 "responsive":true,
                 "bDestroy": true,
                 "ajax": {
-                    "url": urls+'list-govProg/'+id_monper,
+                    "url": urls+'list-nsaProg/'+v_idrole+'/'+id_monper,
                     dataSrc: 'content',
                 },
                 "searching": true,
@@ -284,7 +285,7 @@
                         var id_monper1  = v_dataid1[0];
                         var tahun1      = v_dataid1[1];
                         var v_idprov1   = $("#id_prov").val();
-                        return "<div style='font-size:90%;'><a href='"+urls+"government-program-monitoring/gov/program/"+row.id_program+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"/activity' class='target'>"+row.nm_program+"</div>";
+                        return "<div style='font-size:90%;'><a href='"+urls+"non-government-program-monitoring/gov/program/"+row.id_program+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"/activity' class='target'>"+row.nm_program+"</div>";
                     }},
                 ],
                 "columnDefs": [
@@ -301,7 +302,7 @@
                 var v_data_id   = v_dataid.split("###");;
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
-                table.ajax.url(urls+'list-govProg/'+id_monper ).load();
+                table.ajax.url(urls+'list-nsaProg/'+v_idrole+'/'+id_monper ).load();
                 
             }
             

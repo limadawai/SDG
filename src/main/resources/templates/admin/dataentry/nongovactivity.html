@@ -67,7 +67,7 @@
                         <div class="row-fluid">
                             <div class="widget-box">
                                 <div class="widget-content">
-                                    Program : <a th:href="@{/admin/government-program-monitoring}" th:text="${govProg.id_program+' - '+govProg.nm_program}"></a>
+                                    Program : <a th:href="@{/admin/non-government-program-monitoring}" th:text="${govProg.id_program+' - '+govProg.nm_program}"></a>
                                 </div>
                             </div>
                         </div>
@@ -353,7 +353,7 @@
                 "responsive":true,
                 "bDestroy": true,
                 "ajax": {
-                    "url": urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1,
+                    "url": urls+'list-entry-non-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1,
                     dataSrc: 'content',
                 },
                 "searching": true,
@@ -417,7 +417,7 @@
                 var v_data_id   = v_dataid.split("###");;
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
-                table.ajax.url(urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+id_monper ).load();
+                table.ajax.url(urls+'list-entry-non-gov-activity/'+id_program_1+'/'+id_role_1+'/'+id_monper ).load();
                 
             }
             
@@ -495,6 +495,8 @@
                 $('#simpan_').show();
             });
             
+            
+            
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             
@@ -532,7 +534,7 @@
                 console.log(data);
                 $.ajax({
                     type: "POST",
-                    url: urls+'save-entry-gov_prog',
+                    url: urls+'save-entry-non-gov_prog',
                     beforeSend : function(xhr){
                     	xhr.setRequestHeader(header,token);
                     },
@@ -544,6 +546,7 @@
                     },
                 });
             });
+            
             
             
     </script>
