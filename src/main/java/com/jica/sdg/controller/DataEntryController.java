@@ -1,10 +1,17 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.EntryGovIndicator;
+import com.jica.sdg.model.EntryNsaIndicator;
 import com.jica.sdg.model.EntrySdg;
 import com.jica.sdg.model.EntrySdgIndicatorJoin;
+import com.jica.sdg.model.GovProgram;
+import com.jica.sdg.model.NsaProgram;
 import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.service.IEntrySdgService;
+import com.jica.sdg.service.IGovProgramService;
+import com.jica.sdg.service.INsaProgramService;
 import com.jica.sdg.service.IProvinsiService;
 import java.util.HashMap;
 
@@ -49,6 +56,13 @@ public class DataEntryController {
 
     @Autowired
     NsaProfileService nsaProfilrService;
+    
+    @Autowired
+    IGovProgramService govProgService;
+    
+    @Autowired
+    INsaProgramService nsaProgService;
+    
     //entry SDG
     @GetMapping("admin/sdg-indicator-monitoring")
     public String entri_sdg(Model model, HttpSession session) {
@@ -118,7 +132,6 @@ public class DataEntryController {
     
     @PostMapping(path = "admin/save-entry-sdg", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    
     public void saveEntrySdg(@RequestBody EntrySdg entrySdg) {
         String id_sdg_indicator = entrySdg.getId_sdg_indicator();
         int achievement1        = entrySdg.getAchievement1();
@@ -135,11 +148,187 @@ public class DataEntryController {
     @GetMapping("admin/government-program-monitoring")
     public String govprogram(Model model, HttpSession session) {
         model.addAttribute("title", "SDG Indicators Monitoring");
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+//        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+//        model.addAttribute("lang", session.getAttribute("bahasa"));
+//        model.addAttribute("name", session.getAttribute("name"));
+        
+        Integer id_role = (Integer) session.getAttribute("id_role");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleGov());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
         return "admin/dataentry/govprogram";
     }
+    
+    @GetMapping("admin/government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity")
+    public String gov_kegiatan(Model model, @PathVariable("id_program") String id_program, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, HttpSession session) {
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleGov());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        model.addAttribute("id_prov_1", id_prov_1);
+        model.addAttribute("id_role_1", id_role_1);
+        model.addAttribute("monper_1", monper);
+        model.addAttribute("tahun_1", tahun);
+        model.addAttribute("id_program_1", id_program);
+        
+    	Optional<GovProgram> govprog = govProgService.findOne(id_program);
+        model.addAttribute("title", "SDG Indicators Monitoring");
+        govprog.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
+        return "admin/dataentry/govactivity";
+    }
+    
+    @GetMapping("admin/list-entry-gov-activity/{id_program}/{id_role}/{id_monper}")
+    public @ResponseBody Map<String, Object> listEntryGovActivity(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
+        String sql  = "select a.id_activity, a.id_program, a.id_role, a.internal_code, a.nm_activity,\n" +
+                    "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
+                    "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad \n" +
+                    "from gov_activity as a\n" +
+                    "left join entry_gov_indicator as b on a.id_activity = b.id_assign \n" +
+                    "where a.id_program = :id_program and a.id_role = :id_role ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_program", id_program);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-entry-gov_prog", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveEntryGovProg(@RequestBody EntryGovIndicator entryGovIndicator) {
+//        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
+//        int achievement1        = entrySdg.getAchievement1();
+//        int achievement2        = entrySdg.getAchievement2();
+//        int achievement3        = entrySdg.getAchievement3();
+//        int achievement4        = entrySdg.getAchievement4();
+//        int year_entry          = entrySdg.getYear_entry();
+//        int id_role             = entrySdg.getId_role();
+//        int id_monper           = entrySdg.getId_monper();
+        entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+
+    
+    
+    //non gov
+    @GetMapping("admin/non-government-program-monitoring")
+    public String nongovprogram(Model model, HttpSession session) {
+        model.addAttribute("title", "SDG Indicators Monitoring");
+//        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+//        model.addAttribute("lang", session.getAttribute("bahasa"));
+//        model.addAttribute("name", session.getAttribute("name"));
+        
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        return "admin/dataentry/nongovprogram";
+    }
+    
+    @GetMapping("admin/non-government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity")
+    public String non_gov_kegiatan(Model model, @PathVariable("id_program") String id_program, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, HttpSession session) {
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        model.addAttribute("id_prov_1", id_prov_1);
+        model.addAttribute("id_role_1", id_role_1);
+        model.addAttribute("monper_1", monper);
+        model.addAttribute("tahun_1", tahun);
+        model.addAttribute("id_program_1", id_program);
+        
+    	Optional<NsaProgram> nongovprog = nsaProgService.findOne(id_program);
+        model.addAttribute("title", "SDG Indicators Monitoring");
+        nongovprog.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
+        return "admin/dataentry/nongovactivity";
+    }
+    
+    @GetMapping("admin/list-entry-non-gov-activity/{id_program}/{id_role}/{id_monper}")
+    public @ResponseBody Map<String, Object> listEntryNonGovActivity(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
+        String sql  = "select a.id_activity, a.id_program, a.id_role, a.internal_code, a.nm_activity,\n" +
+                    "b.id as id_entrynsa, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
+                    "(select nsa_prog from ran_rad where id_monper = :id_monper) as ket_ran_rad \n" +
+                    "from nsa_activity as a\n" +
+                    "left join entry_nsa_indicator as b on a.id_activity = b.id_assign\n" +
+                    "where a.id_program = :id_program and a.id_role = :id_role ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_program", id_program);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-entry-non-gov_prog", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveEntryNonGovProg(@RequestBody EntryNsaIndicator entryNsaIndicator) {
+//        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
+//        int achievement1        = entrySdg.getAchievement1();
+//        int achievement2        = entrySdg.getAchievement2();
+//        int achievement3        = entrySdg.getAchievement3();
+//        int achievement4        = entrySdg.getAchievement4();
+//        int year_entry          = entrySdg.getYear_entry();
+//        int id_role             = entrySdg.getId_role();
+//        int id_monper           = entrySdg.getId_monper();
+        entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    
+    
 
     @GetMapping("admin/government-activity-monitoring")
     public String govkegiatan(Model model, HttpSession session) {
