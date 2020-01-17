@@ -280,6 +280,10 @@
     	$('#addNew').hide();
     }
     
+    if(privilege=="ADMIN"){
+      $("#privilege option[value='ADMIN']").remove();
+    }
+    
     $('#id_prov').on('change', function(){
     	var id = $(this).val();
     	table.ajax.url(urls+'manajemen/list-role/'+id).load();

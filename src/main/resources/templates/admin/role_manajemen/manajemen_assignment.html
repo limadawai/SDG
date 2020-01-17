@@ -216,6 +216,7 @@
                 cache: false,
                 async : false,
                 success: function (response) {
+                    console.log(response);
                     $('#detail').empty();
                     var detail="";
                     for (var i = 0; i < response.content.length; i++) {
@@ -242,6 +243,7 @@
                                         async : false,
                                         success: function (result) {
                                             for (var k = 0; k < result.content.length; k++) {
+                                                console.log(result.content);
                                             	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
                     			                            '<span style="vertical-align:middle">'+result.content[k][3]+'</span>'+
                     			                      '</label>';

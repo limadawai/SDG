@@ -349,6 +349,7 @@ public class RanRadSdgController {
         role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+//       System.out.println(session);
         return "admin/ran_rad/gov/activity";
     }
     
