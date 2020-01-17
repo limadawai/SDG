@@ -6,6 +6,13 @@ import com.jica.sdg.model.EntrySdg;
 import com.jica.sdg.model.EntrySdgIndicatorJoin;
 import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.NsaProgram;
+
+import com.jica.sdg.model.EntryProblemIdentify;
+import com.jica.sdg.model.EntrySdg;
+import com.jica.sdg.service.*;
+
+import java.util.*;
+
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
@@ -19,15 +26,10 @@ import com.jica.sdg.service.IRanRadService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.NsaProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 
@@ -53,6 +55,9 @@ public class DataEntryController {
 
     @Autowired
     IRanRadService ranRadService;
+
+    @Autowired
+    EntryProblemIdentifyService identifyService;
 
     @Autowired
     NsaProfileService nsaProfilrService;
@@ -94,7 +99,6 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-monper/{id}")
     public @ResponseBody Map<String, Object> getOptionMonperList(@PathVariable("id") String id) {
-        
         String sql  = "select * from ran_rad as a where a.id_prov = :id ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
@@ -349,6 +353,14 @@ public class DataEntryController {
         model.addAttribute("listRole", roleService.findAll());
         model.addAttribute("listranrad", ranRadService.findAll());
         return "admin/dataentry/problem";
+    }
+
+    @GetMapping("admin/list-problem")
+    public @ResponseBody Map<String, Object> problemList() {
+        List<EntryProblemIdentify> list = identifyService.findGoals();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
     }
 
     // ****************** Best Practice ******************

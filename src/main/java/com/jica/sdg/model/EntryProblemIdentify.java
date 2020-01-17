@@ -5,8 +5,8 @@ import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-@Table(name = "entry_problem_identity")
-public class EntryProblemIdentity implements Serializable {
+@Table(name = "entry_problem_identify")
+public class EntryProblemIdentify implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,10 +56,10 @@ public class EntryProblemIdentity implements Serializable {
     @Column(name = "id_monper")
     private int id_monper;
 
-    public EntryProblemIdentity() {
+    public EntryProblemIdentify() {
     }
 
-    public EntryProblemIdentity(String id_goals, String id_target, String id_indicator, String id_cat, String problem, String follow_up, String id_prov, int id_role, int year, int year_entry, int created_by, Date date_created, String summary, int id_monper) {
+    public EntryProblemIdentify(String id_goals, String id_target, String id_indicator, String id_cat, String problem, String follow_up, String id_prov, int id_role, int year, int year_entry, int created_by, Date date_created, String summary, int id_monper) {
         this.id_goals = id_goals;
         this.id_target = id_target;
         this.id_indicator = id_indicator;
