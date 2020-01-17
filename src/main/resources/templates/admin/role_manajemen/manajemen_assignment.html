@@ -233,6 +233,7 @@
                                 	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
         			                            '<span style="vertical-align:middle">'+result.content[j].nm_target+'</span>'+
         			                      '</label><br/>';
+//                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({
                                         url: urls + 'list-sdgIndicator/'+response.content[i].id_goals+'/'+result.content[j].id_target,
                                         type: 'get',
@@ -242,11 +243,13 @@
                                         success: function (result) {
                                             for (var k = 0; k < result.content.length; k++) {
                                             	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-                    			                            '<span style="vertical-align:middle">'+result.content[k].nm_indicator+'</span>'+
+                    			                            '<span style="vertical-align:middle">'+result.content[k][3]+'</span>'+
                     			                      '</label>';
                     			                var id;
+                                                        
+                                                        //alert(result.content[k].id_goals+'/'+result.content[k].id_target+'/'+result.content[k].id_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val());
                     			               	$.ajax({
-                    			                    url: urls + 'manajemen/get-id_roleSdg/'+result.content[k].id_goals+'/'+result.content[k].id_target+'/'+result.content[k].id_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
+                    			                    url: urls + 'manajemen/get-id_roleSdg/'+result.content[k][1]+'/'+result.content[k][2]+'/'+result.content[k][0]+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
                     			                    type: 'get',
                     			                    dataType: 'json',
                     			                    cache: false,
@@ -256,9 +259,9 @@
                     			                        }
                     			                }); 
                     			                detail += '<select class="assign-sdg" name="sdg[][id_role]">'+role(id)+'</select>'+
-                    			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k].id_goals+'"/>'+
-                    			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k].id_target+'"/>'+
-                    			               				'<input type="hidden" name="sdg[][id_indicator]" value="'+result.content[k].id_indicator+'"/>'+
+                    			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k][1]+'"/>'+
+                    			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k][2]+'"/>'+
+                    			               				'<input type="hidden" name="sdg[][id_indicator]" value="'+result.content[k][0]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_monper]" value="'+$('#id_monper').val()+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_prov]" value="'+$('#id_prov').val()+'"/>'+
                     			               				'<br/>';
@@ -275,6 +278,7 @@
         });
         $('.btnsdg').on('click', function(){
         	var sdg =  $('#form-detail').serializeObject();
+                console.log(sdg);
         	$.ajax({
                 type    :"POST",
                 url     :urls+'manajemen/save-assignmentSdg/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
