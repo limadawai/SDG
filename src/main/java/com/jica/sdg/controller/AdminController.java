@@ -174,6 +174,7 @@ public class AdminController {
     		Optional<Provinsi> list1 = prov.findOne(id_prov);
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
     	}
+        //tester brooo google
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/monper";
