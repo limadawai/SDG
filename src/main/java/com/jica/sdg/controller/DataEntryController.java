@@ -9,6 +9,7 @@ import com.jica.sdg.model.NsaProgram;
 
 import com.jica.sdg.model.EntryProblemIdentify;
 import com.jica.sdg.model.EntrySdg;
+import com.jica.sdg.repository.EntryProblemIdentifyRepository;
 import com.jica.sdg.service.*;
 
 import java.util.*;
@@ -61,13 +62,19 @@ public class DataEntryController {
 
     @Autowired
     NsaProfileService nsaProfilrService;
+
+    @Autowired
+    SdgGoalsService goalsService;
+
+    @Autowired
+    EntryProblemIdentifyRepository repository;
     
     @Autowired
     IGovProgramService govProgService;
     
     @Autowired
     INsaProgramService nsaProgService;
-    
+
     //entry SDG
     @GetMapping("admin/sdg-indicator-monitoring")
     public String entri_sdg(Model model, HttpSession session) {
@@ -330,9 +337,6 @@ public class DataEntryController {
         entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
-    
-    
-    
 
     @GetMapping("admin/government-activity-monitoring")
     public String govkegiatan(Model model, HttpSession session) {
@@ -343,36 +347,5 @@ public class DataEntryController {
         return "admin/dataentry/govactivity";
     }
 
-    // ****************** Problem Identification & Follow Up ******************
-    @GetMapping("admin/problem-identification")
-    public String problem(Model model, HttpSession session) {
-        model.addAttribute("title", "SDG Problem Identification & Follow Up");
-        model.addAttribute("lang", session.getAttribute("bahasa"));
-        model.addAttribute("name", session.getAttribute("name"));
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
-        model.addAttribute("listRole", roleService.findAll());
-        model.addAttribute("listranrad", ranRadService.findAll());
-        return "admin/dataentry/problem";
-    }
-
-    @GetMapping("admin/list-problem")
-    public @ResponseBody Map<String, Object> problemList() {
-        List<EntryProblemIdentify> list = identifyService.findGoals();
-        Map<String, Object> hasil = new HashMap<>();
-        hasil.put("content",list);
-        return hasil;
-    }
-
-    // ****************** Best Practice ******************
-    @GetMapping("admin/best-practice")
-    public String bestpractice(Model model, HttpSession session) {
-        model.addAttribute("title", "Best Practice");
-        model.addAttribute("lang", session.getAttribute("bahasa"));
-        model.addAttribute("name", session.getAttribute("name"));
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
-        model.addAttribute("listRole", roleService.findAll());
-        model.addAttribute("listranrad", ranRadService.findAll());
-        return "admin/dataentry/practice";
-    }
 
 }

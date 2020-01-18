@@ -38,7 +38,7 @@
                                 <option value="0" >-- Pilih Periode --</option>
                                 <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
                             </select>
-                            <button id="btnadd" class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal">Tambah Data</button>
+                            <button id="btnadd" class="btn btn-primary pull-right">Tambah Data</button>
                         </div>
                         <div class="row-fluid">
                             <div class="span8">
@@ -80,20 +80,23 @@
             <h3 id="headmodal">Tambah Data Masalah</h3>
         </div>
         <div class="modal-body">
-            <form id="form-problem" class="">
+            <form id="form-problem" th:action="@{/admin/save-problem}" method="post">
                 <div class="control-group">
                     <label class="lang_indo control-label">Kode</label>
                     <div class="controls">
-                        <input id="indaerah" name="id_goals" class="input-medium input-block-level" type="hidden"/>
-                        <input id="inrole" name="id_goals" class="input-medium input-block-level" type="hidden"/>
-                        <input id="inperiode" name="id_goals" class="input-medium input-block-level" type="hidden"/>
+                        <select id="goals" name="id_goals" class="form-control">
+                            <option th:each="f:${listgoals}" th:value="${f.id_goals}" th:text="${f.nm_goals}"></option>
+                        </select>
+                        <input id="indaerah" name="id_prov" class="input-medium input-block-level" type="hidden"/>
+                        <input id="inrole" name="id_role" class="input-medium input-block-level" type="hidden"/>
+                        <input id="inperiode" name="id_monper" class="input-medium input-block-level" type="hidden"/>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="btn" data-dismiss="modal" aria-hidden="true">
                         <span id="tutup" class="lang_indo">Tutup</span>
                     </button>
-                    <button class="btn btn-primary" id="submit">
+                    <button class="btn btn-primary" type="submit">
                         <span id="simpan" class="lang_indo">Simpan</span>
                     </button>
                 </div>
@@ -109,14 +112,14 @@
         if (lang == "0") {
             indo();
         } else {
-            english();
+            inggris();
         }
 
         $('#fs').on('change', function(){
             if($(this).is(':checked')){
                 indo();
             } else {
-                english();
+                inggris();
             }
         });
 
@@ -130,7 +133,7 @@
             $("#simpan").text("Simpan");
         }
 
-        function english() {
+        function inggris() {
             $("#jdltbl").text("Problem Identification & Follow Up Table");
             $("#spanper").text("Period");
             $(".btn-primary").text("Add Data");
@@ -159,7 +162,7 @@
                         return "<div style='font-size:90%;'>"+row[1]+"</div>";
                     }},
                 {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row[2]+"/target' class='target' data-id='"+row[2]+"'>"+row[2]+"</a></div>";
+                        return "<div style='font-size:90%;'><a href='' class='target' data-id='"+row[2]+"'>"+row[2]+"</a></div>";
                 }}
             ],
             "columnDefs": [
@@ -167,15 +170,37 @@
             select: true
         });
 
-        $('#text-cari').on( 'keyup', function () {
+        $('#text-cari').on('keyup', function () {
             var val=$(this).val();
             table.search(val).draw();
         });
 
-        $("#btnadd").on("click", function(){
+        $("#btnadd").on("click", function(e){
             var valdaerah = $("#daerah").val();
             var valrole = $("#role").val();
             var valperiode = $("#periode").val();
+
+            if (lang == "0" && valdaerah == "0") {
+                swal("Anda harus memilih daerah");
+                $("#myModal").css({"display":"none !important"});
+            } else if (lang == "1" && valdaerah == "0") {
+                swal("You must choose user type");
+                $("#myModal").css({"display":"none !important"});
+            } else if (lang == "0" && valrole == "0") {
+                swal("Anda harus memilih role");
+                $("#myModal").css({"display":"none !important"});
+            } else if (lang == "1" && valrole == "0") {
+                swal("You must choose role type");
+                $("#myModal").css({"display":"none !important"});
+            } else if (lang == "0" && valperiode == "0") {
+                swal("Anda harus memilih periode");
+                $("#myModal").css({"display":"none !important"});
+            } else if (lang == "1" && valperiode == "0") {
+                swal("You must choose periode");
+                $("#myModal").css({"display":"none !important"});
+            } else {
+                $("#myModal").modal("show");
+            }
 
             $("#indaerah").val(valdaerah);
             $("#inrole").val(valrole)
