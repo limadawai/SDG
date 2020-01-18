@@ -130,6 +130,7 @@ public class AdminController {
         model.addAttribute("role", roleService.findByProvince(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("privilege", privilege);
         return "admin/ran_rad/gov/program";
     }
 
@@ -155,6 +156,8 @@ public class AdminController {
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("privilege", privilege);
+//        System.out.println(privilege);
         return "admin/ran_rad/non-gov/program";
     }
 
@@ -171,6 +174,7 @@ public class AdminController {
     		Optional<Provinsi> list1 = prov.findOne(id_prov);
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
     	}
+        //tester brooo google gg
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/monper";
