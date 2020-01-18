@@ -2,6 +2,7 @@ package com.jica.sdg.controller;
 
 import com.jica.sdg.model.EntryProblemIdentify;
 import com.jica.sdg.model.EntrySdg;
+import com.jica.sdg.repository.EntryProblemIdentifyRepository;
 import com.jica.sdg.service.*;
 
 import java.util.*;
@@ -51,6 +52,13 @@ public class DataEntryController {
 
     @Autowired
     NsaProfileService nsaProfilrService;
+
+    @Autowired
+    SdgGoalsService goalsService;
+
+    @Autowired
+    EntryProblemIdentifyRepository repository;
+
     //entry SDG
     @GetMapping("admin/sdg-indicator-monitoring")
     public String entri_sdg(Model model, HttpSession session) {
@@ -160,6 +168,7 @@ public class DataEntryController {
         model.addAttribute("listprov", provinsiService.findAllProvinsi());
         model.addAttribute("listRole", roleService.findAll());
         model.addAttribute("listranrad", ranRadService.findAll());
+        model.addAttribute("listgoals", goalsService.findAll());
         return "admin/dataentry/problem";
     }
 
@@ -170,6 +179,18 @@ public class DataEntryController {
         hasil.put("content",list);
         return hasil;
     }
+
+    @PostMapping("admin/save-problem")
+    public String saveProblem(EntryProblemIdentify problem, Model model, HttpSession session) {
+        repository.save(problem);
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        return "redirect:/admin/problem-identification";
+    }
+
+    
+
+
 
     // ****************** Best Practice ******************
     @GetMapping("admin/best-practice")
