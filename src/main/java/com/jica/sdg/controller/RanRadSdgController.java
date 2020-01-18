@@ -44,8 +44,13 @@ import com.jica.sdg.service.ISdgGoalsService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.ISdgTargetService;
 import com.jica.sdg.service.IUnitService;
+import java.util.Arrays;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 @Controller
 public class RanRadSdgController {
@@ -103,6 +108,9 @@ public class RanRadSdgController {
 	
 	@Autowired
 	INsaMapService nsaMapService;
+        
+        @Autowired
+	private EntityManager em;
 	
 	//*********************** SDG ***********************
 	@GetMapping("admin/list-sdgGoals")
@@ -186,8 +194,14 @@ public class RanRadSdgController {
     
     @GetMapping("admin/list-sdgIndicator/{id_goals}/{id_target}")
     public @ResponseBody Map<String, Object> sdgIndicatorList(@PathVariable("id_goals") String id_goals, @PathVariable("id_target") String id_target) {
+//        String sql = "select a.id_indicator, a.id_goals, a.id_target, a.nm_indicator, b.nm_unit from sdg_indicator a Left Join ref_unit b on a.unit = b.id_unit where a.id_goals = :id_goals and a.id_target = :id_target";
+//        Query query  = em.createNativeQuery(sql)
+//                        .setParameter("id_goals",id_goals)
+//                        .setParameter("id_target", id_target);
+//        List list = query.getResultList();
+        
         List list = sdgIndicatorService.findAllGrid(id_goals, id_target);
-		Map<String, Object> hasil = new HashMap<>();
+	Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
@@ -642,7 +656,23 @@ public class RanRadSdgController {
         model.addAttribute("name", session.getAttribute("name"));
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        exportExcell(id_monper);
+                
         return "admin/ran_rad/map/goals";
+    }
+    
+    public void exportExcell(Integer id_monper){
+        String sql = "select * from ran_rad where id_monper = '"+id_monper+"'";
+        Query result = em.createNativeQuery(sql);
+         Map<String, Object> test = new HashMap<>();
+         test.put("test",result.getResultList() );
+         JSONObject jsonObjlapgdbh = new JSONObject(test);
+         JSONArray c = jsonObjlapgdbh.getJSONArray("test");
+         JSONArray d = c.getJSONArray(0);
+         String id_prov = d.getString(11);
+         System.out.println(id_prov);
+
+        
     }
     
     @GetMapping("admin/ran_rad/map/goals/{id_monper}/{id}/target")
