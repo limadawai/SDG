@@ -15,6 +15,7 @@ import com.jica.sdg.model.GovActivity;
 import com.jica.sdg.model.GovIndicator;
 import com.jica.sdg.model.GovMap;
 import com.jica.sdg.model.GovProgram;
+import com.jica.sdg.model.ListToJson;
 import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.NsaActivity;
 import com.jica.sdg.model.NsaIndicator;
@@ -62,9 +63,13 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.core.io.FileSystemResource;
@@ -385,7 +390,6 @@ public class RanRadSdgController {
         role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
-//       System.out.println(session);
         return "admin/ran_rad/gov/activity";
     }
     
@@ -676,54 +680,218 @@ public class RanRadSdgController {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_monper",id_monper);
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
-        exportExcell(id_monper);
-                
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        exportExcell(id_monper,id_role);
+        String a = System.getProperty("user.dir"); 
         return "admin/ran_rad/map/goals";
     }
     
-    public void exportExcell(Integer id_monper) throws FileNotFoundException, IOException{
+    public String getStringByColumn(String sql,Integer column){
+      Query list = em.createNativeQuery(sql);
+      Map<String, Object> map = new HashMap<>();
+      map.put("map",list.getResultList());
+      JSONObject objMonper = new JSONObject(map);
+      JSONArray array = objMonper.getJSONArray("map").getJSONArray(0);
+      String result = array.getString(column);
+      return result;  
+    }
+    
+    public void exportExcell(Integer id_monper,Integer id_role) throws FileNotFoundException, IOException{
         String sql = "select * from ran_rad where id_monper = '"+id_monper+"'";
-        Query listmonper = em.createNativeQuery(sql);
-         Map<String, Object> mapMonper = new HashMap<>();
-         mapMonper.put("listmonper",listmonper.getResultList() );
-         JSONObject objMonper = new JSONObject(mapMonper);
-         JSONArray array = objMonper.getJSONArray("listmonper").getJSONArray(0);
-         String id_prov = array.getString(11);
-         System.out.println(id_prov);
-         
-         Workbook wb = new HSSFWorkbook();
-         
+        String id_prov = getStringByColumn(sql,11);
+        
+        String getCatRole = "select * from ref_role where id_role = '"+id_role+"'";
+        String cat_role = getStringByColumn(getCatRole,3);
+        
+        
+         Workbook wb = new HSSFWorkbook();         
          CreationHelper createHelper = wb.getCreationHelper();
-         CellStyle cellStyle = wb.createCellStyle();
-         cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-mm-yyyy h:mm"));         
-         cellStyle.setBorderLeft(BorderStyle.THIN);
-         cellStyle.setBorderTop(BorderStyle.THIN);
-         cellStyle.setBorderRight(BorderStyle.THIN);
-         cellStyle.setBorderBottom(BorderStyle.THIN);         
+         
+         Font fontTitle = wb.createFont();
+         fontTitle.setFontHeightInPoints((short)14);
+         fontTitle.setBold(true);
+         
+         //Buat Font Untuk Cell
+         Font fontheader = wb.createFont();
+         fontheader.setFontHeightInPoints((short)12);
+         fontheader.setBold(true);
+         
+         Font fontchild = wb.createFont();
+         fontchild.setFontHeightInPoints((short)11);
+         
+         CellStyle cellStyleTitle = wb.createCellStyle();
+         cellStyleTitle.setAlignment(HorizontalAlignment.CENTER);
+         cellStyleTitle.setVerticalAlignment(VerticalAlignment.CENTER);
+         cellStyleTitle.setFont(fontTitle);
+         
+         //Buat Style Untuk Cell
+         CellStyle cellStyleHeader = wb.createCellStyle();
+         cellStyleHeader.setDataFormat(createHelper.createDataFormat().getFormat("dd-mm-yyyy h:mm"));         
+         cellStyleHeader.setBorderLeft(BorderStyle.THIN);
+         cellStyleHeader.setBorderTop(BorderStyle.THIN);
+         cellStyleHeader.setBorderRight(BorderStyle.THIN);
+         cellStyleHeader.setBorderBottom(BorderStyle.THICK);
+         cellStyleHeader.setAlignment(HorizontalAlignment.CENTER);
+         cellStyleHeader.setVerticalAlignment(VerticalAlignment.CENTER);
+         cellStyleHeader.setFont(fontheader);
+         
+         
+         CellStyle cellStyleChild = wb.createCellStyle();
+//         cellStyleHeader.setDataFormat(createHelper.createDataFormat().getFormat("dd-mm-yyyy h:mm"));         
+         cellStyleChild.setBorderLeft(BorderStyle.THIN);
+         cellStyleChild.setBorderTop(BorderStyle.THIN);
+         cellStyleChild.setBorderRight(BorderStyle.THIN);
+         cellStyleChild.setBorderBottom(BorderStyle.THIN);
+         cellStyleChild.setAlignment(HorizontalAlignment.LEFT);
+         cellStyleChild.setFont(fontchild);
+         
          Sheet sheet1 = wb.createSheet("new sheet");
          
-         Row row = sheet1.createRow(3);
          
-         Cell cell = row.createCell(0);
-         cell.setCellValue(new Date());
-         cell.setCellStyle(cellStyle);
+        Row rowTitle = sheet1.createRow(0);
+        Cell cellTitle = rowTitle.createCell(0);
+        cellTitle.setCellValue("MAPING RAN RAD");
+        cellTitle.setCellStyle(cellStyleTitle);
+        sheet1.addMergedRegion(new CellRangeAddress(0,0,0,6)); 
          
+         
+         //buat row nama sheet row ke x
+         Row row = sheet1.createRow(3); 
+         //Set Tinggi Row
+         row.setHeightInPoints((float)65.25);
+         
+         
+         /** 
+          * Dimulai Buat Cell Header
+          * 
+          */
+         Cell cell0 = row.createCell(0);
+         cell0.setCellValue("No");
+         cell0.setCellStyle(cellStyleHeader);
+         
+         
+         Cell cell1 = row.createCell(1);
+         cell1.setCellValue("Provinsi");
+         cell1.setCellStyle(cellStyleHeader);
+         
+         Cell cell2 = row.createCell(2);
+         cell2.setCellValue("Monper");
+         cell2.setCellStyle(cellStyleHeader);
+         
+         Cell cell3 = row.createCell(3);
+         cell3.setCellValue("Goals");
+         cell3.setCellStyle(cellStyleHeader);
+         
+         Cell cell4 = row.createCell(4);
+         cell4.setCellValue("Target");
+         cell4.setCellStyle(cellStyleHeader);
+         
+         Cell cell5 = row.createCell(5);
+         cell5.setCellValue("Indicator");
+         cell5.setCellStyle(cellStyleHeader);
+         
+         Cell cell6 = row.createCell(6);
+         cell6.setCellValue("Nsa Indicator");
+         cell6.setCellStyle(cellStyleHeader);
+          /** 
+          * Diakhiri Buat Header
+          * 
+          */
+        String table = "";
+        if(cat_role.equals("Government")){
+            table = "gov_map";
+        }else{
+             table = "nsa_map";
+        }
+        
+        String sqlExcell = "SELECT b.nm_prov,CONCAT(c.start_year,' - ',c.end_year) AS monper ,d.nm_goals,e.nm_target,f.nm_indicator,g.nm_indicator as nsa_nm_indicator  FROM "+table+" a\n" +
+                            "LEFT JOIN ref_province b ON b.id_prov = a.id_prov\n" +
+                            "LEFT JOIN ran_rad c ON c.id_monper = a.id_monper\n" +
+                            "LEFT JOIN sdg_goals d ON d.id_goals = a.id_goals\n" +
+                            "LEFT JOIN sdg_target e ON e.id_target = a.id_target\n" +
+                            "LEFT JOIN sdg_indicator f ON f.id_indicator = a.id_indicator\n" +
+                            "LEFT JOIN nsa_indicator g ON g.id_nsa_indicator = a.id_indicator";
+        Query list = em.createNativeQuery(sqlExcell);
+        Map<String, Object> mapRanRad = new HashMap<>();
+        mapRanRad.put("mapRanRad",list.getResultList());
+        JSONObject objRanRad = new JSONObject(mapRanRad); 
+        JSONArray  arrayRanRad = objRanRad.getJSONArray("mapRanRad");
+        Integer begin = 4;
+        Integer no =1;
+        for(int i=0;i<arrayRanRad.length();i++){
+            JSONArray  finalArrayRanRad = arrayRanRad.getJSONArray(i);
+            Row rowChild = sheet1.createRow(begin);
+            
+            
+            Cell cellChild0 = rowChild.createCell(0);
+            cellChild0.setCellValue(no++);
+            cellChild0.setCellStyle(cellStyleChild);
+            
+            String prov = finalArrayRanRad.getString(0);
+            Cell cellChild1 = rowChild.createCell(1);
+            cellChild1.setCellValue(prov);
+            cellChild1.setCellStyle(cellStyleChild);
+            
+            String monper = finalArrayRanRad.getString(1);
+            Cell cellChild2 = rowChild.createCell(2);
+            cellChild2.setCellValue(monper);
+            cellChild2.setCellStyle(cellStyleChild);
+            
+            String goals = finalArrayRanRad.get(2).toString();
+            Cell cellChild3 = rowChild.createCell(3);
+            cellChild3.setCellValue(goals);
+            cellChild3.setCellStyle(cellStyleChild);
+            
+            String target = finalArrayRanRad.get(3).toString();
+            Cell cellChild4 = rowChild.createCell(4);
+            cellChild4.setCellValue(target);
+            cellChild4.setCellStyle(cellStyleChild);
+            
+            String indicator = finalArrayRanRad.get(4).toString();
+            Cell cellChild5 = rowChild.createCell(5);
+            cellChild5.setCellValue(indicator);
+            cellChild5.setCellStyle(cellStyleChild);
+            
+            String nsaindicator = finalArrayRanRad.get(5).toString();
+            Cell cellChild6 = rowChild.createCell(6);
+            cellChild6.setCellValue(nsaindicator);
+            cellChild6.setCellStyle(cellStyleChild);
+            
+            begin++;
+        }
          
         try (OutputStream fileOut = new FileOutputStream("export_ranrad"+id_monper+"-"+id_prov+".xls")) {
+            //auto size sheet k-0 column ke x
             wb.getSheetAt(0).autoSizeColumn(0);
+            wb.getSheetAt(0).autoSizeColumn(1);
+            wb.getSheetAt(0).autoSizeColumn(2);
+            wb.getSheetAt(0).autoSizeColumn(3);
+            wb.getSheetAt(0).autoSizeColumn(4);
+            wb.getSheetAt(0).autoSizeColumn(5);
+            wb.getSheetAt(0).autoSizeColumn(6);
+            
             wb.write(fileOut);
+            wb.close();
         }
         
     }
     
-    @RequestMapping(path = "/export-excell", method = RequestMethod.GET)
-    public ResponseEntity<Resource> getFile(String fileName,HttpServletResponse response) throws FileNotFoundException {
-        File f = new File ("export_ranrad1-000.xls");
+    @RequestMapping(path = "/export-excell/{id_monper}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getFile(@PathVariable("id_monper") String id_monper, HttpServletResponse response,HttpSession session) throws FileNotFoundException {
+        
+        String sql = "select * from ran_rad where id_monper = '"+id_monper+"'";
+        String id_prov = getStringByColumn(sql,11);
+//        Integer id_role = (Integer) session.getAttribute("id_role");
+//        String getCatRole = "select * from ref_role where id_role = '"+id_role+"'";
+//        String cat_role = getStringByColumn(getCatRole,3);
+        File f = new File ("export_ranrad"+id_monper+"-"+id_prov+".xls");
         InputStreamResource resource = new InputStreamResource(new FileInputStream(f));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+"export_ranrad1-000.xls");
+//         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+file);
         headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
         headers.add("Pragma", "no-cache");
         headers.add("Expires", "0");
