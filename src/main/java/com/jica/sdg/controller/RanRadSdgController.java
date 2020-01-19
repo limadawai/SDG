@@ -15,7 +15,6 @@ import com.jica.sdg.model.GovActivity;
 import com.jica.sdg.model.GovIndicator;
 import com.jica.sdg.model.GovMap;
 import com.jica.sdg.model.GovProgram;
-import com.jica.sdg.model.ListToJson;
 import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.NsaActivity;
 import com.jica.sdg.model.NsaIndicator;
