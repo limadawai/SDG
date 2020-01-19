@@ -347,5 +347,4 @@ public class DataEntryController {
         return "admin/dataentry/govactivity";
     }
 
-
 }
