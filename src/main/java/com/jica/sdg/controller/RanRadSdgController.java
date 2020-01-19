@@ -44,8 +44,35 @@ import com.jica.sdg.service.ISdgGoalsService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.ISdgTargetService;
 import com.jica.sdg.service.IUnitService;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.util.Arrays;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.servlet.http.HttpServletResponse;
 
 import javax.servlet.http.HttpSession;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @Controller
 public class RanRadSdgController {
@@ -103,6 +130,9 @@ public class RanRadSdgController {
 	
 	@Autowired
 	INsaMapService nsaMapService;
+        
+        @Autowired
+	private EntityManager em;
 	
 	//*********************** SDG ***********************
 	@GetMapping("admin/list-sdgGoals")
@@ -186,8 +216,14 @@ public class RanRadSdgController {
     
     @GetMapping("admin/list-sdgIndicator/{id_goals}/{id_target}")
     public @ResponseBody Map<String, Object> sdgIndicatorList(@PathVariable("id_goals") String id_goals, @PathVariable("id_target") String id_target) {
+//        String sql = "select a.id_indicator, a.id_goals, a.id_target, a.nm_indicator, b.nm_unit from sdg_indicator a Left Join ref_unit b on a.unit = b.id_unit where a.id_goals = :id_goals and a.id_target = :id_target";
+//        Query query  = em.createNativeQuery(sql)
+//                        .setParameter("id_goals",id_goals)
+//                        .setParameter("id_target", id_target);
+//        List list = query.getResultList();
+        
         List list = sdgIndicatorService.findAllGrid(id_goals, id_target);
-		Map<String, Object> hasil = new HashMap<>();
+	Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
@@ -634,7 +670,7 @@ public class RanRadSdgController {
     
   //*********************** MAPPING ***********************
     @GetMapping("admin/ran_rad/map/goals/{id_monper}")
-    public String goals(Model model, HttpSession session, @PathVariable("id_monper") Integer id_monper) {
+    public String goals(Model model, HttpSession session, @PathVariable("id_monper") Integer id_monper) throws IOException {
     	Optional<RanRad> monper = monPeriodService.findOne(id_monper);
     	Optional<Provinsi> provin = prov.findOne(monper.get().getId_prov());
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
@@ -642,8 +678,62 @@ public class RanRadSdgController {
         model.addAttribute("name", session.getAttribute("name"));
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+        exportExcell(id_monper);
+                
         return "admin/ran_rad/map/goals";
     }
+    
+    public void exportExcell(Integer id_monper) throws FileNotFoundException, IOException{
+        String sql = "select * from ran_rad where id_monper = '"+id_monper+"'";
+        Query listmonper = em.createNativeQuery(sql);
+         Map<String, Object> mapMonper = new HashMap<>();
+         mapMonper.put("listmonper",listmonper.getResultList() );
+         JSONObject objMonper = new JSONObject(mapMonper);
+         JSONArray array = objMonper.getJSONArray("listmonper").getJSONArray(0);
+         String id_prov = array.getString(11);
+         System.out.println(id_prov);
+         
+         Workbook wb = new HSSFWorkbook();
+         
+         CreationHelper createHelper = wb.getCreationHelper();
+         CellStyle cellStyle = wb.createCellStyle();
+         cellStyle.setDataFormat(createHelper.createDataFormat().getFormat("dd-mm-yyyy h:mm"));         
+         cellStyle.setBorderLeft(BorderStyle.THIN);
+         cellStyle.setBorderTop(BorderStyle.THIN);
+         cellStyle.setBorderRight(BorderStyle.THIN);
+         cellStyle.setBorderBottom(BorderStyle.THIN);         
+         Sheet sheet1 = wb.createSheet("new sheet");
+         
+         Row row = sheet1.createRow(3);
+         
+         Cell cell = row.createCell(0);
+         cell.setCellValue(new Date());
+         cell.setCellStyle(cellStyle);
+         
+         
+        try (OutputStream fileOut = new FileOutputStream("export_ranrad"+id_monper+"-"+id_prov+".xls")) {
+            wb.getSheetAt(0).autoSizeColumn(0);
+            wb.write(fileOut);
+        }
+        
+    }
+    
+    @RequestMapping(path = "/export-excell", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getFile(String fileName,HttpServletResponse response) throws FileNotFoundException {
+        File f = new File ("export_ranrad1-000.xls");
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(f));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+"export_ranrad1-000.xls");
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+           return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(f.length())
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(resource);
+        }
+    
     
     @GetMapping("admin/ran_rad/map/goals/{id_monper}/{id}/target")
     public String targetMap(Model model, @PathVariable("id_monper") Integer id_monper, @PathVariable("id") String id, HttpSession session) {
