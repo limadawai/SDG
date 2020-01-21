@@ -26,12 +26,12 @@ public class SdgIndicatorService implements ISdgIndicatorService{
 	}
 
 	@Override
-	public Optional<SdgIndicator> findOne(String id) {
+	public Optional<SdgIndicator> findOne(Integer id) {
 		return (Optional<SdgIndicator>) sdgIndicatorRepo.findById(id);
 	}
 
 	@Override
-	public void deleteSdgIndicator(String id) {
+	public void deleteSdgIndicator(Integer id) {
 		sdgIndicatorRepo.deleteById(id);
 	}
 
