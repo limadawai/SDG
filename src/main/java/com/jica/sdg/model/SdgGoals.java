@@ -9,8 +9,8 @@ public class SdgGoals implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-	@Column(nullable = false, length = 11)
-	private int id;
+    @Column(nullable = false, length = 11)
+    private int id;
 
     @Column(nullable = false, length = 3)
     private String id_goals;

@@ -16,19 +16,19 @@
 <!--  Content  -->
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / SDG Indicators Monitoring</a></div>
-            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Indikator SDG</a></div>
+            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Target SDG Indicators Monitoring</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Indikator SDG Target</a></div>
         </div>
         <div class="container-fluid" id="teruskan">
             <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title lang_eng" id="judul-eng" style="display: none">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>SDG Indicators Monitoring Table</h5>
+                        <h5>SDG Indicators Monitoring Target Table</h5>
                     </div>
                     <div class="widget-title lang_indo" id="judul-indo">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Tabel Monitor Indikator SDG</h5>
+                        <h5>Tabel Target Monitor Indikator SDG</h5>
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
@@ -81,28 +81,28 @@
                                     <thead >
                                         <tr class="lang_eng" style="display: none">
                                             <th style="text-align:center;font-size:80%;width: 10%">Indicator Code</th>
-                                            <th style="text-align:center;font-size:80%;width: 45%">Indicator Name</th>
+                                            <th style="text-align:center;font-size:80%;width: 70%">Indicator Name</th>
                                             <!--<th style="text-align:center;font-size:80%;">Data Source</th>-->
                                             <th style="text-align:center;font-size:80%;">Unit</th>
                                             <!--<th style="text-align:center;font-size:80%;">Baseline</th>-->
-                                            <th style="text-align:center;font-size:80%;">Target SDGs</th>
+<!--                                            <th style="text-align:center;font-size:80%;">Target SDGs</th>
                                             <th style="text-align:center;font-size:80%;">SDGs Achievements I</th>
                                             <th style="text-align:center;font-size:80%;">SDGs Achievements II</th>
                                             <th style="text-align:center;font-size:80%;">SDGs Achievements III</th>
-                                            <th style="text-align:center;font-size:80%;">SDGs Achievements IV</th>
+                                            <th style="text-align:center;font-size:80%;">SDGs Achievements IV</th>-->
                                             <!--<th style="text-align:center;font-size:80%;">Status</th>-->
                                         </tr>
                                         <tr class="lang_indo" id="thead_indo">
                                             <th style="text-align:center;font-size:80%;width: 10%">Kode Indikator</th>
-                                            <th style="text-align:center;font-size:80%;width: 45%">Nama Indikator</th>
+                                            <th style="text-align:center;font-size:80%;width: 70%">Nama Indikator</th>
                                             <!--<th style="text-align:center;font-size:80%;">Sumber Data</th>-->
                                             <th style="text-align:center;font-size:80%;">Unit</th>
                                             <!--<th style="text-align:center;font-size:80%;">Garis Dasar</th>-->
-                                            <th style="text-align:center;font-size:80%;">Target SDG</th>
+<!--                                            <th style="text-align:center;font-size:80%;">Target SDG</th>
                                             <th style="text-align:center;font-size:80%;">Pencapaian SDG I</th>
                                             <th style="text-align:center;font-size:80%;">Pencapaian SDG II</th>
                                             <th style="text-align:center;font-size:80%;">Pencapaian SDG III</th>
-                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG IV</th>
+                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG IV</th>-->
                                             <!--<th style="text-align:center;font-size:80%;">Status</th>-->
                                         </tr>
                                     </thead>
@@ -114,12 +114,12 @@
                     </div>
                 </div>
             </div>
-            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
+<!--            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
                 <a class="btn btn-success btn-small" id="apply_btn" data-id="#">Apply</a>
             </div>
             <div class="btn-toolbar lang_indo" style="float:right" id="btn_indo">
                 <a class="btn btn-success btn-small" id="apply_btn" data-id="#">Terapkan</a>
-            </div>
+            </div>-->
         </div>
         <div class="modal hide fade addModal" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -330,6 +330,7 @@
             var v_data_id   = v_dataid.split("###");;
             var id_monper   = v_data_id[0];
             var tahun       = v_data_id[1];
+            
             var table = $('#tabel-entri-sdg').DataTable({
                 responsive: true,
                 sDom: 'lrtip',
@@ -339,240 +340,238 @@
                 "responsive":true,
                 "bDestroy": true,
                 "ajax": {
-                    "url": urls+'list-entry-sdg/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
+                    "url": urls+'list-entry-sdg-target/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
                     dataSrc: 'content',
                 },
                 "searching": true,
                 "columns": [
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[10]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[12]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[14]+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
+                        var v_idrole1   = $("#idrole").val();
+                        var v_dataid2   = $("#periode").val();
+                        var v_dataid1   = v_dataid2.split("###");;
+                        var id_monper1  = v_dataid1[0];
+                        var tahun1      = v_dataid1[1];
+                        var v_idprov1   = $("#id_prov").val();
                         if($('#fs').is(':checked')){
-                            return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
+                            return "<div style='font-size:90%;'><a href='"+urls+"entry/sdg-target/input/"+row[2]+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"' class='target'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
                         }else{
-                            return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>";
+                            return "<div style='font-size:90%;'>"+row[11]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[15]+"</div>";
                         }
                     }},
                     {"data": function (row, data, index, display) {
                         return "<div style='font-size:90%;'>"+row[6]+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[8] == null || row[8] == ""){
-                            return "<div style='font-size:90%;'> 0 </div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-                        }
-                        
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[13] == 'yearly'){
-                            if(row[9] == null || row[9] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                            }else{
-                                var target  = row[8];
-                                var achieve = row[9];
-                                var sts     = row[7];
-                                if(sts == 'Increment'){
-                                    if(achieve >= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }else{
-                                    if(achieve <= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
-                            }
-                        }else if(row[13] == 'semesterly'){
-                            if(row[9] == null || row[9] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                            }else{
-                                var target  = row[8];
-                                var achieve = row[9];
-                                var sts     = row[7];
-                                if(sts == 'Increment'){
-                                    if(achieve >= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }else{
-                                    if(achieve <= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
-                            }
-                        }else if(row[13] == 'quarterly'){
-                            if(row[9] == null || row[9] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                            }else{
-                                var target  = row[8];
-                                var achieve = row[9];
-                                var sts     = row[7];
-                                if(sts == 'Increment'){
-                                    if(achieve >= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }else{
-                                    if(achieve <= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
-                            }
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[13] == 'yearly'){
-                            if(row[10] == null || row[10] == ""){
-                                return "<div style='font-size:90%;'> 0 </div>";
-                            }else{
-                                return "<div style='font-size:90%;'>"+row[10]+"</div>";
-                            }
-                            
-                        }else if(row[13] == 'semesterly'){
-                            if(row[10] == null || row[10] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                            }else{
-                                var target  = row[8];
-                                var achieve = row[10];
-                                var sts     = row[7];
-                                if(sts == 'Increment'){
-                                    if(achieve >= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }else{
-                                    if(achieve <= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
-                            }
-                        }else if(row[13] == 'quarterly'){
-                            if(row[10] == null || row[10] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                            }else{
-                                var target  = row[8];
-                                var achieve = row[10];
-                                var sts     = row[7];
-                                if(sts == 'Increment'){
-                                    if(achieve >= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }else{
-                                    if(achieve <= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
-                            }
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[10]+"</div>";
-                        }
-                        
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[13] == 'yearly'){
-                            if(row[11] == null || row[11] == ""){
-                                return "<div style='font-size:90%;'> 0 </div>";
-                            }else{
-                                return "<div style='font-size:90%;'>"+row[11]+"</div>";
-                            }
-                            
-                        }else if(row[13] == 'semesterly'){
-                            if(row[11] == null || row[11] == ""){
-                                return "<div style='font-size:90%;'> 0 </div>";
-                            }else{
-                                return "<div style='font-size:90%;'>"+row[11]+"</div>";
-                            }
-                        }else if(row[13] == 'quarterly'){
-                            if(row[11] == null || row[11] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                            }else{
-                                var target  = row[8];
-                                var achieve = row[11];
-                                var sts     = row[7];
-                                if(sts == 'Increment'){
-                                    if(achieve >= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }else{
-                                    if(achieve <= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[11]+"</a>";
-                            }
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[11]+"</div>";
-                        }
-                        
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[13] == 'yearly'){
-                            if(row[12] == null || row[12] == ""){
-                                return "<div style='font-size:90%;'> 0 </div>";
-                            }else{
-                                return "<div style='font-size:90%;'>"+row[12]+"</div>";
-                            }
-                        }else if(row[13] == 'semesterly'){
-                            if(row[12] == null || row[12] == ""){
-                                return "<div style='font-size:90%;'> 0 </div>";
-                            }else{
-                                return "<div style='font-size:90%;'>"+row[12]+"</div>";
-                            }
-                        }else if(row[13] == 'quarterly'){
-                            if(row[12] == null || row[12] == ""){
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                            }else{
-                                var target  = row[8];
-                                var achieve = row[11];
-                                var sts     = row[7];
-                                if(sts == 'Increment'){
-                                    if(achieve >= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }else{
-                                    if(achieve <= target){
-                                        var color_sts = 'btn btn-success';
-                                    }else{
-                                        var color_sts = 'btn btn-danger';
-                                    }
-                                }
-                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
-                            }
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[12]+"</div>";
-                        }
-                    }},
+                    }}
+//                    {"data": function (row, data, index, display) {
+//                        if(row[13] == 'yearly'){
+//                            if(row[9] == null || row[9] == ""){
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+//                            }else{
+//                                var target  = row[8];
+//                                var achieve = row[9];
+//                                var sts     = row[7];
+//                                if(sts == 'Increment'){
+//                                    if(achieve >= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }else{
+//                                    if(achieve <= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+//                            }
+//                        }else if(row[13] == 'semesterly'){
+//                            if(row[9] == null || row[9] == ""){
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+//                            }else{
+//                                var target  = row[8];
+//                                var achieve = row[9];
+//                                var sts     = row[7];
+//                                if(sts == 'Increment'){
+//                                    if(achieve >= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }else{
+//                                    if(achieve <= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+//                            }
+//                        }else if(row[13] == 'quarterly'){
+//                            if(row[9] == null || row[9] == ""){
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+//                            }else{
+//                                var target  = row[8];
+//                                var achieve = row[9];
+//                                var sts     = row[7];
+//                                if(sts == 'Increment'){
+//                                    if(achieve >= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }else{
+//                                    if(achieve <= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+//                            }
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+//                        }
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if(row[13] == 'yearly'){
+//                            if(row[10] == null || row[10] == ""){
+//                                return "<div style='font-size:90%;'> 0 </div>";
+//                            }else{
+//                                return "<div style='font-size:90%;'>"+row[10]+"</div>";
+//                            }
+//                            
+//                        }else if(row[13] == 'semesterly'){
+//                            if(row[10] == null || row[10] == ""){
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+//                            }else{
+//                                var target  = row[8];
+//                                var achieve = row[10];
+//                                var sts     = row[7];
+//                                if(sts == 'Increment'){
+//                                    if(achieve >= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }else{
+//                                    if(achieve <= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+//                            }
+//                        }else if(row[13] == 'quarterly'){
+//                            if(row[10] == null || row[10] == ""){
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+//                            }else{
+//                                var target  = row[8];
+//                                var achieve = row[10];
+//                                var sts     = row[7];
+//                                if(sts == 'Increment'){
+//                                    if(achieve >= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }else{
+//                                    if(achieve <= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+//                            }
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[10]+"</div>";
+//                        }
+//                        
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if(row[13] == 'yearly'){
+//                            if(row[11] == null || row[11] == ""){
+//                                return "<div style='font-size:90%;'> 0 </div>";
+//                            }else{
+//                                return "<div style='font-size:90%;'>"+row[11]+"</div>";
+//                            }
+//                            
+//                        }else if(row[13] == 'semesterly'){
+//                            if(row[11] == null || row[11] == ""){
+//                                return "<div style='font-size:90%;'> 0 </div>";
+//                            }else{
+//                                return "<div style='font-size:90%;'>"+row[11]+"</div>";
+//                            }
+//                        }else if(row[13] == 'quarterly'){
+//                            if(row[11] == null || row[11] == ""){
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+//                            }else{
+//                                var target  = row[8];
+//                                var achieve = row[11];
+//                                var sts     = row[7];
+//                                if(sts == 'Increment'){
+//                                    if(achieve >= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }else{
+//                                    if(achieve <= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[11]+"</a>";
+//                            }
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[11]+"</div>";
+//                        }
+//                        
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if(row[13] == 'yearly'){
+//                            if(row[12] == null || row[12] == ""){
+//                                return "<div style='font-size:90%;'> 0 </div>";
+//                            }else{
+//                                return "<div style='font-size:90%;'>"+row[12]+"</div>";
+//                            }
+//                        }else if(row[13] == 'semesterly'){
+//                            if(row[12] == null || row[12] == ""){
+//                                return "<div style='font-size:90%;'> 0 </div>";
+//                            }else{
+//                                return "<div style='font-size:90%;'>"+row[12]+"</div>";
+//                            }
+//                        }else if(row[13] == 'quarterly'){
+//                            if(row[12] == null || row[12] == ""){
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+//                            }else{
+//                                var target  = row[8];
+//                                var achieve = row[11];
+//                                var sts     = row[7];
+//                                if(sts == 'Increment'){
+//                                    if(achieve >= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }else{
+//                                    if(achieve <= target){
+//                                        var color_sts = 'btn btn-success';
+//                                    }else{
+//                                        var color_sts = 'btn btn-danger';
+//                                    }
+//                                }
+//                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
+//                            }
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[12]+"</div>";
+//                        }
+//                    }},
 //                    {"data": function (row, data, index, display) {
 ////                        if(row[13] == null || row[13] == ""){
 ////                            return '';
@@ -602,7 +601,8 @@
                 var v_data_id   = v_dataid.split("###");;
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
-                table.ajax.url(urls+'list-entry-sdg/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun ).load();
+//                console.log(urls+'list-entry-sdg-target/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun);
+                table.ajax.url(urls+'list-entry-sdg-target/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun ).load();
                 
             }
             
