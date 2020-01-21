@@ -6,12 +6,45 @@
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <head th:include="admin/layout :: header">
     <title th:text="SDG Indicator Monitoring">SDG Indicator Monitoring</title>
-    <style>
-        .pointer {cursor: pointer;}
-    </style>
 </head>
 <body>
     <div th:include="admin/layout :: menu"></div>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Laporan / Monitoring</a></div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div style="width:100%">
+                    <select id="daerah" name="daerah" class="form-control">
+                        <option value="0" >-- Pilih Daerah --</option>
+                        <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
+                    </select>
+                    <select id="role" name="idrole" class="form-control">
+                        <option value="0" >-- Pilih Role --</option>
+                        <option th:each="f:${listRole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+                    </select>
+                    <select id="periode" name="idrole" class="form-control">
+                        <option value="0" >-- Pilih Periode --</option>
+                        <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
+                    </select>
+                </div>
+                <div style="width:100%">
+                    <select id="daerah" name="daerah" class="form-control">
+                        <option value="0" >-- Pilih SDGs --</option>
+                    </select>
+                    <select id="role" name="idrole" class="form-control">
+                        <option value="0" >-- Pilih Target --</option>
+                    </select>
+                    <select id="periode" name="idrole" class="form-control">
+                        <option value="0" >-- Pilih Indikator --</option>
+                    </select>
+                </div>
+                <div class="widget-box">
+                </div>
+            </div>
+        </div>
+    </div>
     <div th:include="admin/layout :: footer"></div>
     <script th:inline="javascript">
         var lang = [[${lang}]];

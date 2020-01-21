@@ -9,6 +9,9 @@ public class SdgIndicator implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+	@Column(nullable = false, length = 11)
+	private int id;
+
     @Column(nullable = false, length = 12)
     private String id_indicator;
     
@@ -20,6 +23,9 @@ public class SdgIndicator implements Serializable {
     
     @Column(nullable = false, length = 125)
     private String nm_indicator;
+
+    @Column(nullable = false, length = 125)
+	private String nm_indicator_eng;
     
     @Column(nullable = false, length = 10)
     private String unit;
@@ -30,15 +36,23 @@ public class SdgIndicator implements Serializable {
 	public SdgIndicator() {
 	}
 
-	public SdgIndicator(String id_indicator, String id_goals, String id_target, String nm_indicator, String unit,
-			 String increment_decrement) {
-		super();
+	public SdgIndicator(int id, String id_indicator, String id_goals, String id_target, String nm_indicator, String nm_indicator_eng, String unit, String increment_decrement) {
+		this.id = id;
 		this.id_indicator = id_indicator;
 		this.id_goals = id_goals;
 		this.id_target = id_target;
 		this.nm_indicator = nm_indicator;
+		this.nm_indicator_eng = nm_indicator_eng;
 		this.unit = unit;
 		this.increment_decrement = increment_decrement;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public String getId_indicator() {
@@ -71,6 +85,14 @@ public class SdgIndicator implements Serializable {
 
 	public void setNm_indicator(String nm_indicator) {
 		this.nm_indicator = nm_indicator;
+	}
+
+	public String getNm_indicator_eng() {
+		return nm_indicator_eng;
+	}
+
+	public void setNm_indicator_eng(String nm_indicator_eng) {
+		this.nm_indicator_eng = nm_indicator_eng;
 	}
 
 	public String getIncrement_decrement() {

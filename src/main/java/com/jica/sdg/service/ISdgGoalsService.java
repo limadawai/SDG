@@ -11,7 +11,7 @@ public interface ISdgGoalsService {
 
     void saveSdgGoals(SdgGoals sdg);
     
-    Optional<SdgGoals> findOne(String id);
+    Optional<SdgGoals> findOne(int id);
     
-    void deleteSdgGoals(String id);
+    void deleteSdgGoals(int id);
 }

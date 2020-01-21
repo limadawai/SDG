@@ -117,7 +117,12 @@
 		//$(document).ready(function (e) {
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
-	        
+
+			var lang = [[${lang}]];
+			var name = [[${name}]];
+			$("#welcome").html("Welcome, "+name);
+			alert(lang);
+
 	        //Bahasa
 	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
@@ -137,7 +142,7 @@
 	    	        messOk = "Data berhasil dihapus";
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
-	        	}else{	    	        
+				}else{
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
 	        		titleDel = "Are you sure";
@@ -147,17 +152,9 @@
 	    	        messOk = "Delete successful";
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
-	        	}
+				}
 	        }
-	        if(lang){
-	        	bhs(lang=="0");
-	        }else{
-	        	bhs($('#fs').is(':checked'));
-	        }
-	        
-	        $('#fs').on('change', function(e){
-	        	bhs($(this).is(':checked'));
-	        });
+
 			var table = $('#tabel-goals').DataTable({
 				sDom: 'lrtip',
 				"bLengthChange": false,
@@ -177,19 +174,23 @@
 							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row.id_goals+"/target' class='target' data-id='"+row.id_goals+"'>"+row.nm_goals+"</a></div>";
+							if (lang == "0") {
+								return "<div style='font-size:90%;'><a href='" + urls + "ran_rad/sdg/goals/" + row.id + "/target' class='target' data-id='" + row.id + "'>" + row.nm_goals + "</a></div>";
+							} else if (lang == "1") {
+								return "<div style='font-size:90%;'><a href='" + urls + "ran_rad/sdg/goals/" + row.id + "/target' class='target' data-id='" + row.id + "'>" + row.nm_goals_eng + "</a></div>";
+							}
 						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row.id_goals+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id_goals+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id_goals+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-						}}
+							'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+							'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+					}}
 				],
 				"columnDefs": [
 				],
 				select: true
-			});	
+			});
 			
 			$('#text-cari').on( 'keyup', function () {
 				var val=$(this).val();
