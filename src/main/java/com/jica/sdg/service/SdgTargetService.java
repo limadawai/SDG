@@ -16,7 +16,7 @@ public class SdgTargetService implements ISdgTargetService{
 	SdgTargetRepository sdgtargetRepo;
 	
 	@Override
-	public List<SdgTarget> findAll(String id) {
+	public List<SdgTarget> findAll(int id) {
 		return (List<SdgTarget>) sdgtargetRepo.findAllTarget(id);
 	}
 	
@@ -26,12 +26,12 @@ public class SdgTargetService implements ISdgTargetService{
 	}
 
 	@Override
-	public Optional<SdgTarget> findOne(String id) {
+	public Optional<SdgTarget> findOne(int id) {
 		return (Optional<SdgTarget>) sdgtargetRepo.findById(id);
 	}
 
 	@Override
-	public void deleteSdgTarget(String id) {
+	public void deleteSdgTarget(int id) {
 		sdgtargetRepo.deleteById(id);
 	}
 }

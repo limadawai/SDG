@@ -47,5 +47,11 @@ public class GovMapService implements IGovMapService{
 	@Override
 	public List<GovMap> findAllBySdgInd(String id) {
 		return (List<GovMap>) repo.getIdBySdgInd(id);
-	}	
+	}
+
+	@Override
+	public List<GovMap> getAllByIdProv(String id_prov) {
+		List list = (List<GovMap>) repo.getAllByIdProv(id_prov);
+		return list;
+	}
 }

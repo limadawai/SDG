@@ -19,4 +19,6 @@ public interface IGovMapService {
     void deleteGovMap(Integer id);
     
     void deleteGovMapBySdgInd(String id);
+
+    List<GovMap> getAllByIdProv(String id_prov);
 }

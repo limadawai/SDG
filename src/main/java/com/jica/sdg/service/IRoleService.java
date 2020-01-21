@@ -20,4 +20,5 @@ public interface IRoleService {
     void deleteRole(Integer id);
     
     Integer cekRole(String id_prov, String nm_role);
+
 }

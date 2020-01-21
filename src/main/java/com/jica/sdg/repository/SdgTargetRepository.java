@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SdgTargetRepository extends CrudRepository<SdgTarget, String> {
-	@Query(value = "select * from sdg_target where id_goals = :id_goals",nativeQuery = true)
-	public List<SdgTarget> findAllTarget(@Param("id_goals") String id_goals); 
+public interface SdgTargetRepository extends CrudRepository<SdgTarget, Integer> {
+	@Query(value = "select * from sdg_target where id = :id",nativeQuery = true)
+	public List<SdgTarget> findAllTarget(@Param("id") int id);
 }

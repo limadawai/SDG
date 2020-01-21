@@ -22,16 +22,17 @@
                     </select>
                     <select id="role" name="idrole" class="form-control">
                         <option value="0" >-- Pilih Role --</option>
-                        <option th:each="f:${listRole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+<!--                        <option th:each="f:${listRole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
                     </select>
                     <select id="periode" name="idrole" class="form-control">
                         <option value="0" >-- Pilih Periode --</option>
-                        <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
+<!--                        <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
                     </select>
                 </div>
                 <div style="width:100%">
                     <select id="daerah" name="daerah" class="form-control">
                         <option value="0" >-- Pilih SDGs --</option>
+<!--                        <option id="goals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>-->
                     </select>
                     <select id="role" name="idrole" class="form-control">
                         <option value="0" >-- Pilih Target --</option>
@@ -39,6 +40,17 @@
                     <select id="periode" name="idrole" class="form-control">
                         <option value="0" >-- Pilih Indikator --</option>
                     </select>
+                </div>
+                <div style="width:100%;padding:20px;background:lightblue;">
+                    <div id="divgoals" style="width:100%">
+                        <p>Goals</p>
+                    </div>
+                    <div id="divtarget" style="width:100%">
+                        <p>Target</p>
+                    </div>
+                    <div id="divindikator" style="width:100%">
+                        <p>Indikator</p>
+                    </div>
                 </div>
                 <div class="widget-box">
                 </div>
@@ -49,7 +61,10 @@
     <script th:inline="javascript">
         var lang = [[${lang}]];
         var name = [[${name}]];
+        var role = [[${role}]];
         $("#welcome").html("Welcome, "+name);
+
+        indo();
 
         if (lang == "0") {
             indo();
@@ -72,6 +87,24 @@
         function inggris() {
 
         }
+
+        // ********************** Fungsi pilih select option **********************
+        $("#daerah").on("change", function(){
+            var valdaerah = $(this).val();
+            if (valdaerah != "0") {
+                $.ajax({
+                    url: urls + "getroleprov",
+                    type: 'get',
+                    data: 'id_prov=' + valdaerah,
+                    dataType: 'json',
+                    cache: false,
+                    async: true,
+                    success: function (result) {
+                        console.log(result);
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
