@@ -121,7 +121,6 @@
 			var lang = [[${lang}]];
 			var name = [[${name}]];
 			$("#welcome").html("Welcome, "+name);
-			alert(lang);
 
 	        //Bahasa
 	        var titleDel = "Anda Yakin";
@@ -154,6 +153,16 @@
 	    	        required = "Required";
 				}
 	        }
+			if(lang){
+				bhs(lang=="0");
+			}else{
+				bhs($('#fs').is(':checked'));
+			}
+
+			$('#fs').on('change', function(e){
+				bhs($(this).is(':checked'));
+				table.ajax.url(urls+'list-sdgGoals').load();
+			});
 
 			var table = $('#tabel-goals').DataTable({
 				sDom: 'lrtip',
@@ -174,18 +183,18 @@
 							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							if (lang == "0") {
+							if ($('#fs').is(':checked')) {
 								return "<div style='font-size:90%;'><a href='" + urls + "ran_rad/sdg/goals/" + row.id + "/target' class='target' data-id='" + row.id + "'>" + row.nm_goals + "</a></div>";
-							} else if (lang == "1") {
+							} else {
 								return "<div style='font-size:90%;'><a href='" + urls + "ran_rad/sdg/goals/" + row.id + "/target' class='target' data-id='" + row.id + "'>" + row.nm_goals_eng + "</a></div>";
 							}
 						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-					}}
+									'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+									'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+									'<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+						}}
 				],
 				"columnDefs": [
 				],
