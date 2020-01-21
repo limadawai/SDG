@@ -7,15 +7,15 @@ import java.util.Optional;
 
 public interface ISdgIndicatorService {
 
-    List<SdgIndicator> findAll(String id_goals, String id_target);
+    List<SdgIndicator> findAll(Integer id_goals, Integer id_target);
     
-    List findAllGrid(String id_goals, String id_target);
+    List findAllGrid(Integer id_goals, Integer id_target);
     
     List<SdgIndicator> findAll();
 
     void saveSdgIndicator(SdgIndicator sdg);
     
-    Optional<SdgIndicator> findOne(String id);
+    Optional<SdgIndicator> findOne(Integer id);
     
-    void deleteSdgIndicator(String id);
+    void deleteSdgIndicator(Integer id);
 }

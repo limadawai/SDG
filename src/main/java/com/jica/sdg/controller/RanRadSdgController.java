@@ -178,7 +178,7 @@ public class RanRadSdgController {
     }
 	
 	@GetMapping("admin/list-sdgTarget/{id}")
-    public @ResponseBody Map<String, Object> sdgtargetList(@PathVariable("id") String id) {
+    public @ResponseBody Map<String, Object> sdgtargetList(@PathVariable("id") Integer id) {
         List<SdgTarget> list = sdgTargetService.findAll(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -192,7 +192,7 @@ public class RanRadSdgController {
 	}
 	
 	@GetMapping("admin/get-sdgTarget/{id}")
-    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id") String id) {
+    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id") Integer id) {
         Optional<SdgTarget> list = sdgTargetService.findOne(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -201,12 +201,12 @@ public class RanRadSdgController {
 	
 	@DeleteMapping("admin/delete-sdgTarget/{id}")
 	@ResponseBody
-	public void deleteSdgtarget(@PathVariable("id") String id) {
+	public void deleteSdgtarget(@PathVariable("id") Integer id) {
 		sdgTargetService.deleteSdgTarget(id);
 	}
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator")
-    public String sdg(Model model, @PathVariable("id") int id, @PathVariable("id_target") String id_target, HttpSession session) {
+    public String sdg(Model model, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
@@ -219,7 +219,7 @@ public class RanRadSdgController {
     }
     
     @GetMapping("admin/list-sdgIndicator/{id_goals}/{id_target}")
-    public @ResponseBody Map<String, Object> sdgIndicatorList(@PathVariable("id_goals") String id_goals, @PathVariable("id_target") String id_target) {
+    public @ResponseBody Map<String, Object> sdgIndicatorList(@PathVariable("id_goals") Integer id_goals, @PathVariable("id_target") Integer id_target) {
 //        String sql = "select a.id_indicator, a.id_goals, a.id_target, a.nm_indicator, b.nm_unit from sdg_indicator a Left Join ref_unit b on a.unit = b.id_unit where a.id_goals = :id_goals and a.id_target = :id_target";
 //        Query query  = em.createNativeQuery(sql)
 //                        .setParameter("id_goals",id_goals)
@@ -239,7 +239,7 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/get-sdgIndicator/{id}")
-    public @ResponseBody Map<String, Object> getSdgIndicator(@PathVariable("id") String id) {
+    public @ResponseBody Map<String, Object> getSdgIndicator(@PathVariable("id") Integer id) {
         Optional<SdgIndicator> list = sdgIndicatorService.findOne(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -248,12 +248,12 @@ public class RanRadSdgController {
     
     @DeleteMapping("admin/delete-sdgIndicator/{id}")
 	@ResponseBody
-	public void deleteSdgIndicator(@PathVariable("id") String id) {
+	public void deleteSdgIndicator(@PathVariable("id") Integer id) {
     	sdgIndicatorService.deleteSdgIndicator(id);
 	}
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator/{id_indicator}/disaggre")
-    public String disagre(Model model, @PathVariable("id") int id, @PathVariable("id_target") String id_target, @PathVariable("id_indicator") String id_indicator, HttpSession session) {
+    public String disagre(Model model, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, @PathVariable("id_indicator") Integer id_indicator, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
     	Optional<SdgIndicator> list2 = sdgIndicatorService.findOne(id_indicator);
@@ -295,7 +295,7 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator/{id_indicator}/disaggre/{id_disaggre}")
-    public String disagreDetail(Model model, @PathVariable("id") int id, @PathVariable("id_target") String id_target, @PathVariable("id_indicator") String id_indicator,
+    public String disagreDetail(Model model, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, @PathVariable("id_indicator") Integer id_indicator,
                                 @PathVariable("id_disaggre") String id_disaggre, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
@@ -922,7 +922,7 @@ public class RanRadSdgController {
     }
     
     @GetMapping("admin/ran_rad/map/goals/{id_monper}/{id}/target/{id_target}/indicator")
-    public String sdgMap(Model model, @PathVariable("id_monper") Integer id_monper, @PathVariable("id") int id, @PathVariable("id_target") String id_target, HttpSession session) {
+    public String sdgMap(Model model, @PathVariable("id_monper") Integer id_monper, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
     	Optional<RanRad> monper = monPeriodService.findOne(id_monper);

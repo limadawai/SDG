@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface ISdgTargetService {
 
-    List<SdgTarget> findAll(String id);
+    List<SdgTarget> findAll(Integer id);
 
     void saveSdgTarget(SdgTarget sdg);
     
-    Optional<SdgTarget> findOne(String id);
+    Optional<SdgTarget> findOne(Integer id);
     
-    void deleteSdgTarget(String id);
+    void deleteSdgTarget(Integer id);
 }
