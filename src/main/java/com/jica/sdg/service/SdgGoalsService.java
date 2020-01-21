@@ -26,12 +26,12 @@ public class SdgGoalsService implements ISdgGoalsService{
 	}
 
 	@Override
-	public Optional<SdgGoals> findOne(String id) {
+	public Optional<SdgGoals> findOne(int id) {
 		return (Optional<SdgGoals>) sdgGoalsRepo.findById(id);
 	}
 
 	@Override
-	public void deleteSdgGoals(String id) {
+	public void deleteSdgGoals(int id) {
 		sdgGoalsRepo.deleteById(id);
 	}
 }

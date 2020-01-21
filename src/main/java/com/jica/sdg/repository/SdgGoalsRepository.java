@@ -5,5 +5,5 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SdgGoalsRepository extends CrudRepository<SdgGoals, String> {
+public interface SdgGoalsRepository extends CrudRepository<SdgGoals, Integer> {
 }

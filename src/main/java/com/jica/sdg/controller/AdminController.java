@@ -89,7 +89,9 @@ public class AdminController {
         request.getSession().setAttribute("username", userData.get(0).getUserName());
         request.getSession().setAttribute("name", userData.get(0).getName());
 
-        model.addAttribute("lang", session.getAttribute("bahasa"));
+        String bhs = (String) session.getAttribute("bahasa");
+        if (bhs == null) {bhs = "0";}
+        model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/dashboard";
     }
@@ -108,7 +110,9 @@ public class AdminController {
     @GetMapping("admin/ran_rad/sdg/goals")
     public String goals(Model model, HttpSession session) {
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        model.addAttribute("lang", session.getAttribute("bahasa"));
+        String bhs = (String) session.getAttribute("bahasa");
+        if (bhs == null) {bhs = "0";}
+        model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/sdg/goals";
     }
@@ -128,9 +132,11 @@ public class AdminController {
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
         model.addAttribute("role", roleService.findByProvince(id_prov));
-        model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("privilege", privilege);
+        String bhs = (String) session.getAttribute("bahasa");
+        if (bhs == null) {bhs = "0";}
+        model.addAttribute("lang", bhs);
         return "admin/ran_rad/gov/program";
     }
 
@@ -154,9 +160,11 @@ public class AdminController {
     	}
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         model.addAttribute("monPer", monPeriodService.findAll(id_prov));
-        model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("privilege", privilege);
+        String bhs = (String) session.getAttribute("bahasa");
+        if (bhs == null) {bhs = "0";}
+        model.addAttribute("lang", bhs);
 //        System.out.println(privilege);
         return "admin/ran_rad/non-gov/program";
     }
@@ -175,7 +183,9 @@ public class AdminController {
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
     	}
         //tester brooo google gg
-        model.addAttribute("lang", session.getAttribute("bahasa"));
+        String bhs = (String) session.getAttribute("bahasa");
+        if (bhs == null) {bhs = "0";}
+        model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/ran_rad/monper";
     }
