@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface INsaIndicatorService {
 
-    List<NsaIndicator> findAll(String id_program, String id_activity);
+    List<NsaIndicator> findAll(Integer id_program, Integer id_activity);
     
-    List findAllIndi(String id_program, String id_activity);
+    List findAllIndi(Integer id_program, Integer id_activity);
 
     void saveNsaIndicator(NsaIndicator gov);
     
-    Optional<NsaIndicator> findOne(String id);
+    Optional<NsaIndicator> findOne(Integer id);
     
-    void deleteNsaIndicator(String id);
+    void deleteNsaIndicator(Integer id);
 }

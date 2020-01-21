@@ -218,7 +218,10 @@
                                 $(this).append(ul);
                             });
                             $('li[class*=aktif]:visible').each(function () {
-                                $(this).on('hover', function () {
+                            	$(this).on('hover', function () {
+                            		$("li.aktif > ul").empty();
+                            	});
+                                $(this).on('click', function () {
                                     $.ajax({
                                         url: urls+'submenu',
                                         type: 'get',

@@ -10,11 +10,18 @@ public class NsaProgram implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, length = 11)
+    private Integer id;
+    
     @Column(nullable = false, length = 10)
     private String id_program;
     
-    @Column(nullable = false, length = 150)
+    @Column(nullable = true, length = 150)
     private String nm_program;
+    
+    @Column(nullable = true, length = 150)
+    private String nm_program_eng;
     
     @Column(nullable = false, length = 4)
     private Integer id_role;
@@ -38,11 +45,13 @@ public class NsaProgram implements Serializable {
 	public NsaProgram() {
 	}
 
-	public NsaProgram(String id_program, String nm_program, Integer id_role, Integer id_monper, String rel_prog_id,
-			Integer created_by, Date date_created, String internal_code) {
+	public NsaProgram(Integer id, String id_program, String nm_program, String nm_program_eng, Integer id_role,
+			Integer id_monper, String rel_prog_id, Integer created_by, Date date_created, String internal_code) {
 		super();
+		this.id = id;
 		this.id_program = id_program;
 		this.nm_program = nm_program;
+		this.nm_program_eng = nm_program_eng;
 		this.id_role = id_role;
 		this.id_monper = id_monper;
 		this.rel_prog_id = rel_prog_id;
@@ -51,6 +60,13 @@ public class NsaProgram implements Serializable {
 		this.internal_code = internal_code;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getId_program() {
 		return id_program;
@@ -66,6 +82,14 @@ public class NsaProgram implements Serializable {
 
 	public void setNm_program(String nm_program) {
 		this.nm_program = nm_program;
+	}
+
+	public String getNm_program_eng() {
+		return nm_program_eng;
+	}
+
+	public void setNm_program_eng(String nm_program_eng) {
+		this.nm_program_eng = nm_program_eng;
 	}
 
 	public Integer getId_role() {
@@ -108,15 +132,15 @@ public class NsaProgram implements Serializable {
 		this.date_created = date_created;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public String getInternal_code() {
 		return internal_code;
 	}
 
 	public void setInternal_code(String internal_code) {
 		this.internal_code = internal_code;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

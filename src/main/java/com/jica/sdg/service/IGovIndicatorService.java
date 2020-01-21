@@ -8,15 +8,15 @@ import java.util.Optional;
 
 public interface IGovIndicatorService {
 
-    List<GovIndicator> findAll(String id_program, String id_activity);
+    List<GovIndicator> findAll(Integer id_program, Integer id_activity);
     
     List<GovIndicator> findAllByRole(Integer id_role);
     
-    List findAllIndi(String id_program, String id_activity);
+    List findAllIndi(Integer id_program, Integer id_activity);
 
     void saveGovIndicator(GovIndicator gov);
     
-    Optional<GovIndicator> findOne(String id);
+    Optional<GovIndicator> findOne(Integer id);
     
-    void deleteGovIndicator(String id);
+    void deleteGovIndicator(Integer id);
 }

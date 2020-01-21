@@ -10,13 +10,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GovIndicatorRepository extends CrudRepository<GovIndicator, String> {
+public interface GovIndicatorRepository extends CrudRepository<GovIndicator, Integer> {
 	@Query(value = "select * from gov_indicator where id_program = :id_program and id_activity = :id_activity",nativeQuery = true)
-	public List<GovIndicator> findAllIndicator(@Param("id_program") String id_program, @Param("id_activity") String id_activity);
+	public List<GovIndicator> findAllIndicator(@Param("id_program") Integer id_program, @Param("id_activity") Integer id_activity);
 	
 	@Query(value = "select a.* from gov_indicator a left join gov_program b on a.id_program=b.id_program where b.id_role = :id_role",nativeQuery = true)
 	public List<GovIndicator> findAllByRole(@Param("id_role") Integer id_role);
 	
-	@Query(value = "select a.id_gov_indicator,a.nm_indicator,b.id_unit,b.nm_unit from gov_indicator a left join ref_unit b on a.unit=b.id_unit where a.id_program = :id_program and a.id_activity = :id_activity",nativeQuery = true)
-	public List findAllIndi(@Param("id_program") String id_program, @Param("id_activity") String id_activity);
+	@Query(value = "select a.id, a.id_gov_indicator,a.nm_indicator,b.id_unit,b.nm_unit,a.nm_indicator_eng from gov_indicator a left join ref_unit b on a.unit=b.id_unit where a.id_program = :id_program and a.id_activity = :id_activity",nativeQuery = true)
+	public List findAllIndi(@Param("id_program") Integer id_program, @Param("id_activity") Integer id_activity);
 }

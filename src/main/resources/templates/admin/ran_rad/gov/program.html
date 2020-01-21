@@ -105,6 +105,7 @@
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Program Code</label>
 				    <label class="lang_indo control-label" style="text-align:left">Kode Program</label>
 				    <div class="controls">
+				    	<input type="hidden" id="id" name="id" class="input-block-level"/>
                         <input type="text" id="id_program" name="id_program" class="input-block-level"/>
 				    	<input type="hidden" id="created_by" name="created_by"/>
 				    	<span class="help-block" id="error_id_program"></span>
@@ -114,7 +115,7 @@
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Internal Code</label>
 				    <label class="lang_indo control-label" style="text-align:left">Kode Internal</label>
 				    <div class="controls">
-                                        <input type="text" id="internal_code" name="internal_code" class="input-block-level"/>
+                        <input type="text" id="internal_code" name="internal_code" class="input-block-level"/>
 				    	<span class="help-block" id="error_internal_code"></span>
 				    </div>
 				  </div>
@@ -122,7 +123,8 @@
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Program Name</label>
 				    <label class="lang_indo control-label" style="text-align:left">Nama Program</label>
 				    <div class="controls">
-                        <input type="text" id="nm_program" name="nm_program" class="input-block-level"/>
+                        <input type="text" id="nm_program" name="nm_program" class="lang_indo input-block-level"/>
+                        <input type="text" id="nm_program_eng" style="display:none;" name="nm_program_eng" class="lang_eng input-block-level"/>
 				    	<span class="help-block" id="error_nm_program"></span>
 				    </div>
 				  </div>
@@ -235,6 +237,7 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
+	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
 	        });
 	        
 	        $('#id_prov').on('change', function(){
@@ -298,13 +301,19 @@
 							return "<div style='font-size:90%;'>"+row.internal_code+"</div>";
 					}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/gov/program/"+row.id_program+"/activity' class='target'>"+row.nm_program+"</div>";
+							var nama;
+							if($("#fs").is(':checked')){
+								nama = row.nm_program;
+							}else{
+								nama = row.nm_program_eng;
+							}
+							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/gov/program/"+row.id+"/activity' class='target'>"+nama+"</div>";
 					}},
 					{"data": function (row, data, index, display) {
 							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row.id_program+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id_program+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id_program+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+							'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+							'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -318,8 +327,10 @@
 			});
 			
 			function clearForm(){
+				$('#id').val("");
 				$('#id_program').val("").removeAttr("readonly");
 				$('#nm_program').val("").removeAttr("readonly");
+				$('#nm_program_eng').val("").removeAttr("readonly");
 				$('#id_role').val("").removeAttr("readonly");
 				$('#id_monper').val("").removeAttr("readonly");
 				$('#rel_prog_id').val("").removeAttr("readonly");
@@ -332,11 +343,14 @@
 			
 			$('#myModal').on('hidden.bs.modal',function(){
 				clearForm();
+				$('#hide_kode_internal').hide();
 			});
 			
 			$('#submit').on('click', function(){
+				var id = $('#id').val();
 				var id_program = $('#id_program').val();
 				var nm_program = $('#nm_program').val();
+				var nm_program_eng = $('#nm_program_eng').val();
 				var id_role = $('#id_role').val();
 				var id_monper = $('#id_monper').val();
 				var rel_prog_id = $('#rel_prog_id').val();
@@ -353,15 +367,17 @@
                     $("#error_id_program").text(required);
                     cek += 1;
                 }
-				if (nm_program == ""){
+				/* if (nm_program == ""){
                     $("#error_nm_program").parents(".control-group").first().addClass("error");
                     $("#error_nm_program").text(required);
                     cek += 1;
-                }
+                } */
 				if(cek==0){
 					var data = JSON.stringify({
+						'id':id,
 						'id_program':id_program,
 						'nm_program':nm_program,
+						'nm_program_eng':nm_program_eng,
 						/* 'id_role':id_role, */
 						'id_monper':id_monper,
 						'rel_prog_id':rel_prog_id,
@@ -391,12 +407,18 @@
                     url: urls+'get-govProg/'+id,
                     success: function (result) {
                     	var val = result.content;
+                    	$('#id').val(val.id);
                     	$('#id_program').val(val.id_program).attr("readonly",true);
         				$('#nm_program').val(val.nm_program);
+        				$('#nm_program_eng').val(val.nm_program_eng);
         				$('#id_role').val(val.id_role);
         				$('#id_monper').val(val.id_monper);
         				$('#rel_prog_id').val(val.rel_prog_id);
         				$('#internal_code').val(val.internal_code);
+        				var privilege = [[${privilege}]];
+        				if(privilege=='ADMIN' || privilege=='SUPER'){
+        	                 $('#hide_kode_internal').show();
+        	             }
 					$('#myModal').modal('show');
                     },
                 })
@@ -407,12 +429,18 @@
                     url: urls+'get-govProg/'+id,
                     success: function (result) {
                     	var val = result.content;
+                    	$('#id').val(val.id);
                     	$('#id_program').val(val.id_program).attr("readonly",true);
         				$('#nm_program').val(val.nm_program).attr("readonly",true);
+        				$('#nm_program_eng').val(val.nm_program_eng).attr("readonly",true);
         				$('#id_role').val(val.id_role).attr("readonly",true);
         				$('#id_monper').val(val.id_monper).attr("readonly",true);
         				$('#rel_prog_id').val(val.rel_prog_id).attr("readonly",true);
         				$('#internal_code').val(val.internal_code).attr("readonly",true);
+        				var privilege = [[${privilege}]];
+        				if(privilege=='ADMIN' || privilege=='SUPER'){
+        	                 $('#hide_kode_internal').show();
+        	             }
 						$('#myModal').modal('show');
                     },
                 })
@@ -454,7 +482,7 @@
              $('#id_program').on('keyup keypress blur change',function(){
                  $('#internal_code').val($(this).val());
              });
-             
+             $('#hide_kode_internal').hide();
              if(privilege=='USER'){
                  $('#hide_kode_internal').hide();
              }

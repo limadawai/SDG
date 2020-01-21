@@ -189,7 +189,7 @@ public class DataEntryController {
     }
     
     @GetMapping("admin/government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity")
-    public String gov_kegiatan(Model model, @PathVariable("id_program") String id_program, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, HttpSession session) {
+    public String gov_kegiatan(Model model, @PathVariable("id_program") Integer id_program, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, HttpSession session) {
         Integer id_role = (Integer) session.getAttribute("id_role");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
@@ -282,7 +282,7 @@ public class DataEntryController {
     }
     
     @GetMapping("admin/non-government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity")
-    public String non_gov_kegiatan(Model model, @PathVariable("id_program") String id_program, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, HttpSession session) {
+    public String non_gov_kegiatan(Model model, @PathVariable("id_program") Integer id_program, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, HttpSession session) {
         Integer id_role = (Integer) session.getAttribute("id_role");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));

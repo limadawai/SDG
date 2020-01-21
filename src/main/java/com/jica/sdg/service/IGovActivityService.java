@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface IGovActivityService {
 
-    List<GovActivity> findAll(String id);
+    List<GovActivity> findAll(Integer id);
 
     void saveGovActivity(GovActivity gov);
     
-    Optional<GovActivity> findOne(String id);
+    Optional<GovActivity> findOne(Integer id);
     
-    void deleteGovActivity(String id);
+    void deleteGovActivity(Integer id);
 }
