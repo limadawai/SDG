@@ -18,7 +18,7 @@ public class NsaActivityService implements INsaActivityService{
 	NsaActivityRepository nsaActivityRepo;
 	
 	@Override
-	public List<NsaActivity> findAll(String id_program) {
+	public List<NsaActivity> findAll(Integer id_program) {
 		return (List<NsaActivity>) nsaActivityRepo.findAllGovActivity(id_program);
 	}
 	
@@ -28,12 +28,12 @@ public class NsaActivityService implements INsaActivityService{
 	}
 
 	@Override
-	public Optional<NsaActivity> findOne(String id) {
+	public Optional<NsaActivity> findOne(Integer id) {
 		return (Optional<NsaActivity>) nsaActivityRepo.findById(id);
 	}
 
 	@Override
-	public void deleteNsaActivity(String id) {
+	public void deleteNsaActivity(Integer id) {
 		nsaActivityRepo.deleteById(id);
 	}
 }

@@ -8,13 +8,20 @@ import java.util.Date;
 @Table(name = "gov_program")
 public class GovProgram implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, length = 11)
+    private Integer id;
+
     @Column(nullable = false, length = 10)
     private String id_program;
     
-    @Column(nullable = false, length = 150)
+    @Column(nullable = true, length = 150)
     private String nm_program;
+    
+    @Column(nullable = true, length = 150)
+    private String nm_program_eng;
     
     @Column(nullable = false, length = 11)
     private Integer id_monper;
@@ -35,15 +42,26 @@ public class GovProgram implements Serializable {
 	public GovProgram() {
 	}
 
-	public GovProgram(String id_program, String nm_program, Integer id_monper, String rel_prog_id,
-			Integer created_by, Date date_created, String internal_code) {
+	public GovProgram(Integer id, String id_program, String nm_program, String nm_program_eng, Integer id_monper,
+			String rel_prog_id, Integer created_by, Date date_created, String internal_code) {
 		super();
+		this.id = id;
 		this.id_program = id_program;
 		this.nm_program = nm_program;
+		this.nm_program_eng = nm_program_eng;
 		this.id_monper = id_monper;
 		this.rel_prog_id = rel_prog_id;
 		this.created_by = created_by;
 		this.date_created = date_created;
+		this.internal_code = internal_code;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getId_program() {
@@ -62,14 +80,13 @@ public class GovProgram implements Serializable {
 		this.nm_program = nm_program;
 	}
 
-    public String getInternal_code() {
-        return internal_code;
-    }
+	public String getNm_program_eng() {
+		return nm_program_eng;
+	}
 
-    public void setInternal_code(String internal_code) {
-        this.internal_code = internal_code;
-    }
-        
+	public void setNm_program_eng(String nm_program_eng) {
+		this.nm_program_eng = nm_program_eng;
+	}
 
 	public Integer getId_monper() {
 		return id_monper;
@@ -101,6 +118,14 @@ public class GovProgram implements Serializable {
 
 	public void setDate_created(Date date_created) {
 		this.date_created = date_created;
+	}
+
+	public String getInternal_code() {
+		return internal_code;
+	}
+
+	public void setInternal_code(String internal_code) {
+		this.internal_code = internal_code;
 	}
 
 	public static long getSerialversionuid() {

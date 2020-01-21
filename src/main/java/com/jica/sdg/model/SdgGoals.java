@@ -9,16 +9,16 @@ public class SdgGoals implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-	@Column(nullable = false, length = 11)
-	private int id;
+    @Column(nullable = false, length = 11)
+    private int id;
 
     @Column(nullable = false, length = 3)
     private String id_goals;
     
-    @Column(nullable = false, length = 150)
+    @Column(nullable = true, length = 150)
     private String nm_goals;
 
-	@Column(nullable = false, length = 150)
+	@Column(nullable = true, length = 150)
 	private String nm_goals_eng;
 
 	public SdgGoals() {

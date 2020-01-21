@@ -11,7 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NsaProgramRepository extends CrudRepository<NsaProgram, String> {
+public interface NsaProgramRepository extends CrudRepository<NsaProgram, Integer> {
 	@Query(value = "select * from nsa_program where id_role = :id_role and id_monper = :id_monper ",nativeQuery = true)
 	public List<NsaProgram> findAll(@Param("id_role") String id_role, @Param("id_monper") String id_monper); 
 }

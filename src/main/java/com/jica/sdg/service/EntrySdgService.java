@@ -4,9 +4,11 @@ import com.jica.sdg.model.EntryGovIndicator;
 import com.jica.sdg.model.EntryNsaIndicator;
 import com.jica.sdg.model.EntrySdg;
 import com.jica.sdg.model.EntrySdgIndicatorJoin;
+import com.jica.sdg.model.SdgIndicatorTarget;
 import com.jica.sdg.repository.EntrySdgRepository;
 import com.jica.sdg.repository.EntryGovIndicatorRepository;
 import com.jica.sdg.repository.EntryNsaIndicatorRepository;
+import com.jica.sdg.repository.SdgIndicatorTargetRepository;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +30,9 @@ public class EntrySdgService implements IEntrySdgService{
 	
 	@Autowired
 	EntryNsaIndicatorRepository entryNsaIndicatorRepo;
+	
+	@Autowired
+	SdgIndicatorTargetRepository sdgIndicatorTargetRepo;
 	
 	@Override
 	public List<EntrySdg> findAllEntrySdg() {
@@ -64,6 +69,21 @@ public class EntrySdgService implements IEntrySdgService{
 //            esdg.setShow_report_date(date);
             entryNsaIndicator.setDate_created(date);
             entryNsaIndicatorRepo.save(entryNsaIndicator);
+	}
+        
+	@Override
+	public void saveSdgIndicatorTargetEntry(SdgIndicatorTarget sdgIndicatorTarget) {
+//            Date date = new Date();
+            //esdg.setApproval_date(date);
+//            esdg.setShow_report_date(date);
+//            entryNsaIndicator.setDate_created(date);
+            sdgIndicatorTargetRepo.save(sdgIndicatorTarget);
+	}
+        
+	@Override
+	public void deleteSdgIndicatorTargetEntry(int id) {
+            sdgIndicatorTargetRepo.deleteById(id);
+//            sdgIndicatorTargetRepo.deleteEntrySdgIndicator(id);
 	}
 //
 ////	@Override

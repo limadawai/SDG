@@ -13,7 +13,7 @@ public interface INsaProgramService {
 
     void saveNsaProgram(NsaProgram gov);
     
-    Optional<NsaProgram> findOne(String id);
+    Optional<NsaProgram> findOne(Integer id);
     
-    void deleteNsaProgram(String id);
+    void deleteNsaProgram(Integer id);
 }

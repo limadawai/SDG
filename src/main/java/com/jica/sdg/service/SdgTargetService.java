@@ -34,4 +34,19 @@ public class SdgTargetService implements ISdgTargetService{
 	public void deleteSdgTarget(int id) {
 		sdgtargetRepo.deleteById(id);
 	}
+
+	@Override
+	public List<SdgTarget> findAll(Integer id) {
+		return (List<SdgTarget>) sdgtargetRepo.findAllTarget(id);
+	}
+
+	@Override
+	public Optional<SdgTarget> findOne(Integer id) {
+		return (Optional<SdgTarget>) sdgtargetRepo.findById(id);
+	}
+
+	@Override
+	public void deleteSdgTarget(Integer id) {
+		sdgtargetRepo.deleteById(id);
+	}
 }

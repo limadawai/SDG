@@ -26,12 +26,12 @@ public class GovProgramService implements IGovProgramService{
 	}
 
 	@Override
-	public Optional<GovProgram> findOne(String id) {
+	public Optional<GovProgram> findOne(Integer id) {
 		return (Optional<GovProgram>) govProgRepo.findById(id);
 	}
 
 	@Override
-	public void deleteGovProgram(String id) {
+	public void deleteGovProgram(Integer id) {
 		govProgRepo.deleteById(id);
 	}
 

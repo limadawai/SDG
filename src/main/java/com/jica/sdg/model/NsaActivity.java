@@ -8,8 +8,12 @@ import java.util.Date;
 @Table(name = "nsa_activity")
 public class NsaActivity implements Serializable {
     private static final long serialVersionUID = 1L;
-
+    
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, length = 11)
+    private Integer id;
+    
     @Column(nullable = false, length = 6)
     private String id_activity;
     
@@ -19,8 +23,11 @@ public class NsaActivity implements Serializable {
     @Column(nullable = false, length = 4)
     private Integer id_role;
     
-    @Column(nullable = false, length = 150)
+    @Column(nullable = true, length = 150)
     private String nm_activity;
+    
+    @Column(nullable = true, length = 150)
+    private String nm_activity_eng;
     
     @Column(nullable = false, length = 6)
     private Integer created_by;
@@ -35,19 +42,27 @@ public class NsaActivity implements Serializable {
 	public NsaActivity() {
 	}
 
-	public NsaActivity(String id_activity, String id_program, Integer id_role, String nm_activity, Integer created_by,
-			Date date_created, String internal_code) {
+	public NsaActivity(Integer id, String id_activity, String id_program, Integer id_role, String nm_activity,
+			String nm_activity_eng, Integer created_by, Date date_created, String internal_code) {
 		super();
+		this.id = id;
 		this.id_activity = id_activity;
 		this.id_program = id_program;
 		this.id_role = id_role;
 		this.nm_activity = nm_activity;
+		this.nm_activity_eng = nm_activity_eng;
 		this.created_by = created_by;
 		this.date_created = date_created;
 		this.internal_code = internal_code;
 	}
 
+	public Integer getId() {
+		return id;
+	}
 
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getId_activity() {
 		return id_activity;
@@ -81,6 +96,14 @@ public class NsaActivity implements Serializable {
 		this.nm_activity = nm_activity;
 	}
 
+	public String getNm_activity_eng() {
+		return nm_activity_eng;
+	}
+
+	public void setNm_activity_eng(String nm_activity_eng) {
+		this.nm_activity_eng = nm_activity_eng;
+	}
+
 	public Integer getCreated_by() {
 		return created_by;
 	}
@@ -97,15 +120,15 @@ public class NsaActivity implements Serializable {
 		this.date_created = date_created;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public String getInternal_code() {
 		return internal_code;
 	}
 
 	public void setInternal_code(String internal_code) {
 		this.internal_code = internal_code;
-	}	
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }

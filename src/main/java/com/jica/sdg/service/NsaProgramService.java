@@ -26,12 +26,12 @@ public class NsaProgramService implements INsaProgramService{
 	}
 
 	@Override
-	public Optional<NsaProgram> findOne(String id) {
+	public Optional<NsaProgram> findOne(Integer id) {
 		return (Optional<NsaProgram>) nsaProgRepo.findById(id);
 	}
 
 	@Override
-	public void deleteNsaProgram(String id) {
+	public void deleteNsaProgram(Integer id) {
 		nsaProgRepo.deleteById(id);
 	}
 

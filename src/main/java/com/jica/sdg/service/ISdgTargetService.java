@@ -14,4 +14,10 @@ public interface ISdgTargetService {
     Optional<SdgTarget> findOne(int id);
     
     void deleteSdgTarget(int id);
+
+    List<SdgTarget> findAll(Integer id);
+    
+    Optional<SdgTarget> findOne(Integer id);
+    
+    void deleteSdgTarget(Integer id);
 }

@@ -20,7 +20,7 @@ public class NsaIndicatorService implements INsaIndicatorService{
 	NsaIndicatorRepository nsaIndicatorRepo;
 
 	@Override
-	public List<NsaIndicator> findAll(String id_program, String id_activity) {
+	public List<NsaIndicator> findAll(Integer id_program, Integer id_activity) {
 		return (List<NsaIndicator>) nsaIndicatorRepo.findAllIndicator(id_program, id_activity);
 	}
 
@@ -30,17 +30,17 @@ public class NsaIndicatorService implements INsaIndicatorService{
 	}
 
 	@Override
-	public Optional<NsaIndicator> findOne(String id) {
+	public Optional<NsaIndicator> findOne(Integer id) {
 		return (Optional<NsaIndicator>) nsaIndicatorRepo.findById(id);
 	}
 
 	@Override
-	public void deleteNsaIndicator(String id) {
+	public void deleteNsaIndicator(Integer id) {
 		nsaIndicatorRepo.deleteById(id);
 	}
 
 	@Override
-	public List findAllIndi(String id_program, String id_activity) {
+	public List findAllIndi(Integer id_program, Integer id_activity) {
 		return nsaIndicatorRepo.findAllIndi(id_program, id_activity);
 	}
 	

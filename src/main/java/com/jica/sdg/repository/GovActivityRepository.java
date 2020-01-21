@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface GovActivityRepository extends CrudRepository<GovActivity, String> {
+public interface GovActivityRepository extends CrudRepository<GovActivity, Integer> {
 	@Query(value = "select * from gov_activity where id_program = :id_program",nativeQuery = true)
-	public List<GovActivity> findAllGovActivity(@Param("id_program") String id_program); 
+	public List<GovActivity> findAllGovActivity(@Param("id_program") Integer id_program); 
 }

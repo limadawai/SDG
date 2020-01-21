@@ -16,7 +16,7 @@ public class SdgIndicatorService implements ISdgIndicatorService{
 	SdgIndicatorRepository sdgIndicatorRepo;
 
 	@Override
-	public List<SdgIndicator> findAll(String id_goals, String id_target) {
+	public List<SdgIndicator> findAll(Integer id_goals, Integer id_target) {
 		return (List<SdgIndicator>) sdgIndicatorRepo.findAllIndicator(id_goals, id_target);
 	}
 
@@ -26,12 +26,12 @@ public class SdgIndicatorService implements ISdgIndicatorService{
 	}
 
 	@Override
-	public Optional<SdgIndicator> findOne(String id) {
+	public Optional<SdgIndicator> findOne(Integer id) {
 		return (Optional<SdgIndicator>) sdgIndicatorRepo.findById(id);
 	}
 
 	@Override
-	public void deleteSdgIndicator(String id) {
+	public void deleteSdgIndicator(Integer id) {
 		sdgIndicatorRepo.deleteById(id);
 	}
 
@@ -41,7 +41,7 @@ public class SdgIndicatorService implements ISdgIndicatorService{
 	}
 
 	@Override
-	public List findAllGrid(String id_goals, String id_target) {
+	public List findAllGrid(Integer id_goals, Integer id_target) {
 		List list = sdgIndicatorRepo.findAllGrid(id_goals, id_target);
 		return list;
 	}

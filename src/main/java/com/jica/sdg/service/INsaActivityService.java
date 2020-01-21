@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface INsaActivityService {
 
-    List<NsaActivity> findAll(String id);
+    List<NsaActivity> findAll(Integer id);
 
     void saveNsaActivity(NsaActivity gov);
     
-    Optional<NsaActivity> findOne(String id);
+    Optional<NsaActivity> findOne(Integer id);
     
-    void deleteNsaActivity(String id);
+    void deleteNsaActivity(Integer id);
 }

@@ -10,6 +10,10 @@ public class NsaIndicator implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(nullable = false, length = 11)
+    private Integer id;
+    
     @Column(nullable = false, length = 12)
     private String id_nsa_indicator;
     
@@ -19,8 +23,11 @@ public class NsaIndicator implements Serializable {
     @Column(nullable = false, length = 6)
     private String id_activity;
     
-    @Column(nullable = false, length = 125)
+    @Column(nullable = true, length = 125)
     private String nm_indicator;
+    
+    @Column(nullable = true, length = 125)
+    private String nm_indicator_eng;
     
     @Column(nullable = false, length = 10)
     private String unit;
@@ -38,19 +45,28 @@ public class NsaIndicator implements Serializable {
 	public NsaIndicator() {
 	}
 
-	public NsaIndicator(String id_nsa_indicator, String id_program, String id_activity, String nm_indicator,
-			String unit, Integer created_by, Date date_created, String internal_code) {
+	public NsaIndicator(Integer id, String id_nsa_indicator, String id_program, String id_activity, String nm_indicator,
+			String nm_indicator_eng, String unit, Integer created_by, Date date_created, String internal_code) {
 		super();
+		this.id = id;
 		this.id_nsa_indicator = id_nsa_indicator;
 		this.id_program = id_program;
 		this.id_activity = id_activity;
 		this.nm_indicator = nm_indicator;
+		this.nm_indicator_eng = nm_indicator_eng;
 		this.unit = unit;
 		this.created_by = created_by;
 		this.date_created = date_created;
 		this.internal_code = internal_code;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getId_nsa_indicator() {
 		return id_nsa_indicator;
@@ -84,6 +100,14 @@ public class NsaIndicator implements Serializable {
 		this.nm_indicator = nm_indicator;
 	}
 
+	public String getNm_indicator_eng() {
+		return nm_indicator_eng;
+	}
+
+	public void setNm_indicator_eng(String nm_indicator_eng) {
+		this.nm_indicator_eng = nm_indicator_eng;
+	}
+
 	public String getUnit() {
 		return unit;
 	}
@@ -108,15 +132,15 @@ public class NsaIndicator implements Serializable {
 		this.date_created = date_created;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
 	public String getInternal_code() {
 		return internal_code;
 	}
 
 	public void setInternal_code(String internal_code) {
 		this.internal_code = internal_code;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }
