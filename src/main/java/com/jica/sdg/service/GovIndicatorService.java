@@ -19,7 +19,7 @@ public class GovIndicatorService implements IGovIndicatorService{
 	GovIndicatorRepository govIndicatorRepo;
 
 	@Override
-	public List<GovIndicator> findAll(String id_program, String id_activity) {
+	public List<GovIndicator> findAll(Integer id_program, Integer id_activity) {
 		return (List<GovIndicator>) govIndicatorRepo.findAllIndicator(id_program, id_activity);
 	}
 
@@ -29,12 +29,12 @@ public class GovIndicatorService implements IGovIndicatorService{
 	}
 
 	@Override
-	public Optional<GovIndicator> findOne(String id) {
+	public Optional<GovIndicator> findOne(Integer id) {
 		return (Optional<GovIndicator>) govIndicatorRepo.findById(id);
 	}
 
 	@Override
-	public void deleteGovIndicator(String id) {
+	public void deleteGovIndicator(Integer id) {
 		govIndicatorRepo.deleteById(id);
 	}
 
@@ -44,7 +44,7 @@ public class GovIndicatorService implements IGovIndicatorService{
 	}
 
 	@Override
-	public List findAllIndi(String id_program, String id_activity) {
+	public List findAllIndi(Integer id_program, Integer id_activity) {
 		List list = govIndicatorRepo.findAllIndi(id_program, id_activity);
 		return list;
 	}

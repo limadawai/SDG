@@ -16,7 +16,7 @@ public class GovActivityService implements IGovActivityService{
 	GovActivityRepository govActivityRepo;
 	
 	@Override
-	public List<GovActivity> findAll(String id_program) {
+	public List<GovActivity> findAll(Integer id_program) {
 		return (List<GovActivity>) govActivityRepo.findAllGovActivity(id_program);
 	}
 	
@@ -26,12 +26,12 @@ public class GovActivityService implements IGovActivityService{
 	}
 
 	@Override
-	public Optional<GovActivity> findOne(String id) {
+	public Optional<GovActivity> findOne(Integer id) {
 		return (Optional<GovActivity>) govActivityRepo.findById(id);
 	}
 
 	@Override
-	public void deleteGovActivity(String id) {
+	public void deleteGovActivity(Integer id) {
 		govActivityRepo.deleteById(id);
 	}
 }

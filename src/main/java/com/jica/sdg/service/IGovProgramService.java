@@ -15,7 +15,7 @@ public interface IGovProgramService {
 
     void saveGovProgram(GovProgram gov);
     
-    Optional<GovProgram> findOne(String id);
+    Optional<GovProgram> findOne(Integer id);
     
-    void deleteGovProgram(String id);
+    void deleteGovProgram(Integer id);
 }
