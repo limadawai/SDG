@@ -18,6 +18,7 @@ import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgIndicator;
+import com.jica.sdg.model.SdgIndicatorTarget;
 import com.jica.sdg.service.IEntrySdgService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.IGovProgramService;
@@ -464,6 +465,34 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/cek-tahun-target-sdg/{year}/{id_indicator}")
+    public @ResponseBody Map<String, Object> cekTahunTargetSdg(@PathVariable("year") String year, @PathVariable("id_indicator") String id_indicator) {
+        String sql  = "select id, id_sdg_indicator, id_role, year, value from sdg_indicator_target where year = :year and id_sdg_indicator = :id_indicator limit 1";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("year", year);
+        query.setParameter("id_indicator", id_indicator);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-entry-sdg-indicator-target", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveEntrySdgIndicatorTarget(@RequestBody SdgIndicatorTarget sdgIndicatorTarget) {
+        entrySdgService.saveSdgIndicatorTargetEntry(sdgIndicatorTarget);
+    }
+    
+//    @GetMapping("admin/delete-entry-sdg-indicator-target/{id}")
+//    public void saveEntrySdgIndicatorTarget(@PathVariable("id") int id) {
+//        entrySdgService.deleteSdgIndicatorTargetEntry(id);
+//    }
+    
+    @DeleteMapping("admin/delete-entry-sdg-indicator-target/{id}")
+    @ResponseBody
+    public void saveEntrySdgIndicatorTarget(@PathVariable("id") int id) {
+        entrySdgService.deleteSdgIndicatorTargetEntry(id);
+    }
     
 
 }
