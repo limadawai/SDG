@@ -218,11 +218,11 @@
                 success: function (response) {
                     console.log(response);
                     $('#detail').empty();
-                    var detail="";
+                    var detail="<table>";
                     for (var i = 0; i < response.content.length; i++) {
-                    	detail += '<label style="display:inline-block;white-space:nowrap">'+
+                    	detail += '<tr><td><label style="display:inline-block;white-space:nowrap">'+
                                       '<span style="vertical-align:middle">'+response.content[i].nm_goals+'</span>'+
-                                '</label><br/>';
+                                '</label></td><tr/>';
                     	$.ajax({
                             url: urls + 'list-sdgTarget/'+response.content[i].id,
                             type: 'get',
@@ -231,9 +231,9 @@
                             async : false,
                             success: function (result) {
                                 for (var j = 0; j < result.content.length; j++) {
-                                	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                	detail += '<tr><td><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
         			                            '<span style="vertical-align:middle">'+result.content[j].nm_target+'</span>'+
-        			                      '</label><br/>';
+        			                      '</label></td><tr/>';
 //                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({
                                         url: urls + 'list-sdgIndicator/'+response.content[i].id_goals+'/'+result.content[j].id,
@@ -244,9 +244,9 @@
                                         success: function (result) {
                                             for (var k = 0; k < result.content.length; k++) {
                                                 console.log(result.content);
-                                            	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                                            	detail += '<tr><td><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
                     			                            '<span style="vertical-align:middle">'+result.content[k][4]+'</span>'+
-                    			                      '</label>';
+                    			                      '</label></td>';
                     			                var id;
                                                         
                                                         //alert(result.content[k].id_goals+'/'+result.content[k].id_target+'/'+result.content[k].id_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val());
@@ -260,13 +260,13 @@
                     			                    	id= result.content;
                     			                        }
                     			                }); 
-                    			                detail += '<select class="assign-sdg" name="sdg[][id_role]">'+role(id)+'</select>'+
-                    			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k][1]+'"/>'+
-                    			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k][2]+'"/>'+
+                    			                detail += '<td><select class="assign-sdg" name="sdg[][id_role]">'+role(id)+'</select>'+
+                    			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k][2]+'"/>'+
+                    			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k][3]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_indicator]" value="'+result.content[k][0]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_monper]" value="'+$('#id_monper').val()+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_prov]" value="'+$('#id_prov').val()+'"/>'+
-                    			               				'<br/>';
+                    			               				'</td><tr/>';
                                             }
                                         }
                                     });     
@@ -274,7 +274,7 @@
                             }
                         });
                     }
-                    $('#detail').append(detail);
+                    $('#detail').append(detail+'</table>');
                 }
             });
         });
