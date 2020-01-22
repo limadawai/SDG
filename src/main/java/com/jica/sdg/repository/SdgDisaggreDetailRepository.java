@@ -12,5 +12,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SdgDisaggreDetailRepository extends CrudRepository<SdgDisaggreDetail, Integer> {
 	@Query(value = "select * from sdg_ranrad_disaggre_detail where id_disaggre = :id_disaggre",nativeQuery = true)
-	public List<SdgDisaggreDetail> findAllDisaggreDetail(@Param("id_disaggre") String id_disaggre); 
+	public List<SdgDisaggreDetail> findAllDisaggreDetail(@Param("id_disaggre") Integer id_disaggre); 
 }

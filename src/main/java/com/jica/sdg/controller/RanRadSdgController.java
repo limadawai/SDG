@@ -272,7 +272,7 @@ public class RanRadSdgController {
     }
     
     @GetMapping("admin/list-sdgDisaggre/{id_indicator}")
-    public @ResponseBody Map<String, Object> sdgDisaggreList(@PathVariable("id_indicator") String id_indicator) {
+    public @ResponseBody Map<String, Object> sdgDisaggreList(@PathVariable("id_indicator") Integer id_indicator) {
         List<SdgDisaggre> list = sdgDisaggreService.findAll(id_indicator);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -286,7 +286,7 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/get-sdgDisaggre/{id}")
-    public @ResponseBody Map<String, Object> getSdgDisaggre(@PathVariable("id") String id) {
+    public @ResponseBody Map<String, Object> getSdgDisaggre(@PathVariable("id") Integer id) {
         Optional<SdgDisaggre> list = sdgDisaggreService.findOne(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -295,14 +295,14 @@ public class RanRadSdgController {
     
     @DeleteMapping("admin/delete-sdgDisaggre/{id}")
 	@ResponseBody
-	public void deleteSdgDisaggre(@PathVariable("id") String id) {
+	public void deleteSdgDisaggre1(@PathVariable("id") Integer id) {
     	sdgDisaggreService.deleteSdgDisaggre(id);
 	}
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator/{id_indicator}/disaggre/{id_disaggre}")
 //    public String disagreDetail(Model model, @PathVariable("id") int id, @PathVariable("id_target") int id_target, @PathVariable("id_indicator") String id_indicator,
     public String disagreDetail(Model model, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, @PathVariable("id_indicator") Integer id_indicator,
-                                @PathVariable("id_disaggre") String id_disaggre, HttpSession session) {
+                                @PathVariable("id_disaggre") Integer id_disaggre, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
     	Optional<SdgIndicator> list2 = sdgIndicatorService.findOne(id_indicator);
@@ -318,7 +318,7 @@ public class RanRadSdgController {
     }
     
     @GetMapping("admin/list-sdgDisaggreDetail/{id}")
-    public @ResponseBody Map<String, Object> sdgDisaggreDetailList(@PathVariable("id") String id) {
+    public @ResponseBody Map<String, Object> sdgDisaggreDetailList(@PathVariable("id") Integer id) {
         List<SdgDisaggreDetail> list = sdgDisaggreDetailService.findAll(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);

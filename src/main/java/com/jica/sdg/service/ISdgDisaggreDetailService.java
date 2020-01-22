@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface ISdgDisaggreDetailService {
 
-    List<SdgDisaggreDetail> findAll(String id);
+    List<SdgDisaggreDetail> findAll(Integer id);
 
     void saveSdgDisaggreDetail(SdgDisaggreDetail sdg);
     

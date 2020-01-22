@@ -224,7 +224,7 @@
                                       '<span style="vertical-align:middle">'+response.content[i].nm_goals+'</span>'+
                                 '</label><br/>';
                     	$.ajax({
-                            url: urls + 'list-sdgTarget/'+response.content[i].id_goals,
+                            url: urls + 'list-sdgTarget/'+response.content[i].id,
                             type: 'get',
                             dataType: 'json',
                             cache: false,
@@ -236,7 +236,7 @@
         			                      '</label><br/>';
 //                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({
-                                        url: urls + 'list-sdgIndicator/'+response.content[i].id_goals+'/'+result.content[j].id_target,
+                                        url: urls + 'list-sdgIndicator/'+response.content[i].id_goals+'/'+result.content[j].id,
                                         type: 'get',
                                         dataType: 'json',
                                         cache: false,
@@ -245,7 +245,7 @@
                                             for (var k = 0; k < result.content.length; k++) {
                                                 console.log(result.content);
                                             	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-                    			                            '<span style="vertical-align:middle">'+result.content[k][3]+'</span>'+
+                    			                            '<span style="vertical-align:middle">'+result.content[k][4]+'</span>'+
                     			                      '</label>';
                     			                var id;
                                                         
