@@ -152,6 +152,8 @@
         
         $('#fs').on('change', function(e){
         	bhs($(this).is(':checked'));
+        	hideBtn();
+        	$('#detail').empty();
         });
         
         function role(id){
@@ -216,13 +218,22 @@
                 cache: false,
                 async : false,
                 success: function (response) {
-                    console.log(response);
                     $('#detail').empty();
-                    var detail="<table>";
+                    var detail="<table><tbody>";
+                    var idGoals;
                     for (var i = 0; i < response.content.length; i++) {
-                    	detail += '<tr><td><label style="display:inline-block;white-space:nowrap">'+
-                                      '<span style="vertical-align:middle">'+response.content[i].nm_goals+'</span>'+
-                                '</label></td><tr/>';
+                    	idGoals = response.content[i].id;
+                    	var nm_goals;
+                    	if($("#fs").is(':checked')){
+                    		nm_goals = response.content[i].nm_goals;
+						}else{
+							nm_goals = response.content[i].nm_goals_eng;
+						}
+                    	detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+                                      '<span class="toogle-sdg-bapak" data-id="'+idGoals+'" style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
+                                '</label></td>'+
+                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+role('')+'</select>'+
+                                '<tr/>';
                     	$.ajax({
                             url: urls + 'list-sdgTarget/'+response.content[i].id,
                             type: 'get',
@@ -231,9 +242,19 @@
                             async : false,
                             success: function (result) {
                                 for (var j = 0; j < result.content.length; j++) {
-                                	detail += '<tr><td><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-        			                            '<span style="vertical-align:middle">'+result.content[j].nm_target+'</span>'+
-        			                      '</label></td><tr/>';
+                                	var nm_target;
+                                	if($("#fs").is(':checked')){
+                                		nm_target = result.content[j].nm_target;
+            						}else{
+            							nm_target = result.content[j].nm_target_eng;
+            						}
+                                	detail += '<tr>'+
+                                				'<td style="width:50%;display:none" class="toogle-sdg-anak sdg-anak'+idGoals+'" data-id="'+idGoals+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+        			                            	'<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
+        			                      			'</label>'+
+        			                           '</td>'+
+        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+role('')+'</select>'+
+        			                      	'<tr/>';
 //                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({
                                         url: urls + 'list-sdgIndicator/'+response.content[i].id_goals+'/'+result.content[j].id,
@@ -243,15 +264,20 @@
                                         async : false,
                                         success: function (result) {
                                             for (var k = 0; k < result.content.length; k++) {
-                                                console.log(result.content);
-                                            	detail += '<tr><td><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-                    			                            '<span style="vertical-align:middle">'+result.content[k][4]+'</span>'+
+                                            	var nm_indicator;
+                                            	if($("#fs").is(':checked')){
+                                            		nm_indicator = result.content[k][4];
+                        						}else{
+                        							nm_indicator = result.content[k][6];
+                        						}
+                                            	detail += '<tr><td class="sdg-cucu'+idGoals+'" data-id="'+idGoals+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                    			                            '<span style="vertical-align:middle">'+result.content[k][1]+' '+nm_indicator+'</span>'+
                     			                      '</label></td>';
                     			                var id;
                                                         
                                                         //alert(result.content[k].id_goals+'/'+result.content[k].id_target+'/'+result.content[k].id_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val());
                     			               	$.ajax({
-                    			                    url: urls + 'manajemen/get-id_roleSdg/'+result.content[k][1]+'/'+result.content[k][2]+'/'+result.content[k][0]+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
+                    			                    url: urls + 'manajemen/get-id_roleSdg/'+result.content[k][2]+'/'+result.content[k][3]+'/'+result.content[k][0]+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
                     			                    type: 'get',
                     			                    dataType: 'json',
                     			                    cache: false,
@@ -260,7 +286,7 @@
                     			                    	id= result.content;
                     			                        }
                     			                }); 
-                    			                detail += '<td><select class="assign-sdg" name="sdg[][id_role]">'+role(id)+'</select>'+
+                    			                detail += '<td class="sdg-cucu'+idGoals+'" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+role(id)+'</select>'+
                     			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k][2]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k][3]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_indicator]" value="'+result.content[k][0]+'"/>'+
@@ -274,13 +300,48 @@
                             }
                         });
                     }
-                    $('#detail').append(detail+'</table>');
+                    $('#detail').append(detail+'</tbody></table>');
                 }
             });
         });
+        
+        $('#detail').on('click','.toogle-sdg-bapak',function(){
+        	var id = $(this).data('id');
+        	if($('#detail').find('.sdg-anak'+id).is(":hidden")){
+        		$('#detail').find('.select-bapak-sdg'+id).hide();
+        		$('#detail').find('.select-anak-sdg'+id).show();
+        	}else{
+        		$('#detail').find('.select-bapak-sdg'+id).show();
+        	}
+        	$('#detail').find('.sdg-anak'+id).slideToggle("slow");
+        	$('#detail').find('.sdg-cucu'+id).hide();
+        });
+        
+        $('#detail').on('click','.toogle-sdg-anak',function(){
+        	var id = $(this).data('id');
+        	if($('#detail').find('.sdg-cucu'+id).is(":hidden")){
+        		$('#detail').find('.select-anak-sdg'+id).hide();
+        	}else{
+        		$('#detail').find('.select-anak-sdg'+id).show();
+        	}
+        	$('#detail').find('.sdg-cucu'+id).slideToggle("slow");
+        });
+        
+        $('#detail').on('change','.select-bapak-sdg',function(){
+        	var value = $(this).val();
+        	var idGoals = $(this).data('id');
+        	$('#detail').find('.select-anak-sdg'+idGoals).val(value);
+        	$('#detail').find('.select-cucu-sdg'+idGoals).val(value);
+        });
+        
+        $('#detail').on('change','.select-anak-sdg',function(){
+        	var value = $(this).val();
+        	var idGoals = $(this).data('id');
+        	$('#detail').find('.select-cucu-sdg'+idGoals).val(value);
+        });
+                
         $('.btnsdg').on('click', function(){
         	var sdg =  $('#form-detail').serializeObject();
-                console.log(sdg);
         	$.ajax({
                 type    :"POST",
                 url     :urls+'manajemen/save-assignmentSdg/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
