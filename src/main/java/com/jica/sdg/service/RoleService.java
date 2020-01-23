@@ -50,4 +50,9 @@ public class RoleService implements IRoleService{
 		return  (List<Role>) role.findAll();
 	}
 
+	@Override
+	public Integer cekJmlRole(String id_prov, String cat_role) {
+		return role.cekRole(id_prov, cat_role);
+	}
+
 }

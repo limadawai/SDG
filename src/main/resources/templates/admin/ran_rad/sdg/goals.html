@@ -90,11 +90,18 @@
 				    </div>
 				  </div>
 				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Goals Name</label>
-				    <label class="lang_indo control-label">Nama Sasaran</label>
+				    <label class="lang_eng control-label" style="display:none">Goals Name (Indonesian)</label>
+				    <label class="lang_indo control-label">Nama Sasaran (Indonesian)</label>
 				    <div class="controls">
-				    	<input id="nm_goals" name="nm_goals" class="lang_indo input-xlarge input-block-level" type="text"/>
-				    	<input id="nm_goals_eng" name="nm_goals_eng"style="display:none;" class="lang_eng input-xlarge input-block-level" type="text"/>
+				    	<input id="nm_goals" name="nm_goals" class="input-xlarge input-block-level" type="text"/>
+				    	<span class="help-block" id="error_nm_goals"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Goals Name (English)</label>
+				    <label class="lang_indo control-label">Nama Sasaran (English)</label>
+				    <div class="controls">
+				    	<input id="nm_goals_eng" name="nm_goals_eng" class="input-xlarge input-block-level" type="text"/>
 				    	<span class="help-block" id="error_nm_goals"></span>
 				    </div>
 				  </div>
@@ -126,7 +133,7 @@
 
 	        //Bahasa
 	        var titleDel = "Anda Yakin";
-	        var messDel = "Menghapus Data?";
+	        var messDel = "Menghapus Data dan Data level dibawahnya?";
 	        var buttDel = 'Ya, Hapus data ini!';
 	        var titleOk	= "Hapus";
 	        var messOk = "Data berhasil dihapus";
@@ -147,7 +154,7 @@
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
 	        		titleDel = "Are you sure";
-	        		messDel = "Delete this data?";
+	        		messDel = "Delete this data and lower level?";
 	        		buttDel = 'Yes, Delete this data!';
 	        		titleOk	= "Delete";
 	    	        messOk = "Delete successful";
