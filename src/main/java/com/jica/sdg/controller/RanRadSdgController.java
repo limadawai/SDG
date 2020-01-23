@@ -139,6 +139,17 @@ public class RanRadSdgController {
 	private EntityManager em;
 	
 	//*********************** SDG ***********************
+
+    @GetMapping("admin/ran_rad/sdg/goals")
+    public String goals(Model model, HttpSession session) {
+        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
+        String bhs = (String) session.getAttribute("bahasa");
+        if (bhs == null) {bhs = "0";}
+        model.addAttribute("lang", bhs);
+        model.addAttribute("name", session.getAttribute("name"));
+        return "admin/ran_rad/sdg/goals";
+    }
+
 	@GetMapping("admin/list-sdgGoals")
     public @ResponseBody Map<String, Object> sdgGoalsList() {
         List<SdgGoals> list = sdgGoalsService.findAll();
@@ -257,8 +268,8 @@ public class RanRadSdgController {
 	}
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator/{id_indicator}/disaggre")
-//    public String disagre(Model model, @PathVariable("id") int id, @PathVariable("id_target") int id_target, @PathVariable("id_indicator") String id_indicator, HttpSession session) {
-    public String disagre(Model model, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, @PathVariable("id_indicator") Integer id_indicator, HttpSession session) {
+    public String disagre(Model model, @PathVariable("id") int id, @PathVariable("id_target") int id_target, @PathVariable("id_indicator") int id_indicator, HttpSession session) {
+//    public String disagre(Model model, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, @PathVariable("id_indicator") Integer id_indicator, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
     	Optional<SdgIndicator> list2 = sdgIndicatorService.findOne(id_indicator);

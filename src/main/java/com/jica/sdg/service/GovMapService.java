@@ -7,11 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.jica.sdg.model.GovMap;
-import com.jica.sdg.model.SdgDisaggre;
-import com.jica.sdg.model.SdgDisaggreDetail;
 import com.jica.sdg.repository.GovMapRepository;
-import com.jica.sdg.repository.SdgDisaggreDetailRepository;
-import com.jica.sdg.repository.SdgDisaggreRepository;
 
 @Service
 public class GovMapService implements IGovMapService{
@@ -49,9 +45,4 @@ public class GovMapService implements IGovMapService{
 		return (List<GovMap>) repo.getIdBySdgInd(id);
 	}
 
-	@Override
-	public List<GovMap> getAllByIdProv(String id_prov) {
-		List list = (List<GovMap>) repo.getAllByIdProv(id_prov);
-		return list;
-	}
 }

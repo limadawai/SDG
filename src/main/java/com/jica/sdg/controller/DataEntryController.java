@@ -353,10 +353,7 @@ public class DataEntryController {
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/dataentry/govactivity";
     }
-    
-    
-    
-    
+
     //TARGET SDG
     @GetMapping("admin/entry/sdg-target")
     public String entri_sdg_target(Model model, HttpSession session) {

@@ -6,6 +6,7 @@ import com.jica.sdg.model.Nsaprofile;
 import com.jica.sdg.model.NsaCollaboration;
 import com.jica.sdg.model.PhilanthropyCollaboration;
 import com.jica.sdg.model.Nsadetail;
+import com.jica.sdg.model.Nsaprofile2;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.Submenu;
@@ -18,6 +19,8 @@ import com.jica.sdg.service.NsaDetailService;
 import com.jica.sdg.service.NsaProfileService;
 import com.jica.sdg.service.NsaCollaborationService;
 import com.jica.sdg.service.PhilanthropyService;
+import java.util.ArrayList;
+import java.util.Collection;
 import static java.util.Collections.list;
 import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -97,10 +100,37 @@ public class NsaController {
     
     @GetMapping("admin/list-getid-nsa-profil/{id}")
     public @ResponseBody Map<String, Object> nsaProfilListid(@PathVariable("id") String id) {
-        List<Nsaprofile> list = nsaProfilrService.findId(id);
+        String sql = "select a.*,b.id_prov from nsa_profile a "
+                     + "left join ref_role b on b.id_role = a.id_role where a.id_role = '"+id+"'";
+        
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<Nsaprofile2> result = new ArrayList<>(rows.size());
         Map<String, Object> hasil = new HashMap<>();
-        hasil.put("content",list);
+        for (Object[] row : rows) {
+            Short num = new Short((short)1);
+            result.add(
+                        new Nsaprofile2(
+                                              (Integer)row[0]
+                                            , (Integer)row[1]
+                                            , (String) row[2]
+                                            , (String) row[3]
+                                            , (String) row[4]
+                                            , (String) row[5]
+                                            , Integer.parseInt(row[6].toString())
+                                            , (String) row[7]
+                                            , (String) row[8]
+                                        )
+                        );
+        }
+        hasil.put("content",result);
         return hasil;
+//return null;
+        
+//        List<Nsaprofile> list = nsaProfilrService.findId(id);
+//        Map<String, Object> hasil = new HashMap<>();
+//        hasil.put("content",list);
+//        return hasil;
     }
     
     @GetMapping("admin/list-nsa-profil-detail/{id}")

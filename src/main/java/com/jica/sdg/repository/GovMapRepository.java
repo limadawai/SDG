@@ -25,7 +25,4 @@ public interface GovMapRepository extends CrudRepository<GovMap, Integer> {
 	@Query(value = "select * from gov_map where id_indicator = :id_indicator",nativeQuery = true)
 	public List<GovMap> getIdBySdgInd(@Param("id_indicator") String id_indicator);
 
-	@Query(value = "select * from gov_map where id_prov = :id_prov",nativeQuery = true)
-	public List<GovMap> getAllByIdProv(@Param("id_prov") String id_prov);
-
 }

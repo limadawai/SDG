@@ -2,9 +2,9 @@
 <html lang="en"
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
-<meta name="_csrf" th:content="${_csrf.token}"/>
-<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-<head th:include="admin/layout :: header">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <head th:include="admin/layout :: header">
     <title th:text="SDG Indicator Monitoring">SDG Indicator Monitoring</title>
 </head>
 <body>
@@ -20,36 +20,33 @@
                         <option value="0" >-- Pilih Daerah --</option>
                         <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
                     </select>
-                    <select id="role" name="idrole" class="form-control">
-                        <option value="0" >-- Pilih Role --</option>
-<!--                        <option th:each="f:${listRole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
-                    </select>
-                    <select id="periode" name="idrole" class="form-control">
+<!--                    <select id="role" name="idrole" class="form-control">-->
+<!--                        <option value="0" >&#45;&#45; Pilih Role &#45;&#45;</option>-->
+<!--                        <option th:each="f:${listrole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
+<!--                    </select>-->
+                    <select id="periode" name="idmonper" class="form-control">
                         <option value="0" >-- Pilih Periode --</option>
-<!--                        <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
+                        <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
                     </select>
                 </div>
                 <div style="width:100%">
-                    <select id="daerah" name="daerah" class="form-control">
+                    <select id="goals" name="daerah" class="form-control">
                         <option value="0" >-- Pilih SDGs --</option>
-<!--                        <option id="goals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>-->
+                        <option id="optgoals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>
                     </select>
-                    <select id="role" name="idrole" class="form-control">
+                    <select id="target" name="idrole" class="form-control">
                         <option value="0" >-- Pilih Target --</option>
                     </select>
-                    <select id="periode" name="idrole" class="form-control">
+                    <select id="indikator" name="idrole" class="form-control">
                         <option value="0" >-- Pilih Indikator --</option>
                     </select>
                 </div>
-                <div style="width:100%;padding:20px;background:lightblue;">
+                <div style="width:98%;padding:10px;border:1px solid #3ec1e9;">
                     <div id="divgoals" style="width:100%">
                         <p>Goals</p>
                     </div>
-                    <div id="divtarget" style="width:100%">
+                    <div id="divtarget" style="width:100%;margin-top:8px;">
                         <p>Target</p>
-                    </div>
-                    <div id="divindikator" style="width:100%">
-                        <p>Indikator</p>
                     </div>
                 </div>
                 <div class="widget-box">
@@ -94,13 +91,18 @@
             if (valdaerah != "0") {
                 $.ajax({
                     url: urls + "getroleprov",
+                    contentType: "application/json; charset=utf-8",
                     type: 'get',
                     data: 'id_prov=' + valdaerah,
                     dataType: 'json',
                     cache: false,
-                    async: true,
                     success: function (result) {
                         console.log(result);
+                        $("#periode").val(result[0][2]).change();
+                        $("#goals").val(result[0][3]).change();
+                        $("#target").val(result[0][4]).change();
+                        $("#divgoals").html(result[0][7]);
+                        $("#divtarget").html(result[0][9]);
                     }
                 });
             }

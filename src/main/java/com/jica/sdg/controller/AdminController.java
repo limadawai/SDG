@@ -107,15 +107,6 @@ public class AdminController {
     }
     
     //*********************** RAN RAD ***********************
-    @GetMapping("admin/ran_rad/sdg/goals")
-    public String goals(Model model, HttpSession session) {
-        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
-        String bhs = (String) session.getAttribute("bahasa");
-        if (bhs == null) {bhs = "0";}
-        model.addAttribute("lang", bhs);
-        model.addAttribute("name", session.getAttribute("name"));
-        return "admin/ran_rad/sdg/goals";
-    }
 
     @GetMapping("admin/ran_rad/gov/program")
     public String gov_program(Model model, HttpSession session) {
