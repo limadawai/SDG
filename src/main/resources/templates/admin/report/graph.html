@@ -26,6 +26,12 @@
                         <span class="icon"><i class="icon-tasks"></i></span>
                         <h5 id="title">Grafik Hasil Pelaporan</h5>
                     </div>
+                    <div class="widget-content" style="background:#FFFFFF;">
+                        <div class="row-fluid">
+                            <div id="divtablegrid" class="span6"></div>
+                            <div id="divkanan" class="span6"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -62,25 +68,45 @@
         }
 
         // ********************** Fungsi pilih select option **********************
-        $("#daerah").on("change", function(){
-            var val = $(this).val();
-            $('#id_monper').html('');
-            var option="";
-            $.ajax({
-                url: urls + 'list-monPer/'+val,
-                type: 'get',
-                dataType: 'json',
-                cache: false,
-                async : false,
-                success: function (result) {
-                    for (var k = 0; k < result.content.length; k++) {
-                        option += '<option value="'+result.content[k].id_monper+'">'
-                            +result.content[k].start_year+'-'+result.content[k].end_year+
-                            '</option>';
-                    }
-                    $('#id_monper').append(option);
-                }
+
+        var toggler = document.getElementsByClassName("caret1");
+        var i;
+        for (i = 0; i < toggler.length; i++) {
+            toggler[i].addEventListener("click", function() {
+                this.parentElement.querySelector(".nested").classList.toggle("active");
+                this.classList.toggle("caret-down");
             });
+        }
+
+        $("#daerah").on("change", function(){
+            var valdaerah = $(this).val();
+            if (valdaerah != "0") {
+                $.ajax({
+                    url: urls + "getroleprov",
+                    type: 'get',
+                    data: 'id_prov=' + valdaerah,
+                    dataType: 'json',
+                    cache: false,
+                    success: function (result) {
+                        console.log(result);
+                        $("#divtablegrid").empty();
+                        var tab = "<ul id='bapak' style='list-style-type:none;'>";
+                        for (var i=0; i<result.length; i++) {
+                            tab += "<li style='cursor:pointer;'>";
+                            tab += "<span class='icon-caret-right' style='padding-right: 10px;'></span>"+result[i][7];
+                            tab += "<ul id='anak' style='margin-left:15px;list-style-type:none;'><li style='cursor:pointer;'>";
+                            tab += "<span class='icon-caret-right' style='padding-right: 10px;'></span>"+result[i][9];
+                            tab += "</li></ul>";
+                            tab += "</li>";
+                        }
+                        tab += "</ul>";
+                        $("#divtablegrid").append(tab);
+                        $("#anak").hide();
+                    }
+                });
+            } else if (valdaerah == "0") {
+                $("#divtablegrid").empty();
+            }
         });
     </script>
 </body>
