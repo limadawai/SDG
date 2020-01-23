@@ -230,7 +230,10 @@
 <script th:inline="javascript" >
     // <![CDATA[
             //$(document).ready(function (e) {
-            
+            var id_role     = [[${id_role}]];
+            var privilege   = [[${privilege}]];
+            var cat_role   = [[${cat_role}]];
+            var id_prov   = [[${id_prov}]];
             //Bahasa
             var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
@@ -326,26 +329,54 @@
                             }
                         }},
                         {"data": function (row, data, index, display) {
-                            if(row[7] == null || row[7] == ""){
-                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
-                            }else{
-                                if(row[5] == null || row[5] == ""){
-                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                        	if(privilege=="SUPER" || privilege=="ADMIN"){
+                        		if(row[7] == null || row[7] == ""){
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
                                 }else{
-                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                    if(row[5] == null || row[5] == ""){
+                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                    }else{
+                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                    }
                                 }
-                            }
+                        	}else if(id_role == id && cat_role == 'NSA'){
+                        		if(row[7] == null || row[7] == ""){
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                }else{
+                                    if(row[5] == null || row[5] == ""){
+                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                    }else{
+                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                    }
+                                }
+                        	}else{
+                        		return "";
+                        	}
+                            
                         }},
                         {"data": function (row, data, index, display) {
-                            if(row[6] == null || row[6] == ""){
-                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
-                            }else{
-                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
-                            }
-                            
+                        	if(privilege=="SUPER" || privilege=="ADMIN"){
+                        		if(row[6] == null || row[6] == ""){
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                }else{
+                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
+                                }
+                        	}else if(id_prov == row[13] && cat_role == 'Institution'){
+                        		if(row[6] == null || row[6] == ""){
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                }else{
+                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
+                                }
+                        	}else{
+                        		return "";
+                        	}
+                                                       
                         }}
                     ],
                     "columnDefs": [

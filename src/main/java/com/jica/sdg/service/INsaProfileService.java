@@ -10,13 +10,16 @@ public interface INsaProfileService {
 
     List<Nsaprofile> findAll();
     
-    List<Nsaprofile> findId(String id);
+    List<Nsaprofile> findId(Integer id);
+    
+    List<Role> findIdProv(String id);
 
     void saveNsaProfil(Nsaprofile ins);
     
     List<Role> findRoleNsa();
     List<Role> findRoleAll();
     List<Role> findRoleGov();
+    List<Role> findNsaAllProvince();
 //    
     void deleteNsaProfil(Integer id);
 }
