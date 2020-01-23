@@ -7,11 +7,11 @@ import java.util.Optional;
 
 public interface ISdgDisaggreService {
 
-    List<SdgDisaggre> findAll(String id_indicator);
+    List<SdgDisaggre> findAll(Integer id_indicator);
 
     void saveSdgDisaggre(SdgDisaggre sdg);
     
-    Optional<SdgDisaggre> findOne(String id);
+    Optional<SdgDisaggre> findOne(Integer id);
     
-    void deleteSdgDisaggre(String id);
+    void deleteSdgDisaggre(Integer id);
 }

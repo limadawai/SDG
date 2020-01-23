@@ -20,9 +20,9 @@
 					<div class="widget-content">
 							<span class="lang_eng" style="display:none">Goals : </span><span class="lang_indo">Sasaran : </span><a th:href="@{/admin/ran_rad/sdg/goals}" th:text="${goals.id_goals+' - '+goals.nm_goals}"></a>
 							<br/>
-							Target : <a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id_goals}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}"></a>
+							Target : <a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}"></a>
 							<br/>
-							<span class="lang_eng" style="display:none">Indicator : </span><span class="lang_indo">Indikator : </span><a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id_goals}+'/target/'+${target.id_target}+'/indicator'}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator}"></a>
+							<span class="lang_eng" style="display:none">Indicator : </span><span class="lang_indo">Indikator : </span><a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target/'+${target.id}+'/indicator'}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator}"></a>
 					</div>
 				</div>
 			</div>
@@ -92,16 +92,17 @@
 				    <label class="lang_indo">Disaggregation</label>
 				    <input type="text" readonly="true" th:value="${disaggre.nm_disaggre}" class="input-xlarge" />
 				    <input type="hidden" id="id_goals" name="id_goals" th:value="${target.id_goals}"/>
-				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id_target}"/>
-				    <input type="hidden" id="id_indicator" name="id_indicator" th:value="${indicator.id_indicator}"/>
-				    <input type="hidden" id="id_disaggre" name="id_disaggre" th:value="${disaggre.id_disaggre}"/>
+				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id}"/>
+				    <input type="hidden" id="id_indicator" name="id_indicator" th:value="${indicator.id}"/>
+				    <input type="hidden" id="id_disaggre" name="id_disaggre" th:value="${disaggre.id}"/>
 				    <input type="hidden" id="id" name="id" class="input-medium"/>
 				  </div>
 				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Aggregation Detail Name</label>
 				    <label class="lang_indo control-label">Nama Aggregation Detail</label>
 				    <div class="controls">
-				    	<input type="text" id="desc_disaggre" name="desc_disaggre" class="input-xlarge input-block-level"/>
+				    	<input type="text" id="desc_disaggre" name="desc_disaggre" class="lang_indo input-xlarge input-block-level"/>
+				    	<input type="text" id="desc_disaggre_eng" style="display:none;" name="desc_disaggre_eng" class="lang_eng input-xlarge input-block-level"/>
 				    	<span class="help-block" id="error_desc_disaggre"></span>
 				    </div>
 				  </div>
@@ -169,6 +170,7 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
+	        	table.ajax.url(urls+'list-sdgDisaggreDetail/'+id_disaggre).load();
 	        });
 			var table = $('#tabel-indicator').DataTable({
 				responsive: true,
@@ -187,7 +189,13 @@
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.desc_disaggre+"</div>";
+							var nama;
+							if($("#fs").is(':checked')){
+								nama = row.desc_disaggre;
+							}else{
+								nama = row.desc_disaggre_eng;
+							}
+							return "<div style='font-size:90%;'>"+nama+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='text-align:center;'>"+
@@ -209,6 +217,7 @@
 			function clearForm(){
 				$('#id').val("").removeAttr("readonly");
 				$('#desc_disaggre').val("").removeAttr("readonly");
+				$('#desc_disaggre_eng').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -221,19 +230,21 @@
 				var id_disaggre = $('#id_disaggre').val();
 				var id = ($('#id').val())?$('#id').val():null;
 				var desc_disaggre = $('#desc_disaggre').val();
+				var desc_disaggre_eng = $('#desc_disaggre_eng').val();
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
-				if (desc_disaggre == ""){
+				/* if (desc_disaggre == ""){
                     $("#error_desc_disaggre").parents(".control-group").first().addClass("error");
                     $("#error_desc_disaggre").text(required);
                     cek += 1;
-                }
+                } */
 				if(cek==0){
 					var data = JSON.stringify({
 						'id_disaggre':id_disaggre,
 						'id':id,
-						'desc_disaggre':desc_disaggre
+						'desc_disaggre':desc_disaggre,
+						'desc_disaggre_eng':desc_disaggre_eng,
 						});
 					$.ajax({
 						type: "POST",
@@ -260,6 +271,7 @@
                     	var val = result.content;
                     	$('#id').val(val.id);
                     	$('#desc_disaggre').val(val.desc_disaggre);
+                    	$('#desc_disaggre_eng').val(val.desc_disaggre_eng);
 						$('#myModal').modal('show');
                     },
                 })
@@ -271,7 +283,8 @@
                     success: function (result) {
                     	var val = result.content;
                     	$('#id').val(val.id);
-                    	$('#desc_disaggre').val(val.desc_disaggre);
+                    	$('#desc_disaggre').val(val.desc_disaggre).attr("readonly",true);
+                    	$('#desc_disaggre_eng').val(val.desc_disaggre_eng).attr("readonly",true);
 						$('#myModal').modal('show');
                     },
                 })

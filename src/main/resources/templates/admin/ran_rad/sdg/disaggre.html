@@ -20,9 +20,9 @@
 					<div class="widget-content">
 							<span class="lang_eng" style="display:none">Goals : </span><span class="lang_indo">Sasaran : </span><a th:href="@{/admin/ran_rad/sdg/goals}" th:text="${goals.id_goals+' - '+goals.nm_goals}"></a>
 							<br/>
-							Target : <a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id_goals}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}"></a>
+							Target : <a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}"></a>
 							<br/>
-							<span class="lang_eng" style="display:none">Indicator : </span><span class="lang_indo">Indikator : </span><a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id_goals}+'/target/'+${target.id_target}+'/indicator'}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator}"></a>
+							<span class="lang_eng" style="display:none">Indicator : </span><span class="lang_indo">Indikator : </span><a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target/'+${target.id}+'/indicator'}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator}"></a>
 					</div>
 				</div>
 			</div>
@@ -96,13 +96,14 @@
 				    <label class="lang_indo">Indikator SDG</label>
 				    <input type="text" readonly="true" th:value="${indicator.nm_indicator}" class="input-xlarge" />
 				    <input type="hidden" id="id_goals" name="id_goals" th:value="${target.id_goals}"/>
-				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id_target}"/>
-				    <input type="hidden" id="id_indicator" name="id_indicator" th:value="${indicator.id_indicator}"/>
+				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id}"/>
+				    <input type="hidden" id="id_indicator" name="id_indicator" th:value="${indicator.id}"/>
 				  </div>
 				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Code</label>
 				    <label class="lang_indo control-label">Kode</label>
 				    <div class="controls">
+				    	<input type="hidden" id="id" name="id" class="input-medium input-block-level"/>
 				    	<input type="text" id="id_disaggre" name="id_disaggre" class="input-medium input-block-level"/>
 				    	<span class="help-block" id="error_id_disaggre"></span>
 				    </div>
@@ -111,7 +112,8 @@
 				    <label class="lang_eng control-label" style="display:none">Aggregation Name</label>
 				    <label class="lang_indo control-label">Nama Aggregation</label>
 				    <div class="controls">
-				    	<input type="text" id="nm_disaggre" name="nm_disaggre" class="input-xlarge input-block-level"/>
+				    	<input type="text" id="nm_disaggre" name="nm_disaggre" class="lang_indo input-xlarge input-block-level"/>
+				    	<input type="text" id="nm_disaggre_eng" style="display:none;" name="nm_disaggre" class="lang_eng input-xlarge input-block-level"/>
 				    	<span class="help-block" id="error_nm_disaggre"></span>
 				    </div>
 				  </div>
@@ -178,6 +180,7 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
+	        	table.ajax.url(urls+'list-sdgDisaggre/'+id_indicator).load();
 	        });
 			var table = $('#tabel-indicator').DataTable({
 				responsive: true,
@@ -200,13 +203,19 @@
 						}},
 
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+id_goals+"/target/"+id_target+"/indicator/"+row.id_indicator+"/disaggre/"+row.id_disaggre+"' class='target'>"+row.nm_disaggre+"</a></div>";
+							var nama;
+							if($("#fs").is(':checked')){
+								nama = row.nm_disaggre;
+							}else{
+								nama = row.nm_disaggre_eng;
+							}
+							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+id_goals+"/target/"+id_target+"/indicator/"+row.id_indicator+"/disaggre/"+row.id+"' class='target'>"+nama+"</a></div>";
 						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row.id_disaggre+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id_disaggre+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id_disaggre+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+							'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+							'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                            '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -220,8 +229,10 @@
 			});
 			
 			function clearForm(){
+				$('#id').val("").removeAttr("readonly");
 				$('#id_disaggre').val("").removeAttr("readonly");
 				$('#nm_disaggre').val("").removeAttr("readonly");
+				$('#nm_disaggre_eng').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -231,9 +242,11 @@
 			});
 			
 			$('#submit').on('click', function(){
+				var id = $('#id').val();
 				var id_indicator = $('#id_indicator').val();
 				var id_disaggre = $('#id_disaggre').val();
 				var nm_disaggre = $('#nm_disaggre').val();
+				var nm_disaggre_eng = $('#nm_disaggre_eng').val();
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -242,16 +255,18 @@
                     $("#error_id_disaggre").text(required);
                     cek += 1;
                 }
-				if (nm_disaggre == ""){
+				/* if (nm_disaggre == ""){
                     $("#error_nm_disaggre").parents(".control-group").first().addClass("error");
                     $("#error_nm_disaggre").text(required);
                     cek += 1;
-                }
+                } */
 				if(cek==0){
 					var data = JSON.stringify({
+						'id':id,
 						'id_indicator':id_indicator,
 						'id_disaggre':id_disaggre,
-						'nm_disaggre':nm_disaggre
+						'nm_disaggre':nm_disaggre,
+						'nm_disaggre_eng':nm_disaggre_eng
 						});
 					$.ajax({
 						type: "POST",
@@ -276,8 +291,10 @@
                     url: urls+'get-sdgDisaggre/'+id,
                     success: function (result) {
                     	var val = result.content;
+                    	$('#id').val(val.id);
                     	$('#id_disaggre').val(val.id_disaggre).attr("readonly",true);
                     	$('#nm_disaggre').val(val.nm_disaggre);
+                    	$('#nm_disaggre_eng').val(val.nm_disaggre_eng);
 						$('#myModal').modal('show');
                     },
                 })
@@ -288,8 +305,10 @@
                     url: urls+'get-sdgDisaggre/'+id,
                     success: function (result) {
                     	var val = result.content;
+                    	$('#id').val(val.id);
                     	$('#id_disaggre').val(val.id_disaggre).attr("readonly",true);
                     	$('#nm_disaggre').val(val.nm_disaggre).attr("readonly",true);
+                    	$('#nm_disaggre_eng').val(val.nm_disaggre_eng).attr("readonly",true);
 						$('#myModal').modal('show');
                     },
                 })

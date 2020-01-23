@@ -16,7 +16,7 @@ public class SdgDisaggreService implements ISdgDisaggreService{
 	SdgDisaggreRepository sdgDisaggreRepository;
 
 	@Override
-	public List<SdgDisaggre> findAll(String id_indicator) {
+	public List<SdgDisaggre> findAll(Integer id_indicator) {
 		return (List<SdgDisaggre>) sdgDisaggreRepository.findAllDisaggre(id_indicator);
 	}
 
@@ -26,12 +26,12 @@ public class SdgDisaggreService implements ISdgDisaggreService{
 	}
 
 	@Override
-	public Optional<SdgDisaggre> findOne(String id) {
+	public Optional<SdgDisaggre> findOne(Integer id) {
 		return (Optional<SdgDisaggre>) sdgDisaggreRepository.findById(id);
 	}
 
 	@Override
-	public void deleteSdgDisaggre(String id) {
+	public void deleteSdgDisaggre(Integer id) {
 		sdgDisaggreRepository.deleteById(id);
 	}
 	

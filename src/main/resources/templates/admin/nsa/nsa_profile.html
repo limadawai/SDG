@@ -889,7 +889,7 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                        if(id_role == row.id_role){
+                                        if(id_role == row.id_role||id_prov==row.id_prov){
                                             return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
                                             '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                                         }else if(id_role == '1'){

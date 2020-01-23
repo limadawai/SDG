@@ -18,7 +18,7 @@ public class SdgDisaggreDetailService implements ISdgDisaggreDetailService{
 	SdgDisaggreDetailRepository SdgDisaggreDetailRepository;
 
 	@Override
-	public List<SdgDisaggreDetail> findAll(String id) {
+	public List<SdgDisaggreDetail> findAll(Integer id) {
 		return (List<SdgDisaggreDetail>) SdgDisaggreDetailRepository.findAllDisaggreDetail(id);
 	}
 
