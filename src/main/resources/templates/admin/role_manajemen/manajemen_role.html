@@ -432,7 +432,7 @@
 		$('#desc_role').val("").removeAttr("readonly");
 		$('#cat_role').val("").removeAttr("disabled");
 		$('#privilege').val("").removeAttr("disabled");
-		$('#prov').val("");
+		$('#prov').val("").removeAttr("disabled");
 		$("input[name='menu']").prop('checked',false).removeAttr("disabled");
 		$("input[name='submenu']").prop('checked',false).removeAttr("disabled");
 		$('.control-group').removeClass('error');
@@ -588,6 +588,7 @@
 				$('#desc_role').val(val.desc_role);
 				$('#cat_role').val(val.cat_role);
 				$('#privilege').val(val.privilege);
+				$('#prov').val(val.id_prov);
 				var menu = val.menu.split(',');
 				for(i=0;i<menu.length;i++){
 					$('#menu'+menu[i]).prop('checked', true);
@@ -611,6 +612,7 @@
 				$('#desc_role').val(val.desc_role).attr("readonly",true);
 				$('#cat_role').val(val.cat_role).attr("disabled",true);
 				$('#privilege').val(val.privilege).attr("disabled",true);
+				$('#prov').val(val.id_prov).attr("disabled",true);
 				var menu = val.menu.split(',');
 				for(i=0;i<menu.length;i++){
 					$('#menu'+menu[i]).prop('checked', true);
