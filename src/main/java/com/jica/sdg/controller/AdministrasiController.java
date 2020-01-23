@@ -120,6 +120,14 @@ public class AdministrasiController {
         return hasil;
     }
     
+    @GetMapping("admin/manajemen/cek-jml-role/{id_prov}/{cat_role}")
+    public @ResponseBody Map<String, Object> cekJmlRoles(HttpSession session, @PathVariable("id_prov") String id_prov, @PathVariable("cat_role") String cat_role) {
+    	Integer cek = roleService.cekJmlRole(id_prov, cat_role);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("cek", cek);
+        return hasil;
+    }
+    
     @PostMapping(path = "admin/manajemen/save-role", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public void saveRole(@RequestBody Role rol) {

@@ -35,5 +35,8 @@ public interface RoleRepository extends CrudRepository<Role, Integer> {
 	
 	@Query(value = "select count(*) from ref_role where id_prov = :id_prov and nm_role = :nm_role",nativeQuery = true)
 	public Integer cekNmRole(@Param("id_prov") String id_prov, @Param("nm_role") String nm_role);
+	
+	@Query(value = "select count(*) from ref_role where id_prov = :id_prov and cat_role = :cat_role",nativeQuery = true)
+	public Integer cekRole(@Param("id_prov") String id_prov, @Param("cat_role") String cat_role);
 
 }

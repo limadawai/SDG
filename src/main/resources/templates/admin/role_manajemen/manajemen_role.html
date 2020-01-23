@@ -228,6 +228,7 @@
     var messNOk = "Data tidak dapat dihapus";
     var required = "Harus diisi";
     var messRole = "Nama Role Sudah ada";
+    var mess1Role = "Role Sudah ada";
     function bhs(cek){
 		if(cek){
 			$(".lang_indo").show();
@@ -240,6 +241,7 @@
 	        messNOk = "Data tidak dapat dihapus";
 	        required = "Harus diisi";
 	        messRole = "Nama Role Sudah ada";
+	        mess1Role = "Role Sudah ada";
     	}else{	    	        
 	        $(".lang_indo").hide();
     		$(".lang_eng").show();
@@ -251,6 +253,7 @@
 	        messNOk = "Can't delete data";
 	        required = "Required";
 	        messRole = "The name Role already exists";
+	        mess1Role = "Role already exists";
     	}
     }
     if(lang){
@@ -500,32 +503,45 @@
 	            		swal('Role',messRole,'error');
 	            		cek += 1;
 	            	}else{
-	            		if(cek==0){
-	            			var data = JSON.stringify({
-	            				'id_role':id_role,
-	            				'nm_role':nm_role,
-	            				'desc_role':desc_role,
-	            				'cat_role':cat_role,
-	            				'status_role':status_role,
-	            				'privilege':privilege,
-	            				'menu':menu,
-	            				'submenu':submenu,
-	            				'id_prov':prov
-	            				});
-	            			$.ajax({
-	            				type: "POST",
-	                            url: urls+'manajemen/save-role',
-	                            beforeSend : function(xhr){
-	                            	xhr.setRequestHeader(header,token);
-	                            },
-	                            headers:{'Accept':'application/json','Content-Type':'application/json'},
-	            				data: data,
-	                            success: function (result) {
-	                            	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()).load();
-	                            	$('#myModal').modal('hide');
-	                            },
-	                        });
-	            		}
+	            		$.ajax({
+	        				type: "GET",
+	        	            url: urls+'manajemen/cek-jml-role/'+prov+'/'+cat_role,
+	        	            success: function (result) {
+	        	            		var ceka = result.cek;
+	        	            		if(ceka>0){
+	        	            			$('#myModal').modal('hide');
+	        		            		swal('Role',mess1Role,'error');
+	        		            		cek += 1;
+	        	            		}else{
+	        	            			if(cek==0){
+	        		            			var data = JSON.stringify({
+	        		            				'id_role':id_role,
+	        		            				'nm_role':nm_role,
+	        		            				'desc_role':desc_role,
+	        		            				'cat_role':cat_role,
+	        		            				'status_role':status_role,
+	        		            				'privilege':privilege,
+	        		            				'menu':menu,
+	        		            				'submenu':submenu,
+	        		            				'id_prov':prov
+	        		            				});
+	        		            			$.ajax({
+	        		            				type: "POST",
+	        		                            url: urls+'manajemen/save-role',
+	        		                            beforeSend : function(xhr){
+	        		                            	xhr.setRequestHeader(header,token);
+	        		                            },
+	        		                            headers:{'Accept':'application/json','Content-Type':'application/json'},
+	        		            				data: data,
+	        		                            success: function (result) {
+	        		                            	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()).load();
+	        		                            	$('#myModal').modal('hide');
+	        		                            },
+	        		                        });
+	        		            		}
+	        	            		}
+	        	            	}
+	            		});
 	            	}
 	            },
 	        })
