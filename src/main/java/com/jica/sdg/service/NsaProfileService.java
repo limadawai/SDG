@@ -28,7 +28,7 @@ public class NsaProfileService implements INsaProfileService{
 	}
 	
 	@Override
-	public List<Nsaprofile> findId(String id) {
+	public List<Nsaprofile> findId(Integer id) {
 		return (List<Nsaprofile>) nsaProfileRepo.findId(id);
 	}
 	
@@ -55,5 +55,16 @@ public class NsaProfileService implements INsaProfileService{
 	public void deleteNsaProfil(Integer id_nsa) {
 		nsaProfileRepo.deleteById(id_nsa);
 	}
+
+		@Override
+		public List<Role> findIdProv(String id) {
+			// TODO Auto-generated method stub
+			return (List<Role>) nsaRoleRepo.findNsaByProvince(id);
+		}
+
+		@Override
+		public List<Role> findNsaAllProvince() {
+			return (List<Role>) nsaRoleRepo.findNsaAllProvince();
+		}
         
 }

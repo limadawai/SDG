@@ -22,5 +22,9 @@ public interface IRoleService {
     Integer cekRole(String id_prov, String nm_role);
     
     Integer cekJmlRole(String id_prov, String cat_role);
+    
+    List<Role> findRoleGov();
+    
+    List<Role> findRoleNonGov(String id_prov);
 
 }

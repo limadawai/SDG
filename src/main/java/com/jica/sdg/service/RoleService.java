@@ -55,4 +55,14 @@ public class RoleService implements IRoleService{
 		return role.cekRole(id_prov);
 	}
 
+	@Override
+	public List<Role> findRoleGov() {
+		return (List<Role>) role.findRoleGov();
+	}
+
+	@Override
+	public List<Role> findRoleNonGov(String id_prov) {
+		return (List<Role>) role.findRoleNonGov(id_prov);
+	}
+
 }

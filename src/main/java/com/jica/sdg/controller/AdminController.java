@@ -144,7 +144,7 @@ public class AdminController {
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("prov", foundUpdateObject1));
     	}
     	if(privilege.equals("SUPER") || privilege.equals("ADMIN")) {
-    		model.addAttribute("role", roleService.findByProvince(id_prov));
+    		model.addAttribute("role", roleService.findRoleNonGov(id_prov));
     	}else {
     		Optional<Role> list1 = roleService.findOne(id_role);
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("role", foundUpdateObject1));
