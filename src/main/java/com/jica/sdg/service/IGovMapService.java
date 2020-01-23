@@ -1,7 +1,6 @@
 package com.jica.sdg.service;
 
 import com.jica.sdg.model.GovMap;
-import com.jica.sdg.model.SdgDisaggreDetail;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +18,4 @@ public interface IGovMapService {
     void deleteGovMap(Integer id);
     
     void deleteGovMapBySdgInd(String id);
-
-    List<GovMap> getAllByIdProv(String id_prov);
 }
