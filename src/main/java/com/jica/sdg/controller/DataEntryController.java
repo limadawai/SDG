@@ -163,6 +163,8 @@ public class DataEntryController {
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
 
+    
+    
     @GetMapping("admin/government-program-monitoring")
     public String govprogram(Model model, HttpSession session) {
         model.addAttribute("title", "SDG Indicators Monitoring");
@@ -219,18 +221,20 @@ public class DataEntryController {
         return "admin/dataentry/govactivity";
     }
     
-    @GetMapping("admin/list-entry-gov-activity/{id_program}/{id_role}/{id_monper}")
-    public @ResponseBody Map<String, Object> listEntryGovActivity(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
+    @GetMapping("admin/list-entry-gov-activity/{id_program}/{id_role}/{id_monper}/{tahun}")
+    public @ResponseBody Map<String, Object> listEntryGovActivity(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
         String sql  = "select a.id_activity, a.id_program, a.id_role, a.internal_code, a.nm_activity,\n" +
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
-                    "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad \n" +
+                    "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_activity_eng, c.value as nilai_target, a.id \n" +
                     "from gov_activity as a\n" +
-                    "left join entry_gov_indicator as b on a.id_activity = b.id_assign \n" +
+                    "left join entry_gov_indicator as b on a.id = b.id_assign\n" +
+                    "left join (select * from gov_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_gov_indicator\n" +
                     "where a.id_program = :id_program and a.id_role = :id_role ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_program", id_program);
         query.setParameter("id_role", id_role);
         query.setParameter("id_monper", id_monper);
+        query.setParameter("tahun", tahun);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -312,18 +316,21 @@ public class DataEntryController {
         return "admin/dataentry/nongovactivity";
     }
     
-    @GetMapping("admin/list-entry-non-gov-activity/{id_program}/{id_role}/{id_monper}")
-    public @ResponseBody Map<String, Object> listEntryNonGovActivity(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
+    @GetMapping("admin/list-entry-non-gov-activity/{id_program}/{id_role}/{id_monper}/{tahun}")
+    public @ResponseBody Map<String, Object> listEntryNonGovActivity(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
         String sql  = "select a.id_activity, a.id_program, a.id_role, a.internal_code, a.nm_activity,\n" +
                     "b.id as id_entrynsa, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
-                    "(select nsa_prog from ran_rad where id_monper = :id_monper) as ket_ran_rad \n" +
+                    "(select nsa_prog from ran_rad where id_monper = :id_monper) as ket_ran_rad, a.nm_activity_eng, c.value as nilai_target, a.id \n" +
                     "from nsa_activity as a\n" +
-                    "left join entry_nsa_indicator as b on a.id_activity = b.id_assign\n" +
+                    "left join entry_nsa_indicator as b on a.id = b.id_assign\n" +
+                    "left join (select * from nsa_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_nsa_indicator \n" +
                     "where a.id_program = :id_program and a.id_role = :id_role ";
+        
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_program", id_program);
         query.setParameter("id_role", id_role);
         query.setParameter("id_monper", id_monper);
+        query.setParameter("tahun", tahun);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);

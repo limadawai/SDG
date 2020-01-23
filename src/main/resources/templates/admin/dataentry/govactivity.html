@@ -89,6 +89,10 @@
                                                 <span class="lang_indo">Activity</span>
                                             </th>
                                             <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Target</span>
+                                                <span class="lang_indo">Target</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
                                                 <span class="lang_eng" style="display:none">Realization I</span>
                                                 <span class="lang_indo">Realisasi I</span>
                                             </th>
@@ -336,6 +340,7 @@
             }
 
             $('#fs').on('change', function(e){
+                grid();
                     bhs($(this).is(':checked'));
             });
             
@@ -353,7 +358,7 @@
                 "responsive":true,
                 "bDestroy": true,
                 "ajax": {
-                    "url": urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1,
+                    "url": urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
                     dataSrc: 'content',
                 },
                 "searching": true,
@@ -362,10 +367,22 @@
                         return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                        if($('#fs').is(':checked')){
+                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                        }else{
+                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                        }
+                        
+                    }},
+                    {"data": function (row, data, index, display) {
+                        if(row[14] == null || row[14] == ""){
+                            return "<div style='font-size:90%;'> 0 </div>";
+                        }else{
+                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+                        }
                     }},
                     {"data": function (row, data, index, display) {
                         if(row[6] == null || row[6] == ""){
@@ -400,7 +417,7 @@
                         var v_data_id   = v_dataid.split("###");
                         var id_monper   = v_data_id[0];
                         var tahun       = v_data_id[1];
-                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
                     }},
                 ],
                 "columnDefs": [
@@ -417,7 +434,7 @@
                 var v_data_id   = v_dataid.split("###");;
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
-                table.ajax.url(urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+id_monper ).load();
+                table.ajax.url(urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+id_monper+'/'+tahun_1 ).load();
                 
             }
             
@@ -440,6 +457,7 @@
                 var year_entry      = data[8];
                 var id_monper       = data[9];
                 var ket_ran_rad     = data[10];
+                var id              = data[12];
                 
                 if(value1 == 'null' || value1 == ""){
                     var achieve1 = '0';
@@ -487,8 +505,8 @@
                 }
                 $('#id').val(id_entrynsa).hide();
                 $('#year_entry').val(year_entry);
-                $('#id_activity').val(id_activity);
-                $('#kode_activity').val(internal_code);
+                $('#id_activity').val(id);
+                $('#kode_activity').val(id_activity);
                 $('#activity_name').val(nm_activity);
                 
                 $('.addModal').modal("show");
