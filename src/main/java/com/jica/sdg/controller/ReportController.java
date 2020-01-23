@@ -63,4 +63,15 @@ public class ReportController {
         return list;
     }
 
+    // ****************** Report Grafik ******************
+    @GetMapping("admin/report-graph")
+    public String grafik(Model model, HttpSession session) {
+        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+
+        model.addAttribute("title", "Report Graphic");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        return "admin/report/graph";
+    }
+
 }

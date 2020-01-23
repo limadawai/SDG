@@ -20,10 +20,10 @@
                         <option value="0" >-- Pilih Daerah --</option>
                         <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
                     </select>
-<!--                    <select id="role" name="idrole" class="form-control">-->
-<!--                        <option value="0" >&#45;&#45; Pilih Role &#45;&#45;</option>-->
-<!--                        <option th:each="f:${listrole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
-<!--                    </select>-->
+                    <select id="role" name="idrole" class="form-control">
+                        <option value="0" >-- Pilih Role --</option>
+                        <option th:each="f:${listrole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+                    </select>
                     <select id="periode" name="idmonper" class="form-control">
                         <option value="0" >-- Pilih Periode --</option>
                         <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
@@ -50,6 +50,10 @@
                     </div>
                 </div>
                 <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5 id="title">Laporan Hasil Monitor</h5>
+                    </div>
                 </div>
             </div>
         </div>
@@ -78,11 +82,11 @@
         });
 
         function indo() {
-
+            $("#title").text("Laporan Hasil Monitor");
         }
 
         function inggris() {
-
+            $("#title").text("Monitoring Report");
         }
 
         // ********************** Fungsi pilih select option **********************
