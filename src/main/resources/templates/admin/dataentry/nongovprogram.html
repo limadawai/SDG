@@ -249,6 +249,7 @@
             }
 
             $('#fs').on('change', function(e){
+                grid();
                     bhs($(this).is(':checked'));
             });
             
@@ -276,7 +277,7 @@
                         return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row.internal_code+"</div>";
+                        return "<div style='font-size:90%;'>"+row.id_program+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
                         var v_idrole1   = $("#idrole").val();
@@ -285,7 +286,12 @@
                         var id_monper1  = v_dataid1[0];
                         var tahun1      = v_dataid1[1];
                         var v_idprov1   = $("#id_prov").val();
-                        return "<div style='font-size:90%;'><a href='"+urls+"non-government-program-monitoring/gov/program/"+row.id_program+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"/activity' class='target'>"+row.nm_program+"</div>";
+                        if($('#fs').is(':checked')){
+                            return "<div style='font-size:90%;'><a href='"+urls+"non-government-program-monitoring/gov/program/"+row.id+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"/activity' class='target'>"+row.nm_program+"</div>";
+                        }else{
+                            return "<div style='font-size:90%;'><a href='"+urls+"non-government-program-monitoring/gov/program/"+row.id+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"/activity' class='target'>"+row.nm_program_eng+"</div>";
+                        }
+                        
                     }},
                 ],
                 "columnDefs": [
