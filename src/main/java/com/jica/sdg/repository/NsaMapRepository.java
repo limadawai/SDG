@@ -20,9 +20,17 @@ public interface NsaMapRepository extends CrudRepository<NsaMap, Integer> {
 	
 	@Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "delete from gov_map WHERE id_indicator = :id_indicator",nativeQuery = true)
+    @Query(value = "delete from nsa_map WHERE id_indicator = :id_indicator",nativeQuery = true)
     void deleteBySdgInd(@Param("id_indicator") String id_indicator);
 	
-	@Query(value = "select * from gov_map where id_indicator = :id_indicator",nativeQuery = true)
-	public List<GovMap> getIdBySdgInd(@Param("id_indicator") String id_indicator); 
+	@Query(value = "select * from nsa_map where id_indicator = :id_indicator",nativeQuery = true)
+	public List<NsaMap> getIdBySdgInd(@Param("id_indicator") String id_indicator); 
+	
+	@Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from nsa_map WHERE id_nsa_indicator = :id_nsa_indicator",nativeQuery = true)
+    void deleteByNsaInd(@Param("id_nsa_indicator") Integer id_nsa_indicator);
+	
+	@Query(value = "select * from nsa_map where id_nsa_indicator = :id_nsa_indicator",nativeQuery = true)
+	public List<NsaMap> getIdByNsaInd(@Param("id_nsa_indicator") Integer id_nsa_indicator);
 }
