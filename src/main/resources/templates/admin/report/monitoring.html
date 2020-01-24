@@ -22,11 +22,11 @@
                     </select>
                     <select id="role" name="idrole" class="form-control">
                         <option value="0" >-- Pilih Role --</option>
-                        <option th:each="f:${listrole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+<!--                        <option th:each="f:${listrole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
                     </select>
                     <select id="periode" name="idmonper" class="form-control">
                         <option value="0" >-- Pilih Periode --</option>
-                        <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
+<!--                        <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
                     </select>
                 </div>
                 <div style="width:100%">
@@ -34,7 +34,7 @@
                         <option value="0" >-- Pilih SDGs --</option>
                         <option id="optgoals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>
                     </select>
-                    <select id="target" name="idrole" class="form-control">
+                    <select id="target" name="target" class="form-control">
                         <option value="0" >-- Pilih Target --</option>
                     </select>
                     <select id="indikator" name="idrole" class="form-control">
@@ -42,17 +42,33 @@
                     </select>
                 </div>
                 <div style="width:98%;padding:10px;border:1px solid #3ec1e9;">
-                    <div id="divgoals" style="width:100%">
-                        <p>Goals</p>
-                    </div>
-                    <div id="divtarget" style="width:100%;margin-top:8px;">
-                        <p>Target</p>
-                    </div>
+                    <div id="divgoals" style="width:100%"></div>
+                </div>
+                <div style="width:98%;padding:10px;border:1px solid #3ec1e9;margin-top:6px;">
+                    <div id="divtarget" style="width:100%;"></div>
                 </div>
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-tasks"></i></span>
                         <h5 id="title">Laporan Hasil Monitor</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div id="indi">
+<!--                            <div>-->
+<!--                                <table  id="tab1" class="table table-striped table-bordered">-->
+<!--                                    <thead>-->
+<!--                                        <tr>-->
+<!--                                            <th id="tab11">Sumber Data</th>-->
+<!--                                            <th id="tab12">Satuan</th>-->
+<!--                                            <th id="tab13">Baseline</th>-->
+<!--                                            <th id="tab14">Target</th>-->
+<!--                                            <th id="tab15">Aktual</th>-->
+<!--                                            <th id="tab16">Status</th>-->
+<!--                                        </tr>-->
+<!--                                    </thead>-->
+<!--                                </table>-->
+<!--                            </div>-->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -83,10 +99,22 @@
 
         function indo() {
             $("#title").text("Laporan Hasil Monitor");
+            $("#tab11").text("Sumber Data");
+            $("#tab12").text("Satuan");
+            $("#tab13").text("Baseline");
+            $("#tab14").text("Target");
+            $("#tab15").text("Aktual");
+            $("#tab16").text("Status");
         }
 
         function inggris() {
             $("#title").text("Monitoring Report");
+            $("#tab11").text("Data Source");
+            $("#tab12").text("Unit");
+            $("#tab13").text("Baseline");
+            $("#tab14").text("Target");
+            $("#tab15").text("Actual");
+            $("#tab16").text("Status");
         }
 
         // ********************** Fungsi pilih select option **********************
@@ -94,19 +122,49 @@
             var valdaerah = $(this).val();
             if (valdaerah != "0") {
                 $.ajax({
-                    url: urls + "getroleprov",
-                    contentType: "application/json; charset=utf-8",
+                    url: urls + "getsdg",
                     type: 'get',
                     data: 'id_prov=' + valdaerah,
                     dataType: 'json',
                     cache: false,
                     success: function (result) {
                         console.log(result);
-                        $("#periode").val(result[0][2]).change();
-                        $("#goals").val(result[0][3]).change();
-                        $("#target").val(result[0][4]).change();
-                        $("#divgoals").html(result[0][7]);
-                        $("#divtarget").html(result[0][9]);
+                        $.ajax({
+                            url: urls + "getrolebyidprov",
+                            type: 'get',
+                            data: 'id_prov=' + valdaerah,
+                            dataType: 'json',
+                            cache: false,
+                            success: function (resrole) {
+                                console.log(resrole);
+                                for (var i=0; i<resrole.length; i++) {
+                                    $("#role").append("<option value=''>"+resrole[i]['nm_role']+"</option>");
+                                }
+                            }
+                        });
+                        for (var i=0; i<result.length; i++) {
+                            $("#divgoals").append("<p>"+result[i][7]+"</p>");
+                            $("#divtarget").append("<p>"+result[i][9]+"</p>");
+                            $("#indi").append("<p id='p"+(i+1)+"'>"+result[i][11]+"</p>");
+                            
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#goals").on("change", function(){
+            var idgoals = $(this).val();
+            if (idgoals != "0") {
+                $.ajax({
+                    url: urls + "gettarget",
+                    type: 'get',
+                    data: 'id_goals=' + idgoals,
+                    dataType: 'json',
+                    cache: false,
+                    success: function (result) {
+                        console.log(result);
+
                     }
                 });
             }
