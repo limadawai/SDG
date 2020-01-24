@@ -20,9 +20,17 @@ public interface GovMapRepository extends CrudRepository<GovMap, Integer> {
 	@Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "delete from gov_map WHERE id_indicator = :id_indicator",nativeQuery = true)
-    void deleteBySdgInd(@Param("id_indicator") String id_indicator);
+    void deleteBySdgInd(@Param("id_indicator") Integer id_indicator);
 	
 	@Query(value = "select * from gov_map where id_indicator = :id_indicator",nativeQuery = true)
 	public List<GovMap> getIdBySdgInd(@Param("id_indicator") String id_indicator);
+	
+	@Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from gov_map WHERE id_gov_indicator = :id_gov_indicator",nativeQuery = true)
+    void deleteByGovInd(@Param("id_gov_indicator") Integer id_gov_indicator);
+	
+	@Query(value = "select * from gov_map where id_gov_indicator = :id_gov_indicator",nativeQuery = true)
+	public List<GovMap> getIdByGovInd(@Param("id_gov_indicator") Integer id_gov_indicator);
 
 }
