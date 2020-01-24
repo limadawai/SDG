@@ -130,7 +130,11 @@
                 </div>
             </div>
         </div>
-        <div id="myModal" data-backdrop="static"class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        
+    </div>
+    <div th:include="admin/layout :: footer"></div>
+</body>
+<div id="myModal" data-backdrop="static"class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 class="lang_eng" style="display:none">Add Activity Indicators</h3>
@@ -170,8 +174,8 @@
 				    </div>
 				  </div>
 				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Activity Indicator</label>
-				    <label class="lang_indo control-label">Indikator Kegiatan</label>
+				    <label class="lang_eng control-label" style="display:none">Activity Indicator (English)</label>
+				    <label class="lang_indo control-label">Indikator Kegiatan (English)</label>
 				    <div class="controls">
 				    	<input type="text" id="nm_indicator_eng" name="nm_indicator_eng" class=" input-block-level"/>
 				    	<span class="help-block" id="error_nm_indicator"></span>
@@ -192,9 +196,9 @@
 				    <label class="lang_eng control-label" style="display:none">SDGs Indicator for Mapping</label>
 				    <label class="lang_indo control-label">Indikator SDG untuk Mapping</label>
 				    <div class="controls">
-				    	<select name="sdg_indicator" id="sdg_indicator" class="input-xlarge input-block-level">
-				    		<option value="0">--select--</option>
-	        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
+				    	<select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
+				    		<!-- <option value="0">--select--</option>
+	        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option> -->
 	        			</select>
 					    <span class="help-block" id="error_unit"></span>
 				    </div>
@@ -237,9 +241,6 @@
 		    	</button>
 		  	</div>
 		</div>
-    </div>
-    <div th:include="admin/layout :: footer"></div>
-</body>
 <script th:inline="javascript" >
 	// <![CDATA[
 		//$(document).ready(function (e) {
@@ -287,6 +288,72 @@
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
 	        });
+	        
+	        //Indikator SDG untuk mapping
+	        $.ajax({
+                url: urls + 'list-sdgGoals',
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                async : false,
+                success: function (response) {
+                		var option = "<option value='0'>-- pilih -- </option>";
+                		for (var i = 0; i < response.content.length; i++) {
+                			var nm_goals;
+                        	if($("#fs").is(':checked')){
+                        		nm_goals = response.content[i].nm_goals;
+    						}else{
+    							nm_goals = response.content[i].nm_goals_eng;
+    						}
+                        	option += '<optgroup label="'+response.content[i].id_goals+' '+nm_goals+'">';
+                        	
+                        	$.ajax({
+                                url: urls + 'list-sdgTarget/'+response.content[i].id,
+                                type: 'get',
+                                dataType: 'json',
+                                cache: false,
+                                async : false,
+                                success: function (result) {
+                                	for (var j = 0; j < result.content.length; j++) {
+                                		var nm_target;
+                                    	if($("#fs").is(':checked')){
+                                    		nm_target = result.content[j].nm_target;
+                						}else{
+                							nm_target = result.content[j].nm_target_eng;
+                						}
+                                    	option += '<optgroup label="'+result.content[j].id_target+' '+nm_target+'">';
+                                    	
+                                    	$.ajax({
+                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
+                                            type: 'get',
+                                            dataType: 'json',
+                                            cache: false,
+                                            async : false,
+                                            success: function (result1) {
+                                            	for (var k = 0; k < result1.content.length; k++) {
+                                            		var nm_indicator;
+                                                	if($("#fs").is(':checked')){
+                                                		nm_indicator = result1.content[k][4];
+                            						}else{
+                            							nm_indicator = result1.content[k][6];
+                            						}
+                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
+                                            	}
+                                            }
+                                    	});
+                                    	option += '</optgroup>';
+                                	}
+                                }
+                        	});
+                        	option += '</optgroup>';
+                		}
+                		$('#sdg_indicator').append(option);
+                		$("#sdg_indicator").select2({
+                		    dropdownParent: $("#myModal")
+                		  });
+                	}
+                });
+
 			var table = $('#tabel-indicator').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
@@ -366,8 +433,11 @@
 				$('#id_gov_indicator').val("").removeAttr("readonly");
 				$('#id').val("");
 				$('#nm_indicator').val("").removeAttr("readonly");
+				$('#nm_indicator_eng').val("").removeAttr("readonly");
 				$('#unit').val("").removeAttr("disabled");
 				$('#internal_code').val("").removeAttr("readonly");
+				$('#sdg_indicator').val("").trigger('change');
+				$('#sdg_indicator').removeAttr("disabled");
 				/* $('#target_year1').val("").removeAttr("readonly");
 				$('#target_year2').val("").removeAttr("readonly");
 				$('#target_year3').val("").removeAttr("readonly");
@@ -393,9 +463,15 @@
 				var nm_indicator_eng = $('#nm_indicator_eng').val();
 				var unit = $('#unit').val();
 				var internal_code = $('#internal_code').val();
-				var sdg_indicator = $('#sdg_indicator').val();
+				var sdg_indicator_val = $('#sdg_indicator').val();
+				var sdg_indicator;
 				if(internal_code==""){
 					internal_code = id_gov_indicator;
+				}
+				if(sdg_indicator_val){
+					sdg_indicator = sdg_indicator_val.toString();
+				}else{
+					sdg_indicator = '0';
 				}
 				/* var target_year1 = $('#target_year1').val();
 				var target_year2 = $('#target_year2').val();
@@ -482,7 +558,20 @@
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();
-        	             }
+        	            }
+        				$.ajax({
+        					type: "GET",
+                            url: urls+'list-getGovMapByGovInd/'+val.id,
+                            success: function (hasil) {
+                            		var val = hasil.content;
+                            		var selectedValues = new Array();
+                            		for(var i=0;i<val.length;i++){
+                            			selectedValues[i] = val[i].id_goals+'---'+val[i].id_target+'---'+val[i].id_indicator;
+                            		}
+                            		console.log(selectedValues);
+                            		$('#sdg_indicator').val(selectedValues).trigger('change');
+                            	}
+                        });
         				/* $('#target_year1').val(val.target_year1);
         				$('#target_year2').val(val.target_year2);
         				$('#target_year3').val(val.target_year3);
@@ -510,6 +599,20 @@
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();
         	             }
+        				$.ajax({
+        					type: "GET",
+                            url: urls+'list-getGovMapByGovInd/'+val.id,
+                            success: function (hasil) {
+                            		var val = hasil.content;
+                            		var selectedValues = new Array();
+                            		for(var i=0;i<val.length;i++){
+                            			selectedValues[i] = val[i].id_goals+'---'+val[i].id_target+'---'+val[i].id_indicator;
+                            		}
+                            		console.log(selectedValues);
+                            		$('#sdg_indicator').val(selectedValues).trigger('change');
+                            		$('#sdg_indicator').attr("disabled",true);
+                            	}
+                        });
         				/* $('#target_year1').val(val.target_year1).attr("readonly",true);
         				$('#target_year2').val(val.target_year2).attr("readonly",true);
         				$('#target_year3').val(val.target_year3).attr("readonly",true);

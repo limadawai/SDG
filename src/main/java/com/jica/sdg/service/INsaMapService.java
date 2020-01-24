@@ -10,6 +10,8 @@ public interface INsaMapService {
     List<NsaMap> findAll(String id);
     
     List<NsaMap> findAllBySdgInd(String id);
+    
+    List<NsaMap> findAllByNsaInd(Integer id);
 
     void saveNsaMap(NsaMap sdg);
     
@@ -18,4 +20,6 @@ public interface INsaMapService {
     void deleteNsaMap(Integer id);
     
     void deleteNsaMapBySdgInd(String id);
+    
+    void deleteNsaMapByNsaInd(Integer id);
 }

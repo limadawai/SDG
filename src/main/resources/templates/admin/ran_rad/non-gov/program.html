@@ -140,7 +140,7 @@
 				  <div class="control-group nasional">
 				    <div class="controls">
                         <select name="prov" class="input-block-level">
-				    		<option></option>
+				    		<option value="">-- pilih --</option>
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
 				    </div>
@@ -244,11 +244,12 @@
 	        	var id = $(this).val();
 	        	$.ajax({
 					type: "GET",
-                    url: urls+'manajemen/list-role/'+id,
+                    url: urls+'manajemen/list-role-nsa/'+id,
                     async:false,
                     success: function (result) {
 						$('#id_role').html("");
 						var array = result.content;
+						console.log(id);
 						for(i=0; i<array.length;i++){
 							var selected = (i==0)?'selected':'';
 							$('#id_role').append('<option '+selected+' value="'+array[i].id_role+'">' +array[i].nm_role+'</option>');

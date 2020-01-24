@@ -10,6 +10,8 @@ public interface IGovMapService {
     List<GovMap> findAll(String id);
     
     List<GovMap> findAllBySdgInd(String id);
+    
+    List<GovMap> findAllByGovInd(Integer id);
 
     void saveGovMap(GovMap sdg);
     
@@ -17,5 +19,7 @@ public interface IGovMapService {
     
     void deleteGovMap(Integer id);
     
-    void deleteGovMapBySdgInd(String id);
+    void deleteGovMapBySdgInd(Integer id);
+    
+    void deleteGovMapByGovInd(Integer id);
 }

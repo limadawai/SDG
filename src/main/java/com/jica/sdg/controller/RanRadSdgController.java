@@ -481,20 +481,23 @@ public class RanRadSdgController {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	govIndicatorService.saveGovIndicator(gov);
-    	
     	if(!sdg_indicator.equals("0")) {
-    		String[] a = sdg_indicator.split("---");
-    		String id_goals = a[0];
-    		String id_target = a[1];
-    		String id_indicator = a[2];
-    		GovMap map = new GovMap();
-    		map.setId_goals(id_goals);
-    		map.setId_target(id_target);
-    		map.setId_indicator(id_indicator);
-    		map.setId_gov_indicator(gov.getId_gov_indicator());
-    		map.setId_monper(id_monper);
-    		map.setId_prov(id_prov);
-    		govMapService.saveGovMap(map);
+    		govMapService.deleteGovMapByGovInd(gov.getId());
+    		String[] sdg = sdg_indicator.split(",");
+    		for(int i=0;i<sdg.length;i++) {
+    			String[] a = sdg[i].split("---");
+        		Integer id_goals = Integer.parseInt(a[0]);
+        		Integer id_target = Integer.parseInt(a[1]);
+        		Integer id_indicator = Integer.parseInt(a[2]);
+        		GovMap map = new GovMap();
+        		map.setId_goals(id_goals);
+        		map.setId_target(id_target);
+        		map.setId_indicator(id_indicator);
+        		map.setId_gov_indicator(gov.getId());
+        		map.setId_monper(id_monper);
+        		map.setId_prov(id_prov);
+        		govMapService.saveGovMap(map);
+    		}
     	}
 	}
     
@@ -631,20 +634,23 @@ public class RanRadSdgController {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaIndicatorService.saveNsaIndicator(gov);
-    	
     	if(!sdg_indicator.equals("0")) {
-    		String[] a = sdg_indicator.split("---");
-    		String id_goals = a[0];
-    		String id_target = a[1];
-    		String id_indicator = a[2];
-    		NsaMap map = new NsaMap();
-    		map.setId_goals(id_goals);
-    		map.setId_target(id_target);
-    		map.setId_indicator(id_indicator);
-    		map.setId_nsa_indicator(gov.getId_nsa_indicator());
-    		map.setId_monper(id_monper);
-    		map.setId_prov(id_prov);
-    		nsaMapService.saveNsaMap(map);
+    		nsaMapService.deleteNsaMapByNsaInd(gov.getId());
+    		String[] sdg = sdg_indicator.split(",");
+    		for(int i=0;i<sdg.length;i++) {
+    			String[] a = sdg[i].split("---");
+    			Integer id_goals = Integer.parseInt(a[0]);
+        		Integer id_target = Integer.parseInt(a[1]);
+        		Integer id_indicator = Integer.parseInt(a[2]);
+        		NsaMap map = new NsaMap();
+        		map.setId_goals(id_goals);
+        		map.setId_target(id_target);
+        		map.setId_indicator(id_indicator);
+        		map.setId_nsa_indicator(gov.getId());
+        		map.setId_monper(id_monper);
+        		map.setId_prov(id_prov);
+        		nsaMapService.saveNsaMap(map);
+    		}
     	}
 	}
     
@@ -974,6 +980,22 @@ public class RanRadSdgController {
     @GetMapping("admin/list-getIdGovMap/{id}")
     public @ResponseBody Map<String, Object> govIndByRole(HttpSession session, @PathVariable("id") String id) {
         List <GovMap> list = govMapService.findAllBySdgInd(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-getGovMapByGovInd/{id}")
+    public @ResponseBody Map<String, Object> getGovMapByGovInd(HttpSession session, @PathVariable("id") Integer id) {
+        List <GovMap> list = govMapService.findAllByGovInd(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-getNsaMapByGovInd/{id}")
+    public @ResponseBody Map<String, Object> getNsaMapByGovInd(HttpSession session, @PathVariable("id") Integer id) {
+        List <NsaMap> list = nsaMapService.findAllByNsaInd(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
