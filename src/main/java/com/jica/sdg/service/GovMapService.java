@@ -36,13 +36,23 @@ public class GovMapService implements IGovMapService{
 	}
 
 	@Override
-	public void deleteGovMapBySdgInd(String id) {
+	public void deleteGovMapBySdgInd(Integer id) {
 		repo.deleteBySdgInd(id);
 	}
 
 	@Override
 	public List<GovMap> findAllBySdgInd(String id) {
 		return (List<GovMap>) repo.getIdBySdgInd(id);
+	}
+
+	@Override
+	public void deleteGovMapByGovInd(Integer id) {
+		repo.deleteByGovInd(id);
+	}
+
+	@Override
+	public List<GovMap> findAllByGovInd(Integer id) {
+		return (List<GovMap>) repo.getIdByGovInd(id);
 	}
 
 }
