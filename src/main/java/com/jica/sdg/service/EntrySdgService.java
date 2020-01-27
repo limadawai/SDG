@@ -1,12 +1,16 @@
 package com.jica.sdg.service;
 
+import com.jica.sdg.model.EntryGovBudget;
 import com.jica.sdg.model.EntryGovIndicator;
+import com.jica.sdg.model.EntryNsaBudget;
 import com.jica.sdg.model.EntryNsaIndicator;
 import com.jica.sdg.model.EntrySdg;
 import com.jica.sdg.model.EntrySdgIndicatorJoin;
 import com.jica.sdg.model.SdgIndicatorTarget;
+import com.jica.sdg.repository.EntryGovBudgetRepository;
 import com.jica.sdg.repository.EntrySdgRepository;
 import com.jica.sdg.repository.EntryGovIndicatorRepository;
+import com.jica.sdg.repository.EntryNsaBudgetRepository;
 import com.jica.sdg.repository.EntryNsaIndicatorRepository;
 import com.jica.sdg.repository.SdgIndicatorTargetRepository;
 import java.util.Date;
@@ -34,6 +38,12 @@ public class EntrySdgService implements IEntrySdgService{
 	@Autowired
 	SdgIndicatorTargetRepository sdgIndicatorTargetRepo;
 	
+	@Autowired
+	EntryGovBudgetRepository entryGovBudgetRepo;
+	
+	@Autowired
+	EntryNsaBudgetRepository entryNsaBudgetRepo;
+	
 	@Override
 	public List<EntrySdg> findAllEntrySdg() {
 		return (List<EntrySdg>) entrySdgRepo.findAllEntrySdg();
@@ -60,6 +70,24 @@ public class EntrySdgService implements IEntrySdgService{
 //            esdg.setShow_report_date(date);
             entryGovIndicator.setDate_created(date);
             entryGovIndicatorRepo.save(entryGovIndicator);
+	}
+        
+	@Override
+	public void saveEntryGovBudget(EntryGovBudget entryGovBudget) {
+            Date date = new Date();
+            //esdg.setApproval_date(date);
+//            esdg.setShow_report_date(date);
+            entryGovBudget.setDate_created(date);
+            entryGovBudgetRepo.save(entryGovBudget);
+	}
+        
+	@Override
+	public void saveEntryNsaBudget(EntryNsaBudget entryNsaBudget) {
+            Date date = new Date();
+            //esdg.setApproval_date(date);
+//            esdg.setShow_report_date(date);
+            entryNsaBudget.setDate_created(date);
+            entryNsaBudgetRepo.save(entryNsaBudget);
 	}
         
 	@Override
