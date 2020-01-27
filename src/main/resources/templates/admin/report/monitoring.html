@@ -22,11 +22,9 @@
                     </select>
                     <select id="role" name="idrole" class="form-control">
                         <option value="0" >-- Pilih Role --</option>
-<!--                        <option th:each="f:${listrole}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
                     </select>
                     <select id="periode" name="idmonper" class="form-control">
                         <option value="0" >-- Pilih Periode --</option>
-<!--                        <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
                     </select>
                 </div>
                 <div style="width:100%">
@@ -53,22 +51,7 @@
                         <h5 id="title">Laporan Hasil Monitor</h5>
                     </div>
                     <div class="widget-content">
-                        <div id="indi">
-<!--                            <div>-->
-<!--                                <table  id="tab1" class="table table-striped table-bordered">-->
-<!--                                    <thead>-->
-<!--                                        <tr>-->
-<!--                                            <th id="tab11">Sumber Data</th>-->
-<!--                                            <th id="tab12">Satuan</th>-->
-<!--                                            <th id="tab13">Baseline</th>-->
-<!--                                            <th id="tab14">Target</th>-->
-<!--                                            <th id="tab15">Aktual</th>-->
-<!--                                            <th id="tab16">Status</th>-->
-<!--                                        </tr>-->
-<!--                                    </thead>-->
-<!--                                </table>-->
-<!--                            </div>-->
-                        </div>
+                        <div id="indi"></div>
                     </div>
                 </div>
             </div>
@@ -105,6 +88,15 @@
             $("#tab14").text("Target");
             $("#tab15").text("Aktual");
             $("#tab16").text("Status");
+            $("#tb1").text("Nama Program");
+            $("#tb2").text("Aktifitas");
+            $("#tb3").text("Indikator");
+            $("#tb4").text("Satuan");
+            $("#tb6").text("Aktual");
+            $("#tb7").text("Budget Aktual");
+            $("#tb8").text("Sumber Pendanaan");
+            $("#tb9").text("Lokasi");
+            $("#tb10").text("Aktor");
         }
 
         function inggris() {
@@ -115,11 +107,23 @@
             $("#tab14").text("Target");
             $("#tab15").text("Actual");
             $("#tab16").text("Status");
+            $("#tb1").text("Program Name");
+            $("#tb2").text("Activity");
+            $("#tb3").text("Indicator");
+            $("#tb4").text("Unit");
+            $("#tb6").text("Actual");
+            $("#tb7").text("Actual Budget");
+            $("#tb8").text("Funding Source");
+            $("#tb9").text("Location");
+            $("#tb10").text("Actor");
         }
 
         // ********************** Fungsi pilih select option **********************
         $("#daerah").on("change", function(){
             var valdaerah = $(this).val();
+            $("#divgoals").empty();
+            $("#divtarget").empty();
+            $("#indi").empty();
             if (valdaerah != "0") {
                 $.ajax({
                     url: urls + "getsdg",
@@ -128,28 +132,93 @@
                     dataType: 'json',
                     cache: false,
                     success: function (result) {
-                        console.log(result);
-                        $.ajax({
-                            url: urls + "getrolebyidprov",
-                            type: 'get',
-                            data: 'id_prov=' + valdaerah,
-                            dataType: 'json',
-                            cache: false,
-                            success: function (resrole) {
-                                console.log(resrole);
-                                for (var i=0; i<resrole.length; i++) {
-                                    $("#role").append("<option value=''>"+resrole[i]['nm_role']+"</option>");
-                                }
+                        if (result.length == 0) {
+                            swal("Data tidak ditemukan");
+                            if (lang != "0") {
+                                swal("Data not found");
                             }
-                        });
-                        for (var i=0; i<result.length; i++) {
-                            $("#divgoals").append("<p>"+result[i][7]+"</p>");
-                            $("#divtarget").append("<p>"+result[i][9]+"</p>");
-                            $("#indi").append("<p id='p"+(i+1)+"'>"+result[i][11]+"</p>");
-                            
+                        } else {
+                            // console.log(result);
+                            $.ajax({
+                                url: urls + "getrolebyidprov",
+                                type: 'get',
+                                data: 'id_prov=' + valdaerah,
+                                dataType: 'json',
+                                cache: false,
+                                success: function (resrole) {
+                                    for (var i = 0; i < resrole.length; i++) {
+                                        $("#role").append("<option value='" + resrole[i]['id_role'] + "'>" + resrole[i]['nm_role'] + "</option>");
+                                    }
+                                }
+                            });
+                            for (var i = 0; i < result.length; i++) {
+                                $("#divgoals").append("<p>" + result[i][7] + "</p>");
+                                $("#divtarget").append("<p>" + result[i][9] + "</p>");
+                                var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + result[i][11] + "</p></div>";
+                                $("#indi").append(p);
+                                //********************** Add table atas ********************
+                                var pq = "<table  id='tabatas' class='table table-striped table-bordered' style='width:60%'>";
+                                pq += "<thead>";
+                                pq += "<tr>";
+                                pq += "<th id='tab11'>Sumber Data</th>";
+                                pq += "<th id='tab12'>Satuan</th>";
+                                pq += "<th id='tab13'>Baseline</th>";
+                                pq += "<th id='tab14'>Target</th>";
+                                pq += "<th id='tab15'>Aktual</th>";
+                                pq += "<th id='tab16'>Status</th>";
+                                pq += "</tr>";
+                                pq += "</thead>";
+                                pq += "</table>";
+                                $("#divtab" + (i + 1)).append(pq);
+                                var q = "<table  id='tabawah' class='table table-striped table-bordered' style='width:100%'>";
+                                q += "<thead>";
+                                q += "<tr>";
+                                q += "<th id='tb1' rowspan='2' style='vertical-align:middle;'>Nama<br>Program</th>";
+                                q += "<th id='tb2' rowspan='2' style='vertical-align:middle;'>Aktifitas</th>";
+                                q += "<th id='tb3' rowspan='2' style='vertical-align:middle;'>Indikator</th>";
+                                q += "<th id='tb4' rowspan='2' style='vertical-align:middle;'>Satuan</th>";
+                                q += "<th id='tb5' rowspan='2' style='vertical-align:middle;'>Target</th>";
+                                q += "<th id='tb6' colspan='5'>Aktual</th>";
+                                q += "<th id='tb7' rowspan='2' style='vertical-align:middle;'>Budget<br>Aktual</th>";
+                                q += "<th id='tb8' rowspan='2' style='vertical-align:middle;'>Sumber<br>Pendanaan</th>";
+                                q += "<th id='tb9' rowspan='2' style='vertical-align:middle;'>Lokasi</th>";
+                                q += "<th id='tb10' rowspan='2' style='vertical-align:middle;'>Pelaku</th>";
+                                q += "<th id='tb11' rowspan='2' style='vertical-align:middle;'>#</th>";
+                                q += "</tr>";
+                                q += "<tr>";
+                                q += "<th>1</th>";
+                                q += "<th>2</th>";
+                                q += "<th>3</th>";
+                                q += "<th>4</th>";
+                                q += "<th>5</th>";
+                                q += "</tr>";
+                                q += "</thead>";
+                                q += "</table>";
+                                $("#divtab" + (i + 1)).append(q);
+                            }
                         }
                     }
                 });
+                $.ajax({
+                    url: urls + "getranradbyidprov",
+                    type: 'get',
+                    data: 'id_prov=' + valdaerah,
+                    dataType: 'json',
+                    cache: false,
+                    success: function (result) {
+                        // console.log(result);
+                        for (var i=0; i<result.length; i++) {
+                            $("#periode").append("<option value='"+result[i]['id_monper']+"'>"+result[i]['start_year']+" - "+result[i]['end_year']+"</option>");
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#role").on("change", function(){
+            var idrole = $(this).val();
+            if (idrole != "0") {
+                
             }
         });
 
@@ -163,8 +232,30 @@
                     dataType: 'json',
                     cache: false,
                     success: function (result) {
-                        console.log(result);
+                        // console.log(result);
+                        for (var i = 0; i < result.length; i++) {
+                            $("#target").append("<option value='" + result[i]['id'] + "'>" + result[i]['nm_target'] + "</option>");
+                        }
+                    }
+                });
+            }
+        });
 
+        $("#target").on("change", function(){
+            var valgoals = $("#goals :selected").val();
+            var valtarget = $(this).val();
+            if (valgoals != "0" && valtarget != "0") {
+                $.ajax({
+                    url: urls + "getindicator",
+                    type: 'get',
+                    data: {id_goals:valgoals, id_target:valtarget},
+                    dataType: 'json',
+                    cache: false,
+                    success: function (result) {
+                        // console.log(result);
+                        for (var i = 0; i < result.length; i++) {
+                            $("#indikator").append("<option value='" + result[i]['id'] + "'>" + result[i]['nm_indicator'] + "</option>");
+                        }
                     }
                 });
             }

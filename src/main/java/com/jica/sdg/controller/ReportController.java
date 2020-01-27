@@ -32,6 +32,8 @@ public class ReportController {
     SdgIndicatorService indicatorService;
     @Autowired
     EntityManager manager;
+    @Autowired
+    RanRadService ranRadService;
 
     // ****************** Report Hasil Monitoring ******************
     @GetMapping("admin/report-monitoring")
@@ -69,9 +71,21 @@ public class ReportController {
         return list;
     }
 
+    @GetMapping("admin/getranradbyidprov")
+    public @ResponseBody List<Object> getranrad(@RequestParam("id_prov") String id) {
+        List list = ranRadService.findAllByIdProv(id);
+        return list;
+    }
+
     @GetMapping("admin/gettarget")
     public @ResponseBody List<Object> getTargetByGoals(@RequestParam("id_goals") int id) {
         List list = targetService.findAll(id);
+        return list;
+    }
+
+    @GetMapping("admin/getindicator")
+    public @ResponseBody List<Object> getIndicatorByTarget(@RequestParam("id_goals") int idgoals, @RequestParam("id_target") int idtarget) {
+        List list = indicatorService.findAll(idgoals, idtarget);
         return list;
     }
 
