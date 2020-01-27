@@ -99,6 +99,19 @@ public class AdministrasiController {
         return hasil;
     }
     
+    @GetMapping("admin/manajemen/list-role-nsa/{id_prov}")
+    public @ResponseBody Map<String, Object> rolesNsa(HttpSession session, @PathVariable("id_prov") String id_prov) {
+    	List<Role> listRole;
+    	if(id_prov.equals("all")) {
+    		listRole = roleService.findAll();
+    	}else {
+    		listRole = roleService.findRoleNonGov(id_prov);
+    	}
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content", listRole);
+        return hasil;
+    }
+    
     @GetMapping("admin/manajemen/list-role-user/{id_prov}")
     public @ResponseBody Map<String, Object> rolesUser(HttpSession session, @PathVariable("id_prov") String id_prov) {
     	List<Role> listRole;

@@ -49,5 +49,15 @@ public class NsaMapService implements INsaMapService{
 	@Override
 	public List<NsaMap> findAllBySdgInd(String id) {
 		return (List<NsaMap>) repo.findAll();
+	}
+
+	@Override
+	public List<NsaMap> findAllByNsaInd(Integer id) {
+		return (List<NsaMap>) repo.getIdByNsaInd(id);
+	}
+
+	@Override
+	public void deleteNsaMapByNsaInd(Integer id) {
+		repo.deleteByNsaInd(id);
 	}	
 }

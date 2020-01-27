@@ -45,7 +45,7 @@ public interface RoleRepository extends CrudRepository<Role, Integer> {
 	@Query(value = "select * from ref_role where id_prov != '000' and cat_role = 'NSA'",nativeQuery = true)
 	public List<Role> findNsaAllProvince(); 
 	
-	@Query(value = "select * from ref_role where id_prov = :id_prov and cat_role = 'Institution' or cat_role = 'NSA'",nativeQuery = true)
+	@Query(value = "select * from ref_role where id_prov = :id_prov and (cat_role = 'Institution' or cat_role = 'NSA')",nativeQuery = true)
     public List<Role> findRoleNonGov(@Param("id_prov") String id_prov);
 
 }
