@@ -32,6 +32,8 @@ public class ReportController {
     SdgIndicatorService indicatorService;
     @Autowired
     EntityManager manager;
+    @Autowired
+    RanRadService ranRadService;
 
     // ****************** Report Hasil Monitoring ******************
     @GetMapping("admin/report-monitoring")
@@ -47,19 +49,43 @@ public class ReportController {
         return "admin/report/monitoring";
     }
 
-    @GetMapping("admin/getroleprov")
+    @GetMapping("admin/getsdg")
     public @ResponseBody List<Object> getGovMapById(@RequestParam("id_prov") String id) {
-        String sql = "select a.*, b.nm_goals, c.nm_indicator as nm_gov_indicator, d.nm_indicator, e.start_year, e.end_year, " +
-                "f.nm_target from gov_map a left join " +
-                "sdg_goals b on b.id_goals = a.id_goals left join " +
-                "gov_indicator c on c.id_gov_indicator = a.id_gov_indicator left join " +
-                "sdg_indicator d on d.id_indicator = a.id_indicator left join " +
-                "ran_rad e on e.id_monper = a.id_monper left join " +
-                "sdg_target f on f.id_target = a.id_target " +
-                "where a.id_prov = :id_prov";
+        String sql = "SELECT a.*, b.nm_goals, b.nm_goals_eng, c.nm_target, c.nm_target_eng, d.nm_indicator, d.nm_indicator_eng, " +
+                "e.nm_role, e.cat_role, f.start_year, f.end_year FROM assign_sdg_indicator a LEFT JOIN " +
+                "sdg_goals b ON b.id = a.id_goals LEFT JOIN " +
+                "sdg_target c ON c.id = a.id_target LEFT JOIN " +
+                "sdg_indicator d ON d.id = a.id_indicator LEFT JOIN " +
+                "ref_role e ON e.id_role = a.id_role LEFT JOIN " +
+                "ran_rad f ON f.id_monper = a.id_monper " +
+                "WHERE a.id_prov = :id_prov";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", id);
         List list = query.getResultList();
+        return list;
+    }
+
+    @GetMapping("admin/getrolebyidprov")
+    public @ResponseBody List<Object> getRoleByIdProv(@RequestParam("id_prov") String id) {
+        List list = roleService.findByProvince(id);
+        return list;
+    }
+
+    @GetMapping("admin/getranradbyidprov")
+    public @ResponseBody List<Object> getranrad(@RequestParam("id_prov") String id) {
+        List list = ranRadService.findAllByIdProv(id);
+        return list;
+    }
+
+    @GetMapping("admin/gettarget")
+    public @ResponseBody List<Object> getTargetByGoals(@RequestParam("id_goals") int id) {
+        List list = targetService.findAll(id);
+        return list;
+    }
+
+    @GetMapping("admin/getindicator")
+    public @ResponseBody List<Object> getIndicatorByTarget(@RequestParam("id_goals") int idgoals, @RequestParam("id_target") int idtarget) {
+        List list = indicatorService.findAll(idgoals, idtarget);
         return list;
     }
 

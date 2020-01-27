@@ -1,6 +1,8 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.EntryGovBudget;
 import com.jica.sdg.model.EntryGovIndicator;
+import com.jica.sdg.model.EntryNsaBudget;
 import com.jica.sdg.model.EntryNsaIndicator;
 import com.jica.sdg.model.EntrySdg;
 import com.jica.sdg.model.EntrySdgIndicatorJoin;
@@ -9,6 +11,8 @@ import com.jica.sdg.model.NsaProgram;
 
 import com.jica.sdg.model.EntryProblemIdentify;
 import com.jica.sdg.model.EntrySdg;
+import com.jica.sdg.model.GovActivity;
+import com.jica.sdg.model.NsaActivity;
 import com.jica.sdg.repository.EntryProblemIdentifyRepository;
 import com.jica.sdg.service.*;
 
@@ -80,7 +84,13 @@ public class DataEntryController {
     IGovProgramService govProgService;
     
     @Autowired
+    IGovActivityService govActService;
+    
+    @Autowired
     INsaProgramService nsaProgService;
+    
+    @Autowired
+    INsaActivityService nsaActService;
     
     @Autowired
     ISdgIndicatorService sdgIndicatorService;
@@ -253,9 +263,9 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> listEntryGovActivity(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
         String sql  = "select a.id_activity, a.id_program, a.id_role, a.internal_code, a.nm_activity,\n" +
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
-                    "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_activity_eng, c.value as nilai_target, a.id \n" +
+                    "(select gov_prog_bud from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_activity_eng, c.value as nilai_target, a.id \n" +
                     "from gov_activity as a\n" +
-                    "left join entry_gov_indicator as b on a.id = b.id_assign\n" +
+                    "left join entry_gov_budget as b on a.id = b.id_gov_activity \n" +
                     "left join (select * from gov_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_gov_indicator\n" +
                     "where a.id_program = :id_program and a.id_role = :id_role ";
         Query query = em.createNativeQuery(sql);
@@ -271,7 +281,22 @@ public class DataEntryController {
     
     @PostMapping(path = "admin/save-entry-gov_prog", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveEntryGovProg(@RequestBody EntryGovIndicator entryGovIndicator) {
+    public void saveEntryGovProg(@RequestBody EntryGovBudget entryGovBudget) {
+//        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
+//        int achievement1        = entrySdg.getAchievement1();
+//        int achievement2        = entrySdg.getAchievement2();
+//        int achievement3        = entrySdg.getAchievement3();
+//        int achievement4        = entrySdg.getAchievement4();
+//        int year_entry          = entrySdg.getYear_entry();
+//        int id_role             = entrySdg.getId_role();
+//        int id_monper           = entrySdg.getId_monper();
+        entrySdgService.saveEntryGovBudget(entryGovBudget);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @PostMapping(path = "admin/save-entry-gov_prog_indicator", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveEntryGovProgIndicator(@RequestBody EntryGovIndicator entryGovIndicator) {
 //        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
 //        int achievement1        = entrySdg.getAchievement1();
 //        int achievement2        = entrySdg.getAchievement2();
@@ -282,6 +307,109 @@ public class DataEntryController {
 //        int id_monper           = entrySdg.getId_monper();
         entrySdgService.saveEntryGovIndicator(entryGovIndicator);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @GetMapping("admin/list-get-sts-monper-gov/{id_monper}")
+    public @ResponseBody Map<String, Object> getGetStsMonperGov(@PathVariable("id_monper") String id_monper) {
+        String sql  = "select gov_prog_bud from ran_rad as a where a.id_monper = :id_monper ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-get-sts-monper-nongov/{id_monper}")
+    public @ResponseBody Map<String, Object> getGetStsMonpernonGov(@PathVariable("id_monper") String id_monper) {
+        String sql  = "select nsa_prog_bud from ran_rad as a where a.id_monper = :id_monper ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-get-sts-monper-gov_act/{id_monper}")
+    public @ResponseBody Map<String, Object> getGetStsMonperGovact(@PathVariable("id_monper") String id_monper) {
+        String sql  = "select gov_prog from ran_rad as a where a.id_monper = :id_monper ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-get-sts-monper-nongov_act/{id_monper}")
+    public @ResponseBody Map<String, Object> getGetStsMonpernonGovact(@PathVariable("id_monper") String id_monper) {
+        String sql  = "select nsa_prog from ran_rad as a where a.id_monper = :id_monper ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity/{id_activity}/indicator")
+    public String gov_kegiatan_indicator(Model model, @PathVariable("id_program") Integer id_program, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, @PathVariable("id_activity") Integer id_activity, HttpSession session) {
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleGov());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        model.addAttribute("id_prov_1", id_prov_1);
+        model.addAttribute("id_role_1", id_role_1);
+        model.addAttribute("monper_1", monper);
+        model.addAttribute("tahun_1", tahun);
+        model.addAttribute("id_program_1", id_program);
+        model.addAttribute("id_activity_1", id_activity);
+        
+    	Optional<GovProgram> govprog = govProgService.findOne(id_program);
+    	Optional<GovActivity> govact  = govActService.findOne(id_activity);
+        model.addAttribute("title", "SDG Indicators Monitoring");
+        govprog.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
+        govact.ifPresent(foundUpdateObject -> model.addAttribute("govAct", foundUpdateObject));
+        return "admin/dataentry/govindicator";
+    }
+    
+    @GetMapping("admin/list-entry-gov-indicator/{id_program}/{id_activity}/{id_role}/{id_monper}/{tahun}")
+    public @ResponseBody Map<String, Object> listEntryGovIndicator(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
+        String sql  = "select a.id_activity, a.id_program, a.id_gov_indicator, a.internal_code, a.nm_indicator,\n" +
+                    "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
+                    "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id \n" +
+                    "from gov_indicator as a\n" +
+                    "left join entry_gov_indicator as b on a.id = b.id_assign \n" +
+                    "left join (select * from gov_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_gov_indicator\n" +
+//                    "where a.id_program = :id_program and a.id_activity = :id_activity and a.id_role = :id_role ";
+                    "where a.id_program = :id_program and a.id_activity = :id_activity ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_program", id_program);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("tahun", tahun);
+        query.setParameter("id_activity", id_activity);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
     }
     
 
@@ -348,6 +476,27 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> listEntryNonGovActivity(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
         String sql  = "select a.id_activity, a.id_program, a.id_role, a.internal_code, a.nm_activity,\n" +
                     "b.id as id_entrynsa, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
+                    "(select nsa_prog_bud from ran_rad where id_monper = :id_monper) as ket_ran_rad, a.nm_activity_eng, c.value as nilai_target, a.id \n" +
+                    "from nsa_activity as a\n" +
+                    "left join entry_nsa_budget as b on a.id = b.id_nsa_activity\n" +
+                    "left join (select * from nsa_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_nsa_indicator \n" +
+                    "where a.id_program = :id_program and a.id_role = :id_role ";
+        
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_program", id_program);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("tahun", tahun);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry-non-gov-indicator/{id_program}/{id_role}/{id_monper}/{tahun}")
+    public @ResponseBody Map<String, Object> listEntryNonGovIndicator(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
+        String sql  = "select a.id_activity, a.id_program, a.id_role, a.internal_code, a.nm_activity,\n" +
+                    "b.id as id_entrynsa, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select nsa_prog from ran_rad where id_monper = :id_monper) as ket_ran_rad, a.nm_activity_eng, c.value as nilai_target, a.id \n" +
                     "from nsa_activity as a\n" +
                     "left join entry_nsa_indicator as b on a.id = b.id_assign\n" +
@@ -365,9 +514,9 @@ public class DataEntryController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-entry-non-gov_prog", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-entry-non-gov_prog_indicator", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveEntryNonGovProg(@RequestBody EntryNsaIndicator entryNsaIndicator) {
+    public void saveEntryNonGovProgIndicator(@RequestBody EntryNsaIndicator entryNsaIndicator) {
 //        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
 //        int achievement1        = entrySdg.getAchievement1();
 //        int achievement2        = entrySdg.getAchievement2();
@@ -379,7 +528,81 @@ public class DataEntryController {
         entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
+    
+    @PostMapping(path = "admin/save-entry-non-gov_prog", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveEntryNonGovProg(@RequestBody EntryNsaBudget entryNsaBudget) {
+//        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
+//        int achievement1        = entrySdg.getAchievement1();
+//        int achievement2        = entrySdg.getAchievement2();
+//        int achievement3        = entrySdg.getAchievement3();
+//        int achievement4        = entrySdg.getAchievement4();
+//        int year_entry          = entrySdg.getYear_entry();
+//        int id_role             = entrySdg.getId_role();
+//        int id_monper           = entrySdg.getId_monper();
+        entrySdgService.saveEntryNsaBudget(entryNsaBudget);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    
+    
+    @GetMapping("admin/non-government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity/{id_activity}/indicator")
+    public String non_gov_kegiatan(Model model, @PathVariable("id_program") Integer id_program, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, @PathVariable("id_activity") Integer id_activity, HttpSession session) {
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        model.addAttribute("id_prov_1", id_prov_1);
+        model.addAttribute("id_role_1", id_role_1);
+        model.addAttribute("monper_1", monper);
+        model.addAttribute("tahun_1", tahun);
+        model.addAttribute("id_program_1", id_program);
+        model.addAttribute("id_activity_1", id_activity);
+        
+    	Optional<NsaProgram> nongovprog = nsaProgService.findOne(id_program);
+    	Optional<NsaActivity> nongovact = nsaActService.findOne(id_activity);
+        model.addAttribute("title", "SDG Indicators Monitoring");
+        nongovprog.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
+        nongovact.ifPresent(foundUpdateObject -> model.addAttribute("govAct", foundUpdateObject));
+        return "admin/dataentry/nongovindicator";
+    }
+    
+    @GetMapping("admin/list-entry-non_gov-indicator/{id_program}/{id_activity}/{id_role}/{id_monper}/{tahun}")
+    public @ResponseBody Map<String, Object> listEntryNonGovIndicator(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
+        String sql  = "select a.id_activity, a.id_program, a.id_nsa_indicator, a.internal_code, a.nm_indicator,\n" +
+                    "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
+                    "(select nsa_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id \n" +
+                    "from nsa_indicator as a\n" +
+                    "left join entry_nsa_indicator as b on a.id = b.id_assign \n" +
+                    "left join (select * from nsa_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_nsa_indicator\n" +
+//                    "where a.id_program = :id_program and a.id_activity = :id_activity and a.id_role = :id_role ";
+                    "where a.id_program = :id_program and a.id_activity = :id_activity ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_program", id_program);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("tahun", tahun);
+        query.setParameter("id_activity", id_activity);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
 
+    
+    ///
     @GetMapping("admin/government-activity-monitoring")
     public String govkegiatan(Model model, HttpSession session) {
         model.addAttribute("title", "SDG Indicators Monitoring");

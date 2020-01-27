@@ -135,7 +135,7 @@ public class RanRadSdgController {
 	@Autowired
 	INsaMapService nsaMapService;
         
-        @Autowired
+	@Autowired
 	private EntityManager em;
 	
 	//*********************** SDG ***********************

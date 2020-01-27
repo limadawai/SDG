@@ -67,7 +67,8 @@
                         <div class="row-fluid">
                             <div class="widget-box">
                                 <div class="widget-content">
-                                    Program : <a th:href="@{/admin/non-government-program-monitoring}" th:text="${govProg.id_program+' - '+govProg.nm_program}"></a>
+                                    Program : <a th:href="@{/admin/non-government-program-monitoring}" th:text="${govProg.id_program+' - '+govProg.nm_program}"></a><br/>
+                                    Activity : <a th:href="@{'/admin/non-government-program-monitoring/gov/program/'+${id_program_1}+'/'+${id_prov_1}+'/'+${id_role_1}+'/'+${monper_1}+'/'+${tahun_1}+'/activity'}" th:text="${govAct.id_activity+' - '+govAct.nm_activity}"></a>
                                 </div>
                             </div>
                         </div>
@@ -179,6 +180,7 @@
         var monper_1    = [[${monper_1}]];
         var tahun_1     = [[${tahun_1}]];
         var id_program_1 = [[${id_program_1}]];
+        var id_activity_1 = [[${id_activity_1}]];
         grid();
         $("#id_prov").val(id_prov_1).trigger("change").attr('disabled',true);
         $("#idrole").val(id_role_1).trigger("change").attr('disabled',true);
@@ -436,13 +438,13 @@
                 
                 $.ajax({
                     type: "GET",
-                    url: urls+'list-get-sts-monper-nongov/'+id_monper,
+                    url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
                     success: function (result1) {
                         var sts = result1.content;
-//                        console.log(sts);
+                        console.log(id_activity_1);
                         if(sts == 'yearly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
                                       <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
@@ -469,7 +471,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "ajax": {
-                                    "url": urls+'list-entry-non-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
                                     dataSrc: 'content',
                                 },
                                 "searching": true,
@@ -482,11 +484,11 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
-//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
+                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+//                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
                                         }else{
-//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
+                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+//                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
                                         }
 
                                     }},
@@ -540,7 +542,7 @@
                             
                         }else if(sts == 'semesterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
                                       <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
@@ -566,7 +568,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "ajax": {
-                                    "url": urls+'list-entry-non-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
                                     dataSrc: 'content',
                                 },
                                 "searching": true,
@@ -579,11 +581,11 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
-//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
+                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+//                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
                                         }else{
-//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
+                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+//                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
                                         }
 
                                     }},
@@ -636,7 +638,7 @@
                             });	
                         }else if(sts == 'quarterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
                                       <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
@@ -663,7 +665,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "ajax": {
-                                    "url": urls+'list-entry-non-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
                                     dataSrc: 'content',
                                 },
                                 "searching": true,
@@ -676,11 +678,11 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
-//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
+                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+//                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
                                         }else{
-//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
+                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+//                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
                                         }
 
                                     }},
@@ -852,7 +854,7 @@
 //                alert('yess '+id_monper);
                 var data    = JSON.stringify({
                                 'id': id,
-                                'id_nsa_activity': id_activity,
+                                'id_assign': id_activity,
                                 'achievement1': achievement1,
                                 'achievement2': achievement2,
                                 'achievement3': achievement3,
@@ -870,7 +872,7 @@
                 console.log(data);
                 $.ajax({
                     type: "POST",
-                    url: urls+'save-entry-non-gov_prog',
+                    url: urls+'save-entry-non-gov_prog_indicator',
                     beforeSend : function(xhr){
                     	xhr.setRequestHeader(header,token);
                     },

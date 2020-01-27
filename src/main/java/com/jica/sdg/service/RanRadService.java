@@ -18,4 +18,10 @@ public class RanRadService implements IRanRadService {
         List ranrad = (List<RanRad>) repository.findAll();
         return ranrad;
     }
+
+    @Override
+    public List<RanRad> findAllByIdProv(String id) {
+        List<RanRad> list = repository.findByIdProv(id);
+        return list;
+    }
 }

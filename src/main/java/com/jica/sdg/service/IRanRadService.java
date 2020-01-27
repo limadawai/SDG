@@ -8,4 +8,6 @@ public interface IRanRadService {
 
     List<RanRad> findAll();
 
+    List<RanRad> findAllByIdProv(String id);
+
 }
