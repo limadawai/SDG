@@ -39,4 +39,14 @@ public class NsaProgramService implements INsaProgramService{
 	public List<NsaProgram> findAllBy(String id_role, String id_monper) {
 		return (List<NsaProgram>) nsaProgRepo.findAll(id_role, id_monper);
 	}
+
+	@Override
+	public List<NsaProgram> findAllByMonperProv(Integer id_monper, String id_prov) {
+		return (List<NsaProgram>) nsaProgRepo.findAllByMonperProv(id_monper, id_prov);
+	}
+
+	@Override
+	public void updateRole(Integer id_role, Integer id) {
+		nsaProgRepo.UpdateRole(id_role, id);
+	}
 }

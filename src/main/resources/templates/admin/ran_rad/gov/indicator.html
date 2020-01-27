@@ -191,6 +191,34 @@
 					    <span class="help-block" id="error_unit"></span>
 				    </div>
 				  </div>
+				  <!-- <div class="control-group">
+                       <a class="btn btn-danger btn-sm hapusTembusan jarak-kanan"><i class="icon-trash"></i></a>
+                       <a class="btn btn-success btn-sm" id="tambah-tembusan"><i class="icon-plus"></i>Target</a><br>
+                  </div>
+                  <div class="table-responsive">
+					<table id="table_tembusan" class="table table-bordered">
+                        <thead>
+							<tr>
+                                <th width="10%"></th>
+                                <th width="45%">
+                                	<span class="lang_eng control-label" style="display:none">Year</span>
+				    				<span class="lang_indo control-label">Tahun</span>
+                                </th>
+                                <th width="45%">Target</th>
+							</tr>
+                        </thead>
+                        <tbody>
+                        	<tr data-id="0">
+                        		<td class="text-center">
+                                <input type="checkbox" name="chk_del_tembusan[]" id="<?php echo 'chk_del_tembusan'.$no;?>" class="hRow" value="" /></td>
+                        		<td><input type="text" name="no_urut[]" class="form-control input-sm" value="" /></td>
+                        		<td>
+									<input type="text" name="nama_tembusan[]" class="form-control input-sm"  value="" />
+								</td>
+                        	</tr>
+                        </tbody>
+                    </table>
+                </div> -->
 				  <hr/>
 				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">SDGs Indicator for Mapping</label>
@@ -659,6 +687,32 @@
             if(privilege=='USER'){
                 $('#hide_kode_internal').hide();
             }
+            
+            /* START TEMBUSAN */
+        	$('#tambah-tembusan').click(function(){
+        		var tabel	= $('#table_tembusan > tbody').find('tr:last');
+        		var newId	= (tabel.length > 0)?parseInt(tabel.data('id'))+1:1;
+        		$('#table_tembusan').append(
+        			'<tr data-id="'+newId+'">' +
+        			'<td class="text-center"><input type="checkbox" name="chk_del_tembusan[]" class="hRow" id="chk_del_tembusan'+newId+'" value="'+newId+'"></td>'+
+        			'<td><input type="text" name="no_urut[]" class="form-control input-sm" /></td>' +
+        			'<td><textarea name="nama_tembusan[]" class="form-control input-sm" style="height:50px;"></textarea></td></td>' +
+        			//'<td><input type="text" name="nama_tembusan[]" class="form-control input-sm" /> </td>' +
+        			'</tr>'
+        		);
+        		$("#chk_del_tembusan"+newId).iCheck({checkboxClass: 'icheckbox_square-pink'});
+        		$('#table_tembusan').find("input[name='no_urut[]']").each(function(i,v){$(v).val(i+1);});
+        	});
+
+        	$(".hapusTembusan").click(function(){
+        		var tabel 	= $("#table_tembusan");
+        		tabel.find(".hRow:checked").each(function(k, v){
+        			var idnya = $(v).val();
+        			tabel.find("tr[data-id='"+idnya+"']").remove();
+        		});
+        		tabel.find("input[name='no_urut[]']").each(function(i,v){$(this).val(i+1);});
+        	});
+        	/* END TEMBUSAN */
 		//});
 		// ]]>
 </script>

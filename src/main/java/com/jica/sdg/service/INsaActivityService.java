@@ -14,4 +14,6 @@ public interface INsaActivityService {
     Optional<NsaActivity> findOne(Integer id);
     
     void deleteNsaActivity(Integer id);
+    
+    void updateRole(Integer id_role, Integer id);
 }

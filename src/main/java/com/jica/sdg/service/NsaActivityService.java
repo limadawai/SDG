@@ -36,4 +36,9 @@ public class NsaActivityService implements INsaActivityService{
 	public void deleteNsaActivity(Integer id) {
 		nsaActivityRepo.deleteById(id);
 	}
+
+	@Override
+	public void updateRole(Integer id_role, Integer id) {
+		nsaActivityRepo.UpdateRole(id_role, id);
+	}
 }

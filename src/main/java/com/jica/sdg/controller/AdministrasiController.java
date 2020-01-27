@@ -11,7 +11,10 @@ import com.jica.sdg.model.User;
 import com.jica.sdg.service.IAssignGovIndicatorService;
 import com.jica.sdg.service.IAssignNsaIndicatorService;
 import com.jica.sdg.service.IAssignSdgIndicatorService;
+import com.jica.sdg.service.IGovActivityService;
 import com.jica.sdg.service.IMonPeriodService;
+import com.jica.sdg.service.INsaActivityService;
+import com.jica.sdg.service.INsaProgramService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.IUserRequestListService;
@@ -65,6 +68,15 @@ public class AdministrasiController {
     
     @Autowired
     IUserRequestListService userReqService;
+    
+    @Autowired
+    IGovActivityService govActivityService;
+    
+    @Autowired
+    INsaProgramService nsaProgService;
+    
+    @Autowired
+    INsaActivityService nsaActivityService;
 
     //*********************** Manajemen Role & User ***********************
     @GetMapping("admin/management/role")
@@ -106,6 +118,19 @@ public class AdministrasiController {
     		listRole = roleService.findAll();
     	}else {
     		listRole = roleService.findRoleNonGov(id_prov);
+    	}
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content", listRole);
+        return hasil;
+    }
+    
+    @GetMapping("admin/manajemen/list-role-gov/{id_prov}")
+    public @ResponseBody Map<String, Object> rolesGov(HttpSession session, @PathVariable("id_prov") String id_prov) {
+    	List<Role> listRole;
+    	if(id_prov.equals("all")) {
+    		listRole = roleService.findAll();
+    	}else {
+    		listRole = roleService.findRoleGov(id_prov);
     	}
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content", listRole);
@@ -277,12 +302,12 @@ public class AdministrasiController {
         	
         	if(!id_role.equals("")) {
         		AssignSdgIndicator a = new AssignSdgIndicator();
-        		a.setId_goals(id_goals);
-        		a.setId_indicator(id_indicator);
-        		a.setId_monper(id_monper);
+        		a.setId_goals(Integer.parseInt(id_goals));
+        		a.setId_indicator(Integer.parseInt(id_indicator));
+        		a.setId_monper(Integer.parseInt(id_monper));
         		a.setId_prov(id_prov);
         		a.setId_role(Integer.parseInt(id_role));
-        		a.setId_target(id_target);
+        		a.setId_target(Integer.parseInt(id_target));
         		assignSdgService.saveAssignSdgIndicator(a);
         	}
         }
@@ -300,30 +325,19 @@ public class AdministrasiController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/manajemen/save-assignmentGov/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/manajemen/save-assignmentGov", consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public void saveAssignGov(@RequestBody Map<String, Object> payload,@PathVariable("id_monper") String id_mon,@PathVariable("id_prov") String id_pro) {
+	public void saveAssignGov(@RequestBody Map<String, Object> payload) {
     	JSONObject jsonObject = new JSONObject(payload);
         JSONObject catatan = jsonObject.getJSONObject("gov");
         JSONArray c = catatan.getJSONArray("gov");
-        assignGovService.deleteAssign(id_mon, id_pro);
         for (int i = 0 ; i < c.length(); i++) {
         	JSONObject obj = c.getJSONObject(i);
-        	String 	id_program = obj.getString("id_program");
-        	String 	id_activity = obj.getString("id_activity");
-        	String 	id_gov_indicator = obj.getString("id_gov_indicator");
+        	String 	id = obj.getString("id");
         	String 	id_role = obj.getString("id_role");
-        	String 	id_monper = obj.getString("id_monper");
-        	String 	id_prov = obj.getString("id_prov");
         	
         	if(!id_role.equals("")) {
-        		AssignGovIndicator a = new AssignGovIndicator();
-        		a.setId_program(id_program);
-        		a.setId_activity(id_activity);
-        		a.setId_monper(id_monper);
-        		a.setId_role(Integer.parseInt(id_role));
-        		a.setId_gov_indicator(id_gov_indicator);
-        		assignGovService.saveAssignGovIndicator(a);
+        		govActivityService.UpdateRole(Integer.parseInt(id_role), Integer.parseInt(id));
         	}
         }
 	}
@@ -340,30 +354,20 @@ public class AdministrasiController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/manajemen/save-assignmentNsa/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/manajemen/save-assignmentNsa", consumes = "application/json", produces = "application/json")
 	@ResponseBody
-	public void saveAssignNsa(@RequestBody Map<String, Object> payload,@PathVariable("id_monper") String id_mon,@PathVariable("id_prov") String id_pro) {
+	public void saveAssignNsa(@RequestBody Map<String, Object> payload) {
     	JSONObject jsonObject = new JSONObject(payload);
         JSONObject catatan = jsonObject.getJSONObject("nsa");
         JSONArray c = catatan.getJSONArray("nsa");
-        assignNsaService.deleteAssign(id_mon, id_pro);
         for (int i = 0 ; i < c.length(); i++) {
         	JSONObject obj = c.getJSONObject(i);
-        	String 	id_program = obj.getString("id_program");
-        	String 	id_activity = obj.getString("id_activity");
-        	String 	id_nsa_indicator = obj.getString("id_nsa_indicator");
+        	String 	id_program = obj.getString("id");
         	String 	id_role = obj.getString("id_role");
-        	String 	id_monper = obj.getString("id_monper");
-        	String 	id_prov = obj.getString("id_prov");
         	
         	if(!id_role.equals("")) {
-        		AssignNsaIndicator a = new AssignNsaIndicator();
-        		a.setId_program(id_program);
-        		a.setId_activity(id_activity);
-        		a.setId_monper(id_monper);
-        		a.setId_role(Integer.parseInt(id_role));
-        		a.setId_nsa_indicator(id_nsa_indicator);
-        		assignNsaService.saveAssignNsaIndicator(a);
+        		nsaProgService.updateRole(Integer.parseInt(id_role), Integer.parseInt(id_program));
+        		nsaActivityService.updateRole(Integer.parseInt(id_role), Integer.parseInt(id_program));
         	}
         }
 	}

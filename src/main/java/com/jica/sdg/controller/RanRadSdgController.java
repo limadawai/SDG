@@ -418,6 +418,14 @@ public class RanRadSdgController {
         return hasil;
     }
     
+    @GetMapping("admin/list-govActivityByProv/{id_program}/{id_prov}")
+    public @ResponseBody Map<String, Object> govActivityListByProv(@PathVariable("id_program") Integer id_program, @PathVariable("id_prov") String id_prov) {
+        List<GovActivity> list = govActivityService.findGovActivityByIdAndProv(id_program, id_prov);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @PostMapping(path = "admin/save-govActivity", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public void saveGovActivity(@RequestBody GovActivity gov) {
@@ -519,6 +527,14 @@ public class RanRadSdgController {
     @GetMapping("admin/list-nsaProg/{id_role}/{id_monper}")
     public @ResponseBody Map<String, Object> nsaProgList(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
         List<NsaProgram> list = nsaProgService.findAllBy(id_role, id_monper);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-nsaProg-assign/{id_monper}/{id_prov}")
+    public @ResponseBody Map<String, Object> nsaProgListAssign(@PathVariable("id_monper") Integer id_monper, @PathVariable("id_prov") String id_prov) {
+        List<NsaProgram> list = nsaProgService.findAllByMonperProv(id_monper, id_prov);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
