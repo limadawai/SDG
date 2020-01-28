@@ -904,8 +904,8 @@ public class RanRadSdgController {
             
             begin++;
         }
-         
-        try (OutputStream fileOut = new FileOutputStream("export_ranrad"+id_monper+"-"+id_prov+".xls")) {
+         String path = System.getProperty("user.home");
+        try (OutputStream fileOut = new FileOutputStream(path+"/export_ranrad"+id_monper+"-"+id_prov+".xls")) {
             //auto size sheet k-0 column ke x
             wb.getSheetAt(0).autoSizeColumn(0);
             wb.getSheetAt(0).autoSizeColumn(1);
@@ -923,13 +923,17 @@ public class RanRadSdgController {
     
     @RequestMapping(path = "/export-excell/{id_monper}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getFile(@PathVariable("id_monper") String id_monper, HttpServletResponse response,HttpSession session) throws FileNotFoundException {
+        String a = System.getProperty("user.dir"); 
+        String path = System.getProperty("user.home");
+        System.out.println(path);
+        
         
         String sql = "select * from ran_rad where id_monper = '"+id_monper+"'";
         String id_prov = getStringByColumn(sql,11);
 //        Integer id_role = (Integer) session.getAttribute("id_role");
 //        String getCatRole = "select * from ref_role where id_role = '"+id_role+"'";
 //        String cat_role = getStringByColumn(getCatRole,3);
-        File f = new File ("export_ranrad"+id_monper+"-"+id_prov+".xls");
+        File f = new File (path+"/export_ranrad"+id_monper+"-"+id_prov+".xls");
         InputStreamResource resource = new InputStreamResource(new FileInputStream(f));
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+"export_ranrad1-000.xls");
