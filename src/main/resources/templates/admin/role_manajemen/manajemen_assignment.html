@@ -532,8 +532,6 @@
 				                        '<span class="toogle-sdg-bapak" data-id="'+idProgram+'" style="vertical-align:middle">'+response.content[i].id_program+' '+nama+'</span>'+
 				                  '</label></td>'+
 				                  '<td style="width:50%">'+
-				                  '<input type="hidden" name="nsa[][id]" value="'+idProgram+'"/>'+
-				                  '<select data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(response.content[i].id_role)+'</select></td>'+
 				                  '<tr/>';
                     	$.ajax({
                             url: urls + 'list-nsaActivity/'+idProgram,
@@ -554,7 +552,10 @@
   			                            	'<span style="vertical-align:middle">'+result.content[j].id_activity+' '+nama+'</span>'+
   			                      			'</label>'+
   			                           '</td>'+
-  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'"></td>'+
+  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'">'+
+  			                         	'<input type="hidden" name="nsa[][id]" value="'+result.content[j].id+'"/>'+
+  			                         	'<select data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(result.content[j].id_role)+'</select></td>'+
+  			                           '</td>'+
   			                      	'<tr/>';
                                 	$.ajax({
                                         url: urls + 'list-nsaIndicator/'+idProgram+'/'+result.content[j].id,

@@ -18,6 +18,6 @@ public interface NsaActivityRepository extends CrudRepository<NsaActivity, Integ
 	
 	@Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "update nsa_activity set id_role = :id_role where id_program = :id",nativeQuery = true)
+    @Query(value = "update nsa_activity set id_role = :id_role where id = :id",nativeQuery = true)
     void UpdateRole(@Param("id_role") Integer id_role, @Param("id") Integer id);
 }
