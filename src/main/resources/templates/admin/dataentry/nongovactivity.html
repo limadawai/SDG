@@ -149,11 +149,17 @@
                                 <input name="activity_name" id="activity_name" type="text" class="input-block-level" readonly="readonly">
                             </div>
                             <div class="control-group">
-                                <label for="nm_inst" class="lang_indo">Realisasi :</label>
-                                <label for="nm_inst" class="lang_eng" style="display: none">Realization :</label>
+                                <label id="" for="nm_inst" class="lang_indo achievement1_indo">Realisasi I:</label>
+                                <label id="" for="nm_inst" class="lang_eng achievement1_eng" style="display: none">Realization I:</label>
                                 <input name="achievement1" id="achievement1" type="text" class="input-block-level" style="margin-bottom: 10px">
+                                <label id="" for="nm_inst" class="lang_indo achievement2_indo">Realisasi II:</label>
+                                <label id="" for="nm_inst" class="lang_eng achievement2_eng" style="display: none">Realization II:</label>
                                 <input name="achievement2" id="achievement2" type="text" class="input-block-level" style="margin-bottom: 10px">
+                                <label id="" for="nm_inst" class="lang_indo achievement3_indo">Realisasi III:</label>
+                                <label id="" for="nm_inst" class="lang_eng achievement3_eng" style="display: none">Realization III:</label>
                                 <input name="achievement3" id="achievement3" type="text" class="input-block-level" style="margin-bottom: 10px">
+                                <label id="" for="nm_inst" class="lang_indo achievement4_indo">Realisasi IV:</label>
+                                <label id="" for="nm_inst" class="lang_eng achievement4_eng" style="display: none">Realization IV:</label>
                                 <input name="achievement4" id="achievement4" type="text" class="input-block-level" style="margin-bottom: 10px">
                             </div>
                         </div>
@@ -443,7 +449,7 @@
                         if(sts == 'yearly'){
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
-                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
+                                       ';
                             
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
                             
@@ -490,13 +496,13 @@
                                         }
 
                                     }},
-                                    {"data": function (row, data, index, display) {
-                                        if(row[14] == null || row[14] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
-                                        }else{
-                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-                                        }
-                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[14] == null || row[14] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+//                                        }
+//                                    }},
 //                                    {"data": function (row, data, index, display) {
 //                                        if(row[6] == null || row[6] == ""){
 //                                            return "<div style='font-size:90%;'> 0 </div>";
@@ -541,7 +547,7 @@
                         }else if(sts == 'semesterly'){
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
-                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
+                                       ';
                             
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
                             
@@ -587,13 +593,13 @@
                                         }
 
                                     }},
-                                    {"data": function (row, data, index, display) {
-                                        if(row[14] == null || row[14] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
-                                        }else{
-                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-                                        }
-                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[14] == null || row[14] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+//                                        }
+//                                    }},
 //                                    {"data": function (row, data, index, display) {
 //                                        if(row[6] == null || row[6] == ""){
 //                                            return "<div style='font-size:90%;'> 0 </div>";
@@ -637,7 +643,7 @@
                         }else if(sts == 'quarterly'){
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
-                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
+                                      ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
                             
@@ -684,13 +690,13 @@
                                         }
 
                                     }},
-                                    {"data": function (row, data, index, display) {
-                                        if(row[14] == null || row[14] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
-                                        }else{
-                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-                                        }
-                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[14] == null || row[14] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+//                                        }
+//                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
                                             return "<div style='font-size:90%;'> 0 </div>";
@@ -803,16 +809,53 @@
                     $('#achievement2').val(achieve2).hide();
                     $('#achievement3').val(achieve3).hide();
                     $('#achievement4').val(achieve4).show();
+                    
+                    if($('#fs').is(':checked')){
+                        $('.achievement1_indo').hide();
+                        $('.achievement2_indo').hide();
+                        $('.achievement3_indo').hide();
+                        $('.achievement4_indo').show();
+                    }else{
+                        $('.achievement1_eng').hide();
+                        $('.achievement2_eng').hide();
+                        $('.achievement3_eng').hide();
+                        $('.achievement4_eng').show();
+                    }
+                    
                 }else if(ket_ran_rad == 'semesterly'){
                     $('#achievement1').val(achieve1).hide();
                     $('#achievement2').val(achieve2).show();
                     $('#achievement3').val(achieve3).hide();
                     $('#achievement4').val(achieve4).show();
+                    
+                    if($('#fs').is(':checked')){
+                        $('.achievement1_indo').hide();
+                        $('.achievement2_indo').show();
+                        $('.achievement3_indo').hide();
+                        $('.achievement4_indo').show();
+                    }else{
+                        $('.achievement1_eng').hide();
+                        $('.achievement2_eng').show();
+                        $('.achievement3_eng').hide();
+                        $('.achievement4_eng').show();
+                    }
                 }else if(ket_ran_rad == 'quarterly'){
                     $('#achievement1').val(achieve1).show();
                     $('#achievement2').val(achieve2).show();
                     $('#achievement3').val(achieve3).show();
                     $('#achievement4').val(achieve4).show();
+                    
+                    if($('#fs').is(':checked')){
+                        $('.achievement1_indo').show();
+                        $('.achievement2_indo').show();
+                        $('.achievement3_indo').show();
+                        $('.achievement4_indo').show();
+                    }else{
+                        $('.achievement1_eng').hide();
+                        $('.achievement2_eng').show();
+                        $('.achievement3_eng').show();
+                        $('.achievement4_eng').show();
+                    }
                 }else{
                     
                     $('#achievement1').val("0").hide();
