@@ -34,4 +34,16 @@ public class GovActivityService implements IGovActivityService{
 	public void deleteGovActivity(Integer id) {
 		govActivityRepo.deleteById(id);
 	}
+
+	@Override
+	public List<GovActivity> findGovActivityByIdAndProv(Integer id, String id_prov) {
+		return (List<GovActivity>) govActivityRepo.findGovActivityByIdAndProv(id, id_prov);
+	}
+
+	@Override
+	public void UpdateRole(Integer id_role, Integer id) {
+		govActivityRepo.UpdateRole(id_role, id);
+	}
+
+	
 }

@@ -75,7 +75,7 @@
                             <div class="span12">
                                 <table  id="tabel-entri-sdg" class="table table-striped table-bordered">
                                     <thead>
-                                        <tr>
+<!--                                        <tr>
                                             <th style="text-align:center;font-size:80%;width: 5%;">
                                                 <span class="lang_eng" style="display:none">No.</span>
                                                 <span class="lang_indo">No.</span>
@@ -112,10 +112,44 @@
                                                 <span class="lang_eng" style="display:none">Action</span>
                                                 <span class="lang_indo">Aksi</span>
                                             </th>
-                                        </tr>
-                                    </thead>
+                                        </tr>-->
+<!--                                    </thead>
                                     <tbody id="tbody_entri-sdg">
-                                    </tbody>
+                                    </tbody>-->
+                                    <thead > 
+                                        <tr class="" > 
+                                            <th style="text-align:center;font-size:80%;width: 10%"> 
+                                                <span class="lang_eng" style="display:none">No.</span> 
+                                                <span class="lang_indo">No.</span> 
+                                            </th> 
+                                            <th style="text-align:center;font-size:80%;width: 10%"> 
+                                                <span class="lang_eng" style="display:none">Indicator Code</span> 
+                                                <span class="lang_indo">Kode Indikator</span> 
+                                            </th> 
+                                            <th style="text-align:center;font-size:80%;width: 45%">
+                                                <span class="lang_eng" style="display:none">Activity Name</span> 
+                                                <span class="lang_indo">Nama Activity</span> 
+                                            </th> 
+                                            <th style="text-align:center;font-size:80%;"> 
+                                                <span class="lang_eng" style="display:none">Target</span> 
+                                                <span class="lang_indo">Target</span> 
+                                            </th> 
+                                            <th style="text-align:center;font-size:80%;"> 
+                                                <span class="lang_eng" style="display:none">Realization II</span> 
+                                                <span class="lang_indo">Realisasi II</span> 
+                                            </th> 
+                                            <th style="text-align:center;font-size:80%;"> 
+                                                <span class="lang_eng" style="display:none">Realization IV</span> 
+                                                <span class="lang_indo">Realisasi IV</span> 
+                                            </th> 
+                                            <th style="text-align:center;font-size:80%;"> 
+                                                <span class="lang_eng" style="display:none">Action</span> 
+                                                <span class="lang_indo">Aksi</span> 
+                                            </th> 
+                                        </tr> 
+                                    </thead> 
+                                    <tbody id="tbody_entri-sdg"> 
+                                    </tbody> 
                                 </table>
                             </div>
                         </div>
@@ -149,11 +183,17 @@
                                 <input name="activity_name" id="activity_name" type="text" class="input-block-level" readonly="readonly">
                             </div>
                             <div class="control-group">
-                                <label for="nm_inst" class="lang_indo">Realisasi :</label>
-                                <label for="nm_inst" class="lang_eng" style="display: none">Realization :</label>
+                                <label id="" for="nm_inst" class="lang_indo achievement1_indo">Realisasi I:</label>
+                                <label id="" for="nm_inst" class="lang_eng achievement1_eng" style="display: none">Realization I:</label>
                                 <input name="achievement1" id="achievement1" type="text" class="input-block-level" style="margin-bottom: 10px">
+                                <label id="" for="nm_inst" class="lang_indo achievement2_indo">Realisasi II:</label>
+                                <label id="" for="nm_inst" class="lang_eng achievement2_eng" style="display: none">Realization II:</label>
                                 <input name="achievement2" id="achievement2" type="text" class="input-block-level" style="margin-bottom: 10px">
+                                <label id="" for="nm_inst" class="lang_indo achievement3_indo">Realisasi III:</label>
+                                <label id="" for="nm_inst" class="lang_eng achievement3_eng" style="display: none">Realization III:</label>
                                 <input name="achievement3" id="achievement3" type="text" class="input-block-level" style="margin-bottom: 10px">
+                                <label id="" for="nm_inst" class="lang_indo achievement4_indo">Realisasi IV:</label>
+                                <label id="" for="nm_inst" class="lang_eng achievement4_eng" style="display: none">Realization IV:</label>
                                 <input name="achievement4" id="achievement4" type="text" class="input-block-level" style="margin-bottom: 10px">
                             </div>
                         </div>
@@ -179,7 +219,7 @@
         var monper_1    = [[${monper_1}]];
         var tahun_1     = [[${tahun_1}]];
         var id_program_1 = [[${id_program_1}]];
-        
+        grid();
         $("#id_prov").val(id_prov_1).trigger("change").attr('disabled',true);
         $("#idrole").val(id_role_1).trigger("change").attr('disabled',true);
         
@@ -321,6 +361,12 @@
                     messOk = "Data berhasil dihapus";
                     messNOk = "Data tidak dapat dihapus";
                     required = "Harus diisi";
+                    
+                    $('.achievement1_').hide();
+                    $('.achievement2_').hide();
+                    $('.achievement3_').hide();
+                    $('.achievement4_').hide();
+                    
                     }else{	    	        
                     $(".lang_indo").hide();
                             $(".lang_eng").show();
@@ -328,10 +374,17 @@
                             messDel = "Delete this data?";
                             buttDel = 'Yes, Delete this data!';
                             titleOk	= "Delete";
-                    messOk = "Delete successful";
-                    messNOk = "Can't delete data";
-                    required = "Required";
+                        messOk = "Delete successful";
+                        messNOk = "Can't delete data";
+                        required = "Required";
+                        $('.achievement1_').hide();
+                        $('.achievement2_').hide();
+                        $('.achievement3_').hide();
+                        $('.achievement4_').hide();
                     }
+                    
+                    
+                    
             }
             if(lang){
                     bhs(lang=="0");
@@ -349,81 +402,81 @@
             var v_data_id   = v_dataid.split("###");;
             var id_monper   = v_data_id[0];
             var tahun       = v_data_id[1];
-            var table = $('#tabel-entri-sdg').DataTable({
-                responsive: true,
-                sDom: 'lrtip',
-                "bLengthChange": false,
-                "cache": false,
-                "autoWidth": true,
-                "responsive":true,
-                "bDestroy": true,
-                "ajax": {
-                    "url": urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
-                    dataSrc: 'content',
-                },
-                "searching": true,
-                "columns": [
-                    {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if($('#fs').is(':checked')){
-                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-                        }
-                        
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[14] == null || row[14] == ""){
-                            return "<div style='font-size:90%;'> 0 </div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[6] == null || row[6] == ""){
-                            return "<div style='font-size:90%;'> 0 </div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[7] == null || row[7] == ""){
-                            return "<div style='font-size:90%;'> 0 </div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[8] == null || row[8] == ""){
-                            return "<div style='font-size:90%;'> 0 </div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[9] == null || row[9] == ""){
-                            return "<div style='font-size:90%;'> 0 </div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        var v_dataid    = $("#periode").val();
-                        var v_data_id   = v_dataid.split("###");
-                        var id_monper   = v_data_id[0];
-                        var tahun       = v_data_id[1];
-                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-                    }},
-                ],
-                "columnDefs": [
-                ],
-                select: true
-            });	
+//            var table = $('#tabel-entri-sdg').DataTable({
+//                responsive: true,
+//                sDom: 'lrtip',
+//                "bLengthChange": false,
+//                "cache": false,
+//                "autoWidth": true,
+//                "responsive":true,
+//                "bDestroy": true,
+//                "ajax": {
+//                    "url": urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+//                    dataSrc: 'content',
+//                },
+//                "searching": true,
+//                "columns": [
+//                    {"data": function (row, data, index, display) {
+//                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if($('#fs').is(':checked')){
+//                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+//                        }
+//                        
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if(row[14] == null || row[14] == ""){
+//                            return "<div style='font-size:90%;'> 0 </div>";
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+//                        }
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if(row[6] == null || row[6] == ""){
+//                            return "<div style='font-size:90%;'> 0 </div>";
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
+//                        }
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if(row[7] == null || row[7] == ""){
+//                            return "<div style='font-size:90%;'> 0 </div>";
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
+//                        }
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if(row[8] == null || row[8] == ""){
+//                            return "<div style='font-size:90%;'> 0 </div>";
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
+//                        }
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if(row[9] == null || row[9] == ""){
+//                            return "<div style='font-size:90%;'> 0 </div>";
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+//                        }
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        var v_dataid    = $("#periode").val();
+//                        var v_data_id   = v_dataid.split("###");
+//                        var id_monper   = v_data_id[0];
+//                        var tahun       = v_data_id[1];
+//                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+//                    }},
+//                ],
+//                "columnDefs": [
+//                ],
+//                select: true
+//            });	
 
             //memanggil tb spp
             function grid()
@@ -432,9 +485,329 @@
                 var v_idrole    = $("#idrole").val();
                 var v_dataid    = $("#periode").val();
                 var v_data_id   = v_dataid.split("###");;
-                var id_monper   = v_data_id[0];
+//                var id_monper   = v_data_id[0];
+                var id_monper   = monper_1;
                 var tahun       = v_data_id[1];
-                table.ajax.url(urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+id_monper+'/'+tahun_1 ).load();
+                
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-sts-monper-gov/'+id_monper,
+                    success: function (result1) {
+                        var sts = result1.content;
+//                        console.log(sts);
+                        if(sts == 'yearly'){
+                            var header = '';
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
+                                       ';
+                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
+                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements II</span> <span class="lang_indo">Pencapaian SDG II</span> </th> ';
+//                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
+//                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization IV</span> <span class="lang_indo">Realisasi IV</span> </th> ';
+                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Action</span> <span class="lang_indo">Aksi</span> </th> ';
+                            
+                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
+                            
+                            $('#tabel-entri-sdg').html(header);
+                            
+//                            var table = $('#tabel-entri-sdg').DataTable({
+                            $('#tabel-entri-sdg').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    dataSrc: 'content',
+                                },
+                                "searching": true,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if($('#fs').is(':checked')){
+//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                            return "<div style='font-size:90%;'><a href='" + urls + "government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
+                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                            return "<div style='font-size:90%;'><a href='" + urls + "government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
+                                        }
+
+                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[14] == null || row[14] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+//                                        }
+//                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[6] == null || row[6] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
+//                                        }
+//                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[7] == null || row[7] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
+//                                        }
+//                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[8] == null || row[8] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
+//                                        }
+//                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[9] == null || row[9] == ""){
+                                            return "<div style='font-size:90%;'> 0 </div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        var v_dataid    = $("#periode").val();
+                                        var v_data_id   = v_dataid.split("###");
+                                        var id_monper   = v_data_id[0];
+                                        var tahun       = v_data_id[1];
+                                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                    }},
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });	
+                            
+                        }else if(sts == 'semesterly'){
+                            var header = '';
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
+                                       ';
+                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
+                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization II</span> <span class="lang_indo">Realisasi II</span> </th> ';
+                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
+//                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization IV</span> <span class="lang_indo">Realisasi IV</span> </th> ';
+                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Action</span> <span class="lang_indo">Aksi</span> </th> ';
+                            
+                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
+//                            console.log(header);
+                            $('#tabel-entri-sdg').html(header);
+                            
+                            $('#tabel-entri-sdg').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    dataSrc: 'content',
+                                },
+                                "searching": true,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if($('#fs').is(':checked')){
+//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                            return "<div style='font-size:90%;'><a href='" + urls + "government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
+                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                            return "<div style='font-size:90%;'><a href='" + urls + "government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
+                                        }
+
+                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[14] == null || row[14] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+//                                        }
+//                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[6] == null || row[6] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
+//                                        }
+//                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[7] == null || row[7] == ""){
+                                            return "<div style='font-size:90%;'> 0 </div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
+                                        }
+                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[8] == null || row[8] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
+//                                        }
+//                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[9] == null || row[9] == ""){
+                                            return "<div style='font-size:90%;'> 0 </div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        var v_dataid    = $("#periode").val();
+                                        var v_data_id   = v_dataid.split("###");
+                                        var id_monper   = v_data_id[0];
+                                        var tahun       = v_data_id[1];
+                                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                    }},
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });	
+                        }else if(sts == 'quarterly'){
+                            var header = '';
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Activity Name</span> <span class="lang_indo">Nama Activity</span> </th> \n\
+                                       ';
+                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
+                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization II</span> <span class="lang_indo">Realisasi SDG II</span> </th> ';
+                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization III</span> <span class="lang_indo">Realisasi SDG III</span> </th>';
+                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization IV</span> <span class="lang_indo">Realisasi SDG IV</span> </th> ';
+                            
+                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Action</span> <span class="lang_indo">Aksi</span> </th> ';
+                            
+                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
+                            
+                            $('#tabel-entri-sdg').html(header);
+                            
+//                            var table2 = $('#tabel-entri-sdg').DataTable({
+                            $('#tabel-entri-sdg').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    dataSrc: 'content',
+                                },
+                                "searching": true,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if($('#fs').is(':checked')){
+//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                            return "<div style='font-size:90%;'><a href='" + urls + "government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[4] + "</a></div>";
+                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                            return "<div style='font-size:90%;'><a href='" + urls + "government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
+                                        }
+
+                                    }},
+//                                    {"data": function (row, data, index, display) {
+//                                        if(row[14] == null || row[14] == ""){
+//                                            return "<div style='font-size:90%;'> 0 </div>";
+//                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+//                                        }
+//                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[6] == null || row[6] == ""){
+                                            return "<div style='font-size:90%;'> 0 </div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[7] == null || row[7] == ""){
+                                            return "<div style='font-size:90%;'> 0 </div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[8] == null || row[8] == ""){
+                                            return "<div style='font-size:90%;'> 0 </div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[9] == null || row[9] == ""){
+                                            return "<div style='font-size:90%;'> 0 </div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        var v_dataid    = $("#periode").val();
+                                        var v_data_id   = v_dataid.split("###");
+                                        var id_monper   = v_data_id[0];
+                                        var tahun       = v_data_id[1];
+                                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                    }},
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });	
+                        }else{
+                            var header = '';
+//                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
+//                                            <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
+//                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
+//                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements II</span> <span class="lang_indo">Pencapaian SDG II</span> </th> ';
+//                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
+//                            
+//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements IV</span> <span class="lang_indo">Pencapaian SDG IV</span> </th> ';
+//                            
+//                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
+                            
+                            $('#tabel-entri-sdg').html(header);
+                        }
+                    }
+                });
+                
+                
+//                table.ajax.url(urls+'list-entry-gov-activity/'+id_program_1+'/'+id_role_1+'/'+id_monper+'/'+tahun_1 ).load();
                 
             }
             
@@ -482,20 +855,58 @@
                 }
 //                alert(ket_ran_rad);
                 if(ket_ran_rad == 'yearly'){
-                    $('#achievement1').val(achieve1).show();
+                    $('#achievement1').val(achieve1).hide();
                     $('#achievement2').val(achieve2).hide();
                     $('#achievement3').val(achieve3).hide();
-                    $('#achievement4').val(achieve4).hide();
+                    $('#achievement4').val(achieve4).show();
+                    
+                    if($('#fs').is(':checked')){
+                        $('.achievement1_indo').hide();
+                        $('.achievement2_indo').hide();
+                        $('.achievement3_indo').hide();
+                        $('.achievement4_indo').show();
+                    }else{
+                        $('.achievement1_eng').hide();
+                        $('.achievement2_eng').hide();
+                        $('.achievement3_eng').hide();
+                        $('.achievement4_eng').show();
+                    }
+                    
+                    
                 }else if(ket_ran_rad == 'semesterly'){
-                    $('#achievement1').val(achieve1).show();
+                    $('#achievement1').val(achieve1).hide();
                     $('#achievement2').val(achieve2).show();
                     $('#achievement3').val(achieve3).hide();
-                    $('#achievement4').val(achieve4).hide();
+                    $('#achievement4').val(achieve4).show();
+                    
+                    if($('#fs').is(':checked')){
+                        $('.achievement1_indo').hide();
+                        $('.achievement2_indo').show();
+                        $('.achievement3_indo').hide();
+                        $('.achievement4_indo').show();
+                    }else{
+                        $('.achievement1_eng').hide();
+                        $('.achievement2_eng').show();
+                        $('.achievement3_eng').hide();
+                        $('.achievement4_eng').show();
+                    }
                 }else if(ket_ran_rad == 'quarterly'){
                     $('#achievement1').val(achieve1).show();
                     $('#achievement2').val(achieve2).show();
                     $('#achievement3').val(achieve3).show();
                     $('#achievement4').val(achieve4).show();
+                    
+                    if($('#fs').is(':checked')){
+                        $('.achievement1_indo').show();
+                        $('.achievement2_indo').show();
+                        $('.achievement3_indo').show();
+                        $('.achievement4_indo').show();
+                    }else{
+                        $('.achievement1_eng').hide();
+                        $('.achievement2_eng').show();
+                        $('.achievement3_eng').show();
+                        $('.achievement4_eng').show();
+                    }
                 }else{
                     
                     $('#achievement1').val("0").hide();
@@ -532,7 +943,7 @@
 //                alert('yess '+id_monper);
                 var data    = JSON.stringify({
                                 'id': id,
-                                'id_assign': id_activity,
+                                'id_gov_activity': id_activity,
                                 'achievement1': achievement1,
                                 'achievement2': achievement2,
                                 'achievement3': achievement3,

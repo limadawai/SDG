@@ -176,6 +176,46 @@
         	return option;
         }
         
+        function roleGov(id){
+        	var option = "<option value=''>-pilih-</option>"
+        	$.ajax({
+                url: urls + 'manajemen/list-role-gov/'+$('#id_prov').val(),
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                async : false,
+                success: function (result) {
+                    for (var k = 0; k < result.content.length; k++) {
+                    	var selected = (result.content[k].id_role==id)?'selected':'';
+                    	option += '<option value="'+result.content[k].id_role+'" '+selected+'>'
+		                            +result.content[k].nm_role+
+		                      '</option>';
+                    }
+                }
+            }); 
+        	return option;
+        }
+        
+        function roleNsa(id){
+        	var option = "<option value=''>-pilih-</option>"
+        	$.ajax({
+                url: urls + 'manajemen/list-role-nsa/'+$('#id_prov').val(),
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                async : false,
+                success: function (result) {
+                    for (var k = 0; k < result.content.length; k++) {
+                    	var selected = (result.content[k].id_role==id)?'selected':'';
+                    	option += '<option value="'+result.content[k].id_role+'" '+selected+'>'
+		                            +result.content[k].nm_role+
+		                      '</option>';
+                    }
+                }
+            }); 
+        	return option;
+        }
+        
         $('#id_prov, #id_monper').on('change', function(){
         	$('#detail').empty();
         	hideBtn();
@@ -206,11 +246,13 @@
         	$('.btnsdg').hide();
         	$('.btngov').hide();
         	$('.btnnongov').hide();
-        }        
+        }     
+        
         //get sdg
         $('#sdg').on('click', function(e){
         	hideBtn();
         	$('.btnsdg').show();
+        	$('#id_monper').hide();
             $.ajax({
                 url: urls + 'list-sdgGoals',
                 type: 'get',
@@ -232,7 +274,7 @@
                     	detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
                                       '<span class="toogle-sdg-bapak" data-id="'+idGoals+'" style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
                                 '</label></td>'+
-                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+role('')+'</select>'+
+                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+roleGov('')+'</select></td>'+
                                 '<tr/>';
                     	$.ajax({
                             url: urls + 'list-sdgTarget/'+response.content[i].id,
@@ -253,7 +295,7 @@
         			                            	'<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
         			                      			'</label>'+
         			                           '</td>'+
-        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+role('')+'</select>'+
+        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+roleGov('')+'</select></td>'+
         			                      	'<tr/>';
 //                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({
@@ -286,7 +328,7 @@
                     			                    	id= result.content;
                     			                        }
                     			                }); 
-                    			                detail += '<td class="sdg-cucu'+idGoals+'" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+role(id)+'</select>'+
+                    			                detail += '<td class="sdg-cucu'+idGoals+'" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+roleGov(id)+'</select>'+
                     			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k][2]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k][3]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_indicator]" value="'+result.content[k][0]+'"/>'+
@@ -363,62 +405,82 @@
         $('#gov').on('click', function(e){
         	hideBtn();
         	$('.btngov').show();
+                $('#id_monper').show();
             $.ajax({
-                url: urls + 'list-govProg',
+                url: urls + 'list-govProg/'+$('#id_monper').val(),
                 type: 'get',
                 dataType: 'json',
                 cache: false,
                 async : false,
                 success: function (response) {
                     $('#detail').empty();
-                    var detail="";
+                    var detail="<table><tbody>";
+                    var nama;
+                    var idProgram;
                     for (var i = 0; i < response.content.length; i++) {
-                    	detail += '<label style="display:inline-block;white-space:nowrap">'+
-                                      '<span style="vertical-align:middle">'+response.content[i].nm_program+'</span>'+
-                                '</label><br/>';
+                    	idProgram=response.content[i].id;
+                    	if($("#fs").is(':checked')){
+    						nama = response.content[i].nm_program;
+    					}else{
+    						nama = response.content[i].nm_program_eng;
+    					}
+                    	/* detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+				                        '<span class="toogle-sdg-bapak" data-id="'+idProgram+'" style="vertical-align:middle">'+response.content[i].id_program+' '+nama+'</span>'+
+				                  '</label></td>'+
+				                  '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idProgram+'" data-id="'+idProgram+'">'+roleGov('')+'</select>'+
+				                  '<tr/>'; */
+		                  detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+			                        '<span class="toogle-sdg-bapak" data-id="'+idProgram+'" style="vertical-align:middle">'+response.content[i].id_program+' '+nama+'</span>'+
+			                  '</label></td>'+
+			                  '<td style="width:50%"></td>'+
+			                  '<tr/>';
                     	$.ajax({
-                            url: urls + 'list-govActivity/'+response.content[i].id_program,
+                            url: urls + 'list-govActivityByProv/'+idProgram+'/'+$('#id_prov').val(),
                             type: 'get',
                             dataType: 'json',
                             cache: false,
                             async : false,
                             success: function (result) {
                                 for (var j = 0; j < result.content.length; j++) {
-                                	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-        			                            '<span style="vertical-align:middle">'+result.content[j].nm_activity+'</span>'+
-        			                      '</label><br/>';
+                                	var nama;
+        							if($("#fs").is(':checked')){
+        								nama = result.content[j].nm_activity;
+        							}else{
+        								nama = result.content[j].nm_activity_eng;
+        							}
+      			                   detail += '<tr>'+
+                          				'<td style="width:50%;display:none" class="toogle-sdg-anak sdg-anak'+idProgram+'" data-id="'+idProgram+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+  			                            	'<span style="vertical-align:middle">'+result.content[j].id_activity+' '+nama+'</span>'+
+  			                      			'</label>'+
+  			                           '</td>'+
+  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'">'+
+  			                         		'<input type="hidden" name="gov[][id]" value="'+result.content[j].id+'"/>'+
+  			                           		'<select name="gov[][id_role]" class="select-anak-sdg'+idProgram+' select-anak-sdg" data-id="'+idProgram+'">'+
+  			                           		roleGov(result.content[j].id_role)+
+  			                           		'</select></td>'+
+  			                      	'<tr/>';
                                 	$.ajax({
-                                        url: urls + 'list-govIndicator/'+response.content[i].id_program+'/'+result.content[j].id_activity,
+                                        url: urls + 'list-govIndicator/'+idProgram+'/'+result.content[j].id,
                                         type: 'get',
                                         dataType: 'json',
                                         cache: false,
                                         async : false,
                                         success: function (result) {
                                             for (var k = 0; k < result.content.length; k++) {
-                                            	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-                    			                            '<span style="vertical-align:middle">'+result.content[k].nm_indicator+'</span>'+
-                    			                      '</label>';
-                    			              var id;
-               			                      $.ajax({
-                     			                    url: urls + 'manajemen/get-id_roleGov/'+result.content[k].id_program+'/'+result.content[k].id_activity+'/'+result.content[k].id_gov_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
-                     			                    type: 'get',
-                     			                    dataType: 'json',
-                     			                    cache: false,
-                     			                    async : false,
-                     			                    success: function (result) {
-                     			                    	id= result.content;
-                     			                        }
-                     			                }); 
-                    			               	detail += '<select name="gov[][id_role]" class="assign-sdg">'+role(id)+'</select>'+
-                    			               				'<input type="hidden" name="gov[][id_program]" value="'+result.content[k].id_program+'"/>'+
-                    			               				'<input type="hidden" name="gov[][id_activity]" value="'+result.content[k].id_activity+'"/>'+
-                    			               				'<input type="hidden" name="gov[][id_gov_indicator]" value="'+result.content[k].id_gov_indicator+'"/>'+
-                    			               				'<input type="hidden" name="gov[][id_monper]" value="'+$('#id_monper').val()+'"/>'+
-                    			               				'<input type="hidden" name="gov[][id_prov]" value="'+$('#id_prov').val()+'"/>'+
-                    			               				'<br/>';
+                    			               	var nama;
+                    							if($("#fs").is(':checked')){
+                    								nama = result.content[k][2];
+                    							}else{
+                    								nama = result.content[k][5];
+                    							}
+                                            	detail += '<tr><td class="sdg-anak'+idProgram+'" data-id="'+idProgram+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+		        			                            '<span style="vertical-align:middle">'+result.content[k][1]+' '+nama+'</span>'+
+		        			                      '</label></td>';
+                    			               	detail += '<td class="sdg-anak'+idProgram+'" style="width:50%;display:none">'+
+        			               				'</td><tr/>';
                                             }
                                         }
-                                    });     
+                                    });    
                                 }
                             }
                         });
@@ -431,7 +493,7 @@
         	var gov =  $('#form-detail').serializeObject();
         	$.ajax({
                 type    :"POST",
-                url     :urls+'manajemen/save-assignmentGov/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
+                url     :urls+'manajemen/save-assignmentGov',
                 headers :{'Accept':'application/json','Content-Type':'application/json'},
                 data    : JSON.stringify({gov}),
                 beforeSend : function(xhr){
@@ -450,59 +512,72 @@
         $('#non-gov').on('click', function(e){
         	hideBtn();
         	$('.btnnongov').show();
+                $('#id_monper').show();
             $.ajax({
-                url: urls + 'list-nsaProg',
+                url: urls + 'list-nsaProg-assign/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
                 type: 'get',
                 dataType: 'json',
                 cache: false,
                 async : false,
                 success: function (response) {
                     $('#detail').empty();
-                    var detail="";
+                    var detail="<table><tbody>";
+                    var nama;
+                    var idProgram;
                     for (var i = 0; i < response.content.length; i++) {
-                    	detail += '<label style="display:inline-block;white-space:nowrap">'+
-                                      '<span style="vertical-align:middle">'+response.content[i].nm_program+'</span>'+
-                                '</label><br/>';
+                    	idProgram=response.content[i].id;
+                    	if($("#fs").is(':checked')){
+    						nama = response.content[i].nm_program;
+    					}else{
+    						nama = response.content[i].nm_program_eng;
+    					}
+                    	detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+				                        '<span class="toogle-sdg-bapak" data-id="'+idProgram+'" style="vertical-align:middle">'+response.content[i].id_program+' '+nama+'</span>'+
+				                  '</label></td>'+
+				                  '<td style="width:50%">'+
+				                  '<input type="hidden" name="nsa[][id]" value="'+idProgram+'"/>'+
+				                  '<select data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(response.content[i].id_role)+'</select></td>'+
+				                  '<tr/>';
                     	$.ajax({
-                            url: urls + 'list-nsaActivity/'+response.content[i].id_program,
+                            url: urls + 'list-nsaActivity/'+idProgram,
                             type: 'get',
                             dataType: 'json',
                             cache: false,
                             async : false,
                             success: function (result) {
                                 for (var j = 0; j < result.content.length; j++) {
-                                	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-        			                            '<span style="vertical-align:middle">'+result.content[j].nm_activity+'</span>'+
-        			                      '</label><br/>';
+                                	var nama;
+        							if($("#fs").is(':checked')){
+        								nama = result.content[j].nm_activity;
+        							}else{
+        								nama = result.content[j].nm_activity_eng;
+        							}
+      			                   detail += '<tr>'+
+                          				'<td style="width:50%;display:none" class="toogle-sdg-anak sdg-anak'+idProgram+'" data-id="'+idProgram+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+  			                            	'<span style="vertical-align:middle">'+result.content[j].id_activity+' '+nama+'</span>'+
+  			                      			'</label>'+
+  			                           '</td>'+
+  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'"></td>'+
+  			                      	'<tr/>';
                                 	$.ajax({
-                                        url: urls + 'list-nsaIndicator/'+response.content[i].id_program+'/'+result.content[j].id_activity,
+                                        url: urls + 'list-nsaIndicator/'+idProgram+'/'+result.content[j].id,
                                         type: 'get',
                                         dataType: 'json',
                                         cache: false,
                                         async : false,
                                         success: function (result) {
                                             for (var k = 0; k < result.content.length; k++) {
-                                            	detail += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-                    			                            '<span style="vertical-align:middle">'+result.content[k].nm_indicator+'</span>'+
-                    			                      '</label>';
-                                            	var id;
-                 			                      $.ajax({
-                       			                    url: urls + 'manajemen/get-id_roleNsa/'+result.content[k].id_program+'/'+result.content[k].id_activity+'/'+result.content[k].id_nsa_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
-                       			                    type: 'get',
-                       			                    dataType: 'json',
-                       			                    cache: false,
-                       			                    async : false,
-                       			                    success: function (result) {
-                       			                    	id= result.content;
-                       			                        }
-                       			                }); 
-                      			               	detail += '<select name="nsa[][id_role]" class="assign-sdg">'+role(id)+'</select>'+
-                      			               				'<input type="hidden" name="nsa[][id_program]" value="'+result.content[k].id_program+'"/>'+
-                      			               				'<input type="hidden" name="nsa[][id_activity]" value="'+result.content[k].id_activity+'"/>'+
-                      			               				'<input type="hidden" name="nsa[][id_nsa_indicator]" value="'+result.content[k].id_nsa_indicator+'"/>'+
-                      			               				'<input type="hidden" name="nsa[][id_monper]" value="'+$('#id_monper').val()+'"/>'+
-                      			               				'<input type="hidden" name="nsa[][id_prov]" value="'+$('#id_prov').val()+'"/>'+
-                      			               				'<br/>';
+	                      			            var nama;
+	                  							if($("#fs").is(':checked')){
+	                  								nama = result.content[k][2];
+	                  							}else{
+	                  								nama = result.content[k][5];
+	                  							}
+	                                          	detail += '<tr><td class="sdg-anak'+idProgram+'" data-id="'+idProgram+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+			        			                            '<span style="vertical-align:middle">'+result.content[k][1]+' '+nama+'</span>'+
+			        			                      '</label></td>';
+	                  			               	detail += '<td class="sdg-anak'+idProgram+'" style="width:50%;display:none">'+
+	      			               				'</td><tr/>';
                                             }
                                         }
                                     });     
@@ -518,7 +593,7 @@
         	var nsa =  $('#form-detail').serializeObject();
         	$.ajax({
                 type    :"POST",
-                url     :urls+'manajemen/save-assignmentNsa/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
+                url     :urls+'manajemen/save-assignmentNsa',
                 headers :{'Accept':'application/json','Content-Type':'application/json'},
                 data    : JSON.stringify({nsa}),
                 beforeSend : function(xhr){

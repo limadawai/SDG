@@ -13,26 +13,29 @@ public class AssignSdgIndicator implements Serializable {
     @Column(nullable = false, length = 11)
     private Integer id;
     
-    @Column(nullable = false, length = 3)
-    private String id_goals;
+    @Column(nullable = false, length = 11)
+    private Integer id_goals;
     
-    @Column(nullable = false, length = 6)
-    private String id_target;
+    @Column(nullable = false, length = 11)
+    private Integer id_target;
     
-    @Column(nullable = false, length = 12)
-    private String id_indicator;
+    @Column(nullable = false, length = 11)
+    private Integer id_indicator;
     
-    @Column(nullable = false, length = 4)
+    @Column(nullable = false, length = 11)
     private Integer id_role;
     
-    @Column(nullable = false, length = 15)
-    private String id_monper;
+    @Column(nullable = false, length = 11)
+    private Integer id_monper;
     
     @Column(nullable = false, length = 3)
     private String 	id_prov;
 
-	public AssignSdgIndicator(Integer id, String id_goals, String id_target, String id_indicator, Integer id_role,
-			String id_monper, String id_prov) {
+	public AssignSdgIndicator() {
+	}
+
+	public AssignSdgIndicator(Integer id, Integer id_goals, Integer id_target, Integer id_indicator, Integer id_role,
+			Integer id_monper, String id_prov) {
 		super();
 		this.id = id;
 		this.id_goals = id_goals;
@@ -43,9 +46,6 @@ public class AssignSdgIndicator implements Serializable {
 		this.id_prov = id_prov;
 	}
 
-	public AssignSdgIndicator() {
-	}
-
 	public Integer getId() {
 		return id;
 	}
@@ -54,27 +54,27 @@ public class AssignSdgIndicator implements Serializable {
 		this.id = id;
 	}
 
-	public String getId_goals() {
+	public Integer getId_goals() {
 		return id_goals;
 	}
 
-	public void setId_goals(String id_goals) {
+	public void setId_goals(Integer id_goals) {
 		this.id_goals = id_goals;
 	}
 
-	public String getId_target() {
+	public Integer getId_target() {
 		return id_target;
 	}
 
-	public void setId_target(String id_target) {
+	public void setId_target(Integer id_target) {
 		this.id_target = id_target;
 	}
 
-	public String getId_indicator() {
+	public Integer getId_indicator() {
 		return id_indicator;
 	}
 
-	public void setId_indicator(String id_indicator) {
+	public void setId_indicator(Integer id_indicator) {
 		this.id_indicator = id_indicator;
 	}
 
@@ -86,11 +86,11 @@ public class AssignSdgIndicator implements Serializable {
 		this.id_role = id_role;
 	}
 
-	public String getId_monper() {
+	public Integer getId_monper() {
 		return id_monper;
 	}
 
-	public void setId_monper(String id_monper) {
+	public void setId_monper(Integer id_monper) {
 		this.id_monper = id_monper;
 	}
 
@@ -104,5 +104,6 @@ public class AssignSdgIndicator implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}    
+	}
+  
 }

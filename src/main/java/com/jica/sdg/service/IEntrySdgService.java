@@ -2,6 +2,8 @@ package com.jica.sdg.service;
 
 import com.jica.sdg.model.EntrySdg;
 import com.jica.sdg.model.EntryGovIndicator;
+import com.jica.sdg.model.EntryGovBudget;
+import com.jica.sdg.model.EntryNsaBudget;
 import com.jica.sdg.model.EntryNsaIndicator;
 import com.jica.sdg.model.EntrySdgIndicatorJoin;
 import com.jica.sdg.model.SdgIndicatorTarget;
@@ -17,7 +19,11 @@ public interface IEntrySdgService {
 //
     void saveEntrySdg(EntrySdg esdg);
     
+    void saveEntryGovBudget(EntryGovBudget entryGovBudget);
+    
     void saveEntryGovIndicator(EntryGovIndicator entryGovIndicator);
+    
+    void saveEntryNsaBudget(EntryNsaBudget entryNsaBudget);
     
     void saveEntryNsaIndicator(EntryNsaIndicator entryNsaIndicator);
     

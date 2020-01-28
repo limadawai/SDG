@@ -101,7 +101,7 @@
 				    <label>Target</label>
 				    <input type="text" readonly="true" th:value="${target.nm_target}" class="input-xlarge" />
 				    <input type="hidden" id="id_goals" name="id_goals" th:value="${target.id_goals}"/>
-				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id_target}"/>
+				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id}"/>
 				  </div>
 				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Code</label>
@@ -231,6 +231,7 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
+	        	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
 	        });
 			var table = $('#tabel-indicator').DataTable({
 				responsive: true,
@@ -249,11 +250,17 @@
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_indicator+"</div>";
+							return "<div style='font-size:90%;'>"+row[1]+"</div>";
 						}},
 
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.nm_indicator+"</div>";
+							var nama;
+							if($("#fs").is(':checked')){
+								nama = row[4];
+							}else{
+								nama = row[6];
+							}
+							return "<div style='font-size:90%;'>"+nama+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
 						var option="<option value=''>-indicator-</option>";
@@ -265,7 +272,7 @@
 		                    	var selected = '';
 		                    	$.ajax({
 									type: "GET",
-				                    url: urls+'list-getIdGovMap/'+row.id_indicator,
+				                    url: urls+'list-getIdGovMap/'+row[0],
 				                    async:false,
 				                    success: function (result) {
 										var array1 = result.content;

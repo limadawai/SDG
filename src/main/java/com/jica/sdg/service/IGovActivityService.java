@@ -8,10 +8,14 @@ import java.util.Optional;
 public interface IGovActivityService {
 
     List<GovActivity> findAll(Integer id);
+    
+    List<GovActivity> findGovActivityByIdAndProv(Integer id, String id_prov);
 
     void saveGovActivity(GovActivity gov);
     
     Optional<GovActivity> findOne(Integer id);
     
     void deleteGovActivity(Integer id);
+    
+    void UpdateRole(Integer id_role, Integer id);
 }
