@@ -273,7 +273,7 @@
                     	detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
                                       '<span class="toogle-sdg-bapak" data-id="'+idGoals+'" style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
                                 '</label></td>'+
-                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+role('')+'</select>'+
+                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+role('')+'</select></td>'+
                                 '<tr/>';
                     	$.ajax({
                             url: urls + 'list-sdgTarget/'+response.content[i].id,
@@ -294,7 +294,7 @@
         			                            	'<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
         			                      			'</label>'+
         			                           '</td>'+
-        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+role('')+'</select>'+
+        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+role('')+'</select></td>'+
         			                      	'<tr/>';
 //                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({
@@ -422,11 +422,16 @@
     					}else{
     						nama = response.content[i].nm_program_eng;
     					}
-                    	detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+                    	/* detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
 				                        '<span class="toogle-sdg-bapak" data-id="'+idProgram+'" style="vertical-align:middle">'+response.content[i].id_program+' '+nama+'</span>'+
 				                  '</label></td>'+
 				                  '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idProgram+'" data-id="'+idProgram+'">'+roleGov('')+'</select>'+
-				                  '<tr/>';
+				                  '<tr/>'; */
+		                  detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+			                        '<span class="toogle-sdg-bapak" data-id="'+idProgram+'" style="vertical-align:middle">'+response.content[i].id_program+' '+nama+'</span>'+
+			                  '</label></td>'+
+			                  '<td style="width:50%"></td>'+
+			                  '<tr/>';
                     	$.ajax({
                             url: urls + 'list-govActivityByProv/'+idProgram+'/'+$('#id_prov').val(),
                             type: 'get',
@@ -450,7 +455,7 @@
   			                         		'<input type="hidden" name="gov[][id]" value="'+result.content[j].id+'"/>'+
   			                           		'<select name="gov[][id_role]" class="select-anak-sdg'+idProgram+' select-anak-sdg" data-id="'+idProgram+'">'+
   			                           		roleGov(result.content[j].id_role)+
-  			                           		'</select>'+
+  			                           		'</select></td>'+
   			                      	'<tr/>';
                                 	$.ajax({
                                         url: urls + 'list-govIndicator/'+idProgram+'/'+result.content[j].id,
@@ -528,7 +533,7 @@
 				                  '</label></td>'+
 				                  '<td style="width:50%">'+
 				                  '<input type="hidden" name="nsa[][id]" value="'+idProgram+'"/>'+
-				                  '<select data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(response.content[i].id_role)+'</select>'+
+				                  '<select data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(response.content[i].id_role)+'</select></td>'+
 				                  '<tr/>';
                     	$.ajax({
                             url: urls + 'list-nsaActivity/'+idProgram,
@@ -549,8 +554,7 @@
   			                            	'<span style="vertical-align:middle">'+result.content[j].id_activity+' '+nama+'</span>'+
   			                      			'</label>'+
   			                           '</td>'+
-  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'">'+
-  			                           		'</select>'+
+  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'"></td>'+
   			                      	'<tr/>';
                                 	$.ajax({
                                         url: urls + 'list-nsaIndicator/'+idProgram+'/'+result.content[j].id,
