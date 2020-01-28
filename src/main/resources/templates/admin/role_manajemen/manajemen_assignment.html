@@ -273,7 +273,7 @@
                     	detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
                                       '<span class="toogle-sdg-bapak" data-id="'+idGoals+'" style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
                                 '</label></td>'+
-                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+role('')+'</select></td>'+
+                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+roleGov('')+'</select></td>'+
                                 '<tr/>';
                     	$.ajax({
                             url: urls + 'list-sdgTarget/'+response.content[i].id,
@@ -294,7 +294,7 @@
         			                            	'<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
         			                      			'</label>'+
         			                           '</td>'+
-        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+role('')+'</select></td>'+
+        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+roleGov('')+'</select></td>'+
         			                      	'<tr/>';
 //                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({
@@ -327,7 +327,7 @@
                     			                    	id= result.content;
                     			                        }
                     			                }); 
-                    			                detail += '<td class="sdg-cucu'+idGoals+'" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+role(id)+'</select>'+
+                    			                detail += '<td class="sdg-cucu'+idGoals+'" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+roleGov(id)+'</select>'+
                     			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k][2]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k][3]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_indicator]" value="'+result.content[k][0]+'"/>'+
