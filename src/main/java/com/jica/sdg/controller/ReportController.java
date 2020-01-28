@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,24 @@ public class ReportController {
         return list;
     }
 
+    @GetMapping("admin/getgovmap")
+    public @ResponseBody List<Object> getGovMapByIdProv(@RequestParam("id_prov") String idprov, @RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT a.*, b.start_year, b.end_year, c.id as idgoals, c.nm_goals, c.nm_goals_eng, d.nm_target, d.nm_target_eng, " +
+                "e.nm_indicator, e.nm_indicator_eng, e.unit, f.nm_indicator AS gov_nm_indicator, f.nm_indicator_eng AS gov_nm_indicator_eng, " +
+                "f.unit AS gov_indicator_unit FROM gov_map a LEFT JOIN " +
+                "ran_rad b ON b.id_monper = a.id_monper LEFT JOIN " +
+                "sdg_goals c ON c.id = a.id_goals LEFT JOIN " +
+                "sdg_target d ON d.id = a.id_target LEFT JOIN " +
+                "sdg_indicator e ON e.id = a.id_indicator LEFT JOIN " +
+                "gov_indicator f ON f.id = a.id_gov_indicator " +
+                "WHERE a.id_prov = :id_prov AND a.id_monper = :id_monper";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+
     @GetMapping("admin/getrolebyidprov")
     public @ResponseBody List<Object> getRoleByIdProv(@RequestParam("id_prov") String id) {
         List list = roleService.findByProvince(id);
@@ -86,6 +105,12 @@ public class ReportController {
     @GetMapping("admin/getindicator")
     public @ResponseBody List<Object> getIndicatorByTarget(@RequestParam("id_goals") int idgoals, @RequestParam("id_target") int idtarget) {
         List list = indicatorService.findAll(idgoals, idtarget);
+        return list;
+    }
+
+    @GetMapping("admin/getdatarole")
+    public @ResponseBody List<Object> getDataByRole(@RequestParam("id_role") int id) {
+        List list = Collections.singletonList(roleService.findOne(id));
         return list;
     }
 

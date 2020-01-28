@@ -27,4 +27,6 @@ public interface IRoleService {
     
     List<Role> findRoleNonGov(String id_prov);
 
+    List<Role> catRole(int id_role);
+
 }
