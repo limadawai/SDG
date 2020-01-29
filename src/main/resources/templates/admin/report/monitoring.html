@@ -194,24 +194,18 @@
                                     cache: false,
                                     success: function (resgovmap) {
                                         console.log(resgovmap);
+                                        $("#goals").empty();
+                                        $("#target").empty();
+                                        $("#indikator").empty();
+                                        $("#divgoals").empty();
+                                        $("#divtarget").empty();
                                         for (var i = 0; i < resgovmap.length; i++) {
-                                            $("#goals").empty();
                                             $("#goals").append("<option value='"+resgovmap[i][9]+"'>"+resgovmap[i][10]+"</option>");
-                                            if (lang == "0") {
-                                                $("#goals").append("<option value='"+resgovmap[i][9]+"'>"+resgovmap[i][10]+"</option>");
-                                            } else if (lang == "1") {
-                                                $("#goals").append("<option value='"+resgovmap[i][9]+"'>"+resgovmap[i][11]+"</option>");
-                                            }
+                                            $("#target").append("<option value='"+resgovmap[i][12]+"'>"+resgovmap[i][13]+"</option>");
+                                            $("#indikator").append("<option value='"+resgovmap[i][15]+"'>"+resgovmap[i][16]+"</option>");
                                             $("#divgoals").append("<p>" + resgovmap[i][10] + "</p>");
-                                            $("#divtarget").append("<p>" + resgovmap[i][12] + "</p>");
-                                            if (lang == "0") {
-                                                $("#divgoals").append("<p>" + resgovmap[i][10] + "</p>");
-                                                $("#divtarget").append("<p>" + resgovmap[i][12] + "</p>");
-                                            } else if (lang == "1") {
-                                                $("#divgoals").append("<p>" + resgovmap[i][11] + "</p>");
-                                                $("#divtarget").append("<p>" + resgovmap[i][13] + "</p>");
-                                            }
-                                            var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + resgovmap[i][14] + "</p></div>";
+                                            $("#divtarget").append("<p>" + resgovmap[i][13] + "</p>");
+                                            var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + resgovmap[i][16] + "</p></div>";
                                             $("#indi").append(p);
                                             //********************** Add table atas ********************
                                             var pq = "<table  id='tabatas' class='table table-striped table-bordered' style='width:60%'>";

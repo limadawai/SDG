@@ -68,8 +68,9 @@ public class ReportController {
 
     @GetMapping("admin/getgovmap")
     public @ResponseBody List<Object> getGovMapByIdProv(@RequestParam("id_prov") String idprov, @RequestParam("id_monper") int idmonper) {
-        String sql = "SELECT a.*, b.start_year, b.end_year, c.id as idgoals, c.nm_goals, c.nm_goals_eng, d.nm_target, d.nm_target_eng, " +
-                "e.nm_indicator, e.nm_indicator_eng, e.unit, f.nm_indicator AS gov_nm_indicator, f.nm_indicator_eng AS gov_nm_indicator_eng, " +
+        String sql = "SELECT a.*, b.start_year, b.end_year, c.id as idgoals, c.nm_goals, c.nm_goals_eng, d.id AS idtarget, d.nm_target, d.nm_target_eng, " +
+                "e.id AS idindi, e.nm_indicator, e.nm_indicator_eng, e.unit, " +
+                "f.nm_indicator AS gov_nm_indicator, f.nm_indicator_eng AS gov_nm_indicator_eng, " +
                 "f.unit AS gov_indicator_unit FROM gov_map a LEFT JOIN " +
                 "ran_rad b ON b.id_monper = a.id_monper LEFT JOIN " +
                 "sdg_goals c ON c.id = a.id_goals LEFT JOIN " +
