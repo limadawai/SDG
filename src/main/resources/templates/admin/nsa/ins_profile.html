@@ -29,10 +29,18 @@
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
-                            <select id="nm_ins_profil" name="idrole" class="form-control">
+                            <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                                <option value="0" >-- Pilih --</option>
+                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+                            </select>
+                            <select id="nm_ins_profil" name="nm_ins_profil" class="form-control">
                                 <option value="0" >-- Pilih --</option>
                                 <option th:each="f:${listInsProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
+                            <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none">
+                                <span class="lang_indo">Tambah</span>
+                                <span class="lang_eng" style="display: none">Add</span>
+                            </button>
                         </div>
 <!--                        <div class="row-fluid">
                             <div class="span6">
@@ -169,7 +177,27 @@
 //                alert('admin');
             }else{
 //                alert('bukan '+id_role);
-                $("#nm_ins_profil").val(id_role).trigger("change").attr('disabled',true);
+                $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
+                
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-ins-profil/'+id_prov,
+                    success: function (result10) {
+                        $("#nm_ins_profil").html('<option value="0" >-- Pilih --</option>');
+                        var array = result10.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#nm_ins_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                        if(privilege == 'ADMIN'){
+                    
+                        }else{
+        //                    alert(id_role);
+                            $("#nm_ins_profil").val(id_role).trigger("change").attr('disabled',true);
+                        }
+                    }
+                });
                 
                 $.ajax({
                     type: "GET",
@@ -177,18 +205,27 @@
                     success: function (result1) {
                         if(result1.content[0] ==  null){
 //                            jika kosong
-                            $('#id_inst').val('');
-                            $('#id_role').val(id_role);
-                            $('#nm_inst').val('');
-                            $('#achievement').val('');
-                            $('#loc_inst').val('');
-                            $('#beneficiaries').val('');
-                            $('#year_impl').val('');
-                            $('#major_part').val('');
-
-                            $('.addModal').modal("show");
-                            $('#simpan_').show();
-                            $('#update_').hide();
+//                            $('#id_inst').val('');
+//                            $('#id_role').val(id_role);
+//                            $('#nm_inst').val('');
+//                            $('#achievement').val('');
+//                            $('#loc_inst').val('');
+//                            $('#beneficiaries').val('');
+//                            $('#year_impl').val('');
+//                            $('#major_part').val('');
+//
+//                            $('.addModal').modal("show");
+//                            $('#simpan_').show();
+//                            $('#update_').hide();
+                            if($("#nm_ins_profil").val()=="0"){
+                            	$("#tambah").hide();
+                            }else if(id_role == id_role){
+                                $("#tambah").show();
+                            }else if(id_role == '1'){
+                                $("#tambah").show();
+                            }else{
+                                $("#tambah").hide();
+                            }
                             //tutup kosong
                         }else{
                             $('#tabel-ins-profile').DataTable({
@@ -200,7 +237,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "ajax": {
-                                    "url": urls+'list-getid-ins-profil/'+id_role,
+                                    "url": urls+'list-getid-ins-profil/'+$("#nm_ins_profil").val(),
                                     dataSrc: 'content',
                                 },
                                 "searching": false,
@@ -280,6 +317,67 @@
 	        	bhs($(this).is(':checked'));
 	        });
             
+            $("#id_prov").on('change', function(e){
+                var id_prov = this.value ;
+                $("#nm_ins_profil").html('');
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-ins-profil/'+id_prov,
+                    success: function (result) {
+                        $("#nm_ins_profil").html('<option value="0" >-- Pilih --</option>');
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#nm_ins_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                    }
+                });
+                //grid
+                $('#tabel-ins-profile').DataTable({
+                    responsive: true,
+                    sDom: 'lrtip',
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "bDestroy": true,
+                    "ajax": {
+                        "url": urls+'list-getid-ins-profil/'+$("#nm_ins_profil").val(),
+                        dataSrc: 'content',
+                    },
+                    "searching": false,
+                    "columns": [
+                        {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                            '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                        }}
+                    ],
+                    "columnDefs": [
+                    ],
+                    select: true
+                });
+            });
+            
             
             $("#nm_ins_profil").on('change', function(e){
                 var id = this.value ;
@@ -290,18 +388,71 @@
                     success: function (result1) {
                         if(result1.content[0] ==  null){
 //                            jika kosong
-                            $('#id_inst').val('');
-                            $('#id_role').val(id);
-                            $('#nm_inst').val('');
-                            $('#achievement').val('');
-                            $('#loc_inst').val('');
-                            $('#beneficiaries').val('');
-                            $('#year_impl').val('');
-                            $('#major_part').val('');
-
-                            $('.addModal').modal("show");
-                            $('#simpan_').show();
-                            $('#update_').hide();
+//                            $('#id_inst').val('');
+//                            $('#id_role').val(id);
+//                            $('#nm_inst').val('');
+//                            $('#achievement').val('');
+//                            $('#loc_inst').val('');
+//                            $('#beneficiaries').val('');
+//                            $('#year_impl').val('');
+//                            $('#major_part').val('');
+//
+//                            $('.addModal').modal("show");
+//                            $('#simpan_').show();
+//                            $('#update_').hide();
+                            if($("#nm_ins_profil").val()=="0"){
+                            	$("#tambah").hide();
+                            }else if(id_role == id_role){
+                                $("#tambah").show();
+                            }else if(id_role == '1'){
+                                $("#tambah").show();
+                            }else{
+                                $("#tambah").hide();
+                            }
+                            
+                            //grid
+                            $('#tabel-ins-profile').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-getid-ins-profil/'+id,
+                                    dataSrc: 'content',
+                                },
+                                "searching": false,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                        '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                                    }}
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });
                             //tutup kosong
                         }else{
                             $('#tabel-ins-profile').DataTable({
@@ -353,6 +504,21 @@
                 
             });
             
+            $('#tambah').on('click', function(e){
+                var id_role = $('#nm_ins_profil').val();
+                $('#id_inst').val('');
+                $('#id_role').val(id_role);
+                $('#nm_inst').val('');
+                $('#achievement').val('');
+                $('#loc_inst').val('');
+                $('#beneficiaries').val('');
+                $('#year_impl').val('');
+                $('#major_part').val('');
+
+                $('.addModal').modal("show");
+                $('#simpan_').show();
+                $('#update_').hide();
+            });
 
 //            var table = $('#tabel-ins-profile').DataTable({
 //                responsive: true,
@@ -514,6 +680,8 @@
                     data: data,
                     success: function (result) {
 //                        window.location = urls+"nsa/inst-profile";
+                        
+                        $('#tambah').hide();
                         $('#tabel-ins-profile').DataTable({
                             responsive: true,
                             sDom: 'lrtip',

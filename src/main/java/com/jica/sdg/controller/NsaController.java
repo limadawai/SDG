@@ -162,6 +162,19 @@ public class NsaController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-option-role-ins-profil/{id}")
+    public @ResponseBody Map<String, Object> getOptionInsProfilList(@PathVariable("id") String id) {
+        
+        String sql  = "select * from ref_role as a where a.id_prov = :id and cat_role = 'Institution' ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-get-option-role-all-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionAllProfilList(@PathVariable("id") String id) {
         
@@ -214,6 +227,14 @@ public class NsaController {
     @GetMapping("admin/get-id-nsa-detail/{id_nsa}")
     public @ResponseBody Map<String, Object> getNsaDetail(@PathVariable("id_nsa") String id_nsa) {
         List<Nsadetail> list = nsaDetailService.findId(id_nsa);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-id-nsa-detail1/{id_nsa}")
+    public @ResponseBody Map<String, Object> getNsaDetail1(@PathVariable("id_nsa") String id_nsa) {
+        List<Nsadetail> list = nsaDetailService.findIdNsa(id_nsa);
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
