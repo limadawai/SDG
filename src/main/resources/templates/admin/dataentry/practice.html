@@ -12,7 +12,8 @@
 
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb" class="lang"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Indikator SDG</a></div>
+            <div id="breadcrumb" class="lang_eng"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Best Practice</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Praktik Terbaik</a></div>
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
@@ -63,7 +64,35 @@
 
     <div th:include="admin/layout :: footer"></div>
     <script th:inline="javascript">
+        var lang = [[${lang}]];
+        var name = [[${name}]];
+        $("#welcome").html("Welcome, "+name);
 
+        if (lang == "0") {
+            indo();
+        } else {
+            inggris();
+        }
+
+        $('#fs').on('change', function(){
+            if($(this).is(':checked')){
+                indo();
+            } else {
+                inggris();
+            }
+        });
+
+        function indo() {
+            $("#jdltbl").text("Tabel Praktik Terbaik");
+            $(".lang_indo").show();
+            $(".lang_eng").hide();
+        }
+
+        function inggris() {
+            $("#jdltbl").text("Best Practice Table");
+            $(".lang_indo").hide();
+            $(".lang_eng").show();
+        }
     </script>
 </body>
 </html>

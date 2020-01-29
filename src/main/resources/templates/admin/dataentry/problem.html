@@ -15,7 +15,8 @@
 
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Indikator SDG</a></div>
+            <div id="breadcrumb" class="lang_eng"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Problem Identification & Follow Up</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Identifikasi Masalah & Solusi</a></div>
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
@@ -131,6 +132,8 @@
             $("#headmodal").text("Tambah Data Masalah");
             $("#tutup").text("Tutup");
             $("#simpan").text("Simpan");
+            $(".lang_indo").show();
+            $(".lang_eng").hide();
         }
 
         function inggris() {
@@ -141,6 +144,8 @@
             $("#headmodal").text("Add Problem Data");
             $("#tutup").text("Close");
             $("#simpan").text("Submit");
+            $(".lang_indo").hide();
+            $(".lang_eng").show();
         }
 
         var table = $('#tabel-problem').DataTable({
