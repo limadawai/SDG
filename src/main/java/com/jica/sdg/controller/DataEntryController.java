@@ -111,11 +111,6 @@ public class DataEntryController {
     @GetMapping("admin/sdg-indicator-monitoring")
     public String entri_sdg(Model model, HttpSession session) {
         model.addAttribute("title", "SDG Indicators Monitoring");
-//        model.addAttribute("listprov", provinsiService.findAllProvinsi());
-//        model.addAttribute("listRole", roleService.findAll());
-//        model.addAttribute("listranrad", ranRadService.findAll());
-//        model.addAttribute("lang", session.getAttribute("bahasa"));
-//        model.addAttribute("name", session.getAttribute("name"));
         
         Integer id_role = (Integer) session.getAttribute("id_role");
         model.addAttribute("lang", session.getAttribute("bahasa"));
@@ -411,10 +406,7 @@ public class DataEntryController {
         hasil.put("content",list);
         return hasil;
     }
-    
 
-    
-    
     //non gov
     @GetMapping("admin/non-government-program-monitoring")
     public String nongovprogram(Model model, HttpSession session) {
