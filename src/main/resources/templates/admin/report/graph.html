@@ -28,7 +28,7 @@
                     </div>
                     <div class="widget-content" style="background:#FFFFFF;">
                         <div class="row-fluid">
-                            <div id="divtablegrid" class="span6"></div>
+                            <div id="divkiri" class="span6"></div>
                             <div id="divkanan" class="span6"></div>
                         </div>
                     </div>
@@ -82,31 +82,78 @@
             var valdaerah = $(this).val();
             if (valdaerah != "0") {
                 $.ajax({
-                    url: urls + "getroleprov",
+                    url: urls + "graphsdg",
                     type: 'get',
                     data: 'id_prov=' + valdaerah,
                     dataType: 'json',
                     cache: false,
                     success: function (result) {
-                        console.log(result);
-                        $("#divtablegrid").empty();
-                        var tab = "<ul id='bapak' style='list-style-type:none;'>";
+                        // console.log(result);
+                        $("#divkiri").empty();
+                        var isi = "<ul>";
                         for (var i=0; i<result.length; i++) {
-                            tab += "<li style='cursor:pointer;'>";
-                            tab += "<span class='icon-caret-right' style='padding-right: 10px;'></span>"+result[i][7];
-                            tab += "<ul id='anak' style='margin-left:15px;list-style-type:none;'><li style='cursor:pointer;'>";
-                            tab += "<span class='icon-caret-right' style='padding-right: 10px;'></span>"+result[i][9];
-                            tab += "</li></ul>";
-                            tab += "</li>";
+                            isi += "<li>"+result[i][8];
+                            isi += "<ul>";
+                            isi += "<li>"+result[i][11];
+                            isi += "<ul>";
+                            isi += "<li id='cucu' title='"+result[i][3]+"'>"+result[i][14]+"</li>";
+                            isi += "</ul>";
+                            isi += "</li>";
+                            isi += "</ul>";
+                            isi += "</li>";
                         }
-                        tab += "</ul>";
-                        $("#divtablegrid").append(tab);
-                        $("#anak").hide();
+                        isi += "</ul>";
+                        $("#divkiri").append(isi);
+                        $("#divkiri").easytree();
                     }
                 });
             } else if (valdaerah == "0") {
-                $("#divtablegrid").empty();
+                $("#divkiri").empty();
             }
+        });
+
+        $(document).on('click', '#cucu', function(){
+            var idindi = $("#cucu span:last").attr("title");
+            // console.log(idindi);
+            $.ajax({
+                url: urls + "graphidgovindi",
+                type: 'get',
+                data: 'id_indicator=' + idindi,
+                dataType: 'json',
+                cache: false,
+                success: function (result) {
+                    // console.log(result[0]);
+                    $("#divkanan").empty();
+                    var data = [];
+                    for (var i=0; i<result.length; i++) {
+                        $.ajax({
+                            url: urls + "isigovmap",
+                            type: 'get',
+                            data: 'id='+result[i],
+                            dataType: 'json',
+                            cache: false,
+                            success: function (resin) {
+                                // console.log(JSON.stringify(resin[0]));
+                                // data.push(Object.assign({}, resin[0]));
+                                // $("#divkanan").html(JSON.stringify(data));
+                                var isi = "<ul>";
+                                isi += "<li>"+resin[0][10];
+                                isi += "<ul>";
+                                isi += "<li>"+resin[0][13];
+                                isi += "<ul>";
+                                isi += "<li id='cucukanan' title='"+resin[0][0]+"'>"+resin[0][4]+"</li>";
+                                isi += "</ul>";
+                                isi += "</li>";
+                                isi += "</ul>";
+                                isi += "</li>";
+                                isi += "</ul>";
+                                $("#divkanan").html(isi);
+                                $("#divkanan").easytree();
+                            }
+                        });
+                    }
+                }
+            });
         });
     </script>
 </body>

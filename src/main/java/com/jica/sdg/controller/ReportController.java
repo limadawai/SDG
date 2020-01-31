@@ -126,4 +126,38 @@ public class ReportController {
         return "admin/report/graph";
     }
 
+    @GetMapping("admin/graphsdg")
+    public @ResponseBody List<Object> graphSdg(@RequestParam("id_prov") String idprov) {
+        String sql = "SELECT a.*, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, c.id AS idtarget, c.nm_target, c.nm_target_eng, " +
+                "d.id AS idindicator, d.nm_indicator, d.nm_indicator_eng FROM assign_sdg_indicator a LEFT JOIN " +
+                "sdg_goals b ON b.id = a.id_goals LEFT JOIN " +
+                "sdg_target c ON c.id = a.id_target LEFT JOIN " +
+                "sdg_indicator d ON d.id = a.id_indicator WHERE a.id_prov = :id_prov";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        List list = query.getResultList();
+        return list;
+    }
+
+    @GetMapping("admin/graphidgovindi")
+    public @ResponseBody List<Object> idGovIndi(@RequestParam("id_indicator") int idindi) {
+        String sql = "SELECT id_gov_indicator FROM gov_map WHERE id_indicator = :id_indicator ORDER BY id_gov_indicator ASC";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_indicator", idindi);
+        List list = query.getResultList();
+        return list;
+    }
+
+    @GetMapping("admin/isigovmap")
+    public @ResponseBody List<Object> isigovmap(@RequestParam("id") int id_gov_indicator) {
+        String sql = "SELECT a.*, b.nm_program, b.nm_program_eng, b.internal_code as progcode, " +
+                "c.nm_activity, c.nm_activity_eng, c.internal_code AS actcode FROM gov_indicator a LEFT JOIN " +
+                "gov_program b ON b.id = a.id_program LEFT JOIN " +
+                "gov_activity c ON c.id = a.id_activity WHERE a.id = :id_gov_indicator";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_gov_indicator", id_gov_indicator);
+        List list = query.getResultList();
+        return list;
+    }
+
 }

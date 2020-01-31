@@ -60,6 +60,7 @@
     <div th:include="admin/layout :: footer"></div>
     <script th:inline="javascript">
         var lang = [[${lang}]];
+        if (lang == null) lang = "0";
         var name = [[${name}]];
         var role = [[${role}]];
         $("#welcome").html("Welcome, "+name);
@@ -140,6 +141,66 @@
                         } else {
                             // console.log(result);
                             $.ajax({
+                                url: urls + "getsdg",
+                                type: 'get',
+                                data: 'id_prov=' + valdaerah,
+                                dataType: 'json',
+                                cache: false,
+                                success: function (ressdg) {
+                                    console.log(ressdg);
+                                    $("#goals").empty();
+                                    $("#target").empty();
+                                    $("#indikator").empty();
+                                    $("#divgoals").empty();
+                                    $("#divtarget").empty();
+                                    for (var i = 0; i < ressdg.length; i++) {
+                                        $("#divgoals").append("<p>" + ressdg[i][7] + "</p>");
+                                        $("#divtarget").append("<p>" + ressdg[i][9] + "</p>");
+                                        var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + ressdg[i][11] + "</p></div>";
+                                        $("#indi").append(p);
+                                        //********************** Add table atas ********************
+                                        var pq = "<table id='tabatas' class='table table-striped table-bordered' style='width:60%'>";
+                                        pq += "<thead>";
+                                        pq += "<tr>";
+                                        pq += "<th id='tab11'>Sumber Dana</th>";
+                                        pq += "<th id='tab12'>Satuan</th>";
+                                        pq += "<th id='tab13'>Baseline</th>";
+                                        pq += "<th id='tab14'>Target</th>";
+                                        pq += "<th id='tab15'>Aktual</th>";
+                                        pq += "<th id='tab16'>Status</th>";
+                                        pq += "</tr>";
+                                        pq += "</thead>";
+                                        pq += "</table>";
+                                        $("#divtab" + (i + 1)).append(pq);
+                                        var q = "<table  id='tabawah' class='table table-striped table-bordered' style='width:100%'>";
+                                        q += "<thead>";
+                                        q += "<tr>";
+                                        q += "<th id='tb1' rowspan='2' style='vertical-align:middle;'>Nama<br>Program</th>";
+                                        q += "<th id='tb2' rowspan='2' style='vertical-align:middle;'>Aktifitas</th>";
+                                        q += "<th id='tb3' rowspan='2' style='vertical-align:middle;'>Indikator</th>";
+                                        q += "<th id='tb4' rowspan='2' style='vertical-align:middle;'>Satuan</th>";
+                                        q += "<th id='tb5' rowspan='2' style='vertical-align:middle;'>Target</th>";
+                                        q += "<th id='tb6' colspan='5'>Aktual</th>";
+                                        q += "<th id='tb7' rowspan='2' style='vertical-align:middle;'>Budget<br>Aktual</th>";
+                                        q += "<th id='tb8' rowspan='2' style='vertical-align:middle;'>Sumber<br>Pendanaan</th>";
+                                        q += "<th id='tb9' rowspan='2' style='vertical-align:middle;'>Lokasi</th>";
+                                        q += "<th id='tb10' rowspan='2' style='vertical-align:middle;'>Pelaku</th>";
+                                        q += "<th id='tb11' rowspan='2' style='vertical-align:middle;'>#</th>";
+                                        q += "</tr>";
+                                        q += "<tr>";
+                                        q += "<th>1</th>";
+                                        q += "<th>2</th>";
+                                        q += "<th>3</th>";
+                                        q += "<th>4</th>";
+                                        q += "<th>5</th>";
+                                        q += "</tr>";
+                                        q += "</thead>";
+                                        q += "</table>";
+                                        $("#divtab" + (i + 1)).append(q);
+                                    }
+                                }
+                            });
+                            $.ajax({
                                 url: urls + "getrolebyidprov",
                                 type: 'get',
                                 data: 'id_prov=' + valdaerah,
@@ -172,6 +233,7 @@
 
         $("#role").on("change", function(){
             var idrole = $(this).val();
+            $("#indi").empty();
             if (idrole != "0") {
                 $.ajax({
                     url: urls + "getdatarole",
@@ -181,79 +243,88 @@
                     cache: false,
                     success: function (result) {
                         // console.log(result);
-                        var catrole = result[0]['cat_role'];
-                        if (catrole == "Government") {
-                            var idprov = $("#daerah").val();
-                            var idmonper = $("#periode").val();
-                            if (idmonper != "0") {
-                                $.ajax({
-                                    url: urls + "getgovmap",
-                                    type: 'get',
-                                    data: {'id_prov':idprov, 'id_monper':idmonper},
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (resgovmap) {
-                                        console.log(resgovmap);
-                                        $("#goals").empty();
-                                        $("#target").empty();
-                                        $("#indikator").empty();
-                                        $("#divgoals").empty();
-                                        $("#divtarget").empty();
-                                        for (var i = 0; i < resgovmap.length; i++) {
-                                            $("#goals").append("<option value='"+resgovmap[i][9]+"'>"+resgovmap[i][10]+"</option>");
-                                            $("#target").append("<option value='"+resgovmap[i][12]+"'>"+resgovmap[i][13]+"</option>");
-                                            $("#indikator").append("<option value='"+resgovmap[i][15]+"'>"+resgovmap[i][16]+"</option>");
-                                            $("#divgoals").append("<p>" + resgovmap[i][10] + "</p>");
-                                            $("#divtarget").append("<p>" + resgovmap[i][13] + "</p>");
-                                            var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + resgovmap[i][16] + "</p></div>";
-                                            $("#indi").append(p);
-                                            //********************** Add table atas ********************
-                                            var pq = "<table  id='tabatas' class='table table-striped table-bordered' style='width:60%'>";
-                                            pq += "<thead>";
-                                            pq += "<tr>";
-                                            pq += "<th id='tab11'>Sumber Dana</th>";
-                                            pq += "<th id='tab12'>Satuan</th>";
-                                            pq += "<th id='tab13'>Baseline</th>";
-                                            pq += "<th id='tab14'>Target</th>";
-                                            pq += "<th id='tab15'>Aktual</th>";
-                                            pq += "<th id='tab16'>Status</th>";
-                                            pq += "</tr>";
-                                            pq += "</thead>";
-                                            pq += "</table>";
-                                            $("#divtab" + (i + 1)).append(pq);
-                                            var q = "<table  id='tabawah' class='table table-striped table-bordered' style='width:100%'>";
-                                            q += "<thead>";
-                                            q += "<tr>";
-                                            q += "<th id='tb1' rowspan='2' style='vertical-align:middle;'>Nama<br>Program</th>";
-                                            q += "<th id='tb2' rowspan='2' style='vertical-align:middle;'>Aktifitas</th>";
-                                            q += "<th id='tb3' rowspan='2' style='vertical-align:middle;'>Indikator</th>";
-                                            q += "<th id='tb4' rowspan='2' style='vertical-align:middle;'>Satuan</th>";
-                                            q += "<th id='tb5' rowspan='2' style='vertical-align:middle;'>Target</th>";
-                                            q += "<th id='tb6' colspan='5'>Aktual</th>";
-                                            q += "<th id='tb7' rowspan='2' style='vertical-align:middle;'>Budget<br>Aktual</th>";
-                                            q += "<th id='tb8' rowspan='2' style='vertical-align:middle;'>Sumber<br>Pendanaan</th>";
-                                            q += "<th id='tb9' rowspan='2' style='vertical-align:middle;'>Lokasi</th>";
-                                            q += "<th id='tb10' rowspan='2' style='vertical-align:middle;'>Pelaku</th>";
-                                            q += "<th id='tb11' rowspan='2' style='vertical-align:middle;'>#</th>";
-                                            q += "</tr>";
-                                            q += "<tr>";
-                                            q += "<th>1</th>";
-                                            q += "<th>2</th>";
-                                            q += "<th>3</th>";
-                                            q += "<th>4</th>";
-                                            q += "<th>5</th>";
-                                            q += "</tr>";
-                                            q += "</thead>";
-                                            q += "</table>";
-                                            $("#divtab" + (i + 1)).append(q);
+                        if (result.length == 0) {
+                            swal("Data tidak ditemukan");
+                            if (lang != "0") {
+                                swal("Data not found");
+                            }
+                        } else {
+                            var catrole = result[0]['cat_role'];
+                            if (catrole == "Government") {
+                                var idprov = $("#daerah").val();
+                                var idmonper = $("#periode").val();
+                                if (idmonper != "0") {
+                                    $.ajax({
+                                        url: urls + "getgovmap",
+                                        type: 'get',
+                                        data: {'id_prov': idprov, 'id_monper': idmonper},
+                                        dataType: 'json',
+                                        cache: false,
+                                        success: function (resgovmap) {
+                                            console.log(resgovmap);
+                                            $("#goals").empty();
+                                            $("#target").empty();
+                                            $("#indikator").empty();
+                                            $("#divgoals").empty();
+                                            $("#divtarget").empty();
+                                            for (var i = 0; i < resgovmap.length; i++) {
+                                                $("#goals").append("<option value='" + resgovmap[i][9] + "'>" + resgovmap[i][10] + "</option>");
+                                                $("#target").append("<option value='" + resgovmap[i][12] + "'>" + resgovmap[i][13] + "</option>");
+                                                $("#indikator").append("<option value='" + resgovmap[i][15] + "'>" + resgovmap[i][16] + "</option>");
+                                                $("#divgoals").append("<p>" + resgovmap[i][10] + "</p>");
+                                                $("#divtarget").append("<p>" + resgovmap[i][13] + "</p>");
+                                                var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + resgovmap[i][16] + "</p></div>";
+                                                $("#indi").append(p);
+                                                //********************** Add table atas ********************
+                                                var pq = "<table  id='tabatas' class='table table-striped table-bordered' style='width:60%'>";
+                                                pq += "<thead>";
+                                                pq += "<tr>";
+                                                pq += "<th id='tab11'>Sumber Dana</th>";
+                                                pq += "<th id='tab12'>Satuan</th>";
+                                                pq += "<th id='tab13'>Baseline</th>";
+                                                pq += "<th id='tab14'>Target</th>";
+                                                pq += "<th id='tab15'>Aktual</th>";
+                                                pq += "<th id='tab16'>Status</th>";
+                                                pq += "</tr>";
+                                                pq += "</thead>";
+                                                pq += "</table>";
+                                                $("#divtab" + (i + 1)).append(pq);
+                                                var q = "<table  id='tabawah' class='table table-striped table-bordered' style='width:100%'>";
+                                                q += "<thead>";
+                                                q += "<tr>";
+                                                q += "<th id='tb1' rowspan='2' style='vertical-align:middle;'>Nama<br>Program</th>";
+                                                q += "<th id='tb2' rowspan='2' style='vertical-align:middle;'>Aktifitas</th>";
+                                                q += "<th id='tb3' rowspan='2' style='vertical-align:middle;'>Indikator</th>";
+                                                q += "<th id='tb4' rowspan='2' style='vertical-align:middle;'>Satuan</th>";
+                                                q += "<th id='tb5' rowspan='2' style='vertical-align:middle;'>Target</th>";
+                                                q += "<th id='tb6' colspan='5'>Aktual</th>";
+                                                q += "<th id='tb7' rowspan='2' style='vertical-align:middle;'>Budget<br>Aktual</th>";
+                                                q += "<th id='tb8' rowspan='2' style='vertical-align:middle;'>Sumber<br>Pendanaan</th>";
+                                                q += "<th id='tb9' rowspan='2' style='vertical-align:middle;'>Lokasi</th>";
+                                                q += "<th id='tb10' rowspan='2' style='vertical-align:middle;'>Pelaku</th>";
+                                                q += "<th id='tb11' rowspan='2' style='vertical-align:middle;'>#</th>";
+                                                q += "</tr>";
+                                                q += "<tr>";
+                                                q += "<th>1</th>";
+                                                q += "<th>2</th>";
+                                                q += "<th>3</th>";
+                                                q += "<th>4</th>";
+                                                q += "<th>5</th>";
+                                                q += "</tr>";
+                                                q += "</thead>";
+                                                q += "</table>";
+                                                $("#divtab" + (i + 1)).append(q);
+                                            }
                                         }
+                                    });
+                                } else {
+                                    swal("Pilih periode terlebih dahulu!");
+                                    if (lang != "0") {
+                                        swal("Please choose the period!");
                                     }
-                                });
-                            } else {
-                                swal("Pilih periode terlebih dahulu!");
-                                if (lang != "0") {
-                                    swal("Please choose the period!");
                                 }
+                            } else if (catrole == "NSA") {
+                                swal('NSA Time');
                             }
                         }
                     }
