@@ -14,7 +14,4 @@ public interface PhilanthropyRepository extends CrudRepository<PhilanthropyColla
 //    @Query(value = "select * from nsa_profile where id_role = :id ",nativeQuery = true)
 //    public List<Nsaprofile> findId(@Param("id") String id);
 
-    
-
-
 }

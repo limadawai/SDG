@@ -35,6 +35,12 @@ public class SdgFundingService implements ISdgFundingService{
 	public void deleteSdgFunding(Integer id) {
 		sdgFundingRepository.deleteById(id);
 	}
-	
-	
+
+	@Override
+	public List<SdgFunding> findAllByIdIndicator(int id_indicator) {
+		List list = sdgFundingRepository.findAllByIdIndi(id_indicator);
+		return list;
+	}
+
+
 }

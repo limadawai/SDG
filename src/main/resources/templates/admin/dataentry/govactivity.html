@@ -837,7 +837,6 @@
                 }else{
                     var achieve1 = value1;
                 }
-                
                 if(value2 == 'null' || value2 == ""){
                     var achieve2 = '0';
                 }else{
@@ -855,10 +854,10 @@
                 }
 //                alert(ket_ran_rad);
                 if(ket_ran_rad == 'yearly'){
-                    $('#achievement1').val(achieve1).hide();
+                    $('#achievement1').val(achieve1).show();
                     $('#achievement2').val(achieve2).hide();
                     $('#achievement3').val(achieve3).hide();
-                    $('#achievement4').val(achieve4).show();
+                    $('#achievement4').val(achieve4).hide();
                     
                     if($('#fs').is(':checked')){
                         $('.achievement1_indo').hide();
@@ -871,15 +870,18 @@
                         $('.achievement3_eng').hide();
                         $('.achievement4_eng').show().html('Realization I');
                     }
-                    
-                    
                 }else if(ket_ran_rad == 'semesterly'){
-                    $('#achievement1').val(achieve1).hide();
+                    $('#achievement1').val(achieve1).show();
                     $('#achievement2').val(achieve2).show();
                     $('#achievement3').val(achieve3).hide();
-                    $('#achievement4').val(achieve4).show();
+                    $('#achievement4').val(achieve4).hide();
                     
                     if($('#fs').is(':checked')){
+                        $('.achievement1_indo').show();
+                        $('.achievement2_indo').show();
+                        $('.achievement3_indo').hide();
+                        $('.achievement4_indo').hide();
+                    }else{
                         $('.achievement1_indo').hide();
                         $('.achievement2_indo').show().html('Realisasi I');
                         $('.achievement3_indo').hide();
@@ -973,8 +975,6 @@
                     },
                 });
             });
-            
-            
     </script>
 </body>
 </html>

@@ -14,4 +14,6 @@ public interface ISdgFundingService {
 //    Optional<SdgDisaggre> findOne(Integer id);
     
     void deleteSdgFunding(Integer id);
+
+    List<SdgFunding> findAllByIdIndicator(int id_indicator);
 }
