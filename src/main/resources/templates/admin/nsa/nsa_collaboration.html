@@ -374,7 +374,7 @@
                                     {"data": function (row, data, index, display) {
                                             
                                         if(privilege=="SUPER" || privilege=="ADMIN"){
-                                            if(privilege == 'SUPER' || cat_role == 'Institution'){
+                                            if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
 //                                                console.log('malah kesini : '+cat_role)
                                                 //INST bisa edit
                                                 if(row[7] == null || row[7] == ""){
@@ -608,7 +608,7 @@
                         {"data": function (row, data, index, display) {
 
                             if(privilege=="SUPER" || privilege=="ADMIN"){
-                                if(privilege == 'SUPER' || cat_role == 'Institution'){
+                                if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
         //                                                console.log('malah kesini : '+cat_role)
                                     //INST bisa edit
                                     if(row[7] == null || row[7] == ""){
@@ -807,7 +807,7 @@
                                     {"data": function (row, data, index, display) {
                                             
                                         if(privilege=="SUPER" || privilege=="ADMIN"){
-                                            if(privilege == 'SUPER' || cat_role == 'Institution'){
+                                            if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
 //                                                console.log('malah kesini : '+cat_role)
                                                 //INST bisa edit
                                                 if(row[7] == null || row[7] == ""){
@@ -980,7 +980,7 @@
                                     {"data": function (row, data, index, display) {
                                             
                                         if(privilege=="SUPER" || privilege=="ADMIN"){
-                                            if(privilege == 'SUPER' || cat_role == 'Institution'){
+                                            if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
 //                                                console.log('malah kesini : '+cat_role)
                                                 //INST bisa edit
                                                 if(row[7] == null || row[7] == ""){
@@ -1199,7 +1199,7 @@
                             {"data": function (row, data, index, display) {
 
                                 if(privilege=="SUPER" || privilege=="ADMIN"){
-                                    if(privilege == 'SUPER' || cat_role == 'Institution'){
+                                    if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
     //                                                console.log('malah kesini : '+cat_role)
                                         //INST bisa edit
                                         if(row[7] == null || row[7] == ""){
@@ -1517,7 +1517,7 @@
                                 {"data": function (row, data, index, display) {
 
                                     if(privilege=="SUPER" || privilege=="ADMIN"){
-                                        if(privilege == 'SUPER' || cat_role == 'Institution'){
+                                        if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
         //                                                console.log('malah kesini : '+cat_role)
                                             //INST bisa edit
                                             if(row[7] == null || row[7] == ""){
@@ -1737,7 +1737,7 @@
                                         {"data": function (row, data, index, display) {
 
                                             if(privilege=="SUPER" || privilege=="ADMIN"){
-                                                if(privilege == 'SUPER' || cat_role == 'Institution'){
+                                                if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
                 //                                                console.log('malah kesini : '+cat_role)
                                                     //INST bisa edit
                                                     if(row[7] == null || row[7] == ""){
@@ -1946,7 +1946,7 @@
                                 {"data": function (row, data, index, display) {
 
                                     if(privilege=="SUPER" || privilege=="ADMIN"){
-                                        if(privilege == 'SUPER' || cat_role == 'Institution'){
+                                        if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
         //                                                console.log('malah kesini : '+cat_role)
                                             //INST bisa edit
                                             if(row[7] == null || row[7] == ""){
@@ -2047,7 +2047,7 @@
                     success: function (result) {
                         var array = result.content;
 //                        alert(array[0][0]);
-                        if(privilege == "SUPER"){
+                        if(privilege == "SUPER" || privilege == "ADMIN"){
                             $('#nm_philanthropy').val('0').trigger("change");
                         }else{
                             if(cat_role == 'Institution'){

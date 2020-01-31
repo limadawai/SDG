@@ -179,10 +179,11 @@ public class NsaController {
     public @ResponseBody Map<String, Object> getOptionInsProfilList_1(@PathVariable("id") String id) {
         
         String sql  = "select a.id_inst, a.nm_inst from nsa_inst as a\n" +
-                    "left join ref_role as b on a.id_role = b.id_role\n" +
-                    "where b.id_prov = :id ";
+                    "left join ref_role as b on a.id_role = b.id_role " ;
+//                    "left join ref_role as b on a.id_role = b.id_role\n" +
+//                    "where b.id_prov = :id ";
         Query query = em.createNativeQuery(sql);
-        query.setParameter("id", id);
+//        query.setParameter("id", id);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         
