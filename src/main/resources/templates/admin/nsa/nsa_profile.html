@@ -365,6 +365,7 @@
             var id_prov     = [[${id_prov}]];
             var privilege   = [[${privilege}]];
 
+            
             if(id_role == '1'){
                 
             }else{
@@ -1226,8 +1227,9 @@
                         var id_nsa1 = id;
                         $.ajax({
                             type: "GET",
-                            url: urls+'get-id-nsa-detail/'+id_nsa1,
+                            url: urls+'get-id-nsa-detail1/'+id_nsa1,
                             success: function (result1) {
+                                console.log(result1.content[0]);
                                 if(result1.content[0] == null){
                                     $('.addModal').modal('hide');
                                     $('#id').val(null);

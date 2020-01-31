@@ -4,9 +4,11 @@ import com.jica.sdg.model.AssignGovIndicator;
 import com.jica.sdg.model.AssignNsaIndicator;
 import com.jica.sdg.model.AssignSdgIndicator;
 import com.jica.sdg.model.Menu;
+import com.jica.sdg.model.Nsaprofile2;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgGoals;
+import com.jica.sdg.model.Unit;
 import com.jica.sdg.model.User;
 import com.jica.sdg.service.IAssignGovIndicatorService;
 import com.jica.sdg.service.IAssignNsaIndicatorService;
@@ -21,6 +23,7 @@ import com.jica.sdg.service.IUserRequestListService;
 import com.jica.sdg.service.MenuService;
 import com.jica.sdg.service.SubmenuService;
 import com.jica.sdg.service.IUserService;
+import java.util.ArrayList;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -35,6 +38,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 @Controller
 public class AdministrasiController {
@@ -77,6 +83,9 @@ public class AdministrasiController {
     
     @Autowired
     INsaActivityService nsaActivityService;
+    
+    @Autowired
+    private EntityManager em;
 
     //*********************** Manajemen Role & User ***********************
     @GetMapping("admin/management/role")
@@ -111,6 +120,22 @@ public class AdministrasiController {
         return hasil;
     }
     
+    @GetMapping("admin/manajemen/list-unit")
+    public @ResponseBody Map<String, Object> units(HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+        String sql = "select * from ref_unit where id_role = '"+id_role+"'";
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<Unit> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+            );
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
     @GetMapping("admin/manajemen/list-role-nsa/{id_prov}")
     public @ResponseBody Map<String, Object> rolesNsa(HttpSession session, @PathVariable("id_prov") String id_prov) {
     	List<Role> listRole;
@@ -172,6 +197,22 @@ public class AdministrasiController {
     	roleService.saveRole(rol);
 	}
     
+        @PostMapping(path = "admin/manajemen/save-unit", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+        @Transactional
+	public void saveUnit(@RequestBody Map<String, Object> payload,HttpSession session) {
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        JSONObject jsonObunit = new JSONObject(payload);
+        String nm_unit           = jsonObunit.get("nm_unit").toString();  
+        String id_unit           = jsonObunit.get("id_unit").toString();
+            if(id_unit.equals("")){
+                em.createNativeQuery("INSERT INTO ref_unit (nm_unit,id_role) values ('"+nm_unit+"','"+id_role+"')").executeUpdate();
+            }else{
+                em.createNativeQuery("UPDATE ref_unit set nm_unit = '"+nm_unit+"' where id_unit ='"+id_unit+"'").executeUpdate();
+            }
+        
+	}
+        
     @GetMapping("admin/manajemen/get-role/{id}")
     public @ResponseBody Map<String, Object> getRole(@PathVariable("id") Integer id) {
         Optional<Role> list = roleService.findOne(id);
@@ -180,12 +221,35 @@ public class AdministrasiController {
         return hasil;
     }
     
+    @GetMapping("admin/manajemen/get-unit/{id}")
+    public @ResponseBody Map<String, Object> getUnit(@PathVariable("id") Integer id) {
+        String sql = "select * from ref_unit where id_unit = '"+id+"'";
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<Unit> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+            );
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
+    
     @DeleteMapping("admin/manajemen/delete-role/{id}")
-	@ResponseBody
-	public void deleteRole(@PathVariable("id") Integer id) {
-    	roleService.deleteRole(id);
-	}
-
+    @ResponseBody
+    public void deleteRole(@PathVariable("id") Integer id) {
+        roleService.deleteRole(id);
+    }
+    
+    @DeleteMapping("admin/manajemen/delete-unit/{id}")
+    @ResponseBody    
+    @Transactional
+    public void deleteUnit(@PathVariable("id") Integer id) {
+        em.createNativeQuery("delete from ref_unit where id_unit ='"+id+"'").executeUpdate();
+    }    
+    
     @GetMapping("admin/management/user")
     public String usermanajemen(Model model, HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
@@ -411,6 +475,26 @@ public class AdministrasiController {
     public @ResponseBody void menusubmenu() {
         List<Menu> listMenu = menuService.findAllMenu();
         System.out.println(listMenu.size());
+    }
+    
+    
+    @GetMapping("admin/management/unit")
+    public String unitmanajemen(Model model, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov = list.get().getId_prov();
+    	String privilege = list.get().getPrivilege();
+    	if(privilege.equals("SUPER")) {
+    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
+		model.addAttribute("id_prov", id_prov);
+		model.addAttribute("privilege", privilege);
+        return "admin/role_manajemen/manajemen_unit";
     }
 
 }

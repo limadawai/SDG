@@ -10,6 +10,7 @@ public interface INsaDetailService {
     List<Nsadetail> findAll();
     
     List<Nsadetail> findId(String id);
+    List<Nsadetail> findIdNsa(String id);
 
     void saveNsaDetail(Nsadetail ins);
     

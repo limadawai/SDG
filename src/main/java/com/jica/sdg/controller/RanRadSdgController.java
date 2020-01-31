@@ -151,10 +151,11 @@ public class RanRadSdgController {
     }
 
 	@GetMapping("admin/list-sdgGoals")
-    public @ResponseBody Map<String, Object> sdgGoalsList() {
+    public @ResponseBody
+    Map<String, Object> sdgGoalsList() {
         List<SdgGoals> list = sdgGoalsService.findAll();
-		Map<String, Object> hasil = new HashMap<>();
-        hasil.put("content",list);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content", list);
         return hasil;
     }
 	

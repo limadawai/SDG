@@ -28,6 +28,11 @@ public class NsaDetailService implements INsaDetailService{
 	}
 	
 	@Override
+	public List<Nsadetail> findIdNsa(String id) {
+		return (List<Nsadetail>) nsaDetailRepo.findIdNsa(id);
+	}
+	
+	@Override
 	public void saveNsaDetail(Nsadetail nsa) {
 		nsaDetailRepo.save(nsa);
 	}
