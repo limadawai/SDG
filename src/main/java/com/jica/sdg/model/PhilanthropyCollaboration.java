@@ -24,17 +24,30 @@ public class PhilanthropyCollaboration implements Serializable {
     private String nm_pillar;
     @Column(name = "loc_philanthropy")
     private String loc_philanthropy;
+    @Column(name = "id_inst")
+    private Integer id_inst;
 
     public PhilanthropyCollaboration() {
     }
 
-    public PhilanthropyCollaboration(Integer id_philanthropy, String type_support, String nm_philanthropy, String nm_pillar, String loc_philanthropy) {
+    public PhilanthropyCollaboration(Integer id_philanthropy, Integer id_inst, String type_support, String nm_philanthropy, String nm_pillar, String loc_philanthropy) {
         this.id_philanthropy    = id_philanthropy;
         this.type_support       = type_support;
         this.nm_philanthropy    = nm_philanthropy;
         this.nm_pillar          = nm_pillar;
         this.loc_philanthropy   = loc_philanthropy;
+        this.id_inst   = id_inst;
     }
+
+    public Integer getId_inst() {
+        return id_inst;
+    }
+
+    public void setId_inst(Integer id_inst) {
+        this.id_inst = id_inst;
+    }
+    
+    
 
     public Integer getId_philanthropy() {
         return id_philanthropy;

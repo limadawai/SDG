@@ -175,6 +175,35 @@ public class NsaController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-option-role-ins-profil_1/{id}")
+    public @ResponseBody Map<String, Object> getOptionInsProfilList_1(@PathVariable("id") String id) {
+        
+        String sql  = "select a.id_inst, a.nm_inst from nsa_inst as a\n" +
+                    "left join ref_role as b on a.id_role = b.id_role\n" +
+                    "where b.id_prov = :id ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-get-option-role-ins-profil_role/{id}")
+    public @ResponseBody Map<String, Object> getOptionInsProfilList_role(@PathVariable("id") String id) {
+        
+        String sql  = "select a.id_inst, a.nm_inst from nsa_inst as a\n" +
+                    "where a.id_role = :id ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-get-option-role-all-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionAllProfilList(@PathVariable("id") String id) {
         
@@ -308,36 +337,37 @@ public class NsaController {
     
     @GetMapping("admin/nsa/nsa-collaboration")
     public String nsa_collaboration(Model model, HttpSession session) {
-    	Optional<Role> list = roleService.findOne((Integer) session.getAttribute("id_role"));
-    	String privilege    = list.get().getPrivilege();
-    	String cat_role 	= list.get().getCat_role();
-    	String id_prov 		= list.get().getId_prov();
         model.addAttribute("title", "NSA Collaboration");
-        if(privilege.equals("SUPER")) {
-        	model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
-        }else if(privilege.equals("ADMIN") && id_prov.equals("000")) {
-        	model.addAttribute("listNsaProfile", nsaProfilrService.findIdProv(id_prov));
-        }else if(privilege.equals("ADMIN") && !id_prov.equals("000")) {
-        	model.addAttribute("listNsaProfile", nsaProfilrService.findNsaAllProvince());
-        }else{
-        	model.addAttribute("listNsaProfile", nsaProfilrService.findIdProv(id_prov));
-        }
-        //model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
+        Integer id_role = (Integer) session.getAttribute("id_role");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleNsa());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	String cat_role     = list.get().getCat_role();
+    	if(id_prov.equals("000")) {
+    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
         model.addAttribute("privilege", privilege);
         model.addAttribute("cat_role", cat_role);
-        model.addAttribute("id_prov", id_prov);
+        
+        
         return "admin/nsa/nsa_collaboration";
     }
     
     @GetMapping("admin/list-getid-nsa-collaboration/{id}")
     public @ResponseBody Map<String, Object> listNsaCollaboration(@PathVariable("id") String id) {
-        String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id_program, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy, d.id_prov from nsa_program as a \n" +
+        String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id_program, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy, d.id_prov, a.nm_program_eng, e.id_inst, e.nm_inst from nsa_program as a \n" +
                     "left join nsa_collaboration as b on a.id_program = b.id_program\n" +
                     "left join philanthropy_collaboration as c on b.id_philanthropy = c.id_philanthropy\n" +
                     "left join ref_role as d on a.id_role = d.id_role\n " +
+                    "left join nsa_inst as e on c.id_inst = e.id_inst\n " +
                     "where a.id_role = :id ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
