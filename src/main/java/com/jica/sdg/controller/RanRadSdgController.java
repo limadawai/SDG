@@ -500,8 +500,12 @@ public class RanRadSdgController {
         		Integer id_indicator = Integer.parseInt(a[2]);
         		GovMap map = new GovMap();
         		map.setId_goals(id_goals);
-        		map.setId_target(id_target);
-        		map.setId_indicator(id_indicator);
+        		if(id_target!=0) {
+        			map.setId_target(id_target);
+        		}
+        		if(id_indicator!=0) {
+        			map.setId_indicator(id_indicator);
+        		}
         		map.setId_gov_indicator(gov.getId());
         		map.setId_monper(id_monper);
         		map.setId_prov(id_prov);
@@ -661,8 +665,12 @@ public class RanRadSdgController {
         		Integer id_indicator = Integer.parseInt(a[2]);
         		NsaMap map = new NsaMap();
         		map.setId_goals(id_goals);
-        		map.setId_target(id_target);
-        		map.setId_indicator(id_indicator);
+        		if(id_target!=0) {
+        			map.setId_target(id_target);
+        		}
+        		if(id_indicator!=0) {
+        			map.setId_indicator(id_indicator);
+        		}
         		map.setId_nsa_indicator(gov.getId());
         		map.setId_monper(id_monper);
         		map.setId_prov(id_prov);
