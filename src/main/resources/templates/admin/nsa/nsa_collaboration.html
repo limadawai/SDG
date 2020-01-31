@@ -417,8 +417,12 @@
                                                         var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
                                                         return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
                                                     }else{
-                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
-                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                        if(row[17] == id_role){
+                                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                        }else{
+                                                            return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                        }
                                                     }
                                                 }
                                             }else{
@@ -651,8 +655,12 @@
                                             var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
                                             return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
                                         }else{
-                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
-                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                            if(row[17] == id_role){
+                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                            }
                                         }
                                     }
                                 }else{
@@ -850,8 +858,12 @@
                                                         var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
                                                         return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
                                                     }else{
-                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
-                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                        if(row[17] == id_role){
+                                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                        }else{
+                                                            return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                        }
                                                     }
                                                 }
                                             }else{
@@ -1023,8 +1035,12 @@
                                                         var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
                                                         return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
                                                     }else{
-                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
-                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                        if(row[17] == id_role){
+                                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                        }else{
+                                                            return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                        }
                                                     }
                                                 }
                                             }else{
@@ -1242,8 +1258,12 @@
                                                 var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
                                                 return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
                                             }else{
-                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
-                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                if(row[17] == id_role){
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
                                             }
                                         }
                                     }else{
@@ -1560,8 +1580,12 @@
                                                     var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
                                                     return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
                                                 }else{
-                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
-                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    if(row[17] == id_role){
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    }else{
+                                                        return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                    }
                                                 }
                                             }
                                         }else{
@@ -1780,8 +1804,12 @@
                                                             var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
                                                             return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
                                                         }else{
-                                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
-                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                            if(row[17] == id_role){
+                                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                            }else{
+                                                                return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                            }
                                                         }
                                                     }
                                                 }else{
@@ -1989,8 +2017,12 @@
                                                     var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
                                                     return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
                                                 }else{
-                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
-                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    if(row[17] == id_role){
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    }else{
+                                                        return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                    }
                                                 }
                                             }
                                         }else{
