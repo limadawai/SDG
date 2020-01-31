@@ -18,11 +18,17 @@
 			<div class="row-fluid">
 				<div class="widget-box">
 					<div class="widget-content">
-							<span class="lang_eng" style="display:none">Goals : </span><span class="lang_indo">Sasaran : </span><a th:href="@{/admin/ran_rad/sdg/goals}" th:text="${goals.id_goals+' - '+goals.nm_goals}"></a>
+							<span class="lang_eng" style="display:none">Goals : </span><span class="lang_indo">Sasaran : </span>
+								<a th:href="@{/admin/ran_rad/sdg/goals}" th:text="${goals.id_goals+' - '+goals.nm_goals}" class="lang_indo"></a>
+								<a th:href="@{/admin/ran_rad/sdg/goals}" th:text="${goals.id_goals+' - '+goals.nm_goals_eng}" class="lang_eng" style="display:none"></a>
 							<br/>
-							Target : <a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}"></a>
+							Target : 
+								<a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}" class="lang_indo"></a>
+								<a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${target.id_target+' - '+target.nm_target_eng}" class="lang_eng" style="display:none"></a>
 							<br/>
-							<span class="lang_eng" style="display:none">Indicator : </span><span class="lang_indo">Indikator : </span><a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target/'+${target.id}+'/indicator'}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator}"></a>
+							<span class="lang_eng" style="display:none">Indicator : </span><span class="lang_indo">Indikator : </span>
+								<a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target/'+${target.id}+'/indicator'}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator}" class="lang_indo"></a>
+								<a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target/'+${target.id}+'/indicator'}" th:text="${indicator.id_indicator+' - '+indicator.nm_indicator_eng}" class="lang_eng" style="display:none"></a>
 					</div>
 				</div>
 			</div>

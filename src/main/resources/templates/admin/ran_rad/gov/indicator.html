@@ -34,9 +34,13 @@
 			<div class="row-fluid">
 				<div class="widget-box">
 					<div class="widget-content">
-							Program : <a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program}"></a>
+							Program : 
+							<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program}" class="lang_indo"></a>
+						<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program_eng}" class="lang_eng" style="display:none"></a>
 							<br/>
-							<span class="lang_eng" style="display:none">Activity : </span><span class="lang_indo">Kegiatan : </span><a th:href="@{'/admin/ran_rad/gov/program/'+${govProg.id}+'/activity'}" th:text="${govActivity.id_activity+' - '+govActivity.nm_activity}"></a>
+							<span class="lang_eng" style="display:none">Activity : </span><span class="lang_indo">Kegiatan : </span>
+							<a th:href="@{'/admin/ran_rad/gov/program/'+${govProg.id}+'/activity'}" th:text="${govActivity.id_activity+' - '+govActivity.nm_activity}" class="lang_indo"></a>
+							<a th:href="@{'/admin/ran_rad/gov/program/'+${govProg.id}+'/activity'}" th:text="${govActivity.id_activity+' - '+govActivity.nm_activity_eng}" class="lang_eng" style="display:none"></a>
 					</div>
 				</div>
 			</div>
