@@ -29,7 +29,11 @@
                     </div>
                     <div class="widget-content">
                         <div class="pull-left adddetail" style="width:100%">
-                            <select id="nm_ins_profil" name="idrole" class="form-control">
+                            <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                                <option value="0" >-- Pilih --</option>
+                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+                            </select>
+                            <select id="nm_nsa_profil" name="nm_nsa_profil" class="form-control">
                                 <option value="0" >-- Pilih --</option>
                                 <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
@@ -179,7 +183,8 @@
                             <div class="control-group">
                                 <label for="achievement" class="lang_indo">Nama filantropi :</label>
                                 <label for="achievement" class="lang_eng" style="display: none">Philanthropy Name :</label>
-                                <input name="nm_philanthropy" id="nm_philanthropy" type="text" class="input-block-level" >
+                                <select id="nm_philanthropy" name="nm_philanthropy" class="span5 form-control">
+                                </select>
                             </div>
                             <div class="control-group">
                                 <label for="achievement" class="lang_indo">Nama Pilar yang Didukung :</label>
@@ -234,6 +239,822 @@
             var privilege   = [[${privilege}]];
             var cat_role   = [[${cat_role}]];
             var id_prov   = [[${id_prov}]];
+            
+            if(id_role == '1'){
+//                alert('admin');
+            }else{
+//                alert('bukan '+id_role);
+                $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
+                
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-nsa-profil/'+id_prov,
+                    success: function (result10) {
+                        $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
+                        var array = result10.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#nm_nsa_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                        if(privilege == 'ADMIN'){
+                    
+                        }else{
+                            if(cat_role == 'NSA'){
+                                $("#nm_nsa_profil").val(id_role).trigger("change").attr('disabled',true);
+                            }else{
+                                $("#nm_nsa_profil").val(id_role).trigger("change");
+                            }
+                            
+                            
+                            
+                            //grid
+                            $('#tabel-nsa-collaboration').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-getid-nsa-collaboration/'+id_role,
+                                    dataSrc: 'content',
+                                },
+                                "searching": true,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                        if(row[0] == null || row[0] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if($('#fs').is(':checked')){
+//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                            return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[2] == null || row[2] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[3] == null || row[3] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[4] == null || row[4] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(privilege=="SUPER" || privilege=="ADMIN"){
+                                            if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                                //NSA bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                                }else{
+                                                    if(row[5] == null || row[5] == ""){
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                    }else{
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain NSA gak bisa edit
+                                                if(row[5] == null || row[5] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                                }
+                                            }
+                                        }else if(privilege=="USER"){
+                                            //user yg catrole nya nsa bisa edit
+                                            if(cat_role == 'NSA'){
+                                                //NSA bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                                }else{
+                                                    if(row[5] == null || row[5] == ""){
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                    }else{
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain NSA gak bisa edit
+                                                if(row[5] == null || row[5] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                                }
+                                            }
+                                        }else{
+                                            return "";
+                                        }
+
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                            
+                                        if(privilege=="SUPER" || privilege=="ADMIN"){
+                                            if(privilege == 'SUPER' || cat_role == 'Institution'){
+//                                                console.log('malah kesini : '+cat_role)
+                                                //INST bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                                }else{
+                                                    if(row[15] == null || row[15] == ""){
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                    }else{
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    }
+                                                }
+                                            }else if(cat_role == 'NSA'){
+                                                console.log('harusnya BENAR : '+cat_role)
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }else{
+                                                console.log('harusnya kesini : '+cat_role)
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }
+                                        }else if(privilege=="USER"){
+//                                            console.log('malah1 kesini : '+cat_role)
+                                            //user yg catrole nya INST bisa edit
+                                            if(cat_role == 'Institution'){
+                                                //INST bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                                }else{
+                                                    if(row[15] == null || row[15] == ""){
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                    }else{
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }
+                                        }else{
+                                            return "";
+                                        }
+
+                                    }}
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });
+                            
+                        }
+                    }
+                });
+                
+//                $.ajax({
+//                    type: "GET",
+//                    url: urls+'list-get-option-role-ins-profil/'+id_prov,
+//                    success: function (result10) {
+//                        $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
+//                        var array = result10.content;
+//                        if (array != '') {
+//                            for (i in array) {
+//                                $("#nm_nsa_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+//                            }
+//                        }
+//                        if(privilege == 'ADMIN'){
+//                    
+//                        }else{
+//                            if(cat_role == 'NSA'){
+//                                $("#nm_nsa_profil").val(id_role).trigger("change").attr('disabled',true);
+//                            }else{
+//                                $("#nm_nsa_profil").val(id_role).trigger("change");
+//                            }
+//                            
+//                        }
+//                    }
+//                });
+                
+            }
+            
+            $("#id_prov").on('change', function(e){
+                var id_prov = this.value ;
+                $("#nm_nsa_profil").html('');
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-nsa-profil/'+id_prov,
+                    success: function (result) {
+                        $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#nm_nsa_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                    }
+                });
+                
+                $("#nm_philanthropy").html('');
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-ins-profil_1/'+id_prov,
+                    success: function (result) {
+                        $("#nm_philanthropy").html('<option value="0" >-- Pilih --</option>');
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#nm_philanthropy").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                    }
+                });
+                
+                //grid
+                $('#tabel-nsa-collaboration').DataTable({
+                    responsive: true,
+                    sDom: 'lrtip',
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "bDestroy": true,
+                    "ajax": {
+                        "url": urls+'list-getid-nsa-collaboration/'+$("#nm_nsa_profil").val(),
+                        dataSrc: 'content',
+                    },
+                    "searching": true,
+                    "columns": [
+                        {"data": function (row, data, index, display) {
+                            if(row[0] == null || row[0] == ""){
+                                return "<div style='font-size:90%;'>-</div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                            }
+                        }},
+                        {"data": function (row, data, index, display) {
+                            if($('#fs').is(':checked')){
+        //                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                            }else{
+        //                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                return "<div style='font-size:90%;'>"+row[14]+"</div>";
+                            }
+                        }},
+                        {"data": function (row, data, index, display) {
+                            if(row[2] == null || row[2] == ""){
+                                return "<div style='font-size:90%;'>-</div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                            }
+                        }},
+                        {"data": function (row, data, index, display) {
+                            if(row[3] == null || row[3] == ""){
+                                return "<div style='font-size:90%;'>-</div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                            }
+                        }},
+                        {"data": function (row, data, index, display) {
+                            if(row[4] == null || row[4] == ""){
+                                return "<div style='font-size:90%;'>-</div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                            }
+                        }},
+                        {"data": function (row, data, index, display) {
+                            if(privilege=="SUPER" || privilege=="ADMIN"){
+                                if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                    //NSA bisa edit
+                                    if(row[7] == null || row[7] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                    }else{
+                                        if(row[5] == null || row[5] == ""){
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                        }else{
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                        }
+                                    }
+                                }else{
+                                    //selain NSA gak bisa edit
+                                    if(row[5] == null || row[5] == ""){
+                                        return "<div style='text-align:center;'>-</div>";
+                                    }else{
+                                        return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                    }
+                                }
+                            }else if(privilege=="USER"){
+                                //user yg catrole nya nsa bisa edit
+                                if(cat_role == 'NSA'){
+                                    //NSA bisa edit
+                                    if(row[7] == null || row[7] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                    }else{
+                                        if(row[5] == null || row[5] == ""){
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                        }else{
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                        }
+                                    }
+                                }else{
+                                    //selain NSA gak bisa edit
+                                    if(row[5] == null || row[5] == ""){
+                                        return "<div style='text-align:center;'>-</div>";
+                                    }else{
+                                        return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                    }
+                                }
+                            }else{
+                                return "";
+                            }
+
+                        }},
+                        {"data": function (row, data, index, display) {
+
+                            if(privilege=="SUPER" || privilege=="ADMIN"){
+                                if(privilege == 'SUPER' || cat_role == 'Institution'){
+        //                                                console.log('malah kesini : '+cat_role)
+                                    //INST bisa edit
+                                    if(row[7] == null || row[7] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                    }else{
+                                        if(row[15] == null || row[15] == ""){
+                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                        }else{
+                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                        }
+                                    }
+                                }else if(cat_role == 'NSA'){
+                                    console.log('harusnya BENAR : '+cat_role)
+                                    //selain INST gak bisa edit
+                                    if(row[15] == null || row[15] == ""){
+                                        return "<div style='text-align:center;'>-</div>";
+                                    }else{
+                                        return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                    }
+                                }else{
+                                    console.log('harusnya kesini : '+cat_role)
+                                    //selain INST gak bisa edit
+                                    if(row[15] == null || row[15] == ""){
+                                        return "<div style='text-align:center;'>-</div>";
+                                    }else{
+                                        return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                    }
+                                }
+                            }else if(privilege=="USER"){
+        //                                            console.log('malah1 kesini : '+cat_role)
+                                //user yg catrole nya INST bisa edit
+                                if(cat_role == 'Institution'){
+                                    //INST bisa edit
+                                    if(row[7] == null || row[7] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                    }else{
+                                        if(row[15] == null || row[15] == ""){
+                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                        }else{
+                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                        }
+                                    }
+                                }else{
+                                    //selain INST gak bisa edit
+                                    if(row[15] == null || row[15] == ""){
+                                        return "<div style='text-align:center;'>-</div>";
+                                    }else{
+                                        return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                    }
+                                }
+                            }else{
+                                return "";
+                            }
+
+                        }}
+                    ],
+                    "columnDefs": [
+                    ],
+                    select: true
+                });
+                            
+            });
+            
+            
+            $("#nm_nsa_profil").on('change', function(e){
+                var id = this.value ;
+                
+                $("#nm_philanthropy").html('');
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-ins-profil_1/'+$("#id_prov").val(),
+                    success: function (result) {
+                        $("#nm_philanthropy").html('<option value="0" >-- Pilih --</option>');
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#nm_philanthropy").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                    }
+                });
+                
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-getid-nsa-profil/'+id,
+                    success: function (result1) {
+                        if(result1.content[0] ==  null){
+                            
+                            //grid
+                            $('#tabel-nsa-collaboration').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-getid-nsa-collaboration/'+id,
+                                    dataSrc: 'content',
+                                },
+                                "searching": true,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                        if(row[0] == null || row[0] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if($('#fs').is(':checked')){
+//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                            return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[2] == null || row[2] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[3] == null || row[3] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[4] == null || row[4] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(privilege=="SUPER" || privilege=="ADMIN"){
+                                            if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                                //NSA bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                                }else{
+                                                    if(row[5] == null || row[5] == ""){
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                    }else{
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain NSA gak bisa edit
+                                                if(row[5] == null || row[5] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                                }
+                                            }
+                                        }else if(privilege=="USER"){
+                                            //user yg catrole nya nsa bisa edit
+                                            if(cat_role == 'NSA'){
+                                                //NSA bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                                }else{
+                                                    if(row[5] == null || row[5] == ""){
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                    }else{
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain NSA gak bisa edit
+                                                if(row[5] == null || row[5] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                                }
+                                            }
+                                        }else{
+                                            return "";
+                                        }
+
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                            
+                                        if(privilege=="SUPER" || privilege=="ADMIN"){
+                                            if(privilege == 'SUPER' || cat_role == 'Institution'){
+//                                                console.log('malah kesini : '+cat_role)
+                                                //INST bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                                }else{
+                                                    if(row[15] == null || row[15] == ""){
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                    }else{
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    }
+                                                }
+                                            }else if(cat_role == 'NSA'){
+                                                console.log('harusnya BENAR : '+cat_role)
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }else{
+                                                console.log('harusnya kesini : '+cat_role)
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }
+                                        }else if(privilege=="USER"){
+//                                            console.log('malah1 kesini : '+cat_role)
+                                            //user yg catrole nya INST bisa edit
+                                            if(cat_role == 'Institution'){
+                                                //INST bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                                }else{
+                                                    if(row[15] == null || row[15] == ""){
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                    }else{
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }
+                                        }else{
+                                            return "";
+                                        }
+
+                                    }}
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });
+                            //tutup kosong
+                        }else{
+                            //grid
+                            $('#tabel-nsa-collaboration').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-getid-nsa-collaboration/'+id,
+                                    dataSrc: 'content',
+                                },
+                                "searching": true,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                        if(row[0] == null || row[0] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if($('#fs').is(':checked')){
+//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                            return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                        }else{
+//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[2] == null || row[2] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[3] == null || row[3] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row[4] == null || row[4] == ""){
+                                            return "<div style='font-size:90%;'>-</div>";
+                                        }else{
+                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                        }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(privilege=="SUPER" || privilege=="ADMIN"){
+                                            if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                                //NSA bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                                }else{
+                                                    if(row[5] == null || row[5] == ""){
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                    }else{
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain NSA gak bisa edit
+                                                if(row[5] == null || row[5] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                                }
+                                            }
+                                        }else if(privilege=="USER"){
+                                            //user yg catrole nya nsa bisa edit
+                                            if(cat_role == 'NSA'){
+                                                //NSA bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                                }else{
+                                                    if(row[5] == null || row[5] == ""){
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                    }else{
+                                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain NSA gak bisa edit
+                                                if(row[5] == null || row[5] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                                }
+                                            }
+                                        }else{
+                                            return "";
+                                        }
+
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                            
+                                        if(privilege=="SUPER" || privilege=="ADMIN"){
+                                            if(privilege == 'SUPER' || cat_role == 'Institution'){
+//                                                console.log('malah kesini : '+cat_role)
+                                                //INST bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                                }else{
+                                                    if(row[15] == null || row[15] == ""){
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                    }else{
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    }
+                                                }
+                                            }else if(cat_role == 'NSA'){
+                                                console.log('harusnya BENAR : '+cat_role)
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }else{
+                                                console.log('harusnya kesini : '+cat_role)
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }
+                                        }else if(privilege=="USER"){
+//                                            console.log('malah1 kesini : '+cat_role)
+                                            //user yg catrole nya INST bisa edit
+                                            if(cat_role == 'Institution'){
+                                                //INST bisa edit
+                                                if(row[7] == null || row[7] == ""){
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                                }else{
+                                                    if(row[15] == null || row[15] == ""){
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                    }else{
+                                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                    }
+                                                }
+                                            }else{
+                                                //selain INST gak bisa edit
+                                                if(row[15] == null || row[15] == ""){
+                                                    return "<div style='text-align:center;'>-</div>";
+                                                }else{
+                                                    return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                }
+                                            }
+                                        }else{
+                                            return "";
+                                        }
+
+                                    }}
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });
+                        }
+                    }
+                });
+                
+                
+            });
+            
+            
+            
+            
             //Bahasa
             var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
@@ -272,6 +1093,177 @@
 	        }
 	        
 	        $('#fs').on('change', function(e){
+                    //grid
+                    $('#tabel-nsa-collaboration').DataTable({
+                        responsive: true,
+                        sDom: 'lrtip',
+                        "bLengthChange": false,
+                        "cache": false,
+                        "autoWidth": true,
+                        "responsive":true,
+                        "bDestroy": true,
+                        "ajax": {
+                            "url": urls+'list-getid-nsa-collaboration/'+$("#nm_nsa_profil").val(),
+                            dataSrc: 'content',
+                        },
+                        "searching": true,
+                        "columns": [
+                            {"data": function (row, data, index, display) {
+                                if(row[0] == null || row[0] == ""){
+                                    return "<div style='font-size:90%;'>-</div>";
+                                }else{
+                                    return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                                }
+                            }},
+                            {"data": function (row, data, index, display) {
+                                if($('#fs').is(':checked')){
+    //                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                    return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                }else{
+    //                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                    return "<div style='font-size:90%;'>"+row[14]+"</div>";
+                                }
+                            }},
+                            {"data": function (row, data, index, display) {
+                                if(row[2] == null || row[2] == ""){
+                                    return "<div style='font-size:90%;'>-</div>";
+                                }else{
+                                    return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                                }
+                            }},
+                            {"data": function (row, data, index, display) {
+                                if(row[3] == null || row[3] == ""){
+                                    return "<div style='font-size:90%;'>-</div>";
+                                }else{
+                                    return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                }
+                            }},
+                            {"data": function (row, data, index, display) {
+                                if(row[4] == null || row[4] == ""){
+                                    return "<div style='font-size:90%;'>-</div>";
+                                }else{
+                                    return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                }
+                            }},
+                            {"data": function (row, data, index, display) {
+                                if(privilege=="SUPER" || privilege=="ADMIN"){
+                                    if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                        //NSA bisa edit
+                                        if(row[7] == null || row[7] == ""){
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                        }else{
+                                            if(row[5] == null || row[5] == ""){
+                                                var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                            }else{
+                                                var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                            }
+                                        }
+                                    }else{
+                                        //selain NSA gak bisa edit
+                                        if(row[5] == null || row[5] == ""){
+                                            return "<div style='text-align:center;'>-</div>";
+                                        }else{
+                                            return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                        }
+                                    }
+                                }else if(privilege=="USER"){
+                                    //user yg catrole nya nsa bisa edit
+                                    if(cat_role == 'NSA'){
+                                        //NSA bisa edit
+                                        if(row[7] == null || row[7] == ""){
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                        }else{
+                                            if(row[5] == null || row[5] == ""){
+                                                var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                            }else{
+                                                var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                            }
+                                        }
+                                    }else{
+                                        //selain NSA gak bisa edit
+                                        if(row[5] == null || row[5] == ""){
+                                            return "<div style='text-align:center;'>-</div>";
+                                        }else{
+                                            return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                        }
+                                    }
+                                }else{
+                                    return "";
+                                }
+
+                            }},
+                            {"data": function (row, data, index, display) {
+
+                                if(privilege=="SUPER" || privilege=="ADMIN"){
+                                    if(privilege == 'SUPER' || cat_role == 'Institution'){
+    //                                                console.log('malah kesini : '+cat_role)
+                                        //INST bisa edit
+                                        if(row[7] == null || row[7] == ""){
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                        }else{
+                                            if(row[15] == null || row[15] == ""){
+                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                            }else{
+                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                            }
+                                        }
+                                    }else if(cat_role == 'NSA'){
+                                        console.log('harusnya BENAR : '+cat_role)
+                                        //selain INST gak bisa edit
+                                        if(row[15] == null || row[15] == ""){
+                                            return "<div style='text-align:center;'>-</div>";
+                                        }else{
+                                            return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                        }
+                                    }else{
+                                        console.log('harusnya kesini : '+cat_role)
+                                        //selain INST gak bisa edit
+                                        if(row[15] == null || row[15] == ""){
+                                            return "<div style='text-align:center;'>-</div>";
+                                        }else{
+                                            return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                        }
+                                    }
+                                }else if(privilege=="USER"){
+    //                                            console.log('malah1 kesini : '+cat_role)
+                                    //user yg catrole nya INST bisa edit
+                                    if(cat_role == 'Institution'){
+                                        //INST bisa edit
+                                        if(row[7] == null || row[7] == ""){
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                        }else{
+                                            if(row[15] == null || row[15] == ""){
+                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                            }else{
+                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                            }
+                                        }
+                                    }else{
+                                        //selain INST gak bisa edit
+                                        if(row[15] == null || row[15] == ""){
+                                            return "<div style='text-align:center;'>-</div>";
+                                        }else{
+                                            return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                        }
+                                    }
+                                }else{
+                                    return "";
+                                }
+
+                            }}
+                        ],
+                        "columnDefs": [
+                        ],
+                        select: true
+                    });
 	        	bhs($(this).is(':checked'));
 	        });
             
@@ -419,6 +1411,7 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
+                        //grid
                         $('#tabel-nsa-collaboration').DataTable({
                             responsive: true,
                             sDom: 'lrtip',
@@ -428,7 +1421,7 @@
                             "responsive":true,
                             "bDestroy": true,
                             "ajax": {
-                                "url": urls+'list-getid-nsa-collaboration/'+id_role,
+                                "url": urls+'list-getid-nsa-collaboration/'+$("#nm_nsa_profil").val(),
                                 dataSrc: 'content',
                             },
                             "searching": true,
@@ -441,10 +1434,12 @@
                                     }
                                 }},
                                 {"data": function (row, data, index, display) {
-                                    if(row[1] == null || row[1] == ""){
-                                        return "<div style='font-size:90%;'>-</div>";
-                                    }else{
+                                    if($('#fs').is(':checked')){
+        //                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
                                         return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                    }else{
+        //                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                        return "<div style='font-size:90%;'>"+row[14]+"</div>";
                                     }
                                 }},
                                 {"data": function (row, data, index, display) {
@@ -469,24 +1464,116 @@
                                     }
                                 }},
                                 {"data": function (row, data, index, display) {
-                                    if(row[7] == null || row[7] == ""){
-                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
-                                    }else{
-                                        if(row[5] == null || row[5] == ""){
-                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                    if(privilege=="SUPER" || privilege=="ADMIN"){
+                                        if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                            //NSA bisa edit
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                            }else{
+                                                if(row[5] == null || row[5] == ""){
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                }else{
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                }
+                                            }
                                         }else{
-                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                            //selain NSA gak bisa edit
+                                            if(row[5] == null || row[5] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                            }
                                         }
+                                    }else if(privilege=="USER"){
+                                        //user yg catrole nya nsa bisa edit
+                                        if(cat_role == 'NSA'){
+                                            //NSA bisa edit
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                            }else{
+                                                if(row[5] == null || row[5] == ""){
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                }else{
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                }
+                                            }
+                                        }else{
+                                            //selain NSA gak bisa edit
+                                            if(row[5] == null || row[5] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                            }
+                                        }
+                                    }else{
+                                        return "";
                                     }
+
                                 }},
                                 {"data": function (row, data, index, display) {
-                                    if(row[6] == null || row[6] == ""){
-                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+
+                                    if(privilege=="SUPER" || privilege=="ADMIN"){
+                                        if(privilege == 'SUPER' || cat_role == 'Institution'){
+        //                                                console.log('malah kesini : '+cat_role)
+                                            //INST bisa edit
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                            }else{
+                                                if(row[15] == null || row[15] == ""){
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                }else{
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                }
+                                            }
+                                        }else if(cat_role == 'NSA'){
+                                            console.log('harusnya BENAR : '+cat_role)
+                                            //selain INST gak bisa edit
+                                            if(row[15] == null || row[15] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                            }
+                                        }else{
+                                            console.log('harusnya kesini : '+cat_role)
+                                            //selain INST gak bisa edit
+                                            if(row[15] == null || row[15] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                            }
+                                        }
+                                    }else if(privilege=="USER"){
+        //                                            console.log('malah1 kesini : '+cat_role)
+                                        //user yg catrole nya INST bisa edit
+                                        if(cat_role == 'Institution'){
+                                            //INST bisa edit
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                            }else{
+                                                if(row[15] == null || row[15] == ""){
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                }else{
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                }
+                                            }
+                                        }else{
+                                            //selain INST gak bisa edit
+                                            if(row[15] == null || row[15] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                            }
+                                        }
                                     }else{
-                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
+                                        return "";
                                     }
 
                                 }}
@@ -514,7 +1601,8 @@
                 var data    = JSON.stringify({
                                 'id_philanthropy': id_philanthropy,
                                 'type_support': type_support,
-                                'nm_philanthropy': nm_philanthropy,
+                                'nm_philanthropy': "-",
+                                'id_inst': nm_philanthropy,
                                 'nm_pillar': nm_pillar,
                                 'loc_philanthropy': loc_philanthropy
                             });
@@ -543,6 +1631,7 @@
                             data: data2,
                             success: function (result1) {
                                 
+                                //grid
                                 $('#tabel-nsa-collaboration').DataTable({
                                     responsive: true,
                                     sDom: 'lrtip',
@@ -552,7 +1641,7 @@
                                     "responsive":true,
                                     "bDestroy": true,
                                     "ajax": {
-                                        "url": urls+'list-getid-nsa-collaboration/'+id_role,
+                                        "url": urls+'list-getid-nsa-collaboration/'+$("#nm_nsa_profil").val(),
                                         dataSrc: 'content',
                                     },
                                     "searching": true,
@@ -565,10 +1654,12 @@
                                             }
                                         }},
                                         {"data": function (row, data, index, display) {
-                                            if(row[1] == null || row[1] == ""){
-                                                return "<div style='font-size:90%;'>-</div>";
-                                            }else{
+                                            if($('#fs').is(':checked')){
+                //                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
                                                 return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                            }else{
+                //                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                                return "<div style='font-size:90%;'>"+row[14]+"</div>";
                                             }
                                         }},
                                         {"data": function (row, data, index, display) {
@@ -593,24 +1684,116 @@
                                             }
                                         }},
                                         {"data": function (row, data, index, display) {
-                                            if(row[7] == null || row[7] == ""){
-                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
-                                            }else{
-                                                if(row[5] == null || row[5] == ""){
-                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                            if(privilege=="SUPER" || privilege=="ADMIN"){
+                                                if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                                    //NSA bisa edit
+                                                    if(row[7] == null || row[7] == ""){
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                                    }else{
+                                                        if(row[5] == null || row[5] == ""){
+                                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                        }else{
+                                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                        }
+                                                    }
                                                 }else{
-                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                    //selain NSA gak bisa edit
+                                                    if(row[5] == null || row[5] == ""){
+                                                        return "<div style='text-align:center;'>-</div>";
+                                                    }else{
+                                                        return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                                    }
                                                 }
+                                            }else if(privilege=="USER"){
+                                                //user yg catrole nya nsa bisa edit
+                                                if(cat_role == 'NSA'){
+                                                    //NSA bisa edit
+                                                    if(row[7] == null || row[7] == ""){
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                                    }else{
+                                                        if(row[5] == null || row[5] == ""){
+                                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                        }else{
+                                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                        }
+                                                    }
+                                                }else{
+                                                    //selain NSA gak bisa edit
+                                                    if(row[5] == null || row[5] == ""){
+                                                        return "<div style='text-align:center;'>-</div>";
+                                                    }else{
+                                                        return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                                    }
+                                                }
+                                            }else{
+                                                return "";
                                             }
+
                                         }},
                                         {"data": function (row, data, index, display) {
-                                            if(row[6] == null || row[6] == ""){
-                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+
+                                            if(privilege=="SUPER" || privilege=="ADMIN"){
+                                                if(privilege == 'SUPER' || cat_role == 'Institution'){
+                //                                                console.log('malah kesini : '+cat_role)
+                                                    //INST bisa edit
+                                                    if(row[7] == null || row[7] == ""){
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                                    }else{
+                                                        if(row[15] == null || row[15] == ""){
+                                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                            return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                        }else{
+                                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                        }
+                                                    }
+                                                }else if(cat_role == 'NSA'){
+                                                    console.log('harusnya BENAR : '+cat_role)
+                                                    //selain INST gak bisa edit
+                                                    if(row[15] == null || row[15] == ""){
+                                                        return "<div style='text-align:center;'>-</div>";
+                                                    }else{
+                                                        return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                    }
+                                                }else{
+                                                    console.log('harusnya kesini : '+cat_role)
+                                                    //selain INST gak bisa edit
+                                                    if(row[15] == null || row[15] == ""){
+                                                        return "<div style='text-align:center;'>-</div>";
+                                                    }else{
+                                                        return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                    }
+                                                }
+                                            }else if(privilege=="USER"){
+                //                                            console.log('malah1 kesini : '+cat_role)
+                                                //user yg catrole nya INST bisa edit
+                                                if(cat_role == 'Institution'){
+                                                    //INST bisa edit
+                                                    if(row[7] == null || row[7] == ""){
+                                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                                    }else{
+                                                        if(row[15] == null || row[15] == ""){
+                                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                            return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                        }else{
+                                                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                        }
+                                                    }
+                                                }else{
+                                                    //selain INST gak bisa edit
+                                                    if(row[15] == null || row[15] == ""){
+                                                        return "<div style='text-align:center;'>-</div>";
+                                                    }else{
+                                                        return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                                    }
+                                                }
                                             }else{
-                                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
+                                                return "";
                                             }
 
                                         }}
@@ -657,6 +1840,7 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
+                        //grid
                         $('#tabel-nsa-collaboration').DataTable({
                             responsive: true,
                             sDom: 'lrtip',
@@ -666,7 +1850,7 @@
                             "responsive":true,
                             "bDestroy": true,
                             "ajax": {
-                                "url": urls+'list-getid-nsa-collaboration/'+id_role,
+                                "url": urls+'list-getid-nsa-collaboration/'+$("#nm_nsa_profil").val(),
                                 dataSrc: 'content',
                             },
                             "searching": true,
@@ -679,10 +1863,12 @@
                                     }
                                 }},
                                 {"data": function (row, data, index, display) {
-                                    if(row[1] == null || row[1] == ""){
-                                        return "<div style='font-size:90%;'>-</div>";
-                                    }else{
+                                    if($('#fs').is(':checked')){
+        //                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
                                         return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                                    }else{
+        //                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                        return "<div style='font-size:90%;'>"+row[14]+"</div>";
                                     }
                                 }},
                                 {"data": function (row, data, index, display) {
@@ -707,24 +1893,116 @@
                                     }
                                 }},
                                 {"data": function (row, data, index, display) {
-                                    if(row[7] == null || row[7] == ""){
-                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
-                                    }else{
-                                        if(row[5] == null || row[5] == ""){
-                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                    if(privilege=="SUPER" || privilege=="ADMIN"){
+                                        if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                            //NSA bisa edit
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                            }else{
+                                                if(row[5] == null || row[5] == ""){
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                }else{
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                }
+                                            }
                                         }else{
-                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                            //selain NSA gak bisa edit
+                                            if(row[5] == null || row[5] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                            }
                                         }
+                                    }else if(privilege=="USER"){
+                                        //user yg catrole nya nsa bisa edit
+                                        if(cat_role == 'NSA'){
+                                            //NSA bisa edit
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                                            }else{
+                                                if(row[5] == null || row[5] == ""){
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                                }else{
+                                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                                }
+                                            }
+                                        }else{
+                                            //selain NSA gak bisa edit
+                                            if(row[5] == null || row[5] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                            }
+                                        }
+                                    }else{
+                                        return "";
                                     }
+
                                 }},
                                 {"data": function (row, data, index, display) {
-                                    if(row[6] == null || row[6] == ""){
-                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+
+                                    if(privilege=="SUPER" || privilege=="ADMIN"){
+                                        if(privilege == 'SUPER' || cat_role == 'Institution'){
+        //                                                console.log('malah kesini : '+cat_role)
+                                            //INST bisa edit
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                            }else{
+                                                if(row[15] == null || row[15] == ""){
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                }else{
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                }
+                                            }
+                                        }else if(cat_role == 'NSA'){
+                                            console.log('harusnya BENAR : '+cat_role)
+                                            //selain INST gak bisa edit
+                                            if(row[15] == null || row[15] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                            }
+                                        }else{
+                                            console.log('harusnya kesini : '+cat_role)
+                                            //selain INST gak bisa edit
+                                            if(row[15] == null || row[15] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                            }
+                                        }
+                                    }else if(privilege=="USER"){
+        //                                            console.log('malah1 kesini : '+cat_role)
+                                        //user yg catrole nya INST bisa edit
+                                        if(cat_role == 'Institution'){
+                                            //INST bisa edit
+                                            if(row[7] == null || row[7] == ""){
+                                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button></div>';
+                                            }else{
+                                                if(row[15] == null || row[15] == ""){
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+""+"</div>";
+                                                }else{
+                                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7]+'###'+row[15]+'###'+row[16];
+                                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+"<i class='icon-edit'></i> "+row[16]+"</a></div>";
+                                                }
+                                            }
+                                        }else{
+                                            //selain INST gak bisa edit
+                                            if(row[15] == null || row[15] == ""){
+                                                return "<div style='text-align:center;'>-</div>";
+                                            }else{
+                                                return "<div style='text-align:center;'>"+row[16]+"</div>";
+                                            }
+                                        }
                                     }else{
-                                        var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="edit_support" href="#">'+" "+row[6]+"</a></div>";
+                                        return "";
                                     }
 
                                 }}
@@ -761,12 +2039,38 @@
             
             $('#tabel-nsa-collaboration').on('click', '.add_support', function(){
                 var dataid  = $(this).data('id');
+                var data    = dataid.split('###');
+                
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-ins-profil_role/'+id_role,
+                    success: function (result) {
+                        var array = result.content;
+//                        alert(array[0][0]);
+                        if(privilege == "SUPER"){
+                            $('#nm_philanthropy').val('0').trigger("change");
+                        }else{
+                            if(cat_role == 'Institution'){
+                                $('#nm_philanthropy').val(array[0][0]).trigger("change").attr('disabled',true);
+                            }else{
+                                $('#nm_philanthropy').val('0').trigger("change");
+                            }
+                        }
+                    }
+                });
+                
+                
+                
+                
+//                alert('id colap = '+data[5]);
                 $('#id_philanthropy').val('');
-                $('#id_collaboration').val(dataid);
+                $('#id_collaboration').val(data[5]);
                 $('#type_support').val('');
-                $('#nm_philanthropy').val('');
+                
                 $('#nm_pillar').val('');
                 $('#loc_philanthropy').val('');
+                
+                
                 
                 $('.addSupport').modal("show");
                 $('#simpan1').show();
@@ -798,9 +2102,10 @@
                 var dataid  = $(this).data('id');
                 var data    = dataid.split('###');
                 
+                
                 $('#id_philanthropy').val(data[0]);
                 $('#type_support_1').val(data[1]).trigger("change");
-                $('#nm_philanthropy').val(data[2]);
+                $('#nm_philanthropy').val(data[6]).trigger("change");
                 $('#nm_pillar').val(data[3]);
                 $('#loc_philanthropy').val(data[4]);
                 $('#id_collaboration').val(data[5]);
