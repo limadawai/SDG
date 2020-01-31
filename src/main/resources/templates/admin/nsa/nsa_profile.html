@@ -1279,7 +1279,12 @@
                 var achieve_nsa     = $('#achieve_nsa').val();
                 var loc_nsa         = $('#loc_nsa').val();
                 var beneficiaries   = $('#beneficiaries').val();
-                var year_impl       = $('#year_impl').val();
+                if($('#year_impl').val() == ""){
+                    var year_impl       = "0";
+                }else{
+                    var year_impl       = $('#year_impl').val();
+                }
+                
                 var major_part      = $('#major_part').val();
                 
                 var data    = JSON.stringify({
@@ -1420,7 +1425,11 @@
                 var achieve_nsa     = $('#achieve_nsa').val();
                 var loc_nsa         = $('#loc_nsa').val();
                 var beneficiaries   = $('#beneficiaries').val();
-                var year_impl       = $('#year_impl').val();
+                if($('#year_impl').val() == ""){
+                    var year_impl       = "0";
+                }else{
+                    var year_impl       = $('#year_impl').val();
+                }
                 var major_part      = $('#major_part').val();
                 
                 var data    = JSON.stringify({
@@ -1493,6 +1502,15 @@
                     success: function (result) {
 //                        swal(titlesimpan,messsimpan,'success');
 //                        window.location = urls+"nsa/profile";
+                        $('#tambah').hide();
+                        $('#file_logo').val('');
+                        $('#web_url').val('');
+                        $('#head_office').val('');
+                        $('#name_pic').val('');
+                        $('#pos_pic').val('');
+                        $('#email_pic').val('');
+                        $('#hp_pic').val('');
+                        
                         $('#tabel-nsa-profile').DataTable({
                             responsive: true,
                             sDom: 'lrtip',
