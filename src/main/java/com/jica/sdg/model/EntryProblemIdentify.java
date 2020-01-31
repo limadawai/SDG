@@ -59,6 +59,15 @@ public class EntryProblemIdentify implements Serializable {
     public EntryProblemIdentify() {
     }
 
+    public EntryProblemIdentify(Integer id, String id_cat, String problem, String follow_up) {
+        this.id = id;
+        this.id_cat = id_cat;
+        this.problem = problem;
+        this.follow_up = follow_up;
+    }
+    
+    
+    
     public EntryProblemIdentify(String id_goals, String id_target, String id_indicator, String id_cat, String problem, String follow_up, String id_prov, int id_role, int year, int year_entry, int created_by, Date date_created, String summary, int id_monper) {
         this.id_goals = id_goals;
         this.id_target = id_target;
