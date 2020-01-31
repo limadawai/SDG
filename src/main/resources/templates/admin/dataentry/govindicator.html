@@ -118,38 +118,7 @@
                                         </tr>-->
 <!--                                    </thead>
                                     <tbody id="tbody_entri-sdg">
-                                    </tbody>-->
-                                    <thead > 
-                                        <tr class="" > 
-                                            <th style="text-align:center;font-size:80%;width: 10%"> 
-                                                <span class="lang_eng" style="display:none">No.</span> 
-                                                <span class="lang_indo">No.</span> 
-                                            </th> 
-                                            <th style="text-align:center;font-size:80%;width: 10%"> 
-                                                <span class="lang_eng" style="display:none">Indicator Code</span> 
-                                                <span class="lang_indo">Kode Indikator</span> 
-                                            </th> 
-                                            <th style="text-align:center;font-size:80%;width: 45%">
-                                                <span class="lang_eng" style="display:none">Activity Name</span> 
-                                                <span class="lang_indo">Nama Activity</span> 
-                                            </th> 
-                                            <th style="text-align:center;font-size:80%;"> 
-                                                <span class="lang_eng" style="display:none">Target</span> 
-                                                <span class="lang_indo">Target</span> 
-                                            </th> 
-                                            <th style="text-align:center;font-size:80%;"> 
-                                                <span class="lang_eng" style="display:none">Realization II</span> 
-                                                <span class="lang_indo">Realisasi II</span> 
-                                            </th> 
-                                            <th style="text-align:center;font-size:80%;"> 
-                                                <span class="lang_eng" style="display:none">Realization IV</span> 
-                                                <span class="lang_indo">Realisasi IV</span> 
-                                            </th> 
-                                            <th style="text-align:center;font-size:80%;"> 
-                                                <span class="lang_eng" style="display:none">Action</span> 
-                                                <span class="lang_indo">Aksi</span> 
-                                            </th> 
-                                        </tr> 
+                                    </tbody>--> 
                                     </thead> 
                                     <tbody id="tbody_entri-sdg"> 
                                     </tbody> 
@@ -849,12 +818,12 @@
                         $('.achievement1_indo').hide();
                         $('.achievement2_indo').hide();
                         $('.achievement3_indo').hide();
-                        $('.achievement4_indo').show();
+                        $('.achievement4_indo').show().html('Realisasi I');
                     }else{
                         $('.achievement1_eng').hide();
                         $('.achievement2_eng').hide();
                         $('.achievement3_eng').hide();
-                        $('.achievement4_eng').show();
+                        $('.achievement4_eng').show().html('Realization I');
                     }
                 }else if(ket_ran_rad == 'semesterly'){
                     $('#achievement1').val(achieve1).hide();
@@ -864,14 +833,14 @@
                     
                     if($('#fs').is(':checked')){
                         $('.achievement1_indo').hide();
-                        $('.achievement2_indo').show();
+                        $('.achievement2_indo').show().html('Realisasi I');
                         $('.achievement3_indo').hide();
-                        $('.achievement4_indo').show();
+                        $('.achievement4_indo').show().html('Realisasi II');
                     }else{
                         $('.achievement1_eng').hide();
-                        $('.achievement2_eng').show();
+                        $('.achievement2_eng').show().html('Realization I');
                         $('.achievement3_eng').hide();
-                        $('.achievement4_eng').show();
+                        $('.achievement4_eng').show().html('Realization II');
                     }
                 }else if(ket_ran_rad == 'quarterly'){
                     $('#achievement1').val(achieve1).show();
@@ -880,15 +849,15 @@
                     $('#achievement4').val(achieve4).show();
                     
                     if($('#fs').is(':checked')){
-                        $('.achievement1_indo').show();
-                        $('.achievement2_indo').show();
-                        $('.achievement3_indo').show();
-                        $('.achievement4_indo').show();
+                        $('.achievement1_indo').show().html('Realisasi I');
+                        $('.achievement2_indo').show().html('Realisasi II');
+                        $('.achievement3_indo').show().html('Realisasi III');
+                        $('.achievement4_indo').show().html('Realisasi IV');
                     }else{
-                        $('.achievement1_eng').hide();
-                        $('.achievement2_eng').show();
-                        $('.achievement3_eng').show();
-                        $('.achievement4_eng').show();
+                        $('.achievement1_eng').show().html('Realization I');
+                        $('.achievement2_eng').show().html('Realization II');
+                        $('.achievement3_eng').show().html('Realization III');
+                        $('.achievement4_eng').show().html('Realization IV');
                     }
                 }else{
                     

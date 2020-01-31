@@ -864,12 +864,12 @@
                         $('.achievement1_indo').hide();
                         $('.achievement2_indo').hide();
                         $('.achievement3_indo').hide();
-                        $('.achievement4_indo').show();
+                        $('.achievement4_indo').show().html('Realisasi I');
                     }else{
                         $('.achievement1_eng').hide();
                         $('.achievement2_eng').hide();
                         $('.achievement3_eng').hide();
-                        $('.achievement4_eng').show();
+                        $('.achievement4_eng').show().html('Realization I');
                     }
                     
                     
@@ -881,14 +881,14 @@
                     
                     if($('#fs').is(':checked')){
                         $('.achievement1_indo').hide();
-                        $('.achievement2_indo').show();
+                        $('.achievement2_indo').show().html('Realisasi I');
                         $('.achievement3_indo').hide();
-                        $('.achievement4_indo').show();
+                        $('.achievement4_indo').show().html('Realisasi I');
                     }else{
                         $('.achievement1_eng').hide();
-                        $('.achievement2_eng').show();
+                        $('.achievement2_eng').show().html('Realization I');
                         $('.achievement3_eng').hide();
-                        $('.achievement4_eng').show();
+                        $('.achievement4_eng').show().html('Realization II');
                     }
                 }else if(ket_ran_rad == 'quarterly'){
                     $('#achievement1').val(achieve1).show();
@@ -897,15 +897,15 @@
                     $('#achievement4').val(achieve4).show();
                     
                     if($('#fs').is(':checked')){
-                        $('.achievement1_indo').show();
-                        $('.achievement2_indo').show();
-                        $('.achievement3_indo').show();
-                        $('.achievement4_indo').show();
+                        $('.achievement1_indo').show().html('Realisasi I');
+                        $('.achievement2_indo').show().html('Realisasi II');
+                        $('.achievement3_indo').show().html('Realisasi III');
+                        $('.achievement4_indo').show().html('Realisasi IV');
                     }else{
-                        $('.achievement1_eng').hide();
-                        $('.achievement2_eng').show();
-                        $('.achievement3_eng').show();
-                        $('.achievement4_eng').show();
+                        $('.achievement1_eng').show().html('Realization I');
+                        $('.achievement2_eng').show().html('Realization II');
+                        $('.achievement3_eng').show().html('Realization III');
+                        $('.achievement4_eng').show().html('Realization IV');
                     }
                 }else{
                     
