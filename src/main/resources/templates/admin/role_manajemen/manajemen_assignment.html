@@ -252,6 +252,7 @@
         $('#sdg').on('click', function(e){
         	hideBtn();
         	$('.btnsdg').show();
+        	$('#id_monper').hide();
             $.ajax({
                 url: urls + 'list-sdgGoals',
                 type: 'get',
@@ -404,6 +405,7 @@
         $('#gov').on('click', function(e){
         	hideBtn();
         	$('.btngov').show();
+                $('#id_monper').show();
             $.ajax({
                 url: urls + 'list-govProg/'+$('#id_monper').val(),
                 type: 'get',
@@ -510,6 +512,7 @@
         $('#non-gov').on('click', function(e){
         	hideBtn();
         	$('.btnnongov').show();
+                $('#id_monper').show();
             $.ajax({
                 url: urls + 'list-nsaProg-assign/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
                 type: 'get',

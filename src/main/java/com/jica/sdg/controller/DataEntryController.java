@@ -100,7 +100,7 @@ public class DataEntryController {
     
     @Autowired
     SdgTargetService sdgTargetService;
-    
+//    
     @Autowired
     UnitService unitService;
     
@@ -111,11 +111,6 @@ public class DataEntryController {
     @GetMapping("admin/sdg-indicator-monitoring")
     public String entri_sdg(Model model, HttpSession session) {
         model.addAttribute("title", "SDG Indicators Monitoring");
-//        model.addAttribute("listprov", provinsiService.findAllProvinsi());
-//        model.addAttribute("listRole", roleService.findAll());
-//        model.addAttribute("listranrad", ranRadService.findAll());
-//        model.addAttribute("lang", session.getAttribute("bahasa"));
-//        model.addAttribute("name", session.getAttribute("name"));
         
         Integer id_role = (Integer) session.getAttribute("id_role");
         model.addAttribute("lang", session.getAttribute("bahasa"));
@@ -265,7 +260,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select gov_prog_bud from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_activity_eng, c.value as nilai_target, a.id \n" +
                     "from gov_activity as a\n" +
-                    "left join entry_gov_budget as b on a.id = b.id_gov_activity \n" +
+                    "left join (select * from entry_gov_budget where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_gov_activity \n" +
                     "left join (select * from gov_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_gov_indicator\n" +
                     "where a.id_program = :id_program and a.id_role = :id_role ";
         Query query = em.createNativeQuery(sql);
@@ -396,7 +391,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id \n" +
                     "from gov_indicator as a\n" +
-                    "left join entry_gov_indicator as b on a.id = b.id_assign \n" +
+                    "left join (select * from entry_gov_indicator where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_assign \n" +
                     "left join (select * from gov_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_gov_indicator\n" +
 //                    "where a.id_program = :id_program and a.id_activity = :id_activity and a.id_role = :id_role ";
                     "where a.id_program = :id_program and a.id_activity = :id_activity ";
@@ -411,10 +406,7 @@ public class DataEntryController {
         hasil.put("content",list);
         return hasil;
     }
-    
 
-    
-    
     //non gov
     @GetMapping("admin/non-government-program-monitoring")
     public String nongovprogram(Model model, HttpSession session) {
@@ -478,7 +470,7 @@ public class DataEntryController {
                     "b.id as id_entrynsa, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select nsa_prog_bud from ran_rad where id_monper = :id_monper) as ket_ran_rad, a.nm_activity_eng, c.value as nilai_target, a.id \n" +
                     "from nsa_activity as a\n" +
-                    "left join entry_nsa_budget as b on a.id = b.id_nsa_activity\n" +
+                    "left join (select * from entry_nsa_budget where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_nsa_activity\n" +
                     "left join (select * from nsa_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_nsa_indicator \n" +
                     "where a.id_program = :id_program and a.id_role = :id_role ";
         
@@ -499,7 +491,7 @@ public class DataEntryController {
                     "b.id as id_entrynsa, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select nsa_prog from ran_rad where id_monper = :id_monper) as ket_ran_rad, a.nm_activity_eng, c.value as nilai_target, a.id \n" +
                     "from nsa_activity as a\n" +
-                    "left join entry_nsa_indicator as b on a.id = b.id_assign\n" +
+                    "left join (select * from entry_nsa_indicator where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_assign\n" +
                     "left join (select * from nsa_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_nsa_indicator \n" +
                     "where a.id_program = :id_program and a.id_role = :id_role ";
         
@@ -585,7 +577,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select nsa_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id \n" +
                     "from nsa_indicator as a\n" +
-                    "left join entry_nsa_indicator as b on a.id = b.id_assign \n" +
+                    "left join (select * from entry_nsa_indicator where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_assign \n" +
                     "left join (select * from nsa_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_nsa_indicator\n" +
 //                    "where a.id_program = :id_program and a.id_activity = :id_activity and a.id_role = :id_role ";
                     "where a.id_program = :id_program and a.id_activity = :id_activity ";

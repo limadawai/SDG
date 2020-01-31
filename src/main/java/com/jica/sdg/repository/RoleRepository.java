@@ -9,6 +9,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -50,5 +51,8 @@ public interface RoleRepository extends CrudRepository<Role, Integer> {
 	
 	@Query(value = "select * from ref_role where id_prov = :id_prov and cat_role = 'Government' and privilege='USER'",nativeQuery = true)
     public List<Role> findRoleGov(@Param("id_prov") String id_prov);
+
+	@Query(value = "select cat_role from ref_role where id_role = :id_role", nativeQuery = true)
+	public List<Role> findCatRole(@Param("id_role") int id_role);
 
 }

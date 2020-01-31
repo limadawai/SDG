@@ -15,11 +15,15 @@ public class Unit implements Serializable {
     
     @Column(nullable = false, length = 16)
     private String nm_unit;
-
-	public Unit(Integer id_unit, String nm_unit) {
+    
+    @Column(nullable = false, length = 11)
+    private Integer id_role;
+    
+	public Unit(Integer id_unit, String nm_unit,Integer id_role) {
 		super();
 		this.id_unit = id_unit;
 		this.nm_unit = nm_unit;
+                this.id_role = id_role;
 	}
 
 	public Unit() {
@@ -44,5 +48,15 @@ public class Unit implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+        public Integer getId_role() {
+            return id_role;
+        }
+
+        public void setId_role(Integer id_role) {
+            this.id_role = id_role;
+        }
+        
+        
 	
 }
