@@ -356,7 +356,7 @@
     						}
                         	option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
                         	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
-			                            '<input class="menu-master sdg-indikator" id="menu'+id_goals+'" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
+			                            '<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
 			                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
 			                      '</label><br/>';
                         	$.ajax({
@@ -376,7 +376,7 @@
                 						}
                                     	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
                                     	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-							                            '<input data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="submenu" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
+							                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
 							                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
 							                      '</label><br/>';
                                     	$.ajax({
@@ -428,13 +428,10 @@
                 		}); */
                 	}
                 });
-	        $('#sdg_indicator').on('change', function(){
-	        	console.log($(this).val());
-	        });
 	        $('.accordion-inner').on('click', '.menu-master', function(){
 	        	var id = $(this).data('id');
 	        	if ($(this).is(":checked")) {
-	                $(".accordion-inner").find('.menu'+id).prop("checked", true);
+	                $(".accordion-inner").find('.menu'+id).prop("checked", false);
 	            } else {
 	            	 $(".accordion-inner").find('.menu'+id).prop("checked", false);
 	            }
@@ -442,10 +439,17 @@
 	        
 	        $('.accordion-inner').on('click', '.menu-slave', function(){
 	        	var id = $(this).data('id');
+	        	var goals = $(this).data('goals');
 	        	if ($(this).is(":checked")) {
-	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", true);
+	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
 	            } else {
 	            	 $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+	            }
+	        	
+	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+	            } else {
+	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
 	            }
 	        });
 	        
@@ -453,13 +457,13 @@
 	        	var id = $(this).data('id');
 	        	var goals = $(this).data('goals');
 	        	if ($(".menu-slave-1-"+id+":checked").length==$(".menu-slave-1-"+id).length) {
-	                $(".accordion-inner").find('#submenu'+id).prop("checked", true);
+	                $(".accordion-inner").find('#submenu'+id).prop("checked", false);
 	            } else {
 	            	 $(".accordion-inner").find('#submenu'+id).prop("checked", false);
 	            }
 	        	
 	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
-	                $(".accordion-inner").find('#menu'+goals).prop("checked", true);
+	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
 	            } else {
 	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
 	            }
@@ -570,7 +574,7 @@
 				$('.help-block').text("");
 			}
 			
-			$('#myModal').on('hidden.bs.modal',function(){
+			$('#myModal').not('.accordion').on('hidden',function(){
 				clearForm();
 				$('#hide_kode_internal').hide();
 			});
@@ -690,7 +694,7 @@
                             		var val = hasil.content;
                             		var selectedValues = new Array();
                             		for(var i=0;i<val.length;i++){
-                            			selectedValues[i] = val[i].id_goals+'---'+val[i].id_target+'---'+val[i].id_indicator;
+                            			selectedValues[i] = val[i].id_goals+'---'+(val[i].id_target?val[i].id_target:0)+'---'+(val[i].id_indicator?val[i].id_indicator:0);
                             			$(".accordion-inner").find('.sdg-indikator[value="'+selectedValues[i]+'"]').prop("checked", true);
                             		}
                             	}

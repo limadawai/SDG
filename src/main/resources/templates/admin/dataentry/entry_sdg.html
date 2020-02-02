@@ -121,7 +121,7 @@
                 <a class="btn btn-success btn-small" id="apply_btn" data-id="#">Terapkan</a>
             </div>
         </div>
-        <div class="modal hide fade addModal" role="dialog" aria-hidden="true">
+        <div class="modal hide fade addModal" data-backdrop="static" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -147,8 +147,10 @@
                         <div class="modal-footer" id="simpan_">
                             <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
                             <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal" style="display: none">Close</button>
-                            <button type="button" id="simpan" class="btn btn-success lang_indo">Simpan</button>
-                            <button type="button" id="simpan" class="btn btn-success lang_eng" style="display: none">Submit</button>
+                            <button type="button" id="simpan" class="btn btn-success lang_indo">
+                            	<span class="lang_indo">Simpan</span>
+                            	<span class="lang_eng" style="display: none">Submit</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -285,6 +287,9 @@
             var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
 	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleApp = "Anda Yakin";
+	        var messApp = "Apply Data ini?";
+	        var buttApp = 'Ya, Apply data ini!';
 	        var titleOk	= "Hapus";
 	        var messOk = "Data berhasil dihapus";
 	        var messNOk = "Data tidak dapat dihapus";
@@ -300,6 +305,9 @@
 	    	        messOk = "Data berhasil dihapus";
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
+	    	        titleApp = "Anda Yakin";
+	    	        messApp = "Apply Data ini?";
+	    	        buttApp = 'Ya, Apply data ini!';
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -310,6 +318,9 @@
 	    	        messOk = "Delete successful";
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
+	    	        titleApp = "Are you sure";
+	    	        messApp = "Apply this data?";
+	    	        buttApp = 'Ya, Apply this data!';
 	        	}
 	        }
 	        if(lang){
@@ -570,13 +581,13 @@
                 //                        
                 //                    }},
                                     {"data": function (row, data, index, display) {
-                                        if(row[12] == null || row[12] == ""){
-                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                        if(row[9] == null || row[9] == ""){
+                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                                         }else{
                                             var target  = row[8];
-                                            var achieve = row[11];
-                                            var sts     = row[7];
-                                            if(sts == 'Increment'){
+                                            var achieve = row[9];
+                                            var IncDec  = row[7];
+                                            if(IncDec == 'Increment'){
                                                 if(achieve >= target){
                                                     var color_sts = 'btn btn-success';
                                                 }else{
@@ -589,7 +600,23 @@
                                                     var color_sts = 'btn btn-danger';
                                                 }
                                             }
-                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
+                                            var apply="";
+                                            var update="update"
+                                            var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
+                                            $.ajax({
+                            					type: "GET",
+                                                url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/1',
+                                                async:false,
+                                                success: function (result) {
+                                                	apply = result.content;
+                                                	if(apply.length>0){
+                                                		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                                		update="";
+                                                	}
+                                                },
+                                            });
+                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>"+
+                                            btnApply;
                                         }
                                     }},
                 //                    {"data": function (row, data, index, display) {
@@ -737,13 +764,13 @@
 //                                        }
 //                                    }},
                                     {"data": function (row, data, index, display) {
-                                        if(row[10] == null || row[10] == ""){
-                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                        if(row[9] == null || row[9] == ""){
+                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                                         }else{
                                             var target  = row[8];
-                                            var achieve = row[10];
-                                            var sts     = row[7];
-                                            if(sts == 'Increment'){
+                                            var achieve = row[9];
+                                            var IncDec     = row[7];
+                                            if(IncDec == 'Increment'){
                                                 if(achieve >= target){
                                                     var color_sts = 'btn btn-success';
                                                 }else{
@@ -756,7 +783,25 @@
                                                     var color_sts = 'btn btn-danger';
                                                 }
                                             }
-                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+                                            var apply="";
+                                            var update="update"
+                                            var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
+                                            $.ajax({
+                            					type: "GET",
+                                                url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/1',
+                                                async:false,
+                                                success: function (result) {
+                                                	apply = result.content;
+                                                	console.log(apply);
+                                                	if(apply.length>0){
+                                                		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                                		update="";
+                                                	}
+                                                },
+                                            });
+                                            
+                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a> "+
+                                            btnApply;
                                         }
 
                                     }},
@@ -802,13 +847,13 @@
                 //                        
                 //                    }},
                                     {"data": function (row, data, index, display) {
-                                        if(row[12] == null || row[12] == ""){
-                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
+                                        if(row[10] == null || row[10] == ""){
+                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
                                         }else{
                                             var target  = row[8];
-                                            var achieve = row[11];
-                                            var sts     = row[7];
-                                            if(sts == 'Increment'){
+                                            var achieve = row[10];
+                                            var IncDec     = row[7];
+                                            if(IncDec == 'Increment'){
                                                 if(achieve >= target){
                                                     var color_sts = 'btn btn-success';
                                                 }else{
@@ -821,7 +866,24 @@
                                                     var color_sts = 'btn btn-danger';
                                                 }
                                             }
-                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
+                                            var apply="";
+                                            var update="update"
+                                            var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
+                                            $.ajax({
+                            					type: "GET",
+                                                url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/2',
+                                                async:false,
+                                                success: function (result) {
+                                                	apply = result.content;
+                                                	console.log(apply);
+                                                	if(apply.length>0){
+                                                		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                                		update="";
+                                                	}
+                                                },
+                                            });
+                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>"+
+                                            btnApply;
                                         }
                                     }},
                 //                    {"data": function (row, data, index, display) {
@@ -903,8 +965,8 @@
                                             }else{
                                                 var target  = row[8];
                                                 var achieve = row[9];
-                                                var sts     = row[7];
-                                                if(sts == 'Increment'){
+                                                var IncDec  = row[7];
+                                                if(IncDec == 'Increment'){
                                                     if(achieve >= target){
                                                         var color_sts = 'btn btn-success';
                                                     }else{
@@ -925,8 +987,8 @@
                                             }else{
                                                 var target  = row[8];
                                                 var achieve = row[9];
-                                                var sts     = row[7];
-                                                if(sts == 'Increment'){
+                                                var IncDec     = row[7];
+                                                if(IncDec == 'Increment'){
                                                     if(achieve >= target){
                                                         var color_sts = 'btn btn-success';
                                                     }else{
@@ -947,8 +1009,8 @@
                                             }else{
                                                 var target  = row[8];
                                                 var achieve = row[9];
-                                                var sts     = row[7];
-                                                if(sts == 'Increment'){
+                                                var IncDec     = row[7];
+                                                if(IncDec == 'Increment'){
                                                     if(achieve >= target){
                                                         var color_sts = 'btn btn-success';
                                                     }else{
@@ -961,7 +1023,23 @@
                                                         var color_sts = 'btn btn-danger';
                                                     }
                                                 }
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
+                                                var apply="";
+                                                var update="update"
+                                                var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
+                                                $.ajax({
+                                					type: "GET",
+                                                    url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/1',
+                                                    async:false,
+                                                    success: function (result) {
+                                                    	apply = result.content;
+                                                    	if(apply.length>0){
+                                                    		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                                    		update="";
+                                                    	}
+                                                    },
+                                                });
+                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>"+
+                                                btnApply;
                                             }
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[9]+"</div>";
@@ -981,8 +1059,8 @@
                                             }else{
                                                 var target  = row[8];
                                                 var achieve = row[10];
-                                                var sts     = row[7];
-                                                if(sts == 'Increment'){
+                                                var IncDec     = row[7];
+                                                if(IncDec == 'Increment'){
                                                     if(achieve >= target){
                                                         var color_sts = 'btn btn-success';
                                                     }else{
@@ -1003,8 +1081,8 @@
                                             }else{
                                                 var target  = row[8];
                                                 var achieve = row[10];
-                                                var sts     = row[7];
-                                                if(sts == 'Increment'){
+                                                var IncDec     = row[7];
+                                                if(IncDec == 'Increment'){
                                                     if(achieve >= target){
                                                         var color_sts = 'btn btn-success';
                                                     }else{
@@ -1017,7 +1095,23 @@
                                                         var color_sts = 'btn btn-danger';
                                                     }
                                                 }
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+                                                var apply="";
+                                                var update="update"
+                                                var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
+                                                $.ajax({
+                                					type: "GET",
+                                                    url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/2',
+                                                    async:false,
+                                                    success: function (result) {
+                                                    	apply = result.content;
+                                                    	if(apply.length>0){
+                                                    		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                                    		update="";
+                                                    	}
+                                                    },
+                                                });
+                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>"+
+                                                btnApply;
                                             }
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[10]+"</div>";
@@ -1044,8 +1138,8 @@
                                             }else{
                                                 var target  = row[8];
                                                 var achieve = row[11];
-                                                var sts     = row[7];
-                                                if(sts == 'Increment'){
+                                                var IncDec     = row[7];
+                                                if(IncDec == 'Increment'){
                                                     if(achieve >= target){
                                                         var color_sts = 'btn btn-success';
                                                     }else{
@@ -1058,7 +1152,23 @@
                                                         var color_sts = 'btn btn-danger';
                                                     }
                                                 }
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[11]+"</a>";
+                                                var apply="";
+                                                var update="update"
+                                                var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
+                                                $.ajax({
+                                					type: "GET",
+                                                    url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/3',
+                                                    async:false,
+                                                    success: function (result) {
+                                                    	apply = result.content;
+                                                    	if(apply.length>0){
+                                                    		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                                    		update="";
+                                                    	}
+                                                    },
+                                                });
+                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[11]+"</a>"+
+                                                btnApply;
                                             }
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[11]+"</div>";
@@ -1084,8 +1194,8 @@
                                             }else{
                                                 var target  = row[8];
                                                 var achieve = row[11];
-                                                var sts     = row[7];
-                                                if(sts == 'Increment'){
+                                                var IncDec     = row[7];
+                                                if(IncDec == 'Increment'){
                                                     if(achieve >= target){
                                                         var color_sts = 'btn btn-success';
                                                     }else{
@@ -1098,7 +1208,23 @@
                                                         var color_sts = 'btn btn-danger';
                                                     }
                                                 }
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
+                                                var apply="";
+                                                var update="update"
+                                                var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
+                                                $.ajax({
+                                					type: "GET",
+                                                    url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/4',
+                                                    async:false,
+                                                    success: function (result) {
+                                                    	apply = result.content;
+                                                    	if(apply.length>0){
+                                                    		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                                    		update="";
+                                                    	}
+                                                    },
+                                                });
+                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>"+
+                                                btnApply;
                                             }
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[12]+"</div>";
@@ -1183,14 +1309,13 @@
                                 'achievement2': achievement2,
                                 'achievement3': achievement3,
                                 'achievement4': achievement4,
-                                'new_value1': '0',
+                                /* 'new_value1': '0',
                                 'new_value2': '0',
                                 'new_value3': '0',
-                                'new_value4': '0',
+                                'new_value4': '0', */
                                 'year_entry': tahun,
                                 'id_role': v_idrole,
-                                'created_by': '0',
-                                'date_created': null,
+                                'created_by': v_idrole,
                                 'id_monper': id_monper
                             });
                 $.ajax({
@@ -1271,6 +1396,52 @@
                 $('#id').val(id).hide();
                 $('.addModal').modal("show");
                 $('#simpan_').show();
+            });
+            
+            $("#tabel-entri-sdg").on('click', '.apply', function () {
+            	var data  = $(this).attr('data-id').split('###');
+                var id_form_type = data[0];
+                var id_role = data[1];
+                var id_monper = data[2];
+                var year = data[3];
+                var approval = data[4];
+                var type = data[5];
+                var period = data[6];
+                var dataPost = JSON.stringify({
+                    'id_form_type': id_form_type,
+                    'id_role': id_role,
+                    'id_monper': id_monper,
+                    'year': year,
+                    'approval': approval,
+                    'type': type,
+                    'period': period,
+                });
+                
+                swal({
+                    title: titleApp,
+                    text: messApp,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttApp
+                }).then(function () {
+                	$.ajax({
+                        type: "POST",
+                        url: urls+'save-approval',
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        headers:{'Accept':'application/json','Content-Type':'application/json'},
+                        data: dataPost,
+                        success: function (result) {
+                            grid();
+                        },
+                    });
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
+                });
             });
 
             // var valdaerah = $("#daerah").val();

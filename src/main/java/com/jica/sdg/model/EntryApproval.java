@@ -29,6 +29,9 @@ public class EntryApproval implements Serializable {
     @Column(name = "id_monper")
     private Integer id_monper;
     
+    @Column(name = "year")
+    private Integer year;
+    
     @Column(name = "approval")
     private String approval;
     
@@ -38,76 +41,108 @@ public class EntryApproval implements Serializable {
     
     @Column(name = "type")
     private String type;
+    
+    @Column(nullable = true,name = "period")
+    private Integer period;
+    
+    @Column(nullable = true,name = "description")
+    private String description;
 
     public EntryApproval() {
     }
 
-    public EntryApproval(Integer id, Integer id_form_type, Integer id_role, Integer id_monper, String approval, Date approval_date, String type) {
-        this.id             = id;
-        this.id_form_type   = id_form_type;
-        this.id_role        = id_role;
-        this.id_monper      = id_monper;
-        this.approval       = approval;
-        this.approval_date  = approval_date;
-        this.type           = type;
-    }
+	public EntryApproval(Integer id, Integer id_form_type, Integer id_role, Integer id_monper, Integer year,
+			String approval, Date approval_date, String type, Integer period, String description) {
+		super();
+		this.id = id;
+		this.id_form_type = id_form_type;
+		this.id_role = id_role;
+		this.id_monper = id_monper;
+		this.year = year;
+		this.approval = approval;
+		this.approval_date = approval_date;
+		this.type = type;
+		this.period = period;
+		this.description = description;
+	}
 
-    public Integer getId() {
-        return id;
-    }
+	public Integer getId() {
+		return id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public Integer getId_form_type() {
-        return id_form_type;
-    }
+	public Integer getId_form_type() {
+		return id_form_type;
+	}
 
-    public void setId_form_type(Integer id_form_type) {
-        this.id_form_type = id_form_type;
-    }
+	public void setId_form_type(Integer id_form_type) {
+		this.id_form_type = id_form_type;
+	}
 
-    public Integer getId_role() {
-        return id_role;
-    }
+	public Integer getId_role() {
+		return id_role;
+	}
 
-    public void setId_role(Integer id_role) {
-        this.id_role = id_role;
-    }
+	public void setId_role(Integer id_role) {
+		this.id_role = id_role;
+	}
 
-    public Integer getId_monper() {
-        return id_monper;
-    }
+	public Integer getId_monper() {
+		return id_monper;
+	}
 
-    public void setId_monper(Integer id_monper) {
-        this.id_monper = id_monper;
-    }
+	public void setId_monper(Integer id_monper) {
+		this.id_monper = id_monper;
+	}
 
-    public String getApproval() {
-        return approval;
-    }
+	public Integer getYear() {
+		return year;
+	}
 
-    public void setApproval(String approval) {
-        this.approval = approval;
-    }
+	public void setYear(Integer year) {
+		this.year = year;
+	}
 
-    public Date getApproval_date() {
-        return approval_date;
-    }
+	public String getApproval() {
+		return approval;
+	}
 
-    public void setApproval_date(Date approval_date) {
-        this.approval_date = approval_date;
-    }
+	public void setApproval(String approval) {
+		this.approval = approval;
+	}
 
-    public String getType() {
-        return type;
-    }
+	public Date getApproval_date() {
+		return approval_date;
+	}
 
-    public void setType(String type) {
-        this.type = type;
-    }
+	public void setApproval_date(Date approval_date) {
+		this.approval_date = approval_date;
+	}
 
-    
-    
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public Integer getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(Integer period) {
+		this.period = period;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}    
 }

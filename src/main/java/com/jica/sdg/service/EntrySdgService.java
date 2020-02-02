@@ -128,5 +128,30 @@ public class EntrySdgService implements IEntrySdgService{
 	public void deleteEntrySdg(String id_nsa) {
 		entrySdgRepo.deleteEntrySdg(id_nsa);
 	}
+
+	@Override
+	public void updateNew1(Integer id, Integer nilai) {
+		entrySdgRepo.updateNew1(id, nilai);
+	}
+
+	@Override
+	public void updateNew2(Integer id, Integer nilai) {
+		entrySdgRepo.updateNew2(id, nilai);
+	}
+
+	@Override
+	public void updateNew3(Integer id, Integer nilai) {
+		entrySdgRepo.updateNew3(id, nilai);
+	}
+
+	@Override
+	public void updateNew4(Integer id, Integer nilai) {
+		entrySdgRepo.updateNew4(id, nilai);
+	}
+
+	@Override
+	public Optional<EntrySdg> findOne(Long id) {
+		return (Optional<EntrySdg>) entrySdgRepo.findById(id);
+	}
         
 }
