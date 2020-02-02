@@ -12,9 +12,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import com.jica.sdg.model.GovActivity;
+import com.jica.sdg.model.GovFunding;
 import com.jica.sdg.model.GovIndicator;
 import com.jica.sdg.model.GovMap;
 import com.jica.sdg.model.GovProgram;
+import com.jica.sdg.model.GovTarget;
 import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.NsaActivity;
 import com.jica.sdg.model.NsaIndicator;
@@ -28,9 +30,11 @@ import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.service.IGovActivityService;
+import com.jica.sdg.service.IGovFundingService;
 import com.jica.sdg.service.IGovIndicatorService;
 import com.jica.sdg.service.IGovMapService;
 import com.jica.sdg.service.IGovProgramService;
+import com.jica.sdg.service.IGovTargetService;
 import com.jica.sdg.service.IMonPeriodService;
 import com.jica.sdg.service.INsaActivityService;
 import com.jica.sdg.service.INsaIndicatorService;
@@ -137,6 +141,12 @@ public class RanRadSdgController {
         
 	@Autowired
 	private EntityManager em;
+	
+	@Autowired
+	IGovTargetService govTargetService;
+	
+	@Autowired
+	IGovFundingService govFundingService;
 	
 	//*********************** SDG ***********************
 
@@ -482,8 +492,7 @@ public class RanRadSdgController {
     }
     
     @PostMapping(path = "admin/save-govIndicator/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
-	@ResponseBody
-	public void saveGovIndicator(@RequestBody GovIndicator gov,
+	public @ResponseBody Map<String, Object> saveGovIndicator(@RequestBody GovIndicator gov,
 			@PathVariable("sdg_indicator") String sdg_indicator,
 			@PathVariable("id_monper") Integer id_monper,
 			@PathVariable("id_prov") String id_prov) {
@@ -512,7 +521,54 @@ public class RanRadSdgController {
         		govMapService.saveGovMap(map);
     		}
     	}
+    	Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",gov.getId());
+        return hasil;
 	}
+    
+    @PostMapping(path = "admin/save-govTarget/{id_gov_indicator}", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public void saveGovTarget(@RequestBody Map<String, Object> payload,@PathVariable("id_gov_indicator") Integer id_gov_indicator) {
+    	JSONObject jsonObject = new JSONObject(payload);
+        JSONObject catatan = jsonObject.getJSONObject("target");
+        JSONArray c = catatan.getJSONArray("target");
+        govTargetService.deleteByGovInd(id_gov_indicator);
+        for (int i = 0 ; i < c.length(); i++) {
+        	JSONObject obj = c.getJSONObject(i);
+        	String year = obj.getString("year");
+        	String value = obj.getString("nilai");
+        	if(!value.equals("")) {
+        		GovTarget gov = new GovTarget();
+        		gov.setId_gov_indicator(id_gov_indicator);
+        		gov.setYear(Integer.parseInt(year));
+        		gov.setValue(Integer.parseInt(value));
+        		govTargetService.saveGovTarget(gov);
+        	}
+        }
+    }
+    
+    @GetMapping("admin/get-govTarget/{id}/{year}")
+    public @ResponseBody Map<String, Object> getgovTarget(@PathVariable("id") Integer id, @PathVariable("year") Integer year) {
+        List<GovTarget> list = govTargetService.findByGovYear(id, year);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-govFunding", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public void saveGovFunding(@RequestBody GovFunding gov) {
+    	govFundingService.deleteByGovInd(gov.getId_gov_indicator(), gov.getId_monper());
+    	govFundingService.saveGovFunding(gov);
+	}
+    
+    @GetMapping("admin/get-govFunding/{id_gov_indicator}/{id_monper}")
+    public @ResponseBody Map<String, Object> getgovFunding(@PathVariable("id_gov_indicator") Integer id_gov_indicator, @PathVariable("id_monper") Integer id_monper) {
+        List<GovFunding> list = govFundingService.findByGovMon(id_gov_indicator, id_monper);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
     
     @GetMapping("admin/get-govIndicator/{id}")
     public @ResponseBody Map<String, Object> getgovIndicator(@PathVariable("id") Integer id) {
