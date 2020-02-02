@@ -29,7 +29,14 @@
                     <div class="widget-content" style="background:#FFFFFF;">
                         <div class="row-fluid">
                             <div id="divkiri" class="span6"></div>
-                            <div id="divkanan" class="span6"></div>
+                            <div id="divkanan" class="span6">
+                                <p><h4 id="patas" style="margin-left:10px;">Pemerintah</h4></p>
+                                <div id="kananatas" class="span12" style="margin:0;padding:0;">
+                                </div>
+                                <p><h4 id="pbawah" style="margin-left:10px;">Non-Pemerintah</h4></p>
+                                <div id="kananbawah" class="span12" style="margin:0;padding:0;">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -90,31 +97,31 @@
                     success: function (result) {
                         // console.log(result);
                         $("#divkiri").empty();
-                        var isi = "<ul>";
+                        var isi = "<ol class='tree'>";
                         for (var i=0; i<result.length; i++) {
-                            isi += "<li>"+result[i][8];
-                            isi += "<ul>";
-                            isi += "<li>"+result[i][11];
-                            isi += "<ul>";
-                            isi += "<li id='cucu' title='"+result[i][3]+"'>"+result[i][14]+"</li>";
-                            isi += "</ul>";
-                            isi += "</li>";
-                            isi += "</ul>";
+                            isi += "<li style='padding:6px'>";
+                                isi += "<label class='dok' for='folder"+(i+1)+"'>"+result[i][8]+"</label> <input type='checkbox' id='folder"+(i+1)+"' />";
+                                isi += "<ol>";
+                                    isi += "<li class='dok' style='padding:6px'>";
+                                        isi += "<label class='dok' for='subfolder"+(i+1)+"'>"+result[i][11]+"</label><input type='checkbox' id='subfolder"+(i+1)+"' />";
+                                        isi += "<ol>";
+                                            isi += "<li id='cucu' class='file' style='padding:6px'><a href='#' onclick='kanan("+result[i][3]+")'>"+result[i][14]+"</a></li>";
+                                        isi += "</ol>";
+                                    isi += "</li>";
+                                isi += "</ol>";
                             isi += "</li>";
                         }
-                        isi += "</ul>";
+                        isi += "</ol>";
                         $("#divkiri").append(isi);
-                        $("#divkiri").easytree();
                     }
                 });
+                pohon();
             } else if (valdaerah == "0") {
                 $("#divkiri").empty();
             }
         });
 
-        $(document).on('click', '#cucu', function(){
-            var idindi = $("#cucu span:last").attr("title");
-            // console.log(idindi);
+        function kanan(idindi) {
             $.ajax({
                 url: urls + "graphidgovindi",
                 type: 'get',
@@ -122,9 +129,8 @@
                 dataType: 'json',
                 cache: false,
                 success: function (result) {
-                    // console.log(result[0]);
-                    $("#divkanan").empty();
-                    var data = [];
+                    // console.log(result.length);
+                    $("#kananatas").empty();
                     for (var i=0; i<result.length; i++) {
                         $.ajax({
                             url: urls + "isigovmap",
@@ -133,28 +139,72 @@
                             dataType: 'json',
                             cache: false,
                             success: function (resin) {
-                                // console.log(JSON.stringify(resin[0]));
-                                // data.push(Object.assign({}, resin[0]));
-                                // $("#divkanan").html(JSON.stringify(data));
-                                var isi = "<ul>";
-                                isi += "<li>"+resin[0][10];
-                                isi += "<ul>";
-                                isi += "<li>"+resin[0][13];
-                                isi += "<ul>";
-                                isi += "<li id='cucukanan' title='"+resin[0][0]+"'>"+resin[0][4]+"</li>";
-                                isi += "</ul>";
-                                isi += "</li>";
-                                isi += "</ul>";
-                                isi += "</li>";
-                                isi += "</ul>";
-                                $("#divkanan").html(isi);
-                                $("#divkanan").easytree();
+                                var isi = "<ol class='treekanan'>";
+                                for (var i=0; i<resin.length; i++) {
+                                    isi += "<li style='padding:6px'>";
+                                        isi += "<label class='dokkanan' for='folder" + (i + 1) + "'>" + resin[i][10] + "</label> <input type='checkbox' id='folder" + (i + 1) + "' />";
+                                        isi += "<ol>";
+                                            isi += "<li>";
+                                            isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
+                                                isi += "<ol>";
+                                                    isi += "<li id='cucukanan' class='file' style='padding:6px'><a onclick='cucukanan(" + resin[i][0] + ","+0+")'>" + resin[i][4] + "</a></li>";
+                                                isi += "</ol>";
+                                            isi += "</li>";
+                                        isi += "</ol>";
+                                    isi += "</li>";
+                                }
+                                isi += "</ol>";
+                                $("#kananatas").append(isi);
                             }
                         });
                     }
                 }
             });
-        });
+            //************************** Non Government ****************************
+            $.ajax({
+                url: urls + "graphidnsaindi",
+                type: 'get',
+                data: 'id_indicator=' + idindi,
+                dataType: 'json',
+                cache: false,
+                success: function (result) {
+                    // console.log(result);
+                    $("#kananbawah").empty();
+                    for (var i=0; i<result.length; i++) {
+                        $.ajax({
+                            url: urls + "isinsamap",
+                            type: 'get',
+                            data: 'id='+result[i],
+                            dataType: 'json',
+                            cache: false,
+                            success: function (resin) {
+                                var isi = "<ol class='treekanan'>";
+                                for (var i=0; i<resin.length; i++) {
+                                    isi += "<li style='padding:6px'>";
+                                    isi += "<label class='dokkanan' for='folder" + (i + 1) + "'>" + resin[i][10] + "</label> <input type='checkbox' id='folder" + (i + 1) + "' />";
+                                    isi += "<ol>";
+                                    isi += "<li style='padding:6px'>";
+                                    isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
+                                    isi += "<ol>";
+                                    isi += "<li id='cucukanan' class='file' style='padding:6px;'><a onclick='cucukanan(" + resin[i][0] + ","+1+")'>" + resin[i][4] + "</a></li>";
+                                    isi += "</ol>";
+                                    isi += "</li>";
+                                    isi += "</ol>";
+                                    isi += "</li>";
+                                }
+                                isi += "</ol>";
+                                $("#kananbawah").append(isi);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        function cucukanan(id, flag) {
+            window.open(urls+"report-graph-detail/"+id+"/"+flag);
+        }
+
     </script>
 </body>
 </html>
