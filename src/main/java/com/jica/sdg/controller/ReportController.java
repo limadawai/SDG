@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -217,5 +218,37 @@ public class ReportController {
         List list = query.getResultList();
         return list;
     }
+
+    @GetMapping("admin/graphidnsaindi")
+    public @ResponseBody List<Object> idNsaIndi(@RequestParam("id_indicator") int idindi) {
+        String sql = "SELECT id_nsa_indicator FROM nsa_map WHERE id_indicator = :id_indicator ORDER BY id_nsa_indicator ASC";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_indicator", idindi);
+        List list = query.getResultList();
+        return list;
+    }
+
+    @GetMapping("admin/isinsamap")
+    public @ResponseBody List<Object> isinsamap(@RequestParam("id") int id_nsa_indicator) {
+        String sql = "SELECT a.*, b.nm_program, b.nm_program_eng, b.internal_code as progcode, " +
+                "c.nm_activity, c.nm_activity_eng, c.internal_code AS actcode FROM nsa_indicator a LEFT JOIN " +
+                "nsa_program b ON b.id = a.id_program LEFT JOIN " +
+                "nsa_activity c ON c.id = a.id_activity WHERE a.id = :id_nsa_indicator";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_nsa_indicator", id_nsa_indicator);
+        List list = query.getResultList();
+        return list;
+    }
+
+    @GetMapping("admin/report-graph-detail/{id}/{flag}")
+    public String grafikdetail(Model model, HttpSession session, @PathVariable("id") String id, @PathVariable("flag") String flag) {
+        model.addAttribute("title", "Report Graphic Detail");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("idindikator", id);
+        model.addAttribute("flag", flag);
+        return "admin/report/graphdetail";
+    }
+
 
 }
