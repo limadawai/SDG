@@ -106,6 +106,9 @@ public class DataEntryController {
     
     @Autowired
     SdgFundingService sdgFundingService;
+    
+    @Autowired
+    IEntryApprovalService approvalService;
 
     //entry SDG
     @GetMapping("admin/sdg-indicator-monitoring")
@@ -157,9 +160,10 @@ public class DataEntryController {
     
     @GetMapping("admin/list-entry-sdg/{id_prov}/{id_role}/{id_monper}/{year}")
     public @ResponseBody Map<String, Object> listEntrySdg(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
-        String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
+        String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
                     "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng \n" +
+                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
+                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4 \n" +
                     "from assign_sdg_indicator as a\n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +
@@ -169,6 +173,7 @@ public class DataEntryController {
                     "left join \n" +
                     "(select * from entry_sdg where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
                     "left join ran_rad as g on a.id_monper = g.id_monper \n" +
+                    "left join ref_unit as h on d.unit = h.id_unit \n" +
                     "where a.id_role = :id_role and a.id_monper = :id_monper and a.id_prov = :id_prov ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);

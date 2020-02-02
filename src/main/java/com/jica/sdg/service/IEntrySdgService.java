@@ -15,6 +15,8 @@ public interface IEntrySdgService {
 
     List<EntrySdg> findAllEntrySdg();
     
+    Optional<EntrySdg> findOne(Long id);
+    
 //    List<Nsadetail> findId(String id);
 //
     void saveEntrySdg(EntrySdg esdg);
@@ -38,4 +40,9 @@ public interface IEntrySdgService {
 //    void deleteIdNsa(String id);
 //    
     void deleteEntrySdg(String id);
+    
+    void updateNew1(Integer id, Integer nilai);
+    void updateNew2(Integer id, Integer nilai);
+    void updateNew3(Integer id, Integer nilai);
+    void updateNew4(Integer id, Integer nilai);
 }
