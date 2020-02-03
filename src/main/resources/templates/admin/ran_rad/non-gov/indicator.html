@@ -23,7 +23,7 @@
 	        			</select>
 	        			<span> RAN/RAD : </span>
 	        			<select name="id_monper" id="id_monper">
-	        				<option th:each="f:${monPer}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year} "></option>
+	        				<option th:each="f:${monPer}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
 	        			</select>
         			</div>
         		</form>
@@ -141,7 +141,6 @@
 			    <h3 class="lang_indo">Tambah Indikator Kegiatan</h3>
 		  	</div>
 			<div class="modal-body">
-				<form>
 				  <div class="control-group">
 				    <label>Program</label>
 				    <input type="text" readonly="true" th:value="${govProg.nm_program}" class="input-xlarge input-block-level" />
@@ -189,6 +188,39 @@
 					    	<option th:each="f:${unit}" th:value="${f.id_unit}" th:text="${f.nm_unit}"></option>
 					    </select>
 					    <span class="help-block" id="error_unit"></span>
+				    </div>
+				  </div>
+				  <div class="table-responsive">
+                  	<form id="form-target">
+					<table class="table table-bordered">
+                        <thead>
+							<tr>
+                                <th width="50%">
+                                	<span class="lang_eng control-label" style="display:none">Year</span>
+				    				<span class="lang_indo control-label">Tahun</span>
+                                </th>
+                                <th width="50%">Target</th>
+							</tr>
+                        </thead>
+                        <tbody id="tbody-target">
+                        </tbody>
+                    </table>
+                    </form>
+                	</div>
+                 <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Baseline</label>
+				    <label class="lang_indo control-label">Dasar</label>
+				    <div class="controls">
+				    	<input type="text" id="baseline" name="baseline" class="input-xlarge input-block-level"/>
+				    	<span class="help-block" id="error_baseline"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Funding Source</label>
+				    <label class="lang_indo control-label">Sumber Pendanaan</label>
+				    <div class="controls">
+				    	<input type="text" id="budsource" name="budsource" class="input-xlarge input-block-level"/>
+					    <span class="help-block" id="error_budsource"></span>
 				    </div>
 				  </div>
 				  <hr/>
@@ -242,7 +274,6 @@
 					    <span class="help-block" id="error_budsource"></span>
 				    </div>
 				  </div> -->
-				</form>
 			</div>
 			<div class="modal-footer">
 		    	<button class="btn" data-dismiss="modal" aria-hidden="true">
@@ -513,13 +544,8 @@
 				$('#sdg_indicator').removeAttr("disabled");
 				$(".accordion-inner").find('.sdg-indikator').prop("checked", false);
 				$(".accordion-inner").find('.sdg-indikator').removeAttr("disabled");
-				/* $('#target_year1').val("").removeAttr("readonly");
-				$('#target_year2').val("").removeAttr("readonly");
-				$('#target_year3').val("").removeAttr("readonly");
-				$('#target_year4').val("").removeAttr("readonly");
-				$('#target_year5').val("").removeAttr("readonly");
 				$('#baseline').val("").removeAttr("readonly");
-				$('#budsource').val("").removeAttr("disabled"); */
+				$('#budsource').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -527,6 +553,18 @@
 			$('#myModal').on('hidden.bs.modal',function(){
 				clearForm();
 				$('#hide_kode_internal').hide();
+			}).on("show", function(){
+				//Target
+		        var tahun = $("#id_monper").text().split(" - ");
+		        var target="";
+		        $("#tbody-target").html("");
+		        for(i=tahun[0];i<=tahun[1];i++){
+		        	target += '<tr>'+
+	                        	'<td><input type="text" name="target[][year]" class="input-block-level" value="'+($.trim(i))+'" readonly="true"/></td>'+
+	                        	'<td><input type="text" name="target[][nilai]" class="input-block-level"  value="" /></td>'+
+	                        '</tr>';
+		        }
+		        $("#tbody-target").append(target);
 			});
 			
 			$('#submit').on('click', function(){
@@ -551,6 +589,8 @@
 				}else{
 					sdg_indicator = '0';
 				}
+				var baseline = $('#baseline').val();
+				var budsource = $('#budsource').val();
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -590,6 +630,36 @@
 						data: data,
 	                    success: function (result) {
 	                    	table.ajax.url(urls+'list-nsaIndicator/'+id_program+'/'+id_activity).load();
+	                    	var id_nsa_indicator = result.content;
+	                    	var target =  $('#form-target').serializeObject();
+	                    	$.ajax({
+	                            type    :"POST",
+	                            url     :urls+'save-nsaTarget/'+id_nsa_indicator+'/'+$('#id_role').val(),
+	                            headers :{'Accept':'application/json','Content-Type':'application/json'},
+	                            data    : JSON.stringify({target}),
+	                            beforeSend : function(xhr){
+	                            	xhr.setRequestHeader(header,token);
+	                            },
+	                            success :function(result){
+	                            },             
+	                         });
+	                    	var funding = JSON.stringify({
+	    						'id_nsa_indicator':id_nsa_indicator,
+	    						'id_monper':$('#id_monper').val(),
+	    						'baseline':baseline,
+	    						'funding_source':budsource
+	    						});
+	                    	$.ajax({
+	                            type    :"POST",
+	                            url     :urls+'save-nsaFunding',
+	                            headers :{'Accept':'application/json','Content-Type':'application/json'},
+	                            data    : funding,
+	                            beforeSend : function(xhr){
+	                            	xhr.setRequestHeader(header,token);
+	                            },
+	                            success :function(result){
+	                            },             
+	                         });
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
@@ -626,6 +696,40 @@
                             	}
                         });
 						$('#myModal').modal('show');
+						var tahun = $("#id_monper").text().split(" - ");
+				        var target="";
+				        $("#tbody-target").html("");
+				        for(i=tahun[0];i<=tahun[1];i++){
+				        	var nilai="";
+				        	$.ajax({
+	        					type: "GET",
+	                            url: urls+'get-nsaTarget/'+val.id+'/'+($.trim(i)),
+	                            async:false,
+	                            success: function (hasil) {
+	                            		var val = hasil.content;
+	                            		if(val.length>0){
+	                            			nilai = val[0]["value"];	
+	                            		}
+	                            	}
+	                        });
+				        	target += '<tr>'+
+			                        	'<td><input type="text" name="target[][year]" class="input-block-level" value="'+($.trim(i))+'" readonly="true"/></td>'+
+			                        	'<td><input type="text" name="target[][nilai]" class="input-block-level"  value="'+nilai+'" /></td>'+
+			                        '</tr>';
+				        }
+				        $("#tbody-target").append(target);
+				        $.ajax({
+        					type: "GET",
+                            url: urls+'get-nsaFunding/'+val.id+'/'+$("#id_monper").val(),
+                            async:false,
+                            success: function (hasil) {
+                            		var val = hasil.content;
+                            		if(val.length>0){
+                            			$('#baseline').val(val[0]["baseline"]);
+                            			$('#budsource').val(val[0]["funding_source"]);
+                            		}
+                            	}
+                        });
                     },
                 })
              }).on('click', '.detail', function(){
@@ -659,6 +763,40 @@
                             	}
                         });
 						$('#myModal').modal('show');
+						var tahun = $("#id_monper").text().split(" - ");
+				        var target="";
+				        $("#tbody-target").html("");
+				        for(i=tahun[0];i<=tahun[1];i++){
+				        	var nilai="";
+				        	$.ajax({
+	        					type: "GET",
+	                            url: urls+'get-nsaTarget/'+val.id+'/'+($.trim(i)),
+	                            async:false,
+	                            success: function (hasil) {
+	                            		var val = hasil.content;
+	                            		if(val.length>0){
+	                            			nilai = val[0]["value"];	
+	                            		}
+	                            	}
+	                        });
+				        	target += '<tr>'+
+			                        	'<td><input type="text" name="target[][year]" class="input-block-level" value="'+($.trim(i))+'" readonly="true"/></td>'+
+			                        	'<td><input type="text" name="target[][nilai]" class="input-block-level"  value="'+nilai+'" readonly="true"/></td>'+
+			                        '</tr>';
+				        }
+				        $("#tbody-target").append(target);
+				        $.ajax({
+        					type: "GET",
+                            url: urls+'get-nsaFunding/'+val.id+'/'+$("#id_monper").val(),
+                            async:false,
+                            success: function (hasil) {
+                            		var val = hasil.content;
+                            		if(val.length>0){
+                            			$('#baseline').val(val[0]["baseline"]).attr("readonly",true);
+                            			$('#budsource').val(val[0]["funding_source"]).attr("readonly",true);
+                            		}
+                            	}
+                        });
                     },
                 })
              }).on('click', '.delete', function(){

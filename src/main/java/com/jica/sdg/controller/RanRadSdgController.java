@@ -19,9 +19,11 @@ import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.GovTarget;
 import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.NsaActivity;
+import com.jica.sdg.model.NsaFunding;
 import com.jica.sdg.model.NsaIndicator;
 import com.jica.sdg.model.NsaMap;
 import com.jica.sdg.model.NsaProgram;
+import com.jica.sdg.model.NsaTarget;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgDisaggre;
@@ -37,9 +39,11 @@ import com.jica.sdg.service.IGovProgramService;
 import com.jica.sdg.service.IGovTargetService;
 import com.jica.sdg.service.IMonPeriodService;
 import com.jica.sdg.service.INsaActivityService;
+import com.jica.sdg.service.INsaFundingService;
 import com.jica.sdg.service.INsaIndicatorService;
 import com.jica.sdg.service.INsaMapService;
 import com.jica.sdg.service.INsaProgramService;
+import com.jica.sdg.service.INsaTargetService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.ISdgDisaggreDetailService;
@@ -147,6 +151,12 @@ public class RanRadSdgController {
 	
 	@Autowired
 	IGovFundingService govFundingService;
+	
+	@Autowired
+	INsaTargetService nsaTargetService;
+	
+	@Autowired
+	INsaFundingService nsaFundingService;
 	
 	//*********************** SDG ***********************
 
@@ -559,7 +569,9 @@ public class RanRadSdgController {
 	@ResponseBody
 	public void saveGovFunding(@RequestBody GovFunding gov) {
     	govFundingService.deleteByGovInd(gov.getId_gov_indicator(), gov.getId_monper());
-    	govFundingService.saveGovFunding(gov);
+    	if(!gov.getBaseline().equals("") || !gov.getFunding_source().equals("")) {
+    		govFundingService.saveGovFunding(gov);
+    	}
 	}
     
     @GetMapping("admin/get-govFunding/{id_gov_indicator}/{id_monper}")
@@ -703,8 +715,7 @@ public class RanRadSdgController {
     }
     
     @PostMapping(path = "admin/save-nsaIndicator/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
-	@ResponseBody
-	public void saveNsaIndicator(@RequestBody NsaIndicator gov,
+	public @ResponseBody Map<String, Object> saveNsaIndicator(@RequestBody NsaIndicator gov,
 			@PathVariable("sdg_indicator") String sdg_indicator,
 			@PathVariable("id_monper") Integer id_monper,
 			@PathVariable("id_prov") String id_prov) {
@@ -733,6 +744,9 @@ public class RanRadSdgController {
         		nsaMapService.saveNsaMap(map);
     		}
     	}
+    	Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",gov.getId());
+        return hasil;
 	}
     
     @GetMapping("admin/get-nsaIndicator/{id}")
@@ -748,6 +762,53 @@ public class RanRadSdgController {
 	public void deleteNsaIndicator(@PathVariable("id") Integer id) {
     	nsaIndicatorService.deleteNsaIndicator(id);
 	}
+    
+    @PostMapping(path = "admin/save-nsaTarget/{id_nsa_indicator}/{id_role}", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public void saveNsaTarget(@RequestBody Map<String, Object> payload,@PathVariable("id_nsa_indicator") Integer id_nsa_indicator,@PathVariable("id_role") Integer id_role) {
+    	JSONObject jsonObject = new JSONObject(payload);
+        JSONObject catatan = jsonObject.getJSONObject("target");
+        JSONArray c = catatan.getJSONArray("target");
+        nsaTargetService.deleteByNsaInd(id_nsa_indicator);
+        for (int i = 0 ; i < c.length(); i++) {
+        	JSONObject obj = c.getJSONObject(i);
+        	String year = obj.getString("year");
+        	String value = obj.getString("nilai");
+        	if(!value.equals("")) {
+        		NsaTarget nsa = new NsaTarget();
+        		nsa.setId_nsa_indicator(id_nsa_indicator);
+        		nsa.setId_role(id_role);
+        		nsa.setYear(Integer.parseInt(year));
+        		nsa.setValue(Integer.parseInt(value));
+        		nsaTargetService.saveNsaTarget(nsa);
+        	}
+        }
+    }
+    
+    @GetMapping("admin/get-nsaTarget/{id}/{year}")
+    public @ResponseBody Map<String, Object> getNsaTarget(@PathVariable("id") Integer id, @PathVariable("year") Integer year) {
+        List<NsaTarget> list = nsaTargetService.findByNsaYear(id, year);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-nsaFunding", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public void saveNsaFunding(@RequestBody NsaFunding gov) {
+    	nsaFundingService.deleteByNsaInd(gov.getId_nsa_indicator(), gov.getId_monper());
+    	if(!gov.getBaseline().equals("") || !gov.getFunding_source().equals("")) {
+    		nsaFundingService.saveNsaFunding(gov);
+    	}
+	}
+    
+    @GetMapping("admin/get-nsaFunding/{id_nsa_indicator}/{id_monper}")
+    public @ResponseBody Map<String, Object> getNsaFunding(@PathVariable("id_nsa_indicator") Integer id_nsa_indicator, @PathVariable("id_monper") Integer id_monper) {
+        List<NsaFunding> list = nsaFundingService.findByNsaMon(id_nsa_indicator, id_monper);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
     
   //*********************** RAN / RAD ***********************
     
