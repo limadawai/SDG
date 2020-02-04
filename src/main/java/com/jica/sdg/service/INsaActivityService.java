@@ -16,4 +16,6 @@ public interface INsaActivityService {
     void deleteNsaActivity(Integer id);
     
     void updateRole(Integer id_role, Integer id);
+    
+    Integer countNsaActivity(Integer id);
 }

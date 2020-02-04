@@ -14,4 +14,6 @@ public interface ISdgDisaggreService {
     Optional<SdgDisaggre> findOne(Integer id);
     
     void deleteSdgDisaggre(Integer id);
+    
+    Integer countDisaggre(Integer id_indicator);
 }

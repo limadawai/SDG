@@ -20,4 +20,6 @@ public interface ISdgTargetService {
     Optional<SdgTarget> findOne(Integer id);
     
     void deleteSdgTarget(Integer id);
+    
+    Integer countTarget(Integer id);
 }

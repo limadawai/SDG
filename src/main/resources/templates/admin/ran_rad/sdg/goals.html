@@ -134,6 +134,7 @@
 	        //Bahasa
 	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data dan Data level dibawahnya?";
+	        var messDelBiasa = "Menghapus Data?";
 	        var buttDel = 'Ya, Hapus data ini!';
 	        var titleOk	= "Hapus";
 	        var messOk = "Data berhasil dihapus";
@@ -150,10 +151,12 @@
 	    	        messOk = "Data berhasil dihapus";
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
+	    	        messDelBiasa = "Menghapus Data?";
 				}else{
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
 	        		titleDel = "Are you sure";
+	        		messDelBiasa = "Delete this data?";
 	        		messDel = "Lower level data exists but will be deleted. OK?";
 	        		buttDel = 'Yes, Delete this data!';
 	        		titleOk	= "Delete";
@@ -298,12 +301,26 @@
         				$('#nm_goals_eng').val(val.nm_goals_eng).attr("readonly",true);
 						$('#myModal').modal('show');
                     },
-                })
+                });
              }).on('click', '.delete', function(){
 				var id = $(this).attr('data-id');
+				var pesan=messDelBiasa;
+				$.ajax({
+					type: "GET",
+                    url: urls+'count-sdgTarget/'+id,
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	if(val>0){
+                    		pesan = messDel;
+                    	}else{
+                    		pesan = messDelBiasa;
+                    	}
+                    },
+                });
 				swal({
                     title: titleDel,
-                    text: messDel,
+                    text: pesan,
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

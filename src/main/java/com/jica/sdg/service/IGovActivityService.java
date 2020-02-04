@@ -18,4 +18,6 @@ public interface IGovActivityService {
     void deleteGovActivity(Integer id);
     
     void UpdateRole(Integer id_role, Integer id);
+    
+    Integer countGovActivity(Integer id);
 }

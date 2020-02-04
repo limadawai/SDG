@@ -43,6 +43,9 @@ public class NsaIndicatorService implements INsaIndicatorService{
 	public List findAllIndi(Integer id_program, Integer id_activity) {
 		return nsaIndicatorRepo.findAllIndi(id_program, id_activity);
 	}
-	
-	
+
+	@Override
+	public Integer countIndicator(Integer id_program, Integer id_activity) {
+		return nsaIndicatorRepo.countIndicator(id_program, id_activity);
+	}
 }

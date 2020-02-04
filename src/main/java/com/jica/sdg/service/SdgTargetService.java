@@ -49,4 +49,9 @@ public class SdgTargetService implements ISdgTargetService{
 	public void deleteSdgTarget(Integer id) {
 		sdgtargetRepo.deleteById(id);
 	}
+
+	@Override
+	public Integer countTarget(Integer id) {
+		return sdgtargetRepo.countTarget(id);
+	}
 }
