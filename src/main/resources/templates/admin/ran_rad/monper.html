@@ -55,10 +55,10 @@
                                             	<span class="lang_eng" style="display:none">Period Year</span>
                                             	<span class="lang_indo">Periode Tahun</span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;">
+                                            <!-- <th style="text-align:center;font-size:80%;">
                                             	<span class="lang_eng" style="display:none">Monitoring Period</span>
                                             	<span class="lang_indo">Periode Monitoring</span>
-                                            </th>
+                                            </th> -->
                                             <th style="text-align:center;font-size:80%;">Status</th>
                                             <th style="text-align:center;font-size:80%;">
                                             	<span class="lang_eng" style="display:none">Action</span>
@@ -293,9 +293,9 @@
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row.start_year+" - "+row.end_year+"</div>";
 						}},
-						{"data": function (row, data, index, display) {
+						/* {"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row.sdg_indicator+"</div>";
-						}},
+						}}, */
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row.status+"</div>";
 						}},
