@@ -114,7 +114,6 @@ public class DataEntryController {
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("id_role", session.getAttribute("id_role"));
-        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleAll());
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov      = list.get().getId_prov();
     	String privilege    = list.get().getPrivilege();
@@ -124,6 +123,7 @@ public class DataEntryController {
             Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
             list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
+    	model.addAttribute("listNsaProfile", roleService.findByProvince(id_prov));
         model.addAttribute("id_prov", id_prov);
         model.addAttribute("privilege", privilege);
         return "admin/dataentry/entry_sdg";
