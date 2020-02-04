@@ -45,4 +45,9 @@ public class SdgIndicatorService implements ISdgIndicatorService{
 		List list = sdgIndicatorRepo.findAllGrid(id_goals, id_target);
 		return list;
 	}
+
+	@Override
+	public Integer countIndicator(Integer id_goals, Integer id_target) {
+		return sdgIndicatorRepo.countIndicator(id_goals, id_target);
+	}
 }

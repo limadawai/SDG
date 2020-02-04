@@ -152,6 +152,7 @@
 	        var messOk = "Data berhasil dihapus";
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
+	        var messDelBiasa = "Menghapus Data?";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -163,6 +164,7 @@
 	    	        messOk = "Data berhasil dihapus";
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
+	    	        messDelBiasa = "Menghapus Data?";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -173,6 +175,7 @@
 	    	        messOk = "Delete successful";
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
+	    	        messDelBiasa = "Delete this data?";
 	        	}
 	        }
 	        if(lang){
@@ -316,9 +319,23 @@
                 })
              }).on('click', '.delete', function(){
 				var id = $(this).attr('data-id');
+				var pesan=messDelBiasa;
+				$.ajax({
+					type: "GET",
+                    url: urls+'count-sdgIndicator/'+id_goals+'/'+id,
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	if(val>0){
+                    		pesan = messDel;
+                    	}else{
+                    		pesan = messDelBiasa;
+                    	}
+                    },
+                });
 				swal({
                     title: titleDel,
-                    text: messDel,
+                    text: pesan,
                     type: 'warning',
                     showCancelButton: true,
                     confirmButtonColor: '#3085d6',

@@ -34,6 +34,11 @@ public class SdgDisaggreService implements ISdgDisaggreService{
 	public void deleteSdgDisaggre(Integer id) {
 		sdgDisaggreRepository.deleteById(id);
 	}
+
+	@Override
+	public Integer countDisaggre(Integer id_indicator) {
+		return sdgDisaggreRepository.countDisaggre(id_indicator);
+	}
 	
 	
 }

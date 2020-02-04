@@ -16,4 +16,6 @@ public interface INsaIndicatorService {
     Optional<NsaIndicator> findOne(Integer id);
     
     void deleteNsaIndicator(Integer id);
+    
+    Integer countIndicator(Integer id_program, Integer id_activity);
 }

@@ -41,4 +41,9 @@ public class NsaActivityService implements INsaActivityService{
 	public void updateRole(Integer id_role, Integer id) {
 		nsaActivityRepo.UpdateRole(id_role, id);
 	}
+
+	@Override
+	public Integer countNsaActivity(Integer id) {
+		return nsaActivityRepo.countNsaActivity(id);
+	}
 }

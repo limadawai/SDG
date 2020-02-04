@@ -45,5 +45,10 @@ public class GovActivityService implements IGovActivityService{
 		govActivityRepo.UpdateRole(id_role, id);
 	}
 
+	@Override
+	public Integer countGovActivity(Integer id) {
+		return govActivityRepo.countGovActivity(id);
+	}
+
 	
 }

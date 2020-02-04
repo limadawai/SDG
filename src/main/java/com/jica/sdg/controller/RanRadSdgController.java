@@ -239,6 +239,14 @@ public class RanRadSdgController {
 	public void deleteSdgtarget(@PathVariable("id") Integer id) {
 		sdgTargetService.deleteSdgTarget(id);
 	}
+	
+	@GetMapping("admin/count-sdgTarget/{id}")
+  public @ResponseBody Map<String, Object> countSdgTarget(@PathVariable("id") Integer id) {
+      Integer list = sdgTargetService.countTarget(id);
+      Map<String, Object> hasil = new HashMap<>();
+      hasil.put("content",list);
+      return hasil;
+  }
     
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator")
 //    public String sdg(Model model, @PathVariable("id") int id, @PathVariable("id_target") int id_target, HttpSession session) {
@@ -288,6 +296,14 @@ public class RanRadSdgController {
     	sdgIndicatorService.deleteSdgIndicator(id);
 	}
     
+    @GetMapping("admin/count-sdgIndicator/{id_goals}/{id_target}")
+    public @ResponseBody Map<String, Object> countsdgIndicator(@PathVariable("id_goals") Integer id_goals, @PathVariable("id_target") Integer id_target) {
+    	Integer list = sdgIndicatorService.countIndicator(id_goals, id_target);
+    	Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/ran_rad/sdg/goals/{id}/target/{id_target}/indicator/{id_indicator}/disaggre")
     public String disagre(Model model, @PathVariable("id") int id, @PathVariable("id_target") int id_target, @PathVariable("id_indicator") int id_indicator, HttpSession session) {
 //    public String disagre(Model model, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, @PathVariable("id_indicator") Integer id_indicator, HttpSession session) {
@@ -320,6 +336,14 @@ public class RanRadSdgController {
     @GetMapping("admin/get-sdgDisaggre/{id}")
     public @ResponseBody Map<String, Object> getSdgDisaggre(@PathVariable("id") Integer id) {
         Optional<SdgDisaggre> list = sdgDisaggreService.findOne(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/count-sdgDisaggre/{id}")
+    public @ResponseBody Map<String, Object> countsdgDisaggreDetail(@PathVariable("id") Integer id) {
+        Integer list = sdgDisaggreService.countDisaggre(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
@@ -439,6 +463,14 @@ public class RanRadSdgController {
         return hasil;
     }
     
+    @GetMapping("admin/count-govActivity/{id_program}")
+    public @ResponseBody Map<String, Object> countgovActivity(@PathVariable("id_program") Integer id_program) {
+        Integer list = govActivityService.countGovActivity(id_program);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-govActivityByProv/{id_program}/{id_prov}")
     public @ResponseBody Map<String, Object> govActivityListByProv(@PathVariable("id_program") Integer id_program, @PathVariable("id_prov") String id_prov) {
         List<GovActivity> list = govActivityService.findGovActivityByIdAndProv(id_program, id_prov);
@@ -496,6 +528,14 @@ public class RanRadSdgController {
     @GetMapping("admin/list-govIndicator/{id_program}/{id_activity}")
     public @ResponseBody Map<String, Object> govIndicatorList(@PathVariable("id_program") Integer id_program, @PathVariable("id_activity") Integer id_activity) {
         List list = govIndicatorService.findAllIndi(id_program, id_activity);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/count-govIndicator/{id_program}/{id_activity}")
+    public @ResponseBody Map<String, Object> countgovIndicator(@PathVariable("id_program") Integer id_program, @PathVariable("id_activity") Integer id_activity) {
+        Integer list = govIndicatorService.countIndicator(id_program, id_activity);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
@@ -661,6 +701,14 @@ public class RanRadSdgController {
         return hasil;
     }
     
+    @GetMapping("admin/count-nsaActivity/{id_program}")
+    public @ResponseBody Map<String, Object> countnsaActivity(@PathVariable("id_program") Integer id_program) {
+        Integer list = nsaActivityService.countNsaActivity(id_program);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @PostMapping(path = "admin/save-nsaActivity", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public void saveNsaActivity(@RequestBody NsaActivity gov) {
@@ -709,6 +757,14 @@ public class RanRadSdgController {
     @GetMapping("admin/list-nsaIndicator/{id_program}/{id_activity}")
     public @ResponseBody Map<String, Object> nsaIndicatorList(@PathVariable("id_program") Integer id_program, @PathVariable("id_activity") Integer id_activity) {
         List<NsaIndicator> list = nsaIndicatorService.findAllIndi(id_program, id_activity);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/count-nsaIndicator/{id_program}/{id_activity}")
+    public @ResponseBody Map<String, Object> countnsaIndicator(@PathVariable("id_program") Integer id_program, @PathVariable("id_activity") Integer id_activity) {
+        Integer list = nsaIndicatorService.countIndicator(id_program, id_activity);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;

@@ -23,4 +23,7 @@ public interface GovActivityRepository extends CrudRepository<GovActivity, Integ
     @Modifying(clearAutomatically = true)
     @Query(value = "update gov_activity set id_role = :id_role where id = :id",nativeQuery = true)
     void UpdateRole(@Param("id_role") Integer id_role, @Param("id") Integer id);
+	
+	@Query(value = "select count(*) from gov_activity where id_program = :id_program",nativeQuery = true)
+	public Integer countGovActivity(@Param("id_program") Integer id_program);
 }

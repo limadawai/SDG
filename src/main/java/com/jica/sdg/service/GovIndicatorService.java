@@ -49,4 +49,9 @@ public class GovIndicatorService implements IGovIndicatorService{
 		return list;
 	}
 
+	@Override
+	public Integer countIndicator(Integer id_program, Integer id_activity) {
+		return govIndicatorRepo.countIndicator(id_program, id_activity);
+	}
+
 }

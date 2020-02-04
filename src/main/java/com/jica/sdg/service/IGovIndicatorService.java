@@ -19,4 +19,6 @@ public interface IGovIndicatorService {
     Optional<GovIndicator> findOne(Integer id);
     
     void deleteGovIndicator(Integer id);
+    
+    Integer countIndicator(Integer id_program, Integer id_activity);
 }

@@ -18,4 +18,6 @@ public interface ISdgIndicatorService {
     Optional<SdgIndicator> findOne(Integer id);
     
     void deleteSdgIndicator(Integer id);
+    
+    Integer countIndicator(Integer id_goals, Integer id_target);
 }
