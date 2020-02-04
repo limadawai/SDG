@@ -5,12 +5,9 @@ import com.jica.sdg.model.EntryGovIndicator;
 import com.jica.sdg.model.EntryNsaBudget;
 import com.jica.sdg.model.EntryNsaIndicator;
 import com.jica.sdg.model.EntrySdg;
-import com.jica.sdg.model.EntrySdgIndicatorJoin;
 import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.NsaProgram;
 
-import com.jica.sdg.model.EntryProblemIdentify;
-import com.jica.sdg.model.EntrySdg;
 import com.jica.sdg.model.GovActivity;
 import com.jica.sdg.model.NsaActivity;
 import com.jica.sdg.repository.EntryProblemIdentifyRepository;
@@ -19,9 +16,7 @@ import com.jica.sdg.service.*;
 import java.util.*;
 
 import com.jica.sdg.model.Provinsi;
-import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
-import com.jica.sdg.model.SdgDisaggre;
 import com.jica.sdg.model.SdgFunding;
 import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
@@ -387,7 +382,7 @@ public class DataEntryController {
         model.addAttribute("title", "SDG Indicators Monitoring");
         govprog.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         govact.ifPresent(foundUpdateObject -> model.addAttribute("govAct", foundUpdateObject));
-        return "admin/dataentry/govindicator";
+        return "govindicator-bak";
     }
     
     @GetMapping("admin/list-entry-gov-indicator/{id_program}/{id_activity}/{id_role}/{id_monper}/{tahun}")
