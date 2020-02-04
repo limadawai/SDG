@@ -140,7 +140,7 @@
 </body>
 <div id="myModal" data-backdrop="static"class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <button type="button" class="close tutup" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 class="lang_eng" style="display:none">Add Activity Indicators</h3>
 			    <h3 class="lang_indo">Tambah Indikator Kegiatan</h3>
 		  	</div>
@@ -255,7 +255,7 @@
 				  </div>
 			</div>
 			<div class="modal-footer">
-		    	<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    	<button class="btn tutup" data-dismiss="modal" aria-hidden="true">
 		    		<span class="lang_eng" style="display:none">Close</span>
 		    		<span class="lang_indo">Tutup</span>
 		    	</button>
@@ -334,7 +334,7 @@
     						}
                         	option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
                         	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
-			                            '<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
+                        				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
 			                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
 			                      '</label><br/>';
                         	$.ajax({
@@ -354,7 +354,7 @@
                 						}
                                     	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
                                     	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-							                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+                                    					'<input data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="submenu" style="vertical-align:middle">&nbsp;&nbsp;&nbsp;'+
 							                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
 							                      '</label><br/>';
                                     	$.ajax({
@@ -392,7 +392,7 @@
 	        $('.accordion-inner').on('click', '.menu-master', function(){
 	        	var id = $(this).data('id');
 	        	if ($(this).is(":checked")) {
-	                $(".accordion-inner").find('.menu'+id).prop("checked", false);
+	                $(".accordion-inner").find('.menu'+id).prop("checked", true);
 	            } else {
 	            	 $(".accordion-inner").find('.menu'+id).prop("checked", false);
 	            }
@@ -402,29 +402,29 @@
 	        	var id = $(this).data('id');
 	        	var goals = $(this).data('goals');
 	        	if ($(this).is(":checked")) {
-	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", true);
 	            } else {
 	            	 $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
 	            }
 	        	
-	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+	        	/* if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
 	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
 	            } else {
 	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
-	            }
+	            } */
 	        });
 	        
 	        $('.accordion-inner').on('click', '.menu-slave-1', function(){
 	        	var id = $(this).data('id');
 	        	var goals = $(this).data('goals');
 	        	if ($(".menu-slave-1-"+id+":checked").length==$(".menu-slave-1-"+id).length) {
-	                $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+	                $(".accordion-inner").find('#submenu'+id).prop("checked", true);
 	            } else {
 	            	 $(".accordion-inner").find('#submenu'+id).prop("checked", false);
 	            }
 	        	
 	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
-	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+	                $(".accordion-inner").find('#menu'+goals).prop("checked", true);
 	            } else {
 	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
 	            }
@@ -482,6 +482,7 @@
 			function clearForm(){
 				$('#id_gov_indicator').val("").removeAttr("readonly");
 				$('#id').val("");
+				$('input[name="target[][nilai]"]').val("").removeAttr("readonly");
 				$('#nm_indicator').val("").removeAttr("readonly");
 				$('#nm_indicator_eng').val("").removeAttr("readonly");
 				$('#unit').val("").removeAttr("disabled");
@@ -495,22 +496,18 @@
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
-			
+			var tahun = $("#id_monper").text().split(" - ");
+	        var target="";
+	        $("#tbody-target").html("");
+	        for(i=tahun[0];i<=tahun[1];i++){
+	        	target += '<tr>'+
+                        	'<td><input type="text" name="target[][year]" class="input-block-level" value="'+($.trim(i))+'" readonly="true"/></td>'+
+                        	'<td><input type="text" name="target[][nilai]" class="input-block-level"  value="" /></td>'+
+                        '</tr>';
+	        }
+	        $("#tbody-target").append(target);
 			$('#myModal').on('hidden',function(){
-				clearForm();
 				$('#hide_kode_internal').hide();
-			}).on("show", function(){
-				//Target
-		        var tahun = $("#id_monper").text().split(" - ");
-		        var target="";
-		        $("#tbody-target").html("");
-		        for(i=tahun[0];i<=tahun[1];i++){
-		        	target += '<tr>'+
-	                        	'<td><input type="text" name="target[][year]" class="input-block-level" value="'+($.trim(i))+'" readonly="true"/></td>'+
-	                        	'<td><input type="text" name="target[][nilai]" class="input-block-level"  value="" /></td>'+
-	                        '</tr>';
-		        }
-		        $("#tbody-target").append(target);
 			});
 			
 			$('#submit').on('click', function(){
@@ -745,6 +742,8 @@
                             		}
                             	}
                         });
+				        $('#baseline').attr("readonly",true);
+				        $('#budsource').attr("readonly",true);
                     },
                 })
              }).on('click', '.delete', function(){
@@ -777,6 +776,10 @@
                     }
                 })
              });
+			
+			$('.tutup').on('click', function(){
+				clearForm();
+			});
 			
 			var privilege = [[${privilege}]];
             $('#hide_kode_internal').hide();
