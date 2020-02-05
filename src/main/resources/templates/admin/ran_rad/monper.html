@@ -327,7 +327,7 @@
 				$('#gov_prog_bud').val("yearly").removeAttr("readonly");
 				$('#nsa_prog_bud').val("yearly").removeAttr("readonly");
 				$('#ident_problem').val("yearly").removeAttr("readonly");
-				$('#best_pract').val("").removeAttr("readonly");
+				$('#best_pract').val("a").removeAttr("readonly");
 				$('#status').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
@@ -387,11 +387,6 @@
 				if (ident_problem == ""){
                     $("#error_ident_problem").parents(".control-group").first().addClass("error");
                     $("#error_ident_problem").text(required);
-                    cek += 1;
-                }
-				if (best_pract == ""){
-                    $("#error_best_pract").parents(".control-group").first().addClass("error");
-                    $("#error_best_pract").text(required);
                     cek += 1;
                 }
 				if (status == ""){

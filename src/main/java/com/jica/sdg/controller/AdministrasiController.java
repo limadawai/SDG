@@ -123,7 +123,16 @@ public class AdministrasiController {
     @GetMapping("admin/manajemen/list-unit")
     public @ResponseBody Map<String, Object> units(HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
-        String sql = "select * from ref_unit where id_role = '"+id_role+"'";
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String id_prov = listRole.get().getId_prov();
+    	String sql;
+    	if(privilege.equals("SUPER")) {
+    		sql = "select * from ref_unit";
+    	}else {
+    		sql = "select a.* from ref_unit left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
+    	}
+        
         Query list = em.createNativeQuery(sql);
         List<Object[]> rows = list.getResultList();
         List<Unit> result = new ArrayList<>(rows.size());
