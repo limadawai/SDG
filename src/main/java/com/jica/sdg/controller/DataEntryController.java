@@ -382,7 +382,7 @@ public class DataEntryController {
         model.addAttribute("title", "SDG Indicators Monitoring");
         govprog.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         govact.ifPresent(foundUpdateObject -> model.addAttribute("govAct", foundUpdateObject));
-        return "govindicator-bak";
+        return "admin/dataentry/govindicator";
     }
     
     @GetMapping("admin/list-entry-gov-indicator/{id_program}/{id_activity}/{id_role}/{id_monper}/{tahun}")

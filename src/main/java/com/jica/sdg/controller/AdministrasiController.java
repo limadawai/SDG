@@ -23,6 +23,8 @@ import com.jica.sdg.service.IUserRequestListService;
 import com.jica.sdg.service.MenuService;
 import com.jica.sdg.service.SubmenuService;
 import com.jica.sdg.service.IUserService;
+
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -123,7 +125,16 @@ public class AdministrasiController {
     @GetMapping("admin/manajemen/list-unit")
     public @ResponseBody Map<String, Object> units(HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
-        String sql = "select * from ref_unit where id_role = '"+id_role+"'";
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String id_prov = listRole.get().getId_prov();
+    	String sql;
+    	if(privilege.equals("SUPER")) {
+    		sql = "select * from ref_unit";
+    	}else {
+    		sql = "select a.* from ref_unit left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
+    	}
+        
         Query list = em.createNativeQuery(sql);
         List<Object[]> rows = list.getResultList();
         List<Unit> result = new ArrayList<>(rows.size());
@@ -175,8 +186,11 @@ public class AdministrasiController {
         return hasil;
     }
     
-    @GetMapping("admin/manajemen/cek-role/{id_prov}/{nm_role}")
-    public @ResponseBody Map<String, Object> cekRoles(HttpSession session, @PathVariable("id_prov") String id_prov, @PathVariable("nm_role") String nm_role) {
+    @PostMapping("admin/manajemen/cek-role")
+    public @ResponseBody Map<String, Object> cekRoles(HttpSession session, @RequestBody Map<String, Object> payload) {
+    	JSONObject jsonObunit = new JSONObject(payload);
+        String id_prov = jsonObunit.get("id_prov").toString();  
+        String nm_role = jsonObunit.get("nm_role").toString();
     	Integer cek = roleService.cekRole(id_prov, nm_role);
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("cek", cek);
