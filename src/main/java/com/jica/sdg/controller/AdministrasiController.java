@@ -23,6 +23,8 @@ import com.jica.sdg.service.IUserRequestListService;
 import com.jica.sdg.service.MenuService;
 import com.jica.sdg.service.SubmenuService;
 import com.jica.sdg.service.IUserService;
+
+import java.net.URLDecoder;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -184,8 +186,11 @@ public class AdministrasiController {
         return hasil;
     }
     
-    @GetMapping("admin/manajemen/cek-role/{id_prov}/{nm_role}")
-    public @ResponseBody Map<String, Object> cekRoles(HttpSession session, @PathVariable("id_prov") String id_prov, @PathVariable("nm_role") String nm_role) {
+    @PostMapping("admin/manajemen/cek-role")
+    public @ResponseBody Map<String, Object> cekRoles(HttpSession session, @RequestBody Map<String, Object> payload) {
+    	JSONObject jsonObunit = new JSONObject(payload);
+        String id_prov = jsonObunit.get("id_prov").toString();  
+        String nm_role = jsonObunit.get("nm_role").toString();
     	Integer cek = roleService.cekRole(id_prov, nm_role);
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("cek", cek);
