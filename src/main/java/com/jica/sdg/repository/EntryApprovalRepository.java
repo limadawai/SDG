@@ -13,5 +13,10 @@ public interface EntryApprovalRepository extends CrudRepository<EntryApproval, I
     @Modifying(clearAutomatically = true)
     @Query(value = "update entry_approval set approval = :approval, description = :description WHERE id = :id",nativeQuery = true)
     void updateApproval(@Param("approval") String approval, @Param("description") String description, @Param("id") Integer id);
+
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "delete from entry_approval WHERE id_role = :id_role and id_monper = :id_monper and year = :year and type = :type and approval <> 2",nativeQuery = true)
+    void deleteApproval(@Param("id_role") Integer id_role, @Param("id_monper") Integer id_monper, @Param("year") Integer year, @Param("type") String type);
     
 }

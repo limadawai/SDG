@@ -43,6 +43,11 @@ public class EntryApprovalService implements IEntryApprovalService{
 	public void updateApproval(String approval, String description, Integer id) {
 		repo.updateApproval(approval, description, id);
 	}
+
+	@Override
+	public void deleteApproveGovBudget(Integer id_role, Integer id_monper, Integer year, String type) {
+		repo.deleteApproval(id_role, id_monper, year, type);
+	}
 	
 	
 }

@@ -42,9 +42,6 @@ public class EntryApproval implements Serializable {
     @Column(name = "type")
     private String type;
     
-    @Column(nullable = true,name = "period")
-    private Integer period;
-    
     @Column(nullable = true,name = "description")
     private String description;
 
@@ -52,7 +49,7 @@ public class EntryApproval implements Serializable {
     }
 
 	public EntryApproval(Integer id, Integer id_form_type, Integer id_role, Integer id_monper, Integer year,
-			String approval, Date approval_date, String type, Integer period, String description) {
+			String approval, Date approval_date, String type, String description) {
 		super();
 		this.id = id;
 		this.id_form_type = id_form_type;
@@ -62,7 +59,6 @@ public class EntryApproval implements Serializable {
 		this.approval = approval;
 		this.approval_date = approval_date;
 		this.type = type;
-		this.period = period;
 		this.description = description;
 	}
 
@@ -128,14 +124,6 @@ public class EntryApproval implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public Integer getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(Integer period) {
-		this.period = period;
 	}
 
 	public String getDescription() {

@@ -144,4 +144,56 @@ public class ApprovalController {
         	}
         }
 	}
+        
+        
+    // approval gov
+    @GetMapping("admin/data-approval/gov-program-monitoring")
+    public String entry_gov(Model model, HttpSession session) {
+        model.addAttribute("title", "SDG Indicators Monitoring");
+        
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleAll());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        return "admin/approval/entry_gov";
+    }
+    
+    
+    
+    
+    // approval nsa
+    @GetMapping("admin/data-approval/nongov-program-monitoring")
+    public String entry_nongov(Model model, HttpSession session) {
+        model.addAttribute("title", "SDG Indicators Monitoring");
+        
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleAll());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        return "admin/approval/entry_nsa";
+    }
 }

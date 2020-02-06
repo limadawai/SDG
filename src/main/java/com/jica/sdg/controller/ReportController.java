@@ -116,10 +116,31 @@ public class ReportController {
 
     @GetMapping("admin/govfunding")
     public @ResponseBody List<Object> getAllGovFunding(@RequestParam("id_indicator") int idindikator) {
-        String sql = "SELECT a.*, b.unit, c.value FROM gov_funding a LEFT JOIN " +
+        String sql = "SELECT a.*, b.unit, c.value, (d.achievement1+d.achievement2+d.achievement3+d.achievement4) AS total " +
+                "FROM gov_funding a LEFT JOIN " +
                 "gov_indicator b ON b.id = a.id_gov_indicator LEFT JOIN " +
-                "gov_target c on c.year = (SELECT start_year from ran_rad where id_monper = a.id_monper) " +
+                "gov_target c ON c.year = (SELECT start_year FROM ran_rad where id_monper = a.id_monper) LEFT JOIN " +
+                "entry_gov_budget d ON d.year_entry = (SELECT start_year FROM ran_rad where id_monper = a.id_monper) " +
                 "WHERE a.id_gov_indicator = :id_gov_indicator";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_gov_indicator", idindikator);
+        List list = query.getResultList();
+        return list;
+    }
+
+    @GetMapping("admin/govindicator")
+    public @ResponseBody List<Object> getTabBawahContent(@RequestParam("id_gov_indicator") int idindikator) {
+        String sql = "SELECT a.id, a.nm_indicator, a.nm_indicator_eng, a.unit, a.internal_code AS kodeindi, " +
+                "b.nm_program, b.nm_program_eng, b.internal_code AS kodeprog, " +
+                "c.nm_activity, c.nm_activity_eng, c.internal_code AS kodeact, " +
+                "d.value, e.nm_unit, f.funding_source " +
+                "FROM gov_indicator a LEFT JOIN " +
+                "gov_program b ON b.id = a.id_program LEFT JOIN " +
+                "gov_activity c ON c.id = a.id_program LEFT JOIN " +
+                "gov_target d ON d.id_gov_indicator = a.id LEFT JOIN " +
+                "ref_unit e ON e.id_unit = a.unit LEFT JOIN " +
+                "gov_funding f ON f.id_gov_indicator = a.id " +
+                "WHERE a.id = :id_gov_indicator";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_gov_indicator", idindikator);
         List list = query.getResultList();
@@ -147,10 +168,31 @@ public class ReportController {
 
     @GetMapping("admin/nsafunding")
     public @ResponseBody List<Object> getAllNsaFunding(@RequestParam("id_indicator") int idindikator) {
-        String sql = "SELECT a.*, b.unit, c.value FROM nsa_funding a LEFT JOIN " +
+        String sql = "SELECT a.*, b.unit, c.value, (d.achievement1+d.achievement2+d.achievement3+d.achievement4) " +
+                "FROM nsa_funding a LEFT JOIN " +
                 "nsa_indicator b ON b.id = a.id_nsa_indicator LEFT JOIN " +
-                "nsa_target c on c.year = (SELECT start_year from ran_rad where id_monper = a.id_monper) " +
+                "nsa_target c ON c.year = (SELECT start_year from ran_rad where id_monper = a.id_monper) LEFT JOIN " +
+                "entry_nsa_budget d ON d.year_entry = (SELECT start_year FROM ran_rad where id_monper = a.id_monper) " +
                 "WHERE a.id_nsa_indicator = :id_nsa_indicator";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_nsa_indicator", idindikator);
+        List list = query.getResultList();
+        return list;
+    }
+
+    @GetMapping("admin/nsaindicator")
+    public @ResponseBody List<Object> getTabBawahContentNsa(@RequestParam("id_nsa_indicator") int idindikator) {
+        String sql = "SELECT a.id, a.nm_indicator, a.nm_indicator_eng, a.unit, a.internal_code AS kodeindi, " +
+                "b.nm_program, b.nm_program_eng, b.internal_code AS kodeprog, " +
+                "c.nm_activity, c.nm_activity_eng, c.internal_code AS kodeact, " +
+                "d.value, e.nm_unit, f.funding_source " +
+                "FROM nsa_indicator a LEFT JOIN " +
+                "nsa_program b ON b.id = a.id_program LEFT JOIN " +
+                "nsa_activity c ON c.id = a.id_program LEFT JOIN " +
+                "nsa_target d ON d.id_nsa_indicator = a.id LEFT JOIN " +
+                "ref_unit e ON e.id_unit = a.unit LEFT JOIN " +
+                "nsa_funding f ON f.id_nsa_indicator = a.id " +
+                "WHERE a.id = :id_nsa_indicator";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_nsa_indicator", idindikator);
         List list = query.getResultList();
