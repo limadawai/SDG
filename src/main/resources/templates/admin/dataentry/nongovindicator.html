@@ -123,6 +123,16 @@
                     </div>
                 </div>
             </div>
+            <div class="btn-toolbar" style="float:right" id="apply">
+                <a class="btn btn-success btn-small" id="apply_btn" data-id="#">
+                    <span class="lang_indo">Terapkan</span>
+                    <span class="lang_eng">Apply</span>
+                </a>
+                <a class="btn btn-primary btn-small" id="unapply_btn" data-id="#" style="display: none">
+                    <span class="lang_indo">Batal Terapkan</span>
+                    <span class="lang_eng">UnApply</span>
+                </a>
+            </div>
         </div>
         <div class="modal hide fade addModal" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -243,7 +253,7 @@
 //
 //        }
 
-
+        btn_apply();
         $("#id_prov").on('change', function(e){
             var id_prov = this.value ;
 //            $.ajax({
@@ -314,6 +324,7 @@
         var titleDel = "Anda Yakin";
             var messDel = "Menghapus Data?";
             var buttDel = 'Ya, Hapus data ini!';
+            var buttDel1 = 'Ya';
             var titleOk	= "Hapus";
             var messOk = "Data berhasil dihapus";
             var messNOk = "Data tidak dapat dihapus";
@@ -325,6 +336,7 @@
                             titleDel = "Anda Yakin";
                             messDel = "Menghapus Data?";
                             buttDel = 'Ya, Hapus data ini!';
+                            buttDel1 = 'Ya';
                             titleOk	= "Hapus";
                     messOk = "Data berhasil dihapus";
                     messNOk = "Data tidak dapat dihapus";
@@ -335,6 +347,7 @@
                             titleDel = "Are you sure";
                             messDel = "Delete this data?";
                             buttDel = 'Yes, Delete this data!';
+                            buttDel1 = 'Yes';
                             titleOk	= "Delete";
                     messOk = "Delete successful";
                     messNOk = "Can't delete data";
@@ -352,6 +365,130 @@
                     bhs($(this).is(':checked'));
             });
             
+            
+            //approval
+        
+        $('#apply').on('click', '#apply_btn', function(e){
+            swal({
+                title: titleDel,
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: buttDel1
+            }).then(function () {
+                var id_role             = $('#idrole').val();
+                var id_monper           = monper_1;
+                var year                = tahun_1;
+                var approval            = "1";
+                var type                = "entry_nsa_indicator";
+
+                var data    = JSON.stringify({
+                                'id': null,
+                                'id_form_type': "0",
+                                'id_role': id_role,
+                                'id_monper': id_monper,
+                                'year': year,
+                                'approval': approval,
+                                'approval_date': null,
+                                'type': type,
+                                'description': ''
+                            });
+                console.log(data);
+                $.ajax({
+                    type: "POST",
+                    url: urls+'save-approve-gov_prog',
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                    data: data,
+                    success: function (result) {
+                        grid();
+                        btn_apply();
+                    },
+                });
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                }
+            });
+        });
+        
+        $('#apply').on('click', '#unapply_btn', function(e){
+            swal({
+                title: titleDel,
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: buttDel1
+            }).then(function () {
+                var id_role             = $('#idrole').val();
+                var id_monper           = monper_1;
+                var year                = tahun_1;
+                var approval            = "1";
+                var type                = "entry_nsa_indicator";
+
+                var data    = JSON.stringify({
+                                'id': null,
+                                'id_form_type': "0",
+                                'id_role': id_role,
+                                'id_monper': id_monper,
+                                'year': year,
+                                'approval': approval,
+                                'approval_date': null,
+                                'type': type,
+                                'description': ''
+                            });
+                console.log(data);
+                $.ajax({
+                    type: "POST",
+                    url: urls+'delete-approve-gov_prog',
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                    data: data,
+                    success: function (result) {
+                        grid();
+                        btn_apply();
+
+                    },
+                });
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                }
+            });
+        });
+
+        function btn_apply(){
+            var id_role             = $('#idrole').val();
+            var id_monper           = monper_1;
+            var year                = tahun_1;
+            var type                = "entry_nsa_indicator";
+            $.ajax({
+                type: "GET",
+                url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+year+'/'+type,
+                success: function (result1) {
+                    if(result1.content == "1"){
+                        $('#apply_btn').hide();
+                        $('#unapply_btn').show();
+                    }else if(result1.content == "2"){
+                        $('#apply_btn').hide();
+                        $('#unapply_btn').hide();
+                    }else if(result1.content == "3"){
+                        $('#apply_btn').show();
+                        $('#unapply_btn').hide();
+                    }else{
+                        $('#apply_btn').show();
+                        $('#unapply_btn').hide();
+                    }
+                }
+            });
+        }
+        //tutup approval
             
             var v_dataid    = $("#periode").val();
             var v_data_id   = v_dataid.split("###");;
@@ -538,7 +675,30 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        
+                                        var id_role             = $('#idrole').val();
+                                        var id_monper1          = monper_1;
+                                        var year                = tahun_1;
+                                        var type                = "entry_nsa_indicator";
+                                        var apply               = "";
+                                        $.ajax({
+                                            type: "GET",
+                                            async:false,
+                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
+                                            success: function (result1) {
+                                                apply = result1.content;
+                                            }
+                                        });
+                                        if(apply == "1"){
+                                            return '';
+                                        }else if(apply == "2"){
+                                            return '';
+                                        }else if(apply == "3"){
+                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }else{
+                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
+                                        
                                     }},
                                 ],
                                 "columnDefs": [
@@ -635,7 +795,29 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        
+                                        var id_role             = $('#idrole').val();
+                                        var id_monper1          = monper_1;
+                                        var year                = tahun_1;
+                                        var type                = "entry_nsa_indicator";
+                                        var apply               = "";
+                                        $.ajax({
+                                            type: "GET",
+                                            async:false,
+                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
+                                            success: function (result1) {
+                                                apply = result1.content;
+                                            }
+                                        });
+                                        if(apply == "1"){
+                                            return '';
+                                        }else if(apply == "2"){
+                                            return '';
+                                        }else if(apply == "3"){
+                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }else{
+                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
                                     }},
                                 ],
                                 "columnDefs": [
@@ -732,7 +914,29 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        
+                                        var id_role             = $('#idrole').val();
+                                        var id_monper1          = monper_1;
+                                        var year                = tahun_1;
+                                        var type                = "entry_nsa_indicator";
+                                        var apply               = "";
+                                        $.ajax({
+                                            type: "GET",
+                                            async:false,
+                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
+                                            success: function (result1) {
+                                                apply = result1.content;
+                                            }
+                                        });
+                                        if(apply == "1"){
+                                            return '';
+                                        }else if(apply == "2"){
+                                            return '';
+                                        }else if(apply == "3"){
+                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }else{
+                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
                                     }},
                                 ],
                                 "columnDefs": [

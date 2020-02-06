@@ -1,5 +1,6 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.EntryApproval;
 import com.jica.sdg.model.EntryGovBudget;
 import com.jica.sdg.model.EntryGovIndicator;
 import com.jica.sdg.model.EntryNsaBudget;
@@ -287,6 +288,51 @@ public class DataEntryController {
 //        int id_monper           = entrySdg.getId_monper();
         entrySdgService.saveEntryGovBudget(entryGovBudget);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @PostMapping(path = "admin/save-approve-gov_prog", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveApproveGovProg(@RequestBody EntryApproval entryApproval) {
+        String type             = entryApproval.getType();
+        int year                = entryApproval.getYear();
+        int id_role             = entryApproval.getId_role();
+        int id_monper           = entryApproval.getId_monper();
+        if(entryApproval.getId()==null) {
+            entryApproval.setApproval_date(new Date());
+	}
+        approvalService.deleteApproveGovBudget(id_role, id_monper, year, type);
+        approvalService.save(entryApproval);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @PostMapping(path = "admin/delete-approve-gov_prog", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void deleteApproveGovProg(@RequestBody EntryApproval entryApproval) {
+        String type             = entryApproval.getType();
+        int year                = entryApproval.getYear();
+        int id_role             = entryApproval.getId_role();
+        int id_monper           = entryApproval.getId_monper();
+//        if(entryApproval.getId()==null) {
+//            entryApproval.setApproval_date(new Date());
+//	}
+        approvalService.deleteApproveGovBudget(id_role, id_monper, year, type);
+//        approvalService.save(entryApproval);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @GetMapping("admin/get-status-approve/{id_role}/{id_monper}/{year}/{type}")
+    public @ResponseBody Map<String, Object> getStatusApprove(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("type") String type) {
+        String sql  = "select approval from entry_approval as a where a.id_role = :id_role and a.id_monper = :id_monper and a.year = :year and a.type = :type ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        query.setParameter("type", type);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
     }
     
     @PostMapping(path = "admin/save-entry-gov_prog_indicator", consumes = "application/json", produces = "application/json")
