@@ -457,7 +457,11 @@
 			status_role = "Admin NSA";
 		}else if(cat_role=="Institution"){
 			status_role = "Admin Institution";
-		} 
+		}else if(cat_role=="gri_ojk") {
+			status_role = "Admin gri_ojk";
+		}else{
+			status_role = "";
+		}
 		var menu = [];
         $.each($("input[name='menu']:checked"), function(){
         	menu.push($(this).val());
@@ -494,9 +498,18 @@
             cek += 1;
         }
 		if(id_role==null){
+			var cekRole = JSON.stringify({
+				'id_prov':prov,
+				'nm_role':nm_role
+				});
 			$.ajax({
-				type: "GET",
-	            url: urls+'manajemen/cek-role/'+prov+'/'+nm_role,
+				type: "POST",
+	            url: urls+'manajemen/cek-role',
+	            beforeSend : function(xhr){
+                	xhr.setRequestHeader(header,token);
+                },
+                headers:{'Accept':'application/json','Content-Type':'application/json'},
+				data: cekRole,
 	            success: function (result) {
 	            	var ceka = result.cek;
 	            	if(ceka>0){
