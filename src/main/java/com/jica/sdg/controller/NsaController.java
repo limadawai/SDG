@@ -344,7 +344,7 @@ public class NsaController {
     	String id_prov      = list.get().getId_prov();
     	String privilege    = list.get().getPrivilege();
     	String cat_role     = list.get().getCat_role();
-    	if(cat_role.equals("NSA")) {
+    	if(!cat_role.equals("NSA") || privilege.equals("SUPER") || privilege.equals("ADMIN")) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);

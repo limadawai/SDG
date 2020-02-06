@@ -355,9 +355,9 @@
 				var id_monper = $('#id_monper').val();
 				var rel_prog_id = $('#rel_prog_id').val();
 				var internal_code = $('#internal_code').val();
-				if(internal_code==""){
+				/* if(internal_code==""){
 					internal_code = id_program;
-				}
+				} */
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -489,9 +489,9 @@
                 })
              });
              var privilege = [[${privilege}]];
-             $('#id_program').on('keyup keypress blur change',function(){
+             /* $('#id_program').on('keyup keypress blur change',function(){
                  $('#internal_code').val($(this).val());
-             });
+             }); */
              $('#hide_kode_internal').hide();
              if(privilege=='USER'){
                  $('#hide_kode_internal').hide();

@@ -64,6 +64,8 @@ import javax.persistence.Query;
 import javax.servlet.http.HttpServletResponse;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
@@ -414,10 +416,14 @@ public class RanRadSdgController {
     
     @PostMapping(path = "admin/save-govProg", consumes = "application/json", produces = "application/json")
 	@ResponseBody
+	@Transactional
 	public void savGovProg(@RequestBody GovProgram gov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	govProgService.saveGovProgram(gov);
+    	if(gov.getInternal_code().equals("")) {
+    		em.createNativeQuery("UPDATE gov_program set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	}
 	}
     
     @GetMapping("admin/get-govProg/{id}")
@@ -481,10 +487,14 @@ public class RanRadSdgController {
     
     @PostMapping(path = "admin/save-govActivity", consumes = "application/json", produces = "application/json")
 	@ResponseBody
+	@Transactional
 	public void saveGovActivity(@RequestBody GovActivity gov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	govActivityService.saveGovActivity(gov);
+    	if(gov.getInternal_code().equals("")) {
+    		em.createNativeQuery("UPDATE gov_activity set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	}
 	}
     
     @GetMapping("admin/get-govActivity/{id}")
@@ -542,13 +552,17 @@ public class RanRadSdgController {
     }
     
     @PostMapping(path = "admin/save-govIndicator/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
-	public @ResponseBody Map<String, Object> saveGovIndicator(@RequestBody GovIndicator gov,
+    @Transactional
+    public @ResponseBody Map<String, Object> saveGovIndicator(@RequestBody GovIndicator gov,
 			@PathVariable("sdg_indicator") String sdg_indicator,
 			@PathVariable("id_monper") Integer id_monper,
 			@PathVariable("id_prov") String id_prov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	govIndicatorService.saveGovIndicator(gov);
+    	if(gov.getInternal_code().equals("")) {
+    		em.createNativeQuery("UPDATE gov_indicator set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	}
     	if(!sdg_indicator.equals("0")) {
     		govMapService.deleteGovMapByGovInd(gov.getId());
     		String[] sdg = sdg_indicator.split(",");
@@ -655,10 +669,14 @@ public class RanRadSdgController {
     
     @PostMapping(path = "admin/save-nsaProg", consumes = "application/json", produces = "application/json")
 	@ResponseBody
+	@Transactional
 	public void savNsaProg(@RequestBody NsaProgram gov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaProgService.saveNsaProgram(gov);
+    	if(gov.getInternal_code().equals("")) {
+    		em.createNativeQuery("UPDATE nsa_program set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	}
 	}
     
     @GetMapping("admin/get-nsaProg/{id}")
@@ -678,8 +696,8 @@ public class RanRadSdgController {
     @GetMapping("admin/ran_rad/non-gov/program/{id_program}/activity")
     public String nsa_kegiatan(Model model, @PathVariable("id_program") Integer id_program, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
-    	Integer id_role = list.get().getId_role();
-    	Optional<Role> role = roleService.findOne(id_role);
+		/* Integer id_role = list.get().getId_role(); */
+    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
     	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
@@ -711,10 +729,14 @@ public class RanRadSdgController {
     
     @PostMapping(path = "admin/save-nsaActivity", consumes = "application/json", produces = "application/json")
 	@ResponseBody
+	@Transactional
 	public void saveNsaActivity(@RequestBody NsaActivity gov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaActivityService.saveNsaActivity(gov);
+    	if(gov.getInternal_code().equals("")) {
+    		em.createNativeQuery("UPDATE nsa_activity set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	}
 	}
     
     @GetMapping("admin/get-nsaActivity/{id}")
@@ -736,8 +758,9 @@ public class RanRadSdgController {
                                 @PathVariable("id_activity") Integer id_activity, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
     	Optional<NsaActivity> list1 = nsaActivityService.findOne(id_activity);
-    	Integer id_role = list.get().getId_role();
-    	Optional<Role> role = roleService.findOne(id_role);
+    	//Integer id_role = list.get().getId_role();
+    	//Optional<Role> role = roleService.findOne(id_role);
+    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
     	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
@@ -771,13 +794,17 @@ public class RanRadSdgController {
     }
     
     @PostMapping(path = "admin/save-nsaIndicator/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
-	public @ResponseBody Map<String, Object> saveNsaIndicator(@RequestBody NsaIndicator gov,
+    @Transactional
+    public @ResponseBody Map<String, Object> saveNsaIndicator(@RequestBody NsaIndicator gov,
 			@PathVariable("sdg_indicator") String sdg_indicator,
 			@PathVariable("id_monper") Integer id_monper,
 			@PathVariable("id_prov") String id_prov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaIndicatorService.saveNsaIndicator(gov);
+    	if(gov.getInternal_code().equals("")) {
+    		em.createNativeQuery("UPDATE nsa_indicator set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	}
     	if(!sdg_indicator.equals("0")) {
     		nsaMapService.deleteNsaMapByNsaInd(gov.getId());
     		String[] sdg = sdg_indicator.split(",");
