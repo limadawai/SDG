@@ -50,7 +50,8 @@
                     					<span class="lang_eng" style="display:none">Export</span>
                     					<span class="lang_indo">Ekspor</span>
                     			</button>
-                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary">
+                    			<!-- <button data-toggle="modal" data-target="#myModal" class="btn btn-primary"> -->
+                    			<button id="showModal" class="btn btn-primary">
                     				<i class="icon-plus"></i> 
                     					<span class="lang_eng" style="display:none">Add Program</span>
                     					<span class="lang_indo">Tambah Program</span>
@@ -215,6 +216,8 @@
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
 	        var messDelBiasa = "Menghapus Data?";
+	        var titleMod = "Maaf";
+	        var messMod = "Semua pilihan harus dipilih";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -227,6 +230,8 @@
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
 	    	        messDelBiasa = "Menghapus Data?";
+	    	        titleMod = "Maaf";
+	    	        messMod = "Semua pilihan harus dipilih";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -238,6 +243,8 @@
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
 	    	        messDelBiasa = "Delete this data?";
+	    	        titleMod = "Sorry";
+	    	        messMod = "All dropdownlists must be selected";
 	        	}
 	        }
 	        if(lang){
@@ -248,6 +255,14 @@
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
+	        });
+	        
+	        $('#showModal').on('click', function(){
+	        	if($('#id_prov').val() && $('#id_monper').val()){
+	        		$("#myModal").modal("show");
+	        	}else{
+	        		swal(titleMod,messMod,'error');
+	        	}
 	        });
 	        
 	        $('#id_prov').on('change', function(){
