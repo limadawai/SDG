@@ -116,7 +116,7 @@ public class ReportController {
 
     @GetMapping("admin/govfunding")
     public @ResponseBody List<Object> getAllGovFunding(@RequestParam("id_indicator") int idindikator) {
-        String sql = "SELECT a.*, b.unit, c.value, (d.achievement1+d.achievement2+d.achievement3+d.achievement4) AS total " +
+        String sql = "SELECT a.*, (SELECT nm_unit from ref_unit WHERE id_unit = b.unit), c.value, (d.achievement1+d.achievement2+d.achievement3+d.achievement4) AS total " +
                 "FROM gov_funding a LEFT JOIN " +
                 "gov_indicator b ON b.id = a.id_gov_indicator LEFT JOIN " +
                 "gov_target c ON c.year = (SELECT start_year FROM ran_rad where id_monper = a.id_monper) LEFT JOIN " +
@@ -133,13 +133,14 @@ public class ReportController {
         String sql = "SELECT a.id, a.nm_indicator, a.nm_indicator_eng, a.unit, a.internal_code AS kodeindi, " +
                 "b.nm_program, b.nm_program_eng, b.internal_code AS kodeprog, " +
                 "c.nm_activity, c.nm_activity_eng, c.internal_code AS kodeact, " +
-                "d.value, e.nm_unit, f.funding_source " +
+                "d.value, e.nm_unit, f.funding_source, g.achievement1, g.achievement2, g.achievement3, g.achievement4 " +
                 "FROM gov_indicator a LEFT JOIN " +
                 "gov_program b ON b.id = a.id_program LEFT JOIN " +
                 "gov_activity c ON c.id = a.id_program LEFT JOIN " +
                 "gov_target d ON d.id_gov_indicator = a.id LEFT JOIN " +
                 "ref_unit e ON e.id_unit = a.unit LEFT JOIN " +
-                "gov_funding f ON f.id_gov_indicator = a.id " +
+                "gov_funding f ON f.id_gov_indicator = a.id LEFT JOIN " +
+                "entry_gov_indicator g ON g.id_assign = a.id " +
                 "WHERE a.id = :id_gov_indicator";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_gov_indicator", idindikator);
