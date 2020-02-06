@@ -332,10 +332,6 @@ public class NsaController {
         insProfilrService.deleteInsProfil(id);
     }
 
-    
-    
-    
-    
     @GetMapping("admin/nsa/nsa-collaboration")
     public String nsa_collaboration(Model model, HttpSession session) {
         model.addAttribute("title", "NSA Collaboration");
@@ -348,7 +344,7 @@ public class NsaController {
     	String id_prov      = list.get().getId_prov();
     	String privilege    = list.get().getPrivilege();
     	String cat_role     = list.get().getCat_role();
-    	if(id_prov.equals("000")) {
+    	if(cat_role.equals("NSA")) {
     		model.addAttribute("listprov", provinsiService.findAllProvinsi());
     	}else {
     		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
