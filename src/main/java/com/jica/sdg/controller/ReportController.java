@@ -186,13 +186,14 @@ public class ReportController {
         String sql = "SELECT a.id, a.nm_indicator, a.nm_indicator_eng, a.unit, a.internal_code AS kodeindi, " +
                 "b.nm_program, b.nm_program_eng, b.internal_code AS kodeprog, " +
                 "c.nm_activity, c.nm_activity_eng, c.internal_code AS kodeact, " +
-                "d.value, e.nm_unit, f.funding_source " +
+                "d.value, e.nm_unit, f.funding_source, g.achievement1, g.achievement2, g.achievement3, g.achievement4 " +
                 "FROM nsa_indicator a LEFT JOIN " +
                 "nsa_program b ON b.id = a.id_program LEFT JOIN " +
                 "nsa_activity c ON c.id = a.id_program LEFT JOIN " +
                 "nsa_target d ON d.id_nsa_indicator = a.id LEFT JOIN " +
                 "ref_unit e ON e.id_unit = a.unit LEFT JOIN " +
-                "nsa_funding f ON f.id_nsa_indicator = a.id " +
+                "nsa_funding f ON f.id_nsa_indicator = a.id LEFT JOIN " +
+                "entry_nsa_indicator g ON g.id_assign = a.id " +
                 "WHERE a.id = :id_nsa_indicator";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_nsa_indicator", idindikator);
