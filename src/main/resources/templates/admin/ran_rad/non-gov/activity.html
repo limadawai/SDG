@@ -285,9 +285,9 @@
 				var nm_activity_eng = $('#nm_activity_eng').val();
 				var id_role = $('#id_role').val();
 				var internal_code = $('#internal_code').val();
-				if(internal_code==""){
+				/* if(internal_code==""){
 					internal_code = id_activity;
-				}
+				} */
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -409,9 +409,9 @@
                 })
              });
 			var privilege = [[${privilege}]];
-            $('#id_program').on('keyup keypress blur change',function(){
+            /* $('#id_program').on('keyup keypress blur change',function(){
                 $('#internal_code').val($(this).val());
-            });
+            }); */
             $('#hide_kode_internal').hide();
             if(privilege=='USER'){
                 $('#hide_kode_internal').hide();

@@ -244,8 +244,10 @@
 //                alert('admin');
             }else{
 //                alert('bukan '+id_role);
-                $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
-                
+				if(cat_role=="NSA"){
+					$("#id_prov").val(id_prov).trigger("change").attr('disabled',true);	
+				}
+				
                 $.ajax({
                     type: "GET",
                     url: urls+'list-get-option-role-nsa-profil/'+id_prov,

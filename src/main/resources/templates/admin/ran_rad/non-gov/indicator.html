@@ -575,9 +575,9 @@
 				var nm_indicator_eng = $('#nm_indicator_eng').val();
 				var unit = $('#unit').val();
 				var internal_code = $('#internal_code').val();
-				if(internal_code==""){
+				/* if(internal_code==""){
 					internal_code = id_nsa_indicator;
-				}
+				} */
 				var sdg_indicator;
 				var sdg_indicator_val = [];
 		        $.each($("input[name='sdg_indicator']:checked"), function(){
@@ -836,9 +836,9 @@
 			});
 			
 			var privilege = [[${privilege}]];
-            $('#id_program').on('keyup keypress blur change',function(){
+            /* $('#id_program').on('keyup keypress blur change',function(){
                 $('#internal_code').val($(this).val());
-            });
+            }); */
             $('#hide_kode_internal').hide();
             if(privilege=='USER'){
                 $('#hide_kode_internal').hide();
