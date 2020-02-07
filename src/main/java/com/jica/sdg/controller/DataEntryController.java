@@ -28,11 +28,12 @@ import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.IGovProgramService;
 import com.jica.sdg.service.INsaProgramService;
 import com.jica.sdg.service.IProvinsiService;
-import java.util.HashMap;
-
 import com.jica.sdg.service.IRanRadService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.NsaProfileService;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -43,6 +44,7 @@ import javax.persistence.Query;
 
 import javax.servlet.http.HttpSession;
 //import org.springframework.data.jpa.repository.Query;
+import javax.transaction.Transactional;
 
 @Controller
 public class DataEntryController {
@@ -695,7 +697,7 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> listEntrySdgTarget(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
         String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
                     "g.sdg_indicator, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng \n" +
+                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit \n" +
                     "from assign_sdg_indicator as a\n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +
@@ -703,6 +705,7 @@ public class DataEntryController {
                     "left join \n" +
                     "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
                     "left join ran_rad as g on a.id_monper = g.id_monper \n" +
+                    "left join ref_unit as h on d.unit = h.id_unit \n" +
                     "where a.id_role = :id_role and a.id_monper = :id_monper and a.id_prov = :id_prov ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
@@ -715,7 +718,60 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/get-sdgTargetIndicator/{id_indicator}/{id_role}/{year}")
+    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator, @PathVariable("id_role") String id_role, @PathVariable("year") String year) {
+        String sql  = "select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_sdg_indicator = :id_indicator and id_role = :id_role and year = :year";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_indicator", id_indicator);
+        query.setParameter("year", year);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
     
+    @PostMapping(path = "admin/save-sdgTargetIndicator/{id_indicator}/{id_role}", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	@Transactional
+	public void saveSdgTarget(@RequestBody Map<String, Object> payload,@PathVariable("id_indicator") Integer id_indicator,@PathVariable("id_role") Integer id_role) {
+    	JSONObject jsonObject = new JSONObject(payload);
+        JSONObject catatan = jsonObject.getJSONObject("target");
+        JSONArray c = catatan.getJSONArray("target");
+        em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and id_role = '"+id_role+"'").executeUpdate();
+        for (int i = 0 ; i < c.length(); i++) {
+        	JSONObject obj = c.getJSONObject(i);
+        	String year = obj.getString("year");
+        	String value = obj.getString("nilai");
+        	if(!value.equals("")) {
+        		em.createNativeQuery("INSERT INTO sdg_indicator_target (id_sdg_indicator,id_role,year,value) values ('"+id_indicator+"','"+id_role+"','"+year+"','"+value+"')").executeUpdate();
+        	}
+        }
+    }
+    
+    @PostMapping(path = "admin/save-sdgFunding", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	@Transactional
+	public void saveSdgTarget(@RequestBody Map<String, Object> payload) {
+        JSONObject jsonObunit = new JSONObject(payload);
+        String id_sdg_indicator = jsonObunit.get("id_sdg_indicator").toString();  
+        String baseline = jsonObunit.get("baseline").toString();
+        String funding_source = jsonObunit.get("funding_source").toString();
+        em.createNativeQuery("delete from sdg_funding where id_sdg_indicator ='"+id_sdg_indicator+"'").executeUpdate();
+        em.createNativeQuery("INSERT INTO sdg_funding (id_sdg_indicator,baseline,funding_source) values ('"+id_sdg_indicator+"','"+baseline+"','"+funding_source+"')").executeUpdate();
+    }
+    
+    @GetMapping("admin/get-sdgFunding/{id_indicator}")
+    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator) {
+        String sql  = "select baseline, funding_source from sdg_funding where id_sdg_indicator = :id_indicator";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_indicator", id_indicator);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+	
     @GetMapping("admin/entry/sdg-target/input/{id_indicator}/{id_prov_1}/{id_role_1}/{monper}/{tahun}")
     public String InputTargetSdg(Model model, @PathVariable("id_indicator") Integer id_indicator, @PathVariable("id_prov_1") String id_prov_1, @PathVariable("id_role_1") String id_role_1, @PathVariable("monper") String monper, @PathVariable("tahun") String tahun, HttpSession session) {
         Integer id_role = (Integer) session.getAttribute("id_role");

@@ -214,6 +214,7 @@
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-govActivity/'+id_program).load();
 	        });
+	        var privilege = [[${privilege}]];
 			var table = $('#tabel-target').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
@@ -246,10 +247,10 @@
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/gov/program/"+row.id_program+"/activity/"+row.id+"/indicator' class='target'>"+nama+"</a></div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+						return "<div style='text-align:center;'>"+
+						'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+						'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                        '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 						}}
 				],
 				"columnDefs": [
@@ -409,7 +410,7 @@
                 })
              });
              
-             var privilege = [[${privilege}]];
+             
              /* $('#id_activity').on('keyup keypress blur change',function(){
                  $('#internal_code').val($(this).val());
              }); */
