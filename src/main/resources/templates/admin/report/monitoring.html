@@ -327,15 +327,20 @@
                                                     for (var i=0; i<resin.length; i++) {
                                                         var rowb = "<tr>";
                                                         rowb += "<td>" + resin[i][5] + "</td>";
+                                                        if (resin[i][8] == null){resin[i][8] = "-"}
                                                         rowb += "<td>" + resin[i][8] + "</td>";
                                                         rowb += "<td>" + resin[i][1] + "</td>";
                                                         rowb += "<td>" + resin[i][12] + "</td>";
                                                         if (resin[i][11] == null){resin[i][11] = 0}
                                                         rowb += "<td style='text-align:center;'>" + resin[i][11] + "</td>";
-                                                        rowb += "<td style='text-align:center;'>-</td>";
-                                                        rowb += "<td style='text-align:center;'>-</td>";
-                                                        rowb += "<td style='text-align:center;'>-</td>";
-                                                        rowb += "<td style='text-align:center;'>-</td>";
+                                                        if (resin[i][14] == null){resin[i][14] = "-"}
+                                                        rowb += "<td style='text-align:center;'>" + resin[i][14] + "</td>";
+                                                        if (resin[i][15] == null){resin[i][15] = "-"}
+                                                        rowb += "<td style='text-align:center;'>" + resin[i][15] + "</td>";
+                                                        if (resin[i][16] == null){resin[i][16] = "-"}
+                                                        rowb += "<td style='text-align:center;'>" + resin[i][16] + "</td>";
+                                                        if (resin[i][17] == null){resin[i][17] = "-"}
+                                                        rowb += "<td style='text-align:center;'>" + resin[i][17] + "</td>";
                                                         rowb += "<td style='text-align:center;'>-</td>";
                                                         rowb += "<td style='text-align:center;'>-</td>";
                                                         if (resin[i][13] == null){resin[i][13] = "-"}
@@ -463,8 +468,10 @@
                                                         row += "<td style='text-align:center;'>" + resfund[i][5] + "</td>";
                                                         row += "<td style='text-align:center;'>" + resfund[i][3] + "</td>";
                                                         row += "<td style='text-align:center;'>" + resfund[i][6] + "</td>";
-                                                        row += "<td></td>";
-                                                        row += "<td></td>";
+                                                        row += "<td style='text-align:center;'>" + resfund[i][7] + "</td>";
+                                                        row += "<td style='text-align:center;vertical-align:middle;'>" +
+                                                            "<div style='width:15px;height:15px;background:green;margin:0 auto;border-radius:50%;'></div>" +
+                                                            "</td>";
                                                         row += "</tr>";
                                                         $("#tabatas" + idnsaindi[i] + " > tbody").append(row);
                                                     }

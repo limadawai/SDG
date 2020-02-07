@@ -17,5 +17,5 @@ public interface IEntryApprovalService {
     
     void updateApproval(String approval, String description, Integer id);
     
-    void deleteApproveGovBudget(Integer id_role, Integer id_monper, Integer year, String type);
+    void deleteApproveGovBudget(Integer id_role, Integer id_monper, Integer year, String type, String periode);
 }
