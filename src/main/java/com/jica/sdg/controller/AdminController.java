@@ -178,6 +178,7 @@ public class AdminController {
         if (bhs == null) {bhs = "0";}
         model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("privilege", privilege);
         return "admin/ran_rad/monper";
     }
 

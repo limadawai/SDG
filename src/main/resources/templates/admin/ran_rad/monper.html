@@ -36,7 +36,7 @@
 								</div>
                     		</div>
                     		<div class="span6" align="right">
-                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary">
+                    			<button data-toggle="modal" id="addNew" data-target="#myModal" class="btn btn-primary">
                     				<i class="icon-plus"></i> 
                     					<span class="lang_eng" style="display:none">Add RAN/RAD</span>
                     					<span class="lang_indo">Tambah RAN/RAD</span>
@@ -228,7 +228,10 @@
 		//$(document).ready(function (e) {
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
-	        
+	        var privilege = [[${privilege}]];
+	        if(privilege=="USER"){
+	        	$('#addNew').hide();
+	        }
 	        //Bahasa
 	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
@@ -300,11 +303,17 @@
 							return "<div style='font-size:90%;'>"+row.status+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='text-align:center;'>"+
-							"<a href='"+urls+"ran_rad/map/goals/"+row.id_monper+"' class='btn btn-info btn-mini'><i class='icon-resize-horizontal'></i></a>"+
-							'<button data-id="'+row.id_monper+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-							'<button data-id="'+row.id_monper+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id_monper+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+							if(privilege=="USER"){
+								return "<div style='text-align:center;'>"+
+								"<a href='"+urls+"ran_rad/map/goals/"+row.id_monper+"' class='btn btn-info btn-mini'><i class='icon-resize-horizontal'></i></a></div>";
+							}else{
+								return "<div style='text-align:center;'>"+
+								"<a href='"+urls+"ran_rad/map/goals/"+row.id_monper+"' class='btn btn-info btn-mini'><i class='icon-resize-horizontal'></i></a>"+
+								'<button data-id="'+row.id_monper+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+								'<button data-id="'+row.id_monper+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+	                            '<button data-id="'+row.id_monper+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+							}
+							
 						}}
 				],
 				"columnDefs": [

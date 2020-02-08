@@ -31,6 +31,7 @@ import com.jica.sdg.model.SdgDisaggreDetail;
 import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
+import com.jica.sdg.model.Unit;
 import com.jica.sdg.service.IGovActivityService;
 import com.jica.sdg.service.IGovFundingService;
 import com.jica.sdg.service.IGovIndicatorService;
@@ -58,6 +59,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -255,12 +257,31 @@ public class RanRadSdgController {
     public String sdg(Model model, @PathVariable("id") int id, @PathVariable("id_target") Integer id_target, HttpSession session) {
     	Optional<SdgGoals> list = sdgGoalsService.findOne(id);
     	Optional<SdgTarget> list1 = sdgTargetService.findOne(id_target);
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String id_prov = listRole.get().getId_prov();
+    	String sql;
+    	if(privilege.equals("SUPER")) {
+    		sql = "select * from ref_unit";
+    	}else {
+    		sql = "select a.* from ref_unit a left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
+    	}
+    	Query listUnit = em.createNativeQuery(sql);
+        List<Object[]> rows = listUnit.getResultList();
+        List<Unit> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+            );
+        }
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
         list.ifPresent(foundUpdateObject -> model.addAttribute("goals", foundUpdateObject));
         list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
-        model.addAttribute("unit", unitService.findAll());
+        model.addAttribute("unit", result);
         return "admin/ran_rad/sdg/sdgs_indicator";
     }
     
@@ -521,12 +542,31 @@ public class RanRadSdgController {
     	Optional<RanRad> ranrad = monPeriodService.findOne(list.get().getId_monper());
     	Optional<Provinsi> provin = prov.findOne(ranrad.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String id_prov = listRole.get().getId_prov();
+    	String sql;
+    	if(privilege.equals("SUPER")) {
+    		sql = "select * from ref_unit";
+    	}else {
+    		sql = "select a.* from ref_unit a left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
+    	}
+    	Query listUnit = em.createNativeQuery(sql);
+        List<Object[]> rows = listUnit.getResultList();
+        List<Unit> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+            );
+        }
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
-        model.addAttribute("unit", unitService.findAll());
+        model.addAttribute("unit", result);
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
         role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
@@ -650,6 +690,33 @@ public class RanRadSdgController {
     	govIndicatorService.deleteGovIndicator(id);
 	}
     
+    @RequestMapping(path = "admin/export-govProgram/{id_monper}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getFileGovProgram(@PathVariable("id_monper") String id_monper, HttpServletResponse response,HttpSession session) throws FileNotFoundException {
+        
+    	
+    	
+    	
+    	
+    	
+    	
+    	String a = System.getProperty("user.dir"); 
+        String path = System.getProperty("user.home");
+        String sql = "select * from ran_rad where id_monper = '"+id_monper+"'";
+        String id_prov = getStringByColumn(sql,11);
+        File f = new File (path+"/export_ranrad"+id_monper+"-"+id_prov+".xls");
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(f));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+"export_ranrad1-000.xls");
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+           return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(f.length())
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(resource);
+        }
+    
   //*********************** NON GOV PROGRAM ***********************
     @GetMapping("admin/list-nsaProg/{id_role}/{id_monper}")
     public @ResponseBody Map<String, Object> nsaProgList(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
@@ -696,13 +763,13 @@ public class RanRadSdgController {
     @GetMapping("admin/ran_rad/non-gov/program/{id_program}/activity")
     public String nsa_kegiatan(Model model, @PathVariable("id_program") Integer id_program, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
-		/* Integer id_role = list.get().getId_role(); */
     	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
-    	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
+    	Optional<Role> roleDrop = roleService.findOne(list.get().getId_role());
+    	Optional<Provinsi> provin = prov.findOne(roleDrop.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
-        role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
+        roleDrop.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
@@ -761,17 +828,37 @@ public class RanRadSdgController {
     	//Integer id_role = list.get().getId_role();
     	//Optional<Role> role = roleService.findOne(id_role);
     	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
-    	Optional<Provinsi> provin = prov.findOne(role.get().getId_prov());
+    	Optional<Role> roleDrop = roleService.findOne(list.get().getId_role());
+    	Optional<Provinsi> provin = prov.findOne(roleDrop.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String id_prov = listRole.get().getId_prov();
+    	String sql;
+    	if(privilege.equals("SUPER")) {
+    		sql = "select * from ref_unit";
+    	}else {
+    		sql = "select a.* from ref_unit a left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
+    	}
+    	Query listUnit = em.createNativeQuery(sql);
+        List<Object[]> rows = listUnit.getResultList();
+        List<Unit> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+            );
+        }
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
-        role.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
+        roleDrop.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         list1.ifPresent(foundUpdateObject1 -> model.addAttribute("govActivity", foundUpdateObject1));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
-        model.addAttribute("unit", unitService.findAll());
+        model.addAttribute("unit", result);
         model.addAttribute("sdgIndicator", sdgIndicatorService.findAll());
         model.addAttribute("privilege", role.get().getPrivilege());
         return "admin/ran_rad/non-gov/indicator";

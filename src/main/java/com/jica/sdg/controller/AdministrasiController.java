@@ -132,7 +132,7 @@ public class AdministrasiController {
     	if(privilege.equals("SUPER")) {
     		sql = "select * from ref_unit";
     	}else {
-    		sql = "select a.* from ref_unit left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
+    		sql = "select a.* from ref_unit a left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
     	}
         
         Query list = em.createNativeQuery(sql);
@@ -508,6 +508,7 @@ public class AdministrasiController {
 		model.addAttribute("name", session.getAttribute("name"));
 		model.addAttribute("id_prov", id_prov);
 		model.addAttribute("privilege", privilege);
+		model.addAttribute("id_role", id_role);
         return "admin/role_manajemen/manajemen_unit";
     }
 

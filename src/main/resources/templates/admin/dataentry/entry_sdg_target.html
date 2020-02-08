@@ -199,13 +199,15 @@
                         var array1 = result1.content;
                         if (array1 != '') {
                             for (i in array1) {
-                                var selisih     = (array1[i][2] - array1[i][1]);
+                            	var text     = array1[i][1]+'-'+array1[i][2];
+                            	$("#periode").append('<option value="'+array1[i][0]+'" >'+text+'</option>');
+                                /* var selisih     = (array1[i][2] - array1[i][1]);
 //                                console.log(array1[i][2]);
                                 var x;
                                 for(x=0; x<=selisih; x++){
 //                                    console.log((array1[i][1]+x));
                                     $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
-                                }
+                                } */
                                 
                             }
                         }
@@ -245,13 +247,15 @@
                         var array1 = result1.content;
                         if (array1 != '') {
                             for (i in array1) {
-                                var selisih     = (array1[i][2] - array1[i][1]);
+                            	var text     = array1[i][1]+'-'+array1[i][2];
+                            	$("#periode").append('<option value="'+array1[i][0]+'" >'+text+'</option>');
+                                /* var selisih     = (array1[i][2] - array1[i][1]);
 //                                console.log(array1[i][2]);
                                 var x;
                                 for(x=0; x<=selisih; x++){
 //                                    console.log((array1[i][1]+x));
                                     $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
-                                }
+                                } */
                                 
                             }
                         }
@@ -358,11 +362,11 @@
                         if($('#fs').is(':checked')){
                             return "<div style='font-size:90%;'><a href='"+urls+"entry/sdg-target/input/"+row[2]+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"' class='target'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
                         }else{
-                            return "<div style='font-size:90%;'>"+row[11]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[15]+"</div>";
+                            return "<div style='font-size:90%;'><a href='"+urls+"entry/sdg-target/input/"+row[2]+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"' class='target'>"+row[11]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[15]+"</div>";
                         }
                     }},
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[6]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[16]+"</div>";
                     }}
 //                    {"data": function (row, data, index, display) {
 //                        if(row[13] == 'yearly'){

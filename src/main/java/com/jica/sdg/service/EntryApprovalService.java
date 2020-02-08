@@ -45,8 +45,8 @@ public class EntryApprovalService implements IEntryApprovalService{
 	}
 
 	@Override
-	public void deleteApproveGovBudget(Integer id_role, Integer id_monper, Integer year, String type) {
-		repo.deleteApproval(id_role, id_monper, year, type);
+	public void deleteApproveGovBudget(Integer id_role, Integer id_monper, Integer year, String type, String periode) {
+		repo.deleteApproval(id_role, id_monper, year, type, periode);
 	}
 	
 	
