@@ -45,7 +45,7 @@
 								</div>
                     		</div>
                     		<div class="span6" align="right">
-                    			<button class="btn btn-warning">
+                    			<button id="export" class="btn btn-warning" data="/sdg/export-excell">
                     				<i class="icon-download"></i> 
                     					<span class="lang_eng" style="display:none">Export</span>
                     					<span class="lang_indo">Ekspor</span>
@@ -523,6 +523,13 @@
              if(privilege=='USER'){
                  $('#hide_kode_internal').hide();
              }
+             
+             $("#export").click(function(){
+                 var data = $(this).attr("data");
+                 var id_monper = [[${id_monper}]];
+                 var url = data+"/"+id_monper;
+                  window.open(url, '_blank');   
+             })
 		//});
 		// ]]>
 </script>
