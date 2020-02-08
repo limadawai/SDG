@@ -40,11 +40,15 @@
                                 <option value="0" >-- Pilih --</option>
                                 <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
+                            <select id="periode" name="periode" class="form-control">
+                                <option value="0" >-- Pilih --</option>
+                                <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
+                            </select>
                             <div class="btn-toolbar" style="float:right">
-                                <button class="btn btn-success btn-small tambah">
+                                <!-- <button class="btn btn-success btn-small tambah">
                                     <span class="lang_eng" style="display:none">Add New</span>
                                     <span class="lang_indo">Tambah Baru</span>
-                                </button>
+                                </button> -->
                             </div>
                             
 <!--                            <div class="lang_indo"><span> Periode</span></div>
@@ -69,10 +73,10 @@
                                     Program : <a th:href="@{/admin/entry/sdg-target}" th:text="${sdgInd.id_indicator+' - '+sdgInd.nm_indicator}"></a>
                                 </div>
                             </div>
-                            <div class="input-append pull-right">
+                            <!-- <div class="input-append pull-right">
                                 <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
                                 <span class="add-on"><i class="icon-search"></i></span>
-                            </div>
+                            </div> -->
                         </div>
 <!--                        <div class="row-fluid">
                             <div class="span6">
@@ -85,55 +89,75 @@
                             </div>
                     	</div>-->
                         <div class="row-fluid">
-                            <div class="span12">
+                            <!-- <div class="span12">
                                 <table  id="tabel-entri-sdg" class="table table-striped table-bordered">
                                     <thead >
                                         <tr class="lang_eng" style="display: none">
-<!--                                            <th style="text-align:center;font-size:80%;width: 10%">Indicator Code</th>
-                                            <th style="text-align:center;font-size:80%;width: 70%">Indicator Name</th>-->
-                                            <!--<th style="text-align:center;font-size:80%;">Data Source</th>-->
                                             <th style="text-align:center;font-size:80%; width:10%">Years</th>
                                             <th style="text-align:center;font-size:80%">Target</th>
                                             <th style="text-align:center;font-size:80%; width:10%">Action</th>
-                                            <!--<th style="text-align:center;font-size:80%;">Baseline</th>-->
-<!--                                            <th style="text-align:center;font-size:80%;">Target SDGs</th>
-                                            <th style="text-align:center;font-size:80%;">SDGs Achievements I</th>
-                                            <th style="text-align:center;font-size:80%;">SDGs Achievements II</th>
-                                            <th style="text-align:center;font-size:80%;">SDGs Achievements III</th>
-                                            <th style="text-align:center;font-size:80%;">SDGs Achievements IV</th>-->
-                                            <!--<th style="text-align:center;font-size:80%;">Status</th>-->
                                         </tr>
                                         <tr class="lang_indo" id="thead_indo">
                                             <th style="text-align:center;font-size:80%; width:10%">Tahun</th>
                                             <th style="text-align:center;font-size:80%;">Target</th>
                                             <th style="text-align:center;font-size:80%; width:10%">Aksi</th>
-<!--                                            <th style="text-align:center;font-size:80%;width: 10%">Kode Indikator</th>
-                                            <th style="text-align:center;font-size:80%;width: 70%">Nama Indikator</th>-->
-                                            <!--<th style="text-align:center;font-size:80%;">Sumber Data</th>-->
-                                            <!--<th style="text-align:center;font-size:80%;">Unit</th>-->
-                                            <!--<th style="text-align:center;font-size:80%;">Garis Dasar</th>-->
-<!--                                            <th style="text-align:center;font-size:80%;">Target SDG</th>
-                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG I</th>
-                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG II</th>
-                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG III</th>
-                                            <th style="text-align:center;font-size:80%;">Pencapaian SDG IV</th>-->
-                                            <!--<th style="text-align:center;font-size:80%;">Status</th>-->
                                         </tr>
                                     </thead>
                                     <tbody id="tbody_entri-sdg">
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> -->
+                            <div class="table-responsive">
+			                  	<form id="form-target">
+								<table class="table table-bordered">
+			                        <thead>
+										<tr>
+			                                <th width="50%">
+			                                	<span class="lang_eng control-label" style="display:none">Year</span>
+							    				<span class="lang_indo control-label">Tahun</span>
+			                                </th>
+			                                <th width="50%">Target</th>
+										</tr>
+			                        </thead>
+			                        <tbody id="tbody-target">
+			                        </tbody>
+			                    </table>
+			                    </form>
+		                	</div>
+                        </div>
+                        <div class="row-fluid">
+                        	<div class="table-responsive">
+								<table class="table table-bordered">
+			                        <thead>
+										<tr>
+			                                <th width="50%">
+			                                	<span class="lang_eng control-label" style="display:none">Baseline</span>
+							    				<span class="lang_indo control-label">Dasar</span>
+			                                </th>
+			                                <th width="50%">
+			                                	<span class="lang_eng control-label" style="display:none">Funding Source</span>
+							    				<span class="lang_indo control-label">Sumber Pendanaan</span>
+											</th>
+										</tr>
+			                        </thead>
+			                        <tbody>
+			                        	<tr>
+			                        		<td><input type="text" id="baseline" name="baseline" class="input-xlarge input-block-level"/></td>
+			                        		<td><input type="text" id="budsource" name="budsource" class="input-xlarge input-block-level"/></td>
+			                        	</tr>
+			                        </tbody>
+			                    </table>
+		                	</div>
                         </div>
                     </div>
                 </div>
             </div>
-<!--            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
-                <a class="btn btn-success btn-small" id="apply_btn" data-id="#">Apply</a>
+            <div class="btn-toolbar" style="float:right;">
+                <button class="btn btn-success btn-small btn-save" id="save" data-id="#">
+                	<span class="lang_eng" style="float:right; display: none">Submit</span>
+                	<span class="lang_indo">Simpan</span>
+                </button>
             </div>
-            <div class="btn-toolbar lang_indo" style="float:right" id="btn_indo">
-                <a class="btn btn-success btn-small" id="apply_btn" data-id="#">Terapkan</a>
-            </div>-->
         </div>
         <div class="modal hide fade addModal" role="dialog" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -160,12 +184,12 @@
                                 <input name="value" id="value" type="text" class="input-block-level">
                             </div>
                         </div>
-                        <div class="modal-footer" id="simpan_">
+                        <!-- <div class="modal-footer" id="simpan_">
                             <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
                             <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal" style="display: none">Close</button>
                             <button type="button" id="simpan" class="btn btn-success lang_indo">Simpan</button>
                             <button type="button" id="simpan" class="btn btn-success lang_eng" style="display: none">Submit</button>
-                        </div>
+                        </div> -->
                     </form>
                 </div>
             </div>
@@ -193,6 +217,154 @@
 //        alert(id_role_1);
         $("#id_prov").val(id_prov_1).trigger("change").attr('disabled',true);
         $("#idrole").val(id_role_1).trigger("change").attr('disabled',true);
+      //Bahasa
+        var titleDel = "Anda Yakin";
+        var titleSave = "Simpan";
+        var messDel = "Menghapus Data?";
+        var messSave = "Simpan berhasil";
+        var buttDel = 'Ya, Hapus data ini!';
+        var titleOk	= "Hapus";
+        var messOk = "Data berhasil dihapus";
+        var messNOk = "Data tidak dapat dihapus";
+        var required = "Harus diisi";
+        var peringatantahun = "Peringatan";
+        var messperingatantahun = "Tahun Sudah Ada";
+        function bhs(cek){
+			if(cek){
+				$(".lang_indo").show();
+        		$(".lang_eng").hide();
+        		titleDel = "Anda Yakin";
+        		messDel = "Menghapus Data?";
+        		buttDel = 'Ya, Hapus data ini!';
+        		titleOk	= "Hapus";
+    	        messOk = "Data berhasil dihapus";
+    	        messNOk = "Data tidak dapat dihapus";
+    	        required = "Harus diisi";
+                peringatantahun = "Peringatan";
+                messperingatantahun = "Tahun Sudah Ada";
+                titleSave = "Simpan";
+                messSave = "Simpan berhasil";
+        	}else{	    	        
+    	        $(".lang_indo").hide();
+        		$(".lang_eng").show();
+        		titleDel = "Are you sure";
+        		messDel = "Delete this data?";
+        		buttDel = 'Yes, Delete this data!';
+        		titleOk	= "Delete";
+    	        messOk = "Delete successful";
+    	        messNOk = "Can't delete data";
+    	        required = "Required";
+                    peringatantahun = "Warning";
+                    messperingatantahun = "Year is available";
+                    titleSave = "Save";
+                    messSave = "Save successful";
+        	}
+        }
+        if(lang){
+        	bhs(lang=="0");
+        }else{
+        	bhs($('#fs').is(':checked'));
+        }
+        
+        $('#fs').on('change', function(e){
+                grid();
+        	bhs($(this).is(':checked'));
+        });
+        $.ajax({
+            type: "GET",
+            url: urls+'list-get-option-monper/'+id_prov_1,
+            async:false,
+            success: function (result1) {
+                $("#periode").html('<option value="0" >-- Pilih --</option>');
+                var array1 = result1.content;
+                if (array1 != '') {
+                    for (i in array1) {
+                    	var text     = array1[i][1]+'-'+array1[i][2];
+                    	var selected = (monper_1==array1[i][0])?'selected':'';
+                    	$("#periode").append('<option value="'+text+'"  '+selected+'>'+text+'</option>');
+                        /* var selisih     = (array1[i][2] - array1[i][1]);
+//                        console.log(array1[i][2]);
+                        var x;
+                        for(x=0; x<=selisih; x++){
+//                            console.log((array1[i][1]+x));
+                            $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+                        } */
+                        
+                    }
+                }
+                $("#periode").attr('disabled',true);
+                var tahun = $("#periode").val().split("-");
+                var target="";
+                $("#tbody-target").html("");
+                for(i=tahun[0];i<=tahun[1];i++){
+                	var nilai="";
+		        	$.ajax({
+    					type: "GET",
+                        url: urls+'get-sdgTargetIndicator/'+id_indicator_1+'/'+id_role_1+'/'+($.trim(i)),
+                        async:false,
+                        success: function (hasil) {
+                        		var val = hasil.content;
+                        		if(val.length>0){
+                        			nilai = val[0][3];	
+                        		}
+                        	}
+                    });
+                	target += '<tr>'+
+                            	'<td><input type="text" name="target[][year]" class="input-block-level" value="'+($.trim(i))+'" readonly="true"/></td>'+
+                            	'<td><input type="text" name="target[][nilai]" class="input-block-level"  value="'+nilai+'" /></td>'+
+                            '</tr>';
+                }
+                $("#tbody-target").append(target);
+            }
+        });
+        
+        $.ajax({
+			type: "GET",
+            url: urls+'get-sdgFunding/'+id_indicator_1,
+            async:false,
+            success: function (hasil) {
+            		var val = hasil.content;
+            		if(val.length>0){
+            			$('#baseline').val(val[0][0]);
+            			$('#budsource').val(val[0][1]);
+            		}
+            	}
+        });
+        
+        $('.btn-save').on('click', function(){
+        	var target =  $('#form-target').serializeObject();
+        	$.ajax({
+                type    :"POST",
+                url     :urls+'save-sdgTargetIndicator/'+id_indicator_1+"/"+id_role_1,
+                headers :{'Accept':'application/json','Content-Type':'application/json'},
+                data    : JSON.stringify({target}),
+                beforeSend : function(xhr){
+                	xhr.setRequestHeader(header,token);
+                },
+                success :function(result){
+                	var baseline = $('#baseline').val();
+                	var budsource = $('#budsource').val();
+                	var funding = JSON.stringify({
+						'id_sdg_indicator':id_indicator_1,
+						'baseline':baseline,
+						'funding_source':budsource
+						});
+                	$.ajax({
+                        type    :"POST",
+                        url     :urls+'save-sdgFunding',
+                        headers :{'Accept':'application/json','Content-Type':'application/json'},
+                        data    : funding,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        success :function(result){
+                        },             
+                     });
+                	swal(titleSave,messSave,'success');
+                },             
+             });
+        });
+        
 //            var id_role     = [[${id_role}]];
 //            var id_prov     = [[${id_prov}]];
 //            var privilege   = [[${privilege}]];
@@ -311,53 +483,7 @@
             
             //tutup validasi role
             
-            //Bahasa
-            var titleDel = "Anda Yakin";
-	        var messDel = "Menghapus Data?";
-	        var buttDel = 'Ya, Hapus data ini!';
-	        var titleOk	= "Hapus";
-	        var messOk = "Data berhasil dihapus";
-	        var messNOk = "Data tidak dapat dihapus";
-	        var required = "Harus diisi";
-	        var peringatantahun = "Peringatan";
-	        var messperingatantahun = "Tahun Sudah Ada";
-	        function bhs(cek){
-				if(cek){
-					$(".lang_indo").show();
-	        		$(".lang_eng").hide();
-	        		titleDel = "Anda Yakin";
-	        		messDel = "Menghapus Data?";
-	        		buttDel = 'Ya, Hapus data ini!';
-	        		titleOk	= "Hapus";
-	    	        messOk = "Data berhasil dihapus";
-	    	        messNOk = "Data tidak dapat dihapus";
-	    	        required = "Harus diisi";
-                        peringatantahun = "Peringatan";
-                        messperingatantahun = "Tahun Sudah Ada";
-	        	}else{	    	        
-	    	        $(".lang_indo").hide();
-	        		$(".lang_eng").show();
-	        		titleDel = "Are you sure";
-	        		messDel = "Delete this data?";
-	        		buttDel = 'Yes, Delete this data!';
-	        		titleOk	= "Delete";
-	    	        messOk = "Delete successful";
-	    	        messNOk = "Can't delete data";
-	    	        required = "Required";
-                        peringatantahun = "Warning";
-                        messperingatantahun = "Year is available";
-	        	}
-	        }
-	        if(lang){
-	        	bhs(lang=="0");
-	        }else{
-	        	bhs($('#fs').is(':checked'));
-	        }
-	        
-	        $('#fs').on('change', function(e){
-                    grid();
-	        	bhs($(this).is(':checked'));
-	        });
+            
             
 
             var v_idprov    = $("#id_prov").val();

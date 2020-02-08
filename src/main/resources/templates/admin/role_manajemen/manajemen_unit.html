@@ -157,9 +157,9 @@
     
     var privilege = [[${privilege}]];
     var id_prov = [[${id_prov}]];
+    var id_role = [[${id_role}]];
     
-    console.log(privilege);
-    console.log(id_prov);
+    console.log(id_role);
     
     if((privilege=="SUPER" || privilege=="ADMIN") && id_prov=="000"){
     	$('#addNew').show();
@@ -265,7 +265,9 @@
         	 $(".menu").find('#menu'+id).prop("checked", false);
         }
     });
-
+	if(privilege=="USER"){
+		$('#addNew').hide();
+	}
     var table = $('#tabel-role').DataTable({
         responsive: true,
         sDom: 'lrtip',
@@ -286,12 +288,12 @@
                 return "<div style='font-size:90%;'>"+(row.nm_unit)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-            	if(privilege=="SUPER" && row.privilege!="SUPER"){
+            	if(privilege=="SUPER"){
             		 return "<div style='text-align:center;'>"+
                      '<button data-id="'+row.id_unit+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
                      '<button data-id="'+row.id_unit+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
                      '<button data-id="'+row.id_unit+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-            	}else if(privilege=="ADMIN" && id_prov==row.id_prov && row.privilege!="SUPER"){
+            	}else if(id_role==row.id_role){
             		 return "<div style='text-align:center;'>"+
                      '<button data-id="'+row.id_unit+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
                      '<button data-id="'+row.id_unit+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
