@@ -76,15 +76,6 @@
 
         // ********************** Fungsi pilih select option **********************
 
-        var toggler = document.getElementsByClassName("caret1");
-        var i;
-        for (i = 0; i < toggler.length; i++) {
-            toggler[i].addEventListener("click", function() {
-                this.parentElement.querySelector(".nested").classList.toggle("active");
-                this.classList.toggle("caret-down");
-            });
-        }
-
         $("#daerah").on("change", function(){
             var valdaerah = $(this).val();
             if (valdaerah != "0") {
@@ -144,7 +135,7 @@
                                     isi += "<li style='padding:6px'>";
                                         isi += "<label class='dokkanan' for='folder" + (i + 1) + "'>" + resin[i][10] + "</label> <input type='checkbox' id='folder" + (i + 1) + "' />";
                                         isi += "<ol>";
-                                            isi += "<li>";
+                                            isi += "<li style='padding:6px'>";
                                             isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
                                                 isi += "<ol>";
                                                     isi += "<li id='cucukanan' class='file' style='padding:6px'><a onclick='cucukanan(" + resin[i][0] + ","+0+")'>" + resin[i][4] + "</a></li>";
