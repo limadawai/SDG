@@ -209,6 +209,7 @@ public class NsaController {
     public @ResponseBody Map<String, Object> getOptionAllProfilList(@PathVariable("id") String id) {
         
         String sql  = "select * from ref_role as a where a.id_prov = :id and id_role!=1";
+//        String sql  = "select * from ref_role as a where a.id_prov = :id and id_role!=1";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
