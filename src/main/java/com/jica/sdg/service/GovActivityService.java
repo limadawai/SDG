@@ -16,8 +16,8 @@ public class GovActivityService implements IGovActivityService{
 	GovActivityRepository govActivityRepo;
 	
 	@Override
-	public List<GovActivity> findAll(Integer id_program) {
-		return (List<GovActivity>) govActivityRepo.findAllGovActivity(id_program);
+	public List<GovActivity> findAll(Integer id_program, Integer id_role) {
+		return (List<GovActivity>) govActivityRepo.findAllGovActivity(id_program, id_role);
 	}
 	
 	@Override

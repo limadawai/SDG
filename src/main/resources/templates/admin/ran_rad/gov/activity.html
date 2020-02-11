@@ -18,7 +18,7 @@
         				<select name="id_prov" id="id_prov">
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
-	        			<select name="id_role" id="id_role" style="display:none">
+	        			<select name="id_role" id="id_role">
 	        				<option th:each="f:${role}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
 	        			</select>
 	        			<span> RAN/RAD : </span>
@@ -57,7 +57,7 @@
 								</div>
                     		</div>
                     		<div class="span6" align="right">
-                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary">
+                    			<button class="btn btn-primary" id="showModal">
                     			<i class="icon-plus"></i>
                     				<span class="lang_eng" style="display:none">Add Activity</span>
                     				<span class="lang_indo">Tambah Kegiatan</span>
@@ -171,6 +171,12 @@
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
 			var id_program = $('#id_program').val();
+			var privilege = [[${privilege}]];
+			var id_role = [[${id_role}]];
+			$('#id_role').val(id_role).trigger('change');
+			if(privilege=="USER"){
+				$('#id_role').attr('disabled',true);
+			}
 			//Bahasa
 	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data dan Data level dibawahnya?";
@@ -180,6 +186,8 @@
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
 	        var messDelBiasa = "Menghapus Data?";
+	        var titleMod = "Maaf";
+	        var messMod = "Semua pilihan harus dipilih";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -192,6 +200,8 @@
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
 	    	        messDelBiasa = "Menghapus Data?";
+	    	        titleMod = "Maaf";
+	    	        messMod = "Semua pilihan harus dipilih";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -203,6 +213,8 @@
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
 	    	        messDelBiasa = "Delete this data?";
+	    	        titleMod = "Sorry";
+	    	        messMod = "All dropdownlists must be selected";
 	        	}
 	        }
 	        if(lang){
@@ -212,9 +224,20 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
-	        	table.ajax.url(urls+'list-govActivity/'+id_program).load();
+	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
 	        });
-	        var privilege = [[${privilege}]];
+	        
+	        $('#id_role').on('change', function(){
+	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$(this).val()).load();
+	        });
+	        
+	        $('#showModal').on('click', function(){
+	        	if($('#id_prov').val() && $('#id_monper').val() && $('#id_role').val()){
+	        		$("#myModal").modal("show");
+	        	}else{
+	        		swal(titleMod,messMod,'error');
+	        	}
+	        });
 			var table = $('#tabel-target').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
@@ -223,7 +246,7 @@
 				"autoWidth": true,
 				"responsive":true,
 				"ajax": {
-					"url": urls+'list-govActivity/'+id_program,
+					"url": urls+'list-govActivity/'+id_program+'/'+$('#id_role').val(),
 					dataSrc: 'content',
 				},
 				"searching": true,
@@ -320,7 +343,7 @@
 	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
 						data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-govActivity/'+id_program).load();
+	                    	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
@@ -398,7 +421,7 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-govActivity/'+id_program).load();
+                        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');
