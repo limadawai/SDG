@@ -464,10 +464,11 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> listEntryGovIndicator(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
         String sql  = "select a.id_activity, a.id_program, a.id_gov_indicator, a.internal_code, a.nm_indicator,\n" +
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
-                    "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id \n" +
+                    "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id, d.nm_unit \n" +
                     "from gov_indicator as a\n" +
                     "left join (select * from entry_gov_indicator where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_assign \n" +
                     "left join (select * from gov_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_gov_indicator\n" +
+                    "left join (select * from ref_unit )  as d on a.unit = d.id_unit\n" +
 //                    "where a.id_program = :id_program and a.id_activity = :id_activity and a.id_role = :id_role ";
                     "where a.id_program = :id_program and a.id_activity = :id_activity ";
         Query query = em.createNativeQuery(sql);
@@ -700,10 +701,11 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> listEntryNonGovIndicator(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("tahun") String tahun) {
         String sql  = "select a.id_activity, a.id_program, a.id_nsa_indicator, a.internal_code, a.nm_indicator,\n" +
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
-                    "(select nsa_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id \n" +
+                    "(select nsa_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id, d.nm_unit \n" +
                     "from nsa_indicator as a\n" +
                     "left join (select * from entry_nsa_indicator where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_assign \n" +
                     "left join (select * from nsa_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_nsa_indicator\n" +
+                    "left join (select * from ref_unit )  as d on a.unit = d.id_unit\n" +
 //                    "where a.id_program = :id_program and a.id_activity = :id_activity and a.id_role = :id_role ";
                     "where a.id_program = :id_program and a.id_activity = :id_activity ";
         Query query = em.createNativeQuery(sql);
