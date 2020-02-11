@@ -54,7 +54,7 @@
     <div th:include="admin/layout :: footer"></div>
     <script th:inline="javascript">
         var lang = [[${lang}]];
-        if (lang == null) lang = "0";
+        if (lang == null) {lang = "0";};
         var name = [[${name}]];
         var role = [[${role}]];
         $("#welcome").html("Welcome, "+name);
@@ -593,11 +593,13 @@
             var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
             if (periode == "yearly") {
                 var valreal1 = [];var valreal2 = [];var valreal3 = [];var valreal4 = [];var valreal5 = [];
-                valreal1.push(parseInt($("#td1").text(), 10));
-                valreal2.push(parseInt($("#td2").text(), 10));
-                valreal3.push(parseInt($("#td3").text(), 10));
-                valreal4.push(parseInt($("#td4").text(), 10));
-                valreal5.push(parseInt($("#td5").text(), 10));
+                valreal1.push(
+                    parseInt($("#td1").text(), 10),
+                    parseInt($("#td2").text(), 10),
+                    parseInt($("#td3").text(), 10),
+                    parseInt($("#td4").text(), 10),
+                    parseInt($("#td5").text(), 10)
+                );
                 Highcharts.chart('barcontainer', {
                     chart: {
                         type: 'column'
@@ -606,7 +608,7 @@
                         text: 'Realisasi per Tahun'
                     },
                     subtitle: {
-                        text: 'Periode 2019 - 2023'
+                        text: 'Periode '+tahun[0]+' - '+tahun[4]
                     },
                     xAxis: {
                         categories: tahun,
@@ -635,14 +637,6 @@
                     },
                     series: [{
                         name: tahun[0], data: valreal1
-                    }, {
-                        name: tahun[1], data: valreal2
-                    }, {
-                        name: tahun[2], data: valreal3
-                    }, {
-                        name: tahun[3], data: valreal4
-                    }, {
-                        name: tahun[4], data: valreal5
                     }]
                 });
             } else if (periode == "semesterly") {
