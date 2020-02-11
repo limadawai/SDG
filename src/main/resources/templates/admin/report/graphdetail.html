@@ -647,11 +647,20 @@
                 });
             } else if (periode == "semesterly") {
                 var valreal1 = [];var valreal2 = [];var valreal3 = [];var valreal4 = [];var valreal5 = [];
-                var valreal1 = [parseInt($("#td1").text(), 10),parseInt($("#td2").text(), 10)];
-                var valreal2 = [parseInt($("#td3").text(), 10),parseInt($("#td4").text(), 10)];
-                var valreal3 = [parseInt($("#td5").text(), 10),parseInt($("#td6").text(), 10)];
-                var valreal4 = [parseInt($("#td7").text(), 10),parseInt($("#td8").text(), 10)];
-                var valreal5 = [parseInt($("#td9").text(), 10),parseInt($("#td10").text(), 10)];
+                var valreal1 = [
+                    parseInt($("#td1").text(), 10),
+                    parseInt($("#td2").text(), 10),
+                    parseInt($("#td3").text(), 10),
+                    parseInt($("#td4").text(), 10),
+                    parseInt($("#td5").text(), 10)
+                ];
+                var valreal2 = [
+                    parseInt($("#td6").text(), 10),
+                    parseInt($("#td7").text(), 10),
+                    parseInt($("#td8").text(), 10),
+                    parseInt($("#td9").text(), 10),
+                    parseInt($("#td10").text(), 10)
+                ];
                 Highcharts.chart('barcontainer', {
                     chart: {
                         type: 'column'
@@ -668,7 +677,7 @@
                     },
                     yAxis: {
                         min: 0,
-                        title: {text: 'Realisasi per Tahun'}
+                        title: {text: 'Realisasi per Semester'}
                     },
                     tooltip: {
                         headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -691,12 +700,6 @@
                         name: tahun[0], data: valreal1
                     }, {
                         name: tahun[1], data: valreal2
-                    }, {
-                        name: tahun[2], data: valreal3
-                    }, {
-                        name: tahun[3], data: valreal4
-                    }, {
-                        name: tahun[4], data: valreal5
                     }]
                 });
             } else if (periode == "quarterly") {
