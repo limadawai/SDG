@@ -243,10 +243,13 @@
             if(id_role == '1'){
 //                alert('admin');
             }else{
-//                alert('bukan '+id_role);
-				if(cat_role=="NSA"){
-					$("#id_prov").val(id_prov).trigger("change").attr('disabled',true);	
-				}
+//                alert('cat '+cat_role);
+                if(cat_role=="NSA"){
+                    $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);	
+                }
+//                else if(cat_role=="Institution"){
+//                    $("#id_prov").val("").trigger("change").attr('disabled',false);	
+//                }
 				
                 $.ajax({
                     type: "GET",
@@ -264,7 +267,11 @@
                         }else{
                             if(cat_role == 'NSA'){
                                 $("#nm_nsa_profil").val(id_role).trigger("change").attr('disabled',true);
-                            }else{
+                            }
+//                            else if(cat_role=="Institution"){
+//                                $("#nm_nsa_profil").val("").trigger("change").attr('disabled',false);	
+//                            }
+                            else{
                                 $("#nm_nsa_profil").val(id_role).trigger("change");
                             }
                             
@@ -324,7 +331,7 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(privilege=="SUPER" || privilege=="ADMIN"){
-                                            if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                            if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
                                                 //NSA bisa edit
                                                 if(row[7] == null || row[7] == ""){
                                                     return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -562,7 +569,8 @@
                         }},
                         {"data": function (row, data, index, display) {
                             if(privilege=="SUPER" || privilege=="ADMIN"){
-                                if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                
+                                if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
                                     //NSA bisa edit
                                     if(row[7] == null || row[7] == ""){
                                         return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -765,7 +773,8 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(privilege=="SUPER" || privilege=="ADMIN"){
-                                            if(privilege == 'SUPER' || cat_role == 'NSA'){
+//                                            alert(privilege+' - '+ cat_role);
+                                            if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
                                                 //NSA bisa edit
                                                 if(row[7] == null || row[7] == ""){
                                                     return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -942,7 +951,7 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(privilege=="SUPER" || privilege=="ADMIN"){
-                                            if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                            if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
                                                 //NSA bisa edit
                                                 if(row[7] == null || row[7] == ""){
                                                     return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -1165,7 +1174,7 @@
                             }},
                             {"data": function (row, data, index, display) {
                                 if(privilege=="SUPER" || privilege=="ADMIN"){
-                                    if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                    if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
                                         //NSA bisa edit
                                         if(row[7] == null || row[7] == ""){
                                             return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -1344,17 +1353,17 @@
                         }},
                         {"data": function (row, data, index, display) {
                         	if(privilege=="SUPER" || privilege=="ADMIN"){
-                        		if(row[7] == null || row[7] == ""){
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
-                                }else{
-                                    if(row[5] == null || row[5] == ""){
-                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                    if(row[7] == null || row[7] == ""){
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
                                     }else{
-                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                        if(row[5] == null || row[5] == ""){
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                        }else{
+                                            var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                        }
                                     }
-                                }
                         	}else if(id_role == id && cat_role == 'NSA'){
                         		if(row[7] == null || row[7] == ""){
                                     return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -1487,7 +1496,7 @@
                                 }},
                                 {"data": function (row, data, index, display) {
                                     if(privilege=="SUPER" || privilege=="ADMIN"){
-                                        if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                        if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
                                             //NSA bisa edit
                                             if(row[7] == null || row[7] == ""){
                                                 return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -1711,7 +1720,7 @@
                                         }},
                                         {"data": function (row, data, index, display) {
                                             if(privilege=="SUPER" || privilege=="ADMIN"){
-                                                if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                                if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
                                                     //NSA bisa edit
                                                     if(row[7] == null || row[7] == ""){
                                                         return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -1924,7 +1933,7 @@
                                 }},
                                 {"data": function (row, data, index, display) {
                                     if(privilege=="SUPER" || privilege=="ADMIN"){
-                                        if(privilege == 'SUPER' || cat_role == 'NSA'){
+                                        if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
                                             //NSA bisa edit
                                             if(row[7] == null || row[7] == ""){
                                                 return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
@@ -2074,18 +2083,22 @@
             $('#tabel-nsa-collaboration').on('click', '.add_support', function(){
                 var dataid  = $(this).data('id');
                 var data    = dataid.split('###');
-                
+//                alert(id_role);
                 $.ajax({
                     type: "GET",
                     url: urls+'list-get-option-role-ins-profil_role/'+id_role,
                     success: function (result) {
                         var array = result.content;
-//                        alert(array[0][0]);
+//                        alert(array.length);
                         if(privilege == "SUPER" || privilege == "ADMIN"){
                             $('#nm_philanthropy').val('0').trigger("change");
                         }else{
                             if(cat_role == 'Institution'){
-                                $('#nm_philanthropy').val(array[0][0]).trigger("change").attr('disabled',true);
+                                if(array.length == 0){
+                                    $('#nm_philanthropy').val("0").trigger("change").attr('disabled',true);
+                                }else{
+                                    $('#nm_philanthropy').val(array[0][0]).trigger("change").attr('disabled',true);
+                                }
                             }else{
                                 $('#nm_philanthropy').val('0').trigger("change");
                             }

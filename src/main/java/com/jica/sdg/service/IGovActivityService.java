@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface IGovActivityService {
 
-    List<GovActivity> findAll(Integer id);
+    List<GovActivity> findAll(Integer id, Integer id_role);
     
     List<GovActivity> findGovActivityByIdAndProv(Integer id, String id_prov);
 

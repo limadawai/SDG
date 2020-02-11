@@ -1013,7 +1013,7 @@
                         if(sts == 'yearly'){
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
-                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
+                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span> <span class="lang_indo">Satuan</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
                             
@@ -1059,6 +1059,9 @@
 //                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
                                         }
 
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[16]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[14] == null || row[14] == ""){
@@ -1139,7 +1142,7 @@
                         }else if(sts == 'semesterly'){
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
-                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
+                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span> <span class="lang_indo">Satuan</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
                             
@@ -1184,6 +1187,9 @@
 //                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
                                         }
 
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[16]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[14] == null || row[14] == ""){
@@ -1262,7 +1268,7 @@
                         }else if(sts == 'quarterly'){
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
-                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
+                                      <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span> <span class="lang_indo">Satuan</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
                             
@@ -1308,6 +1314,9 @@
 //                                            return "<div style='font-size:90%;'><a href='" + urls + "non-government-program-monitoring/gov/program/"+id_program_1+"/"+id_prov_1+"/"+id_role_1+"/"+monper_1+"/"+tahun_1+"/activity/" + row[15] + "/indicator' class='target' >" + row[13] + "</a></div>";
                                         }
 
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[16]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[14] == null || row[14] == ""){
