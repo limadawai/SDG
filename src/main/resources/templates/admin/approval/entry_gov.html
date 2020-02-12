@@ -42,6 +42,15 @@
                                 <option value="entry_gov_budget" >Budget</option>
                                 <option value="entry_gov_indicator" >Indicator</option>
                             </select>
+                            <select id="period" name="period" class="form-control">
+                                <option value="0" ><span class=""> -- Pilih -- </span> </option>
+                            </select>
+                            <div class="input-append">
+                                <button class="btn btn-success " id="show_report">
+                                    <span class="lang_eng" style="display:none">Show Report</span>
+                                    <span class="lang_indo">Tampil Laporan</span>
+                                </button>
+                            </div>
                             <div class="input-append pull-right">
                                 <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
                                 <span class="add-on"><i class="icon-search"></i></span>
@@ -332,12 +341,92 @@
 //
 //        
         $("#periode").on('change', function(e){
+            var tipe    = $("#type").val();
+            var periode = $("#periode").val();
+            var data    = periode.split("###");
+            if(tipe == 'entry_gov_budget'){
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-sts-monper-gov/'+data[0],
+                    success: function (result1) {
+                        var sts = result1.content;
+//                        console.log(sts);
+                        if(sts == 'yearly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                        }else if(sts == 'semesterly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                        }else if(sts == 'quarterly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                        }else{}
+                        $("#period").html(s_html);
+                    }
+                });
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-sts-monper-gov_act/'+data[0],
+                    success: function (result1) {
+                        if(sts == 'yearly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                        }else if(sts == 'semesterly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                        }else if(sts == 'quarterly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                        }else{}
+                        $("#period").html(s_html);
+                    }
+                });
+            }
+            
+            $("#tabel-approve-gov-activity").hide();
+            $("#tabel-approve-gov-indicator").hide();
+            grid_role()
+        });
+        
+        $("#period").on('change', function(e){
+            
             grid_role()
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
         });
         
         $("#type").on('change', function(e){
+            var tipe    = $("#type").val();
+            var periode = $("#periode").val();
+            var data    = periode.split("###");
+            if(tipe == 'entry_gov_budget'){
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-sts-monper-gov/'+data[0],
+                    success: function (result1) {
+                        var sts = result1.content;
+//                        console.log(sts);
+                        if(sts == 'yearly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                        }else if(sts == 'semesterly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                        }else if(sts == 'quarterly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                        }else{}
+                        $("#period").html(s_html);
+                    }
+                });
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-sts-monper-gov_act/'+data[0],
+                    success: function (result1) {
+                        if(sts == 'yearly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                        }else if(sts == 'semesterly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                        }else if(sts == 'quarterly'){
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                        }else{}
+                        $("#period").html(s_html);
+                    }
+                });
+            }
             grid_role()
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
@@ -414,6 +503,7 @@
         function grid_role()
         {
             var v_dataid    = $("#periode").val();
+            var v_period    = $("#period").val();
             var v_data_id   = v_dataid.split("###");
             var id_monper   = v_data_id[0];
             var tahun       = v_data_id[1];
@@ -431,7 +521,7 @@
                 "responsive":true,
                 "bDestroy": true,
                 "ajax": {
-                    "url": urls+'list-role-approval/'+id_monper+'/'+v_year+'/'+v_type,
+                    "url": urls+'list-role-approval/'+id_monper+'/'+v_year+'/'+v_type+'/'+v_period,
                     dataSrc: 'content',
                 },
                 "searching": true,
@@ -440,17 +530,26 @@
                         return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'><a class='id_role' data-id='"+row[1]+"' data-monper='"+row[4]+"' data-type='"+v_type+"' data-periode='"+row[6]+"' data-nmrole='"+row[2]+"' href='#'>"+row[2]+"</a></div>";
+                        return "<div style='font-size:90%;'><a class='id_role' data-id='"+row[1]+"' data-monper='"+row[4]+"' data-type='"+v_type+"' data-periode='"+row[6]+"' data-nmrole='"+row[2]+"' data-approval='"+row[3]+"' href='#'>"+row[2]+"</a></div>";
                     }},
                     {"data": function (row, data, index, display) {
                         var warna = "btn-primary";
                         if(row[3]==2){
                             warna = "btn-success";
+                            return "<div style='text-align:center;'>"+
+                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unapprove">UnApprove</button></div>';
                         }else if(row[3]==3){
                             warna = "btn-danger";
+                            return "<div style='text-align:center;'>"+
+                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' approve">Reject</button></div>';
+                        }else if(row[3]==1){
+                            warna = "btn-primary";
+                            return "<div style='text-align:center;'>"+
+                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' approve">Approve</button></div>';
+                        }else if(row[3]==4){
+                            warna = "";
+                            return "";
                         }
-                        return "<div style='text-align:center;'>"+
-                        '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' approve"><i class="icon-edit"></i></button></div>';
                     }},
                 ],
                 "columnDefs": [
@@ -459,6 +558,63 @@
             });	
             
         }
+        
+        $('.input-append').on('click', '#show_report', function(){
+//            alert('lolo');
+            var v_dataid    = $("#periode").val();
+            var v_period    = $("#period").val();
+            var v_data_id   = v_dataid.split("###");
+            var id_monper   = v_data_id[0];
+            var tahun       = v_data_id[1];
+            var v_idprov    = $("#id_prov").val();
+            var v_type      = $("#type").val();	
+            swal({
+                title: titleDel,
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: buttDel1
+            }).then(function () {
+                var periode             = v_period;
+                var id_monper1           = id_monper;
+                var year                = tahun;
+                var approval            = "4";
+                var type                = v_type;
+
+                var data1    = JSON.stringify({
+                                'id': "1",
+                                'id_form_type': "0",
+                                'id_role': "1",
+                                'id_monper': id_monper1,
+                                'year': year,
+                                'approval': approval,
+                                'approval_date': null,
+                                'type': type,
+                                'periode': periode,
+                                'description': '-'
+                            });
+                console.log(data1);
+                $.ajax({
+                    type: "POST",
+                    url: urls+'done-approve-gov_prog1',
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                    data: data1,
+                    success: function (result) {
+                        $("#tabel-approve-gov-activity").hide();
+                        $("#tabel-approve-gov-indicator").hide();
+                        grid_role();
+                    },
+                });
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                }
+            });
+        });
         
         $('#tbody-role').on('click', '.approve', function(){
             var id          = $(this).data("id");
@@ -469,13 +625,39 @@
             $('.approval[value="'+approval+'"]').prop("checked", true).trigger("click");
             $("#description").text((description?description:''));
             $("#myModal").modal('show');	
+        }).on('click', ".unapprove", function(e){
+            var id          = $(this).data("id");
+            var data = JSON.stringify({
+                        'id':id,
+                        'approval':'1',
+                        'description':"-"
+            });
+            $.ajax({
+                type: "POST",
+                url: urls+'update-approval',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header,token);
+                },
+                headers:{'Accept':'application/json','Content-Type':'application/json'},
+                data: data,
+                success: function (result) {
+//                        var data_id     = $("#periode").val().split("###");;
+//                        var id_monper   = data_id[0];
+//                        var tahun       = data_id[1];
+                    $("#tabel-approve-gov-activity").hide();
+                    $("#tabel-approve-gov-indicator").hide();
+                    grid_role();
+                },
+            });
+            
         }).on('click', ".id_role", function(e){
             var id_role     = $(this).data("id");
             var id_monper   = $(this).data("monper");
             var type        = $(this).data("type");
             var periode     = $(this).data("periode");
             var nmrole      = $(this).data("nmrole");
-            grid(id_role, id_monper, type, periode, nmrole);
+            var approval    = $(this).data("approval");
+            grid(id_role, id_monper, type, periode, nmrole, approval);
             $('.tombol-new').show();
             if(type == 'entry_gov_budget'){
                 $("#tabel-approve-gov-activity").show();
@@ -533,7 +715,7 @@
         });
 
         //memanggil tb detail
-        function grid(id_role, id_monper, type, periode, nmrole)
+        function grid(id_role, id_monper, type, periode, nmrole, approval)
         {
             if(type == 'entry_gov_budget'){
                 var v_idprov    = $("#id_prov").val();
@@ -680,7 +862,12 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        if(approval == '4'){
+                                            return '';
+                                        }else{
+                                            return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
+                                        
                                     }},
                                 ],
                                 "columnDefs": [
@@ -825,7 +1012,12 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        if(approval == '4'){
+                                            return '';
+                                        }else{
+                                            return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
+                                        
                                         
                                     }},
                                 ],
@@ -984,7 +1176,11 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        if(approval == '4'){
+                                            return '';
+                                        }else{
+                                            return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
                                         
                                     }},
                                 ],
@@ -1156,7 +1352,12 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        
+                                        if(approval == '4'){
+                                            return '';
+                                        }else{
+                                            return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
                                         
                                     }},
                                 ],
@@ -1293,7 +1494,12 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        if(approval == '4'){
+                                            return '';
+                                        }else{
+                                            return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
+                                        
                                     }},
                                 ],
                                 "columnDefs": [
@@ -1449,8 +1655,11 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-                                        
+                                        if(approval == '4'){
+                                            return '';
+                                        }else{
+                                            return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
+                                        }
                                     }},
                                 ],
                                 "columnDefs": [

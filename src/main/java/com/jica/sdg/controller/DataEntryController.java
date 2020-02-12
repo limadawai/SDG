@@ -5,6 +5,7 @@ import com.jica.sdg.model.EntryGovBudget;
 import com.jica.sdg.model.EntryGovIndicator;
 import com.jica.sdg.model.EntryNsaBudget;
 import com.jica.sdg.model.EntryNsaIndicator;
+import com.jica.sdg.model.EntryShowReport;
 import com.jica.sdg.model.EntrySdg;
 import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.NsaProgram;
@@ -329,6 +330,31 @@ public class DataEntryController {
 	}
         approvalService.deleteApproveGovBudget(id_role, id_monper, year, type, periode);
         approvalService.save(entryApproval);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @PostMapping(path = "admin/done-approve-gov_prog1", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void doneApproveGovProg1(@RequestBody EntryApproval entryApproval) {
+//        System.out.println(entryApproval.getPeriode());
+//        System.out.println(id_monper+' '+ year+" "+ type+" "+ periode);
+        String type             = entryApproval.getType();
+        String periode          = entryApproval.getPeriode();
+        int year                = entryApproval.getYear();
+//        int id_role             = entryApproval.getId_role();
+        int id_monper           = entryApproval.getId_monper();
+        
+        EntryShowReport rp = new EntryShowReport();
+//                rp.setId();
+        rp.setId_monper(id_monper);
+        rp.setYear(year);
+        rp.setShow_report("1");
+        rp.setShow_report_date(new Date());
+        rp.setType(type);
+        rp.setPeriod("1");
+        approvalService.updatedoneApproveGovBudget(id_monper, year, type, periode);
+        approvalService.saveshow(rp);
+//        approvalService.save(entryApproval);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
     

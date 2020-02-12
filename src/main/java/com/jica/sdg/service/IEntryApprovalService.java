@@ -1,6 +1,7 @@
 package com.jica.sdg.service;
 
 import com.jica.sdg.model.EntryApproval;
+import com.jica.sdg.model.EntryShowReport;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,6 +12,7 @@ public interface IEntryApprovalService {
 
     void save(EntryApproval app);
     
+    
     Optional<EntryApproval> findOne(Integer id);
     
     void deleteEntryApproval(Integer id);
@@ -18,4 +20,8 @@ public interface IEntryApprovalService {
     void updateApproval(String approval, String description, Integer id);
     
     void deleteApproveGovBudget(Integer id_role, Integer id_monper, Integer year, String type, String periode);
+    
+    void updatedoneApproveGovBudget(Integer id_monper, Integer year, String type, String periode);
+    
+    void saveshow(EntryShowReport app1);
 }

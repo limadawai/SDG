@@ -98,13 +98,14 @@ public class ApprovalController {
         return "admin/approval/entry_sdg";
     }
 	
-    @GetMapping("admin/list-role-approval/{id_monper}/{year}/{type}")
-    public @ResponseBody Map<String, Object> listRoleApproval(@PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("type") String type) {
-        String sql = "select a.id, a.id_role, b.nm_role, a.approval, a.id_monper, a.description, a.periode from entry_approval a left join ref_role b on a.id_role = b.id_role where id_monper=:id_monper and year=:year and type=:type and approval = '1' ";
+    @GetMapping("admin/list-role-approval/{id_monper}/{year}/{type}/{period}")
+    public @ResponseBody Map<String, Object> listRoleApproval(@PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("type") String type, @PathVariable("period") String period) {
+        String sql = "select a.id, a.id_role, b.nm_role, a.approval, a.id_monper, a.description, a.periode from entry_approval a left join ref_role b on a.id_role = b.id_role where a.id_monper=:id_monper and a.year=:year and a.type=:type and a.periode=:period order by a.approval ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_monper", id_monper);
         query.setParameter("year", year);
         query.setParameter("type", type);
+        query.setParameter("period", period);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);

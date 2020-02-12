@@ -18,10 +18,10 @@ public class SdgTarget implements Serializable {
     @Column(nullable = false, length = 2)
     private String id_goals;
 
-	@Column(nullable = false, length = 150)
+	@Column(nullable = false)
 	private String nm_target;
 
-	@Column(nullable = false, length = 150)
+	@Column(nullable = false)
 	private String nm_target_eng;
 
 	public SdgTarget() {
