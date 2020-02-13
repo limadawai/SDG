@@ -22,17 +22,20 @@ public class EntryShowReport  implements Serializable {
     private Date show_report_date;
     @Column(name = "type")
     private String type;
+    @Column(name = "period")
+    private String period;
 
     public EntryShowReport() {
     }
 
-    public EntryShowReport(int id, int id_monper, int year, String show_report, Date show_report_date, String type) {
+    public EntryShowReport(int id, int id_monper, int year, String show_report, Date show_report_date, String type, String period) {
         this.id = id;
         this.id_monper = id_monper;
         this.year = year;
         this.show_report = show_report;
         this.show_report_date = show_report_date;
         this.type = type;
+        this.period = period;
     }
 
     public int getId() {
@@ -81,5 +84,13 @@ public class EntryShowReport  implements Serializable {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
     }
 }

@@ -17,10 +17,10 @@ public class GovProgram implements Serializable {
     @Column(nullable = false, length = 10)
     private String id_program;
     
-    @Column(nullable = true, length = 150)
+    @Column(nullable = true)
     private String nm_program;
     
-    @Column(nullable = true, length = 150)
+    @Column(nullable = true)
     private String nm_program_eng;
     
     @Column(nullable = false, length = 11)

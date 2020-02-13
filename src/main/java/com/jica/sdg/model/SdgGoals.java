@@ -15,10 +15,10 @@ public class SdgGoals implements Serializable {
     @Column(nullable = false, length = 3)
     private String id_goals;
     
-    @Column(nullable = true, length = 150)
+    @Column(nullable = true)
     private String nm_goals;
 
-	@Column(nullable = true, length = 150)
+	@Column(nullable = true)
 	private String nm_goals_eng;
 
 	public SdgGoals() {

@@ -21,10 +21,10 @@ public class SdgIndicator implements Serializable {
     @Column(nullable = false, length = 6)
     private String id_target;
     
-    @Column(nullable = false, length = 125)
+    @Column(nullable = false)
     private String nm_indicator;
 
-    @Column(nullable = false, length = 125)
+    @Column(nullable = false)
 	private String nm_indicator_eng;
     
     @Column(nullable = false, length = 10)

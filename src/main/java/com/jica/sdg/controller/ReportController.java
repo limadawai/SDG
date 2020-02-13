@@ -97,6 +97,7 @@ public class ReportController {
 
     @GetMapping("admin/getgovmap")
     public @ResponseBody List<Object> getGovMapByIdProv(@RequestParam("id_prov") String idprov, @RequestParam("id_monper") int idmonper) {
+        List list;
         String sql = "SELECT a.*, b.start_year, b.end_year, c.id as idgoals, c.nm_goals, c.nm_goals_eng, d.id AS idtarget, d.nm_target, d.nm_target_eng, " +
                 "e.id AS idindi, e.nm_indicator, e.nm_indicator_eng, e.unit, " +
                 "f.nm_indicator AS gov_nm_indicator, f.nm_indicator_eng AS gov_nm_indicator_eng, " +
@@ -110,7 +111,26 @@ public class ReportController {
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
         query.setParameter("id_monper", idmonper);
-        List list = query.getResultList();
+        list = query.getResultList();
+        return list;
+    }
+
+    @GetMapping("admin/getgovmapall")
+    public @ResponseBody List<Object> getGovMapByIdProvAll(@RequestParam("id_monper") int idmonper) {
+        List list;
+        String sql = "SELECT a.*, b.start_year, b.end_year, c.id as idgoals, c.nm_goals, c.nm_goals_eng, d.id AS idtarget, d.nm_target, d.nm_target_eng, " +
+                "e.id AS idindi, e.nm_indicator, e.nm_indicator_eng, e.unit, " +
+                "f.nm_indicator AS gov_nm_indicator, f.nm_indicator_eng AS gov_nm_indicator_eng, " +
+                "f.unit AS gov_indicator_unit FROM gov_map a LEFT JOIN " +
+                "ran_rad b ON b.id_monper = a.id_monper LEFT JOIN " +
+                "sdg_goals c ON c.id = a.id_goals LEFT JOIN " +
+                "sdg_target d ON d.id = a.id_target LEFT JOIN " +
+                "sdg_indicator e ON e.id = a.id_indicator LEFT JOIN " +
+                "gov_indicator f ON f.id = a.id_gov_indicator " +
+                "WHERE a.id_monper = :id_monper";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        list = query.getResultList();
         return list;
     }
 
@@ -203,22 +223,32 @@ public class ReportController {
 
     @GetMapping("admin/getentryreport")
     public @ResponseBody List<Object> getEntryReportData(@RequestParam("id") int idreport) {
-        String sql = "SELECT * FROM entry_show_report WHERE id = :id";
+        String sql = "SELECT * FROM entry_show_report WHERE id_monper = :id_monper";
         Query query = manager.createNativeQuery(sql);
-        query.setParameter("id", idreport);
+        query.setParameter("id_monper", idreport);
         List list = query.getResultList();
         return list;
     }
 
     @GetMapping("admin/getrolebyidprov")
     public @ResponseBody List<Object> getRoleByIdProv(@RequestParam("id_prov") String id) {
-        List list = roleService.findByProvince(id);
+        List list;
+        if (id.equals("00")) {
+            list = roleService.findAll();
+        } else {
+            list = roleService.findByProvince(id);
+        }
         return list;
     }
 
     @GetMapping("admin/getranradbyidprov")
     public @ResponseBody List<Object> getranrad(@RequestParam("id_prov") String id) {
-        List list = ranRadService.findAllByIdProv(id);
+        List list;
+        if (id.equals("00")) {
+            list = ranRadService.findAll();
+        } else {
+            list = ranRadService.findAllByIdProv(id);
+        }
         return list;
     }
 

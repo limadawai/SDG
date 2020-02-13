@@ -18,6 +18,7 @@
             <div style="width:100%">
                 <select id="daerah" name="daerah" class="form-control">
                     <option value="0" >-- Pilih Daerah --</option>
+                    <option value="00"> All </option>
                     <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
                 </select>
                 <select id="role" name="idrole" class="form-control">
@@ -28,14 +29,14 @@
                 </select>
             </div>
             <div style="width:100%">
-                <select id="goals" name="daerah" class="form-control">
+                <select id="goals" name="goals" class="form-control">
                     <option value="0" >-- Pilih SDGs --</option>
                     <option id="optgoals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>
                 </select>
                 <select id="target" name="target" class="form-control">
                     <option value="0" >-- Pilih Target --</option>
                 </select>
-                <select id="indikator" name="idrole" class="form-control">
+                <select id="indikator" name="indikator" class="form-control">
                     <option value="0" >-- Pilih Indikator --</option>
                 </select>
             </div>
@@ -196,7 +197,12 @@
                 dataType: 'json',
                 cache: false,
                 success: function (result) {
-                    // console.log(result);
+                    if (result.length == 0) {
+                        swal("Data tidak ditemukan!");
+                        if (lang != "0") {
+                            swal("Data not found!");
+                        }
+                    }
                     if (result[0][3] == "1") {
                         var stat = result[0][3];
                         if (idrole == "0") {
@@ -205,7 +211,7 @@
                         } else if (idprov == "0") {
                             swal("Anda harus memilih provinsi");
                         }
-                        var catrole = result[0]['cat_role'];
+                        // var catrole = result[0]['cat_role'];
                         if (status == "Government") {
                             var idprov = $("#daerah").val();
                             var idmonper = $("#periode").val();
@@ -214,15 +220,19 @@
                             var goalseng = [];
                             var targetindo = [];
                             var targeteng = [];
+                            var url1 = urls+"getgovmap";
+                            var url2 = urls+"getgovmapall";
+                            var data1 = {'id_prov': idprov, 'id_monper': idmonper};
+                            var data2 = {'id_monper': idmonper};
                             if (idmonper != "0") {
                                 $.ajax({
-                                    url: urls + "getgovmap",
+                                    url: (idprov == "00") ? url2 : url1,
+                                    data: (idprov == "00") ? data2 : data1,
                                     type: 'get',
-                                    data: {'id_prov': idprov, 'id_monper': idmonper},
                                     dataType: 'json',
                                     cache: false,
                                     success: function (resgovmap) {
-                                        // console.log(resgovmap);
+                                        console.log(resgovmap);
                                         $("#goals").empty();
                                         $("#target").empty();
                                         $("#indikator").empty();
