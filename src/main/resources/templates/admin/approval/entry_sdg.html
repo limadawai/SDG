@@ -253,14 +253,6 @@
                 });
                 $(".tabel-entri-sdg").hide();
             });
-
-            $("#periode").on('change', function(e){
-                var data_id     = this.value.split("###");;
-                var id_monper   = data_id[0];
-                var tahun       = data_id[1];
-                table.ajax.url(urls+'list-role-approval/'+id_monper+'/'+tahun+'/entry_sdg').load();
-                $(".tabel-entri-sdg").hide();
-            });
             
             $('#teruskan').on('click', '#apply_btn', function(e){
                 alert('button is not a function');
@@ -360,13 +352,21 @@
 								warna = "btn-danger";
 							}
 							return "<div style='text-align:center;'>"+
-							'<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" type="button" title="approve" class="btn '+warna+' btn-mini approve"><i class="icon-edit"></i></button></div>';
+							'<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" type="button" title="approve" class="btn '+warna+' approve"><i class="icon-edit"></i></button></div>';
 						}},
 				],
 				"columnDefs": [
 				],
 				select: true
 			});	
+            
+            $("#periode").on('change', function(e){
+                var data_id     = this.value.split("###");;
+                var id_monper   = data_id[0];
+                var tahun       = data_id[1];
+                table.ajax.url(urls+'list-role-approval/'+id_monper+'/'+tahun+'/entry_sdg').load();
+                $(".tabel-entri-sdg").hide();
+            });
             
             $('#tbody-role').on('click', '.approve', function(){
             	var id = $(this).data("id");

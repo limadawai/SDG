@@ -9,12 +9,14 @@ import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,21 +61,31 @@ public class ApprovalController {
 		approvalService.save(app);
 	}
 	
-    @GetMapping("admin/get-approve/{id_form_type}/{type}/{year}/{id_monper}")
-    public @ResponseBody Map<String, Object> getApprove(@PathVariable("id_form_type") Integer id_form_type, @PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper) {
-        if(type.equals("entry_sdg")) {
-        }
-        String sql = "select id, approval from entry_approval where id_form_type=:id_form_type and type=:type and year=:year and id_monper=:id_monper";
+    @GetMapping("admin/get-approve/{type}/{year}/{id_monper}/{periode}")
+    public @ResponseBody Map<String, Object> getApprove(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode) {
+        String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode";
         Query query = em.createNativeQuery(sql);
-        query.setParameter("id_form_type", id_form_type);
         query.setParameter("year", year);
         query.setParameter("id_monper", id_monper);
         query.setParameter("type", type);
+        query.setParameter("periode", periode);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
+    
+    @DeleteMapping("admin/unapply/{type}/{year}/{id_monper}/{periode}")
+    @ResponseBody    
+    @Transactional
+    public void deleteUnit(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode) {
+    	Query query = em.createNativeQuery("delete from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode");
+    	query.setParameter("year", year);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("type", type);
+        query.setParameter("periode", periode);
+        query.executeUpdate();
+    } 
 	
 	@GetMapping("admin/data-approval/sdg-indicator-monitoring")
     public String entri_sdg(Model model, HttpSession session) {
@@ -98,13 +110,14 @@ public class ApprovalController {
         return "admin/approval/entry_sdg";
     }
 	
-    @GetMapping("admin/list-role-approval/{id_monper}/{year}/{type}")
-    public @ResponseBody Map<String, Object> listRoleApproval(@PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("type") String type) {
-        String sql = "select a.id, a.id_role, b.nm_role, a.approval, a.id_monper, a.description, a.periode from entry_approval a left join ref_role b on a.id_role = b.id_role where id_monper=:id_monper and year=:year and type=:type and approval = '1' ";
+    @GetMapping("admin/list-role-approval/{id_monper}/{year}/{type}/{period}")
+    public @ResponseBody Map<String, Object> listRoleApproval(@PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("type") String type, @PathVariable("period") String period) {
+        String sql = "select a.id, a.id_role, b.nm_role, a.approval, a.id_monper, a.description, a.periode from entry_approval a left join ref_role b on a.id_role = b.id_role where a.id_monper=:id_monper and a.year=:year and a.type=:type and a.periode=:period order by a.approval ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_monper", id_monper);
         query.setParameter("year", year);
         query.setParameter("type", type);
+        query.setParameter("period", period);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);

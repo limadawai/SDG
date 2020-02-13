@@ -5,7 +5,9 @@ import com.jica.sdg.model.EntryGovBudget;
 import com.jica.sdg.model.EntryGovIndicator;
 import com.jica.sdg.model.EntryNsaBudget;
 import com.jica.sdg.model.EntryNsaIndicator;
+import com.jica.sdg.model.EntryShowReport;
 import com.jica.sdg.model.EntrySdg;
+import com.jica.sdg.model.EntrySdgDetail;
 import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.NsaProgram;
 
@@ -107,6 +109,9 @@ public class DataEntryController {
     
     @Autowired
     IEntryApprovalService approvalService;
+    
+    @Autowired
+    IEntrySdgDetailService entrySdgDetailService;
 
     //entry SDG
     @GetMapping("admin/sdg-indicator-monitoring")
@@ -161,7 +166,8 @@ public class DataEntryController {
         String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
                     "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
-                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4 \n" +
+                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
+                    "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4 \n" +
                     "from assign_sdg_indicator as a\n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +
@@ -172,6 +178,9 @@ public class DataEntryController {
                     "(select * from entry_sdg where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
                     "left join ran_rad as g on a.id_monper = g.id_monper \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
+                    "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
+                    "left join (select * from entry_sdg_detail where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail \n" +
                     "where a.id_role = :id_role and a.id_monper = :id_monper and a.id_prov = :id_prov ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
@@ -197,6 +206,12 @@ public class DataEntryController {
         int id_monper           = entrySdg.getId_monper();
         entrySdgService.saveEntrySdg(entrySdg);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @PostMapping(path = "admin/save-entry-sdg-detail", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveEntrySdgDetail(@RequestBody EntrySdgDetail entrySdg) {
+        entrySdgDetailService.saveEntrySdgDetail(entrySdg);
     }
 
     
@@ -329,6 +344,31 @@ public class DataEntryController {
 	}
         approvalService.deleteApproveGovBudget(id_role, id_monper, year, type, periode);
         approvalService.save(entryApproval);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @PostMapping(path = "admin/done-approve-gov_prog1", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void doneApproveGovProg1(@RequestBody EntryApproval entryApproval) {
+//        System.out.println(entryApproval.getPeriode());
+//        System.out.println(id_monper+' '+ year+" "+ type+" "+ periode);
+        String type             = entryApproval.getType();
+        String periode          = entryApproval.getPeriode();
+        int year                = entryApproval.getYear();
+//        int id_role             = entryApproval.getId_role();
+        int id_monper           = entryApproval.getId_monper();
+        
+        EntryShowReport rp = new EntryShowReport();
+//                rp.setId();
+        rp.setId_monper(id_monper);
+        rp.setYear(year);
+        rp.setShow_report("1");
+        rp.setShow_report_date(new Date());
+        rp.setType(type);
+        rp.setPeriod("1");
+        approvalService.updatedoneApproveGovBudget(id_monper, year, type, periode);
+        approvalService.saveshow(rp);
+//        approvalService.save(entryApproval);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
     
