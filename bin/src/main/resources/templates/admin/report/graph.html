@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <head th:include="admin/layout :: header">
+    <title th:text="SDG Report Graph"></title>
+</head>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Laporan / Grafik</a></div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div style="width:100%">
+                    <select id="daerah" name="daerah" class="form-control">
+                        <option value="0" >-- Pilih Daerah --</option>
+                        <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
+                    </select>
+                </div>
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5 id="title">Grafik Hasil Pelaporan</h5>
+                    </div>
+                    <div class="widget-content" style="background:#FFFFFF;">
+                        <div class="row-fluid">
+                            <div id="divkiri" class="span6"></div>
+                            <div id="divkanan" class="span6">
+                                <p><h4 id="patas" style="margin-left:10px;">Pemerintah</h4></p>
+                                <div id="kananatas" class="span12" style="margin:0;padding:0;">
+                                </div>
+                                <p><h4 id="pbawah" style="margin-left:10px;">Non-Pemerintah</h4></p>
+                                <div id="kananbawah" class="span12" style="margin:0;padding:0;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:include="admin/layout :: footer"></div>
+    <script th:inline="javascript">
+        var lang = [[${lang}]];
+        if (lang == null ) {lang = "0";};
+        var name = [[${name}]];
+        var role = [[${role}]];
+        $("#welcome").html("Welcome, "+name);
+
+        indo();
+
+        if (lang == "0") {
+            indo();
+        } else {
+            inggris();
+        }
+
+        $('#fs').on('change', function(){
+            if($(this).is(':checked')){
+                indo();
+            } else {
+                inggris();
+            }
+        });
+
+        function indo() {
+            $("#title").text("Grafik hasil Pelaporan");
+        }
+
+        function inggris() {
+            $("#title").text("Monitoring Graph");
+        }
+
+        // ********************** Fungsi pilih select option **********************
+
+        $("#daerah").on("change", function(){
+            var valdaerah = $(this).val();
+            if (valdaerah != "0") {
+                $.ajax({
+                    url: urls + "graphsdg",
+                    type: 'get',
+                    data: 'id_prov=' + valdaerah,
+                    dataType: 'json',
+                    cache: false,
+                    success: function (result) {
+                        // console.log(result);
+                        $("#divkiri").empty();
+                        var isi = "<ol class='tree'>";
+                        for (var i=0; i<result.length; i++) {
+                            isi += "<li style='padding:6px'>";
+                                isi += "<label class='dok' for='folder"+(i+1)+"'>"+result[i][8]+"</label> <input type='checkbox' id='folder"+(i+1)+"' />";
+                                isi += "<ol>";
+                                    isi += "<li class='dok' style='padding:6px'>";
+                                        isi += "<label class='dok' for='subfolder"+(i+1)+"'>"+result[i][11]+"</label><input type='checkbox' id='subfolder"+(i+1)+"' />";
+                                        isi += "<ol>";
+                                            isi += "<li id='cucu' class='file' style='padding:6px'><a href='#' onclick='kanan("+result[i][3]+")'>"+result[i][14]+"</a></li>";
+                                        isi += "</ol>";
+                                    isi += "</li>";
+                                isi += "</ol>";
+                            isi += "</li>";
+                        }
+                        isi += "</ol>";
+                        $("#divkiri").append(isi);
+                    }
+                });
+                pohon();
+            } else if (valdaerah == "0") {
+                $("#divkiri").empty();
+            }
+        });
+
+        function kanan(idindi) {
+            $.ajax({
+                url: urls + "graphidgovindi",
+                type: 'get',
+                data: 'id_indicator=' + idindi,
+                dataType: 'json',
+                cache: false,
+                success: function (result) {
+                    // console.log(result.length);
+                    $("#kananatas").empty();
+                    for (var i=0; i<result.length; i++) {
+                        $.ajax({
+                            url: urls + "isigovmap",
+                            type: 'get',
+                            data: 'id='+result[i],
+                            dataType: 'json',
+                            cache: false,
+                            success: function (resin) {
+                                var isi = "<ol class='treekanan'>";
+                                for (var i=0; i<resin.length; i++) {
+                                    isi += "<li style='padding:6px'>";
+                                        isi += "<label class='dokkanan' for='folder" + (i + 1) + "'>" + resin[i][10] + "</label> <input type='checkbox' id='folder" + (i + 1) + "' />";
+                                        isi += "<ol>";
+                                            isi += "<li style='padding:6px'>";
+                                            isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
+                                                isi += "<ol>";
+                                                    isi += "<li id='cucukanan' class='file' style='padding:6px'><a onclick='cucukanan(" + resin[i][0] + ","+0+")'>" + resin[i][4] + "</a></li>";
+                                                isi += "</ol>";
+                                            isi += "</li>";
+                                        isi += "</ol>";
+                                    isi += "</li>";
+                                }
+                                isi += "</ol>";
+                                $("#kananatas").append(isi);
+                            }
+                        });
+                    }
+                }
+            });
+            //************************** Non Government ****************************
+            $.ajax({
+                url: urls + "graphidnsaindi",
+                type: 'get',
+                data: 'id_indicator=' + idindi,
+                dataType: 'json',
+                cache: false,
+                success: function (result) {
+                    // console.log(result);
+                    $("#kananbawah").empty();
+                    for (var i=0; i<result.length; i++) {
+                        $.ajax({
+                            url: urls + "isinsamap",
+                            type: 'get',
+                            data: 'id='+result[i],
+                            dataType: 'json',
+                            cache: false,
+                            success: function (resin) {
+                                var isi = "<ol class='treekanan'>";
+                                for (var i=0; i<resin.length; i++) {
+                                    isi += "<li style='padding:6px'>";
+                                    isi += "<label class='dokkanan' for='folder" + (i + 1) + "'>" + resin[i][10] + "</label> <input type='checkbox' id='folder" + (i + 1) + "' />";
+                                    isi += "<ol>";
+                                    isi += "<li style='padding:6px'>";
+                                    isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
+                                    isi += "<ol>";
+                                    isi += "<li id='cucukanan' class='file' style='padding:6px;'><a onclick='cucukanan(" + resin[i][0] + ","+1+")'>" + resin[i][4] + "</a></li>";
+                                    isi += "</ol>";
+                                    isi += "</li>";
+                                    isi += "</ol>";
+                                    isi += "</li>";
+                                }
+                                isi += "</ol>";
+                                $("#kananbawah").append(isi);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        function cucukanan(id, flag) {
+            window.open(urls+"report-graph-detail/"+id+"/"+flag);
+        }
+
+    </script>
+</body>
+</html>

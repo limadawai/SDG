@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/layout :: header">
+    <title th:text="Define RAN/RAD/SDGs Indicator"></title>
+</head>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Funding/ SDGs Indicator</a></div>
+        </div>
+        <div class="container-fluid">
+			<div class="row-fluid">
+				<label class="tip-bottom"><span class="lang_eng" style="display:none">Goals</span><span class="lang_indo">Sasaran</span> <i class="icon-angle-right"></i> Target <i class="icon-angle-right"></i> <span class="lang_eng" style="display:none">SDGs Indicator</span><span class="lang_indo">Indikator SDG</span></label>
+			</div>
+			<div class="row-fluid">
+				<div class="widget-box">
+					<div class="widget-content">
+							<span class="lang_eng" style="display:none">Goals : </span><span class="lang_indo">Sasaran : </span><a th:href="@{/admin/entry-funding/sdg-goals}" th:text="${goals.id_goals+' - '+goals.nm_goals}"></a>
+							<br/>
+							Target : <a th:href="@{'/admin/entry-funding/sdg-goals/'+${goals.id}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}"></a>
+					</div>
+				</div>
+			</div>
+            <div class="row-fluid">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>
+                        	<span class="lang_eng" style="display:none">SDGs Indicator</span><span class="lang_indo">Indikator SDG</span>
+                        </h5>
+                    </div>
+                    <div class="widget-content">
+                    	<div class="row-fluid">
+                    		<div class="span6">
+                    			<div class="input-append">
+								  <input placeholder="Search..." class="span12" id="text-cari" type="text"/>
+								  <span class="add-on"><i class="icon-search"></i></span>
+								</div>
+                    		</div>
+<!--                    		<div class="span6" align="right">
+                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary"><i class="icon-plus"></i>
+                    				<span class="lang_eng" style="display:none">Add SDGs Indicator</span><span class="lang_indo">Tambah Indikator SDG</span>
+                    			</button>
+                    		</div>-->
+                    	</div>
+                    	<br/>
+                        <div class="row-fluid">
+                            <div class="span12">
+                            	<div class="table-responsive">
+	                                <table class="table table-bordered table-striped" id="tabel-indicator">
+	                                    <thead>
+	                                        <tr>
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
+	                                            	<span class="lang_eng" style="display:none">No</span>
+													<span class="lang_indo">No</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
+	                                            	<span class="lang_eng" style="display:none">Code</span>
+	                                            	<span class="lang_indo">Kode</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;" width="50%">
+	                                            	<span class="lang_eng" style="display:none">SDGs Indicator</span>
+	                                            	<span class="lang_indo">Indikator SDG</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
+	                                            	<span class="lang_eng" style="display:none">Unit</span>
+	                                            	<span class="lang_indo">Satuan</span>
+	                                            </th>
+<!--	                                            <th style="text-align:center;font-size:80%;" width="10%">
+	                                            	<span class="lang_eng" style="display:none">Action</span>
+	                                            	<span class="lang_indo">Aksi</span>
+	                                            </th>-->
+	                                        </tr>
+	                                    </thead>
+	                                    <tbody id="tbody-indicator">
+	                                    </tbody>
+	                                </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal"data-backdrop="static" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 class="lang_eng" style="display:none">Add SDGs Indicators</h3>
+			    <h3 class="lang_indo">Tambah Indikator SDG</h3>
+		  	</div>
+			<div class="modal-body">
+				<form>
+				  <div class="control-group">
+				    <label>Target</label>
+				    <input type="text" readonly="true" th:value="${target.nm_target}" class="input-xlarge input-block-level" />
+				    <input type="hidden" id="id_goals" name="id_goals" th:value="${target.id_goals}"/>
+				    <input type="hidden" id="id_target" name="id_target" th:value="${target.id}"/>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Code</label>
+				    <label class="lang_indo control-label">Kode</label>
+				    <div class="controls">
+				    	<input type="text" id="id_indicator" name="id_indicator" class="input-medium input-block-level"/>
+				    	<input type="hidden" id="id" name="id" class="input-medium input-block-level"/>
+				    	<span class="help-block" id="error_id_indicator"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">SDGs Indicator Name (Indonesian)</label>
+				    <label class="lang_indo control-label">Nama Indikator SDG (Indonesian)</label>
+				    <div class="controls">
+				    	<input type="text" id="nm_indicator" name="nm_indicator" class="input-xlarge input-block-level"/>
+				    	<span class="help-block" id="error_nm_indicator"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">SDGs Indicator Name (English)</label>
+				    <label class="lang_indo control-label">Nama Indikator SDG (English)</label>
+				    <div class="controls">
+				    	<input type="text" id="nm_indicator_eng" name="nm_indicator_eng" class="input-xlarge input-block-level"/>
+				    	<span class="help-block" id="error_nm_indicator"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Unit</label>
+				    <label class="lang_indo control-label">Satuan</label>
+				    <div class="controls">
+				    	<select name="unit" id="unit" class="input-xlarge input-block-level">
+	        				<option th:each="f:${unit}" th:value="${f.id_unit}" th:text="${f.nm_unit}"></option>
+	        			</select>
+					    <span class="help-block" id="error_unit"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Increment/Decrement</label>
+				    <label class="lang_indo control-label">Increment/Decrement</label>
+				    <div class="controls">
+				    	<select id="increment_decrement" name="increment_decrement" class="input-xlarge input-block-level">
+				    		<option value="">select</option>
+					    	<option value="Increment">Increment</option>
+					    	<option value="Decrement">Decrement</option>
+					    </select>
+					    <span class="help-block" id="error_increment_decrement"></span>
+				    </div>
+				  </div>
+				</form>
+			</div>
+			<div class="modal-footer">
+		    	<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<span class="lang_eng" style="display:none">Close</span>
+		    		<span class="lang_indo">Tutup</span>
+		    	</button>
+		    	<button class="btn btn-primary" id="submit">
+		    		<span class="lang_eng" style="display:none">Submit</span>
+		    		<span class="lang_indo">Simpan</span>
+		    	</button>
+		  	</div>
+		</div>
+    </div>
+    <div th:include="admin/layout :: footer"></div>
+</body>
+<script th:inline="javascript" >
+	// <![CDATA[
+		//$(document).ready(function (e) {
+			var token = $("meta[name='_csrf']").attr("content");
+	        var header = $("meta[name='_csrf_header']").attr("content");
+			var id_goals = $('#id_goals').val();
+			var id_target = $('#id_target').val();
+			//Bahasa
+	        var titleDel = "Anda Yakin";
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
+	        function bhs(cek){
+				if(cek){
+					$(".lang_indo").show();
+	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
+	        	}else{	    	        
+	    	        $(".lang_indo").hide();
+	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
+	        	}
+	        }
+	        if(lang){
+	        	bhs(lang=="0");
+	        }else{
+	        	bhs($('#fs').is(':checked'));
+	        }
+	        $('#fs').on('change', function(e){
+	        	bhs($(this).is(':checked'));
+	        	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
+	        });
+	                    
+			var table = $('#tabel-indicator').DataTable({
+				responsive: true,
+				sDom: 'lrtip',
+				"bLengthChange": false,
+				"cache": false,
+				"autoWidth": true,
+				"responsive":true,
+				"ajax": {
+					"url": urls+'list-sdgIndicator/'+id_goals+'/'+id_target,
+					dataSrc: 'content',
+				},
+				"searching": true,
+				"columns": [
+					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+						}},
+					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row[1]+"</div>";
+						}},
+
+					{"data": function (row, data, index, display) {
+							var nama;
+							if($("#fs").is(':checked')){
+								nama = row[4];
+							}else{
+								nama = row[6];
+							}
+							return "<div style='font-size:90%;'><a href='"+urls+"entry-funding/sdg-goals/"+row[2]+"/target/"+row[3]+"/indicator/"+row[0]+"/funding' class='target'>"+nama+"</a></div>";
+						}},
+					{"data": function (row, data, index, display) {
+						return "<div style='font-size:90%;'>"+row[5]+"</div>";
+					}},
+//					{"data": function (row, data, index, display) {
+//							return "<div style='text-align:center;'>"+
+//							'<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+//							'<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+//                            '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+//						}},
+				],
+				"columnDefs": [
+				],
+				select: true
+			});	
+			
+			$('#text-cari').on( 'keyup', function () {
+				var val=$(this).val();
+				table.search(val).draw();
+			});
+			
+			function clearForm(){
+				$('#id').val("");
+				$('#id_indicator').val("").removeAttr("readonly");
+				$('#nm_indicator').val("").removeAttr("readonly");
+				$('#nm_indicator_eng').val("").removeAttr("readonly");
+				$('#unit').val("").removeAttr("disabled");
+				$('#increment_decrement').val("").removeAttr("disabled");
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+			}
+			
+			$('#myModal').on('hidden.bs.modal',function(){
+				clearForm();
+			});
+			
+			$('#submit').on('click', function(){
+				var id_goals = $('#id_goals').val();
+				var id_target = $('#id_target').val();
+				var id = $('#id').val();
+				var id_indicator = $('#id_indicator').val();
+				var nm_indicator = $('#nm_indicator').val();
+				var nm_indicator_eng = $('#nm_indicator_eng').val();
+				var unit = $('#unit').val();
+				var increment_decrement = $('#increment_decrement').val();
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+				var cek = 0;
+				if (id_indicator == ""){
+                    $("#error_id_indicator").parents(".control-group").first().addClass("error");
+                    $("#error_id_indicator").text(required);
+                    cek += 1;
+                }
+				/* if (nm_indicator == ""){
+                    $("#error_nm_indicator").parents(".control-group").first().addClass("error");
+                    $("#error_nm_indicator").text(required);
+                    cek += 1;
+                } */
+				if (unit == ""){
+                    $("#error_unit").parents(".control-group").first().addClass("error");
+                    $("#error_unit").text(required);
+                    cek += 1;
+                }
+				if (increment_decrement == ""){
+                    $("#error_increment_decrement").parents(".control-group").first().addClass("error");
+                    $("#error_increment_decrement").text(required);
+                    cek += 1;
+                }
+				if(cek==0){
+					var data = JSON.stringify({
+						'id_goals':id_goals,
+						'id_target':id_target,
+						'id':id,
+						'id_indicator':id_indicator,
+						'nm_indicator':nm_indicator,
+						'nm_indicator_eng':nm_indicator_eng,
+						'unit':unit,
+						'increment_decrement':increment_decrement,
+						});
+					$.ajax({
+						type: "POST",
+	                    url: urls+'save-sdgIndicator',
+	                    beforeSend : function(xhr){
+	                    	xhr.setRequestHeader(header,token);
+	                    },
+	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+						data: data,
+	                    success: function (result) {
+	                    	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
+	                    	$('#myModal').modal('hide');
+	                    },
+	                });
+				}
+			});
+			
+			$('#tbody-indicator').on('click', '.update', function(){
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                    url: urls+'get-sdgIndicator/'+id,
+                    success: function (result) {
+                    	var val = result.content;
+                    	$('#id_goals').val(val.id_goals);
+                    	$('#id').val(val.id);
+                    	$('#id_target').val(val.id_target);
+                    	$('#id_indicator').val(val.id_indicator).attr("readonly",true);
+        				$('#nm_indicator').val(val.nm_indicator);
+        				$('#nm_indicator_eng').val(val.nm_indicator_eng);
+        				$('#unit').val(val.unit);
+        				$('#increment_decrement').val(val.increment_decrement);
+						$('#myModal').modal('show');
+                    },
+                })
+             }).on('click', '.detail', function(){
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                    url: urls+'get-sdgIndicator/'+id,
+                    success: function (result) {
+                    	var val = result.content;
+                    	$('#id_goals').val(val.id_goals);
+                    	$('#id').val(val.id);
+                    	$('#id_target').val(val.id_target).attr("readonly",true);
+                    	$('#id_indicator').val(val.id_indicator).attr("readonly",true);
+        				$('#nm_indicator').val(val.nm_indicator).attr("readonly",true);
+        				$('#nm_indicator_eng').val(val.nm_indicator_eng).attr("readonly",true);
+        				$('#unit').val(val.unit).attr("disabled",true);
+        				$('#increment_decrement').val(val.increment_decrement).attr("disabled",true);
+						$('#myModal').modal('show');
+                    },
+                })
+             }).on('click', '.delete', function(){
+				var id = $(this).attr('data-id');
+				swal({
+                    title: titleDel,
+                    text: messDel,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttDel
+                }).then(function () {
+                	$.ajax({
+    					type: "DELETE",
+                        url: urls+'delete-sdgIndicator/'+id,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        success: function (result) {
+                        	swal(titleOk,messOk,'success');
+                        	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
+                        },
+                        error:function (result) {
+                        	swal(titleOk,messNOk,'error');
+                        },
+                    })
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
+                })
+             });
+		//});
+		// ]]>
+</script>
+</html>

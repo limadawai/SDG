@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>SDG Login Form</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <style>
+        .item > div {
+            height: auto;
+        }
+        .row {
+            margin-top: 7%;
+        }
+        .item > div > img {
+            background-size: 100% 100%;
+            -o-background-size: cover;
+            -ms-background-size: cover;
+            -moz-background-size: cover;
+            -webkit-background-size: cover;
+        }
+        .btn {
+            margin-right: 26px;
+        }
+        .span5 {
+            text-align: center;
+            color: rgb(23, 37, 116);
+            margin-top: 8%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="span7">
+                <div class="carousel slide" id="myCarousel">
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <div>
+                                <img th:src="@{/img/slider/air_bersih.jpg}" class="img-polaroid">
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div>
+                                <img th:src="@{/img/slider/education.jpg}" class="img-polaroid">
+                            </div>
+                        </div>
+                        <div class="item">
+                            <div>
+                                <img th:src="@{/img/slider/poverty.jpg}" class="img-polaroid">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <form method="post" th:action="@{/login}">
+                <div class="span5">
+                    <img th:src="@{/img/logo.png}" style="width:60%;">
+                    <h4>Selamat Datang</h4>
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon icon-user"></i></span>
+                        <input name="username" type="text" class="span4" placeholder="Username" required>
+                    </div>
+                    <div class="input-prepend">
+                        <span class="add-on"><i class="icon icon-lock"></i></span>
+                        <input name="password" type="password" class="span4" placeholder="Password" required>
+                    </div>
+                    <button type="submit" name="submit" class="btn btn-success pull-right">Sign in</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script>
+        $(document).ready(function() {
+            $('.carousel').carousel({
+                interval: 5000
+            })
+        });
+    </script>
+</body>
+</html>

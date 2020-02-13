@@ -41,14 +41,10 @@
                 </select>
             </div>
             <div style="width:98%;padding:10px;border:1px solid #3ec1e9;">
-               	<p><b><u>List Goals</u></b></p>
-                <div id="divgoals" style="width:100%">
-                </div>
+                <div id="divgoals" style="width:100%"></div>
             </div>
             <div style="width:98%;padding:10px;border:1px solid #3ec1e9;margin-top:6px;">
-               	<p><b><u>List Target</u></b></p>
-                <div id="divtarget" style="width:100%;">
-                </div>
+                <div id="divtarget" style="width:100%;"></div>
             </div>
             <div class="widget-box">
                 <div class="widget-title">
@@ -218,57 +214,41 @@
                         // var catrole = result[0]['cat_role'];
                         if (status == "Government") {
                             var idprov = $("#daerah").val();
-                            //var idmonper = $("#periode").val();
+                            var idmonper = $("#periode").val();
                             var idgovindi = [];
                             var goalsindo = [];
                             var goalseng = [];
                             var targetindo = [];
                             var targeteng = [];
-                            var idindi = [];
-                            if (idperiode != "0") {
-                            	/* ================ Get Goals Data ================ */
-                            	$.ajax({
-                            		url: urls + "getgovmapgoals",
-                                    type: 'get',
-                                    data: {'id_prov': idprov, 'id_monper': idperiode},
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (result) {
-                                    	//console.log(result[0][1]);
-                                    	for (var i=0; i<result.length; i++) {
-                                    		$("#divgoals").append("<p>" + result[i][1] + "</p>");
-                                    	}
-                                    }
-                            	});
-                            	/* ================ Get Target Data ================ */
-                            	$.ajax({
-                            		url: urls + "getgovmaptarget",
-                                    type: 'get',
-                                    data: {'id_prov': idprov, 'id_monper': idperiode},
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (result) {
-                                    	//console.log(result);
-                                    	for (var i=0; i<result.length; i++) {
-                                    		$("#divtarget").append("<p>" + result[i][1] + "</p>");
-                                    	}
-                                    }
-                            	});
+                            var url1 = urls+"getgovmap";
+                            var url2 = urls+"getgovmapall";
+                            var data1 = {'id_prov': idprov, 'id_monper': idmonper};
+                            var data2 = {'id_monper': idmonper};
+                            if (idmonper != "0") {
                                 $.ajax({
-                                    url: urls+"getgovmap",
+                                    url: (idprov == "00") ? url2 : url1,
+                                    data: (idprov == "00") ? data2 : data1,
                                     type: 'get',
-                                    data: {'id_prov': idprov, 'id_monper': idperiode},
                                     dataType: 'json',
                                     cache: false,
                                     success: function (resgovmap) {
-                                        //console.log(resgovmap);
+                                        console.log(resgovmap);
                                         $("#goals").empty();
                                         $("#target").empty();
                                         $("#indikator").empty();
+                                        $("#divgoals").empty();
+                                        $("#divtarget").empty();
                                         for (var i = 0; i < resgovmap.length; i++) {
                                             $("#goals").append("<option value='" + resgovmap[i][9] + "'>" + resgovmap[i][10] + "</option>");
                                             $("#target").append("<option value='" + resgovmap[i][12] + "'>" + resgovmap[i][13] + "</option>");
                                             $("#indikator").append("<option value='" + resgovmap[i][15] + "'>" + resgovmap[i][16] + "</option>");
+                                            if (lang == "0") {
+                                                $("#divgoals").append("<p>" + resgovmap[i][10] + "</p>");
+                                                $("#divtarget").append("<p>" + resgovmap[i][13] + "</p>");
+                                            } else {
+                                                $("#divgoals").append("<p>" + resgovmap[i][11] + "</p>");
+                                                $("#divtarget").append("<p>" + resgovmap[i][14] + "</p>");
+                                            }
                                             var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + resgovmap[i][16] + "</p></div>";
                                             $("#indi").append(p);
                                             idgovindi.push(resgovmap[i][6]);
@@ -276,47 +256,19 @@
                                             goalseng.push(resgovmap[i][11]);
                                             targetindo.push(resgovmap[i][13]);
                                             targeteng.push(resgovmap[i][14]);
-                                            idindi.push(resgovmap[i][5]);
                                             //********************** Add table atas ********************
-                                            var pq = "<table  id='tabatas"+i+"' class='table table-striped table-bordered' style='width:60%'>";
+                                            var pq = "<table  id='tabatas"+resgovmap[i][6]+"' class='table table-striped table-bordered' style='width:60%'>";
                                             pq += "<thead>";
                                             pq += "<tr>";
-                                            pq += "<th id='tab11' rowspan='2'>Sumber Dana</th>";
-                                            pq += "<th id='tab12' rowspan='2'>Satuan</th>";
-                                            pq += "<th id='tab13' rowspan='2'>Baseline</th>";
-                                            pq += "<th id='tab14' colspan='5'>Target</th>";
-                                            pq += "<th id='tab15' colspan='4'>Aktual</th>";
-                                            pq += "<th id='tab16' rowspan='2'>Status</th>";
-                                            pq += "</tr>";
-                                            pq += "<tr>";
-                                            pq += "<th>I</th>";
-                                            pq += "<th>II</th>";
-                                            pq += "<th>III</th>";
-                                            pq += "<th>IV</th>";
-                                            pq += "<th>V</th>";
-                                            pq += "<th>I</th>";
-                                            pq += "<th>II</th>";
-                                            pq += "<th>III</th>";
-                                            pq += "<th>IV</th>";
+                                            pq += "<th id='tab11'>Sumber Dana</th>";
+                                            pq += "<th id='tab12'>Satuan</th>";
+                                            pq += "<th id='tab13'>Baseline</th>";
+                                            pq += "<th id='tab14'>Target</th>";
+                                            pq += "<th id='tab15'>Aktual</th>";
+                                            pq += "<th id='tab16'>Status</th>";
                                             pq += "</tr>";
                                             pq += "</thead>";
-                                            pq += "<tbody>";
-                                            pq += "<tr>";
-                                            pq += "<td id='tda1'></td>";
-                                            pq += "<td id='tda2'></td>";
-                                            pq += "<td id='tda3'></td>";
-                                            pq += "<td id='tda4' style='text-align:center;'></td>";
-                                            pq += "<td id='tda5' style='text-align:center;'></td>";
-                                            pq += "<td id='tda6' style='text-align:center;'></td>";
-                                            pq += "<td id='tda7' style='text-align:center;'></td>";
-                                            pq += "<td id='tda8' style='text-align:center;'></td>";
-                                            pq += "<td id='tda9' style='text-align:center;'></td>";
-                                            pq += "<td id='tda10' style='text-align:center;'></td>";
-                                            pq += "<td id='tda11' style='text-align:center;'></td>";
-                                            pq += "<td id='tda12' style='text-align:center;'></td>";
-                                            pq += "<td id='tda13'><div style='width:15px;height:15px;background:green;margin:0 auto;border-radius:50%;'></div></td>";
-                                            pq += "</tr>";
-                                            pq += "</tbody>";
+                                            pq += "<tbody></tbody>";
                                             pq += "</table>";
                                             $("#divtab" + (i + 1)).append(pq);
                                             var q = "<table  id='tabawah"+resgovmap[i][6]+"' class='table table-striped table-bordered' style='width:100%'>";
@@ -344,59 +296,34 @@
                                             q += "<tbody></tbody>";
                                             q += "</table>";
                                             $("#divtab" + (i + 1)).append(q);
-                                            
-                                          //******************** Table Content ********************
-                                            $.ajax({
-                                                url: urls + "sdgfunding",
-                                                type: 'get',
-                                                data: 'id_indicator=' + resgovmap[i][5],
-                                                dataType: 'json',
-                                                cache: false,
-                                                success: function (resfund) {
-                                                	//console.log(resfund[0][4]);
-                                                	for (var j=0; j<resfund.length; j++) {
-                                                		$("td#tda1").text(resfund[j][4]);
-                                                		$("td#tda2").text(resfund[j][5]);
-                                                		$("td#tda3").text(resfund[j][3]);
-                                                	}
-                                                }
-                                            });
-                                          
-                                            $.ajax({
-                                                url: urls + "sdginditarget",
-                                                type: 'get',
-                                                data: {'id_indicator':resgovmap[i][5], 'id_role':$("#role").val()},
-                                                dataType: 'json',
-                                                cache: false,
-                                                async: false,
-                                                success: function (resindi) {
-                                                	//console.log(resindi.length);
-                                                	$("td#tda4").text(resindi[0]);
-                                            		$("td#tda5").text(resindi[1]);
-                                            		$("td#tda6").text(resindi[2]);
-                                            		$("td#tda7").text(resindi[3]);
-                                            		$("td#tda8").text(resindi[4]);
-                                                }
-                                            });
-                                            
-                                            $.ajax({
-                                                url: urls + "entrysdg",
-                                                type: 'get',
-                                                data: {'id_indicator':resgovmap[i][5], 'id_role':$("#role").val()},
-                                                dataType: 'json',
-                                                cache: false,
-                                                async: false,
-                                                success: function (resindi) {
-                                                	console.log(resindi);
-                                                	$("td#tda9").text(resindi[0]);
-                                            		$("td#tda10").text(resindi[1]);
-                                            		$("td#tda11").text(resindi[2]);
-                                            		$("td#tda12").text(resindi[3]);
-                                                }
-                                            });
                                         }
 
                                         //******************** Table Content ********************
+                                        for (var i=0; i< idgovindi.length; i++) {
+                                            $.ajax({
+                                                url: urls + "govfunding",
+                                                type: 'get',
+                                                data: 'id_indicator=' + idgovindi[i],
+                                                dataType: 'json',
+                                                cache: false,
+                                                success: function (resfund) {
+                                                    // console.log(resfund);
+                                                    for (var i = 0; i < resfund.length; i++) {
+                                                        var row = "<tr>";
+                                                        row += "<td>" + resfund[i][4] + "</td>";
+                                                        row += "<td style='text-align:center;'>" + resfund[i][5] + "</td>";
+                                                        row += "<td style='text-align:center;'>" + resfund[i][3] + "</td>";
+                                                        row += "<td style='text-align:center;'>" + resfund[i][6] + "</td>";
+                                                        row += "<td style='text-align:center;'>" + resfund[i][7] + "</td>";
+                                                        row += "<td style='text-align:center;vertical-align:middle;'>" +
+                                                            "<div style='width:15px;height:15px;background:green;margin:0 auto;border-radius:50%;'></div>" +
+                                                            "</td>";
+                                                        row += "</tr>";
+                                                        $("#tabatas" + idgovindi[i] + " > tbody").append(row);
+                                                    }
+                                                }
+                                            });
+                                        }
 
                                         for (var i=0; i<idgovindi.length; i++) {
                                             $.ajax({
