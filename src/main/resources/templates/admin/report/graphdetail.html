@@ -58,6 +58,9 @@
         var name = [[${name}]];
         var role = [[${role}]];
         $("#welcome").html("Welcome, "+name);
+        var idsdg = [[${idsdg}]];
+        var idtarget = [[${idtar}]];
+        var idsdgindikator = [[${idsdgindikator}]];
         var idindikator = [[${idindikator}]];
         var flag = [[${flag}]];
 
@@ -66,17 +69,18 @@
             $.ajax({
                 url: urls + "cekgovmonper",
                 type: 'get',
-                data: "id_gov_indicator="+idindikator,
+                data: {"id_goals":idsdg,"id_target":idtarget,"id_indicator":idsdgindikator,"id_gov_indicator":idindikator},
                 dataType: 'json',
                 cache: false,
+                async: false,
                 success: function (monper) {
-                    // console.log(monper[0]);
+                    //console.log("id monper : "+monper);
                     percallback(monper[0]);
                     if (monper[0] == "yearly") {
                         headyearly();
                     } else if (monper[0] == "semesterly") {
                         headsemesterly();
-                    } else {
+                    } else if (monper[0] == "quarterly") {
                         headquarterly();
                     }
                 }
@@ -85,7 +89,7 @@
             $.ajax({
                 url: urls + "ceknsamonper",
                 type: 'get',
-                data: "id_nsa_indicator="+idindikator,
+                data: {"id_sdg_goals":idsdg,"id_sdg_target":idtarget,"id_sdg_indicator":idsdgindikator,"id_nsa_indicator":idindikator},
                 dataType: 'json',
                 cache: false,
                 success: function (monper) {
@@ -95,7 +99,7 @@
                         headyearly();
                     } else if (monper[0] == "semesterly") {
                         headsemesterly();
-                    } else {
+                    } else if (monper[0] == "quarterly") {
                         headquarterly();
                     }
                 }
@@ -275,42 +279,33 @@
         }
 
         //******************** Content ********************
-        //********** Header tabel ***********
-        $.ajax({
-            url: urls + "getperiodeheader",
-            type: 'get',
-            data: "id_gov_indicator="+idindikator,
-            dataType: 'json',
-            cache: false,
-            success: function (resheader) {
-                var a = parseInt(resheader[0][1], 10);
-                var b = parseInt(resheader[0][2], 10);
-                var selisih = (b - a) + 1;
-                var range = [];
-                range.push(a);
-                por(a);
-                for (var i=1; i<selisih; i++) {
-                    range.push(a+i);
-                    por(a+i);
-                }
-                // console.log(range);
-                for (var i=0; i<range.length; i++) {
-                    $("#tahun"+(i+1)).text(range[i]);
-                    $("#tahun1"+(i+1)).text(range[i]);
-                }
-            }
-        });
+        
         //********** Flag 0 => Gov || Flag 1 => Non-Gov **********
         if (flag == "0") {
-            //================= Get Mapping Program Indicator ke SDG Indicator ===============
+        	//********** Header tabel ***********
             $.ajax({
-                url: urls + "reportgovgrap",
+                url: urls + "getperiodeheader",
                 type: 'get',
                 data: "id_gov_indicator="+idindikator,
                 dataType: 'json',
                 cache: false,
+                success: function (resheader) {
+                	//console.log("resheader : "+resheader);
+                    var a = parseInt(resheader[0][1], 10);
+                    var b = parseInt(resheader[0][2], 10);
+                    $("#tahun1").text(a);$("#tahun2").text(a+1);$("#tahun3").text(a+2);$("#tahun4").text(a+3);$("#tahun5").text(a+4);
+                    $("#tahun11").text(a);$("#tahun12").text(a+1);$("#tahun13").text(a+2);$("#tahun14").text(a+3);$("#tahun15").text(a+4);
+                }
+            });
+            //================= Get Mapping Program Indicator ke SDG Indicator ===============
+            $.ajax({
+                url: urls + "reportgovgrap",
+                type: 'get',
+                data: {"id_sdg_goals":idsdg,"id_sdg_target":idtarget,"id_sdg_indicator":idsdgindikator,"id_gov_indicator":idindikator},
+                dataType: 'json',
+                cache: false,
                 success: function (resgovindi) {
-                    // console.log(resgovindi);
+                    //console.log(resgovindi);
                     for ( var i=0; i<resgovindi.length; i++) {
                         var row = "<tr>";
                         row += "<td style='text-align:center;'>"+resgovindi[i][7]+"</td>";
@@ -436,6 +431,20 @@
                 }
             });
         } else if (flag == "1") {
+        	//********** Header tabel ***********
+            $.ajax({
+                url: urls + "getnsaperiodeheader",
+                type: 'get',
+                data: "id_nsa_indicator="+idindikator,
+                dataType: 'json',
+                cache: false,
+                success: function (resheader) {
+                    var a = parseInt(resheader[0][1], 10);
+                    var b = parseInt(resheader[0][2], 10);
+                    $("#tahun1").text(a);$("#tahun2").text(a+1);$("#tahun3").text(a+2);$("#tahun4").text(a+3);$("#tahun5").text(a+4);
+                    $("#tahun11").text(a);$("#tahun12").text(a+1);$("#tahun13").text(a+2);$("#tahun14").text(a+3);$("#tahun15").text(a+4);
+                }
+            });
             //================= Get Mapping Program Indicator ke SDG Indicator ===============
             $.ajax({
                 url: urls + "reportnsagrap",
@@ -806,6 +815,150 @@
                                 align: 'center',
                                 verticalAlign: 'bottom'
                             }
+                        }
+                    }]
+                }
+            });
+            
+          //******************* XY Multi Axis Chart *******************
+            Highcharts.chart('compare', {
+                chart: {
+                    zoomType: 'xy'
+                },
+                title: {
+                    text: 'Average Monthly Weather Data for Tokyo',
+                    align: 'left'
+                },
+                subtitle: {
+                    text: 'Source: WorldClimate.com',
+                    align: 'left'
+                },
+                xAxis: [{
+                    categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+                        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                    crosshair: true
+                }],
+                yAxis: [{ // Primary yAxis
+                    labels: {
+                        format: '{value}°C',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    title: {
+                        text: 'Temperature',
+                        style: {
+                            color: Highcharts.getOptions().colors[2]
+                        }
+                    },
+                    opposite: true
+
+                }, { // Secondary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: 'Rainfall',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    },
+                    labels: {
+                        format: '{value} mm',
+                        style: {
+                            color: Highcharts.getOptions().colors[0]
+                        }
+                    }
+
+                }, { // Tertiary yAxis
+                    gridLineWidth: 0,
+                    title: {
+                        text: 'Sea-Level Pressure',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+                    labels: {
+                        format: '{value} mb',
+                        style: {
+                            color: Highcharts.getOptions().colors[1]
+                        }
+                    },
+                    opposite: true
+                }],
+                tooltip: {
+                    shared: true
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'left',
+                    x: 80,
+                    verticalAlign: 'top',
+                    y: 55,
+                    floating: true,
+                    backgroundColor:
+                        Highcharts.defaultOptions.legend.backgroundColor || // theme
+                        'rgba(255,255,255,0.25)'
+                },
+                series: [{
+                    name: 'Rainfall',
+                    type: 'column',
+                    yAxis: 1,
+                    data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4],
+                    tooltip: {
+                        valueSuffix: ' mm'
+                    }
+
+                }, {
+                    name: 'Sea-Level Pressure',
+                    type: 'spline',
+                    yAxis: 2,
+                    data: [1016, 1016, 1015.9, 1015.5, 1012.3, 1009.5, 1009.6, 1010.2, 1013.1, 1016.9, 1018.2, 1016.7],
+                    marker: {
+                        enabled: false
+                    },
+                    dashStyle: 'shortdot',
+                    tooltip: {
+                        valueSuffix: ' mb'
+                    }
+
+                }, {
+                    name: 'Temperature',
+                    type: 'spline',
+                    data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6],
+                    tooltip: {
+                        valueSuffix: ' °C'
+                    }
+                }],
+                responsive: {
+                    rules: [{
+                        condition: {
+                            maxWidth: 500
+                        },
+                        chartOptions: {
+                            legend: {
+                                floating: false,
+                                layout: 'horizontal',
+                                align: 'center',
+                                verticalAlign: 'bottom',
+                                x: 0,
+                                y: 0
+                            },
+                            yAxis: [{
+                                labels: {
+                                    align: 'right',
+                                    x: 0,
+                                    y: -6
+                                },
+                                showLastLabel: false
+                            }, {
+                                labels: {
+                                    align: 'left',
+                                    x: 0,
+                                    y: -6
+                                },
+                                showLastLabel: false
+                            }, {
+                                visible: false
+                            }]
                         }
                     }]
                 }
