@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <head th:include="admin/layout :: header">
+    <title th:text="SDG Indicator Monitoring">SDG Indicator Monitoring</title>
+    <style>
+    .pointer {cursor: pointer;}
+    </style>
+</head>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+
+<!--  Content  -->
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Target SDG Indicators Monitoring</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Indikator SDG Target</a></div>
+        </div>
+        <div class="container-fluid" id="teruskan">
+            <div class="row-fluid">
+                <div class="widget-box">
+                    <div class="widget-title lang_eng" id="judul-eng" style="display: none">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>SDG Indicators Monitoring Target Table</h5>
+                    </div>
+                    <div class="widget-title lang_indo" id="judul-indo">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>Tabel Target Monitor Indikator SDG</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="pull-left" style="width:100%">
+                            <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                                <option value="0" >-- Pilih --</option>
+                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+                            </select>
+                            <select id="idrole" name="idrole" class="form-control">
+                                <option value="0" >-- Pilih --</option>
+                                <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+                            </select>
+                            <select id="periode" name="periode" class="form-control">
+                                <option value="0" >-- Pilih --</option>
+                                <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
+                            </select>
+                            <div class="btn-toolbar" style="float:right">
+                                <!-- <button class="btn btn-success btn-small tambah">
+                                    <span class="lang_eng" style="display:none">Add New</span>
+                                    <span class="lang_indo">Tambah Baru</span>
+                                </button> -->
+                            </div>
+                            
+<!--                            <div class="lang_indo"><span> Periode</span></div>
+                            <div class="lang_eng"><span> Period</span></div>-->
+<!--                            <select id="periode" name="periode" class="form-control">
+                                <option value="0" >-- Pilih --</option>
+                                <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
+                            </select>-->
+                            
+<!--                            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
+                                <button class="btn btn-warning btn-small tambah">
+                                    Add New
+                                </button>
+                                <button class="btn btn-success btn-small">Import</button>
+                                <button class="btn btn-primary btn-small">Export</button>
+                            </div>
+-->                         
+                        </div>
+                        <div class="row-fluid">
+                            <div class="widget-box">
+                                <div class="widget-content">
+                                    Program : <a th:href="@{/admin/entry/sdg-target}" th:text="${sdgInd.id_indicator+' - '+sdgInd.nm_indicator}"></a>
+                                </div>
+                            </div>
+                            <!-- <div class="input-append pull-right">
+                                <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
+                                <span class="add-on"><i class="icon-search"></i></span>
+                            </div> -->
+                        </div>
+<!--                        <div class="row-fluid">
+                            <div class="span6">
+                            </div>
+                            <div class="span6" align="right">
+                                <div class="input-append">
+                                    <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
+                                    <span class="add-on"><i class="icon-search"></i></span>
+                                </div>
+                            </div>
+                    	</div>-->
+                        <div class="row-fluid">
+                            <!-- <div class="span12">
+                                <table  id="tabel-entri-sdg" class="table table-striped table-bordered">
+                                    <thead >
+                                        <tr class="lang_eng" style="display: none">
+                                            <th style="text-align:center;font-size:80%; width:10%">Years</th>
+                                            <th style="text-align:center;font-size:80%">Target</th>
+                                            <th style="text-align:center;font-size:80%; width:10%">Action</th>
+                                        </tr>
+                                        <tr class="lang_indo" id="thead_indo">
+                                            <th style="text-align:center;font-size:80%; width:10%">Tahun</th>
+                                            <th style="text-align:center;font-size:80%;">Target</th>
+                                            <th style="text-align:center;font-size:80%; width:10%">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbody_entri-sdg">
+                                    </tbody>
+                                </table>
+                            </div> -->
+                            <div class="table-responsive">
+			                  	<form id="form-target">
+								<table class="table table-bordered">
+			                        <thead>
+										<tr>
+			                                <th width="50%">
+			                                	<span class="lang_eng control-label" style="display:none">Year</span>
+							    				<span class="lang_indo control-label">Tahun</span>
+			                                </th>
+			                                <th width="50%">Target</th>
+										</tr>
+			                        </thead>
+			                        <tbody id="tbody-target">
+			                        </tbody>
+			                    </table>
+			                    </form>
+		                	</div>
+                        </div>
+                        <div class="row-fluid">
+                        	<div class="table-responsive">
+								<table class="table table-bordered">
+			                        <thead>
+										<tr>
+			                                <th width="50%">
+			                                	<span class="lang_eng control-label" style="display:none">Baseline</span>
+							    				<span class="lang_indo control-label">Dasar</span>
+			                                </th>
+			                                <th width="50%">
+			                                	<span class="lang_eng control-label" style="display:none">Funding Source</span>
+							    				<span class="lang_indo control-label">Sumber Pendanaan</span>
+											</th>
+										</tr>
+			                        </thead>
+			                        <tbody>
+			                        	<tr>
+			                        		<td><input type="text" id="baseline" name="baseline" class="input-xlarge input-block-level"/></td>
+			                        		<td><input type="text" id="budsource" name="budsource" class="input-xlarge input-block-level"/></td>
+			                        	</tr>
+			                        </tbody>
+			                    </table>
+		                	</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-toolbar" style="float:right;">
+                <button class="btn btn-success btn-small btn-save" id="save" data-id="#">
+                	<span class="lang_eng" style="float:right; display: none">Submit</span>
+                	<span class="lang_indo">Simpan</span>
+                </button>
+            </div>
+        </div>
+        <div class="modal hide fade addModal" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        <h3 class="modal-title lang_indo" id="exampleModalLabel">Target Monitor Indikator SDG</h3>
+                        <h3 class="modal-title lang_eng" id="exampleModalLabel" style="display: none">SDG Indicators Monitoring Target</h3>
+                    </div>
+                    <form class="form-horizontal">
+                        <div class="modal-body">
+                            <div class="control-group">
+                                <label for="nm_inst" class="lang_indo">Tahun :</label>
+                                <label for="nm_inst" class="lang_eng" style="display: none">Year :</label>
+                                <input name="id" id="id" type="hidden" class="input-block-level">
+                                <!--<input name="id_sdg_indicator" id="id_sdg_indicator" type="hidden" class="input-block-level">-->
+                                <input name="year" id="year" type="text" class="input-block-level">
+                            </div>
+                            <div class="control-group">
+                                <label for="nm_inst" class="lang_indo">Target :</label>
+                                <label for="nm_inst" class="lang_eng" style="display: none">Target :</label>
+                                <input name="value" id="value" type="text" class="input-block-level">
+                            </div>
+                        </div>
+                        <!-- <div class="modal-footer" id="simpan_">
+                            <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal" style="display: none">Close</button>
+                            <button type="button" id="simpan" class="btn btn-success lang_indo">Simpan</button>
+                            <button type="button" id="simpan" class="btn btn-success lang_eng" style="display: none">Submit</button>
+                        </div> -->
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:include="admin/layout :: footer"></div>
+    
+
+</body>
+
+<script th:inline="javascript" >
+    // <![CDATA[
+            //$(document).ready(function (e) {
+            
+            //validasi role
+//            alert('yaa');
+        var id_role     = [[${id_role}]];
+        var id_prov     = [[${id_prov}]];
+        var privilege   = [[${privilege}]];
+        var id_prov_1   = [[${id_prov_1}]];
+        var id_role_1   = [[${id_role_1}]];
+        var monper_1    = [[${monper_1}]];
+        var tahun_1     = [[${tahun_1}]];
+        var id_indicator_1 = [[${id_indicator_1}]];
+//        alert(id_role_1);
+        $("#id_prov").val(id_prov_1).trigger("change").attr('disabled',true);
+        $("#idrole").val(id_role_1).trigger("change").attr('disabled',true);
+      //Bahasa
+        var titleDel = "Anda Yakin";
+        var titleSave = "Simpan";
+        var messDel = "Menghapus Data?";
+        var messSave = "Simpan berhasil";
+        var buttDel = 'Ya, Hapus data ini!';
+        var titleOk	= "Hapus";
+        var messOk = "Data berhasil dihapus";
+        var messNOk = "Data tidak dapat dihapus";
+        var required = "Harus diisi";
+        var peringatantahun = "Peringatan";
+        var messperingatantahun = "Tahun Sudah Ada";
+        function bhs(cek){
+			if(cek){
+				$(".lang_indo").show();
+        		$(".lang_eng").hide();
+        		titleDel = "Anda Yakin";
+        		messDel = "Menghapus Data?";
+        		buttDel = 'Ya, Hapus data ini!';
+        		titleOk	= "Hapus";
+    	        messOk = "Data berhasil dihapus";
+    	        messNOk = "Data tidak dapat dihapus";
+    	        required = "Harus diisi";
+                peringatantahun = "Peringatan";
+                messperingatantahun = "Tahun Sudah Ada";
+                titleSave = "Simpan";
+                messSave = "Simpan berhasil";
+        	}else{	    	        
+    	        $(".lang_indo").hide();
+        		$(".lang_eng").show();
+        		titleDel = "Are you sure";
+        		messDel = "Delete this data?";
+        		buttDel = 'Yes, Delete this data!';
+        		titleOk	= "Delete";
+    	        messOk = "Delete successful";
+    	        messNOk = "Can't delete data";
+    	        required = "Required";
+                    peringatantahun = "Warning";
+                    messperingatantahun = "Year is available";
+                    titleSave = "Save";
+                    messSave = "Save successful";
+        	}
+        }
+        if(lang){
+        	bhs(lang=="0");
+        }else{
+        	bhs($('#fs').is(':checked'));
+        }
+        
+        $('#fs').on('change', function(e){
+                grid();
+        	bhs($(this).is(':checked'));
+        });
+        $.ajax({
+            type: "GET",
+            url: urls+'list-get-option-monper/'+id_prov_1,
+            async:false,
+            success: function (result1) {
+                $("#periode").html('<option value="0" >-- Pilih --</option>');
+                var array1 = result1.content;
+                if (array1 != '') {
+                    for (i in array1) {
+                    	var text     = array1[i][1]+'-'+array1[i][2];
+                    	var selected = (monper_1==array1[i][0])?'selected':'';
+                    	$("#periode").append('<option value="'+text+'"  '+selected+'>'+text+'</option>');
+                        /* var selisih     = (array1[i][2] - array1[i][1]);
+//                        console.log(array1[i][2]);
+                        var x;
+                        for(x=0; x<=selisih; x++){
+//                            console.log((array1[i][1]+x));
+                            $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+                        } */
+                        
+                    }
+                }
+                $("#periode").attr('disabled',true);
+                var tahun = $("#periode").val().split("-");
+                var target="";
+                $("#tbody-target").html("");
+                for(i=tahun[0];i<=tahun[1];i++){
+                	var nilai="";
+		        	$.ajax({
+    					type: "GET",
+                        url: urls+'get-sdgTargetIndicator/'+id_indicator_1+'/'+id_role_1+'/'+($.trim(i)),
+                        async:false,
+                        success: function (hasil) {
+                        		var val = hasil.content;
+                        		if(val.length>0){
+                        			nilai = val[0][3];	
+                        		}
+                        	}
+                    });
+                	target += '<tr>'+
+                            	'<td><input type="text" name="target[][year]" class="input-block-level" value="'+($.trim(i))+'" readonly="true"/></td>'+
+                            	'<td><input type="text" name="target[][nilai]" class="input-block-level"  value="'+nilai+'" /></td>'+
+                            '</tr>';
+                }
+                $("#tbody-target").append(target);
+            }
+        });
+        
+        $.ajax({
+			type: "GET",
+            url: urls+'get-sdgFunding/'+id_indicator_1,
+            async:false,
+            success: function (hasil) {
+            		var val = hasil.content;
+            		if(val.length>0){
+            			$('#baseline').val(val[0][0]);
+            			$('#budsource').val(val[0][1]);
+            		}
+            	}
+        });
+        
+        $('.btn-save').on('click', function(){
+        	var target =  $('#form-target').serializeObject();
+        	$.ajax({
+                type    :"POST",
+                url     :urls+'save-sdgTargetIndicator/'+id_indicator_1+"/"+id_role_1,
+                headers :{'Accept':'application/json','Content-Type':'application/json'},
+                data    : JSON.stringify({target}),
+                beforeSend : function(xhr){
+                	xhr.setRequestHeader(header,token);
+                },
+                success :function(result){
+                	var baseline = $('#baseline').val();
+                	var budsource = $('#budsource').val();
+                	var funding = JSON.stringify({
+						'id_sdg_indicator':id_indicator_1,
+						'baseline':baseline,
+						'funding_source':budsource
+						});
+                	$.ajax({
+                        type    :"POST",
+                        url     :urls+'save-sdgFunding',
+                        headers :{'Accept':'application/json','Content-Type':'application/json'},
+                        data    : funding,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        success :function(result){
+                        },             
+                     });
+                	swal(titleSave,messSave,'success');
+                },             
+             });
+        });
+        
+//            var id_role     = [[${id_role}]];
+//            var id_prov     = [[${id_prov}]];
+//            var privilege   = [[${privilege}]];
+//            if(id_role == '1'){
+                
+//            }else{
+//                $.ajax({
+//                    type: "GET",
+//                    url: urls+'list-get-option-role-all-profil/'+id_prov,
+//                    success: function (result) {
+//                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+//                        var array = result.content;
+//                        if (array != '') {
+//                            for (i in array) {
+//                                $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+//                            }
+//                        }
+//                        if(privilege == 'ADMIN'){
+//                            $("#idrole").val('0').trigger("change").attr('disabled',false);
+//                        }else{
+//                            $("#idrole").val(id_role).trigger("change").attr('disabled',true);
+//                        }
+//                    }
+//                });
+//                
+//                $.ajax({
+//                    type: "GET",
+//                    url: urls+'list-get-option-monper/'+id_prov,
+//                    success: function (result1) {
+//                        $("#periode").html('<option value="0" >-- Pilih --</option>');
+//                        var array1 = result1.content;
+//                        if (array1 != '') {
+//                            for (i in array1) {
+//                                var selisih     = (array1[i][2] - array1[i][1]);
+////                                console.log(array1[i][2]);
+//                                var x;
+//                                for(x=0; x<=selisih; x++){
+////                                    console.log((array1[i][1]+x));
+//                                    $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+//                                }
+//                                
+//                            }
+//                        }
+//                        
+//                    }
+//                });
+//                
+//                $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
+//                
+//                
+//                
+//            }
+            
+            
+            $("#id_prov").on('change', function(e){
+                var id_prov = this.value ;
+//                $("#idrole").val(id_role_1).trigger("change").attr('disabled',true);
+//                $.ajax({
+//                    type: "GET",
+//                    url: urls+'list-get-option-role-all-profil/'+id_prov,
+//                    success: function (result) {
+//                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+//                        var array = result.content;
+//                        if (array != '') {
+//                            for (i in array) {
+//                                $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+//                            }
+//                        }
+//                        grid();
+//                    }
+//                });
+//                
+//                $.ajax({
+//                    type: "GET",
+//                    url: urls+'list-get-option-monper/'+id_prov,
+//                    success: function (result1) {
+//                        $("#periode").html('<option value="0" >-- Pilih --</option>');
+//                        var array1 = result1.content;
+//                        if (array1 != '') {
+//                            for (i in array1) {
+//                                var selisih     = (array1[i][2] - array1[i][1]);
+////                                console.log(array1[i][2]);
+//                                var x;
+//                                for(x=0; x<=selisih; x++){
+////                                    console.log((array1[i][1]+x));
+//                                    $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+//                                }
+//                                
+//                            }
+//                        }
+//                    }
+//                });
+            });
+            
+//            $("#periode").on('change', function(e){
+////                var data_id     = this.value.split("###");;
+////                var id_monper   = data_id[0];
+////                var tahun       = data_id[1];
+//                grid();
+//            });
+//            
+//            $("#idrole").on('change', function(e){
+//                var data_id     = this.value.split("###");;
+//                var id_monper   = data_id[0];
+//                var tahun       = data_id[1];
+//                grid();
+//            });
+            
+            $("#id_prov").val(id_prov_1).trigger("change");
+            $("#idrole").val(id_role_1).trigger("change");
+            
+            $('#teruskan').on('click', '#apply_btn', function(e){
+                alert('button is not a function');
+            });
+            
+            
+            //tutup validasi role
+            
+            
+            
+
+            var v_idprov    = $("#id_prov").val();
+            var v_idrole    = $("#idrole").val();
+            
+            var table = $('#tabel-entri-sdg').DataTable({
+                responsive: true,
+                sDom: 'lrtip',
+                "bLengthChange": false,
+                "cache": false,
+                "autoWidth": true,
+                "responsive":true,
+                "bDestroy": true,
+                "ajax": {
+                    "url": urls+'list-entry-sdg-target-input/'+id_indicator_1+'/'+v_idrole,
+                    dataSrc: 'content',
+                },
+                "searching": true,
+                "columns": [
+//                    {"data": function (row, data, index, display) {
+//                        return "<div style='font-size:90%;'>"+row[10]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[12]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[14]+"</div>";
+//                    }},
+//                    {"data": function (row, data, index, display) {
+//                        if($('#fs').is(':checked')){
+//                            return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
+//                        }else{
+//                            return "<div style='font-size:90%;'>"+row[11]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[15]+"</div>";
+//                        }
+//                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        var edit_1      = '<a data-id="'+row[0]+'###'+row[1]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'" title="Update" class="btn btn-primary btn-mini update" href="#">Edit</a>' ;
+                        var delete_1    = '<a data-id="'+row[0]+'" title="Delete" class="btn btn-danger btn-mini delete" href="#">Delete</a>' ;
+                        return edit_1 +' '+delete_1 ;
+                    }}
+                ],
+                "columnDefs": [
+                ],
+                select: true
+            });	
+
+            //memanggil tb spp
+            function grid()
+            {
+                var v_idprov    = $("#id_prov").val();
+                var v_idrole    = $("#idrole").val();
+//                console.log(urls+'list-entry-sdg-target/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun);
+                table.ajax.url(urls+'list-entry-sdg-target-input/'+id_indicator_1+'/'+v_idrole ).load();
+                
+            }
+            
+
+            $('#text-cari').on( 'keyup', function () {
+                var val=$(this).val();
+                table.search(val).draw();
+            });
+            
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            
+            $("#tabel-entri-sdg").on('click', '.myCheck', function () {
+                var dataid      = $(this).attr('data-id');
+                var checkBox    = document.getElementById("myCheck"+dataid);
+                
+            });
+            
+            $('#simpan_').on('click', '#simpan', function(e){
+                var id                  = ($('#id').val())?$('#id').val():null;
+                var id_role             = $("#idrole").val();
+                var year                = $('#year').val();
+                var value               = $('#value').val();
+                if(id == null){
+                    $.ajax({
+                        type: "GET",
+                        url: urls+'cek-tahun-target-sdg/'+year+'/'+id_indicator_1,
+                        success: function (result1) {
+//                            console.log();
+                            if(result1.content.length == '0'){
+                                var data    = JSON.stringify({
+                                                'id': id,
+                                                'id_sdg_indicator': id_indicator_1,
+                                                'id_role': id_role,
+                                                'year': year,
+                                                'value': value
+                                            });
+                                $.ajax({
+                                    type: "POST",
+                                    url: urls+'save-entry-sdg-indicator-target',
+                                    beforeSend : function(xhr){
+                                        xhr.setRequestHeader(header,token);
+                                    },
+                                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                                    data: data,
+                                    success: function (result) {
+                                        grid();
+                                        $('.addModal').modal('hide');
+                                    },
+                                });
+                            }else{
+                                $('.addModal').modal('hide');
+                                swal(peringatantahun,messperingatantahun,'error');
+                            }
+                        }
+                    });
+                }else{
+                    var data    = JSON.stringify({
+                                    'id': id,
+                                    'id_sdg_indicator': id_indicator_1,
+                                    'id_role': id_role,
+                                    'year': year,
+                                    'value': value
+                                });
+                    $.ajax({
+                        type: "POST",
+                        url: urls+'save-entry-sdg-indicator-target',
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header,token);
+                        },
+                        headers:{'Accept':'application/json','Content-Type':'application/json'},
+                        data: data,
+                        success: function (result) {
+                            grid();
+                            $('.addModal').modal('hide');
+                        },
+                    });
+                }
+                
+            });
+            
+            
+            $('.tambah').on('click', function(){
+                $('#id').val("");
+                $('#year').val("");
+                $('#value').val("");
+                $('.addModal').modal("show");
+                $('#simpan_').show();
+            });
+            
+            $('#tabel-entri-sdg').on('click', '.update', function(){
+                var dataid          = $(this).data('id');
+                var data            = dataid.split('###');
+                var id              = data[0];
+                var id_sdg_indicator = data[1];
+                var id_role         = data[2];
+                var year            = data[3];
+                var value           = data[4];
+                
+                $('#id').val(id);
+                $('#year').val(year);
+                $('#value').val(value);
+                $('.addModal').modal("show");
+                $('#simpan_').show();
+            });
+            
+            $('#tabel-entri-sdg').on('click', '.delete', function(){
+                var dataid          = $(this).data('id');
+                swal({
+                    title: titleDel,
+                    text: messDel,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttDel
+                }).then(function () {
+                    $.ajax({
+                        type: "DELETE",
+                        url: urls+'delete-entry-sdg-indicator-target/'+dataid,
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header,token);
+                        },
+                        success: function (result) {
+                            grid();
+                            $('.addModal').modal('hide');
+                            swal(peringatantahun,messOk,'success');
+                        },
+                        error:function (result) {
+                            
+                        },
+                    })
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
+                })
+                
+            });
+
+            // var valdaerah = $("#daerah").val();
+            // $("#daerah").on("change", function() {
+            //     var selectPer = $("#periode option:selected").html();
+            //     var selectVal = $("option:selected", this).val();
+            //     if (selectVal == "000") {
+            //         // $(this).html();
+            //         alert(selectPer);
+            //     }
+            // });
+            var selValDaerah = $("#daerah option:selected").val();
+            $("#periode").on("change", function(){
+                if (selValDaerah == "000") {
+                    // $(this).html("RAN "+teks);
+                    alert("teks");
+                }
+            });
+        //});
+    // ]]>
+</script>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/layout :: header">
+    <title th:text="${title}"></title>
+</head>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i> Dashboard </a></div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>SDGs Map</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <div id="container"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>Data Graph</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="row-fluid">
+                            <div class="span8">
+                                <div id="barcontainer"></div>
+                            </div>
+                            <div class="span4">
+                                <div id="piecontainer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row-fluid">
+                <div class="widget-box">
+                    <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>Site Analytics</h5>
+                        <div class="buttons"><a href="#" class="btn btn-mini btn-success"><i class="icon-refresh"></i> Update stats</a></div>
+                    </div>
+                    <div class="widget-content">
+                        <div class="row-fluid">
+                            <div class="span8">
+                                <div class="chart"></div>
+                            </div>
+                            <div class="span4">
+                                <ul class="stat-boxes2">
+                                    <li>
+                                        <div class="left peity_bar_neutral"><span><span style="display: none;">2,4,9,7,12,10,12</span>
+                        <canvas width="50" height="24"></canvas>
+                        </span>+10%</div>
+                                        <div class="right"> <strong>15598</strong> Visits </div>
+                                    </li>
+                                    <li>
+                                        <div class="left peity_line_neutral"><span><span style="display: none;">10,15,8,14,13,10,10,15</span>
+                        <canvas width="50" height="24"></canvas>
+                        </span>10%</div>
+                                        <div class="right"> <strong>150</strong> New Users </div>
+                                    </li>
+                                    <li>
+                                        <div class="left peity_bar_bad"><span><span style="display: none;">3,5,6,16,8,10,6</span>
+                        <canvas width="50" height="24"></canvas>
+                        </span>-40%</div>
+                                        <div class="right"> <strong>4560</strong> Orders</div>
+                                    </li>
+                                    <li>
+                                        <div class="left peity_line_good"><span><span style="display: none;">12,6,9,13,14,10,17</span>
+                        <canvas width="50" height="24"></canvas>
+                        </span>+60%</div>
+                                        <div class="right"> <strong>936</strong> Register </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:include="admin/layout :: footer"></div>
+
+    <script th:inline="javascript">
+        function goPage (newURL) {
+            if (newURL != "") {
+                if (newURL == "-" ) {
+                    resetMenu();
+                } else {
+                    document.location.href = newURL;
+                }
+            }
+        }
+        function resetMenu() {
+            document.gomenu.selector.selectedIndex = 2;
+        }
+
+        //************************ Highchart Map ************************
+        Highcharts.setOptions({
+            colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                return {
+                    radialGradient: {
+                        cx: 0.5,
+                        cy: 0.3,
+                        r: 0.7
+                    },
+                    stops: [
+                        [0, color],
+                        [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+                    ]
+                };
+            })
+        });
+
+        var data = [
+            ['id-3700', 0],
+            ['id-ac', 1],
+            ['id-ki', 2],
+            ['id-jt', 3],
+            ['id-be', 4],
+            ['id-bt', 5],
+            ['id-kb', 6],
+            ['id-bb', 7],
+            ['id-ba', 8],
+            ['id-ji', 9],
+            ['id-ks', 10],
+            ['id-nt', 11],
+            ['id-se', 12],
+            ['id-kr', 13],
+            ['id-ib', 14],
+            ['id-su', 15],
+            ['id-ri', 16],
+            ['id-sw', 17],
+            ['id-la', 18],
+            ['id-sb', 19],
+            ['id-ma', 20],
+            ['id-nb', 21],
+            ['id-sg', 22],
+            ['id-st', 23],
+            ['id-pa', 24],
+            ['id-jr', 25],
+            ['id-1024', 26],
+            ['id-jk', 27],
+            ['id-go', 28],
+            ['id-yo', 29],
+            ['id-kt', 30],
+            ['id-sl', 31],
+            ['id-sr', 32],
+            ['id-ja', 33]
+        ];
+        Highcharts.mapChart('container', {
+            chart: {
+                map: 'countries/id/id-all'
+            },
+            title: {
+                text: 'Indonesian SDGs'
+            },
+            subtitle: {
+                text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/id/id-all.js">Indonesia</a>'
+            },
+            mapNavigation: {
+                enabled: true,
+                buttonOptions: {
+                    verticalAlign: 'bottom'
+                }
+            },
+            colorAxis: {
+                min: 0
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                data: data,
+                name: 'Random data',
+                states: {
+                    hover: {
+                        color: '#BADA55'
+                    }
+                },
+                dataLabels: {
+                    enabled: true,
+                    format: '{point.name}'
+                }
+            }]
+        });
+        //******************** Barchart ********************
+        Highcharts.chart('barcontainer', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Capaian Berdasarkan 4 Pilar'
+            },
+            xAxis: {
+                categories: [
+                    'Jan',
+                    'Feb',
+                    'Mar',
+                    'Apr',
+                    'May',
+                    'Jun',
+                    'Jul',
+                    'Aug',
+                    'Sep',
+                    'Oct',
+                    'Nov',
+                    'Dec'
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Persentase (%)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.1f} mm</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Pilar Pembangunan Sosial',
+                data: [49.9, 71.5, 106.4, 129.2, 144.0, 176.0, 135.6, 148.5, 216.4, 194.1, 95.6, 54.4]
+
+            }, {
+                name: 'Pilar Pembangunan Ekonomi',
+                data: [83.6, 78.8, 98.5, 93.4, 106.0, 84.5, 105.0, 104.3, 91.2, 83.5, 106.6, 92.3]
+
+            }, {
+                name: 'Pilar Pembangunan Lingkungan',
+                data: [48.9, 38.8, 39.3, 41.4, 47.0, 48.3, 59.0, 59.6, 52.4, 65.2, 59.3, 51.2]
+
+            }, {
+                name: 'Pilar Hukum & Tata Kelola Perusahaan',
+                data: [42.4, 33.2, 34.5, 39.7, 52.6, 75.5, 57.4, 60.4, 47.6, 39.1, 46.8, 51.1]
+
+            }]
+        });
+        //********************** Piechart *********************
+        Highcharts.chart('piecontainer', {
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie'
+            },
+            title: {
+                text: 'Data Pencapaian Program<br>Periode Tahun 2018'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        connectorColor: 'silver'
+                    }
+                }
+            },
+            credits: {
+                enabled: false
+            },
+            series: [{
+                name: 'Share',
+                data: [
+                    { name: 'Program 1', y: 61.41 },
+                    { name: 'Program 2', y: 11.84 },
+                    { name: 'Program 3', y: 10.85 },
+                    { name: 'Program 4', y: 4.67 },
+                    { name: 'Program 5', y: 4.18 },
+                    { name: 'Program 6', y: 7.05 }
+                ]
+            }]
+        });
+    </script>
+</body>
+</html>

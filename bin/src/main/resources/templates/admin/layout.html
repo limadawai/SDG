@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="header">
+    <title>Dashboard SDG</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/bootstrap-responsive.min.css}"/>
+    <link rel="stylesheet" th:href="@{/css/fullcalendar.css}"/>
+    <link rel="stylesheet" th:href="@{/css/maruti-style.css}"/>
+    <link rel="stylesheet" th:href="@{/css/maruti-media.css}" class="skin-color"/>
+    <link rel="stylesheet" th:href="@{/css/font-awesome.css}" />
+    <link rel="stylesheet" th:href="@{/css/switch-bahasa.css}" />
+    <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/sweetalert2.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/select2.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/multiple-select.css}" />
+    <link rel="stylesheet" th:href="@{/css/treeview.css}" />
+
+    <script th:src="@{/js/excanvas.min.js}"></script>
+    <script th:src="@{/js/jquery.min.js}"></script>
+    <script th:src="@{/js/jquery.ui.custom.js}"></script>
+    <script th:src="@{/js/bootstrap.min.js}"></script>
+    <script th:src="@{/js/jquery.flot.min.js}"></script>
+    <script th:src="@{/js/jquery.flot.resize.min.js}"></script>
+    <script th:src="@{/js/jquery.peity.min.js}"></script>
+    <script th:src="@{/js/fullcalendar.min.js}"></script>
+    <script th:src="@{/js/maruti.js}"></script>
+    <script th:src="@{/js/maruti.dashboard.js}"></script>
+    <script th:src="@{/js/maruti.chat.js}"></script>
+    <script th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/js/sweetalert2.min.js}"></script>
+    <script th:src="@{/js/jquery.serialize-object.js}"></script>
+    <script th:src="@{/js/select2.min.js}"></script>
+    <script th:src="@{/js/multiple-select.js}"></script>
+
+    <script th:src="@{/js/highchart/highmaps.js}"></script>
+    <script th:src="@{/js/highchart/exporting.js}"></script>
+    <script th:src="@{/js/highchart/id-all.js}"></script>
+    <script th:src="@{/js/highchart/highcharts.js}"></script>
+    <script th:src="@{/js/highchart/export-data.js}"></script>
+    <script th:src="@{/js/highchart/accessibility.js}"></script>
+</head>
+<body>
+    <div th:fragment="menu">
+        <div id="header">
+            <h3><a href="#">SDGs E-Monev</a></h3>
+        </div>
+        <div class="btn-group rightzero">
+            <a class="top_message tip-left" title="Manage Files"><i class="icon-file"></i></a>
+            <a class="top_message tip-bottom" title="Manage Users"><i class="icon-user"></i></a>
+            <a class="top_message tip-bottom" title="Manage Comments"><i class="icon-comment"></i>
+                <span class="label label-important">5</span>
+            </a>
+            <a class="top_message tip-bottom" title="Manage Orders"><i class="icon-shopping-cart"></i></a>
+        </div>
+        <div id="user-nav" class="navbar navbar-inverse">
+            <ul class="nav">
+                <li class="" style="margin-top:10px;background:none;padding:10px;">
+                    <span id="welcome" style="color:white;">Welcome Super</span>
+                </li>
+                <li class="" style="margin-top:7px;background:none;padding:10px;">
+                    <div class="flipswitch">
+                        <input id="fs" type="checkbox" name="flipswitch" class="flipswitch-cb" checked>
+                        <label class="flipswitch-label" for="fs">
+                            <div class="flipswitch-inner"></div>
+                            <div class="flipswitch-switch"></div>
+                        </label>
+                    </div>
+                </li>
+                <li class="" style="margin-top:12px;background:none;padding:10px;">
+                    <form id="logoutform" method="post" th:action="@{/logout}">
+                        <a href="javascript:;" onclick="document.getElementById('logoutform').submit()">
+                            <i class="icon icon-share-alt"></i> <span id="keluar" class="text">Logout</span>
+                        </a>
+                    </form>
+                </li>
+            </ul>
+        </div>
+        <div id="sidebar">
+            <script th:inline="javascript">
+                var urls = "/sdg/admin/";
+                var lang = [[${lang}]];
+                var name = [[${name}]];
+                $("#welcome").html("Welcome, "+name);
+
+                bahasa();
+                if (lang == "1") {
+                    english();
+                    if (!localStorage.getItem("reload")) {
+                        localStorage.setItem("reload", "true");
+                        location.reload();
+                    } else {
+                        localStorage.removeItem("reload");
+                    }
+                } else if (lang == "0") {
+                    bahasa();
+                    if (!localStorage.getItem("reload")) {
+                        localStorage.setItem("reload", "true");
+                        location.reload();
+                    } else {
+                        localStorage.removeItem("reload");
+                    }
+                }
+                // else if(!lang){
+                //     if($('#fs').is(':checked')){
+                //         bahasa();
+                //     }else{
+                //         english();
+                //     }
+                // }
+
+                //********************************* Switch Language *********************************
+                var token = $("meta[name='_csrf']").attr("content");
+                $('#fs').change(function() {
+                    if($(this).is(':checked')) {
+                        $.ajax({
+                            url: urls + "bahasa",
+                            headers: {"X-CSRF-TOKEN": token},
+                            type: "post",
+                            data: {"bhs": "0"},
+                            dataType: "text",
+                            cache: "false",
+                            success: function(data) {
+                                bahasa();
+                            }
+                        });
+                    } else {
+                        $.ajax({
+                            url: urls + "english",
+                            headers: {"X-CSRF-TOKEN": token},
+                            type: "post",
+                            data: {"bhs": "1"},
+                            dataType: "text",
+                            cache: "false",
+                            success: function(data) {
+                                english();
+                            }
+                        });
+                    }
+                });
+                $("#sidebar li:first").addClass("active");
+
+                //===== Fungsi Bahasa Indonesia ======
+                function bahasa() {
+                    document.getElementById("fs").checked = true;
+                    $("#keluar").html("Keluar");
+                    $("#bhs").html("Bahasa :");
+                    $.ajax({
+                        url: urls + 'menu',
+                        type: 'get',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (response) {
+                            $('#menuatas').empty();
+                            for (var i = 0; i < response.length; i++) {
+                                var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
+                                    '<a id="' + response[i].id_menu + '" href="' + response[i].link + '"><span id="' + response[i].submenu + '">' + response[i].menu_indo + '</span></a>'
+                                '</li>';
+                                $('#menuatas').append(menuRow);
+                            }
+                            $('span[id*=aktif]:visible').each(function () {
+                                $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
+                            });
+                            $('li[class*=aktif]:visible').each(function () {
+                                $(this).addClass('submenu');
+                                var ul = '<ul id="' + $(this).attr('id') + '" class="drop"></ul>';
+                                $(this).append(ul);
+                            });
+                            $('li[class*=aktif]:visible').each(function () {
+                            	$(this).on('hover', function () {
+                            		$("li.aktif > ul").empty();
+                            	});
+                                $(this).on('click', function () {
+                                    $.ajax({
+                                        url: urls + 'submenu',
+                                        type: 'get',
+                                        data: 'id=' + $(this).attr('id'),
+                                        dataType: 'json',
+                                        cache: false,
+                                        success: function (result) {
+                                            $("li.aktif > ul").empty();
+                                            for (var j = 0; j < result.length; j++) {
+                                                var li = '<li><a href="' + result[j].submenu_link + '">' + result[j].submenu_indo + '</a></li>';
+                                                $("li.aktif > ul").append(li);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    });
+                }
+
+                function english() {
+                    document.getElementById("fs").checked = false;
+                    $("#keluar").html("Logout");
+                    $("#bhs").html("English :");
+                    $.ajax({
+                        url: urls + 'menu',
+                        type: 'get',
+                        dataType: 'json',
+                        cache: false,
+                        success: function (response) {
+                            $('#menuatas').empty();
+                            for (var i = 0; i < response.length; i++) {
+                                var menuRow = '<li id="' + response[i].id_menu + '" class="' + response[i].submenu + '">' +
+                                    '<a id="' + response[i].id_menu + '" href="' + response[i].link + '"><span id="' + response[i].submenu + '">' + response[i].menu_eng + '</span></a>'
+                                '</li>';
+                                $('#menuatas').append(menuRow);
+                            }
+                            $('span[id*=aktif]:visible').each(function () {
+                                $(this).append('&nbsp;&nbsp;&nbsp;<i class="icon icon-caret-down" style="background:none"></i>');
+                            });
+                            $('li[class*=aktif]:visible').each(function () {
+                                $(this).addClass('submenu');
+                                var ul = '<ul id="' + $(this).attr('id') + '" class="drop"></ul>';
+                                $(this).append(ul);
+                            });
+                            $('li[class*=aktif]:visible').each(function () {
+                            	$(this).on('hover', function () {
+                            		$("li.aktif > ul").empty();
+                            	});
+                                $(this).on('click', function () {
+                                    $.ajax({
+                                        url: urls+'submenu',
+                                        type: 'get',
+                                        data: 'id=' + $(this).attr('id'),
+                                        dataType: 'json',
+                                        cache: false,
+                                        success: function (result) {
+                                            $("li.aktif > ul").empty();
+                                            for (var j = 0; j < result.length; j++) {
+                                                var li = '<li><a href="' + result[j].submenu_link + '">' + result[j].submenu_eng + '</a></li>';
+                                                $("li.aktif > ul").append(li);
+                                            }
+                                        }
+                                    });
+                                });
+                            });
+                        }
+                    });
+                }
+            </script>
+            <ul id="menuatas"></ul>
+        </div>
+    </div>
+    <!--*************************** Content ***************************-->
+    <div id="content"></div>
+
+    <div th:fragment="footer" class="row-fluid">
+        <div id="footer" class="span12"> 2019 &copy; JICA - SDG </div>
+    </div>
+</body>
+</html>

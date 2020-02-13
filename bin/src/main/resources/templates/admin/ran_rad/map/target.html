@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/layout :: header">
+    <title th:text="Define RAN/RAD/SDGs Indicator"></title>
+</head>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/SDGs Indicator</a></div>
+        </div>
+        <div class="container-fluid">
+        	<div class="row-fluid">
+        		<form class="form-horizontal">
+        			<div class="control-group">
+        				<select name="id_prov" id="id_prov">
+	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
+	        			</select>
+	        			<span> RAN/RAD : </span>
+	        			<select name="id_monper" id="id_monper">
+	        				<option th:each="f:${monPer}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year} "></option>
+	        			</select>
+        			</div>
+        		</form>
+        	</div>
+			<div class="row-fluid">
+				<label class="tip-bottom"><span class="lang_eng" style="display:none">Goals</span><span class="lang_indo">Sasaran</span> <i class="icon-angle-right"></i> Target</label>
+			</div>
+			<div class="row-fluid">
+				<div class="widget-box">
+					<div class="widget-content">
+						<span class="lang_eng" style="display:none">Goals : </span><span class="lang_indo">Sasaran : </span><a th:href="@{'/admin/ran_rad/map/goals/'+${id_monper}}" th:text="${content.id_goals+' - '+content.nm_goals}"></a>
+					</div>
+				</div>
+			</div>
+            <div class="row-fluid">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>Target</h5>
+                    </div>
+                    <div class="widget-content">
+                    	<div class="row-fluid">
+                    		<div class="span6">
+                    			<div class="input-append">
+								  <input placeholder="Search..." class="span12" id="text-cari" type="text"/>
+								  <span class="add-on"><i class="icon-search"></i></span>
+								</div>
+                    		</div>
+                    	</div>
+                    	<br/>
+                        <div class="row-fluid">
+                            <div class="span12">
+                            	<div class="table-responsive">
+	                                <table class="table table-bordered table-striped" id="tabel-target">
+	                                    <thead>
+	                                        <tr>
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
+	                                            	<span class="lang_eng" style="display:none">No</span>
+													<span class="lang_indo">No</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;" width="5%">
+	                                            	<span class="lang_eng" style="display:none">Code</span>
+	                                            	<span class="lang_indo">Kode</span>
+	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;" width="45%">
+	                                            	<span class="lang_eng" style="display:none">Target</span>
+	                                            	<span class="lang_indo">Target</span>
+	                                            </th>
+	                                        </tr>
+	                                    </thead>
+	                                    <tbody id="tbody-target">
+	                                    </tbody>
+	                                </table>
+                              	</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 class="lang_eng" style="display:none">Add SDGs Target</h3>
+			    <h3 class="lang_indo">Tambah Target SDG</h3>
+		  	</div>
+			<div class="modal-body">
+				<form>
+				  <div class="control-group">
+				  	<label class="lang_eng control-label" style="display:none">Goals Name</label>
+				    <label class="lang_indo control-label">Nama Sasaran</label>
+				    <div class="controls">
+				    	<input type="text" readonly="true" th:value="${content.nm_goals}" class="input-xlarge"/>
+				    	<input type="hidden" id="id_goals" name="id_goals" th:value="${content.id_goals}"/>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				  	<label class="lang_eng control-label" style="display:none">Code</label>
+				    <label class="lang_indo control-label">Kode</label>
+				    <div class="controls">
+				    	<input type="text" id="id_target" name="id_target" class="input-medium"/>
+				    	<span class="help-block" id="error_id_target"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				  	<label class="lang_eng control-label" style="display:none">Target Name</label>
+				    <label class="lang_indo control-label">Nama Target</label>
+				    <div class="controls">
+				    	<input type="text" id="nm_target" name="nm_target" class="input-xlarge"/>
+				    	<span class="help-block" id="error_nm_target"></span>
+				    </div>
+				  </div>
+				</form>
+			</div>
+			<div class="modal-footer">
+		    	<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<span class="lang_eng" style="display:none">Close</span>
+		    		<span class="lang_indo">Tutup</span>
+		    	</button>
+		    	<button class="btn btn-primary" id="submit">
+		    		<span class="lang_eng" style="display:none">Submit</span>
+		    		<span class="lang_indo">Simpan</span>
+		    	</button>
+		  	</div>
+		</div>
+    </div>
+    <div th:include="admin/layout :: footer"></div>
+</body>
+<script th:inline="javascript" >
+	// <![CDATA[
+		//$(document).ready(function (e) {
+			var token = $("meta[name='_csrf']").attr("content");
+	        var header = $("meta[name='_csrf_header']").attr("content");
+			var id_goals = $('#id_goals').val();
+			//Bahasa
+	        var titleDel = "Anda Yakin";
+	        var messDel = "Menghapus Data?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
+	        function bhs(cek){
+				if(cek){
+					$(".lang_indo").show();
+	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
+	        	}else{	    	        
+	    	        $(".lang_indo").hide();
+	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Delete this data?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
+	        	}
+	        }
+	        if(lang){
+	        	bhs(lang=="0");
+	        }else{
+	        	bhs($('#fs').is(':checked'));
+	        }
+	        $('#fs').on('change', function(e){
+	        	bhs($(this).is(':checked'));
+	        });
+			var table = $('#tabel-target').DataTable({
+				responsive: true,
+				sDom: 'lrtip',
+				"bLengthChange": false,
+				"cache": false,
+				"autoWidth": true,
+				"responsive":true,
+				"ajax": {
+					"url": urls+'list-sdgTarget/'+id_goals,
+					dataSrc: 'content',
+				},
+				"searching": true,
+				"columns": [
+					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+						}},
+					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row.id_target+"</div>";
+						}},
+					{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/map/goals/"+$('#id_monper').val()+"/"+row.id_goals+"/target/"+row.id+"/indicator' class='target'>"+row.nm_target+"</a></div>";
+						}},
+				],
+				"columnDefs": [
+				],
+				select: true
+			});	
+			
+			$('#text-cari').on( 'keyup', function () {
+				var val=$(this).val();
+				table.search(val).draw();
+			});
+			
+			function clearForm(){
+				$('#id_target').val("").removeAttr("readonly");
+				$('#nm_target').val("").removeAttr("readonly");
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+			}
+			
+			$('#myModal').on('hidden.bs.modal',function(){
+				clearForm();
+			});
+			
+			$('#submit').on('click', function(){
+				var id_goals = $('#id_goals').val();
+				var id_target = $('#id_target').val();
+				var nm_target = $('#nm_target').val();
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+				var cek = 0;
+				if (id_target == ""){
+                    $("#error_id_target").parents(".control-group").first().addClass("error");
+                    $("#error_id_target").text(required);
+                    cek += 1;
+                }
+				if (nm_target == ""){
+                    $("#error_nm_target").parents(".control-group").first().addClass("error");
+                    $("#error_nm_target").text(required);
+                    cek += 1;
+                }
+				if(cek==0){
+					var data = JSON.stringify({'id_goals':id_goals,'id_target':id_target,'nm_target':nm_target});
+					$.ajax({
+						type: "POST",
+	                    url: urls+'save-sdgTarget',
+	                    beforeSend : function(xhr){
+	                    	xhr.setRequestHeader(header,token);
+	                    },
+	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+						data: data,
+	                    success: function (result) {
+	                    	table.ajax.url(urls+'list-sdgTarget/'+id_goals).load();
+	                    	$('#myModal').modal('hide');
+	                    },
+	                });
+				}
+			});
+			
+			$('#tbody-target').on('click', '.update', function(){
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                    url: urls+'get-sdgTarget/'+id,
+                    success: function (result) {
+                    	var val = result.content;
+                    	$('#id_goals').val(val.id_goals);
+                    	$('#id_target').val(val.id_target).attr("readonly",true);
+        				$('#nm_target').val(val.nm_target);
+						$('#myModal').modal('show');
+                    },
+                })
+             }).on('click', '.detail', function(){
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                    url: urls+'get-sdgTarget/'+id,
+                    success: function (result) {
+                    	var val = result.content;
+                    	$('#id_goals').val(val.id_goals);
+                    	$('#id_target').val(val.id_target).attr("readonly",true);
+        				$('#nm_target').val(val.nm_target).attr("readonly",true);
+						$('#myModal').modal('show');
+                    },
+                })
+             }).on('click', '.delete', function(){
+				var id = $(this).attr('data-id');
+				swal({
+                    title: titleDel,
+                    text: messDel,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttDel
+                }).then(function () {
+                	$.ajax({
+    					type: "DELETE",
+                        url: urls+'delete-sdgTarget/'+id,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        success: function (result) {
+                        	swal(titleOk,messOk,'success');
+                        	table.ajax.url(urls+'list-sdgTarget/'+id_goals).load();
+                        },
+                        error:function (result) {
+                        	swal(titleOk,messNOk,'error');
+                        },
+                    })
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
+                })
+             });
+		//});
+		// ]]>
+</script>
+</html>
