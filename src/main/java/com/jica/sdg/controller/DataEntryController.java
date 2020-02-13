@@ -167,7 +167,8 @@ public class DataEntryController {
                     "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
                     "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
-                    "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4 \n" +
+                    "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
+                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4 \n" +
                     "from assign_sdg_indicator as a\n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +

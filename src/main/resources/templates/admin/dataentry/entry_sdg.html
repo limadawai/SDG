@@ -366,16 +366,27 @@
                                 "bDestroy": true,
                                 "drawCallback": function( settings ) {
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
-                                    console.log(cektabel);
                                     if(cektabel==0){
                                     	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
+                                    	var btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                    	$.ajax({
+                        					type: "GET",
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                            async:false,
+                                            success: function (result) {
+                                            	apply = result.content;
+                                            	if(apply.length>0){
+                                            		btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            	}
+                                            },
+                                        });
                                         tabel.after(
                                         		'<tr>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
-                                        			'<td><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>'+
+                                        			'<td>'+btnApply1+'</td>'+
                                         		'</tr>'
                                         		); 
                                     }
@@ -420,43 +431,91 @@
 
                                     }},
                                     {"data": function (row, data, index, display) {
-                                        if(row[9] == null || row[9] == ""){
-                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                                        }else{
-                                            var target  = row[8];
+                                    	var color_sts = "";
+                                    	var text = "";
+                                    	var update = ""
+                                        if(row[9]){
+                                        	var target  = row[8];
                                             var achieve = row[9];
-                                            var IncDec  = row[7];
+                                            var IncDec     = row[7];
+                                            text = " "+row[9];
                                             if(IncDec == 'Increment'){
                                                 if(achieve >= target){
-                                                    var color_sts = 'btn btn-success';
+                                                    color_sts = 'btn btn-success';
                                                 }else{
-                                                    var color_sts = 'btn btn-danger';
+                                                    color_sts = 'btn btn-danger';
                                                 }
                                             }else{
                                                 if(achieve <= target){
-                                                    var color_sts = 'btn btn-success';
+                                                    color_sts = 'btn btn-success';
                                                 }else{
-                                                    var color_sts = 'btn btn-danger';
+                                                    color_sts = 'btn btn-danger';
                                                 }
                                             }
-                                            //var apply="";
-                                            var update="update"
-                                           /*  var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
-                                            $.ajax({
-                            					type: "GET",
-                                                url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/1',
-                                                async:false,
-                                                success: function (result) {
-                                                	apply = result.content;
-                                                	if(apply.length>0){
-                                                		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                                		update="";
-                                                	}
-                                                },
-                                            }); */
-                                            return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
-                                            //btnApply;
+                                            update="update";
+                                         }else if(row[33]){
+                                        	var target  = row[8];
+                                            var achieve = row[33];
+                                            var IncDec  = row[7];
+                                     		if(IncDec == 'Increment'){
+                                                if(achieve >= target){
+                                                    color_sts = 'btn btn-success';
+                                                }else{
+                                                    color_sts = 'btn btn-danger';
+                                                }
+                                            }else{
+                                                if(achieve <= target){
+                                                    color_sts = 'btn btn-success';
+                                                }else{
+                                                    color_sts = 'btn btn-danger';
+                                                }
+                                            }
+                                        	text = " "+row[33];
+                                        	update="update";
+                                        }else{
+                                        	text = " - ";
+                                        	update="update";
                                         }
+                                    	var id = "";
+                                    	var val = "";
+                                    	if(row[30] && row[31]){
+                                    		id = row[32];
+                                    		val1 = row[33];
+                                    		val2 = row[34];
+                                    		val3 = row[35];
+                                    		val4 = row[36];
+                                    	}else{
+                                    		id = row[14];
+                                    		val1 = row[9];
+                                    		val2 = row[10];
+                                    		val3 = row[11];
+                                    		val4 = row[12];
+                                    	}
+                                    	$.ajax({
+                        					type: "GET",
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                            async:false,
+                                            success: function (result) {
+                                            	apply = result.content;
+                                            	if(apply.length>0){
+                                            		if(IncDec == 'Increment'){
+                                                        if(achieve >= target){
+                                                            color_sts = 'text-success';
+                                                        }else{
+                                                            color_sts = 'text-error';
+                                                        }
+                                                    }else{
+                                                        if(achieve <= target){
+                                                            color_sts = 'text-success';
+                                                        }else{
+                                                            color_sts = 'text-error';
+                                                        }
+                                                    }
+                                            		update = "";
+                                            	}
+                                            },
+                                        });
+                                    	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                     }},
                                 ],
                                 "columnDefs": [
@@ -769,32 +828,66 @@
                                 "bDestroy": true,
                                 "drawCallback": function( settings ) {
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
-                                    console.log(cektabel);
                                     if(cektabel==0){
-                                    	var btnApply=' <a data-id="'+row[14]+'###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a>';
+                                    	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
+                                    	var btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                    	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                    	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                    	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
                                         $.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/'+row[14]+'/entry_sdg/'+tahun+'/4',
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
-                                            		btnApply=' <a title="Unapply" class="btn btn-danger" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                            		update="";
+                                            		btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                             	}
                                             },
                                         });
-                                    	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
+                                        $.ajax({
+                        					type: "GET",
+                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2',
+                                            async:false,
+                                            success: function (result) {
+                                            	apply = result.content;
+                                            	if(apply.length>0){
+                                            		btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            	}
+                                            },
+                                        });
+                                        $.ajax({
+                        					type: "GET",
+                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/3',
+                                            async:false,
+                                            success: function (result) {
+                                            	apply = result.content;
+                                            	if(apply.length>0){
+                                            		btnApply3=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            	}
+                                            },
+                                        });
+                                        $.ajax({
+                        					type: "GET",
+                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/4',
+                                            async:false,
+                                            success: function (result) {
+                                            	apply = result.content;
+                                            	if(apply.length>0){
+                                            		btnApply4=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            	}
+                                            },
+                                        });
                                         tabel.after(
                                         		'<tr>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
-                                        			'<td><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>'+
-                                        			'<td><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>'+
-                                        			'<td><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>'+
-                                        			'<td><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>'+
+                                        			'<td>'+btnApply1+'</td>'+
+                                        			'<td>'+btnApply2+'</td>'+
+                                        			'<td>'+btnApply3+'</td>'+
+                                        			'<td>'+btnApply4+'</td>'+
                                         		'</tr>'
                                         		); 
                                     }
@@ -884,33 +977,93 @@
                                                 return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
                                             }
                                         }else if(row[13] == 'quarterly'){
-                                            if(row[9] == null || row[9] == ""){
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                                            }else{
-                                                var target  = row[8];
+                                        	var color_sts = "";
+                                        	var text = "";
+                                        	var update = ""
+                                            if(row[9]){
+                                            	var target  = row[8];
                                                 var achieve = row[9];
                                                 var IncDec     = row[7];
+                                                text = " "+row[9];
                                                 if(IncDec == 'Increment'){
                                                     if(achieve >= target){
-                                                        var color_sts = 'btn btn-success';
+                                                        color_sts = 'btn btn-success';
                                                     }else{
-                                                        var color_sts = 'btn btn-danger';
+                                                        color_sts = 'btn btn-danger';
                                                     }
                                                 }else{
                                                     if(achieve <= target){
-                                                        var color_sts = 'btn btn-success';
+                                                        color_sts = 'btn btn-success';
                                                     }else{
-                                                        var color_sts = 'btn btn-danger';
+                                                        color_sts = 'btn btn-danger';
                                                     }
                                                 }
-                                                var update="update";
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[9]+"</a>";
-                                               
+                                                update="update";
+                                             }else if(row[33]){
+                                            	var target  = row[8];
+                                                var achieve = row[33];
+                                                var IncDec  = row[7];
+                                         		if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                            	text = " "+row[33];
+                                            	update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
                                             }
-                                        }else{
-                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+                                        	var id = "";
+                                        	var val = "";
+                                        	if(row[30] && row[31]){
+                                        		id = row[32];
+                                        		val1 = row[33];
+                                        		val2 = row[34];
+                                        		val3 = row[35];
+                                        		val4 = row[36];
+                                        	}else{
+                                        		id = row[14];
+                                        		val1 = row[9];
+                                        		val2 = row[10];
+                                        		val3 = row[11];
+                                        		val4 = row[12];
+                                        	}
+                                        	$.ajax({
+                            					type: "GET",
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                                async:false,
+                                                success: function (result) {
+                                                	apply = result.content;
+                                                	if(apply.length>0){
+                                                		if(IncDec == 'Increment'){
+                                                            if(achieve >= target){
+                                                                color_sts = 'text-success';
+                                                            }else{
+                                                                color_sts = 'text-error';
+                                                            }
+                                                        }else{
+                                                            if(achieve <= target){
+                                                                color_sts = 'text-success';
+                                                            }else{
+                                                                color_sts = 'text-error';
+                                                            }
+                                                        }
+                                                		update = "";
+                                                	}
+                                                },
+                                            });
+                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                         }
-                                    }},
+                                        }},
                                     {"data": function (row, data, index, display) {
                                         if(row[13] == 'yearly'){
                                             if(row[10] == null || row[10] == ""){
@@ -942,34 +1095,93 @@
                                                 return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' update" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
                                             }
                                         }else if(row[13] == 'quarterly'){
-                                            if(row[10] == null || row[10] == ""){
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                                            }else{
-                                                var target  = row[8];
+                                        	var color_sts = "";
+                                        	var text = "";
+                                        	var update = ""
+                                            if(row[10]){
+                                            	var target  = row[8];
                                                 var achieve = row[10];
                                                 var IncDec     = row[7];
+                                                text = " "+row[10];
                                                 if(IncDec == 'Increment'){
                                                     if(achieve >= target){
-                                                        var color_sts = 'btn btn-success';
+                                                        color_sts = 'btn btn-success';
                                                     }else{
-                                                        var color_sts = 'btn btn-danger';
+                                                        color_sts = 'btn btn-danger';
                                                     }
                                                 }else{
                                                     if(achieve <= target){
-                                                        var color_sts = 'btn btn-success';
+                                                        color_sts = 'btn btn-success';
                                                     }else{
-                                                        var color_sts = 'btn btn-danger';
+                                                        color_sts = 'btn btn-danger';
                                                     }
                                                 }
-
-                                                var update="update";
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###2'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[10]+"</a>";
+                                                update="update";
+                                             }else if(row[34]){
+                                            	var target  = row[8];
+                                                var achieve = row[34];
+                                                var IncDec  = row[7];
+                                         		if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                            	text = " "+row[34];
+                                            	update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
                                             }
-                                        }else{
-                                            return "<div style='font-size:90%;'>"+row[10]+"</div>";
+                                        	var id = "";
+                                        	var val = "";
+                                        	if(row[30] && row[31]){
+                                        		id = row[32];
+                                        		val1 = row[33];
+                                        		val2 = row[34];
+                                        		val3 = row[35];
+                                        		val4 = row[36];
+                                        	}else{
+                                        		id = row[14];
+                                        		val1 = row[9];
+                                        		val2 = row[10];
+                                        		val3 = row[11];
+                                        		val4 = row[12];
+                                        	}
+                                        	$.ajax({
+                            					type: "GET",
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2',
+                                                async:false,
+                                                success: function (result) {
+                                                	apply = result.content;
+                                                	if(apply.length>0){
+                                                		if(IncDec == 'Increment'){
+                                                            if(achieve >= target){
+                                                                color_sts = 'text-success';
+                                                            }else{
+                                                                color_sts = 'text-error';
+                                                            }
+                                                        }else{
+                                                            if(achieve <= target){
+                                                                color_sts = 'text-success';
+                                                            }else{
+                                                                color_sts = 'text-error';
+                                                            }
+                                                        }
+                                                		update = "";
+                                                	}
+                                                },
+                                            });
+                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###2'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                         }
-
-                                    }},
+                                        }},
                                     {"data": function (row, data, index, display) {
                                         if(row[13] == 'yearly'){
                                             if(row[11] == null || row[11] == ""){
@@ -985,33 +1197,93 @@
                                                 return "<div style='font-size:90%;'>"+row[11]+"</div>";
                                             }
                                         }else if(row[13] == 'quarterly'){
-                                            if(row[11] == null || row[11] == ""){
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                                            }else{
-                                                var target  = row[8];
+                                        	var color_sts = "";
+                                        	var text = "";
+                                        	var update = ""
+                                            if(row[11]){
+                                            	var target  = row[8];
                                                 var achieve = row[11];
                                                 var IncDec     = row[7];
+                                                text = " "+row[11];
                                                 if(IncDec == 'Increment'){
                                                     if(achieve >= target){
-                                                        var color_sts = 'btn btn-success';
+                                                        color_sts = 'btn btn-success';
                                                     }else{
-                                                        var color_sts = 'btn btn-danger';
+                                                        color_sts = 'btn btn-danger';
                                                     }
                                                 }else{
                                                     if(achieve <= target){
-                                                        var color_sts = 'btn btn-success';
+                                                        color_sts = 'btn btn-success';
                                                     }else{
-                                                        var color_sts = 'btn btn-danger';
+                                                        color_sts = 'btn btn-danger';
                                                     }
                                                 }
-                                                var update="update";
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###3'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[11]+"</a>";
+                                                update="update";
+                                             }else if(row[35]){
+                                            	var target  = row[8];
+                                                var achieve = row[35];
+                                                var IncDec  = row[7];
+                                         		if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                            	text = " "+row[35];
+                                            	update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
                                             }
-                                        }else{
-                                            return "<div style='font-size:90%;'>"+row[11]+"</div>";
+                                        	var id = "";
+                                        	var val = "";
+                                        	if(row[30] && row[31]){
+                                        		id = row[32];
+                                        		val1 = row[33];
+                                        		val2 = row[34];
+                                        		val3 = row[35];
+                                        		val4 = row[36];
+                                        	}else{
+                                        		id = row[14];
+                                        		val1 = row[9];
+                                        		val2 = row[10];
+                                        		val3 = row[11];
+                                        		val4 = row[12];
+                                        	}
+                                        	$.ajax({
+                            					type: "GET",
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/3',
+                                                async:false,
+                                                success: function (result) {
+                                                	apply = result.content;
+                                                	if(apply.length>0){
+                                                		if(IncDec == 'Increment'){
+                                                            if(achieve >= target){
+                                                                color_sts = 'text-success';
+                                                            }else{
+                                                                color_sts = 'text-error';
+                                                            }
+                                                        }else{
+                                                            if(achieve <= target){
+                                                                color_sts = 'text-success';
+                                                            }else{
+                                                                color_sts = 'text-error';
+                                                            }
+                                                        }
+                                                		update = "";
+                                                	}
+                                                },
+                                            });
+                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###3'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                         }
-
-                                    }},
+                                        }},
                                     {"data": function (row, data, index, display) {
                                         if(row[13] == 'yearly'){
                                             if(row[12] == null || row[12] == ""){
@@ -1026,34 +1298,93 @@
                                                 return "<div style='font-size:90%;'>"+row[12]+"</div>";
                                             }
                                         }else if(row[13] == 'quarterly'){
-                                            if(row[12] == null || row[12] == ""){
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="update" href="#"><i class="icon-edit"></i>'+" - "+'</a>';
-                                            }else{
-                                                var target  = row[8];
-                                                var achieve = row[11];
+                                        	var color_sts = "";
+                                        	var text = "";
+                                        	var update = ""
+                                            if(row[12]){
+                                            	var target  = row[8];
+                                                var achieve = row[12];
                                                 var IncDec     = row[7];
+                                                text = " "+row[12];
                                                 if(IncDec == 'Increment'){
                                                     if(achieve >= target){
-                                                        var color_sts = 'btn btn-success';
+                                                        color_sts = 'btn btn-success';
                                                     }else{
-                                                        var color_sts = 'btn btn-danger';
+                                                        color_sts = 'btn btn-danger';
                                                     }
                                                 }else{
                                                     if(achieve <= target){
-                                                        var color_sts = 'btn btn-success';
+                                                        color_sts = 'btn btn-success';
                                                     }else{
-                                                        var color_sts = 'btn btn-danger';
+                                                        color_sts = 'btn btn-danger';
                                                     }
                                                 }
-                                                var apply="";
-                                                var update="update";
-                                                return '<a data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###4'+'###'+row[14]+'" title="Update" class="'+color_sts+' '+update+'" href="#"><i class="icon-edit "></i>'+" "+row[12]+"</a>";
-                                                //btnApply;
+                                                update="update";
+                                             }else if(row[36]){
+                                            	var target  = row[8];
+                                                var achieve = row[36];
+                                                var IncDec  = row[7];
+                                         		if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                            	text = " "+row[36];
+                                            	update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
                                             }
-                                        }else{
-                                            return "<div style='font-size:90%;'>"+row[12]+"</div>";
+                                        	var id = "";
+                                        	var val = "";
+                                        	if(row[30] && row[31]){
+                                        		id = row[32];
+                                        		val1 = row[33];
+                                        		val2 = row[34];
+                                        		val3 = row[35];
+                                        		val4 = row[36];
+                                        	}else{
+                                        		id = row[14];
+                                        		val1 = row[9];
+                                        		val2 = row[10];
+                                        		val3 = row[11];
+                                        		val4 = row[12];
+                                        	}
+                                        	$.ajax({
+                            					type: "GET",
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/4',
+                                                async:false,
+                                                success: function (result) {
+                                                	apply = result.content;
+                                                	if(apply.length>0){
+                                                		if(IncDec == 'Increment'){
+                                                            if(achieve >= target){
+                                                                color_sts = 'text-success';
+                                                            }else{
+                                                                color_sts = 'text-error';
+                                                            }
+                                                        }else{
+                                                            if(achieve <= target){
+                                                                color_sts = 'text-success';
+                                                            }else{
+                                                                color_sts = 'text-error';
+                                                            }
+                                                        }
+                                                		update = "";
+                                                	}
+                                                },
+                                            });
+                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###4'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                         }
-                                    }},
+                                        }},
                                 ],
                                 "columnDefs": [
                                 ],
