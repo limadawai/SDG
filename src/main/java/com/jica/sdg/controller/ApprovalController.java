@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jica.sdg.model.EntryApproval;
+import com.jica.sdg.model.EntryShowReport;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.service.IEntryApprovalService;
+import com.jica.sdg.service.IEntrySdgDetailService;
 import com.jica.sdg.service.IEntrySdgService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
@@ -51,6 +53,9 @@ public class ApprovalController {
 	
 	@Autowired
 	IEntrySdgService sdgService;
+	
+	@Autowired
+	IEntrySdgDetailService sdgDetailService;
 	
 	@PostMapping(path = "admin/save-approval", consumes = "application/json", produces = "application/json")
 	@ResponseBody
@@ -132,6 +137,30 @@ public class ApprovalController {
 		Integer id = Integer.parseInt(recive.get("id").toString());
 		approvalService.updateApproval(approval, description, id);
 	}
+	
+	@PostMapping(path = "admin/show-report-sdg", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	@Transactional
+	public void showReport(@RequestBody Map<String, Object> payload) {
+		JSONObject jsonObunit = new JSONObject(payload);
+        String id_monper = jsonObunit.get("id_monper").toString();  
+        String tahun = jsonObunit.get("tahun").toString();
+        String period = jsonObunit.get("period").toString();
+        Query query = em.createNativeQuery("UPDATE entry_approval set approval = '4' where type='entry_sdg' and id_monper = :id_monper and year = :year and periode = :periode");
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", tahun);
+        query.setParameter("periode", period);
+        query.executeUpdate();
+        
+        EntryShowReport rp = new EntryShowReport();
+        rp.setId_monper(Integer.parseInt(id_monper));
+        rp.setYear(Integer.parseInt(tahun));
+        rp.setShow_report("1");
+        rp.setShow_report_date(new Date());
+        rp.setType("entry_sdg");
+        rp.setPeriod(period);
+        approvalService.saveshow(rp);
+	}
 
 	@PostMapping(path = "admin/update-new-sdg", consumes = "application/json", produces = "application/json")
 	@ResponseBody
@@ -144,16 +173,30 @@ public class ApprovalController {
         	String 	nilai = obj.getString("new_val_nilai");
         	String 	id = obj.getString("new_val_id");
         	String 	period = obj.getString("new_val_period");
+        	String 	id_disaggre = obj.getString("new_val_id_disaggre");
         	if(!nilai.equals("")) {
-        		if(period.equals("1")) {
-        			sdgService.updateNew1(Integer.parseInt(id), Integer.parseInt(nilai));
-        		}else if(period.equals("2")) {
-        			sdgService.updateNew2(Integer.parseInt(id), Integer.parseInt(nilai));
-        		}else if(period.equals("3")) {
-        			sdgService.updateNew3(Integer.parseInt(id), Integer.parseInt(nilai));
-        		}else if(period.equals("4")) {
-        			sdgService.updateNew4(Integer.parseInt(id), Integer.parseInt(nilai));
+        		if(id_disaggre.equals("null") || id_disaggre.equals("")) {
+        			if(period.equals("1")) {
+            			sdgService.updateNew1(Integer.parseInt(id), Integer.parseInt(nilai));
+            		}else if(period.equals("2")) {
+            			sdgService.updateNew2(Integer.parseInt(id), Integer.parseInt(nilai));
+            		}else if(period.equals("3")) {
+            			sdgService.updateNew3(Integer.parseInt(id), Integer.parseInt(nilai));
+            		}else if(period.equals("4")) {
+            			sdgService.updateNew4(Integer.parseInt(id), Integer.parseInt(nilai));
+            		}
+        		}else {
+        			if(period.equals("1")) {
+            			sdgDetailService.updateNew1(Integer.parseInt(id_disaggre), Integer.parseInt(nilai));
+            		}else if(period.equals("2")) {
+            			sdgDetailService.updateNew2(Integer.parseInt(id_disaggre), Integer.parseInt(nilai));
+            		}else if(period.equals("3")) {
+            			sdgDetailService.updateNew3(Integer.parseInt(id_disaggre), Integer.parseInt(nilai));
+            		}else if(period.equals("4")) {
+            			sdgDetailService.updateNew4(Integer.parseInt(id_disaggre), Integer.parseInt(nilai));
+            		}
         		}
+        		
         	}
         }
 	}

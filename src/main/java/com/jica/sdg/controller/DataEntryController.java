@@ -3,6 +3,7 @@ package com.jica.sdg.controller;
 import com.jica.sdg.model.EntryApproval;
 import com.jica.sdg.model.EntryGovBudget;
 import com.jica.sdg.model.EntryGovIndicator;
+import com.jica.sdg.model.EntryGriojk;
 import com.jica.sdg.model.EntryNsaBudget;
 import com.jica.sdg.model.EntryNsaIndicator;
 import com.jica.sdg.model.EntryShowReport;
@@ -25,6 +26,7 @@ import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgIndicatorTarget;
 import com.jica.sdg.model.SdgTarget;
+import com.jica.sdg.model.Unit;
 import com.jica.sdg.service.IEntrySdgService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.IGovProgramService;
@@ -33,6 +35,14 @@ import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRanRadService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.NsaProfileService;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -43,10 +53,19 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletResponse;
 
 import javax.servlet.http.HttpSession;
 //import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class DataEntryController {
@@ -167,7 +186,8 @@ public class DataEntryController {
                     "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
                     "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
-                    "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4 \n" +
+                    "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
+                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4 \n" +
                     "from assign_sdg_indicator as a\n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +
@@ -1075,4 +1095,146 @@ public class DataEntryController {
     public void saveEntryFundingSdg(@PathVariable("id") int id) {
         sdgFundingService.deleteSdgFunding(id);
     }
+    
+    @GetMapping("admin/home-entry/gri-ojk")
+    public String listgriojk(Model model, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov = list.get().getId_prov();
+    	String privilege = list.get().getPrivilege();
+    	if(privilege.equals("SUPER")) {
+    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
+		model.addAttribute("id_prov", id_prov);
+		model.addAttribute("privilege", privilege);
+		model.addAttribute("id_role", id_role);
+        return "admin/dataentry/gri_ojk";
+        
+    }
+    @GetMapping("admin/list-entry/gri-ojk")
+    public @ResponseBody Map<String, Object> units(HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String id_prov = listRole.get().getId_prov();
+    	String sql;
+//    	if(privilege.equals("SUPER")) {
+    		sql = "select * from entry_gri_ojk";
+//    	}else {
+//    		sql = "select a.* from ref_unit a left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
+//    	}
+        
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(
+                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4])
+            );
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-entry/gri-ojk"/*, consumes = "application/json", produces = "application/json"*/)
+	@ResponseBody
+        @Transactional
+	public ResponseEntity<?> saveGriOjk(/*@RequestBody Map<String, Object> payload
+                                            ,*/HttpSession session
+                                            ,@RequestParam("id") String id
+                                            ,@RequestParam("company_name") String company_name
+                                            ,@RequestParam("year") String year
+                                            ,@RequestParam("files") MultipartFile[] uploadfiles) {
+        Integer id_role = (Integer) session.getAttribute("id_role");
+//        JSONObject jsonObunit = new JSONObject(payload); 
+//        System.out.println(company_name);
+//        String company_name      = jsonObunit.get("company_name").toString(); 
+//        String year              = jsonObunit.get("year").toString(); 
+//        String id                = jsonObunit.get("id").toString();
+        
+            if(id.equals("")){
+                 UUID uuid1 = UUID.randomUUID();
+                 UUID uuid2 = UUID.randomUUID();
+                 String file1 =  uuid1.toString() + ".xls";
+                 String file2 =  uuid2.toString() + ".xls";
+                em.createNativeQuery("INSERT INTO entry_gri_ojk (company_name,year,file1,file2) values ('"+company_name+"','"+year+"','"+file1+"','"+file2+"')").executeUpdate();
+                String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
+                .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
+                if (!StringUtils.isEmpty(uploadedFileName)) {
+                    try {
+
+                            saveUploadedFiles(Arrays.asList(uploadfiles),file1,file2);
+
+                        } catch (IOException e) {
+//                            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                        }
+                    
+                }
+            }else{
+                em.createNativeQuery("UPDATE ref_unit set nm_unit = '"+company_name+"' where id_unit ='"+year+"'").executeUpdate();
+            }
+        return new ResponseEntity("Successfully uploaded - "
+                + "test", HttpStatus.OK);
+	}
+        
+        private void saveUploadedFiles(List<MultipartFile> files,String file1,String file2) throws IOException {
+            int i = 1;
+            for (MultipartFile file : files) {
+                
+                if (!file.isEmpty()) {
+                    byte[] bytes = file.getBytes();
+                    String uploadpath = System.getProperty("user.home");
+                    String UPLOADED_FOLDER = "C://wa//";
+                    String rename="";
+                    if(i==1) {
+                            rename = file1;
+                    }else if(i==2){
+                            rename = file2;
+                    }
+    //                System.out.println(uploadpath);
+                    String fileExtension=file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+                    //String fileName = StringUtils.cleanPath(period+"_file"+Integer.toString(i)+"_"+file.getOriginalFilename()).toLowerCase();
+                    String fileName = StringUtils.cleanPath(rename).toLowerCase();
+                    Path path = Paths.get(uploadpath +"/"+ fileName);
+                    Files.write(path, bytes);
+                   
+                }
+                
+                 i++;
+            }
+
+        }
+        
+       @DeleteMapping("admin/delete-entry/gri-ojk/{id}")
+        @ResponseBody
+        @Transactional
+        public void deleteGriOjk(@PathVariable("id") Integer id) {
+            em.createNativeQuery("delete from entry_gri_ojk where id ='" + id + "'").executeUpdate();
+        }
+        
+        @RequestMapping(path = "/admin/export-entry/gri-ojk/{name}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getFile(@PathVariable("name") String name, HttpServletResponse response,HttpSession session) throws FileNotFoundException {
+    
+        String path = System.getProperty("user.home");
+        File f = new File (path+"/"+name);
+        InputStreamResource resource = new InputStreamResource(new FileInputStream(f));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+name);
+//         headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename="+file);
+        headers.add("Cache-Control", "no-cache, no-store, must-revalidate");
+        headers.add("Pragma", "no-cache");
+        headers.add("Expires", "0");
+           return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(f.length())
+                .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                .body(resource);
+        }
+        
 }
