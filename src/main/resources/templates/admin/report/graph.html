@@ -87,7 +87,7 @@
                     dataType: 'json',
                     cache: false,
                     success: function (result) {
-                        // console.log(result);
+                        //console.log(result);
                         $("#divkiri").empty();
                         var isi = "<ol class='tree'>";
                         for (var i=0; i<result.length; i++) {
@@ -97,7 +97,9 @@
                                     isi += "<li class='dok' style='padding:6px'>";
                                         isi += "<label class='dok' for='subfolder"+(i+1)+"'>"+result[i][11]+"</label><input type='checkbox' id='subfolder"+(i+1)+"' />";
                                         isi += "<ol>";
-                                            isi += "<li id='cucu' class='file' style='padding:6px'><a href='#' onclick='kanan("+result[i][3]+")'>"+result[i][14]+"</a></li>";
+                                            isi += "<li id='cucu' class='file' style='padding:6px'>" +
+                                            "<a href='#' onclick='kanan("+result[i][1]+","+result[i][2]+","+result[i][3]+")'>"+result[i][14]+"</a>" +
+                                            "</li>";
                                         isi += "</ol>";
                                     isi += "</li>";
                                 isi += "</ol>";
@@ -113,7 +115,8 @@
             }
         });
 
-        function kanan(idindi) {
+        function kanan(idsdg, idtar, idindi) {
+        	//alert(idsdg+" "+idtar+" "+idindi);
             $.ajax({
                 url: urls + "graphidgovindi",
                 type: 'get',
@@ -121,7 +124,7 @@
                 dataType: 'json',
                 cache: false,
                 success: function (result) {
-                    // console.log(result.length);
+                    //console.log(result);
                     $("#kananatas").empty();
                     for (var i=0; i<result.length; i++) {
                         $.ajax({
@@ -139,7 +142,9 @@
                                             isi += "<li style='padding:6px'>";
                                             isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
                                                 isi += "<ol>";
-                                                    isi += "<li id='cucukanan' class='file' style='padding:6px'><a onclick='cucukanan(" + resin[i][0] + ","+0+")'>" + resin[i][4] + "</a></li>";
+                                                    isi += "<li id='cucukanan' class='file' style='padding:6px'>" +
+                                                    	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+0+")'>" + resin[i][4] + "</a>" +
+                                                    	"</li>";
                                                 isi += "</ol>";
                                             isi += "</li>";
                                         isi += "</ol>";
@@ -178,7 +183,9 @@
                                     isi += "<li style='padding:6px'>";
                                     isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
                                     isi += "<ol>";
-                                    isi += "<li id='cucukanan' class='file' style='padding:6px;'><a onclick='cucukanan(" + resin[i][0] + ","+1+")'>" + resin[i][4] + "</a></li>";
+                                    isi += "<li id='cucukanan' class='file' style='padding:6px'>" +
+                                	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+1+")'>" + resin[i][4] + "</a>" +
+                                	"</li>";
                                     isi += "</ol>";
                                     isi += "</li>";
                                     isi += "</ol>";
@@ -193,8 +200,9 @@
             });
         }
 
-        function cucukanan(id, flag) {
-            window.open(urls+"report-graph-detail/"+id+"/"+flag);
+        function cucukanan(idsdg, idtar, idindi, id, flag) {
+        	//alert(idsdg+" "+idtar+" "+idindi+" "+id+" "+flag);
+            window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+flag);
         }
 
     </script>
