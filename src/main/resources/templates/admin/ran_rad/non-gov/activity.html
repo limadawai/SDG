@@ -77,8 +77,8 @@
 	                                            	<span class="lang_indo">Kode</span>
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;">
-	                                            	<span class="lang_eng" style="display:none">Internal Code</span>
-	                                            	<span class="lang_indo">Kode Internal</span>
+	                                            	<span class="lang_eng" style="display:none">SDG E-Monev Code</span>
+	                                            	<span class="lang_indo">Kode SDG E-Monev</span>
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">Activity</span>
@@ -112,7 +112,8 @@
 				  	<label class="lang_eng control-label" style="display:none">Program</label>
 				    <label class="lang_indo control-label">Program</label>
 				    <div class="controls">
-				    	<input type="text" readonly="true" th:value="${govProg.nm_program}" class="input-xlarge input-block-level"/>
+				    	<input type="text" style="display:none" readonly="true" th:value="${govProg.nm_program_eng}" class="lang_eng input-xlarge input-block-level" />
+				    	<input type="text" readonly="true" th:value="${govProg.nm_program}" class="lang_indo input-xlarge input-block-level" />
 				    	<input type="hidden" id="id_program" name="id_program" th:value="${govProg.id}"/>
 				    </div>
 				  </div>
@@ -126,8 +127,8 @@
 				    </div>
 				  </div>
 				  <div id="hide_kode_internal" class="control-group">
-				    <label class="lang_eng control-label" style="display:none;text-align:left">Internal Code</label>
-				    <label class="lang_indo control-label" style="text-align:left">Kode Internal</label>
+				    <label class="lang_eng control-label" style="display:none;text-align:left">SDG E-Monev Code</label>
+				    <label class="lang_indo control-label" style="text-align:left">Kode SDG E-Monev</label>
 				    <div class="controls">
                         <input type="text" id="internal_code" name="internal_code" class="input-block-level"/>
 				    	<span class="help-block" id="error_internal_code"></span>
