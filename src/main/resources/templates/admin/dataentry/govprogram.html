@@ -267,7 +267,7 @@
                 "responsive":true,
                 "bDestroy": true,
                 "ajax": {
-                    "url": urls+'list-govProg/'+id_monper,
+                    "url": urls+'list-govProg-entry/'+id_monper+'/'+v_idrole,
                     dataSrc: 'content',
                 },
                 "searching": true,
@@ -308,7 +308,7 @@
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
 //                alert(urls+'list-govProg/'+id_monper);
-                table.ajax.url(urls+'list-govProg/'+id_monper ).load();
+                table.ajax.url(urls+'list-govProg-entry/'+id_monper+'/'+v_idrole ).load();
                 
             }
             

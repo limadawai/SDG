@@ -56,6 +56,7 @@ public class ApprovalController {
 	
 	@Autowired
 	IEntrySdgDetailService sdgDetailService;
+
 	
 	@PostMapping(path = "admin/save-approval", consumes = "application/json", produces = "application/json")
 	@ResponseBody
@@ -63,6 +64,7 @@ public class ApprovalController {
 		if(app.getId()==null) {
 			app.setApproval_date(new Date());
 		}
+		approvalService.deleteApproveGovBudget(app.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
 		approvalService.save(app);
 	}
 	
