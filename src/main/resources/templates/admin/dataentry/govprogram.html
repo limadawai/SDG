@@ -99,6 +99,16 @@
         var id_role     = [[${id_role}]];
         var id_prov     = [[${id_prov}]];
         var privilege   = [[${privilege}]];
+        
+        
+        
+        
+//        else{
+//            $("#id_prov").val(id_prov).trigger("change");
+//            $("#id_prov").val(id_prov).trigger("change");
+//            $("#id_prov").val(id_prov).trigger("change");
+//        }
+        
         if(id_role == '1'){
 
         }else{
@@ -148,6 +158,7 @@
 
 
         }
+        
 
 
         $("#id_prov").on('change', function(e){
@@ -187,21 +198,52 @@
                     }
                 }
             });
+//            sessionStorage.provinsi_gov  = id_prov;
+            
         });
 
+//        if(privilege != 'USER'){
+//            var s_prov_gov  = sessionStorage.provinsi_gov
+////            var s_role_gov  = sessionStorage.role_gov
+////            var s_tahun_gov = sessionStorage.tahun_gov
+//            $("#id_prov").val(s_prov_gov).trigger("change");
+////            $("#idrole").val(s_role_gov).trigger("change");
+////            $("#periode").val(s_tahun_gov).trigger("change");
+//        }
+        
         $("#periode").on('change', function(e){
-            var data_id     = this.value.split("###");;
+            var data_id     = this.value.split("###");
             var id_monper   = data_id[0];
             var tahun       = data_id[1];
             grid();
+//            sessionStorage.tahun_gov  = $("#periode").val();
         });
+        
+//        if(privilege != 'USER'){
+////            var s_prov_gov  = sessionStorage.provinsi_gov
+////            var s_role_gov  = sessionStorage.role_gov
+//            var s_tahun_gov = sessionStorage.tahun_gov
+////            $("#id_prov").val(s_prov_gov).trigger("change");
+////            $("#idrole").val(s_role_gov).trigger("change");
+//            $("#periode").val(s_tahun_gov).trigger("change");
+//        }
 
         $("#idrole").on('change', function(e){
             var data_id     = this.value.split("###");;
-            var id_monper   = data_id[0];
-            var tahun       = data_id[1];
+//            var id_monper   = data_id[0];
+//            var tahun       = data_id[1];
             grid();
+//            sessionStorage.role_gov  = $("#idrole").val();
         });
+        
+//        if(privilege != 'USER'){
+////            var s_prov_gov  = sessionStorage.provinsi_gov
+//            var s_role_gov  = sessionStorage.role_gov
+////            var s_tahun_gov = sessionStorage.tahun_gov
+////            $("#id_prov").val(s_prov_gov).trigger("change");
+//            $("#idrole").val(s_role_gov).trigger("change");
+////            $("#periode").val(s_tahun_gov).trigger("change");
+//        }
 
 
         $('#teruskan').on('click', '#apply_btn', function(e){
