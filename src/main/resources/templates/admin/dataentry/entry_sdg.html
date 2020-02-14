@@ -247,6 +247,8 @@
                 });
             });
             
+            
+            
             $("#periode").on('change', function(e){
                 var data_id     = this.value.split("###");;
                 var id_monper   = data_id[0];
@@ -344,6 +346,35 @@
                 
                 $.ajax({
                     type: "GET",
+                    url: urls+'get-status-approve/'+v_idrole+'/'+id_monper+'/'+tahun+'/entry_sdg/1',
+                    success: function (result1) {
+                        if(result1.content == "1"){
+                            $('.appl1').hide();
+                            $('.unappl1').show();
+                            
+                            $('#achievement1').val("0").attr('disabled',true);
+                        }else if(result1.content == "2"){
+                            $('.appl1').hide();
+                            $('.unappl1').hide();
+                            
+                            $('#achievement1').val("0").attr('disabled',true);
+                        }else if(result1.content == "3"){
+                            $('.appl1').show();
+                            $('.unappl1').hide();
+                            
+                            $('#achievement1').val("0").attr('disabled',false);
+                            
+                        }else{
+                            $('.appl1').show();
+                            $('.unappl1').hide();
+                            
+                            $('#achievement1').val("0").attr('disabled',false);
+                        }
+                    }
+                });
+                
+                $.ajax({
+                    type: "GET",
                     url: urls+'list-get-sts-monper/'+id_monper,
                     async:false,
                     success: function (result1) {
@@ -376,7 +407,13 @@
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
-                                            		btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		if(apply[0][1]=="1"){
+                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
+                                            			btnApply1 = "";
+                                            		}else if(apply[0][1]=="3"){
+                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            		}
                                             	}
                                             },
                                         });
@@ -555,7 +592,13 @@
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
-                                            		btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		if(apply[0][1]=="1"){
+                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
+                                            			btnApply1 = "";
+                                            		}else if(apply[0][1]=="3"){
+                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            		}
                                             	}
                                             },
                                         });
@@ -566,7 +609,14 @@
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
-                                            		btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		if(apply[0][1]=="1"){
+                                            			btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
+                                            			btnApply2 = "";
+                                            		}else if(apply[0][1]=="3"){
+                                            			btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            		}
+                                            		
                                             	}
                                             },
                                         });
@@ -832,8 +882,8 @@
                                     	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
                                     	var btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
                                     	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                                    	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                                    	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                    	var btnApply3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                    	var btnApply4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
                                         $.ajax({
                         					type: "GET",
                                             url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
@@ -841,7 +891,13 @@
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
-                                            		btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		if(apply[0][1]=="1"){
+                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
+                                            			btnApply1 = "";
+                                            		}else if(apply[0][1]=="3"){
+                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            		}
                                             	}
                                             },
                                         });
@@ -852,7 +908,13 @@
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
-                                            		btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		if(apply[0][1]=="1"){
+                                            			btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
+                                            			btnApply2 = "";
+                                            		}else if(apply[0][1]=="3"){
+                                            			btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            		}
                                             	}
                                             },
                                         });
@@ -863,7 +925,13 @@
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
-                                            		btnApply3=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		if(apply[0][1]=="1"){
+                                            			btnApply3=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
+                                            			btnApply3 = "";
+                                            		}else if(apply[0][1]=="3"){
+                                            			btnApply3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            		}
                                             	}
                                             },
                                         });
@@ -874,7 +942,13 @@
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
-                                            		btnApply4=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		if(apply[0][1]=="1"){
+                                            			btnApply4=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
+                                            			btnApply4 = "";
+                                            		}else if(apply[0][1]=="3"){
+                                            			btnApply4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            		}
                                             	}
                                             },
                                         });
