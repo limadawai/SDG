@@ -570,7 +570,7 @@ public class DataEntryController {
     
     @GetMapping("admin/list-govProg-entry/{id_monper}/{id_role}")
     public @ResponseBody Map<String, Object> govProg(@PathVariable("id_monper") Integer id_monper, @PathVariable("id_role") Integer id_role) {
-    	String sql = "select b.* from gov_activity a left join gov_program b on a.id_program = b.id where b.id_monper = :id_monper and a.id_role = :id_role";
+    	String sql = "select DISTINCT b.* from gov_activity a left join gov_program b on a.id_program = b.id where b.id_monper = :id_monper and a.id_role = :id_role";
         Query list = em.createNativeQuery(sql);
         list.setParameter("id_role", id_role);
         list.setParameter("id_monper", id_monper);
