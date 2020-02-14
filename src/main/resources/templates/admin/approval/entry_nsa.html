@@ -364,6 +364,7 @@
                     type: "GET",
                     url: urls+'list-get-sts-monper-nongov_act/'+data[0],
                     success: function (result1) {
+                        var sts = result1.content;
                         if(sts == 'yearly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
                         }else if(sts == 'semesterly'){
@@ -413,6 +414,7 @@
                     type: "GET",
                     url: urls+'list-get-sts-monper-nongov_act/'+data[0],
                     success: function (result1) {
+                        var sts = result1.content;
                         if(sts == 'yearly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
                         }else if(sts == 'semesterly'){

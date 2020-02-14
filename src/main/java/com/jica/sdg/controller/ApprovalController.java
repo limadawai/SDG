@@ -24,15 +24,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jica.sdg.model.EntryApproval;
+import com.jica.sdg.model.EntryGriojk;
 import com.jica.sdg.model.EntryShowReport;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
+import com.jica.sdg.model.Unit;
 import com.jica.sdg.service.IEntryApprovalService;
 import com.jica.sdg.service.IEntrySdgDetailService;
 import com.jica.sdg.service.IEntrySdgService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.NsaProfileService;
+import java.util.ArrayList;
 
 @Controller
 public class ApprovalController {
@@ -56,6 +59,7 @@ public class ApprovalController {
 	
 	@Autowired
 	IEntrySdgDetailService sdgDetailService;
+
 	
 	@PostMapping(path = "admin/save-approval", consumes = "application/json", produces = "application/json")
 	@ResponseBody
@@ -63,6 +67,7 @@ public class ApprovalController {
 		if(app.getId()==null) {
 			app.setApproval_date(new Date());
 		}
+		approvalService.deleteApproveGovBudget(app.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
 		approvalService.save(app);
 	}
 	
@@ -252,4 +257,53 @@ public class ApprovalController {
         model.addAttribute("privilege", privilege);
         return "admin/approval/entry_nsa";
     }
+    @GetMapping("admin/home-approval/gri-ojk")
+    public String listgriojk(Model model, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov = list.get().getId_prov();
+    	String privilege = list.get().getPrivilege();
+    	if(privilege.equals("SUPER")) {
+    		model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+    		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+    		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
+		model.addAttribute("id_prov", id_prov);
+		model.addAttribute("privilege", privilege);
+		model.addAttribute("id_role", id_role);
+        return "admin/approval/gri_ojk";
+        
+    }
+    @GetMapping("admin/get-approval/gri-ojk/{id}")
+    public @ResponseBody Map<String, Object> getUnit(@PathVariable("id") Integer id) {
+        String sql = "select * from entry_gri_ojk where id = '"+id+"'";
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(
+                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(Integer)row[5],(String) row[6])
+            );
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-approval/gri-ojk", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+        @Transactional
+	public void saveUnit(@RequestBody Map<String, Object> payload,HttpSession session) {
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        JSONObject jsonObapproval = new JSONObject(payload);
+        String description           = jsonObapproval.get("description").toString();  
+        String approval              = jsonObapproval.get("approval").toString();  
+        String id                    = jsonObapproval.get("id").toString();
+           em.createNativeQuery("UPDATE entry_gri_ojk set description = '"+description+"',approval = '"+approval+"' where id ='"+id+"'").executeUpdate();
+        
+	}
+    
 }

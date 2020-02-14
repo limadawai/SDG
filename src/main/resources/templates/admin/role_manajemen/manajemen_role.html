@@ -46,6 +46,10 @@
                                                 <th style="text-align:center;font-size:80%;width:15%;">No.</th>
                                                 <th style="text-align:center;font-size:80%;">Role</th>
                                                 <th style="text-align:center;font-size:80%;">
+                                                	<span class="lang_eng" style="display:none">Category</span>
+                                                	<span class="lang_indo">Ketegori</span>
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">Description</span>
                                                 	<span class="lang_indo">Deskripsi</span>
                                                 </th>
@@ -398,6 +402,10 @@
                 return "<div style='font-size:90%;'>"+(row.nm_role)+"</div>";}
             },
             {"data": function (row, data, index, display) {
+            	var cat = (row.cat_role=="gri_ojk")?"GRI/OJK":row.cat_role;
+                return "<div style='font-size:90%;'>"+(cat)+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
                 return "<div style='font-size:90%;'>"+(row.desc_role)+"</div>";}
             },
             {"data": function (row, data, index, display) {
@@ -421,6 +429,7 @@
         ],
         select: true
     });
+    
     $('#text-cari').on( 'keyup', function () {
         var val=$(this).val();
         table.search(val).draw();

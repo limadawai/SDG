@@ -158,7 +158,7 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-monper/{id}")
     public @ResponseBody Map<String, Object> getOptionMonperList(@PathVariable("id") String id) {
-        String sql  = "select * from ran_rad as a where a.id_prov = :id ";
+        String sql  = "select * from ran_rad as a where a.id_prov = :id and a.status = 'on Going'";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
@@ -565,6 +565,33 @@ public class DataEntryController {
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-govProg-entry/{id_monper}/{id_role}")
+    public @ResponseBody Map<String, Object> govProg(@PathVariable("id_monper") Integer id_monper, @PathVariable("id_role") Integer id_role) {
+    	String sql = "select DISTINCT b.* from gov_activity a left join gov_program b on a.id_program = b.id where b.id_monper = :id_monper and a.id_role = :id_role";
+        Query list = em.createNativeQuery(sql);
+        list.setParameter("id_role", id_role);
+        list.setParameter("id_monper", id_monper);
+        List<Object[]> rows = list.getResultList();
+        List<GovProgram> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+        	result.add(
+        			new GovProgram(
+        					(Integer)row[0], 
+        					(String) row[1], 
+        					(String)row[2], 
+        					(String)row[3], 
+        					(Integer)row[4], 
+        					(String)row[5], 
+        					Integer.parseInt(row[6].toString()), 
+        					(Date)row[7], 
+        					(String)row[8])
+        			);
+        }
+        hasil.put("content",result);
         return hasil;
     }
 

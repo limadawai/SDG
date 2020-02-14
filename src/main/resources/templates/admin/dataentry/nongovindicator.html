@@ -15,8 +15,8 @@
 
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Government Program Monitoring</a></div>
-            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Indikator SDG</a></div>
+            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Non-Government Program Monitoring</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Program Non-Pemerintahan</a></div>
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
@@ -283,7 +283,7 @@
 //
 //        }
 
-        btn_apply();
+        
         $("#id_prov").on('change', function(e){
             var id_prov = this.value ;
 //            $.ajax({
@@ -319,18 +319,19 @@
 
                         }
                     }
-                    $("#periode").val(monper_1+"###"+tahun_1).trigger("change").attr('disabled',true);
+                    $("#periode").val(monper_1+"###"+tahun_1).trigger("change").attr('disabled',false);
                 }
             });
         });
 //
 //        
-//        $("#periode").on('change', function(e){
-//            var data_id     = this.value.split("###");;
-//            var id_monper   = data_id[0];
-//            var tahun       = data_id[1];
-//            grid();
-//        });
+        $("#periode").on('change', function(e){
+            var data_id     = this.value.split("###");;
+            var id_monper   = data_id[0];
+            var tahun       = data_id[1];
+            grid();
+            btn_apply();
+        });
 //
 //        $("#idrole").on('change', function(e){
 //            var data_id     = this.value.split("###");;
@@ -338,7 +339,7 @@
 //            var tahun       = data_id[1];
 //            grid();
 //        });
-
+        btn_apply();
         $("#id_prov").val(id_prov_1).trigger("change");
         $("#idrole").val(id_role_1).trigger("change");
         $("#periode").val(monper_1+"###"+tahun_1).trigger("change");
@@ -411,8 +412,12 @@
             }).then(function () {
                 var periode             = "1";
                 var id_role             = $('#idrole').val();
-                var id_monper           = monper_1;
-                var year                = tahun_1;
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var year                = v_data_id[1];
+//                var id_monper           = monper_1;
+//                var year                = tahun_1;
                 var approval            = "1";
                 var type                = "entry_nsa_indicator";
 
@@ -460,8 +465,12 @@
             }).then(function () {
                 var periode             = "1";
                 var id_role             = $('#idrole').val();
-                var id_monper           = monper_1;
-                var year                = tahun_1;
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var year                = v_data_id[1];
+//                var id_monper           = monper_1;
+//                var year                = tahun_1;
                 var approval            = "1";
                 var type                = "entry_nsa_indicator";
 
@@ -511,8 +520,12 @@
             }).then(function () {
                 var periode             = "2";
                 var id_role             = $('#idrole').val();
-                var id_monper           = monper_1;
-                var year                = tahun_1;
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var year                = v_data_id[1];
+//                var id_monper           = monper_1;
+//                var year                = tahun_1;
                 var approval            = "1";
                 var type                = "entry_nsa_indicator";
 
@@ -560,8 +573,12 @@
             }).then(function () {
                 var periode             = "2";
                 var id_role             = $('#idrole').val();
-                var id_monper           = monper_1;
-                var year                = tahun_1;
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var year                = v_data_id[1];
+//                var id_monper           = monper_1;
+//                var year                = tahun_1;
                 var approval            = "1";
                 var type                = "entry_nsa_indicator";
 
@@ -611,8 +628,12 @@
             }).then(function () {
                 var periode             = "3";
                 var id_role             = $('#idrole').val();
-                var id_monper           = monper_1;
-                var year                = tahun_1;
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var year                = v_data_id[1];
+//                var id_monper           = monper_1;
+//                var year                = tahun_1;
                 var approval            = "1";
                 var type                = "entry_nsa_indicator";
 
@@ -660,8 +681,12 @@
             }).then(function () {
                 var periode             = "3";
                 var id_role             = $('#idrole').val();
-                var id_monper           = monper_1;
-                var year                = tahun_1;
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var year                = v_data_id[1];
+//                var id_monper           = monper_1;
+//                var year                = tahun_1;
                 var approval            = "1";
                 var type                = "entry_nsa_indicator";
 
@@ -711,8 +736,12 @@
             }).then(function () {
                 var periode             = "4";
                 var id_role             = $('#idrole').val();
-                var id_monper           = monper_1;
-                var year                = tahun_1;
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var year                = v_data_id[1];
+//                var id_monper           = monper_1;
+//                var year                = tahun_1;
                 var approval            = "1";
                 var type                = "entry_nsa_indicator";
 
@@ -760,8 +789,12 @@
             }).then(function () {
                 var periode             = "4";
                 var id_role             = $('#idrole').val();
-                var id_monper           = monper_1;
-                var year                = tahun_1;
+                var v_dataid            = $("#periode").val();
+                var v_data_id           = v_dataid.split("###");;
+                var id_monper           = v_data_id[0];
+                var year                = v_data_id[1];
+//                var id_monper           = monper_1;
+//                var year                = tahun_1;
                 var approval            = "1";
                 var type                = "entry_nsa_indicator";
 
@@ -800,8 +833,12 @@
 
         function btn_apply(){
             var id_role             = $('#idrole').val();
-            var id_monper           = monper_1;
-            var year                = tahun_1;
+            var v_dataid            = $("#periode").val();
+            var v_data_id           = v_dataid.split("###");;
+            var id_monper           = v_data_id[0];
+            var year                = v_data_id[1];
+//            var id_monper           = monper_1;
+//            var year                = tahun_1;
             var type                = "entry_nsa_indicator";
             $.ajax({
                 type: "GET",
@@ -823,6 +860,11 @@
                         
                         $('#achievement1').val("0").attr('disabled',false);
                         
+                    }else if(result1.content == "4"){
+                        $('.appl1').hide();
+                        $('.unappl1').hide();
+                        
+                        $('#achievement1').val("0").attr('disabled',true);
                     }else{
                         $('.appl1').show();
                         $('.unappl1').hide();
@@ -850,6 +892,11 @@
                         $('.unappl2').hide();
                         
                         $('#achievement2').val("0").attr('disabled',false);
+                    }else if(result2.content == "4"){
+                        $('.appl2').hide();
+                        $('.unappl2').hide();
+                        
+                        $('#achievement2').val("0").attr('disabled',true);
                     }else{
                         $('.appl2').show();
                         $('.unappl2').hide();
@@ -877,6 +924,11 @@
                         $('.unappl3').hide();
                         
                         $('#achievement3').val("0").attr('disabled',false);
+                    }else if(result3.content == "4"){
+                        $('.appl3').hide();
+                        $('.unappl3').hide();
+                        
+                        $('#achievement3').val("0").attr('disabled',true);
                     }else{
                         $('.appl3').show();
                         $('.unappl3').hide();
@@ -904,6 +956,11 @@
                         $('.unappl4').hide();
                         
                         $('#achievement4').val("0").attr('disabled',false);
+                    }else if(result4.content == "4"){
+                        $('.appl4').hide();
+                        $('.unappl4').hide();
+                        
+                        $('#achievement4').val("0").attr('disabled',true);
                     }else{
                         $('.appl4').show();
                         $('.unappl4').hide();
@@ -1001,8 +1058,9 @@
                 var v_idrole    = $("#idrole").val();
                 var v_dataid    = $("#periode").val();
                 var v_data_id   = v_dataid.split("###");;
-                var id_monper   = monper_1;
-                var tahun       = v_data_id[1];
+                var id_monper   = v_data_id[0];
+//                var id_monper   = monper_1;
+                var tahun_v     = v_data_id[1];
                 
                 $.ajax({
                     type: "GET",
@@ -1012,7 +1070,7 @@
                         console.log(id_activity_1);
                         if(sts == 'yearly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Code</span> <span class="lang_indo">Kode</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
                                       <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span> <span class="lang_indo">Satuan</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
@@ -1039,7 +1097,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "ajax": {
-                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+id_monper+'/'+tahun_v,
                                     dataSrc: 'content',
                                 },
                                 "searching": true,
@@ -1141,7 +1199,7 @@
                             
                         }else if(sts == 'semesterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Code</span> <span class="lang_indo">Kode</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
                                       <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span> <span class="lang_indo">Satuan</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
@@ -1167,7 +1225,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "ajax": {
-                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+id_monper+'/'+tahun_v,
                                     dataSrc: 'content',
                                 },
                                 "searching": true,
@@ -1267,7 +1325,7 @@
                             $(".app4").hide();
                         }else if(sts == 'quarterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Code</span> <span class="lang_indo">Kode</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indicator</span> </th> \n\
                                       <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span> <span class="lang_indo">Satuan</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
@@ -1294,7 +1352,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "ajax": {
-                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+monper_1+'/'+tahun_1,
+                                    "url": urls+'list-entry-non_gov-indicator/'+id_program_1+'/'+id_activity_1+'/'+id_role_1+'/'+id_monper+'/'+tahun_v,
                                     dataSrc: 'content',
                                 },
                                 "searching": true,

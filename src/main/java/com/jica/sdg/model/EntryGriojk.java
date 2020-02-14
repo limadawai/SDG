@@ -24,6 +24,12 @@ public class EntryGriojk implements Serializable {
     
     @Column(nullable = false, length = 255)
     private String file2;
+    
+    @Column(nullable = false, length = 11)
+    private Integer approval;
+    
+    @Column(nullable = false, length = 255)
+    private String description;
 
     public EntryGriojk(Integer id, String company_name, Integer year, String file1, String file2) {
         this.id = id;
@@ -31,6 +37,16 @@ public class EntryGriojk implements Serializable {
         this.year = year;
         this.file1 = file1;
         this.file2 = file2;
+    }
+
+    public EntryGriojk(Integer id, String company_name, Integer year, String file1, String file2, Integer approval, String description) {
+        this.id = id;
+        this.company_name = company_name;
+        this.year = year;
+        this.file1 = file1;
+        this.file2 = file2;
+        this.approval = approval;
+        this.description = description;
     }
     
     
@@ -73,6 +89,22 @@ public class EntryGriojk implements Serializable {
 
     public void setFile2(String file2) {
         this.file2 = file2;
+    }
+
+    public Integer getApproval() {
+        return approval;
+    }
+
+    public void setApproval(Integer approval) {
+        this.approval = approval;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     
