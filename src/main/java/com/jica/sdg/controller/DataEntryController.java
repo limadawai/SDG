@@ -158,7 +158,7 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-monper/{id}")
     public @ResponseBody Map<String, Object> getOptionMonperList(@PathVariable("id") String id) {
-        String sql  = "select * from ran_rad as a where a.id_prov = :id ";
+        String sql  = "select * from ran_rad as a where a.id_prov = :id and a.status = 'on Going'";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
