@@ -130,7 +130,7 @@
         $("#divgoals").empty();
         $("#divtarget").empty();
         $("#indi").empty();
-        if (valdaerah != "0") {
+        if (valdaerah != "0" && != "00") {
             $.ajax({
                 url: urls + "getrolebyidprov",
                 type: 'get',
@@ -262,13 +262,13 @@
                                     cache: false,
                                     success: function (resgovmap) {
                                         //console.log(resgovmap);
-                                        $("#goals").empty();
-                                        $("#target").empty();
-                                        $("#indikator").empty();
+                                        //$("#goals").empty();
+                                        //$("#target").empty();
+                                        //$("#indikator").empty();
                                         for (var i = 0; i < resgovmap.length; i++) {
-                                            $("#goals").append("<option value='" + resgovmap[i][9] + "'>" + resgovmap[i][10] + "</option>");
-                                            $("#target").append("<option value='" + resgovmap[i][12] + "'>" + resgovmap[i][13] + "</option>");
-                                            $("#indikator").append("<option value='" + resgovmap[i][15] + "'>" + resgovmap[i][16] + "</option>");
+                                            //$("#goals").append("<option value='" + resgovmap[i][9] + "'>" + resgovmap[i][10] + "</option>");
+                                            //$("#target").append("<option value='" + resgovmap[i][12] + "'>" + resgovmap[i][13] + "</option>");
+                                            //$("#indikator").append("<option value='" + resgovmap[i][15] + "'>" + resgovmap[i][16] + "</option>");
                                             var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + resgovmap[i][16] + "</p></div>";
                                             $("#indi").append(p);
                                             idgovindi.push(resgovmap[i][6]);
@@ -368,7 +368,6 @@
                                                 data: {'id_indicator':resgovmap[i][5], 'id_role':$("#role").val()},
                                                 dataType: 'json',
                                                 cache: false,
-                                                async: false,
                                                 success: function (resindi) {
                                                 	//console.log(resindi.length);
                                                 	$("td#tda4").text(resindi[0]);

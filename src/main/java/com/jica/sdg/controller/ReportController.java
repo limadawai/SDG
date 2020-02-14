@@ -338,6 +338,9 @@ public class ReportController {
         List list = query.getResultList();
         return list;
     }
+    
+    // ****************************** Get All by ID Prov ******************************
+    
 
     // ****************************** Report Grafik ******************************
 
@@ -366,7 +369,7 @@ public class ReportController {
 
     @GetMapping("admin/graphidgovindi")
     public @ResponseBody List<Object> idGovIndi(@RequestParam("id_indicator") int idindi) {
-        String sql = "SELECT id_gov_indicator FROM gov_map WHERE id_indicator = :id_indicator ORDER BY id_gov_indicator ASC";
+        String sql = "SELECT id_gov_indicator, id_monper FROM gov_map WHERE id_indicator = :id_indicator ORDER BY id_gov_indicator ASC";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_indicator", idindi);
         List list = query.getResultList();
@@ -387,7 +390,7 @@ public class ReportController {
 
     @GetMapping("admin/graphidnsaindi")
     public @ResponseBody List<Object> idNsaIndi(@RequestParam("id_indicator") int idindi) {
-        String sql = "SELECT id_nsa_indicator FROM nsa_map WHERE id_indicator = :id_indicator ORDER BY id_nsa_indicator ASC";
+        String sql = "SELECT id_nsa_indicator, id_monper FROM nsa_map WHERE id_indicator = :id_indicator ORDER BY id_nsa_indicator ASC";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_indicator", idindi);
         List list = query.getResultList();
@@ -410,9 +413,9 @@ public class ReportController {
 
     //====================== Grafik Detail ======================
     
-    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{id}/{flag}")
+    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{id}/{idmonper}/{flag}")
     public String grafikdetail(Model model, HttpSession session, @PathVariable("idsdg") String idsdg, @PathVariable("idtar") String idtar,
-    		@PathVariable("idindi") String idindi, @PathVariable("id") String id, @PathVariable("flag") String flag) {
+    		@PathVariable("idindi") String idindi, @PathVariable("id") String id, @PathVariable("idmonper") String idmonper, @PathVariable("flag") String flag) {
         model.addAttribute("title", "Report Graphic Detail");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
@@ -420,6 +423,7 @@ public class ReportController {
         model.addAttribute("idtar", idtar);
         model.addAttribute("idsdgindikator", idindi);
         model.addAttribute("idindikator", id);
+        model.addAttribute("idmonper", idmonper);
         model.addAttribute("flag", flag);
         return "admin/report/graphdetail";
     }
@@ -508,63 +512,83 @@ public class ReportController {
         List list = query.getResultList();
         return list;
     }
-
-    @GetMapping("admin/sumrealyear")
-    public @ResponseBody List<Object> sumrealyear(@RequestParam("id_gov_indicator") int id) {
-        String sql ="SELECT year_entry, achievement1 FROM entry_gov_indicator " +
-                "WHERE id_monper = (SELECT id_monper FROM gov_map WHERE id_gov_indicator = :id_gov_indicator)";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_gov_indicator", id);
+    
+    @GetMapping("admin/targetgov")
+    public @ResponseBody List<Object> targetgov(@RequestParam("id_gov_indicator") int idindi, @RequestParam("year") String tahun) {
+    	String sql = "SELECT value FROM gov_target WHERE id_gov_indicator = :id_gov_indicator AND year = :year";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_gov_indicator", idindi);
+    	query.setParameter("year", tahun);
         List list = query.getResultList();
         return list;
     }
-
-    @GetMapping("admin/sumrealsemester")
-    public @ResponseBody List<Object> sumrealsemester(@RequestParam("id_gov_indicator") int id) {
-        String sql ="SELECT year_entry, achievement1, achievement2 FROM entry_gov_indicator " +
-                "WHERE id_monper = (SELECT id_monper FROM gov_map WHERE id_gov_indicator = :id_gov_indicator)";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_gov_indicator", id);
+    
+    @GetMapping("admin/targetnsa")
+    public @ResponseBody List<Object> targetnsa(@RequestParam("id_nsa_indicator") int idindi, @RequestParam("year") String tahun) {
+    	String sql = "SELECT value FROM nsa_target WHERE id_nsa_indicator = :id_nsa_indicator AND year = :year";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_nsa_indicator", idindi);
+    	query.setParameter("year", tahun);
         List list = query.getResultList();
         return list;
     }
-
-    @GetMapping("admin/sumrealquarter")
-    public @ResponseBody List<Object> sumrealquarter(@RequestParam("id_gov_indicator") int id) {
-        String sql ="SELECT year_entry, achievement1, achievement2, achievement3, achievement4 FROM entry_gov_indicator " +
-                "WHERE id_monper = (SELECT id_monper FROM gov_map WHERE id_gov_indicator = :id_gov_indicator)";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_gov_indicator", id);
+    
+    @GetMapping("admin/realgovyear")
+    public @ResponseBody List<Object> realgov(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun) {
+    	String sql = "SELECT achievement1 FROM entry_gov_indicator WHERE year_entry = :year AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_monper", idmonper);
+    	query.setParameter("year", tahun);
         List list = query.getResultList();
         return list;
     }
-
-    @GetMapping("admin/sumrealyearnsa")
-    public @ResponseBody List<Object> sumrealyearnsa(@RequestParam("id_nsa_indicator") int id) {
-        String sql ="SELECT year_entry, achievement1 FROM entry_nsa_indicator " +
-                "WHERE id_monper = (SELECT id_monper FROM nsa_map WHERE id_nsa_indicator = :id_nsa_indicator)";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_nsa_indicator", id);
+    
+    @GetMapping("admin/realgovsemester")
+    public @ResponseBody List<Object> realgovsemester(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun) {
+    	String sql = "SELECT achievement1, achievement2 FROM entry_gov_indicator WHERE year_entry = :year AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_monper", idmonper);
+    	query.setParameter("year", tahun);
         List list = query.getResultList();
         return list;
     }
-
-    @GetMapping("admin/sumrealsemesternsa")
-    public @ResponseBody List<Object> sumrealsemesternsa(@RequestParam("id_nsa_indicator") int id) {
-        String sql ="SELECT year_entry, achievement1, achievement2 FROM entry_nsa_indicator " +
-                "WHERE id_monper = (SELECT id_monper FROM nsa_map WHERE id_nsa_indicator = :id_nsa_indicator)";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_nsa_indicator", id);
+    
+    @GetMapping("admin/realgovquarter")
+    public @ResponseBody List<Object> realgovquarter(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun) {
+    	String sql = "SELECT achievement1, achievement2, achievement3, achievement4 FROM entry_gov_indicator WHERE year_entry = :year AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_monper", idmonper);
+    	query.setParameter("year", tahun);
         List list = query.getResultList();
         return list;
     }
-
-    @GetMapping("admin/sumrealquarternsa")
-    public @ResponseBody List<Object> sumrealquarternsa(@RequestParam("id_nsa_indicator") int id) {
-        String sql ="SELECT year_entry, achievement1, achievement2, achievement3, achievement4 FROM entry_nsa_indicator " +
-                "WHERE id_monper = (SELECT id_monper FROM nsa_map WHERE id_nsa_indicator = :id_nsa_indicator)";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_nsa_indicator", id);
+    
+    @GetMapping("admin/realnsayear")
+    public @ResponseBody List<Object> realnsayear(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun) {
+    	String sql = "SELECT achievement1 FROM entry_nsa_indicator WHERE year_entry = :year AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_monper", idmonper);
+    	query.setParameter("year", tahun);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/realnsasemester")
+    public @ResponseBody List<Object> realnsasemester(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun) {
+    	String sql = "SELECT achievement1 FROM entry_nsa_indicator WHERE year_entry = :year AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_monper", idmonper);
+    	query.setParameter("year", tahun);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/realnsaquarter")
+    public @ResponseBody List<Object> realnsaquarter(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun) {
+    	String sql = "SELECT achievement1 FROM entry_nsa_indicator WHERE year_entry = :year AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_monper", idmonper);
+    	query.setParameter("year", tahun);
         List list = query.getResultList();
         return list;
     }

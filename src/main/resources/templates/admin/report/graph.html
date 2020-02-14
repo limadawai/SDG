@@ -69,10 +69,14 @@
 
         function indo() {
             $("#title").text("Grafik hasil Pelaporan");
+            $("#patas").text("Pemerintah");
+            $("#pbawah").text("Non-Pemerintah");
         }
 
         function inggris() {
             $("#title").text("Monitoring Graph");
+            $("#patas").text("Government");
+            $("#pbawah").text("Non-Government");
         }
 
         // ********************** Fungsi pilih select option **********************
@@ -124,13 +128,13 @@
                 dataType: 'json',
                 cache: false,
                 success: function (result) {
-                    //console.log(result);
+                    //console.log(result[0][1]);
                     $("#kananatas").empty();
                     for (var i=0; i<result.length; i++) {
                         $.ajax({
                             url: urls + "isigovmap",
                             type: 'get',
-                            data: 'id='+result[i],
+                            data: 'id='+result[i][0],
                             dataType: 'json',
                             cache: false,
                             success: function (resin) {
@@ -143,7 +147,7 @@
                                             isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
                                                 isi += "<ol>";
                                                     isi += "<li id='cucukanan' class='file' style='padding:6px'>" +
-                                                    	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+0+")'>" + resin[i][4] + "</a>" +
+                                                    	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+result[0][1]+","+0+")'>" + resin[i][4] + "</a>" +
                                                     	"</li>";
                                                 isi += "</ol>";
                                             isi += "</li>";
@@ -165,7 +169,7 @@
                 dataType: 'json',
                 cache: false,
                 success: function (result) {
-                    // console.log(result);
+                    //console.log(result);
                     $("#kananbawah").empty();
                     for (var i=0; i<result.length; i++) {
                         $.ajax({
@@ -184,7 +188,7 @@
                                     isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
                                     isi += "<ol>";
                                     isi += "<li id='cucukanan' class='file' style='padding:6px'>" +
-                                	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+1+")'>" + resin[i][4] + "</a>" +
+                                	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+result[0][1]+","+1+")'>" + resin[i][4] + "</a>" +
                                 	"</li>";
                                     isi += "</ol>";
                                     isi += "</li>";
@@ -200,9 +204,9 @@
             });
         }
 
-        function cucukanan(idsdg, idtar, idindi, id, flag) {
+        function cucukanan(idsdg, idtar, idindi, id, idmonper, flag) {
         	//alert(idsdg+" "+idtar+" "+idindi+" "+id+" "+flag);
-            window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+flag);
+            window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmonper+"/"+flag);
         }
 
     </script>
