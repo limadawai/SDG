@@ -350,13 +350,16 @@
                         var sts = result1.content;
 //                        console.log(sts);
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
+                        if(sts == 'yearly'){
+                        	$("#period").trigger('change');
+                        }
                     }
                 });
             }else{
@@ -366,13 +369,16 @@
                     success: function (result1) {
                         var sts = result1.content;
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
+                        if(sts == 'yearly'){
+                        	$("#period").trigger('change');
+                        }
                     }
                 });
             }
@@ -400,13 +406,16 @@
                         var sts = result1.content;
 //                        console.log(sts);
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
+                        if(sts == 'yearly'){
+                        	$("#period").trigger('change');
+                        }
                     }
                 });
             }else{
@@ -416,13 +425,16 @@
                     success: function (result1) {
                         var sts = result1.content;
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
+                        if(sts == 'yearly'){
+                        	$("#period").trigger('change');
+                        }
                     }
                 });
             }

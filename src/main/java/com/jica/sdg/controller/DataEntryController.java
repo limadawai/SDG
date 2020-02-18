@@ -451,6 +451,18 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-sts-monper-sdg/{id_monper}")
+    public @ResponseBody Map<String, Object> getGetStsMonpersdg(@PathVariable("id_monper") String id_monper) {
+        String sql  = "select sdg_indicator from ran_rad as a where a.id_monper = :id_monper ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-get-sts-monper-nongov/{id_monper}")
     public @ResponseBody Map<String, Object> getGetStsMonpernonGov(@PathVariable("id_monper") String id_monper) {
         String sql  = "select nsa_prog_bud from ran_rad as a where a.id_monper = :id_monper ";

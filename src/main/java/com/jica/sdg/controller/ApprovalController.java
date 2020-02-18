@@ -71,29 +71,31 @@ public class ApprovalController {
 		approvalService.save(app);
 	}
 	
-    @GetMapping("admin/get-approve/{type}/{year}/{id_monper}/{periode}")
-    public @ResponseBody Map<String, Object> getApprove(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode) {
-        String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode";
+    @GetMapping("admin/get-approve/{type}/{year}/{id_monper}/{periode}/{id_role}")
+    public @ResponseBody Map<String, Object> getApprove(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode, @PathVariable("id_role") Integer id_role) {
+        String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and id_role = :id_role";
         Query query = em.createNativeQuery(sql);
         query.setParameter("year", year);
         query.setParameter("id_monper", id_monper);
         query.setParameter("type", type);
         query.setParameter("periode", periode);
+        query.setParameter("id_role", id_role);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
     
-    @DeleteMapping("admin/unapply/{type}/{year}/{id_monper}/{periode}")
+    @DeleteMapping("admin/unapply/{type}/{year}/{id_monper}/{periode}/{id_role}")
     @ResponseBody    
     @Transactional
-    public void deleteUnit(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode) {
-    	Query query = em.createNativeQuery("delete from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode");
+    public void deleteUnit(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode, @PathVariable("id_role") Integer id_role) {
+    	Query query = em.createNativeQuery("delete from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and id_role = :id_role");
     	query.setParameter("year", year);
         query.setParameter("id_monper", id_monper);
         query.setParameter("type", type);
         query.setParameter("periode", periode);
+        query.setParameter("id_role", id_role);
         query.executeUpdate();
     } 
 	
