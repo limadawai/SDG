@@ -374,17 +374,21 @@
 							var warna = "btn-primary";
 							var text = "Approve";
 							var hide = "";
+							var kelas = "approve"
 							if(row[3]==2){
 								text = "Unapprove";
 								warna = "btn-success";
+								kelas = "unapprove";
 							}else if(row[3]==3){
 								text = "Reject";
 								warna = "btn-danger";
+								kelas = "approve";
 							}else if(row[3]==4){
 								hide = 'display:none';
+								kelas = "approve";
 							}
 							return "<div style='text-align:center;"+hide+"'>"+
-							'<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" type="button" title="approve" class="btn '+warna+' approve">'+text+'</div>';
+							'<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" type="button" title="approve" class="btn '+warna+' '+kelas+' ">'+text+'</div>';
 						}},
 				],
 				"columnDefs": [
@@ -442,6 +446,42 @@
                 	$('.tombol-new').show();
                 }
                 $(".tabel-entri-sdg").show();
+            }).on('click', '.unapprove', function(){
+            	var id = $(this).data("id");
+            	swal({
+                    title: titleDel,
+                    text: "",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttDel1
+                }).then(function () {
+                	var data = JSON.stringify({
+    					'id':id,
+    					'approval':'1',
+    					'description':""
+    					});
+                	$.ajax({
+    					type: "POST",
+                        url: urls+'update-approval',
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        headers:{'Accept':'application/json','Content-Type':'application/json'},
+    					data: data,
+                        success: function (result) {
+                        	var data_id     = $("#period").val().split("###");;
+                            var id_monper   = data_id[0];
+                            var tahun       = data_id[1];
+                            var period       = data_id[2];
+                            table.ajax.url(urls+'list-role-approval/'+id_monper+'/'+tahun+'/entry_sdg/'+period).load();
+                        },
+                    });
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
+                });
             });
             
             $('#myModal').on('hidden.bs.modal',function(){
