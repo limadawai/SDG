@@ -66,11 +66,15 @@
                                                     <span class="lang_eng" style="display:none">No</span>
                                                     <span class="lang_indo">No</span>
                                                 </th>
-                                                <th style="text-align:center;font-size:80%;" width="60%">
+                                                <th style="text-align:center;font-size:80%;" width="50%">
                                                     <span class="lang_eng" style="display:none">Name</span>
                                                     <span class="lang_indo">Nama</span>
                                                 </th>
-                                                <th style="text-align:center;font-size:80%;" width="20%">
+                                                <th style="text-align:center;font-size:80%;" width="15%">
+                                                    <span class="lang_eng" style="display:none">Status</span>
+                                                    <span class="lang_indo">Status</span>
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;" width="15%">
                                                     <span class="lang_eng" style="display:none">Action</span>
                                                     <span class="lang_indo">Aksi</span>
                                                 </th>
@@ -548,6 +552,18 @@
                         return "<div style='font-size:90%;'><a class='id_role' data-id='"+row[1]+"' data-monper='"+row[4]+"' data-type='"+v_type+"' data-periode='"+row[6]+"' data-nmrole='"+row[2]+"' data-approval='"+row[3]+"' href='#'>"+row[2]+"</a></div>";
                     }},
                     {"data": function (row, data, index, display) {
+                        if(row[3] == '1'){
+                            return "<span style='font-size:90%; background: #f5ff6e; text-align: center;'>Wait Approval</span>";
+                        }else if(row[3] == '2'){
+                            return "<span style='font-size:90%; background: #6eeaff; text-align: center;'>Approved</span>";
+                        }else if(row[3] == '3'){
+                            return "<span style='font-size:90%; background: #ffa6a6; text-align: center;'>Rejected</span>";
+                        }else if(row[3] == '4'){
+                            return "<span style='font-size:90%; background: #b5ffb5; text-align: center;'>Done</span>";
+                        }else{}
+                        
+                    }},
+                    {"data": function (row, data, index, display) {
                         var warna = "btn-primary";
                         if(row[3]==2){
                             warna = "btn-success";
@@ -556,7 +572,7 @@
                         }else if(row[3]==3){
                             warna = "btn-danger";
                             return "<div style='text-align:center;'>"+
-                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' approve">Reject</button></div>';
+                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unreject">UnReject</button></div>';
                         }else if(row[3]==1){
                             warna = "btn-primary";
                             return "<div style='text-align:center;'>"+
@@ -639,6 +655,31 @@
             $("#description").text((description?description:''));
             $("#myModal").modal('show');	
         }).on('click', ".unapprove", function(e){
+            var id          = $(this).data("id");
+            var data = JSON.stringify({
+                        'id':id,
+                        'approval':'1',
+                        'description':"-"
+            });
+            $.ajax({
+                type: "POST",
+                url: urls+'update-approval',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header,token);
+                },
+                headers:{'Accept':'application/json','Content-Type':'application/json'},
+                data: data,
+                success: function (result) {
+//                        var data_id     = $("#periode").val().split("###");;
+//                        var id_monper   = data_id[0];
+//                        var tahun       = data_id[1];
+                    $("#tabel-approve-gov-activity").hide();
+                    $("#tabel-approve-gov-indicator").hide();
+                    grid_role();
+                },
+            });
+            
+        }).on('click', ".unreject", function(e){
             var id          = $(this).data("id");
             var data = JSON.stringify({
                         'id':id,
@@ -883,7 +924,7 @@
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
                                         
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1036,7 +1077,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1204,7 +1245,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1382,7 +1423,7 @@
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
                                         
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1522,7 +1563,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1682,7 +1723,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
