@@ -51,6 +51,8 @@
                                     <span class="lang_indo">Tampil Laporan</span>
                                 </button>
                             </div>
+                            <input id="nmrol" type="hidden"/>
+                            <input id="idrol" type="hidden"/>
                             <div class="input-append pull-right">
                                 <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
                                 <span class="add-on"><i class="icon-search"></i></span>
@@ -711,6 +713,8 @@
             var periode     = $(this).data("periode");
             var nmrole      = $(this).data("nmrole");
             var approval    = $(this).data("approval");
+            $('#nmrol').val(nmrole);
+            $('#idrol').val(id_role);
             grid(id_role, id_monper, type, periode, nmrole, approval);
             $('.tombol-new').show();
             if(type == 'entry_nsa_budget'){
@@ -1959,11 +1963,13 @@
                 var achievement2_       = $('#achievement2_').val();
                 var achievement3_       = $('#achievement3_').val();
                 var achievement4_       = $('#achievement4_').val();
-                var v_idrole            = id_role_1;
+//                var v_idrole            = id_role_1;
                 var v_dataid            = $("#periode").val();
                 var v_data_id           = v_dataid.split("###");
                 var id_monper           = v_data_id[0];
                 var tahun               = $("#year_entry").val();
+                var nmrol               = $("#nmrol").val();
+                var v_idrole            = $("#idrol").val();
 //                alert('yess '+id_monper);
                 if (type == 'entry_nsa_budget'){
                     var ur = 'save-entry-non-gov_prog';
@@ -2013,8 +2019,12 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        $("#tabel-approve-gov-activity").hide();
-                        $("#tabel-approve-gov-indicator").hide();
+                        var pp      = $("#period").val();
+                        var app     = '1';
+                        console.log(v_idrole+' '+ id_monper+' '+ type+' '+ pp+' '+ nmrol+' '+ app)
+                        grid(v_idrole, id_monper, type, pp, nmrol, app);
+//                        $("#tabel-approve-gov-activity").hide();
+//                        $("#tabel-approve-gov-indicator").hide();
                     	$('.addModal').modal('hide');
                     },
                 });
