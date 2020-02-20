@@ -75,17 +75,41 @@ public class ReportController {
     }
     
     @GetMapping("admin/getentrysdg")
-    public @ResponseBody List<Object> getentry(@RequestParam("id_role") int idrole, @RequestParam("id_monper") int idmonper) {
-    	String sql = "SELECT a.*, z.sdg_indicator FROM entry_sdg a LEFT JOIN "
-    			+ "WHERE a.id_role = :id_role AND a.id_monper = :id_monper";
+    public @ResponseBody List<Object> getentry(@RequestParam("id_role") int idrole, @RequestParam("id_monper") int idmonper, 
+    		@RequestParam("year_entry") int year) {
+    	String sql = "SELECT a.*, b.sdg_indicator FROM entry_sdg a LEFT JOIN "
+    			+ "ran_rad b ON b.id_monper = :id_monper "
+    			+ "WHERE a.id_role = :id_role AND a.id_monper = :id_monper AND a.year_entry = :year_entry";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_role", idrole);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("year_entry", year);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getstartyear")
+    public @ResponseBody List<Object> getstartyear(@RequestParam("id_monper") int idmonper) {
+    	String sql = "SELECT start_year FROM ran_rad WHERE id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_monper", idmonper);
         List list = query.getResultList();
         return list;
     }
     
-    // ****************************** Get All by ID Prov ******************************
+    @GetMapping("admin/getsdgbyindi")
+    public @ResponseBody List<Object> getsdgbyindi(@RequestParam("id_indicator") int idindi) {
+    	String sql = "SELECT a.id, a.id_goals, a.id_target, a.nm_indicator, a.nm_indicator_eng, a.unit, "
+    			+ "b.id AS idgoals, b.nm_goals, b.nm_goals_eng, c.id AS idtarget, c.nm_target, c.nm_target_eng, d.nm_unit FROM sdg_indicator a LEFT JOIN "
+    			+ "sdg_goals b ON b.id = a.id_goals LEFT JOIN "
+    			+ "sdg_target c ON c.id = a.id_target LEFT JOIN "
+    			+ "ref_unit d ON d.id_unit = a.unit "
+    			+ "WHERE a.id = :id_indicator";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_indicator", idindi);
+        List list = query.getResultList();
+        return list;
+    }
     
 
     // ****************************** Report Grafik ******************************
