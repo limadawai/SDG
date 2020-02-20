@@ -331,7 +331,8 @@
 //
 //        
         $("#periode").on('change', function(e){
-            var data_id     = this.value.split("###");;
+            var data_id     = $(this).val().split("###");
+            sessionStorage.periode_gov  = $(this).val();
             var id_monper   = data_id[0];
             var tahun       = data_id[1];
             grid();

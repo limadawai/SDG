@@ -163,6 +163,7 @@
 
         $("#id_prov").on('change', function(e){
             var id_prov = this.value ;
+            sessionStorage.provinsi_gov  = id_prov;
             $.ajax({
                 type: "GET",
                 url: urls+'list-get-option-role-gov-profil/'+id_prov,
@@ -172,6 +173,9 @@
                     if (array != '') {
                         for (i in array) {
                             $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                        }
+                        if(sessionStorage.idrole_gov && sessionStorage.periode_gov && sessionStorage.provinsi_gov){
+                        	$("#idrole").val(sessionStorage.idrole_gov);
                         }
                     }
                     grid();
@@ -195,6 +199,9 @@
                             }
 
                         }
+                        if(sessionStorage.idrole_gov && sessionStorage.periode_gov && sessionStorage.provinsi_gov){
+                        	$("#periode").val(sessionStorage.periode_gov).trigger("change");
+                        }
                     }
                 }
             });
@@ -212,7 +219,8 @@
 //        }
         
         $("#periode").on('change', function(e){
-            var data_id     = this.value.split("###");
+            var data_id     = $(this).val().split("###");
+            sessionStorage.periode_gov  = $(this).val();
             var id_monper   = data_id[0];
             var tahun       = data_id[1];
             grid();
@@ -229,12 +237,17 @@
 //        }
 
         $("#idrole").on('change', function(e){
-            var data_id     = this.value.split("###");;
+            var data_id     = $(this).val().split("###");
+            sessionStorage.idrole_gov  = $(this).val();
 //            var id_monper   = data_id[0];
 //            var tahun       = data_id[1];
             grid();
 //            sessionStorage.role_gov  = $("#idrole").val();
         });
+        
+        if(sessionStorage.idrole_gov && sessionStorage.periode_gov && sessionStorage.provinsi_gov){
+        	$("#id_prov").val(sessionStorage.provinsi_gov).trigger("change");
+        }
         
 //        if(privilege != 'USER'){
 ////            var s_prov_gov  = sessionStorage.provinsi_gov

@@ -158,6 +158,18 @@
                     }
                 });
                 $("#sidebar li:first").addClass("active");
+                
+                function clearStorageDataEntry(){
+                	sessionStorage.removeItem("idrole_gov");
+                	sessionStorage.removeItem("periode_gov");
+                	sessionStorage.removeItem("provinsi_gov");
+                	sessionStorage.removeItem("idrole_nongov");
+                	sessionStorage.removeItem("periode_nongov");
+                	sessionStorage.removeItem("provinsi_nongov");
+                	sessionStorage.removeItem("idrole_target");
+                	sessionStorage.removeItem("periode_target");
+                	sessionStorage.removeItem("provinsi_target");
+                }
 
                 //===== Fungsi Bahasa Indonesia ======
                 function bahasa() {
@@ -190,6 +202,7 @@
                             		$("li.aktif > ul").empty();
                             	});
                                 $(this).on('click', function () {
+                                	clearStorageDataEntry();
                                     $.ajax({
                                         url: urls + 'submenu',
                                         type: 'get',
@@ -240,6 +253,7 @@
                             		$("li.aktif > ul").empty();
                             	});
                                 $(this).on('click', function () {
+                                	clearStorageDataEntry();
                                     $.ajax({
                                         url: urls+'submenu',
                                         type: 'get',
