@@ -125,7 +125,7 @@
 			                    </form>
 		                	</div>
                         </div>
-                        <div class="row-fluid">
+                        <div class="row-fluid" style="display:none">
                         	<div class="table-responsive">
 								<table class="table table-bordered">
 			                        <thead>
@@ -360,7 +360,9 @@
                         success :function(result){
                         },             
                      });
-                	swal(titleSave,messSave,'success');
+                	swal(titleSave,messSave,'success').then(function(){
+                		window.location.href =urls+"entry/sdg-target";
+                	});
                 },             
              });
         });

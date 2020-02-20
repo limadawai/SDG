@@ -1336,5 +1336,13 @@ public class RanRadSdgController {
         hasil.put("content",list);
         return hasil;
     }
+    
+    @GetMapping("admin/cek-period/{id_prov}/{start}/{end}")
+    public @ResponseBody Map<String, Object> cekPeriod(@PathVariable("id_prov") String id_prov, @PathVariable("start") Integer start, @PathVariable("end") Integer end) {
+        Integer list = monPeriodService.cekPeriode(id_prov, start, end);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
 	
 }

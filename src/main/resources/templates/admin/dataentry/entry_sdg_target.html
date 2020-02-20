@@ -224,8 +224,10 @@
             
             $("#id_prov").on('change', function(e){
                 var id_prov = this.value ;
+                sessionStorage.provinsi_target  = id_prov;
                 $.ajax({
                     type: "GET",
+                    async:false,
                     url: urls+'list-get-option-role-all-profil/'+id_prov,
                     success: function (result) {
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
@@ -234,13 +236,16 @@
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
+                            if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
+                            	$("#idrole").val(sessionStorage.idrole_target);
+                            }
                         }
-                        grid();
                     }
                 });
                 
                 $.ajax({
                     type: "GET",
+                    async:false,
                     url: urls+'list-get-option-monper/'+id_prov,
                     success: function (result1) {
                         $("#periode").html('<option value="0" >-- Pilih --</option>');
@@ -258,24 +263,33 @@
                                 } */
                                 
                             }
+                            if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
+                            	$("#periode").val(sessionStorage.periode_target);
+                            }
                         }
                     }
                 });
             });
             
             $("#periode").on('change', function(e){
-                var data_id     = this.value.split("###");;
+                var data_id     = $(this).val().split("###");
+                sessionStorage.periode_target  = $(this).val();
                 var id_monper   = data_id[0];
                 var tahun       = data_id[1];
                 grid();
             });
             
             $("#idrole").on('change', function(e){
-                var data_id     = this.value.split("###");;
+                var data_id     = $(this).val().split("###");
+                sessionStorage.idrole_target  = $(this).val();
                 var id_monper   = data_id[0];
                 var tahun       = data_id[1];
                 grid();
             });
+            
+            if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
+            	$("#id_prov").val(sessionStorage.provinsi_target).trigger("change");
+            }
             
             
             $('#teruskan').on('click', '#apply_btn', function(e){

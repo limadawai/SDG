@@ -149,7 +149,7 @@
                         <div class="modal-footer" id="simpan_">
                             <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
                             <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal" style="display: none">Close</button>
-                            <button type="button" id="simpan" class="btn btn-success lang_indo">
+                            <button type="button" id="simpan" class="btn btn-success">
                             	<span class="lang_indo">Simpan</span>
                             	<span class="lang_eng" style="display: none">Submit</span>
                             </button>
@@ -177,6 +177,9 @@
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
+                        	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
+                        		$("#idrole").append('<option value="all" >-- ALL --</option>');
+                        	} */
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
@@ -219,6 +222,9 @@
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
+                        	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
+                        		$("#idrole").append('<option value="all" >-- ALL --</option>');
+                        	} */
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
@@ -381,7 +387,7 @@
                         var sts = result1.content;
                         if(sts == 'yearly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                             <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
                             header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
@@ -402,23 +408,48 @@
                                     	var btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
                                     	$.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
                                             		if(apply[0][1]=="1"){
                                             			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
-                                            			btnApply1 = "";
+                                            		}else if(apply[0][1]=="2"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply1 = "<span class='label label-success'>Disetujui</span>";
+                            							}else{
+                            								btnApply1 = "<span class='label label-success'>Approved</span>";
+                            							}
+                                            		}else if(apply[0][1]=="4"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply1 = "<span class='label label-info'>Tampil Laporan</span>";
+                            							}else{
+                            								btnApply1 = "<span class='label label-info'>Show Report</span>";
+                            							}
                                             		}else if(apply[0][1]=="3"){
-                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-important'>Ditolak</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>Rejected</span>";
+                            							}
+                                            			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                            		}else if(apply[0][1]=="5"){
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-default'>Tidak ada aksi</span>";
+                            							}else{
+                            								label = "<span class='label label-default'>No Action</span>";
+                            							}
+                                            			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                             		}
                                             	}
                                             },
                                         });
                                         tabel.after(
                                         		'<tr>'+
+                                        			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
@@ -455,6 +486,9 @@
                                            	}
                                             return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
                                         }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[41]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[6]+"</div>";
@@ -530,7 +564,7 @@
                                     	}
                                     	$.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
@@ -563,7 +597,7 @@
                             
                         }else if(sts == 'semesterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                          <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization II</span> <span class="lang_indo">Realisasi SDG II</span> </th> ';
@@ -587,34 +621,82 @@
                                     	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
                                         $.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
                                             		if(apply[0][1]=="1"){
                                             			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
-                                            			btnApply1 = "";
+                                            		}else if(apply[0][1]=="2"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply1 = "<span class='label label-success'>Disetujui</span>";
+                            							}else{
+                            								btnApply1 = "<span class='label label-success'>Approved</span>";
+                            							}
+                                            		}else if(apply[0][1]=="4"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply1 = "<span class='label label-info'>Tampil Laporan</span>";
+                            							}else{
+                            								btnApply1 = "<span class='label label-info'>Show Report</span>";
+                            							}
                                             		}else if(apply[0][1]=="3"){
-                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-important'>Ditolak</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>Rejected</span>";
+                            							}
+                                            			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                            		}else if(apply[0][1]=="5"){
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-default'>Tidak ada aksi</span>";
+                            							}else{
+                            								label = "<span class='label label-default'>No Action</span>";
+                            							}
+                                            			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                             		}
                                             	}
                                             },
                                         });
                                         $.ajax({
                         					type: "GET",
-                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2',
+                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
                                             		if(apply[0][1]=="1"){
                                             			btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
-                                            			btnApply2 = "";
+                                            		}else if(apply[0][1]=="2"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply2 = "<span class='label label-success'>Disetujui</span>";
+                            							}else{
+                            								btnApply2 = "<span class='label label-success'>Approved</span>";
+                            							}
+                                            		}else if(apply[0][1]=="4"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply2 = "<span class='label label-info'>Tampil Laporan</span>";
+                            							}else{
+                            								btnApply2 = "<span class='label label-info'>Show Report</span>";
+                            							}
                                             		}else if(apply[0][1]=="3"){
-                                            			btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-important'>Ditolak</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>Rejected</span>";
+                            							}
+                                            			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                            		}else if(apply[0][1]=="5"){
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-default'>Tidak ada aksi</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>No Action</span>";
+                            							}
+                                            			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                             		}
                                             		
                                             	}
@@ -622,6 +704,7 @@
                                         });
                                         tabel.after(
                                         		'<tr>'+
+                                        			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
@@ -661,6 +744,9 @@
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[41]+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
@@ -734,7 +820,7 @@
                                     	}
                                     	$.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
@@ -821,7 +907,7 @@
                                     	}
                                     	$.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2',
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
@@ -853,7 +939,7 @@
                             
                         }else if(sts == 'quarterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                             <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
@@ -886,74 +972,171 @@
                                     	var btnApply4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
                                         $.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
                                             		if(apply[0][1]=="1"){
                                             			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
-                                            			btnApply1 = "";
+                                            		}else if(apply[0][1]=="2"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply1 = "<span class='label label-success'>Disetujui</span>";
+                            							}else{
+                            								btnApply1 = "<span class='label label-success'>Approved</span>";
+                            							}
+                                            		}else if(apply[0][1]=="4"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply1 = "<span class='label label-info'>Tampil Laporan</span>";
+                            							}else{
+                            								btnApply1 = "<span class='label label-info'>Show Report</span>";
+                            							}
                                             		}else if(apply[0][1]=="3"){
-                                            			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-important'>Ditolak</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>Rejected</span>";
+                            							}
+                                            			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-success unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                            		}else if(apply[0][1]=="5"){
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-default'>Tidak ada aksi</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>No Action</span>";
+                            							}
+                                            			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                             		}
                                             	}
                                             },
                                         });
                                         $.ajax({
                         					type: "GET",
-                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2',
+                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
                                             		if(apply[0][1]=="1"){
                                             			btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
-                                            			btnApply2 = "";
+                                            		}else if(apply[0][1]=="2"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply2 = "<span class='label label-success'>Disetujui</span>";
+                            							}else{
+                            								btnApply2 = "<span class='label label-success'>Approved</span>";
+                            							}
+                                            		}else if(apply[0][1]=="4"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply2 = "<span class='label label-info'>Tampil Laporan</span>";
+                            							}else{
+                            								btnApply2 = "<span class='label label-info'>Show Report</span>";
+                            							}
                                             		}else if(apply[0][1]=="3"){
-                                            			btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-important'>Ditolak</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>Rejected</span>";
+                            							}
+                                            			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-success unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                            		}else if(apply[0][1]=="5"){
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-default'>Tidak ada aksi</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>No Action</span>";
+                            							}
+                                            			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                             		}
                                             	}
                                             },
                                         });
                                         $.ajax({
                         					type: "GET",
-                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/3',
+                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
                                             		if(apply[0][1]=="1"){
                                             			btnApply3=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
-                                            			btnApply3 = "";
+                                            		}else if(apply[0][1]=="2"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply3 = "<span class='label label-success'>Disetujui</span>";
+                            							}else{
+                            								btnApply3 = "<span class='label label-success'>Approved</span>";
+                            							}
+                                            		}else if(apply[0][1]=="4"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply3 = "<span class='label label-info'>Tampil Laporan</span>";
+                            							}else{
+                            								btnApply3 = "<span class='label label-info'>Show Report</span>";
+                            							}
                                             		}else if(apply[0][1]=="3"){
-                                            			btnApply3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-important'>Ditolak</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>Rejected</span>";
+                            							}
+                                            			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Unapply" class="btn btn-success unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                            		}else if(apply[0][1]=="5"){
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-default'>Tidak ada aksi</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>No Action</span>";
+                            							}
+                                            			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                             		}
                                             	}
                                             },
                                         });
                                         $.ajax({
                         					type: "GET",
-                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/4',
+                        					url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
                                             	if(apply.length>0){
                                             		if(apply[0][1]=="1"){
                                             			btnApply4=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
-                                            		}else if(apply[0][1]=="2" || apply[0][1]=="4"){
-                                            			btnApply4 = "";
+                                            		}else if(apply[0][1]=="2"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply4 = "<span class='label label-success'>Disetujui</span>";
+                            							}else{
+                            								btnApply4 = "<span class='label label-success'>Approved</span>";
+                            							}
+                                            		}else if(apply[0][1]=="4"){
+                                            			if($("#fs").is(':checked')){
+                                            				btnApply4 = "<span class='label label-info'>Tampil Laporan</span>";
+                            							}else{
+                            								btnApply4 = "<span class='label label-info'>Show Report</span>";
+                            							}
                                             		}else if(apply[0][1]=="3"){
-                                            			btnApply4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-important'>Ditolak</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>Rejected</span>";
+                            							}
+                                            			btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Unapply" class="btn btn-success unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                            		}else if(apply[0][1]=="5"){
+                                            			var label;
+                                            			if($("#fs").is(':checked')){
+                                            				label = "<span class='label label-default'>Tidak ada aksi</span>";
+                            							}else{
+                            								label = "<span class='label label-important'>No Action</span>";
+                            							}
+                                            			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_sdg###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                             		}
                                             	}
                                             },
                                         });
                                         tabel.after(
                                         		'<tr>'+
+                                        			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
@@ -993,6 +1176,9 @@
                                            	}
                                             return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
                                         }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[41]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[6]+"</div>";
@@ -1113,7 +1299,7 @@
                                         	}
                                         	$.ajax({
                             					type: "GET",
-                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1',
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                                 async:false,
                                                 success: function (result) {
                                                 	apply = result.content;
@@ -1231,7 +1417,7 @@
                                         	}
                                         	$.ajax({
                             					type: "GET",
-                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2',
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                                 async:false,
                                                 success: function (result) {
                                                 	apply = result.content;
@@ -1333,7 +1519,7 @@
                                         	}
                                         	$.ajax({
                             					type: "GET",
-                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/3',
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
                                                 async:false,
                                                 success: function (result) {
                                                 	apply = result.content;
@@ -1434,7 +1620,7 @@
                                         	}
                                         	$.ajax({
                             					type: "GET",
-                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/4',
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
                                                 async:false,
                                                 success: function (result) {
                                                 	apply = result.content;
@@ -1694,7 +1880,7 @@
                 }).then(function () {
                 	$.ajax({
                         type: "DELETE",
-                        url: urls+'unapply/entry_sdg/'+year+'/'+id_monper+'/'+period,
+                        url: urls+'unapply/entry_sdg/'+year+'/'+id_monper+'/'+period+'/'+id_role,
                         beforeSend : function(xhr){
                         	xhr.setRequestHeader(header,token);
                         },

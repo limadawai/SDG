@@ -152,6 +152,7 @@
 
         $("#id_prov").on('change', function(e){
             var id_prov = this.value ;
+            sessionStorage.provinsi_nongov  = id_prov;
             $.ajax({
                 type: "GET",
                 url: urls+'list-get-option-role-nsa-profil/'+id_prov,
@@ -161,6 +162,9 @@
                     if (array != '') {
                         for (i in array) {
                             $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                        }
+                        if(sessionStorage.idrole_nongov && sessionStorage.periode_nongov && sessionStorage.provinsi_nongov){
+                        	$("#idrole").val(sessionStorage.idrole_nongov);
                         }
                     }
                     grid();
@@ -184,25 +188,33 @@
                             }
 
                         }
+                        if(sessionStorage.idrole_nongov && sessionStorage.periode_nongov && sessionStorage.provinsi_nongov){
+                        	$("#periode").val(sessionStorage.periode_nongov).trigger("change");
+                        }
                     }
                 }
             });
         });
 
         $("#periode").on('change', function(e){
-            var data_id     = this.value.split("###");;
+            var data_id     = $(this).val().split("###");
+            sessionStorage.periode_nongov  = $(this).val();
             var id_monper   = data_id[0];
             var tahun       = data_id[1];
             grid();
         });
 
         $("#idrole").on('change', function(e){
-            var data_id     = this.value.split("###");;
+            var data_id     = $(this).val().split("###");
+            sessionStorage.idrole_nongov  = $(this).val();
             var id_monper   = data_id[0];
             var tahun       = data_id[1];
             grid();
         });
 
+        if(sessionStorage.idrole_nongov && sessionStorage.periode_nongov && sessionStorage.provinsi_nongov){
+        	$("#id_prov").val(sessionStorage.provinsi_nongov).trigger("change");
+        }
 
         $('#teruskan').on('click', '#apply_btn', function(e){
             alert('button is not a function');

@@ -18,7 +18,6 @@
             <div style="width:100%">
                 <select id="daerah" name="daerah" class="form-control">
                     <option value="0" >-- Pilih Daerah --</option>
-                    <option value="00"> All </option>
                     <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
                 </select>
                 <select id="role" name="idrole" class="form-control">
@@ -40,23 +39,17 @@
                     <option value="0" >-- Pilih Indikator --</option>
                 </select>
             </div>
-            <div style="width:98%;padding:10px;border:1px solid #3ec1e9;">
-               	<p><b><u>List Goals</u></b></p>
-                <div id="divgoals" style="width:100%">
-                </div>
-            </div>
-            <div style="width:98%;padding:10px;border:1px solid #3ec1e9;margin-top:6px;">
-               	<p><b><u>List Target</u></b></p>
-                <div id="divtarget" style="width:100%;">
-                </div>
-            </div>
             <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon"><i class="icon-tasks"></i></span>
                     <h5 id="title">Laporan Hasil Monitor</h5>
                 </div>
                 <div class="widget-content">
-                    <div id="indi"></div>
+                    <div id="indi">
+	                	<!-- <div id="divgoals" style="width:100%"></div>
+	                	<div id="divtarget" style="width:100%"></div>
+                    	<table id="tabatas" class='table table-striped table-bordered'></table><br><br> -->
+                    </div>
                 </div>
             </div>
         </div>
@@ -88,48 +81,21 @@
 
     function indo() {
         $("#title").text("Laporan Hasil Monitor");
-        $("#tab11").text("Sumber Dana");
-        $("#tab12").text("Satuan");
-        $("#tab13").text("Baseline");
-        $("#tab14").text("Target");
-        $("#tab15").text("Aktual");
-        $("#tab16").text("Status");
-        $("#tb1").text("Nama Program");
-        $("#tb2").text("Aktifitas");
-        $("#tb3").text("Indikator");
-        $("#tb4").text("Satuan");
-        $("#tb6").text("Aktual");
-        $("#tb7").text("Budget Aktual");
-        $("#tb8").text("Sumber Pendanaan");
-        $("#tb9").text("Lokasi");
-        $("#tb10").text("Aktor");
+        $("#th1").text("Sumber Pendanaan");
+        $("#th2").text("Satuan");
+        $("#th3").text("Baseline");
     }
 
     function inggris() {
         $("#title").text("Monitoring Report");
-        $("#tab11").text("Funding Source");
-        $("#tab12").text("Unit");
-        $("#tab13").text("Baseline");
-        $("#tab14").text("Target");
-        $("#tab15").text("Actual");
-        $("#tab16").text("Status");
-        $("#tb1").text("Program Name");
-        $("#tb2").text("Activity");
-        $("#tb3").text("Indicator");
-        $("#tb4").text("Unit");
-        $("#tb6").text("Actual");
-        $("#tb7").text("Actual Budget");
-        $("#tb8").text("Funding Source");
-        $("#tb9").text("Location");
-        $("#tb10").text("Actor");
+        $("#th1").text("Funding Source");
+        $("#th2").text("Unit");
+        $("#th3").text("Baseline");
     }
 
     // ********************** Fungsi pilih select option Provinsi **********************
     $("#daerah").on("change", function(){
         var valdaerah = $(this).val();
-        $("#divgoals").empty();
-        $("#divtarget").empty();
-        $("#indi").empty();
         if (valdaerah != "0") {
             $.ajax({
                 url: urls + "getrolebyidprov",
@@ -138,7 +104,7 @@
                 dataType: 'json',
                 cache: false,
                 success: function(result) {
-                    // console.log(result);
+                    //console.log(result);
                     $("#role").empty();
                     $("#role").append("<option value='0'>-- Pilih Role --</option>");
                     for (var i=0; i<result.length; i++) {
@@ -170,9 +136,6 @@
     }
     $("#role").on("change", function(){
         var idrole = $(this).val();
-        $("#divgoals").empty();
-        $("#divtarget").empty();
-        $("#indi").empty();
         if (idrole != "0") {
             $.ajax({
                 url: urls + "getdatarole",
@@ -190,470 +153,119 @@
     });
 
     $("#periode").on("change", function(){
-        var idperiode = $(this).val();
+        var idmonper = $(this).val();
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
-        if (idperiode != "0") {
-            $.ajax({
-                url: urls + "getentryreport",
-                type: 'get',
-                data: 'id=' + idperiode,
-                dataType: 'json',
-                cache: false,
-                success: function (result) {
-                    if (result.length == 0) {
-                        swal("Data tidak ditemukan!");
-                        if (lang != "0") {
-                            swal("Data not found!");
-                        }
-                    }
-                    if (result[0][3] == "1") {
-                        var stat = result[0][3];
-                        if (idrole == "0") {
-                            swal("Anda harus memilih role");
-                            $(this).val("0").change();
-                        } else if (idprov == "0") {
-                            swal("Anda harus memilih provinsi");
-                        }
-                        // var catrole = result[0]['cat_role'];
-                        if (status == "Government") {
-                            var idprov = $("#daerah").val();
-                            //var idmonper = $("#periode").val();
-                            var idgovindi = [];
-                            var goalsindo = [];
-                            var goalseng = [];
-                            var targetindo = [];
-                            var targeteng = [];
-                            var idindi = [];
-                            if (idperiode != "0") {
-                            	/* ================ Get Goals Data ================ */
-                            	$.ajax({
-                            		url: urls + "getgovmapgoals",
-                                    type: 'get',
-                                    data: {'id_prov': idprov, 'id_monper': idperiode},
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (result) {
-                                    	//console.log(result[0][1]);
-                                    	for (var i=0; i<result.length; i++) {
-                                    		$("#divgoals").append("<p>" + result[i][1] + "</p>");
-                                    	}
-                                    }
-                            	});
-                            	/* ================ Get Target Data ================ */
-                            	$.ajax({
-                            		url: urls + "getgovmaptarget",
-                                    type: 'get',
-                                    data: {'id_prov': idprov, 'id_monper': idperiode},
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (result) {
-                                    	//console.log(result);
-                                    	for (var i=0; i<result.length; i++) {
-                                    		$("#divtarget").append("<p>" + result[i][1] + "</p>");
-                                    	}
-                                    }
-                            	});
-                                $.ajax({
-                                    url: urls+"getgovmap",
-                                    type: 'get',
-                                    data: {'id_prov': idprov, 'id_monper': idperiode},
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (resgovmap) {
-                                        //console.log(resgovmap);
-                                        $("#goals").empty();
-                                        $("#target").empty();
-                                        $("#indikator").empty();
-                                        for (var i = 0; i < resgovmap.length; i++) {
-                                            $("#goals").append("<option value='" + resgovmap[i][9] + "'>" + resgovmap[i][10] + "</option>");
-                                            $("#target").append("<option value='" + resgovmap[i][12] + "'>" + resgovmap[i][13] + "</option>");
-                                            $("#indikator").append("<option value='" + resgovmap[i][15] + "'>" + resgovmap[i][16] + "</option>");
-                                            var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + resgovmap[i][16] + "</p></div>";
-                                            $("#indi").append(p);
-                                            idgovindi.push(resgovmap[i][6]);
-                                            goalsindo.push(resgovmap[i][10]);
-                                            goalseng.push(resgovmap[i][11]);
-                                            targetindo.push(resgovmap[i][13]);
-                                            targeteng.push(resgovmap[i][14]);
-                                            idindi.push(resgovmap[i][5]);
-                                            //********************** Add table atas ********************
-                                            var pq = "<table  id='tabatas"+i+"' class='table table-striped table-bordered' style='width:60%'>";
-                                            pq += "<thead>";
-                                            pq += "<tr>";
-                                            pq += "<th id='tab11' rowspan='2'>Sumber Dana</th>";
-                                            pq += "<th id='tab12' rowspan='2'>Satuan</th>";
-                                            pq += "<th id='tab13' rowspan='2'>Baseline</th>";
-                                            pq += "<th id='tab14' colspan='5'>Target</th>";
-                                            pq += "<th id='tab15' colspan='4'>Aktual</th>";
-                                            pq += "<th id='tab16' rowspan='2'>Status</th>";
-                                            pq += "</tr>";
-                                            pq += "<tr>";
-                                            pq += "<th>I</th>";
-                                            pq += "<th>II</th>";
-                                            pq += "<th>III</th>";
-                                            pq += "<th>IV</th>";
-                                            pq += "<th>V</th>";
-                                            pq += "<th>I</th>";
-                                            pq += "<th>II</th>";
-                                            pq += "<th>III</th>";
-                                            pq += "<th>IV</th>";
-                                            pq += "</tr>";
-                                            pq += "</thead>";
-                                            pq += "<tbody>";
-                                            pq += "<tr>";
-                                            pq += "<td id='tda1'></td>";
-                                            pq += "<td id='tda2'></td>";
-                                            pq += "<td id='tda3'></td>";
-                                            pq += "<td id='tda4' style='text-align:center;'></td>";
-                                            pq += "<td id='tda5' style='text-align:center;'></td>";
-                                            pq += "<td id='tda6' style='text-align:center;'></td>";
-                                            pq += "<td id='tda7' style='text-align:center;'></td>";
-                                            pq += "<td id='tda8' style='text-align:center;'></td>";
-                                            pq += "<td id='tda9' style='text-align:center;'></td>";
-                                            pq += "<td id='tda10' style='text-align:center;'></td>";
-                                            pq += "<td id='tda11' style='text-align:center;'></td>";
-                                            pq += "<td id='tda12' style='text-align:center;'></td>";
-                                            pq += "<td id='tda13'><div style='width:15px;height:15px;background:green;margin:0 auto;border-radius:50%;'></div></td>";
-                                            pq += "</tr>";
-                                            pq += "</tbody>";
-                                            pq += "</table>";
-                                            $("#divtab" + (i + 1)).append(pq);
-                                            var q = "<table  id='tabawah"+resgovmap[i][6]+"' class='table table-striped table-bordered' style='width:100%'>";
-                                            q += "<thead>";
-                                            q += "<tr>";
-                                            q += "<th id='tb1' rowspan='2' style='vertical-align:middle;'>Nama<br>Program</th>";
-                                            q += "<th id='tb2' rowspan='2' style='vertical-align:middle;'>Aktifitas</th>";
-                                            q += "<th id='tb3' rowspan='2' style='vertical-align:middle;'>Indikator</th>";
-                                            q += "<th id='tb4' rowspan='2' style='vertical-align:middle;'>Satuan</th>";
-                                            q += "<th id='tb5' rowspan='2' style='vertical-align:middle;'>Target</th>";
-                                            q += "<th id='tb6' colspan='5'>Aktual</th>";
-                                            q += "<th id='tb7' rowspan='2' style='vertical-align:middle;'>Budget<br>Aktual</th>";
-                                            q += "<th id='tb8' rowspan='2' style='vertical-align:middle;'>Sumber<br>Pendanaan</th>";
-                                            q += "<th id='tb9' rowspan='2' style='vertical-align:middle;'>Lokasi</th>";
-                                            q += "<th id='tb10' rowspan='2' style='vertical-align:middle;'>Pelaku</th>";
-                                            q += "</tr>";
-                                            q += "<tr>";
-                                            q += "<th>1</th>";
-                                            q += "<th>2</th>";
-                                            q += "<th>3</th>";
-                                            q += "<th>4</th>";
-                                            q += "<th>5</th>";
-                                            q += "</tr>";
-                                            q += "</thead>";
-                                            q += "<tbody></tbody>";
-                                            q += "</table>";
-                                            $("#divtab" + (i + 1)).append(q);
-                                            
-                                          //******************** Table Content ********************
-                                            $.ajax({
-                                                url: urls + "sdgfunding",
-                                                type: 'get',
-                                                data: 'id_indicator=' + resgovmap[i][5],
-                                                dataType: 'json',
-                                                cache: false,
-                                                success: function (resfund) {
-                                                	//console.log(resfund[0][4]);
-                                                	for (var j=0; j<resfund.length; j++) {
-                                                		$("td#tda1").text(resfund[j][4]);
-                                                		$("td#tda2").text(resfund[j][5]);
-                                                		$("td#tda3").text(resfund[j][3]);
-                                                	}
-                                                }
-                                            });
-                                          
-                                            $.ajax({
-                                                url: urls + "sdginditarget",
-                                                type: 'get',
-                                                data: {'id_indicator':resgovmap[i][5], 'id_role':$("#role").val()},
-                                                dataType: 'json',
-                                                cache: false,
-                                                async: false,
-                                                success: function (resindi) {
-                                                	//console.log(resindi.length);
-                                                	$("td#tda4").text(resindi[0]);
-                                            		$("td#tda5").text(resindi[1]);
-                                            		$("td#tda6").text(resindi[2]);
-                                            		$("td#tda7").text(resindi[3]);
-                                            		$("td#tda8").text(resindi[4]);
-                                                }
-                                            });
-                                            
-                                            $.ajax({
-                                                url: urls + "entrysdg",
-                                                type: 'get',
-                                                data: {'id_indicator':resgovmap[i][5], 'id_role':$("#role").val()},
-                                                dataType: 'json',
-                                                cache: false,
-                                                async: false,
-                                                success: function (resindi) {
-                                                	console.log(resindi);
-                                                	$("td#tda9").text(resindi[0]);
-                                            		$("td#tda10").text(resindi[1]);
-                                            		$("td#tda11").text(resindi[2]);
-                                            		$("td#tda12").text(resindi[3]);
-                                                }
-                                            });
-                                        }
-
-                                        //******************** Table Content ********************
-
-                                        for (var i=0; i<idgovindi.length; i++) {
-                                            $.ajax({
-                                                url: urls + "govindicator",
-                                                type: 'get',
-                                                data: 'id_gov_indicator=' + idgovindi[i],
-                                                dataType: 'json',
-                                                cache: false,
-                                                success: function (resin) {
-                                                    // console.log(resin);
-                                                    for (var i=0; i<resin.length; i++) {
-                                                        var rowb = "<tr>";
-                                                        rowb += "<td>" + resin[i][5] + "</td>";
-                                                        if (resin[i][8] == null){resin[i][8] = "-"}
-                                                        rowb += "<td>" + resin[i][8] + "</td>";
-                                                        rowb += "<td>" + resin[i][1] + "</td>";
-                                                        rowb += "<td>" + resin[i][12] + "</td>";
-                                                        if (resin[i][11] == null){resin[i][11] = 0}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][11] + "</td>";
-                                                        if (resin[i][14] == null){resin[i][14] = "-"}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][14] + "</td>";
-                                                        if (resin[i][15] == null){resin[i][15] = "-"}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][15] + "</td>";
-                                                        if (resin[i][16] == null){resin[i][16] = "-"}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][16] + "</td>";
-                                                        if (resin[i][17] == null){resin[i][17] = "-"}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][17] + "</td>";
-                                                        rowb += "<td style='text-align:center;'>-</td>";
-                                                        rowb += "<td style='text-align:center;'>-</td>";
-                                                        if (resin[i][13] == null){resin[i][13] = "-"}
-                                                        rowb += "<td>" + resin[i][13] + "</td>";
-                                                        rowb += "<td style='text-align:center;'></td>";
-                                                        rowb += "<td style='text-align:center;'></td>";
-                                                        rowb += "</tr>";
-                                                        $("#tabawah" + idgovindi[i] + " > tbody").append(rowb);
-                                                    }
-                                                }
-                                            });
-                                        }
-
-                                        $('#fs').on('change', function(){
-                                            if($(this).is(':checked')){
-                                                $("#divgoals").empty();
-                                                for (var i=0; i<goalsindo.length; i++) {
-                                                    $("#divgoals").append("<p>" + goalsindo[i] + "</p>");
-                                                }
-                                                $("#divtarget").empty();
-                                                for (var i=0; i<targetindo.length; i++) {
-                                                    $("#divtarget").append("<p>" + targetindo[i] + "</p>");
-                                                }
-                                            } else {
-                                                $("#divgoals").empty();
-                                                for (var i=0; i<goalseng.length; i++) {
-                                                    $("#divgoals").append("<p>" + goalseng[i] + "</p>");
-                                                }
-                                                $("#divtarget").empty();
-                                                for (var i=0; i<targeteng.length; i++) {
-                                                    $("#divtarget").append("<p>" + targeteng[i] + "</p>");
-                                                }
-                                            }
-                                        });
-                                    }
-                                });
-                            } else {
-                                swal("Pilih periode terlebih dahulu!");
-                                if (lang != "0") {
-                                    swal("Please choose the period!");
-                                }
-                            }
-                        } else if (status == "NSA" || status == "Institution") {
-                            var idprov = $("#daerah").val();
-                            var idmonper = $("#periode").val();
-                            var idnsaindi = [];
-                            if (idmonper != "0") {
-                                $.ajax({
-                                    url: urls + "getnsamap",
-                                    type: 'get',
-                                    data: {'id_prov': idprov, 'id_monper': idmonper},
-                                    dataType: 'json',
-                                    cache: false,
-                                    success: function (resnsamap) {
-                                        // console.log(resnsamap);
-                                        $("#goals").empty();
-                                        $("#target").empty();
-                                        $("#indikator").empty();
-                                        $("#divgoals").empty();
-                                        $("#divtarget").empty();
-                                        for (var i = 0; i < resnsamap.length; i++) {
-                                            $("#goals").append("<option value='" + resnsamap[i][9] + "'>" + resnsamap[i][10] + "</option>");
-                                            $("#target").append("<option value='" + resnsamap[i][12] + "'>" + resnsamap[i][13] + "</option>");
-                                            $("#indikator").append("<option value='" + resnsamap[i][15] + "'>" + resnsamap[i][16] + "</option>");
-                                            $("#divgoals").append("<p>" + resnsamap[i][10] + "</p>");
-                                            $("#divtarget").append("<p>" + resnsamap[i][13] + "</p>");
-                                            var p = "<div id='divtab" + (i + 1) + "'><p id='p" + (i + 1) + "'>" + resnsamap[i][16] + "</p></div>";
-                                            $("#indi").append(p);
-                                            idnsaindi.push(resnsamap[i][6]);
-                                            //********************** Add table atas ********************
-                                            var pq = "<table  id='tabatas"+resnsamap[i][6]+"' class='table table-striped table-bordered' style='width:60%'>";
-                                            pq += "<thead>";
-                                            pq += "<tr>";
-                                            pq += "<th id='tab11'>Sumber Dana</th>";
-                                            pq += "<th id='tab12'>Satuan</th>";
-                                            pq += "<th id='tab13'>Baseline</th>";
-                                            pq += "<th id='tab14'>Target</th>";
-                                            pq += "<th id='tab15'>Aktual</th>";
-                                            pq += "<th id='tab16'>Status</th>";
-                                            pq += "</tr>";
-                                            pq += "</thead>";
-                                            pq += "<tbody></tbody>";
-                                            pq += "</table>";
-                                            $("#divtab" + (i + 1)).append(pq);
-                                            var q = "<table  id='tabawah"+resnsamap[i][6]+"' class='table table-striped table-bordered' style='width:100%'>";
-                                            q += "<thead>";
-                                            q += "<tr>";
-                                            q += "<th id='tb1' rowspan='2' style='vertical-align:middle;'>Nama<br>Program</th>";
-                                            q += "<th id='tb2' rowspan='2' style='vertical-align:middle;'>Aktifitas</th>";
-                                            q += "<th id='tb3' rowspan='2' style='vertical-align:middle;'>Indikator</th>";
-                                            q += "<th id='tb4' rowspan='2' style='vertical-align:middle;'>Satuan</th>";
-                                            q += "<th id='tb5' rowspan='2' style='vertical-align:middle;'>Target</th>";
-                                            q += "<th id='tb6' colspan='5'>Aktual</th>";
-                                            q += "<th id='tb7' rowspan='2' style='vertical-align:middle;'>Budget<br>Aktual</th>";
-                                            q += "<th id='tb8' rowspan='2' style='vertical-align:middle;'>Sumber<br>Pendanaan</th>";
-                                            q += "<th id='tb9' rowspan='2' style='vertical-align:middle;'>Lokasi</th>";
-                                            q += "<th id='tb10' rowspan='2' style='vertical-align:middle;'>Pelaku</th>";
-                                            q += "</tr>";
-                                            q += "<tr>";
-                                            q += "<th>1</th>";
-                                            q += "<th>2</th>";
-                                            q += "<th>3</th>";
-                                            q += "<th>4</th>";
-                                            q += "<th>5</th>";
-                                            q += "</tr>";
-                                            q += "</thead>";
-                                            q += "<tbody></tbody>";
-                                            q += "</table>";
-                                            $("#divtab" + (i + 1)).append(q);
-                                        }
-
-                                        //******************** Table Content ********************
-                                        for (var i=0; i< idnsaindi.length; i++) {
-                                            $.ajax({
-                                                url: urls + "nsafunding",
-                                                type: 'get',
-                                                data: 'id_indicator=' + idnsaindi[i],
-                                                dataType: 'json',
-                                                cache: false,
-                                                success: function (resfund) {
-                                                    console.log(resfund);
-                                                    for (var i = 0; i < resfund.length; i++) {
-                                                        var row = "<tr>";
-                                                        row += "<td>" + resfund[i][4] + "</td>";
-                                                        row += "<td style='text-align:center;'>" + resfund[i][5] + "</td>";
-                                                        row += "<td style='text-align:center;'>" + resfund[i][3] + "</td>";
-                                                        row += "<td style='text-align:center;'>" + resfund[i][6] + "</td>";
-                                                        row += "<td style='text-align:center;'>" + resfund[i][7] + "</td>";
-                                                        row += "<td style='text-align:center;vertical-align:middle;'>" +
-                                                            "<div style='width:15px;height:15px;background:green;margin:0 auto;border-radius:50%;'></div>" +
-                                                            "</td>";
-                                                        row += "</tr>";
-                                                        $("#tabatas" + idnsaindi[i] + " > tbody").append(row);
-                                                    }
-                                                }
-                                            });
-                                        }
-
-                                        for (var i=0; i<idnsaindi.length; i++) {
-                                            $.ajax({
-                                                url: urls + "nsaindicator",
-                                                type: 'get',
-                                                data: 'id_nsa_indicator=' + idnsaindi[i],
-                                                dataType: 'json',
-                                                cache: false,
-                                                success: function (resin) {
-                                                    // console.log(resin);
-                                                    for (var i=0; i<resin.length; i++) {
-                                                        var rowb = "<tr>";
-                                                        rowb += "<td>" + resin[i][5] + "</td>";
-                                                        rowb += "<td>" + resin[i][8] + "</td>";
-                                                        rowb += "<td>" + resin[i][1] + "</td>";
-                                                        rowb += "<td>" + resin[i][12] + "</td>";
-                                                        if (resin[i][11] == null){resin[i][11] = 0}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][11] + "</td>";
-                                                        if (resin[i][14] == null){resin[i][14] = "-"}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][14] + "</td>";
-                                                        if (resin[i][15] == null){resin[i][15] = "-"}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][15] + "</td>";
-                                                        if (resin[i][16] == null){resin[i][16] = "-"}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][16] + "</td>";
-                                                        if (resin[i][17] == null){resin[i][17] = "-"}
-                                                        rowb += "<td style='text-align:center;'>" + resin[i][17] + "</td>";
-                                                        rowb += "<td style='text-align:center;'>-</td>";
-                                                        rowb += "<td style='text-align:center;'></td>";
-                                                        if (resin[i][13] == null){resin[i][13] = "-"}
-                                                        rowb += "<td>" + resin[i][13] + "</td>";
-                                                        rowb += "<td style='text-align:center;'></td>";
-                                                        rowb += "<td style='text-align:center;'></td>";
-                                                        rowb += "</tr>";
-                                                        $("#tabawah" + idnsaindi[i] + " > tbody").append(rowb);
-                                                    }
-                                                }
-                                            });
-                                        }
-                                    }
-                                });
-                            } else {
-                                swal("Pilih periode terlebih dahulu!");
-                                if (lang != "0") {
-                                    swal("Please choose the period!");
-                                }
-                            }
-                        }
-                    } else {
-                        swal("Data not found");
-                    }
-                }
-            });
-        }
+        $.ajax({
+        	url: urls + "getentryshowreport",
+            type: 'get',
+            data: 'id_monper=' + idmonper,
+            dataType: 'json',
+            cache: false,
+            success: function (result) {
+            	//console.log(result);
+            	if (result.length == 0) {
+            		swal("Data tidak ditemukan!");
+            		if (lang == "1") {
+            			swal("Data not found!");
+            		}
+            	} else {
+            		var idrole = $("#role").val();
+            		for (var i=0; i<result.length; i++) {
+            			if (result[i][5] == "entry_sdg") {
+	                		$.ajax({
+	                			url: urls + "getentrysdg",
+	                            type: 'get',
+	                            data: {"id_role":idrole, "id_monper":result[i][1]},
+	                            dataType: 'json',
+	                            cache: false,
+	                            global: false,
+	                            success: function (result) {
+	                            	console.log(result);
+	                            	for (var i=0; i<result.length; i++) {
+	                            		var div = "<p id='goals"+(i+1)+"'></p>";
+	                            		div += "<p id='target"+(i+1)+"'></p>";
+	                            		div += "<p id='indikator"+(i+1)+"'></p>";
+	                            		div += "<table id='tabatas"+(i+1)+"' class='table table-striped table-bordered'></table>";
+	                            		$("#indi").append(div);
+	                            		if (result[i][15] == "yearly") {
+	                            			var tab = "<tr>";
+	                            	    	tab += "<th id='head1' style='vertical-align:middle;width:10%;' rowspan='4'>Sumber Pendanaan</th>";
+	                            	    	tab += "<th id='head2' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
+	                            	    	tab += "<th id='head3' style='vertical-align:middle;width:10%;' rowspan='4'>Baseline</th>";
+	                            	    	tab += "<th id='head3' style='vertical-align:middle;width:10%;' colspan='5'>Target</th>";
+	                            	    	tab += "<th id='head3' style='vertical-align:middle;width:10%;' colspan='5'>Realisasi</th>";
+	                            	    	tab += "<th id='head3' style='vertical-align:middle;width:10%;' rowspan='4'>Status</th>";
+	                            	    	tab += "</tr>";
+	                            	    	tab += "<tr>";
+	                            	    	tab += "<th id='htar1' style='vertical-align:middle;width:10%;' rowspan='3'>1920</th>";
+	                            	    	tab += "<th id='htar2' style='vertical-align:middle;width:10%;' rowspan='3'>1921</th>";
+	                            	    	tab += "<th id='htar3' style='vertical-align:middle;width:10%;' rowspan='3'>1922</th>";
+	                            	    	tab += "<th id='htar4' style='vertical-align:middle;width:10%;' rowspan='3'>1923</th>";
+	                            	    	tab += "<th id='htar5' style='vertical-align:middle;width:10%;' rowspan='3'>1924</th>";
+	                            	    	tab += "</tr>";
+	                            	    	tab += "<tr>";
+	                            	    	tab += "<th id='hreal1' style='vertical-align:middle;width:10%;' colspan='1'>1920</th>";
+	                            	    	tab += "<th id='hreal2' style='vertical-align:middle;width:10%;' colspan='1'>1921</th>";
+	                            	    	tab += "<th id='hreal3' style='vertical-align:middle;width:10%;' colspan='1'>1922</th>";
+	                            	    	tab += "<th id='hreal4' style='vertical-align:middle;width:10%;' colspan='1'>1923</th>";
+	                            	    	tab += "<th id='hreal5' style='vertical-align:middle;width:10%;' colspan='1'>1924</th>";
+	                            	    	tab += "</tr>";
+	                            	    	tab += "<tr>";
+	                            	    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+	                            	    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+	                            	    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+	                            	    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+	                            	    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+	                            	    	tab += "</tr>";
+	                            	    	$("#tabatas"+(i+1)).append(tab);
+	                            		}
+	                            	}
+	                            }
+	                		});
+            			} else if (result[i][5] == "entry_gov_indicator") {
+            				
+            			} else if (result[i][5] == "entry_nsa_indicator") {
+            				
+            			}
+            		}
+            	}
+            }
+        });
     });
-
-    // $("#goals").on("change", function(){
-    //     var idgoals = $(this).val();
-    //     if (idgoals != "0") {
-    //         $.ajax({
-    //             url: urls + "gettarget",
-    //             type: 'get',
-    //             data: 'id_goals=' + idgoals,
-    //             dataType: 'json',
-    //             cache: false,
-    //             success: function (result) {
-    //                 // console.log(result);
-    //                 for (var i = 0; i < result.length; i++) {
-    //                     $("#target").append("<option value='" + result[i]['id'] + "'>" + result[i]['nm_target'] + "</option>");
-    //                 }
-    //             }
-    //         });
-    //     }
-    // });
-    //
-    // $("#target").on("change", function(){
-    //     var valgoals = $("#goals :selected").val();
-    //     var valtarget = $(this).val();
-    //     if (valgoals != "0" && valtarget != "0") {
-    //         $.ajax({
-    //             url: urls + "getindicator",
-    //             type: 'get',
-    //             data: {id_goals:valgoals, id_target:valtarget},
-    //             dataType: 'json',
-    //             cache: false,
-    //             success: function (result) {
-    //                 // console.log(result);
-    //                 for (var i = 0; i < result.length; i++) {
-    //                     $("#indikator").append("<option value='" + result[i]['id'] + "'>" + result[i]['nm_indicator'] + "</option>");
-    //                 }
-    //             }
-    //         });
-    //     }
-    // });
+    
+    function tabatasheadyearly() {
+    	var tab = "<tr>";
+    	tab += "<th id='head1' style='vertical-align:middle;width:10%;' rowspan='4'>Sumber Pendanaan</th>";
+    	tab += "<th id='head2' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
+    	tab += "<th id='head3' style='vertical-align:middle;width:10%;' rowspan='4'>Baseline</th>";
+    	tab += "<th id='head3' style='vertical-align:middle;width:10%;' colspan='5'>Target</th>";
+    	tab += "<th id='head3' style='vertical-align:middle;width:10%;' colspan='5'>Realisasi</th>";
+    	tab += "<th id='head3' style='vertical-align:middle;width:10%;' rowspan='4'>Status</th>";
+    	tab += "</tr>";
+    	tab += "<tr>";
+    	tab += "<th id='htar1' style='vertical-align:middle;width:10%;' rowspan='3'>1920</th>";
+    	tab += "<th id='htar2' style='vertical-align:middle;width:10%;' rowspan='3'>1921</th>";
+    	tab += "<th id='htar3' style='vertical-align:middle;width:10%;' rowspan='3'>1922</th>";
+    	tab += "<th id='htar4' style='vertical-align:middle;width:10%;' rowspan='3'>1923</th>";
+    	tab += "<th id='htar5' style='vertical-align:middle;width:10%;' rowspan='3'>1924</th>";
+    	tab += "</tr>";
+    	tab += "<tr>";
+    	tab += "<th id='hreal1' style='vertical-align:middle;width:10%;' colspan='1'>1920</th>";
+    	tab += "<th id='hreal2' style='vertical-align:middle;width:10%;' colspan='1'>1921</th>";
+    	tab += "<th id='hreal3' style='vertical-align:middle;width:10%;' colspan='1'>1922</th>";
+    	tab += "<th id='hreal4' style='vertical-align:middle;width:10%;' colspan='1'>1923</th>";
+    	tab += "<th id='hreal5' style='vertical-align:middle;width:10%;' colspan='1'>1924</th>";
+    	tab += "</tr>";
+    	tab += "<tr>";
+    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+    	tab += "<th style='vertical-align:middle;width:10%;'>I</th>";
+    	tab += "</tr>";
+    }
+    
 </script>
 </body>
 </html>

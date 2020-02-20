@@ -23,11 +23,11 @@
                 <div class="widget-box">
                     <div class="widget-title lang_eng" id="judul-eng" style="display: none">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Government Program Monitoring Table</h5>
+                        <h5>Non Government Program Monitoring Table</h5>
                     </div>
                     <div class="widget-title lang_indo" id="judul-indo">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Tabel Monitor Program Pemerintah</h5>
+                        <h5>Tabel Monitor Program Non Pemerintah</h5>
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
@@ -325,7 +325,8 @@
 //
 //        
         $("#periode").on('change', function(e){
-            var data_id     = this.value.split("###");;
+            var data_id     = $(this).val().split("###");
+            sessionStorage.periode_nongov  = $(this).val();
             var id_monper   = data_id[0];
             var tahun       = data_id[1];
             grid();

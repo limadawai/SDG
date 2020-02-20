@@ -51,6 +51,8 @@
                                     <span class="lang_indo">Tampil Laporan</span>
                                 </button>
                             </div>
+                            <input id="nmrol" type="hidden"/>
+                            <input id="idrol" type="hidden"/>
                             <div class="input-append pull-right">
                                 <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
                                 <span class="add-on"><i class="icon-search"></i></span>
@@ -66,11 +68,15 @@
                                                     <span class="lang_eng" style="display:none">No</span>
                                                     <span class="lang_indo">No</span>
                                                 </th>
-                                                <th style="text-align:center;font-size:80%;" width="60%">
+                                                <th style="text-align:center;font-size:80%;" width="50%">
                                                     <span class="lang_eng" style="display:none">Name</span>
                                                     <span class="lang_indo">Nama</span>
                                                 </th>
-                                                <th style="text-align:center;font-size:80%;" width="20%">
+                                                <th style="text-align:center;font-size:80%;" width="15%">
+                                                    <span class="lang_eng" style="display:none">Status</span>
+                                                    <span class="lang_indo">Status</span>
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;" width="15%">
                                                     <span class="lang_eng" style="display:none">Action</span>
                                                     <span class="lang_indo">Aksi</span>
                                                 </th>
@@ -352,13 +358,16 @@
                         var sts = result1.content;
                         console.log(sts);
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
+                        if(sts == 'yearly'){
+                            $("#period").trigger('change');
+                        }
                     }
                 });
             }else{
@@ -368,13 +377,16 @@
                     success: function (result1) {
                         var sts = result1.content;
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
+                        if(sts == 'yearly'){
+                            $("#period").trigger('change');
+                        }
                     }
                 });
             }
@@ -386,7 +398,7 @@
         
         $("#period").on('change', function(e){
             
-            grid_role()
+            grid_role();
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
         });
@@ -403,13 +415,16 @@
                         var sts = result1.content;
 //                        console.log(sts);
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
+                        if(sts == 'yearly'){
+                        	$("#period").trigger('change');
+                        }
                     }
                 });
             }else{
@@ -419,13 +434,16 @@
                     success: function (result1) {
                         var sts = result1.content;
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >1</option><option value="2" >2<option value="3" >3</option><option value="4" >4</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
+                        if(sts == 'yearly'){
+                        	$("#period").trigger('change');
+                        }
                     }
                 });
             }
@@ -535,6 +553,18 @@
                         return "<div style='font-size:90%;'><a class='id_role' data-id='"+row[1]+"' data-monper='"+row[4]+"' data-type='"+v_type+"' data-periode='"+row[6]+"' data-nmrole='"+row[2]+"' data-approval='"+row[3]+"' href='#'>"+row[2]+"</a></div>";
                     }},
                     {"data": function (row, data, index, display) {
+                        if(row[3] == '1'){
+                            return "<span style='font-size:90%; background: #f5ff6e; text-align: center;'>Wait Approval</span>";
+                        }else if(row[3] == '2'){
+                            return "<span style='font-size:90%; background: #6eeaff; text-align: center;'>Approved</span>";
+                        }else if(row[3] == '3'){
+                            return "<span style='font-size:90%; background: #ffa6a6; text-align: center;'>Rejected</span>";
+                        }else if(row[3] == '4'){
+                            return "<span style='font-size:90%; background: #b5ffb5; text-align: center;'>Done</span>";
+                        }else{}
+                        
+                    }},
+                    {"data": function (row, data, index, display) {
                         var warna = "btn-primary";
                         if(row[3]==2){
                             warna = "btn-success";
@@ -543,7 +573,7 @@
                         }else if(row[3]==3){
                             warna = "btn-danger";
                             return "<div style='text-align:center;'>"+
-                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' approve">Reject</button></div>';
+                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unreject">UnReject</button></div>';
                         }else if(row[3]==1){
                             warna = "btn-primary";
                             return "<div style='text-align:center;'>"+
@@ -652,6 +682,31 @@
                 },
             });
             
+        }).on('click', ".unreject", function(e){
+            var id          = $(this).data("id");
+            var data = JSON.stringify({
+                        'id':id,
+                        'approval':'1',
+                        'description':"-"
+            });
+            $.ajax({
+                type: "POST",
+                url: urls+'update-approval',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header,token);
+                },
+                headers:{'Accept':'application/json','Content-Type':'application/json'},
+                data: data,
+                success: function (result) {
+//                        var data_id     = $("#periode").val().split("###");;
+//                        var id_monper   = data_id[0];
+//                        var tahun       = data_id[1];
+                    $("#tabel-approve-gov-activity").hide();
+                    $("#tabel-approve-gov-indicator").hide();
+                    grid_role();
+                },
+            });
+            
         }).on('click', ".id_role", function(e){
             var id_role     = $(this).data("id");
             var id_monper   = $(this).data("monper");
@@ -659,6 +714,9 @@
             var periode     = $(this).data("periode");
             var nmrole      = $(this).data("nmrole");
             var approval    = $(this).data("approval");
+            $('#nmrol').val(nmrole);
+            $('#idrol').val(id_role);
+            console.log(id_role+' '+ id_monper+' '+ type+' '+ periode+' '+ nmrole+' '+ approval)
             grid(id_role, id_monper, type, periode, nmrole, approval);
             $('.tombol-new').show();
             if(type == 'entry_gov_budget'){
@@ -864,7 +922,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1014,7 +1072,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1178,7 +1236,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[19]+'###'+row[20]+'###'+row[21]+'###'+row[22]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1355,7 +1413,7 @@
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
                                         
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1496,7 +1554,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1657,7 +1715,7 @@
 //                                        }else{
 //                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
 //                                        }
-                                        if(approval == '4'){
+                                        if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
                                             return '<a data-type="'+type+'" data-nilai="'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'" data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[22]+'###'+row[23]+'###'+row[24]+'###'+row[25]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'###'+v_periode+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
@@ -1894,11 +1952,13 @@
                 var achievement2_       = $('#achievement2_').val();
                 var achievement3_       = $('#achievement3_').val();
                 var achievement4_       = $('#achievement4_').val();
-                var v_idrole            = id_role_1;
+//                var v_idrole            = id_role_1;
                 var v_dataid            = $("#periode").val();
                 var v_data_id           = v_dataid.split("###");
                 var id_monper           = v_data_id[0];
                 var tahun               = $("#year_entry").val();
+                var nmrol               = $("#nmrol").val();
+                var v_idrole            = $("#idrol").val();
                 
                 if (type == 'entry_gov_budget'){
                     var ur = 'save-entry-gov_prog';
@@ -1949,8 +2009,12 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        $("#tabel-approve-gov-activity").hide();
-                        $("#tabel-approve-gov-indicator").hide();
+                        var pp      = $("#period").val();
+                        var app     = '1';
+                        console.log(v_idrole+' '+ id_monper+' '+ type+' '+ pp+' '+ nmrol+' '+ app)
+                        grid(v_idrole, id_monper, type, pp, nmrol, app);
+//                        $("#tabel-approve-gov-activity").hide();
+//                        $("#tabel-approve-gov-indicator").hide();
                     	$('.addModal').modal('hide');
                     },
                 });

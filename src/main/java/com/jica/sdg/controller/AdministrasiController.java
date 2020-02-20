@@ -109,13 +109,17 @@ public class AdministrasiController {
         return "admin/role_manajemen/manajemen_role";
     }
 
-    @GetMapping("admin/manajemen/list-role/{id_prov}")
-    public @ResponseBody Map<String, Object> roles(HttpSession session, @PathVariable("id_prov") String id_prov) {
+    @GetMapping("admin/manajemen/list-role/{id_prov}/{cat}")
+    public @ResponseBody Map<String, Object> roles(HttpSession session, @PathVariable("id_prov") String id_prov, @PathVariable("cat") String cat) {
     	List<Role> listRole;
-    	if(id_prov.equals("all")) {
+    	if(id_prov.equals("all") && cat.equals("all")) {
     		listRole = roleService.findAll();
-    	}else {
+    	}else if(!id_prov.equals("all") && cat.equals("all")){
     		listRole = roleService.findByProvince(id_prov);
+    	}else if(id_prov.equals("all") && !cat.equals("all")){
+    		listRole = roleService.findByCat(cat);
+    	}else {
+    		listRole = roleService.findByProvince(id_prov,cat);
     	}
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content", listRole);
