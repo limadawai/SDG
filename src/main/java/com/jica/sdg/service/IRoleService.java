@@ -15,6 +15,10 @@ public interface IRoleService {
     
     List<Role> findByProvince(String id_prov);
     
+    List<Role> findByProvince(String id_prov, String cat);
+    
+    List<Role> findByCat(String cat);
+    
     void saveRole(Role rol);
     
     void deleteRole(Integer id);

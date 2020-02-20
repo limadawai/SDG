@@ -61,10 +61,10 @@
                                     <thead>
                                         <tr>
                                             <th style="text-align:center;font-size:80%;">No.</th>
-                                            <th style="text-align:center;font-size:80%;">
+                                            <!-- <th style="text-align:center;font-size:80%;">
                                             	<span class="lang_eng" style="display:none">Code</span>
                                             	<span class="lang_indo">Kode</span>
-                                            </th>
+                                            </th> -->
                                             <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">SDG E-Monev Code</span>
 	                                            	<span class="lang_indo">Kode SDG E-Monev</span>
@@ -97,7 +97,7 @@
 		  	</div>
 			<div class="modal-body">
 				<form id="form-sdgGoals">
-				  <div class="control-group">
+				  <div class="control-group" style="display:none;">
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Program Code</label>
 				    <label class="lang_indo control-label" style="text-align:left">Kode Program</label>
 				    <div class="controls">
@@ -310,9 +310,9 @@
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
-					{"data": function (row, data, index, display) {
+					/* {"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row.id_program+"</div>";
-						}},
+						}}, */
 						{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row.internal_code+"</div>";
 						}},
@@ -377,11 +377,11 @@
 				$('.help-block').text("");
 				var cek = 0;
 				
-				if (id_program == ""){
+				/* if (id_program == ""){
                     $("#error_id_program").parents(".control-group").first().addClass("error");
                     $("#error_id_program").text(required);
                     cek += 1;
-                }
+                } */
 				/* if (nm_program == ""){
                     $("#error_nm_program").parents(".control-group").first().addClass("error");
                     $("#error_nm_program").text(required);

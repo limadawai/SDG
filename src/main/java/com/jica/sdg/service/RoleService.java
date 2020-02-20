@@ -73,4 +73,14 @@ public class RoleService implements IRoleService{
 		return (List<Role>) role.findRoleGov(id_prov);
 	}
 
+	@Override
+	public List<Role> findByProvince(String id_prov, String cat) {
+		return (List<Role>) role.findByProvince(id_prov,cat);
+	}
+
+	@Override
+	public List<Role> findByCat(String cat) {
+		return (List<Role>) role.findByCat(cat);
+	}
+
 }

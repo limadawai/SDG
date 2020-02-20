@@ -77,10 +77,10 @@
 	                                            	<span class="lang_eng" style="display:none">No</span>
 													<span class="lang_indo">No</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="5%">
+	                                            <!-- <th style="text-align:center;font-size:80%;" width="5%">
 	                                            	<span class="lang_eng" style="display:none">Code</span>
 	                                            	<span class="lang_indo">Kode</span>
-	                                            </th>
+	                                            </th> -->
 	                                            <th style="text-align:center;font-size:80%;" width="50%">
 	                                            	<span class="lang_eng" style="display:none">Activity Indicator</span>
 	                                            	<span class="lang_indo">Indikator Kegiatan</span>
@@ -154,7 +154,7 @@
 				    <input type="text" readonly="true" th:value="${govActivity.nm_activity}" class="lang_indo input-xlarge input-block-level" />
 				    <input type="text" style="display:none" readonly="true" th:value="${govActivity.nm_activity_eng}" class="lang_eng input-xlarge input-block-level" />
 				   </div>
-				  <div class="control-group">
+				  <div class="control-group" style="display:none;">
 				    <label class="lang_eng control-label" style="display:none">Code</label>
 				    <label class="lang_indo control-label">Kode</label>
 				    <div class="controls">
@@ -492,9 +492,9 @@
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
-					{"data": function (row, data, index, display) {
+					/* {"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row[1]+"</div>";
-						}},
+						}}, */
 
 					{"data": function (row, data, index, display) {
 							var nama;
@@ -600,11 +600,11 @@
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
-				if (id_nsa_indicator == ""){
+				/* if (id_nsa_indicator == ""){
                     $("#error_id_nsa_indicator").parents(".control-group").first().addClass("error");
                     $("#error_id_nsa_indicator").text(required);
                     cek += 1;
-                }
+                } */
 				/* if (nm_indicator == ""){
                     $("#error_nm_indicator").parents(".control-group").first().addClass("error");
                     $("#error_nm_indicator").text(required);

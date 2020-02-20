@@ -72,10 +72,10 @@
 	                                    <thead>
 	                                        <tr>
 	                                            <th style="text-align:center;font-size:80%;">No.</th>
-	                                            <th style="text-align:center;font-size:80%;">
+	                                            <!-- <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">Code</span>
 	                                            	<span class="lang_indo">Kode</span>
-	                                            </th>
+	                                            </th> -->
 	                                            <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">SDG E-Monev Code</span>
 	                                            	<span class="lang_indo">Kode SDG E-Monev</span>
@@ -117,7 +117,7 @@
 				    	<input type="hidden" id="id_program" name="id_program" th:value="${govProg.id}"/>
 				    </div>
 				  </div>
-				  <div class="control-group">
+				  <div class="control-group" style="display:none;">
 				  	<label class="lang_eng control-label" style="display:none">Activity Code</label>
 				    <label class="lang_indo control-label">Kode Kegiatan</label>
 				    <div class="controls">
@@ -231,9 +231,9 @@
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
-					{"data": function (row, data, index, display) {
+					/* {"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row.id_activity+"</div>";
-						}},
+						}}, */
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+(row.internal_code?row.internal_code:'')+"</div>";
 					}},
@@ -292,11 +292,11 @@
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
-				if (id_activity == ""){
+				/* if (id_activity == ""){
                     $("#error_id_activity").parents(".control-group").first().addClass("error");
                     $("#error_id_activity").text(required);
                     cek += 1;
-                }
+                } */
 				/* if (nm_activity == ""){
                     $("#error_nm_activity").parents(".control-group").first().addClass("error");
                     $("#error_nm_activity").text(required);

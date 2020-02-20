@@ -32,6 +32,13 @@
                             	<option th:if="${privilege=='SUPER'}" value="all">-All-</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
+                            <select id="cat_role_filter" name="cat_role_filter" class="span3">
+                                <option value="all">-All-</option>
+                                <option value="Government">Government</option>
+                                <option value="NSA">Non Government : NSA</option>
+                                <option value="Institution">Non Government : Institution</option>
+                                <option value="gri_ojk">GRI/OJK</option>
+                            </select>
                             <button class="btn btn-warning btn-small pull-right" id="addNew" data-toggle="modal" data-target="#myModal">
                             	<span class="lang_eng" style="display:none">Add New</span>
                             	<span class="lang_indo">Tambah</span>
@@ -293,7 +300,12 @@
     
     $('#id_prov').on('change', function(){
     	var id = $(this).val();
-    	table.ajax.url(urls+'manajemen/list-role/'+id).load();
+    	table.ajax.url(urls+'manajemen/list-role/'+id+'/'+$('#cat_role_filter').val()).load();
+    });
+    
+    $('#cat_role_filter').on('change', function(){
+    	var id = $(this).val();
+    	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()+'/'+id).load();
     });
     
     //Load Select Menu
@@ -390,7 +402,7 @@
         "autoWidth": true,
         "responsive":true,
         "ajax": {
-            "url": '/sdg/admin/manajemen/list-role/'+$('#id_prov').val(),
+            "url": '/sdg/admin/manajemen/list-role/'+$('#id_prov').val()+'/'+$('#cat_role_filter').val(),
             dataSrc: 'content',
         },
         "searching": true,
@@ -557,7 +569,7 @@
 	        		                            headers:{'Accept':'application/json','Content-Type':'application/json'},
 	        		            				data: data,
 	        		                            success: function (result) {
-	        		                            	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()).load();
+	        		                            	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()+'/'+$('#cat_role_filter').val()).load();
 	        		                            	$('#myModal').modal('hide');
 	        		                            },
 	        		                        });
@@ -590,7 +602,7 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
     				data: data,
                     success: function (result) {
-                    	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()).load();
+                    	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()+'/'+$('#cat_role_filter').val()).load();
                     	$('#myModal').modal('hide');
                     },
                 });
@@ -667,7 +679,7 @@
                 },
                 success: function (result) {
                 	swal(titleOk,messOk,'success');
-                	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()).load();
+                	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()+'/'+$('#cat_role_filter').val()).load();
                 },
                 error:function (result) {
                 	swal(titleOk,messNOk,'error');
