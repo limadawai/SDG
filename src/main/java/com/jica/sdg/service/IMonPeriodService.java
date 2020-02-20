@@ -14,4 +14,6 @@ public interface IMonPeriodService {
     Optional<RanRad> findOne(Integer id);
     
     void deleteMonPeriod(Integer id);
+    
+    Integer cekPeriode(String id_prov,Integer start,Integer end);
 }

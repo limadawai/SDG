@@ -59,10 +59,14 @@
 	                                            	<span class="lang_eng" style="display:none">No</span>
 													<span class="lang_indo">No</span>
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="60%">
+	                                            <th style="text-align:center;font-size:80%;" width="45%">
 	                                            	<span class="lang_eng" style="display:none">Name</span>
 	                                            	<span class="lang_indo">Nama</span>
 	                                            </th>
+	                                            <th style="text-align:center;font-size:80%;" width="15%">
+                                                    <span class="lang_eng" style="display:none">Status</span>
+                                                    <span class="lang_indo">Status</span>
+                                                </th>
 	                                            <th style="text-align:center;font-size:80%;" width="20%">
 	                                            	<span class="lang_eng" style="display:none">Action</span>
 	                                            	<span class="lang_indo">Aksi</span>
@@ -371,6 +375,20 @@
 							}
 							return "<div style='font-size:90%;'><a class='id_role' data-id='"+row[1]+"' data-statusApp='"+statusApp+"' data-period='"+row[4]+"' href='#'>"+row[2]+"</a></div>";
 						}},
+						{"data": function (row, data, index, display) {
+	                        if(row[3] == '1'){
+	                            return "<span style='font-size:90%; background: #f5ff6e; text-align: center;'>Wait Approval</span>";
+	                        }else if(row[3] == '2'){
+	                            return "<span style='font-size:90%; background: #6eeaff; text-align: center;'>Approved</span>";
+	                        }else if(row[3] == '3'){
+	                            return "<span style='font-size:90%; background: #ffa6a6; text-align: center;'>Rejected</span>";
+	                        }else if(row[3] == '4'){
+	                            return "<span style='font-size:90%; background: #b5ffb5; text-align: center;'>Done</span>";
+	                        }else{
+	                        	return "<span style='font-size:90%; background: #f5ff6e; text-align: center;'>Not Approved</span>";
+	                        	}
+	                        
+	                    }},
 					{"data": function (row, data, index, display) {
 							var warna = "btn-primary";
 							var text = "Approve";
@@ -386,20 +404,20 @@
 								kelas = "unapprove";
 							}else if(row[3]==3){
 								if($("#fs").is(':checked')){
-									text = "Tolak";
+									text = "Batal Tolak";
     							}else{
-    								text = "Reject";
+    								text = "unreject";
     							}
 								warna = "btn-danger";
-								kelas = "approve";
+								kelas = "unapprove";
 							}else if(row[3]==4){
 								hide = 'display:none';
 								kelas = "approve";
 							}else if(row[3]==5){
 								if($("#fs").is(':checked')){
-									text = "Tidak ada aksi";
+									text = "Approve";
     							}else{
-    								text = "Not Approved";
+    								text = "Approve";
     							}
 								warna = "btn-default";
 								kelas = "approve";

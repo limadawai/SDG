@@ -193,6 +193,7 @@
     var messOk = "Data berhasil dihapus";
     var messNOk = "Data tidak dapat dihapus";
     var required = "Harus diisi";
+    var contain = "Username tidak boleh ada karakter ";
     var messUsername = "Username sudah ada";
     function bhs(cek){
 		if(cek){
@@ -206,6 +207,7 @@
 	        messNOk = "Data tidak dapat dihapus";
 	        required = "Harus diisi";
 	        messUsername = "Username sudah ada";
+	        contain = "Username tidak boleh ada karakter ";
     	}else{	    	        
 	        $(".lang_indo").hide();
     		$(".lang_eng").show();
@@ -217,6 +219,7 @@
 	        messNOk = "Can't delete data";
 	        required = "Required";
 	        messUsername = "Username already exist";
+	        contain = "Username cannot contain ";
     	}
     }
     if(lang){
@@ -351,8 +354,14 @@
 		var email = $('#email').val();
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
+		var format = /[ !#$%^&*()+\-=\[\]{};':"\\|,<>\/?]/;
 		var cek = 0;
 		
+		if(format.test(username)){
+			$("#error_username").parents(".control-group").first().addClass("error");
+            $("#error_username").text(contain+format);
+            cek += 1;
+		}
 		if (username == ""){
             $("#error_username").parents(".control-group").first().addClass("error");
             $("#error_username").text(required);
@@ -382,6 +391,7 @@
 			$.ajax({
 				type: "GET",
 	            url: urls+'manajemen/cek-username/'+username,
+	            async:false,
 	            success: function (result) {
 	            	var val = result.cek;
 	            	if(val>0){
@@ -419,6 +429,7 @@
 	        })
 		}else{
 			if(cek==0){
+				
     			var data = JSON.stringify({
     				'id_user':id_user,
     				'userName':username,

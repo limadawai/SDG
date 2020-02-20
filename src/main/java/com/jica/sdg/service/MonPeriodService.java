@@ -38,6 +38,11 @@ public class MonPeriodService implements IMonPeriodService{
 	public void deleteMonPeriod(Integer id) {
 		monPer.deleteById(id);
 	}
+
+	@Override
+	public Integer cekPeriode(String id_prov, Integer start, Integer end) {
+		return monPer.cekPeriode(id_prov, start, end);
+	}
 	
 	
 }

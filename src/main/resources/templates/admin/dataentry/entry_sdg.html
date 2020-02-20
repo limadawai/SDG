@@ -177,6 +177,9 @@
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
+                        	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
+                        		$("#idrole").append('<option value="all" >-- ALL --</option>');
+                        	} */
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
@@ -219,6 +222,9 @@
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
+                        	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
+                        		$("#idrole").append('<option value="all" >-- ALL --</option>');
+                        	} */
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
@@ -381,7 +387,7 @@
                         var sts = result1.content;
                         if(sts == 'yearly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                             <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
                             header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
@@ -447,6 +453,7 @@
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
+                                        			'<td></td>'+
                                         			'<td>'+btnApply1+'</td>'+
                                         		'</tr>'
                                         		); 
@@ -479,6 +486,9 @@
                                            	}
                                             return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
                                         }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[41]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[6]+"</div>";
@@ -587,7 +597,7 @@
                             
                         }else if(sts == 'semesterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                          <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization II</span> <span class="lang_indo">Realisasi SDG II</span> </th> ';
@@ -698,6 +708,7 @@
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
+                                        			'<td></td>'+
                                         			'<td>'+btnApply1+'</td>'+
                                         			'<td>'+btnApply2+'</td>'+
                                         		'</tr>'
@@ -731,6 +742,9 @@
                                            	}
                                             return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
                                         }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[41]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[6]+"</div>";
@@ -925,7 +939,7 @@
                             
                         }else if(sts == 'quarterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
+                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                             <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
@@ -1126,6 +1140,7 @@
                                         			'<td></td>'+
                                         			'<td></td>'+
                                         			'<td></td>'+
+                                        			'<td></td>'+
                                         			'<td>'+btnApply1+'</td>'+
                                         			'<td>'+btnApply2+'</td>'+
                                         			'<td>'+btnApply3+'</td>'+
@@ -1161,6 +1176,9 @@
                                            	}
                                             return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
                                         }
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row[41]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[6]+"</div>";

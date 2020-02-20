@@ -240,6 +240,7 @@
 	        var messOk = "Data berhasil dihapus";
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
+	        var mess = "Tahun sudah ada di RAN/RAD lain";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -251,6 +252,7 @@
 	    	        messOk = "Data berhasil dihapus";
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
+	    	        mess = "Tahun sudah ada di RAN/RAD lain";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -261,6 +263,7 @@
 	    	        messOk = "Delete successful";
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
+	    	        mess = "Year overlaps with other RAN/RAD";
 	        	}
 	        }
 	        if(lang){
@@ -403,6 +406,19 @@
                     $("#error_v").text(required);
                     cek += 1;
                 }
+				$.ajax({
+					type: "GET",
+                    url: urls+'cek-period/'+id_prov+'/'+start_year+'/'+end_year,
+                    async:false,
+                    success: function (result) {
+                    	var jml = result.content;
+						if(jml>0 && !id_monper){
+							cek += 1;
+							$('#myModal').hide();
+							swal("RAN/RAD",mess,'error').then(function(){$('#myModal').show()});
+						}
+                    },
+                });
 				if(cek==0){
 					var data = JSON.stringify({
 						'id_monper':id_monper,
