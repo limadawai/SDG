@@ -933,15 +933,15 @@ public class DataEntryController {
         String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
                     "g.sdg_indicator, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit \n" +
-                    "from assign_sdg_indicator as a\n" +
+                    "from ran_rad as g\n" +
+                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +
                     "left join sdg_indicator as d on a.id_indicator = d.id \n" +
                     "left join \n" +
                     "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
-                    "left join ran_rad as g on a.id_monper = g.id_monper \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "where a.id_role = :id_role and a.id_monper = :id_monper and a.id_prov = :id_prov ";
+                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         query.setParameter("id_role", id_role);
