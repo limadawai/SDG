@@ -29,6 +29,8 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 @Controller
 public class AdminController {
@@ -43,7 +45,10 @@ public class AdminController {
 	RoleService roleService;
 
 	@Autowired
-    UserService userService;
+        UserService userService;
+        
+        @Autowired
+	private EntityManager em;
 
     //*********************** Menu Dari DB ***********************
     @Autowired
@@ -93,7 +98,27 @@ public class AdminController {
         if (bhs == null) {bhs = "0";}
         model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
-        return "admin/dashboard";
+        
+         Query query = em.createNativeQuery("WITH tsdg AS (\n" +
+                                                "	SELECT * FROM assign_sdg_indicator\n" +
+                                                "),tgov_map AS (\n" +
+                                                "	SELECT * FROM gov_map\n" +
+                                                ")\n" +
+                                                ",tnsa_map AS (\n" +
+                                                "	SELECT * FROM nsa_map\n" +
+                                                ")\n" +
+                                                "SELECT \n" +
+                                                "a.*\n" +
+                                                ",(SELECT COUNT(*) FROM tsdg WHERE id_prov = a.id_prov) AS sdg  \n" +
+                                                ",(SELECT COUNT(*) FROM tgov_map WHERE id_prov = a.id_prov) AS gov  \n" +
+                                                ",(SELECT COUNT(*) FROM tnsa_map WHERE id_prov = a.id_prov) AS non_gov  \n" +
+                                                "FROM ref_province a WHERE id_map IS NOT NULL ");
+        
+            List list =  query.getResultList();
+            Map<String, Object> hasil = new HashMap<>();
+            hasil.put("content",list);
+            model.addAttribute("map",hasil);
+         return "admin/dashboard";
     }
 
     @PostMapping("admin/bahasa")
