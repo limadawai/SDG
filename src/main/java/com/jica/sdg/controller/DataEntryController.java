@@ -216,7 +216,8 @@ public class DataEntryController {
                     "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
                     "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
                     "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role \n" +
-                    "from assign_sdg_indicator as a\n" +
+                    "from ran_rad as g \n" +
+                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +
                     "left join sdg_indicator as d on a.id_indicator = d.id \n" +
@@ -224,13 +225,12 @@ public class DataEntryController {
                     "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
                     "left join \n" +
                     "(select * from entry_sdg where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
-                    "left join ran_rad as g on a.id_monper = g.id_monper \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
                     "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
                     "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
                     "left join (select * from entry_sdg_detail where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail \n" +
                     "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where a.id_role = :id_role and a.id_monper = :id_monper and a.id_prov = :id_prov ";
+                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
 	        query = em.createNativeQuery(sql);
 	        query.setParameter("id_prov", id_prov);
 	        query.setParameter("id_role", id_role);
