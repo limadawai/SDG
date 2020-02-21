@@ -341,6 +341,7 @@
             var tahun       = v_data_id[1];
             
             //memanggil tb spp
+            var t;
             function grid()
             {
                 var v_idprov    = $("#id_prov").val();
@@ -387,13 +388,14 @@
                         var sts = result1.content;
                         if(sts == 'yearly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
+                            header += '<tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                             <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
-                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
-                            
-                            $('#tabel-entri-sdg').html(header);
-                            $('#tabel-entri-sdg').DataTable({
+                            header +=   '</tr>';
+                            if(t){t.clear().destroy();}
+                            $('#tabel-entri-sdg thead').html(''); 
+                            $('#tabel-entri-sdg thead').html(header);
+                            t=$('#tabel-entri-sdg').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
                                 "bLengthChange": false,
@@ -401,7 +403,9 @@
                                 "autoWidth": true,
                                 "responsive":true,
                                 "bDestroy": true,
+                                "paging": false,
                                 "drawCallback": function( settings ) {
+                                	$('#tabel-entri-sdg thead').html(header);
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
                                     if(cektabel==0){
                                     	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
@@ -597,15 +601,17 @@
                             
                         }else if(sts == 'semesterly'){
                             var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
+                            header += '<tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                          <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization II</span> <span class="lang_indo">Realisasi SDG II</span> </th> ';
-                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
+                            header +=   '</tr> ';
                             
-                            $('#tabel-entri-sdg').html(header);
-                            var t = $('#tabel-entri-sdg').DataTable({
-                                responsive: true,
+                            if(t){console.log(t.clear().destroy());}
+                            $('#tabel-entri-sdg thead').html(''); 
+                            $('#tabel-entri-sdg thead').html(header);
+                            t = $('#tabel-entri-sdg').DataTable({
+                            	responsive: true,
                                 sDom: 'lrtip',
                                 "bLengthChange": false,
                                 "cache": false,
@@ -614,6 +620,7 @@
                                 "bDestroy": true,
                                 "paging": false,
                                 "drawCallback": function( settings ) {
+                                	$('#tabel-entri-sdg thead').html(header);
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
                                     if(cektabel==0){
                                     	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
@@ -935,11 +942,11 @@
                                 "columnDefs": [
                                 ],
                                 select: true
-                            });	 
+                            });
                             
                         }else if(sts == 'quarterly'){
-                            var header = '';
-                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
+                            var header3 = '';
+                            header += '<tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th><th>Role</th> \n\
                                             <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization I</span> <span class="lang_indo">Realisasi SDG I</span> </th> ';
@@ -950,11 +957,13 @@
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Realization IV</span> <span class="lang_indo">Realisasi SDG IV</span> </th> ';
                             
-                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
+                            header +=   '</tr> ';
                             
-                            $('#tabel-entri-sdg').html(header);
-                            
-                            $('#tabel-entri-sdg').DataTable({
+                            //$('#tabel-entri-sdg').html(header);
+                            if(t){t.clear().destroy();}
+                            $('#tabel-entri-sdg thead').html(''); 
+                            $('#tabel-entri-sdg thead').html(header);
+                            t=$('#tabel-entri-sdg').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
                                 "bLengthChange": false,
@@ -962,7 +971,9 @@
                                 "autoWidth": true,
                                 "responsive":true,
                                 "bDestroy": true,
+                                "paging": false,
                                 "drawCallback": function( settings ) {
+                                	$('#tabel-entri-sdg thead').html(header);
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
                                     if(cektabel==0){
                                     	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
