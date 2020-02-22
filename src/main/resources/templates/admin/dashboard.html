@@ -111,7 +111,7 @@
         var data_map =[];
         $.each(map.content,function(i,x){
             var total = x[4]+x[5]+x[6];
-            data_map.push({'hc-key':x[3],'name':x[1],'sdg':x[4],'gov':x[5],'non_gov':x[6],'total':total})
+            data_map.push({'hc-key':x[3],'name':x[1],'sdg':x[4],'gov':x[5],'non_gov':x[6],'value':total})
 //            console.log(x[1]);
         });
 //        console.log(data_map);
@@ -217,7 +217,7 @@
 //                    '<span style="font-size:30px">{point.value}/km²</span>',
                 pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
                                 <tr><th colspan="4">{point.name}</th></th></tr><tr><th>SDG</th><th>Gov</th><th>Non Gov</th><th>Total</th></tr>\n\
-                                <tr><td>{point.sdg}</td><td>{point.gov}</td><td>{point.non_gov}</td><td>{point.total}</td></tr></table></div>',
+                                <tr><td>{point.sdg}</td><td>{point.gov}</td><td>{point.non_gov}</td><td>{point.value}</td></tr></table></div>',
 //                positioner: function () {
 //                    return { x: 0, y: 250 };
 //                }
