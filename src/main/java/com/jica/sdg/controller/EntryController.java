@@ -1,5 +1,7 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.BestPractice;
+import com.jica.sdg.model.EntryBestPractice;
 import com.jica.sdg.model.EntryProblemIdentify;
 import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.Nsaprofile2;
@@ -13,6 +15,8 @@ import com.jica.sdg.model.Unit;
 import com.jica.sdg.repository.EntryProblemIdentifyRepository;
 import com.jica.sdg.service.*;
 import java.util.ArrayList;
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -66,6 +70,12 @@ public class EntryController {
     ISdgIndicatorService sdgIndicatorService;
     @Autowired
     ModelCrud modelCrud;
+    
+    @Autowired
+    IBestPracticeService bestService;
+    
+    @Autowired
+    IEntryBestPracticeService enbestService;
     // ****************** Problem Identification & Follow Up ******************
     @GetMapping("admin/problem-identification")
      public String govprogram(Model model, HttpSession session) {
@@ -253,14 +263,152 @@ public class EntryController {
     // ****************** Best Practice ******************
     @GetMapping("admin/best-practice")
     public String bestpractice(Model model, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String privilege    = list.get().getPrivilege();
+    	String id_prov 		= list.get().getId_prov();
+    	String cat_role		= list.get().getCat_role();
         model.addAttribute("title", "Best Practice");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
-        model.addAttribute("listprov", provinsiService.findAllProvinsi());
-        model.addAttribute("listRole", roleService.findAll());
-        model.addAttribute("listranrad", ranRadService.findAll());
+        if(privilege.equals("SUPER")) {
+        	model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        }else {
+        	Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+        }
+        model.addAttribute("privilege", privilege);
+        model.addAttribute("cat_role", cat_role);
         return "admin/dataentry/practice";
     }
 
-
+    @GetMapping("admin/best-practice/list-govmap/{id_prov}/{id_monper}/{id}")
+    public @ResponseBody Map<String, Object> getOptionMonperList(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper,@PathVariable("id") String id) {
+        String sql  = "select a.id, b.nm_goals, b.nm_goals_eng, c.nm_target, c.nm_target_eng, d.nm_indicator, d.nm_indicator_eng, "
+        		+ "b.id_goals, c.id_target, d.id_indicator "
+        		+ "from gov_map as a "
+        		+ "left join sdg_goals b on a.id_goals = b.id "
+        		+ "left join sdg_target c on a.id_target = c.id "
+        		+ "left join sdg_indicator d on a.id_indicator = d.id "
+        		+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_gov_indicator = :id";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/best-practice/list-nsamap/{id_prov}/{id_monper}/{id}")
+    public @ResponseBody Map<String, Object> getNsa(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper,@PathVariable("id") String id) {
+        String sql  = "select a.id, b.nm_goals, b.nm_goals_eng, c.nm_target, c.nm_target_eng, d.nm_indicator, d.nm_indicator_eng, "
+        		+ "b.id_goals, c.id_target, d.id_indicator "
+        		+ "from nsa_map as a "
+        		+ "left join sdg_goals b on a.id_goals = b.id "
+        		+ "left join sdg_target c on a.id_target = c.id "
+        		+ "left join sdg_indicator d on a.id_indicator = d.id "
+        		+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_nsa_indicator = :id";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-best/{id_role}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> listBest(@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+        String sql  = "select a.id, b.nm_program, b.nm_program_eng, a.location, a.time_activity, a.background, a.implementation_process, "
+        		+ "a.challenges_learning, a.id_indicator, c.nm_program as nsa_prog, c.nm_program_eng as nsa_prog_eng "
+        		+ "from best_practice as a "
+        		+ "left join gov_program b on a.id_program = b.id "
+        		+ "left join nsa_program c on a.id_program = c.id "
+        		+ "where a.id_role = :id_role and a.id_monper = :id_monper and a.year = :year";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-best-entry/{id_best}")
+    public @ResponseBody Map<String, Object> listBest(@PathVariable("id_best") String id_best) {
+        String sql  = "select a.*, c.nm_program as nsa_prog, c.nm_program_eng as nsa_prog_eng, b.id_indicator "
+        		+ "from entry_best_practice as a "
+        		+ "left join best_practice b on a.id_best_practice = b.id "
+        		+ "left join nsa_program c on b.id_program = c.id "
+        		+ "where a.id_best_practice = :id_best_practice";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_best_practice", id_best);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @PostMapping(path = "admin/save-best", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public void saveBest(@RequestBody BestPractice best) {
+    	bestService.saveBestPractice(best);
+    }
+    
+    @PostMapping(path = "admin/save-best-entry", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public void saveBest(@RequestBody EntryBestPractice best, HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	best.setCreated_by(id_role);
+    	best.setDate_created(new Date());
+    	enbestService.saveEntryBestPractice(best);
+    }
+    
+    @GetMapping("admin/get-best/{id}")
+    public @ResponseBody Map<String, Object> getBest(@PathVariable("id") Integer id){
+    	Optional<BestPractice> list = bestService.findOne(id);
+    	Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-best-entry/{id}")
+    public @ResponseBody Map<String, Object> getBestEntry(@PathVariable("id") Integer id){
+    	Optional<EntryBestPractice> list = enbestService.findOne(id);
+    	Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/best-practice/detail/{id}")
+    public String bestpractice(Model model, HttpSession session, @PathVariable("id") Integer id) {
+    	Optional<BestPractice> listRole = bestService.findOne(id);
+    	Optional<Role> list = roleService.findOne(listRole.get().getId_role());
+    	String privilege    = list.get().getPrivilege();
+    	String id_prov 		= list.get().getId_prov();
+    	String cat_role		= list.get().getCat_role();
+        model.addAttribute("title", "Best Practice");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        if(privilege.equals("SUPER")) {
+        	model.addAttribute("listprov", provinsiService.findAllProvinsi());
+        }else {
+        	Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+        }
+        model.addAttribute("privilege", privilege);
+        model.addAttribute("cat_role", cat_role);
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("id_role", listRole.get().getId_role());
+        model.addAttribute("id_monper", listRole.get().getId_monper());
+        model.addAttribute("year", listRole.get().getYear());
+        model.addAttribute("id_best", id);
+        model.addAttribute("id_indicator", listRole.get().getId_indicator());
+        return "admin/dataentry/entry_practice";
+    }
+    
 }

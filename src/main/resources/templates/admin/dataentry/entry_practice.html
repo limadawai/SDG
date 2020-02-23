@@ -14,8 +14,8 @@
         <div id="content-header">
             <div id="breadcrumb"> 
             	<a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>
-	            	<span class="lang_eng" style="display:none">Input Data / Best Practice</span>
-					<span class="lang_indo">Input Data / Praktik Terbaik</span>
+	            	<span class="lang_eng" style="display:none">Input Data / Detail Best Practice</span>
+					<span class="lang_indo">Input Data / Praktik Terbaik Detail</span>
             	</a>
             </div>
         </div>
@@ -25,29 +25,29 @@
                     <div class="widget-title" id="judul-indo">
                         <span class="icon"><i class="icon-tasks"></i></span>
                         <h5 id="jdltbl">
-                        	<span class="lang_eng" style="display:none">List Best Practice</span>
-							<span class="lang_indo">Daftar Praktik Terbaik</span>
+                        	<span class="lang_eng" style="display:none">List Detail Best Practice</span>
+							<span class="lang_indo">Daftar Praktik Terbaik Detail</span>
                         </h5>
                     </div>
                     <div class="widget-content">
                     	<div class="row-fluid">
                     		<div class="span8">
-                    			<select id="id_prov" name="id_prov" class="form-control">
+                    			<select id="id_prov" name="id_prov" class="form-control" disabled="true">
 	                                <option value="0" >-- Pilih --</option>
 	                                <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
 	                            </select>
-	                            <select id="idrole" name="idrole" class="form-control">
+	                            <select id="idrole" name="idrole" class="form-control" disabled="true">
 	                            	<option value="0" >-- Pilih --</option>
 	                            </select>
-	                            <select id="periode" name="periode" class="form-control">
+	                            <select id="periode" name="periode" class="form-control" disabled="true">
 	                            	<option value="0" >-- Pilih --</option>
 	                            </select>
                     		</div>
                     		<div class="span4" align="right">
                     			<button id="showModal" class="btn btn-primary">
 	                   				<i class="icon-plus"></i> 
-	                   					<span class="lang_eng" style="display:none">Add Best Practice</span>
-	                   					<span class="lang_indo">Tambah Praktik Terbaik</span>
+	                   					<span class="lang_eng" style="display:none">Add Detail</span>
+	                   					<span class="lang_indo">Tambah Detail</span>
 	                   			</button>
 	                   			<button class="btn btn-warning">
 	                   				<!-- <i class="icon-plus"></i>  -->
@@ -61,29 +61,41 @@
                                 <table  id="tabel-practice" class="table table-striped table-bordered">
                                     <thead>
 	                                    <tr>
+	                                    	<th style="text-align:center;font-size:80%;" width="15%">
+	                                        	<span class="lang_eng" style="display:none">Title</span>
+                   								<span class="lang_indo">Judul</span>
+	                                        </th>
 	                                        <th style="text-align:center;font-size:80%;" width="15%">
 	                                        	<span class="lang_eng" style="display:none">Name of Destination in TPB/SDGs</span>
                    								<span class="lang_indo">Nama Tujuan TPB/SDGs</span>
 	                                        </th>
 	                                        <th style="text-align:center;font-size:80%;" width="15%">
-	                                        	<span class="lang_eng" style="display:none">Program Name</span>
-                   								<span class="lang_indo">Nama Program</span>
+	                                        	<span class="lang_eng" style="display:none">Organization Name</span>
+                   								<span class="lang_indo">Nama Organisasi</span>
 	                                        </th>
 	                                        <th style="text-align:center;font-size:80%;" width="15%">
-	                                        	<span class="lang_eng" style="display:none">Location and Time of Activity</span>
-                   								<span class="lang_indo">Lokasi dan Waktu Aktifitas</span>
+	                                        	<span class="lang_eng" style="display:none">Activity Location</span>
+                   								<span class="lang_indo">Lokasi Kegiatan</span>
 	                                        </th>
 	                                        <th style="text-align:center;font-size:80%;" width="15%">
-	                                        	<span class="lang_eng" style="display:none">Background</span>
-                   								<span class="lang_indo">Latar Belakang</span>
+	                                        	<span class="lang_eng" style="display:none">Activity Period</span>
+                   								<span class="lang_indo">Periode Kegiatan</span>
 											</th>
 	                                        <th style="text-align:center;font-size:80%;" width="15%">
-	                                        	<span class="lang_eng" style="display:none">Implementation Process<br/>(Strategy, Parties involved, beneficiaries etc)</span>
-                   								<span class="lang_indo">Proses Implementasi</span>
+	                                        	<span class="lang_eng" style="display:none">Partner</span>
+                   								<span class="lang_indo">Rekan</span>
 											</th>
 											<th style="text-align:center;font-size:80%;" width="15%">
-	                                        	<span class="lang_eng" style="display:none">Challenges and Learning</span>
-                   								<span class="lang_indo">Tantangan dan Pembelajaran</span>
+	                                        	<span class="lang_eng" style="display:none">Beneficaries</span>
+                   								<span class="lang_indo">Beneficaries</span>
+											</th>
+											<th style="text-align:center;font-size:80%;" width="15%">
+	                                        	<span class="lang_eng" style="display:none">Description</span>
+                   								<span class="lang_indo">Deskripsi</span>
+											</th>
+											<th style="text-align:center;font-size:80%;" width="15%">
+	                                        	<span class="lang_eng" style="display:none">Document(Pic/Text)</span>
+                   								<span class="lang_indo">Dokumen</span>
 											</th>
 											<th style="text-align:center;font-size:80%;" width="10%">
 	                                        	<span class="lang_eng" style="display:none">Action</span>
@@ -102,19 +114,19 @@
         <div id="myModal"data-backdrop="static" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 class="lang_eng" style="display:none">Add Best Pactice</h3>
-			    <h3 class="lang_indo">Tambah Praktik Terbaik</h3>
+			    <h3 class="lang_eng" style="display:none">Add Detail Best Pactice</h3>
+			    <h3 class="lang_indo">Tambah Praktik Terbaik Detail</h3>
 		  	</div>
 			<div class="modal-body">
 				<form id="form-sdgGoals">
 				<div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Program</label>
-				    <label class="lang_indo control-label">Program</label>
+				    <label class="lang_eng control-label" style="display:none">Title</label>
+				    <label class="lang_indo control-label">Judul</label>
 				    <div class="controls">
-				    	<select id="id_program" name="id_program" class="input-xlarge input-block-level">
-				    	</select>
+				    	<input type="text" id="title" name="title" class="input-xlarge input-block-level"/>
 				    	<input id="id" name="id" class="input-medium input-block-level" type="hidden"/>
-				    	<span class="help-block" id="error_id_program"></span>
+				    	<input id="id_best_practice" name="id_best_practice" class="input-medium input-block-level" type="hidden"/>
+				    	<span class="help-block" id="error_title"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
@@ -133,51 +145,62 @@
 							    </div>
 							  </div>
 						</div>
-				    	<!-- <select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
-				    		<option value="0">--select--</option>
-	        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
-	        			</select> -->
-					    <span class="help-block" id="error_unit"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Location</label>
-				    <label class="lang_indo control-label">Lokasi</label>
+				    <label class="lang_eng control-label" style="display:none">Organization Name</label>
+				    <label class="lang_indo control-label">Nama Organisasi</label>
+				    <div class="controls">
+				    	<input id="org_name" name="org_name" class="input-xlarge input-block-level" type="text"/>
+				    	<span class="help-block" id="error_org_name"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Activity Location</label>
+				    <label class="lang_indo control-label">Lokasi Kegiatan</label>
 				    <div class="controls">
 				    	<input id="location" name="location" class="input-xlarge input-block-level" type="text"/>
 				    	<span class="help-block" id="error_location"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Date and Time</label>
-				    <label class="lang_indo control-label">Tanggal dan Waktu</label>
+				    <label class="lang_eng control-label" style="display:none">Activity Period</label>
+				    <label class="lang_indo control-label">Periode Kegiatan</label>
 				    <div class="controls">
-				    	<input id="time_activity" name="time_activity" class="input-xlarge input-block-level" type="text"/>
-				    	<span class="help-block" id="error_time_activity"></span>
+				    	<input id="activity_periode" name="activity_periode" class="input-xlarge input-block-level"></input>
+				    	<span class="help-block" id="error_activity_periode"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Background</label>
-				    <label class="lang_indo control-label">Latar Belakang</label>
+				    <label class="lang_eng control-label" style="display:none">Partner</label>
+				    <label class="lang_indo control-label">Partner</label>
 				    <div class="controls">
-				    	<textarea id="background" name="background" class="input-xlarge input-block-level"></textarea>
-				    	<span class="help-block" id="error_background"></span>
+				    	<input id="partner" name="partner" class="input-xlarge input-block-level"></input>
+				    	<span class="help-block" id="error_partner"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Implementation Process</label>
-				    <label class="lang_indo control-label">Proses Implementasi</label>
+				    <label class="lang_eng control-label" style="display:none">Beneficiaries</label>
+				    <label class="lang_indo control-label">Beneficiaries</label>
 				    <div class="controls">
-				    	<textarea id="implementation_process" name="implementation_process" class="input-xlarge input-block-level"></textarea>
-				    	<span class="help-block" id="error_implementation_process"></span>
+				    	<input id="beneficiaries" name="beneficiaries" class="input-xlarge input-block-level"></input>
+				    	<span class="help-block" id="error_beneficiaries"></span>
 				    </div>
 				  </div>
 				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Challenges and Learning</label>
-				    <label class="lang_indo control-label">Tantangan dan Pembelajaran</label>
+				    <label class="lang_eng control-label" style="display:none">Story</label>
+				    <label class="lang_indo control-label">Story</label>
 				    <div class="controls">
-				    	<textarea id="challenges_learning" name="challenges_learning" class="input-xlarge input-block-level"></textarea>
-				    	<span class="help-block" id="error_challenges_learning"></span>
+				    	<textarea id="story" name="story" class="input-xlarge input-block-level"></textarea>
+				    	<span class="help-block" id="error_story"></span>
+				    </div>
+				  </div>
+				  <div class="control-group">
+				    <label class="lang_eng control-label" style="display:none">Additional Info</label>
+				    <label class="lang_indo control-label">Informasi Tambahan</label>
+				    <div class="controls">
+				    	<textarea id="add_info" name="add_info" class="input-xlarge input-block-level"></textarea>
+				    	<span class="help-block" id="error_add_info"></span>
 				    </div>
 				  </div>
 				</form>
@@ -201,6 +224,13 @@
  // <![CDATA[
         var lang = [[${lang}]];
         var name = [[${name}]];
+        var id_prov = [[${id_prov}]];
+        var id_role = [[${id_role}]];
+        var id_monper = [[${id_monper}]];
+        var year = [[${year}]];
+        var id_best = [[${id_best}]];
+        var id_indicator = [[${id_indicator}]];
+        $("#id_best_practice").val(id_best);
         $("#welcome").html("Welcome, "+name);
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -276,46 +306,41 @@
             	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
         	}
         });
-        
-        $("#id_prov").on('change', function(e){
-            var id_prov = this.value ;
-            $.ajax({
-                type: "GET",
-                url: urls+'list-get-option-role-all-profil/'+id_prov,
-                success: function (result) {
-                    $("#idrole").html('<option value="0" >-- Pilih --</option>');
-                    var array = result.content;
-                    if (array != '') {
-                    	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
-                    		$("#idrole").append('<option value="all" >-- ALL --</option>');
-                    	} */
-                        for (i in array) {
-                            $("#idrole").append('<option data-cat="'+array[i][3]+'" value="'+array[i][0]+'" >'+array[i][1]+'</option>');
-                        }
-                    }
-                   // grid();
-                }
-            });
-            
-            $.ajax({
-                type: "GET",
-                url: urls+'list-get-option-monper/'+id_prov,
-                success: function (result1) {
-                    $("#periode").html('<option value="0" >-- Pilih --</option>');
-                    var array1 = result1.content;
-                    if (array1 != '') {
-                        for (i in array1) {
-                            var selisih     = (array1[i][2] - array1[i][1]);
-                            var x;
-                            for(x=0; x<=selisih; x++){
-                                $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
-                            }
-                            
-                        }
+        $("#id_prov").val(id_prov);
+        $.ajax({
+            type: "GET",
+            url: urls+'list-get-option-role-all-profil/'+id_prov,
+            async:false,
+            success: function (result) {
+                $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                var array = result.content;
+                if (array != '') {
+                    for (i in array) {
+                    	var selected = (array[i][0]==id_role)?'selected':'';
+                        $("#idrole").append('<option data-cat="'+array[i][3]+'" value="'+array[i][0]+'" '+selected+' >'+array[i][1]+'</option>');
                     }
                 }
-            });
-            table.ajax.url(urls+'list-best/0/0/0').load();
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: urls+'list-get-option-monper/'+id_prov,
+            async:false,
+            success: function (result1) {
+                $("#periode").html('<option value="0" >-- Pilih --</option>');
+                var array1 = result1.content;
+                if (array1 != '') {
+                    for (i in array1) {
+                        var selisih     = (array1[i][2] - array1[i][1]);
+                        var x;
+                        for(x=0; x<=selisih; x++){
+                        	var selected = ((array1[i][0] == id_monper) && ((array1[i][1]+x) == year))?'selected':'';
+                            $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" '+selected+'>'+(array1[i][1]+x)+'</option>');
+                        }
+                        
+                    }
+                }
+            }
         });
         
         $("#idrole").on("change", function(){
@@ -334,7 +359,6 @@
                 async : false,
                 success: function (response) {
                 		var option = "<option value='0'>-- Pilih --</option>";
-                		$('#id_program').html("");
                 		for (var i = 0; i < response.content.length; i++) {
                 			var nm_goals;
                 			var id_goals=response.content[i].id;
@@ -443,6 +467,7 @@
                             						}else{
                             							nm_indicator = result1.content[k][5];
                             						}
+                                                	var selected = (result1.content[k][0]==id_indicator)?'selected':'';
                                                 	option += '<option value="'+id_goals+'###'+id_target+'###'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
                                             	}
                                             }
@@ -459,26 +484,13 @@
         }
         
         $('#showModal').on('click', function(){
-        	if($('#id_prov').val()!="0" && $('#periode').val()!="0" && $('#idrole').val()!="0"){
+        	if($('#id_prov').val() && $('#periode').val() && $('#idrole').val()){
         		var cat = $("#idrole").find(":selected").data("cat");
         		if(cat=="NSA"){
         			programNsa();
         		}else{
         			program();
         		}
-        		$("#myModal").modal("show");
-        	}else{
-        		swal(titleMod,messMod,'error');
-        	}
-        });
-        
-        $('#id_program').on('change', function(){
-        	var id_indicator = $(this).val().split('###')[2];
-        	var id_prov = $('#id_prov').val();
-        	var id_monper = $("#periode").val().split('###')[0];
-        	var cat = $("#idrole").find(":selected").data("cat");
-        	$('.accordion-inner').html("");
-        	if(cat=="NSA"){
         		$.ajax({
 	                url: urls + 'best-practice/list-nsamap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+id_indicator,
 	                type: 'get',
@@ -514,42 +526,9 @@
 	                	$('.accordion-inner').append(text);
 	                }
 	        	});
+        		$("#myModal").modal("show");
         	}else{
-        		$.ajax({
-                    url: urls + 'best-practice/list-govmap/'+id_prov+'/'+id_monper+'/'+id_indicator,
-                    type: 'get',
-                    dataType: 'json',
-                    cache: false,
-                    async : false,
-                    success: function (result1) {
-                    	var text = "";
-                    	$('.accordion-inner').html(text);
-                    	for (var k = 0; k < result1.content.length; k++) {
-                    		var nm_goals;
-                    		var nm_target;
-                    		var nm_indicator;
-                        	if($("#fs").is(':checked')){
-                        		nm_goals = result1.content[k][1];
-                        		nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-                        		nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-    						}else{
-    							nm_goals = result1.content[k][2];
-    							nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-    							nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-    						}
-                        	text += '<label style="display:inline-block;white-space:nowrap;">'+
-    			        				'<span style="vertical-align:middle">'+nm_goals+'</span>'+
-    			                  '</label><br/>';
-    	                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-    	        					'<span style="vertical-align:middle">'+nm_target+'</span>'+
-    	                     '</label><br/>';
-    	                     text += '<label  style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-    			                         '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
-    			                   '</label><br/>';
-                    	}
-                    	$('.accordion-inner').append(text);
-                    }
-            	});
+        		swal(titleMod,messMod,'error');
         	}
         });
         
@@ -561,104 +540,55 @@
 			"autoWidth": true,
 			"responsive":true,
 			"ajax": {
-				"url": urls+'list-best/0/0/0',
+				"url": urls+'list-best-entry/'+id_best,
 				dataSrc: 'content',
 			},
 			"searching": true,
 			"columns": [
 				{"data": function (row, data, index, display) {
-					var cat = $("#idrole").find(":selected").data("cat");
-					if(cat == "NSA"){
-						var text = "";
-						$.ajax({
-			                url: urls + 'best-practice/list-nsamap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+row[8],
-			                type: 'get',
-			                dataType: 'json',
-			                cache: false,
-			                async : false,
-			                success: function (result1) {
-			                	for (var k = 0; k < result1.content.length; k++) {
-			                		var nm_goals;
-			                		var nm_target;
-			                		var nm_indicator;
-			                    	if($("#fs").is(':checked')){
-			                    		nm_goals = result1.content[k][1];
-			                    		nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-			                    		nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-									}else{
-										nm_goals = result1.content[k][2];
-										nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-										nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-									}
-			                    	text += '<label style="display:inline-block;white-space:nowrap;">'+
-						        				'<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
-						                  '</label><br/>';
-				                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-						        					'<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
-						                     '</label><br/>';
-				                     text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-						                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
-						                   '</label><br/>';
-			                	}
-			                }
-			        	});
-					}else{
-						var text = "";
-						$.ajax({
-			                url: urls + 'best-practice/list-govmap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+row[8],
-			                type: 'get',
-			                dataType: 'json',
-			                cache: false,
-			                async : false,
-			                success: function (result1) {
-			                	for (var k = 0; k < result1.content.length; k++) {
-			                		var nm_goals;
-			                		var nm_target;
-			                		var nm_indicator;
-			                    	if($("#fs").is(':checked')){
-			                    		nm_goals = result1.content[k][1];
-			                    		nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-			                    		nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-									}else{
-										nm_goals = result1.content[k][2];
-										nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-										nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-									}
-			                    	text += '<label style="display:inline-block;white-space:nowrap;">'+
-						        				'<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
-						                  '</label><br/>';
-				                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-						        					'<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
-						                     '</label><br/>';
-				                     text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-						                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
-						                   '</label><br/>';
-			                	}
-			                }
-			        	});
-					}
+					return "<div style='font-size:90%;'>"+row[2]+"</div>";
+				}},
+				{"data": function (row, data, index, display) {
+					var text = "";
+					$.ajax({
+		                url: urls + 'best-practice/list-nsamap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+row[14],
+		                type: 'get',
+		                dataType: 'json',
+		                cache: false,
+		                async : false,
+		                success: function (result1) {
+		                	for (var k = 0; k < result1.content.length; k++) {
+		                		var nm_goals;
+		                		var nm_target;
+		                		var nm_indicator;
+		                    	if($("#fs").is(':checked')){
+		                    		nm_goals = result1.content[k][1];
+		                    		nm_target = (result1.content[k][3]?result1.content[k][3]:"");
+		                    		nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
+								}else{
+									nm_goals = result1.content[k][2];
+									nm_target = (result1.content[k][4]?result1.content[k][4]:"");
+									nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
+								}
+		                    	text += '<label style="display:inline-block;">'+
+					        				'<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
+					                  '</label><br/>';
+			                    text += '<label style="display:inline-block;margin-left:20px">'+
+					        					'<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+					                     '</label><br/>';
+			                     text += '<label style="display:inline-block;margin-left:40px">'+
+					                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+					                   '</label><br/>';
+		                	}
+		                }
+		        	});
 					return "<div style='font-size:90%;'>"+text+"</div>";
 				}},
 				{"data": function (row, data, index, display) {
-						var nama="";
-						var cat = $("#idrole").find(":selected").data("cat");
-						if($("#fs").is(':checked')){
-							if(cat=="NSA"){
-								nama = row[9];
-							}else{
-								nama = row[1];	
-							}
-						}else{
-							if(cat=="NSA"){
-								nama = row[10];
-							}else{
-								nama = row[2];
-							}
-						}
-						return "<div style='font-size:90%;'>"+nama+"</div>";
+						return "<div style='font-size:90%;'>"+row[3]+"</div>";
 					}},
 				{"data": function (row, data, index, display) {
-						return "<div style='font-size:90%;'>"+row[3]+" "+row[4]+"</div>";
+						return "<div style='font-size:90%;'>"+row[4]+"</div>";
 					}},
 				{"data": function (row, data, index, display) {
 					return "<div style='font-size:90%;'>"+row[5]+"</div>";
@@ -670,10 +600,16 @@
 					return "<div style='font-size:90%;'>"+row[7]+"</div>";
 				}},
 				{"data": function (row, data, index, display) {
+					return "<div style='font-size:90%;'>"+row[8]+"</div>";
+				}},
+				{"data": function (row, data, index, display) {
+					return "<div style='font-size:90%;'>"+row[9]+"</div>";
+				}},
+				{"data": function (row, data, index, display) {
 						var detail = "";
-						var cat = $("#idrole").find(":selected").data("cat");
+						var cat = $("idrole").data("cat");
 						if(cat=="NSA"){
-							detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
+							detail = '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini delete">Detail</button></div>';
 						}
 						return "<div style='text-align:center;'>"+
 						'<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-warning btn-mini update">Edit</button>'+detail+"</div>";
@@ -684,29 +620,18 @@
 			select: true
 		});	
         
-        $('#periode').on('change', function(){
-        	var id = $(this).val().split("###");
-        	var id_monper = id[0];
-        	var year = id[1];
-        	var id_role = $('#idrole').val();
-        	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
-        });
         
         $('#submit').on('click', function(){
 			var id = $('#id').val();
-			var id_prog = $('#id_program').val().split("###");
-			var id_program = id_prog[0];
-			var id_activity = id_prog[1];
-			var id_indicator = id_prog[2];
-			var id_role = $('#idrole').val();
+			var id_best_practice = $('#id_best_practice').val();
+			var title = $('#title').val();
+			var org_name = $('#org_name').val();
 			var location = $('#location').val();
-			var time_activity = $('#time_activity').val();
-			var background = $('#background').val();
-			var implementation_process = $('#implementation_process').val();
-			var challenges_learning = $('#challenges_learning').val();
-			var periode = $('#periode').val().split("###");
-			var id_monper = periode[0];
-        	var year = periode[1];
+			var activity_periode = $('#activity_periode').val();
+			var partner = $('#partner').val();
+			var beneficiaries = $('#beneficiaries').val();
+			var story = $('#story').val();
+			var add_info = $('#add_info').val();
 			
 			$('.control-group').removeClass('error');
 			$('.help-block').text("");
@@ -724,28 +649,26 @@
 			if(cek==0){
 				var data = JSON.stringify({
 					'id':id,
-					'id_program':id_program,
-					'id_activity':id_activity,
-					'id_indicator':id_indicator,
-					'id_role':id_role,
+					'id_best_practice':id_best_practice,
+					'title':title,
+					'org_name':org_name,
 					'location':location,
-					'time_activity':time_activity,
-					'background':background,
-					'implementation_process':implementation_process,
-					'challenges_learning':challenges_learning,
-					'id_monper':id_monper,
-					'year':year
+					'activity_periode':activity_periode,
+					'partner':partner,
+					'beneficiaries':beneficiaries,
+					'story':story,
+					'add_info':add_info
 					});
 				$.ajax({
 					type: "POST",
-                    url: urls+'save-best',
+                    url: urls+'save-best-entry',
                     beforeSend : function(xhr){
                     	xhr.setRequestHeader(header,token);
                     },
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
 					data: data,
                     success: function (result) {
-                    	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
+                    	table.ajax.url(urls+'list-best-entry/'+id_best).load();
                     	$('#myModal').modal('hide');
                     },
                 });
@@ -754,15 +677,16 @@
         
         function clearForm(){
 			$('#id').val("");
-			$('#id_program').val("").removeAttr("readonly");
+			$('#title').val("").removeAttr("readonly");
+			$('#org_name').val("").removeAttr("readonly");
 			$('#location').val("").removeAttr("readonly");
-			$('#time_activity').val("").removeAttr("readonly");
-			$('#background').val("").removeAttr("readonly");
-			$('#implementation_process').val("").removeAttr("readonly");
-			$('#challenges_learning').val("").removeAttr("readonly");
+			$('#activity_periode').val("").removeAttr("readonly");
+			$('#partner').val("").removeAttr("readonly");
+			$('#beneficiaries').val("").removeAttr("readonly");
+			$('#story').val("").removeAttr("readonly");
+			$('#add_info').val("").removeAttr("readonly");
 			$('.control-group').removeClass('error');
 			$('.help-block').text("");
-			$('.accordion-inner').html("");
 		}
         
         $('#tbody-best').on('click', '.update', function(){
@@ -770,17 +694,19 @@
 			program();
 			$.ajax({
 				type: "GET",
-                url: urls+'get-best/'+id,
+                url: urls+'get-best-entry/'+id,
                 success: function (result) {
                 	var val = result.content;
                 	$('#showModal').trigger('click');
                 	$('#id').val(val.id);
-                	$('#id_program').val(val.id_program+"###"+val.id_activity+"###"+val.id_indicator).trigger("change");
+    				$('#title').val(val.title);
+    				$('#org_name').val(val.org_name);
     				$('#location').val(val.location);
-    				$('#time_activity').val(val.time_activity);
-    				$('#background').val(val.background);
-    				$('#implementation_process').val(val.implementation_process);
-    				$('#challenges_learning').val(val.challenges_learning);
+    				$('#activity_periode').val(val.activity_periode);
+    				$('#partner').val(val.partner);
+    				$('#beneficiaries').val(val.beneficiaries);
+    				$('#story').val(val.story);
+    				$('#add_info').val(val.add_info);
                 },
             })
          });
