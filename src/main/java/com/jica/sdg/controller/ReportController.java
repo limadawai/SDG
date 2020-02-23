@@ -106,6 +106,27 @@ public class ReportController {
         return list;
     }
     
+    @GetMapping("admin/getgovindicator")
+    public @ResponseBody List<Object> getgovindicator(@RequestParam("id_prov") String idprov, 
+    		@RequestParam("id_sdg_indicator") int idsdgindikator, 
+    		@RequestParam("id_monper") int idmonper, 
+    		@RequestParam("id_role") int idrole) {
+    	String sql = "SELECT a.*, b.nm_program, b.nm_program_eng, c.nm_activity, c.nm_activity_eng, "
+    			+ "d.nm_indicator, d.nm_indicator_eng, e.nm_unit FROM gov_map a LEFT JOIN "
+    			+ "gov_program b ON b.id = (SELECT id_program FROM gov_indicator WHERE id = a.id_gov_indicator) LEFT JOIN "
+    			+ "gov_activity c ON c.id = (SELECT id_activity FROM gov_indicator WHERE id = a.id_gov_indicator AND id_role = :id_role) LEFT JOIN "
+    			+ "gov_indicator d ON d.id = a.id_gov_indicator LEFT JOIN "
+    			+ "ref_unit e ON e.id_unit = (SELECT unit FROM gov_indicator WHERE id = a.id_gov_indicator) "
+    			+ "WHERE a.id_prov = :id_prov AND a.id_indicator = :id_indicator AND a.id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        query.setParameter("id_indicator", idsdgindikator);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("id_role", idrole);
+        List list = query.getResultList();
+        return list;
+    }
+    
 
     // ****************************** Report Grafik ******************************
 
