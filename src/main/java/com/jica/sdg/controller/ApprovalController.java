@@ -136,6 +136,21 @@ public class ApprovalController {
         return hasil;
     }
 	
+    @GetMapping("admin/list-get-cek-show-report/{id_monper}/{year}/{sts}/{type}/{period}")
+    public @ResponseBody Map<String, Object> listcekshowreport(@PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("sts") String sts, @PathVariable("type") String type, @PathVariable("period") String period) {
+        String sql = "select count(*) as totalcek from entry_show_report where id_monper = :id_monper and year = :year and show_report = :sts and type = :type ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        query.setParameter("sts", sts);
+        query.setParameter("type", type);
+//        query.setParameter("period", period);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+	
 	@PostMapping(path = "admin/update-approval", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public void updateApproval(@RequestBody Map<String, Object> recive) {

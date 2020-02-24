@@ -63,5 +63,10 @@ public class EntryApprovalService implements IEntryApprovalService{
 	public void saveshow(EntryShowReport app1) {
 		repo_report.save(app1);
 	}
+
+	@Override
+	public void deleteshow(Integer year, Integer id_monper, String type) {
+		repo_report.deleteShowreport(year, id_monper, type);
+	}
 	
 }

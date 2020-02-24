@@ -47,6 +47,10 @@
                                     <span class="lang_eng" style="display:none">Show Report</span>
                                     <span class="lang_indo">Tampil Laporan</span>
                                 </button>
+                                <button class="btn btn-warning " id="unshow_report" style="display: none">
+                                    <span class="lang_eng" style="display:none">UnShow Report</span>
+                                    <span class="lang_indo">Batal Tampil Laporan</span>
+                                </button>
                             </div>
                         </div>
                        <div class="row-fluid">
@@ -181,6 +185,7 @@
             var privilege   = [[${privilege}]];
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
+            cek_show_report();
             if(id_role == '1'){
                 
             }else{
@@ -266,6 +271,7 @@
                     }
                 });
                 $(".tabel-entri-sdg").hide();
+                cek_show_report();
             });
             
             $('#teruskan').on('click', '#apply_btn', function(e){
@@ -454,6 +460,7 @@
                     }
                 });
                 $(".tabel-entri-sdg").hide();
+                cek_show_report();
             });
             
             $("#period").on('change', function(e){
@@ -463,6 +470,7 @@
                 var period       = data_id[2];
                 table.ajax.url(urls+'list-role-approval/'+id_monper+'/'+tahun+'/entry_sdg/'+period).load();
                 $(".tabel-entri-sdg").hide();
+                cek_show_report();
             });
             
             $('#tbody-role').on('click', '.approve', function(){
@@ -569,6 +577,32 @@
             	$('#myModal').modal('hide');
             });
             
+            function cek_show_report(){
+                var v_dataid    = $("#periode").val();
+                var v_period    = $("#period").val();
+                var v_data_id   = v_dataid.split("###");
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                var v_type      = 'entry_sdg';	
+                var sts         = '1';	
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-cek-show-report/'+id_monper+'/'+tahun+'/'+sts+'/'+v_type+'/'+v_period,
+                    success: function (result1) {
+                        var sts = result1.content;
+                        if(sts == '0'){
+                            $("#show_report").show();
+                            $("#unshow_report").hide();
+                        }else{
+                            $("#show_report").hide();
+                            $("#unshow_report").show();
+                        }
+
+    //                        console.log(sts);
+                    }
+                });
+            }
+            
             $('#show_report').on('click', function(){
             	var data_id     = $("#period").val().split("###");
                 var id_monper   = data_id[0];
@@ -600,6 +634,7 @@
 		                data: data,
 		                success: function (result) {
 		                	table.ajax.url(urls+'list-role-approval/'+id_monper+'/'+tahun+'/entry_sdg/'+period).load();
+                                        cek_show_report();
 		                },
 		            });
                 }, function (dismiss) {
