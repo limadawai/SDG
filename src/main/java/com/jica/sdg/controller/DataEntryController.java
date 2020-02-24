@@ -423,6 +423,31 @@ public class DataEntryController {
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
     
+    @PostMapping(path = "admin/done-approve-gov_prog1_unshow", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void doneApproveGovProg1unshow(@RequestBody EntryApproval entryApproval) {
+//        System.out.println(entryApproval.getPeriode());
+//        System.out.println(id_monper+' '+ year+" "+ type+" "+ periode);
+        String type             = entryApproval.getType();
+        String periode          = entryApproval.getPeriode();
+        int year                = entryApproval.getYear();
+//        int id_role             = entryApproval.getId_role();
+        int id_monper           = entryApproval.getId_monper();
+        
+        EntryShowReport rp = new EntryShowReport();
+//                rp.setId();
+        rp.setId_monper(id_monper);
+        rp.setYear(year);
+        rp.setShow_report("1");
+        rp.setShow_report_date(new Date());
+        rp.setType(type);
+        rp.setPeriod("1");
+//        approvalService.updatedoneApproveGovBudget(id_monper, year, type, periode);
+        approvalService.deleteshow(year, id_monper, type);
+//        approvalService.save(entryApproval);
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
     @PostMapping(path = "admin/delete-approve-gov_prog", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public void deleteApproveGovProg(@RequestBody EntryApproval entryApproval) {

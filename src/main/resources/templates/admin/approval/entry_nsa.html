@@ -50,6 +50,10 @@
                                     <span class="lang_eng" style="display:none">Show Report</span>
                                     <span class="lang_indo">Tampil Laporan</span>
                                 </button>
+                                <button class="btn btn-warning " id="unshow_report" style="display: none">
+                                    <span class="lang_eng" style="display:none">UnShow Report</span>
+                                    <span class="lang_indo">Batal Tampil Laporan</span>
+                                </button>
                             </div>
                             <input id="nmrol" type="hidden"/>
                             <input id="idrol" type="hidden"/>
@@ -247,6 +251,7 @@
         $("#tabel-approve-gov-activity").hide();
         $("#tabel-approve-gov-indicator").hide();
         grid_role();
+        cek_show_report();
         
         
 //        alert(id_role_1);
@@ -341,6 +346,7 @@
             grid_role();
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
+            cek_show_report();
         });
 //
 //        
@@ -391,6 +397,7 @@
             grid_role();
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
+            cek_show_report();
         });
         
         $("#period").on('change', function(e){
@@ -398,6 +405,7 @@
             grid_role()
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
+            cek_show_report();
         });
         
         $("#type").on('change', function(e){
@@ -447,6 +455,7 @@
             grid_role()
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
+            cek_show_report();
         });
 //
 //        $("#idrole").on('change', function(e){
@@ -592,6 +601,33 @@
             
         }
         
+        
+        function cek_show_report(){
+            var v_dataid    = $("#periode").val();
+            var v_period    = $("#period").val();
+            var v_data_id   = v_dataid.split("###");
+            var id_monper   = v_data_id[0];
+            var tahun       = v_data_id[1];
+            var v_type      = $("#type").val();	
+            var sts         = '1';	
+            $.ajax({
+                type: "GET",
+                url: urls+'list-get-cek-show-report/'+id_monper+'/'+tahun+'/'+sts+'/'+v_type+'/'+v_period,
+                success: function (result1) {
+                    var sts = result1.content;
+                    if(sts == '0'){
+                        $("#show_report").show();
+                        $("#unshow_report").hide();
+                    }else{
+                        $("#show_report").hide();
+                        $("#unshow_report").show();
+                    }
+                    
+//                        console.log(sts);
+                }
+            });
+        }
+        
         $('.input-append').on('click', '#show_report', function(){
             var v_dataid    = $("#periode").val();
             var v_period    = $("#period").val();
@@ -640,6 +676,63 @@
                         $("#tabel-approve-gov-activity").hide();
                         $("#tabel-approve-gov-indicator").hide();
                         grid_role();
+                        cek_show_report();
+                    },
+                });
+            }, function (dismiss) {
+                if (dismiss === 'cancel') {
+                }
+            });
+        });
+        $('.input-append').on('click', '#unshow_report', function(){
+            var v_dataid    = $("#periode").val();
+            var v_period    = $("#period").val();
+            var v_data_id   = v_dataid.split("###");
+            var id_monper   = v_data_id[0];
+            var tahun       = v_data_id[1];
+            var v_idprov    = $("#id_prov").val();
+            var v_type      = $("#type").val();	
+            swal({
+                title: titleDel,
+                text: "",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: buttDel1
+            }).then(function () {
+                var periode             = v_period;
+                var id_monper1           = id_monper;
+                var year                = tahun;
+                var approval            = "4";
+                var type                = v_type;
+
+                var data1    = JSON.stringify({
+                                'id': "1",
+                                'id_form_type': "0",
+                                'id_role': "1",
+                                'id_monper': id_monper1,
+                                'year': year,
+                                'approval': approval,
+                                'approval_date': null,
+                                'type': type,
+                                'periode': periode,
+                                'description': '-'
+                            });
+                console.log(data1);
+                $.ajax({
+                    type: "POST",
+                    url: urls+'done-approve-gov_prog1_unshow',
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                    data: data1,
+                    success: function (result) {
+                        $("#tabel-approve-gov-activity").hide();
+                        $("#tabel-approve-gov-indicator").hide();
+                        grid_role();
+                        cek_show_report();
                     },
                 });
             }, function (dismiss) {
