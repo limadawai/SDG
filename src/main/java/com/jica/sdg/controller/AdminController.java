@@ -99,20 +99,12 @@ public class AdminController {
         model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
         
-         Query query = em.createNativeQuery("WITH tsdg AS (\n" +
-                                                "	SELECT * FROM assign_sdg_indicator\n" +
-                                                "),tgov_map AS (\n" +
-                                                "	SELECT * FROM gov_map\n" +
-                                                ")\n" +
-                                                ",tnsa_map AS (\n" +
-                                                "	SELECT * FROM nsa_map\n" +
-                                                ")\n" +
-                                                "SELECT \n" +
+         Query query = em.createNativeQuery("SELECT \n" +
                                                 "a.*\n" +
-                                                ",(SELECT COUNT(*) FROM tsdg WHERE id_prov = a.id_prov) AS sdg  \n" +
-                                                ",(SELECT COUNT(*) FROM tgov_map WHERE id_prov = a.id_prov) AS gov  \n" +
-                                                ",(SELECT COUNT(*) FROM tnsa_map WHERE id_prov = a.id_prov) AS non_gov  \n" +
-                                                "FROM ref_province a WHERE id_map IS NOT NULL ");
+                                                ",(SELECT COUNT(*) FROM (SELECT * FROM assign_sdg_indicator) AS tsdg WHERE id_prov = a.id_prov) AS sdg  \n" +
+                                                ",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = a.id_prov) AS gov  \n" +
+                                                ",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = a.id_prov) AS non_gov \n" +
+                                                "FROM ref_province a WHERE id_map IS NOT NULL");
         
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
