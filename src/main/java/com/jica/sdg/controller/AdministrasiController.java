@@ -1,13 +1,33 @@
 package com.jica.sdg.controller;
 
-import com.jica.sdg.model.AssignGovIndicator;
-import com.jica.sdg.model.AssignNsaIndicator;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.jica.sdg.model.AssignSdgIndicator;
 import com.jica.sdg.model.Menu;
-import com.jica.sdg.model.Nsaprofile2;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
-import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.Unit;
 import com.jica.sdg.model.User;
 import com.jica.sdg.service.IAssignGovIndicatorService;
@@ -20,29 +40,9 @@ import com.jica.sdg.service.INsaProgramService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.IUserRequestListService;
+import com.jica.sdg.service.IUserService;
 import com.jica.sdg.service.MenuService;
 import com.jica.sdg.service.SubmenuService;
-import com.jica.sdg.service.IUserService;
-
-import java.net.URLDecoder;
-import java.util.ArrayList;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 @Controller
 public class AdministrasiController {
