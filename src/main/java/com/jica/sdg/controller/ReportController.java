@@ -198,25 +198,37 @@ public class ReportController {
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/report/graph";
     }
-
-    @GetMapping("admin/graphsdg")
-    public @ResponseBody List<Object> graphSdg(@RequestParam("id_prov") String idprov) {
-        String sql = "SELECT a.*, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, c.id AS idtarget, c.nm_target, c.nm_target_eng, " +
-                "d.id AS idindicator, d.nm_indicator, d.nm_indicator_eng FROM assign_sdg_indicator a LEFT JOIN " +
-                "sdg_goals b ON b.id = a.id_goals LEFT JOIN " +
-                "sdg_target c ON c.id = a.id_target LEFT JOIN " +
-                "sdg_indicator d ON d.id = a.id_indicator WHERE a.id_prov = :id_prov";
-        Query query = manager.createNativeQuery(sql);
+    
+    @GetMapping("admin/getrole")
+    public @ResponseBody List<Object> getrole(@RequestParam("id_prov") String idprov) {
+    	String sql = "SELECT id_role FROM ref_role WHERE id_prov = :id_prov";
+    	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
         List list = query.getResultList();
         return list;
     }
 
+    @GetMapping("admin/graphsdg")
+    public @ResponseBody List<Object> graphSdg(@RequestParam("id_prov") String idprov, @RequestParam("id_role") int idrole) {
+        String sql = "SELECT a.*, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, c.id AS idtarget, c.nm_target, c.nm_target_eng, " +
+                "d.id AS idindicator, d.nm_indicator, d.nm_indicator_eng "
+                + "FROM assign_sdg_indicator a LEFT JOIN " +
+                "sdg_goals b ON b.id = a.id_goals LEFT JOIN " +
+                "sdg_target c ON c.id = a.id_target LEFT JOIN " +
+                "sdg_indicator d ON d.id = a.id_indicator WHERE a.id_prov = :id_prov AND id_role = :id_role";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        query.setParameter("id_role", idrole);
+        List list = query.getResultList();
+        return list;
+    }
+
     @GetMapping("admin/graphidgovindi")
-    public @ResponseBody List<Object> idGovIndi(@RequestParam("id_indicator") int idindi) {
-        String sql = "SELECT id_gov_indicator, id_monper FROM gov_map WHERE id_indicator = :id_indicator ORDER BY id_gov_indicator ASC";
+    public @ResponseBody List<Object> idGovIndi(@RequestParam("id_indicator") int idindi, @RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT id_gov_indicator, id_monper FROM gov_map WHERE id_indicator = :id_indicator AND id_monper = :id_monper";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_indicator", idindi);
+        query.setParameter("id_monper", idmonper);
         List list = query.getResultList();
         return list;
     }
@@ -234,10 +246,11 @@ public class ReportController {
     }
 
     @GetMapping("admin/graphidnsaindi")
-    public @ResponseBody List<Object> idNsaIndi(@RequestParam("id_indicator") int idindi) {
-        String sql = "SELECT id_nsa_indicator, id_monper FROM nsa_map WHERE id_indicator = :id_indicator ORDER BY id_nsa_indicator ASC";
+    public @ResponseBody List<Object> idNsaIndi(@RequestParam("id_indicator") int idindi, @RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT id_nsa_indicator, id_monper FROM nsa_map WHERE id_indicator = :id_indicator AND id_monper = :id_monper";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_indicator", idindi);
+        query.setParameter("id_monper", idmonper);
         List list = query.getResultList();
         return list;
     }
@@ -403,7 +416,7 @@ public class ReportController {
     
     @GetMapping("admin/reportnsagrap")
     public @ResponseBody List<Object> reportnsagrap(@RequestParam("id_sdg_goals") int idsdg, @RequestParam("id_sdg_target") int idtarget,
-    		@RequestParam("id_sdg_indicator") int idsdgindi, @RequestParam("id_gov_indicator") int id) {
+    		@RequestParam("id_sdg_indicator") int idsdgindi, @RequestParam("id_nsa_indicator") int id) {
         String sql = "SELECT a.*, b.nm_unit FROM nsa_map a LEFT JOIN "
                 +"ref_unit b ON b.id_unit = (SELECT unit FROM nsa_indicator WHERE id = a.id_nsa_indicator) "
                 + "WHERE id_goals = :id_goals AND id_target = :id_target AND id_indicator = :id_indicator AND id_nsa_indicator = :id_nsa_indicator";

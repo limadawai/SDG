@@ -416,7 +416,7 @@ public class DataEntryController {
         rp.setShow_report("1");
         rp.setShow_report_date(new Date());
         rp.setType(type);
-        rp.setPeriod("1");
+        rp.setPeriod(periode);
         approvalService.updatedoneApproveGovBudget(id_monper, year, type, periode);
         approvalService.saveshow(rp);
 //        approvalService.save(entryApproval);
@@ -442,8 +442,8 @@ public class DataEntryController {
         rp.setShow_report_date(new Date());
         rp.setType(type);
         rp.setPeriod("1");
-//        approvalService.updatedoneApproveGovBudget(id_monper, year, type, periode);
-        approvalService.deleteshow(year, id_monper, type);
+        approvalService.updateundoneApproveGovBudget(id_monper, year, type, periode);
+        approvalService.deleteshow(year, id_monper, type, periode);
 //        approvalService.save(entryApproval);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }

@@ -60,13 +60,18 @@ public class EntryApprovalService implements IEntryApprovalService{
 	}
 
 	@Override
+	public void updateundoneApproveGovBudget(Integer id_monper, Integer year, String type, String periode) {
+		repo.updateUNdoneApproval(id_monper, year, type, periode);
+	}
+
+	@Override
 	public void saveshow(EntryShowReport app1) {
 		repo_report.save(app1);
 	}
 
 	@Override
-	public void deleteshow(Integer year, Integer id_monper, String type) {
-		repo_report.deleteShowreport(year, id_monper, type);
+	public void deleteshow(Integer year, Integer id_monper, String type, String periode) {
+		repo_report.deleteShowreport(year, id_monper, type, periode);
 	}
 	
 }
