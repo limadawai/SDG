@@ -214,10 +214,11 @@ public class ReportController {
     }
 
     @GetMapping("admin/graphidnsaindi")
-    public @ResponseBody List<Object> idNsaIndi(@RequestParam("id_indicator") int idindi) {
-        String sql = "SELECT id_nsa_indicator, id_monper FROM nsa_map WHERE id_indicator = :id_indicator ORDER BY id_nsa_indicator ASC";
+    public @ResponseBody List<Object> idNsaIndi(@RequestParam("id_indicator") int idindi, @RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT id_nsa_indicator, id_monper FROM nsa_map WHERE id_indicator = :id_indicator AND id_monper = :id_monper";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_indicator", idindi);
+        query.setParameter("id_monper", idmonper);
         List list = query.getResultList();
         return list;
     }

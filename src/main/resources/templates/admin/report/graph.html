@@ -186,7 +186,7 @@
             $.ajax({
                 url: urls + "graphidnsaindi",
                 type: 'get',
-                data: 'id_indicator=' + idindi,
+                data: {"id_indicator":idindi,"id_monper":idmonper},
                 dataType: 'json',
                 cache: false,
                 success: function (result) {
