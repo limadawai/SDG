@@ -382,7 +382,7 @@ public class ReportController {
     
     @GetMapping("admin/reportnsagrap")
     public @ResponseBody List<Object> reportnsagrap(@RequestParam("id_sdg_goals") int idsdg, @RequestParam("id_sdg_target") int idtarget,
-    		@RequestParam("id_sdg_indicator") int idsdgindi, @RequestParam("id_gov_indicator") int id) {
+    		@RequestParam("id_sdg_indicator") int idsdgindi, @RequestParam("id_nsa_indicator") int id) {
         String sql = "SELECT a.*, b.nm_unit FROM nsa_map a LEFT JOIN "
                 +"ref_unit b ON b.id_unit = (SELECT unit FROM nsa_indicator WHERE id = a.id_nsa_indicator) "
                 + "WHERE id_goals = :id_goals AND id_target = :id_target AND id_indicator = :id_indicator AND id_nsa_indicator = :id_nsa_indicator";
