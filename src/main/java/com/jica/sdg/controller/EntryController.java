@@ -322,7 +322,7 @@ public class EntryController {
     
     @GetMapping("admin/list-best/{id_role}/{id_monper}/{year}")
     public @ResponseBody Map<String, Object> listBest(@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
-        String sql  = "select a.id, b.nm_program, b.nm_program_eng, a.location, a.time_activity, a.background, a.implementation_process, "
+        String sql  = "select a.id, b.nm_program, b.nm_program_eng, a.location, DATE_FORMAT(a.time_activity, \"%M, %d %Y %H:%i\"), a.background, a.implementation_process, "
         		+ "a.challenges_learning, a.id_indicator, c.nm_program as nsa_prog, c.nm_program_eng as nsa_prog_eng "
         		+ "from best_practice as a "
         		+ "left join gov_program b on a.id_program = b.id "
