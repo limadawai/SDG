@@ -192,10 +192,11 @@ public class ReportController {
     }
 
     @GetMapping("admin/graphidgovindi")
-    public @ResponseBody List<Object> idGovIndi(@RequestParam("id_indicator") int idindi) {
-        String sql = "SELECT id_gov_indicator, id_monper FROM gov_map WHERE id_indicator = :id_indicator ORDER BY id_gov_indicator ASC";
+    public @ResponseBody List<Object> idGovIndi(@RequestParam("id_indicator") int idindi, @RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT id_gov_indicator, id_monper FROM gov_map WHERE id_indicator = :id_indicator AND id_monper = :id_monper";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_indicator", idindi);
+        query.setParameter("id_monper", idmonper);
         List list = query.getResultList();
         return list;
     }
