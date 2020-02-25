@@ -14,8 +14,8 @@ public interface EntryShowReportRepository extends CrudRepository<EntryShowRepor
     
     @Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "delete from entry_show_report WHERE year = :year and id_monper = :id_monper and show_report = '1' and type = :type ",nativeQuery = true)
-    void deleteShowreport(@Param("year") Integer year, @Param("id_monper") Integer id_monper, @Param("type") String type);
+    @Query(value = "delete from entry_show_report WHERE year = :year and id_monper = :id_monper and show_report = '1' and type = :type and period = :periode ",nativeQuery = true)
+    void deleteShowreport(@Param("year") Integer year, @Param("id_monper") Integer id_monper, @Param("type") String type, @Param("periode") String periode);
 
 
 

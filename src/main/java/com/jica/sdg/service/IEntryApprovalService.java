@@ -23,7 +23,9 @@ public interface IEntryApprovalService {
     
     void updatedoneApproveGovBudget(Integer id_monper, Integer year, String type, String periode);
     
+    void updateundoneApproveGovBudget(Integer id_monper, Integer year, String type, String periode);
+    
     void saveshow(EntryShowReport app1);
     
-    void deleteshow(Integer year, Integer id_monper, String type);
+    void deleteshow(Integer year, Integer id_monper, String type, String periode);
 }
