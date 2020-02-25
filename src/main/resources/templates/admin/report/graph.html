@@ -113,7 +113,6 @@
                         $("#divkiri").append(isi);
                     }
                 });
-                pohon();
             } else if (valdaerah == "0") {
                 $("#divkiri").empty();
             }
@@ -175,10 +174,11 @@
                         $.ajax({
                             url: urls + "isinsamap",
                             type: 'get',
-                            data: 'id='+result[i],
+                            data: 'id='+result[i][0],
                             dataType: 'json',
                             cache: false,
                             success: function (resin) {
+                            	//console.log(resin);
                                 var isi = "<ol class='treekanan'>";
                                 for (var i=0; i<resin.length; i++) {
                                     isi += "<li style='padding:6px'>";
