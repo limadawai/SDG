@@ -206,18 +206,7 @@
             	stsBud = result1.content;
             	}
             });
-        
-        $.ajax({
-        	url: urls + "getentryshowreport",
-            type: 'get',
-            data: {"id_monper":id_monper, "year":tahun},
-            dataType: 'json',
-            cache: false,
-            async:false,
-            success: function (res) {
-            	periodSdg = res[0][0];
-            }
-        });
+
         var tabelSdg = "";
         var textSdg = "";
         
