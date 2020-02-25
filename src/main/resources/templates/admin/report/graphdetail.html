@@ -300,7 +300,7 @@
                 dataType: 'json',
                 cache: false,
                 success: function (resgovindi) {
-                    console.log(resgovindi);
+                    //console.log(resgovindi);
                     for ( var i=0; i<resgovindi.length; i++) {
                         var row = "<tr>";
                         row += "<td style='text-align:center;'>"+resgovindi[i][7]+"</td>";
@@ -310,47 +310,47 @@
                         row += "<td id='tar4' style='text-align:center;'></td>";
                         row += "<td id='tar5' style='text-align:center;'></td>";
                         if (periode == "yearly") {
-                            row += "<td id='td1' style='text-align:center;'></td>";
-                            row += "<td id='td2' style='text-align:center;'></td>";
-                            row += "<td id='td3' style='text-align:center;'></td>";
-                            row += "<td id='td4' style='text-align:center;'></td>";
-                            row += "<td id='td5' style='text-align:center;'></td>";
+                            row += "<td id='td1' style='text-align:center;'>0</td>";
+                            row += "<td id='td2' style='text-align:center;'>0</td>";
+                            row += "<td id='td3' style='text-align:center;'>0</td>";
+                            row += "<td id='td4' style='text-align:center;'>0</td>";
+                            row += "<td id='td5' style='text-align:center;'>0</td>";
                         } else if (periode == "semesterly") {
-                            row += "<td id='td11' style='text-align:center;'></td>";
-                            row += "<td id='td21' style='text-align:center;'></td>";
-                            row += "<td id='td12' style='text-align:center;'></td>";
-                            row += "<td id='td22' style='text-align:center;'></td>";
-                            row += "<td id='td13' style='text-align:center;'></td>";
-                            row += "<td id='td23' style='text-align:center;'></td>";
-                            row += "<td id='td14' style='text-align:center;'></td>";
-                            row += "<td id='td24' style='text-align:center;'></td>";
-                            row += "<td id='td15' style='text-align:center;'></td>";
-                            row += "<td id='td25' style='text-align:center;'></td>";
+                            row += "<td id='td11' style='text-align:center;'>0</td>";
+                            row += "<td id='td21' style='text-align:center;'>0</td>";
+                            row += "<td id='td12' style='text-align:center;'>0</td>";
+                            row += "<td id='td22' style='text-align:center;'>0</td>";
+                            row += "<td id='td13' style='text-align:center;'>0</td>";
+                            row += "<td id='td23' style='text-align:center;'>0</td>";
+                            row += "<td id='td14' style='text-align:center;'>0</td>";
+                            row += "<td id='td24' style='text-align:center;'>0</td>";
+                            row += "<td id='td15' style='text-align:center;'>0</td>";
+                            row += "<td id='td25' style='text-align:center;'>0</td>";
                         } else if (periode == "quarterly") {
-                            row += "<td id='td11' style='text-align:center;'></td>";
-                            row += "<td id='td21' style='text-align:center;'></td>";
-                            row += "<td id='td31' style='text-align:center;'></td>";
-                            row += "<td id='td41' style='text-align:center;'></td>";
-                            row += "<td id='td12' style='text-align:center;'></td>";
-                            row += "<td id='td22' style='text-align:center;'></td>";
-                            row += "<td id='td32' style='text-align:center;'></td>";
-                            row += "<td id='td42' style='text-align:center;'></td>";
-                            row += "<td id='td13' style='text-align:center;'></td>";
-                            row += "<td id='td23' style='text-align:center;'></td>";
-                            row += "<td id='td33' style='text-align:center;'></td>";
-                            row += "<td id='td43' style='text-align:center;'></td>";
-                            row += "<td id='td14' style='text-align:center;'></td>";
-                            row += "<td id='td24' style='text-align:center;'></td>";
-                            row += "<td id='td34' style='text-align:center;'></td>";
-                            row += "<td id='td44' style='text-align:center;'></td>";
-                            row += "<td id='td15' style='text-align:center;'></td>";
-                            row += "<td id='td25' style='text-align:center;'></td>";
-                            row += "<td id='td35' style='text-align:center;'></td>";
-                            row += "<td id='td45' style='text-align:center;'></td>";
+                            row += "<td id='td11' style='text-align:center;'>0</td>";
+                            row += "<td id='td21' style='text-align:center;'>0</td>";
+                            row += "<td id='td31' style='text-align:center;'>0</td>";
+                            row += "<td id='td41' style='text-align:center;'>0</td>";
+                            row += "<td id='td12' style='text-align:center;'>0</td>";
+                            row += "<td id='td22' style='text-align:center;'>0</td>";
+                            row += "<td id='td32' style='text-align:center;'>0</td>";
+                            row += "<td id='td42' style='text-align:center;'>0</td>";
+                            row += "<td id='td13' style='text-align:center;'>0</td>";
+                            row += "<td id='td23' style='text-align:center;'>0</td>";
+                            row += "<td id='td33' style='text-align:center;'>0</td>";
+                            row += "<td id='td43' style='text-align:center;'>0</td>";
+                            row += "<td id='td14' style='text-align:center;'>0</td>";
+                            row += "<td id='td24' style='text-align:center;'>0</td>";
+                            row += "<td id='td34' style='text-align:center;'>0</td>";
+                            row += "<td id='td44' style='text-align:center;'>0</td>";
+                            row += "<td id='td15' style='text-align:center;'>0</td>";
+                            row += "<td id='td25' style='text-align:center;'>0</td>";
+                            row += "<td id='td35' style='text-align:center;'>0</td>";
+                            row += "<td id='td45' style='text-align:center;'>0</td>";
                         }
                         if (resgovindi[i][14] == null){resgovindi[i][14] = 0};
                         row += "<td style='text-align:center;width:8%;'>"+resgovindi[i][14]+"</td>";
-                        row += "<td style='width:12%;'>"+resgovindi[i][13]+"</td>";
+                        row += "<td id='fund' style='width:12%;'></td>";
                         row += "<td>"+name+"</td>";
                         row += "</tr>";
                         $("#tabgrafik > tbody").append(row);
@@ -382,7 +382,7 @@
                     		$.ajax({
             	            	url: urls + "realgovyear",
             	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i]},
+            	                data: {"id_monper":idmonper,"year":tahun[i],"id_gov_indicator":idindikator},
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
@@ -398,11 +398,11 @@
                     		$.ajax({
             	            	url: urls + "realgovsemester",
             	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i]},
+            	                data: {"id_monper":idmonper,"year":tahun[i],"id_gov_indicator":idindikator},
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
-            	                	//console.log(resreal[0]);
+            	                	console.log(resreal);
             	                	for (var i=1; i<=5; i++) {
             	                		$("#td1"+i).text(resreal[i-1][0]);
             	                		$("#td2"+i).text(resreal[i-1][1]);
@@ -415,7 +415,7 @@
                     		$.ajax({
             	            	url: urls + "realgovquarter",
             	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i]},
+            	                data: {"id_monper":idmonper,"year":tahun[i],"id_gov_indicator":idindikator},
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
@@ -430,6 +430,17 @@
                     		});
                     	}
                     }
+                    $.ajax({
+    	            	url: urls + "getgovfundsource",
+    	                type: 'get',
+    	                data: {"id_monper":idmonper,"id_gov_indicator":idindikator},
+    	                dataType: 'json',
+    	                cache: false,
+    	                success: function (resfund) {
+    	                	//console.log(resfund[0][4]);
+    	                	$("#fund").text(resfund[0][4]);
+    	                }
+            		});
                 }
             });
         } else if (flag == "1") {
@@ -470,47 +481,47 @@
                         if (resnsaindi[i][12] == null){resnsaindi[i][12] = 0};
                         row += "<td id='tar5' style='text-align:center;'>"+resnsaindi[i][12]+"</td>";
                         if (periode == "yearly") {
-                            row += "<td id='td1' style='text-align:center;'></td>";
-                            row += "<td id='td2' style='text-align:center;'></td>";
-                            row += "<td id='td3' style='text-align:center;'></td>";
-                            row += "<td id='td4' style='text-align:center;'></td>";
-                            row += "<td id='td5' style='text-align:center;'></td>";
+                            row += "<td id='td1' style='text-align:center;'>0</td>";
+                            row += "<td id='td2' style='text-align:center;'>0</td>";
+                            row += "<td id='td3' style='text-align:center;'>0</td>";
+                            row += "<td id='td4' style='text-align:center;'>0</td>";
+                            row += "<td id='td5' style='text-align:center;'>0</td>";
                         } else if (periode == "semesterly") {
-                            row += "<td id='td11' style='text-align:center;'></td>";
-                            row += "<td id='td21' style='text-align:center;'></td>";
-                            row += "<td id='td12' style='text-align:center;'></td>";
-                            row += "<td id='td22' style='text-align:center;'></td>";
-                            row += "<td id='td13' style='text-align:center;'></td>";
-                            row += "<td id='td23' style='text-align:center;'></td>";
-                            row += "<td id='td14' style='text-align:center;'></td>";
-                            row += "<td id='td24' style='text-align:center;'></td>";
-                            row += "<td id='td15' style='text-align:center;'></td>";
-                            row += "<td id='td25' style='text-align:center;'></td>";
+                            row += "<td id='td11' style='text-align:center;'>0</td>";
+                            row += "<td id='td21' style='text-align:center;'>0</td>";
+                            row += "<td id='td12' style='text-align:center;'>0</td>";
+                            row += "<td id='td22' style='text-align:center;'>0</td>";
+                            row += "<td id='td13' style='text-align:center;'>0</td>";
+                            row += "<td id='td23' style='text-align:center;'>0</td>";
+                            row += "<td id='td14' style='text-align:center;'>0</td>";
+                            row += "<td id='td24' style='text-align:center;'>0</td>";
+                            row += "<td id='td15' style='text-align:center;'>0</td>";
+                            row += "<td id='td25' style='text-align:center;'>0</td>";
                         } else if (periode == "quarterly") {
-                            row += "<td id='td11' style='text-align:center;'></td>";
-                            row += "<td id='td21' style='text-align:center;'></td>";
-                            row += "<td id='td31' style='text-align:center;'></td>";
-                            row += "<td id='td41' style='text-align:center;'></td>";
-                            row += "<td id='td12' style='text-align:center;'></td>";
-                            row += "<td id='td22' style='text-align:center;'></td>";
-                            row += "<td id='td32' style='text-align:center;'></td>";
-                            row += "<td id='td42' style='text-align:center;'></td>";
-                            row += "<td id='td13' style='text-align:center;'></td>";
-                            row += "<td id='td23' style='text-align:center;'></td>";
-                            row += "<td id='td33' style='text-align:center;'></td>";
-                            row += "<td id='td43' style='text-align:center;'></td>";
-                            row += "<td id='td14' style='text-align:center;'></td>";
-                            row += "<td id='td24' style='text-align:center;'></td>";
-                            row += "<td id='td34' style='text-align:center;'></td>";
-                            row += "<td id='td44' style='text-align:center;'></td>";
-                            row += "<td id='td15' style='text-align:center;'></td>";
-                            row += "<td id='td25' style='text-align:center;'></td>";
-                            row += "<td id='td35' style='text-align:center;'></td>";
-                            row += "<td id='td45' style='text-align:center;'></td>";
+                            row += "<td id='td11' style='text-align:center;'>0</td>";
+                            row += "<td id='td21' style='text-align:center;'>0</td>";
+                            row += "<td id='td31' style='text-align:center;'>0</td>";
+                            row += "<td id='td41' style='text-align:center;'>0</td>";
+                            row += "<td id='td12' style='text-align:center;'>0</td>";
+                            row += "<td id='td22' style='text-align:center;'>0</td>";
+                            row += "<td id='td32' style='text-align:center;'>0</td>";
+                            row += "<td id='td42' style='text-align:center;'>0</td>";
+                            row += "<td id='td13' style='text-align:center;'>0</td>";
+                            row += "<td id='td23' style='text-align:center;'>0</td>";
+                            row += "<td id='td33' style='text-align:center;'>0</td>";
+                            row += "<td id='td43' style='text-align:center;'>0</td>";
+                            row += "<td id='td14' style='text-align:center;'>0</td>";
+                            row += "<td id='td24' style='text-align:center;'>0</td>";
+                            row += "<td id='td34' style='text-align:center;'>0</td>";
+                            row += "<td id='td44' style='text-align:center;'>0</td>";
+                            row += "<td id='td15' style='text-align:center;'>0</td>";
+                            row += "<td id='td25' style='text-align:center;'>0</td>";
+                            row += "<td id='td35' style='text-align:center;'>0</td>";
+                            row += "<td id='td45' style='text-align:center;'>0</td>";
                         }
                         if (resnsaindi[i][14] == null){resnsaindi[i][14] = 0};
                         row += "<td style='text-align:center;'>"+resnsaindi[i][14]+"</td>";
-                        row += "<td>"+resnsaindi[i][13]+"</td>";
+                        row += "<td id='fund' style='width:12%;'></td>";
                         row += "<td>"+name+"</td>";
                         row += "</tr>";
                         $("#tabgrafik > tbody").append(row);
@@ -539,7 +550,7 @@
                     		$.ajax({
             	            	url: urls + "realnsayear",
             	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i]},
+            	                data: {"id_monper":idmonper,"year":tahun[i],"id_nsa_indicator":idindikator},
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
@@ -555,11 +566,11 @@
                     		$.ajax({
             	            	url: urls + "realnsasemester",
             	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i]},
+            	                data: {"id_monper":idmonper,"year":tahun[i],"id_nsa_indicator":idindikator},
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
-            	                	console.log(resreal[0]);
+            	                	//console.log(resreal[0]);
             	                	for (var i=1; i<=5; i++) {
             	                		$("#td1"+i).text(resreal[i-1][0]);
             	                		$("#td2"+i).text(resreal[i-1][1]);
@@ -572,11 +583,11 @@
                     		$.ajax({
             	            	url: urls + "realnsaquarter",
             	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i]},
+            	                data: {"id_monper":idmonper,"year":tahun[i],"id_nsa_indicator":idindikator},
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
-            	                	console.log(resreal[0]);
+            	                	//console.log(resreal[0]);
             	                	for (var i=1; i<=5; i++) {
             	                		$("#td1"+i).text(resreal[i-1][0]);
             	                		$("#td2"+i).text(resreal[i-1][1]);
@@ -587,6 +598,17 @@
                     		});
                     	}
                     }
+                    $.ajax({
+    	            	url: urls + "getnsafundsource",
+    	                type: 'get',
+    	                data: {"id_monper":idmonper,"id_nsa_indicator":idindikator},
+    	                dataType: 'json',
+    	                cache: false,
+    	                success: function (resfund) {
+    	                	//console.log(resfund[0][4]);
+    	                	$("#fund").text(resfund[0][4]);
+    	                }
+            		});
                 }
             });
         }
