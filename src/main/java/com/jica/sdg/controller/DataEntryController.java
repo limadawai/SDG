@@ -966,7 +966,7 @@ public class DataEntryController {
                     "left join \n" +
                     "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
+                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov order by a.id_goals, a.id_target, a.id_indicator";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         query.setParameter("id_role", id_role);

@@ -154,6 +154,38 @@ public class ReportController {
         return hasil;
     }
     
+    @GetMapping("admin/getnsaindicator")
+    public @ResponseBody Map<String, Object> getnsaindicator(@RequestParam("id_prov") String idprov, 
+    		@RequestParam("id_sdg_indicator") int idsdgindikator, 
+    		@RequestParam("id_monper") int idmonper, 
+    		@RequestParam("id_role") int idrole,
+    		@RequestParam("year") int year) {
+    	String sql = "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
+    			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
+    			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
+    			+ "i.funding_source "
+    			+ "from nsa_map a "
+    			+ "left join entry_nsa_indicator b on a.id_nsa_indicator = b.id_assign and b.year_entry = :year "
+    			+ "left join nsa_indicator d on a.id_nsa_indicator = d.id "
+    			+ "left join entry_nsa_budget c on a.id_nsa_indicator = d.id_activity and c.year_entry = :year "
+    			+ "left join nsa_program e on d.id_program = e.id "
+    			+ "left join nsa_activity f on d.id_activity = f.id "
+    			+ "left join ref_unit g on d.unit = g.id_unit "
+    			+ "left join nsa_target h on a.id_nsa_indicator = h.id_nsa_indicator and year = :year "
+    			+ "left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper "
+    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator and f.id_role = :id_role ";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        query.setParameter("id_indicator", idsdgindikator);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("id_role", idrole);
+        query.setParameter("year", year);
+        List list = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
 
     // ****************************** Report Grafik ******************************
 
