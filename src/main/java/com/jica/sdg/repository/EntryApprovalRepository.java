@@ -24,4 +24,9 @@ public interface EntryApprovalRepository extends CrudRepository<EntryApproval, I
     @Query(value = "update entry_approval set approval='4' WHERE id_monper = :id_monper and year = :year and type = :type and periode = :periode and (approval = '2' or approval = '1')",nativeQuery = true)
     void updatedoneApproval(@Param("id_monper") Integer id_monper, @Param("year") Integer year, @Param("type") String type, @Param("periode") String periode);
 
+    @Transactional
+    @Modifying(clearAutomatically = true)
+    @Query(value = "update entry_approval set approval='2' WHERE id_monper = :id_monper and year = :year and type = :type and periode = :periode and approval = '4' ",nativeQuery = true)
+    void updateUNdoneApproval(@Param("id_monper") Integer id_monper, @Param("year") Integer year, @Param("type") String type, @Param("periode") String periode);
+
 }
