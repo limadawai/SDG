@@ -206,18 +206,7 @@
             	stsBud = result1.content;
             	}
             });
-        
-        $.ajax({
-        	url: urls + "getentryshowreport",
-            type: 'get',
-            data: {"id_monper":id_monper, "year":tahun},
-            dataType: 'json',
-            cache: false,
-            async:false,
-            success: function (res) {
-            	periodSdg = res[0][0];
-            }
-        });
+
         var tabelSdg = "";
         var textSdg = "";
         
@@ -240,6 +229,7 @@
                 async:false,
                 success: function (res) {
                 	var row = res.content;
+                	var noGoals = 1;
                 	for(var i=0;i<row.length;i++){
                 		//JUDUL BESAR SDG
                 		if($('#fs').is(':checked')){
@@ -247,14 +237,56 @@
                        		if(row[i][26]){
                            		disaggre = "<p style='font-size:90%;'>"+row[i][25]+" "+row[i][26]+" "+row[i][28]+"</p>";
                            	}
-                       		textSdg += "<p style='font-size:90%;'>"+row[i][15]+" "+row[i][3]+"<p/><p style='font-size:90%;'>"+row[i][17]+" "+row[i][4]+"<p/><p style='font-size:90%;'>"+row[i][19]+" "+row[i][5]+"</p>"+disaggre;
+        					//Goals
+        					var ig=i-1;
+        					if(ig<0){
+        						textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'>Goal "+noGoals+". "+row[i][15]+" "+row[i][3]+"</div><p/>";
+        					}else if(row[ig][15]!=row[i][15]){
+        						textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'>Goal "+noGoals+". "+row[i][15]+" "+row[i][3]+"</div><p/>";	
+        					}
+                       		//Target
+                       		var it=i-1;
+                       		if(it<0){
+                       			textSdg += "<p style='font-size:90%;'>SDG Targets "+row[i][17]+" "+row[i][4]+"<p/>";
+                       		}else if(row[ig][17]!=row[i][17]){
+                       			textSdg += "<p style='font-size:90%;'>SDG Targets "+row[i][17]+" "+row[i][4]+"<p/>";
+                       		}
+                       		//Indicator
+                       		var ii=i-1;
+                       		if(ii<0){
+                       			textSdg += "<p style='font-size:90%;'>SDG Indicators "+row[i][19]+" "+row[i][5]+"</p>";
+                       		}else if(row[ig][19]!=row[i][19]){
+                       			textSdg += "<p style='font-size:90%;'>SDG Indicators "+row[i][19]+" "+row[i][5]+"</p>";
+                       		}
+                       		textSdg += disaggre;
                         }else{
                         	var disaggre = "";
                        		if(row[i][27]){
                            		disaggre = "<p style='font-size:90%;'>"+row[i][25]+" "+row[i][27]+" "+row[i][29]+"</p>";
                            	}
-                       		textSdg += "<p style='font-size:90%;'>"+row[i][15]+" "+row[i][16]+"<p/><p style='font-size:90%;'>"+row[i][17]+" "+row[i][18]+"<p/><p style='font-size:90%;'>"+row[i][19]+" "+row[i][20]+"</p>"+disaggre;
-                        }
+                       		//Goals
+                       		var ig=i-1;
+                       		if(ig<0){
+                       			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'>Goal "+noGoals+". "+row[i][15]+" "+row[i][16]+"</div><p/>";
+                       		}else if(row[ig][15]!=row[i][15]){
+                       			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'>Goal "+noGoals+". "+row[i][15]+" "+row[i][16]+"</div><p/>";	
+                       		}
+                       		//Target
+                       		var it=i-1;
+                       		if(it<0){
+                       			textSdg += "<p style='font-size:90%;'>SDG Targets "+row[i][17]+" "+row[i][18]+"<p/>";
+                       		}else if(row[ig][17]!=row[i][17]){
+                       			textSdg += "<p style='font-size:90%;'>SDG Targets "+row[i][17]+" "+row[i][18]+"<p/>";
+                       		}
+                       		//Indicator
+                       		var ii=i-1;
+                       		if(ii<0){
+                       			textSdg += "<p style='font-size:90%;'>SDG Indicators "+row[i][19]+" "+row[i][20]+"</p>";
+                       		}else if(row[ig][19]!=row[i][19]){
+                       			textSdg += "<p style='font-size:90%;'>SDG Indicators "+row[i][19]+" "+row[i][20]+"</p>";
+                       		}
+                       		textSdg += disaggre;
+                       	}
                 		var nilai = "";
                 		if(row[i][9]){
                 			nilai = row[i][9];
