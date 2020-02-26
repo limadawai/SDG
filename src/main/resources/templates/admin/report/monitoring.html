@@ -329,15 +329,47 @@
                 		var nilai3 = "";
                 		var nilai4 = "";
                 		if(row[i][30] && row[i][31]){
-                			nilai1 = row[i][33];
-                			nilai2 = row[i][34];
-                			nilai3 = row[i][35];
-                			nilai4 = row[i][36];
+                			if(row[i][37]){
+                				nilai1 = row[i][37];
+                			}else{
+                				nilai1 = row[i][33];
+                			}
+                			if(row[i][38]){
+                				nilai2 = row[i][38];
+                			}else{
+                				nilai2 = row[i][34];
+                			}
+                			if(row[i][39]){
+                				nilai3 = row[i][39];
+                			}else{
+                				nilai3 = row[i][35];
+                			}
+                			if(row[i][40]){
+                				nilai4 = row[i][40];
+                			}else{
+                				nilai4 = row[i][36];
+                			}
                     	}else{
-                    		nilai1 = row[i][9];
-                    		nilai2 = row[i][10];
-                    		nilai3 = row[i][11];
-                    		nilai4 = row[i][12];
+                    		if(row[i][21]){
+                    			nilai1 = row[i][21];
+                			}else{
+                				nilai1 = row[i][9];
+                			}
+                    		if(row[i][22]){
+                    			nilai2 = row[i][22];
+                			}else{
+                				nilai2 = row[i][10];
+                			}
+                    		if(row[i][23]){
+                    			nilai3 = row[i][23];
+                			}else{
+                				nilai3 = row[i][11];
+                			}
+                    		if(row[i][23]){
+                    			nilai4 = row[i][24];
+                			}else{
+                				nilai4 = row[i][12];
+                			}
                     	}
                 		textSdg += tabelSdg+"<tbody><tr style='font-size:90%;'><td></td><td>"+row[i][6]+"</td><td></td><td>"+(row[i][8]?row[i][8]:0)+"</td>";
                 		if(sts == 'yearly'){
@@ -417,31 +449,81 @@
     	                            		textSdg += "<td>"+rowGov[j][1]+"</td><td>"+rowGov[j][3]+"</td><td>"+rowGov[j][5];
     	                            	}
 	                            		textSdg +="<td>"+rowGov[j][6]+"</td>"+"<td>"+rowGov[j][7]+"</td>";
+	                            		var nilaiGov1;
+	                            		var nilaiGov2;
+	                            		var nilaiGov3;
+	                            		var nilaiGov4;
+	                            		if(rowGov[j][17]){
+	                            			nilaiGov1 = rowGov[j][17];
+	                            		}else{
+	                            			nilaiGov1 = rowGov[j][8];
+	                            		}
+	                            		if(rowGov[j][18]){
+	                            			nilaiGov2 = rowGov[j][18];
+	                            		}else{
+	                            			nilaiGov2 = rowGov[j][9];
+	                            		}
+	                            		if(rowGov[j][19]){
+	                            			nilaiGov3 = rowGov[j][19];
+	                            		}else{
+	                            			nilaiGov3 = rowGov[j][10];
+	                            		}
+	                            		if(rowGov[j][20]){
+	                            			nilaiGov4 = rowGov[j][20];
+	                            		}else{
+	                            			nilaiGov4 = rowGov[j][11];
+	                            		}
+	                            		
 	                            		if(stsGov == 'yearly'){
-	                            			textSdg += "<td>"+rowGov[j][8]+"</td>";
+	                            			textSdg += "<td>"+nilaiGov1+"</td>";
 	                                	}
 	                            		else if(stsGov == 'semesterly'){
-	                            			textSdg += "<td>"+rowGov[j][8]+"</td>";
-	                            			textSdg += "<td>"+rowGov[j][9]+"</td>";
+	                            			textSdg += "<td>"+nilaiGov1+"</td>";
+	                            			textSdg += "<td>"+nilaiGov2+"</td>";
 	                                	}
 	                            		else if(stsGov == 'quarterly'){
-	                            			textSdg += "<td>"+rowGov[j][8]+"</td>";
-	                            			textSdg += "<td>"+rowGov[j][9]+"</td>";
-	                            			textSdg += "<td>"+rowGov[j][10]+"</td>";
-	                            			textSdg += "<td>"+rowGov[j][11]+"</td>";
+	                            			textSdg += "<td>"+nilaiGov1+"</td>";
+	                            			textSdg += "<td>"+nilaiGov2+"</td>";
+	                            			textSdg += "<td>"+nilaiGov3+"</td>";
+	                            			textSdg += "<td>"+nilaiGov4+"</td>";
 	                                	}
+	                            		
+	                            		var nilaiBudGov1;
+	                            		var nilaiBudGov2;
+	                            		var nilaiBudGov3;
+	                            		var nilaiBudGov4;
+	                            		if(rowGov[j][21]){
+	                            			nilaiBudGov1 = rowGov[j][21];
+	                            		}else{
+	                            			nilaiBudGov1 = rowGov[j][12];
+	                            		}
+	                            		if(rowGov[j][22]){
+	                            			nilaiBudGov2 = rowGov[j][22];
+	                            		}else{
+	                            			nilaiBudGov2 = rowGov[j][13];
+	                            		}
+	                            		if(rowGov[j][23]){
+	                            			nilaiBudGov3 = rowGov[j][23];
+	                            		}else{
+	                            			nilaiBudGov3 = rowGov[j][14];
+	                            		}
+	                            		if(rowGov[j][24]){
+	                            			nilaiBudGov4 = rowGov[j][24];
+	                            		}else{
+	                            			nilaiBudGov4 = rowGov[j][15];
+	                            		}
 	                            		if(stsBud == 'yearly'){
-	                            			textSdg += "<td>"+rowGov[j][12]+"</td>";
+	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
 	                                	}
 	                            		else if(stsBud == 'semesterly'){
-	                            			textSdg += "<td>"+rowGov[j][12]+"</td>";
-	                            			textSdg += "<td>"+rowGov[j][13]+"</td>";
+	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
+	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
 	                                	}
 	                            		else if(stsBud == 'quarterly'){
-	                            			textSdg += "<td>"+rowGov[j][12]+"</td>";
-	                            			textSdg += "<td>"+rowGov[j][13]+"</td>";
-	                            			textSdg += "<td>"+rowGov[j][14]+"</td>";
-	                            			textSdg += "<td>"+rowGov[j][15]+"</td>";
+	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
+	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
+	                            			textSdg += "<td>"+nilaiBudGov3+"</td>";
+	                            			textSdg += "<td>"+nilaiBudGov4+"</td>";
 	                                	}
 	                            		textSdg += "<td>"+rowGov[j][16]+"</td>";
 	                            		textSdg += "<td></td><td></td></tr>";

@@ -524,6 +524,7 @@
                             var tahun       = data_id[1];
                             var period       = data_id[2];
                             table.ajax.url(urls+'list-role-approval/'+id_monper+'/'+tahun+'/entry_sdg/'+period).load();
+                            $(".tabel-entri-sdg").hide();
                         },
                     });
                 }, function (dismiss) {
@@ -571,6 +572,7 @@
 	                        var tahun       = data_id[1];
 	                        var period       = data_id[2];
 	                        table.ajax.url(urls+'list-role-approval/'+id_monper+'/'+tahun+'/entry_sdg/'+period).load();
+	                        $(".tabel-entri-sdg").hide();
 	                    },
 	                });
             	}
@@ -635,6 +637,7 @@
 		                success: function (result) {
 		                	table.ajax.url(urls+'list-role-approval/'+id_monper+'/'+tahun+'/entry_sdg/'+period).load();
                                         cek_show_report();
+                                        $(".tabel-entri-sdg").hide();
 		                },
 		            });
                 }, function (dismiss) {
