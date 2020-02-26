@@ -411,7 +411,7 @@
                     		});
                     	}
                     } else if (periode == "quarterly") {
-                    	console.log(tahun);
+                    	//console.log(tahun);
                     	for (var i=0; i<tahun.length; i++) {
                     		$.ajax({
             	            	url: urls + "realgovquarter",
@@ -420,7 +420,7 @@
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
-            	                	console.log(resreal[0]);
+            	                	//console.log(resreal[0]);
             	                	for (var i=1; i<=5; i++) {
             	                		$("#td1"+i).text(resreal[i-1][0]);
             	                		$("#td2"+i).text(resreal[i-1][1]);
@@ -467,7 +467,7 @@
                 dataType: 'json',
                 cache: false,
                 success: function (resnsaindi) {
-                    console.log(resnsaindi);
+                    //console.log(resnsaindi);
                     for ( var i=0; i<resnsaindi.length; i++) {
                         var row = "<tr>";
                         row += "<td style='text-align:center;'>"+resnsaindi[i][7]+"</td>";
@@ -529,7 +529,7 @@
                     }
                     //******************* Isi kolom target *******************
                     var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
-                    var arrtahun = [];
+                    var arrnsatahun = [];
                     for (var i=0; i<tahun.length; i++) {
         	            $.ajax({
         	            	url: urls + "targetnsa",
@@ -538,13 +538,14 @@
         	                dataType: 'json',
         	                cache: false,
         	                success: function (restarget) {
-        	                	//console.log(restarget[0]);
-        	                	arrtahun.push(restarget[0]);
+        	                	console.log(restarget);
+        	                	arrnsatahun.push(restarget[0]);
         	                }
         	            });
                     }
-                    for (var i=0; i<arrtahun.length; i++) {
-                    	$("#tar"+(i+1)).text(arrtahun[i]);
+                    for (var i=0; i<arrnsatahun.length; i++) {
+                    	$("#tar"+(i+1)).text("101");
+                    	//$("#tar"+(i+1)).text(arrnsatahun[i]);
                     }
                     if (periode == "yearly") {
                     	for (var i=0; i<tahun.length; i++) {
