@@ -93,6 +93,8 @@
                     success: function (resrole) {
                     	//console.log(resrole);
                         $("#divkiri").empty();
+                        $("#kananatas").empty();
+                        $("#kananbawah").empty();
                     	for (var i=0; i<resrole.length; i++) {
                     		$.ajax({
                                 url: urls + "graphsdg",
@@ -108,6 +110,7 @@
                                     var isi = "<ol class='tree'>";
                                     if (result.length > 0) {
 	                                    for (var i=0; i<result.length; i++) {
+	                                    	//console.log(result[i][5]);
 	                                        isi += "<li style='padding:6px'>";
 	                                            isi += "<label class='dok' for='folder"+(i+1)+"'>"+result[i][8]+"</label> <input type='checkbox' id='folder"+(i+1)+"' />";
 	                                            isi += "<ol>";
@@ -115,7 +118,7 @@
 	                                                    isi += "<label class='dok' for='subfolder"+(i+1)+"'>"+result[i][11]+"</label><input type='checkbox' id='subfolder"+(i+1)+"' />";
 	                                                    isi += "<ol>";
 	                                                        isi += "<li id='cucu' class='file' style='padding:6px'>" +
-	                                                        "<a href='#' onclick='kanan("+result[i][1]+","+result[i][2]+","+result[i][3]+")'>"+result[i][14]+"</a>" +
+	                                                        "<a href='#' onclick='kanan("+result[i][1]+","+result[i][2]+","+result[i][3]+","+result[i][5]+")'>"+result[i][14]+"</a>" +
 	                                                        "</li>";
 	                                                    isi += "</ol>";
 	                                                isi += "</li>";
@@ -136,16 +139,17 @@
             }
         });
 
-        function kanan(idsdg, idtar, idindi) {
-        	//alert(idsdg+" "+idtar+" "+idindi);
+        function kanan(idsdg, idtar, idindi, idmonper) {
+        	//alert(idsdg+" "+idtar+" "+idindi+" "+idmonper);
             $.ajax({
                 url: urls + "graphidgovindi",
                 type: 'get',
-                data: 'id_indicator=' + idindi,
+                data: {"id_indicator":idindi,"id_monper":idmonper},
                 dataType: 'json',
                 cache: false,
                 success: function (result) {
-                    //console.log(result[0][1]);
+                    //console.log(result);
+                    //console.log("id monper : "+result[0][1])
                     $("#kananatas").empty();
                     for (var i=0; i<result.length; i++) {
                         $.ajax({
@@ -182,7 +186,7 @@
             $.ajax({
                 url: urls + "graphidnsaindi",
                 type: 'get',
-                data: 'id_indicator=' + idindi,
+                data: {"id_indicator":idindi,"id_monper":idmonper},
                 dataType: 'json',
                 cache: false,
                 success: function (result) {
@@ -197,6 +201,7 @@
                             cache: false,
                             success: function (resin) {
                             	//console.log(resin);
+                            	//console.log("id monper : "+result[0][1])
                                 var isi = "<ol class='treekanan'>";
                                 for (var i=0; i<resin.length; i++) {
                                     isi += "<li style='padding:6px'>";
@@ -222,9 +227,9 @@
             });
         }
 
-        function cucukanan(idsdg, idtar, idindi, id, idmonper, flag) {
+        function cucukanan(idsdg, idtar, idindi, id, idmon, flag) {
         	//alert(idsdg+" "+idtar+" "+idindi+" "+id+" "+flag);
-            window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmonper+"/"+flag);
+            window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag);
         }
 
     </script>

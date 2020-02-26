@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "best_practice")
 public class BestPractice implements Serializable {
@@ -36,7 +38,8 @@ public class BestPractice implements Serializable {
     private String location;
     
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-mm-dd HH:mm")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date time_activity;
     
     @Column(name = "background")

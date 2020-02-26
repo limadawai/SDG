@@ -402,7 +402,7 @@
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
-            	                	console.log(resreal);
+            	                	//console.log(resreal);
             	                	for (var i=1; i<=5; i++) {
             	                		$("#td1"+i).text(resreal[i-1][0]);
             	                		$("#td2"+i).text(resreal[i-1][1]);
@@ -411,6 +411,7 @@
                     		});
                     	}
                     } else if (periode == "quarterly") {
+                    	console.log(tahun);
                     	for (var i=0; i<tahun.length; i++) {
                     		$.ajax({
             	            	url: urls + "realgovquarter",
@@ -419,7 +420,7 @@
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
-            	                	//console.log(resreal[0]);
+            	                	console.log(resreal[0]);
             	                	for (var i=1; i<=5; i++) {
             	                		$("#td1"+i).text(resreal[i-1][0]);
             	                		$("#td2"+i).text(resreal[i-1][1]);
@@ -667,7 +668,7 @@
                             }
                         },
                         min: 0,
-                        max:100,
+                        //max:100,
                         title: {
                             text: '',
                             style: {
@@ -682,7 +683,7 @@
                             }
                         },
                         min: 0,
-                        max: 100,
+                        //max: 100,
                         labels: {
                             format: '{value}',
                             style: {
@@ -776,7 +777,7 @@
                             }
                         },
                         min: 0,
-                        max:100,
+                        //max:100,
                         title: {
                             text: '',
                             style: {
@@ -791,7 +792,7 @@
                             }
                         },
                         min: 0,
-                        max: 100,
+                        //max: 100,
                         labels: {
                             format: '{value}',
                             style: {
@@ -909,7 +910,7 @@
                             }
                         },
                         min: 0,
-                        max:100,
+                        //max:100,
                         title: {
                             text: '',
                             style: {
@@ -924,7 +925,7 @@
                             }
                         },
                         min: 0,
-                        max: 100,
+                        //max: 100,
                         labels: {
                             format: '{value}',
                             style: {
