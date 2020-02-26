@@ -196,6 +196,26 @@
         	return option;
         }
         
+        function roleAll(id){
+        	var option = "<option value=''>-pilih-</option>"
+        	$.ajax({
+                url: urls + 'manajemen/list-role-user/'+$('#id_prov').val(),
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                async : false,
+                success: function (result) {
+                    for (var k = 0; k < result.content.length; k++) {
+                    	var selected = (result.content[k].id_role==id)?'selected':'';
+                    	option += '<option value="'+result.content[k].id_role+'" '+selected+'>'
+		                            +result.content[k].nm_role+
+		                      '</option>';
+                    }
+                }
+            }); 
+        	return option;
+        }
+        
         function roleNsa(id){
         	var option = "<option value=''>-pilih-</option>"
         	$.ajax({
@@ -328,7 +348,7 @@
                     			                    	id= result.content;
                     			                        }
                     			                }); 
-                    			                detail += '<td class="sdg-cucu'+idGoals+'" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+roleGov(id)+'</select>'+
+                    			                detail += '<td class="sdg-cucu'+idGoals+'" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+roleAll(id)+'</select>'+
                     			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k][2]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k][3]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_indicator]" value="'+result.content[k][0]+'"/>'+

@@ -152,7 +152,17 @@
 				    <label class="lang_eng control-label" style="display:none">Date and Time</label>
 				    <label class="lang_indo control-label">Tanggal dan Waktu</label>
 				    <div class="controls">
-				    	<input id="time_activity" name="time_activity" class="input-xlarge input-block-level" type="text"/>
+				    	<div id="datetimepicker1" class="input-append date">
+						    <input id="time_activity" class="input-small" name="time_activity" data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
+						    <span class="add-on">
+						      <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar">
+						      </i>
+						    </span>
+					  	</div>
+					  	<select id="jam" class="input-small">
+					  	</select>:
+					  	<select id="menit" class="input-small">
+					  	</select>
 				    	<span class="help-block" id="error_time_activity"></span>
 				    </div>
 				  </div>
@@ -205,6 +215,22 @@
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         //$("#time_activity").datepicker();
+        $('#time_activity').datepicker({
+            autoclose: true,
+            format: "yyyy-mm-dd"
+        });
+        function pad (str, max) {
+        	  str = str.toString();
+        	  return str.length < max ? pad("0" + str, max) : str;
+        	}
+        $("#jam").html("");
+        for(var i=0; i<=23; i++){
+        	$("#jam").append("<option value='"+(pad(i,2))+"'>"+(pad(i,2))+"</option>")
+        }
+        $("#menit").html("");
+        for(var i=0; i<=59; i++){
+        	$("#menit").append("<option value='"+(pad(i,2))+"'>"+(pad(i,2))+"</option>")
+        }
       //Bahasa
         var titleDel = "Anda Yakin";
         var messDel = "Menghapus Data?";
@@ -700,7 +726,7 @@
 			var id_indicator = id_prog[2];
 			var id_role = $('#idrole').val();
 			var location = $('#location').val();
-			var time_activity = $('#time_activity').val();
+			var time_activity = $('#time_activity').val()+" "+$('#jam').val()+":"+$('#menit').val()+":00";
 			var background = $('#background').val();
 			var implementation_process = $('#implementation_process').val();
 			var challenges_learning = $('#challenges_learning').val();
