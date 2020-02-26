@@ -234,8 +234,6 @@ public class ReportController {
         List list = query.getResultList();
         return list;
     }
-    
-    
 
     //====================== Grafik Detail ======================
     
