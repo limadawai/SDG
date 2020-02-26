@@ -1,6 +1,11 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.Problemlist;
+import com.jica.sdg.model.SdgGoals;
+import com.jica.sdg.model.SdgIndicator;
+import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.service.*;
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 public class ReportController {
@@ -29,6 +35,8 @@ public class ReportController {
     @Autowired
     SdgGoalsService goalsService;
     @Autowired
+    ISdgGoalsService sdgGoalsService;
+    @Autowired
     SdgTargetService targetService;
     @Autowired
     SdgIndicatorService indicatorService;
@@ -38,6 +46,14 @@ public class ReportController {
     RanRadService ranRadService;
     @Autowired
     SdgFundingService sdgFundingService;
+    @Autowired
+    ISdgTargetService sdgTargetService;
+    @Autowired
+    ISdgIndicatorService sdgIndicatorService;
+    @Autowired
+    ModelCrud modelCrud;
+    @Autowired
+    private EntityManager em;
 
     // ****************** Report Hasil Monitoring ******************
     @GetMapping("admin/report-monitoring")
@@ -481,6 +497,106 @@ public class ReportController {
     	query.setParameter("id_monper", idmonper);
         List list = query.getResultList();
         return list;
+    }
+    
+   
+    
+    @GetMapping("admin/report-problem-identification")
+    public String report_problem_identify(Model model,  HttpSession session) {    	
+        model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");        
+        model.addAttribute("refcategory",modelCrud.getRefCategory());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        return "admin/report/problemidentify";
+    }
+    
+    @GetMapping("admin/list-report-problem")
+     public @ResponseBody Map<String, Object> ProblemList() {
+        String sql = "SELECT a.id,a.id_cat,b.nm_cat, a.problem,a.follow_up FROM entry_problem_identify a "
+                     + " LEFT JOIN ref_category b ON  a.id_cat = b.id_cat ";        
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<Problemlist> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(new Problemlist((Integer)row[0],(String)row[1],(String)row[2], (String)row[3],(String)row[4]));
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
+     
+    @GetMapping("admin/list-report-problem/{id_cat}")
+     public @ResponseBody Map<String, Object> ProblemList(@PathVariable("id_cat") String id_cat) {
+        String sql = "SELECT a.id,a.id_cat,b.nm_cat, a.problem,a.follow_up FROM entry_problem_identify a "
+                     + " LEFT JOIN ref_category b ON  a.id_cat = b.id_cat where a.id_cat = '"+id_cat+"'";        
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<Problemlist> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(new Problemlist((Integer)row[0],(String)row[1],(String)row[2], (String)row[3],(String)row[4]));
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
+     
+    @GetMapping("admin/list-report-problem-goals/{id_goals}")
+     public @ResponseBody Map<String, Object> ProblemListGoals(@PathVariable("id_goals") String id_goals) {
+        String sql = "SELECT a.id,a.id_cat,b.nm_cat, a.problem,a.follow_up FROM entry_problem_identify a "
+                     + " LEFT JOIN ref_category b ON  a.id_cat = b.id_cat where a.id_goals = '"+id_goals+"'";        
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<Problemlist> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(new Problemlist((Integer)row[0],(String)row[1],(String)row[2], (String)row[3],(String)row[4]));
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
+    @GetMapping("admin/list-report-problem-role/{id_role}")
+     public @ResponseBody Map<String, Object> ProblemListRole(@PathVariable("id_role") String id_role) {
+        String sql = "SELECT a.id,a.id_cat,b.nm_cat, a.problem,a.follow_up FROM entry_problem_identify a "
+                     + " LEFT JOIN ref_category b ON  a.id_cat = b.id_cat where a.id_role = '"+id_role+"'";        
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<Problemlist> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(new Problemlist((Integer)row[0],(String)row[1],(String)row[2], (String)row[3],(String)row[4]));
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
+     
+    @GetMapping("admin/report-problem/get-category")
+     public @ResponseBody Map<String, Object> ProblemGetCategory() {
+        String sql = "SELECT * FROM ref_category WHERE id_cat IN(SELECT DISTINCT id_cat FROM entry_problem_identify)";        
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/report-problem/get-goals")
+     public @ResponseBody Map<String, Object> ProblemGetGoals() {
+        String sql = "SELECT id,nm_goals FROM sdg_goals WHERE id IN(SELECT DISTINCT id_goals FROM entry_problem_identify)";        
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+     
+    @GetMapping("admin/report-problem/get-role")
+     public @ResponseBody Map<String, Object> ProblemGetRole() {
+        String sql = "SELECT * FROM ref_role WHERE id_role IN(SELECT DISTINCT id_role FROM entry_problem_identify)";        
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
     }
 
 
