@@ -120,27 +120,97 @@ public class RateController {
         return "admin/rate/rate_index";
     }
     
-    @GetMapping("admin/x/val/{id_prov}/{id_role}/{id_monper}/{year}")
-    public @ResponseBody Map<String, Object>  val_rate_sdg(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
-        String sql  = "select c.nm_target, e.value, f.achievement1 + f.achievement2 + f.achievement3 + f.achievement4 as nila, round(((f.achievement1 + f.achievement2 + f.achievement3 + f.achievement4 )/ e.value) * 100) as per\n" + 
-        		"    from assign_sdg_indicator as a \n" + 
-        		"    left join sdg_goals as b on a.id_goals = b.id\n" + 
-        		"    left join sdg_target as c on b.id = c.id_goals\n" + 
-        		"    left join sdg_indicator as d on b.id = d.id_goals and c.id = d.id_target\n" + 
-        		"    left join sdg_indicator_target as e on d.id = e.id_sdg_indicator\n" + 
-        		"    left join entry_sdg as f on e.id_sdg_indicator = f.id_sdg_indicator\n" + 
-        		"    where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_role = :id_role and e.year = :id_year \n" + 
-        		"    and f.id_role = :id_role and f.id_monper = :id_monper" + 
-        		"";
+    @GetMapping("admin/x/val/{id_prov}/{period}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object>  val_rate_sdg(@PathVariable("id_prov") String id_prov, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+        String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
+                    "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                    "union all\n" +
+                    "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
+                    "from ref_role a\n" +
+                    "where a.cat_role = 'Government' and a.id_prov = :id_prov \n" +
+                    "union all\n" +
+                    "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
+                    "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                    "union all\n" +
+                    "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
+                    "from ref_role a\n" +
+                    "where a.cat_role = 'NSA' and a.id_prov = :id_prov ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
-        query.setParameter("id_role", id_role);
+        query.setParameter("period", period);
         query.setParameter("id_monper", id_monper);
-        query.setParameter("id_year", year);
+        query.setParameter("year", year);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         
         hasil.put("content",list);
         return hasil;
     }    
+    
+    @GetMapping("admin/get-cek-app/{id_role}/{id_monper}/{year}/{period}")
+    public @ResponseBody Map<String, Object>  cek_app(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year, @PathVariable("period") String period) {
+        String sql  = "select count(*) as cek from entry_approval where (type = 'entry_gov_indicator' or type = 'entry_nsa_indicator') and id_role = :id_role and id_monper = :id_monper and year = :year and periode = :period ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get-cek-sho/{id_monper}/{year}/{period}/{type}")
+    public @ResponseBody Map<String, Object>  cek_sho(@PathVariable("id_monper") String id_monper,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type) {
+        String sql  = "select count(*) as cek from entry_show_report where id_monper = :id_monper and year = :year and type = :type and period = :period ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        query.setParameter("type", type);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get-cek-data-all/{id_role}/{year}/{period}/{type}/{tb}/{tb2}")
+    public @ResponseBody Map<String, Object>  cek_data_all(@PathVariable("id_role") String id_role,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2) {
+        
+        String sql  = "select \n" +
+                    "(\n" +
+                    "select count(*) as total_all from\n" +
+                    "(\n" +
+                    "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
+                    "from "+tb2+" b\n" +
+                    "left join "+tb+" c on b.id_activity = c.id\n" +
+                    "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 ) d on b.id = d.id_assign\n" +
+                    "where c.id_role = :id_role \n" +
+                    ") as a\n" +
+                    ") as isi,\n" +
+                    "(\n" +
+                    "select count(*) as total_all from\n" +
+                    "(\n" +
+                    "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
+                    "from "+tb2+" b\n" +
+                    "left join "+tb+" c on b.id_activity = c.id\n" +
+                    "left join (select * from "+type+" where year_entry = :year) d on b.id = d.id_assign\n" +
+                    "where c.id_role = :id_role\n" +
+                    ") as a\n" +
+                    ") as semua";
+        Query query = em.createNativeQuery(sql);
+//        query.setParameter("period", period);
+        query.setParameter("id_role", id_role);
+        query.setParameter("year", year);
+//        query.setParameter("type", type);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
 }

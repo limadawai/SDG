@@ -82,13 +82,17 @@ public class ReportController {
     }
     
     @GetMapping("admin/getentryshowreport")
-    public @ResponseBody List<Object> getentryshowreport(@RequestParam("id_monper") int idmonper, @RequestParam("year") int year) {
+    public @ResponseBody Map<String, Object> getentryshowreport(@RequestParam("id_monper") int idmonper, @RequestParam("year") int year) {
     	String sql = "SELECT max(period) FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_sdg'";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_monper", idmonper);
         query.setParameter("year", year);
+        
+        
         List list = query.getResultList();
-        return list;
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("sdg",list);
+        return hasil;
     }
     
     
@@ -147,7 +151,8 @@ public class ReportController {
     	String sql = "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
     			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
     			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
-    			+ "i.funding_source "
+    			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4 "
     			+ "from gov_map a "
     			+ "left join entry_gov_indicator b on a.id_gov_indicator = b.id_assign and b.year_entry = :year "
     			+ "left join gov_indicator d on a.id_gov_indicator = d.id "
@@ -179,7 +184,8 @@ public class ReportController {
     	String sql = "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
     			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
     			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
-    			+ "i.funding_source "
+    			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4 "
     			+ "from nsa_map a "
     			+ "left join entry_nsa_indicator b on a.id_nsa_indicator = b.id_assign and b.year_entry = :year "
     			+ "left join nsa_indicator d on a.id_nsa_indicator = d.id "
