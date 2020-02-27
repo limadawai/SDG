@@ -83,15 +83,42 @@ public class ReportController {
     
     @GetMapping("admin/getentryshowreport")
     public @ResponseBody Map<String, Object> getentryshowreport(@RequestParam("id_monper") int idmonper, @RequestParam("year") int year) {
-    	String sql = "SELECT max(period) FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_sdg'";
+    	String sql = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_sdg'";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_monper", idmonper);
         query.setParameter("year", year);
+        List listSdg = query.getResultList();
         
+        String sql1 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_indicator'";
+        Query query1 = manager.createNativeQuery(sql1);
+        query1.setParameter("id_monper", idmonper);
+        query1.setParameter("year", year);
+        List listGovInd = query1.getResultList();
         
-        List list = query.getResultList();
+        String sql2 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_budget'";
+        Query query2 = manager.createNativeQuery(sql2);
+        query2.setParameter("id_monper", idmonper);
+        query2.setParameter("year", year);
+        List listGovBud = query2.getResultList();
+        
+        String sql3 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_budget'";
+        Query query3 = manager.createNativeQuery(sql3);
+        query3.setParameter("id_monper", idmonper);
+        query3.setParameter("year", year);
+        List listNsaBud = query3.getResultList();
+        
+        String sql4 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_indicator'";
+        Query query4 = manager.createNativeQuery(sql4);
+        query4.setParameter("id_monper", idmonper);
+        query4.setParameter("year", year);
+        List listNsaInd = query4.getResultList();
+        
         Map<String, Object> hasil = new HashMap<>();
-        hasil.put("sdg",list);
+        hasil.put("sdg",listSdg);
+        hasil.put("GovInd",listGovInd);
+        hasil.put("GovBud",listGovBud);
+        hasil.put("NsaInd",listNsaInd);
+        hasil.put("NsaBud",listNsaBud);
         return hasil;
     }
     
@@ -288,8 +315,6 @@ public class ReportController {
         List list = query.getResultList();
         return list;
     }
-    
-    
 
     //====================== Grafik Detail ======================
     
@@ -389,7 +414,7 @@ public class ReportController {
     @GetMapping("admin/realgovyear")
     public @ResponseBody List<Object> realgov(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun, 
     		@RequestParam("id_gov_indicator") int idgovindi) {
-    	String sql = "SELECT achievement1 FROM entry_gov_indicator WHERE id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
+    	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1) FROM entry_gov_indicator WHERE id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
     	Query query = manager.createNativeQuery(sql);
     	query.setParameter("id_monper", idmonper);
     	query.setParameter("year", tahun);
@@ -401,7 +426,8 @@ public class ReportController {
     @GetMapping("admin/realgovsemester")
     public @ResponseBody List<Object> realgovsemester(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun, 
     		@RequestParam("id_gov_indicator") int idgovindi) {
-    	String sql = "SELECT achievement1, achievement2 FROM entry_gov_indicator WHERE id_assign = :id_assign AND "
+    	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1), COALESCE(NULLIF(new_value2,''),achievement2) "
+    			+ "FROM entry_gov_indicator WHERE id_assign = :id_assign AND "
     			+ "year_entry = :year AND id_monper = :id_monper";
     	Query query = manager.createNativeQuery(sql);
     	query.setParameter("id_monper", idmonper);
@@ -414,7 +440,9 @@ public class ReportController {
     @GetMapping("admin/realgovquarter")
     public @ResponseBody List<Object> realgovquarter(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun, 
     		@RequestParam("id_gov_indicator") int idgovindi) {
-    	String sql = "SELECT achievement1, achievement2, achievement3, achievement4 FROM entry_gov_indicator WHERE "
+    	String sql = "SELECT SELECT COALESCE(NULLIF(new_value1,''),achievement1), COALESCE(NULLIF(new_value2,''),achievement2), "
+    			+ "COALESCE(NULLIF(new_value3,''),achievement3), COALESCE(NULLIF(new_value4,''),achievement4) "
+    			+ "FROM entry_gov_indicator WHERE "
     			+ "id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
     	Query query = manager.createNativeQuery(sql);
     	query.setParameter("id_monper", idmonper);
@@ -464,7 +492,8 @@ public class ReportController {
     @GetMapping("admin/realnsayear")
     public @ResponseBody List<Object> realnsayear(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun, 
     		@RequestParam("id_nsa_indicator") int idindikator) {
-    	String sql = "SELECT achievement1 FROM entry_nsa_indicator WHERE id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
+    	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1) FROM entry_nsa_indicator "
+    			+ "WHERE id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
     	Query query = manager.createNativeQuery(sql);
     	query.setParameter("id_monper", idmonper);
     	query.setParameter("year", tahun);
@@ -476,7 +505,8 @@ public class ReportController {
     @GetMapping("admin/realnsasemester")
     public @ResponseBody List<Object> realnsasemester(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun, 
     		@RequestParam("id_nsa_indicator") int idindikator) {
-    	String sql = "SELECT achievement1 FROM entry_nsa_indicator WHERE id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
+    	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1), COALESCE(NULLIF(new_value2,''),achievement2) "
+    			+ "FROM entry_nsa_indicator WHERE id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
     	Query query = manager.createNativeQuery(sql);
     	query.setParameter("id_monper", idmonper);
     	query.setParameter("year", tahun);
@@ -488,7 +518,9 @@ public class ReportController {
     @GetMapping("admin/realnsaquarter")
     public @ResponseBody List<Object> realnsaquarter(@RequestParam("id_monper") int idmonper, @RequestParam("year") String tahun, 
     		@RequestParam("id_nsa_indicator") int idindikator) {
-    	String sql = "SELECT achievement1 FROM entry_nsa_indicator WHERE id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
+    	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1), COALESCE(NULLIF(new_value2,''),achievement2), "
+    			+ "COALESCE(NULLIF(new_value3,''),achievement3), COALESCE(NULLIF(new_value4,''),achievement4) "
+    			+ "FROM entry_nsa_indicator WHERE id_assign = :id_assign AND year_entry = :year AND id_monper = :id_monper";
     	Query query = manager.createNativeQuery(sql);
     	query.setParameter("id_monper", idmonper);
     	query.setParameter("year", tahun);
@@ -508,7 +540,7 @@ public class ReportController {
     }
     
    
-    
+   //*********************************************************************************************** 
     @GetMapping("admin/report-problem-identification")
     public String report_problem_identify(Model model,  HttpSession session) {    	
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");        
