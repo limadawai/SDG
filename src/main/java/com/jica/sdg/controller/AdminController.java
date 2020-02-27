@@ -4,12 +4,15 @@ import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.Submenu;
+import com.jica.sdg.model.TahunMap;
+import com.jica.sdg.model.Unit;
 import com.jica.sdg.service.IMenuService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.ISubmenuService;
 import com.jica.sdg.service.ProvinsiService;
 import com.jica.sdg.model.User;
 import com.jica.sdg.service.*;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -99,17 +102,35 @@ public class AdminController {
         model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
         
-         Query query = em.createNativeQuery("SELECT \n" +
-                                                "a.*\n" +
-                                                ",(SELECT COUNT(*) FROM (SELECT * FROM assign_sdg_indicator) AS tsdg WHERE id_prov = a.id_prov) AS sdg  \n" +
-                                                ",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = a.id_prov) AS gov  \n" +
-                                                ",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = a.id_prov) AS non_gov \n" +
-                                                "FROM ref_province a WHERE id_map IS NOT NULL");
+         Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target \n" +
+                                            ", (a.achievement1+a.achievement2+a.achievement3+a.achievement4) AS realisasi\n" +
+                                            ",c.id_prov\n" +
+                                            ",d.id_map\n" +
+                                            ",d.nm_prov\n" +
+                                            ",b.year\n" +
+                                            " FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year \n" +
+                                            " JOIN ref_role c ON a.id_role = c.id_role\n" +
+                                            " JOIN ref_province d ON c.id_prov = d.id_prov\n" +
+                                            " WHERE b.year = YEAR(NOW())");
         
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list);
+            
+            String sql = "SELECT DISTINCT 'c',year_entry FROM entry_sdg";
+            Query list2 = em.createNativeQuery(sql);
+            List<Object[]> rows = list2.getResultList();
+            List<TahunMap> result = new ArrayList<>(rows.size());
+            Map<String, Object> hasiltahun = new HashMap<>();
+            for (Object[] row : rows) {
+                result.add(
+                            new TahunMap((Integer)row[1])
+                );
+            }
+            hasiltahun.put("tahunmap",result);   
+            
             model.addAttribute("map",hasil);
+            model.addAttribute("tahunmap",hasiltahun);
          return "admin/dashboard";
     }
 

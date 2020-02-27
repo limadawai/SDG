@@ -617,15 +617,8 @@
 
         //************************** Grafik / Chart **************************
         $("#btngrafik").click(function () {
-            Highcharts.setOptions({
-                colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
-                    return {
-                        radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
-                        stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
-                    };
-                })
-            });
-
+            var chart4;
+           
             var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
             var valtarget = [
                 parseInt($("#tar1").text(), 10),
@@ -733,10 +726,24 @@
                             tooltip: {
 //                          valueSuffix: '%'
                             }
-                        }]
+                        }],
+                    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                            return {
+                                radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
+                                stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
+                            };
+                        })
               }
               eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
             } else if (periode == "semesterly") {
+//                if (typeof(chart4)==='object'){
+//                    console.log(typeof(chart4));
+//                    return false;
+////                    chart4.destroy();
+//                }else{
+//                     console.log(typeof(chart4));
+////                     return false;
+//                }
                 var valreal1 = [
                     parseInt($("#td11").text(), 10),
                     parseInt($("#td12").text(), 10),
@@ -853,8 +860,15 @@
                             tooltip: {
 //                          valueSuffix: '%'
                             }
-                        }]
+                        }],
+                     colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                            return {
+                                radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
+                                stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
+                            };
+                        })
               }
+
               eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
 //                                            });
             } else if (periode == "quarterly") {
@@ -1005,13 +1019,25 @@
                             tooltip: {
 //                          valueSuffix: '%'
                         }
-                        }]
+                        }],
+                    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                            return {
+                                radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
+                                stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
+                            };
+                        })
               }
               eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
             }
-
+           
             
         });
+        function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+            });
+          }
     </script>
 </body>
 </html>
