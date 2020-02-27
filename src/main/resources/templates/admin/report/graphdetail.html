@@ -411,7 +411,7 @@
                     		});
                     	}
                     } else if (periode == "quarterly") {
-                    	console.log(tahun);
+                    	//console.log(tahun);
                     	for (var i=0; i<tahun.length; i++) {
                     		$.ajax({
             	            	url: urls + "realgovquarter",
@@ -420,7 +420,7 @@
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
-            	                	console.log(resreal[0]);
+            	                	//console.log(resreal[0]);
             	                	for (var i=1; i<=5; i++) {
             	                		$("#td1"+i).text(resreal[i-1][0]);
             	                		$("#td2"+i).text(resreal[i-1][1]);
@@ -467,7 +467,7 @@
                 dataType: 'json',
                 cache: false,
                 success: function (resnsaindi) {
-                    console.log(resnsaindi);
+                    //console.log(resnsaindi);
                     for ( var i=0; i<resnsaindi.length; i++) {
                         var row = "<tr>";
                         row += "<td style='text-align:center;'>"+resnsaindi[i][7]+"</td>";
@@ -529,7 +529,7 @@
                     }
                     //******************* Isi kolom target *******************
                     var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
-                    var arrtahun = [];
+                    var arrnsatahun = [];
                     for (var i=0; i<tahun.length; i++) {
         	            $.ajax({
         	            	url: urls + "targetnsa",
@@ -537,14 +537,15 @@
         	                data: {"id_nsa_indicator":idindikator,"year":tahun[i]},
         	                dataType: 'json',
         	                cache: false,
+        	                async: false,
         	                success: function (restarget) {
-        	                	//console.log(restarget[0]);
-        	                	arrtahun.push(restarget[0]);
+        	                	//console.log(restarget);
+        	                	arrnsatahun.push(restarget[0]);
         	                }
         	            });
                     }
-                    for (var i=0; i<arrtahun.length; i++) {
-                    	$("#tar"+(i+1)).text(arrtahun[i]);
+                    for (var i=0; i<arrnsatahun.length; i++) {
+                    	$("#tar"+(i+1)).text(arrnsatahun[i]);
                     }
                     if (periode == "yearly") {
                     	for (var i=0; i<tahun.length; i++) {
@@ -571,7 +572,7 @@
             	                dataType: 'json',
             	                cache: false,
             	                success: function (resreal) {
-            	                	//console.log(resreal[0]);
+            	                	console.log(resreal[0]);
             	                	for (var i=1; i<=5; i++) {
             	                		$("#td1"+i).text(resreal[i-1][0]);
             	                		$("#td2"+i).text(resreal[i-1][1]);
@@ -646,7 +647,7 @@
                         zoomType: 'xy',
                         renderTo: 'dualaxes'
                     },
-                    colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
+                    //colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
 
                     title: {
                         text: 'Komparasi Target dan Realisasi '
@@ -755,7 +756,7 @@
                         zoomType: 'xy',
                         renderTo: 'dualaxes'
                     },
-                    colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
+                    //colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
 
                     title: {
                         text: 'Komparasi Target dan Realisasi '
@@ -888,7 +889,7 @@
                         zoomType: 'xy',
                         renderTo: 'dualaxes'
                     },
-                    colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
+                    //colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
 
                     title: {
                         text: 'Komparasi Target dan Realisasi '
@@ -1005,9 +1006,6 @@
               eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
             }
 
-            //******************* Line Chart *******************
-            
-            var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
             
         });
     </script>
