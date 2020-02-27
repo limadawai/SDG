@@ -148,7 +148,7 @@
 				  </div>
 				  <div class="control-group nasional">
 				    <div class="controls">
-                         <select name="prov" class="input-block-level">
+                         <select id="prov" name="prov" class="input-block-level">
 				    		<option></option>
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
@@ -163,7 +163,7 @@
 				  </div>
 				  <div class="control-group provinsi">
 				    <div class="controls">
-                        <select name="role" class="input-block-level">
+                        <select name="role" id="role" class="input-block-level">
 				    		<option></option>
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
@@ -363,6 +363,8 @@
 				$('#created_by').val("").removeAttr("readonly");
 				$('#date_created').val("").removeAttr("readonly");
 				$('#internal_code').val("").removeAttr("readonly");
+				$('#prov').val("").removeAttr("readonly");
+				$('#role').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
