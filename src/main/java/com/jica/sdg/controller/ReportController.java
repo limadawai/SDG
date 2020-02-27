@@ -83,15 +83,42 @@ public class ReportController {
     
     @GetMapping("admin/getentryshowreport")
     public @ResponseBody Map<String, Object> getentryshowreport(@RequestParam("id_monper") int idmonper, @RequestParam("year") int year) {
-    	String sql = "SELECT max(period) FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_sdg'";
+    	String sql = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_sdg'";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_monper", idmonper);
         query.setParameter("year", year);
+        List listSdg = query.getResultList();
         
+        String sql1 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_indicator'";
+        Query query1 = manager.createNativeQuery(sql1);
+        query1.setParameter("id_monper", idmonper);
+        query1.setParameter("year", year);
+        List listGovInd = query1.getResultList();
         
-        List list = query.getResultList();
+        String sql2 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_budget'";
+        Query query2 = manager.createNativeQuery(sql2);
+        query2.setParameter("id_monper", idmonper);
+        query2.setParameter("year", year);
+        List listGovBud = query2.getResultList();
+        
+        String sql3 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_budget'";
+        Query query3 = manager.createNativeQuery(sql3);
+        query3.setParameter("id_monper", idmonper);
+        query3.setParameter("year", year);
+        List listNsaBud = query3.getResultList();
+        
+        String sql4 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_indicator'";
+        Query query4 = manager.createNativeQuery(sql4);
+        query4.setParameter("id_monper", idmonper);
+        query4.setParameter("year", year);
+        List listNsaInd = query4.getResultList();
+        
         Map<String, Object> hasil = new HashMap<>();
-        hasil.put("sdg",list);
+        hasil.put("sdg",listSdg);
+        hasil.put("GovInd",listGovInd);
+        hasil.put("GovBud",listGovBud);
+        hasil.put("NsaInd",listNsaInd);
+        hasil.put("NsaBud",listNsaBud);
         return hasil;
     }
     
