@@ -675,7 +675,7 @@
                             style: {
                                 color: Highcharts.getOptions().colors[1]
                             }
-                        }
+                        }, opposite: true
                     }, { // Secondary yAxis
                         title: {
                             text: '',
@@ -689,20 +689,20 @@
                             format: '{value}',
                             style: {
                                 color: Highcharts.getOptions().colors[0],
-                                display:'none'
+//                                display:'none'
                             }
                         },
-                        opposite: true
+                       
                     }],
                     tooltip: {
                         shared: true
                     },
-                    legend: {
+                     legend: {
                         layout: 'vertical',
-                        align: 'center',
-                        x: -0,
+                        align: 'right',
+                        x: 0,
                         verticalAlign: 'top',
-                        y: 400,
+                        y: 55,
                         floating: true,
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
@@ -729,6 +729,7 @@
                             name: 'Target',
                             type: 'spline',
                             data: valtarget,
+                             yAxis: 1,
                             tooltip: {
 //                          valueSuffix: '%'
                             }
@@ -777,14 +778,15 @@
                                 color: Highcharts.getOptions().colors[1]
                             }
                         },
-                        min: 0,
+//                        min: 0,
                         //max:100,
                         title: {
                             text: '',
                             style: {
                                 color: Highcharts.getOptions().colors[1]
                             }
-                        }
+                        },
+                        opposite: true
                     }, { // Secondary yAxis
                         title: {
                             text: '',
@@ -792,26 +794,26 @@
                                 color: Highcharts.getOptions().colors[0]
                             }
                         },
-                        min: 0,
+//                        min: 0,
                         //max: 100,
                         labels: {
                             format: '{value}',
                             style: {
                                 color: Highcharts.getOptions().colors[0],
-                                display:'none'
+//                                display:'none'
                             }
                         },
-                        opposite: true
+                        
                     }],
                     tooltip: {
                         shared: true
                     },
                     legend: {
                         layout: 'vertical',
-                        align: 'center',
-                        x: -0,
+                        align: 'right',
+                        x: 0,
                         verticalAlign: 'top',
-                        y: 400,
+                        y: 55,
                         floating: true,
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
@@ -846,6 +848,7 @@
                         {
                             name: 'Target',
                             type: 'spline',
+                            yAxis: 1,
                             data: valtarget,
                             tooltip: {
 //                          valueSuffix: '%'
@@ -917,7 +920,7 @@
                             style: {
                                 color: Highcharts.getOptions().colors[1]
                             }
-                        }
+                        },opposite: true
                     }, { // Secondary yAxis
                         title: {
                             text: '',
@@ -931,20 +934,20 @@
                             format: '{value}',
                             style: {
                                 color: Highcharts.getOptions().colors[0],
-                                display:'none'
+//                                display:'none'
                             }
                         },
-                        opposite: true
+                        
                     }],
                     tooltip: {
                         shared: true
                     },
                     legend: {
                         layout: 'vertical',
-                        align: 'center',
-                        x: -0,
+                        align: 'right',
+                        x: 0,
                         verticalAlign: 'top',
-                        y: 400,
+                        y: 55,
                         floating: true,
                         backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
                     },
@@ -998,6 +1001,7 @@
                             name: 'Target',
                             type: 'spline',
                             data: valtarget,
+                            yAxis: 1,
                             tooltip: {
 //                          valueSuffix: '%'
                         }
