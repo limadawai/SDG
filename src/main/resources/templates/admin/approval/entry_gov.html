@@ -248,6 +248,7 @@
         var tahun_1     = [[${tahun_1}]];
         var id_program_1 = [[${id_program_1}]];
         var id_activity_1 = [[${id_activity_1}]];
+        var t;
         
         $("#tabel-approve-gov-activity").hide();
         $("#tabel-approve-gov-indicator").hide();
@@ -349,6 +350,8 @@
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
+            $("#period").html('<option value="0" >-- Pilih --</option>');
+            t.ajax.url(urls+'list-role-approval/0/0/0/0').load();
         });
 //
 //        
@@ -364,16 +367,13 @@
                         var sts = result1.content;
                         console.log(sts);
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1">End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
-                        if(sts == 'yearly'){
-                            $("#period").trigger('change');
-                        }
                     }
                 });
             }else{
@@ -383,16 +383,13 @@
                     success: function (result1) {
                         var sts = result1.content;
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1">End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
-                        if(sts == 'yearly'){
-                            $("#period").trigger('change');
-                        }
                     }
                 });
             }
@@ -401,6 +398,7 @@
             $("#tabel-approve-gov-indicator").hide();
             grid_role();
             cek_show_report();
+            t.ajax.url(urls+'list-role-approval/0/0/0/0').load();
         });
         
         $("#period").on('change', function(e){
@@ -423,16 +421,13 @@
                         var sts = result1.content;
 //                        console.log(sts);
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1">End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
-                        if(sts == 'yearly'){
-                        	$("#period").trigger('change');
-                        }
                     }
                 });
             }else{
@@ -442,16 +437,13 @@
                     success: function (result1) {
                         var sts = result1.content;
                         if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                            var s_html = '<option value="0" >-- Pilih --</option><option value="1">End of fiscal year</option>';
                         }else if(sts == 'semesterly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
                         }else if(sts == 'quarterly'){
                             var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                         }else{}
                         $("#period").html(s_html);
-                        if(sts == 'yearly'){
-                        	$("#period").trigger('change');
-                        }
                     }
                 });
             }
@@ -541,7 +533,7 @@
             var v_year      = tahun;
             var v_id_form   = "0";
             
-            $('#tabel-role').DataTable({
+            t=$('#tabel-role').DataTable({
                 responsive: true,
                 sDom: 'lrtip',
                 "bLengthChange": false,

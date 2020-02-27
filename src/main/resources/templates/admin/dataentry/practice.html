@@ -211,6 +211,9 @@
  // <![CDATA[
         var lang = [[${lang}]];
         var name = [[${name}]];
+        var privilege = [[${privilege}]];
+        var role = [[${id_role}]];
+        var prov = [[${id_prov}]];
         $("#welcome").html("Welcome, "+name);
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -303,8 +306,8 @@
         	}
         });
         
-        $("#id_prov").on('change', function(e){
-            var id_prov = this.value ;
+        function provChange(){
+        	var id_prov = $("#id_prov").val() ;
             $.ajax({
                 type: "GET",
                 url: urls+'list-get-option-role-all-profil/'+id_prov,
@@ -316,8 +319,17 @@
                     		$("#idrole").append('<option value="all" >-- ALL --</option>');
                     	} */
                         for (i in array) {
-                            $("#idrole").append('<option data-cat="'+array[i][3]+'" value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                        	var selected =""
+                        	if(privilege == 'USER' && role == array[i][0]){
+                        		selected = "selected";
+                           	}
+                            $("#idrole").append('<option data-cat="'+array[i][3]+'" value="'+array[i][0]+'" '+selected+' >'+array[i][1]+'</option>');
                         }
+                    	
+                        if(privilege == 'USER'){
+                        	$("#idrole").attr('disabled',true);
+                       	}
+                      	
                     }
                    // grid();
                 }
@@ -342,6 +354,15 @@
                 }
             });
             table.ajax.url(urls+'list-best/0/0/0').load();
+        }
+
+        if(privilege == 'USER'){
+       		$("#id_prov").val(prov).attr('disabled', true);
+       		provChange();
+       	}
+        
+        $("#id_prov").on('change',function(e){
+        	provChange();
         });
         
         $("#idrole").on("change", function(){
