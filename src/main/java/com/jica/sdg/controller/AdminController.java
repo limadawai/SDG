@@ -152,7 +152,7 @@ public class AdminController {
        @GetMapping("admin/dashboard/get-map/{tahun}/{indicator}")
         public @ResponseBody Map<String, Object> getUnit(@PathVariable("tahun") String tahun,@PathVariable("indicator") String indicator) {
         String where = "";
-            if(indicator.equals(0)){
+            if(!indicator.equals("0")){
                 where = "AND b.id_sdg_indicator = '"+indicator+"'";
             }
         Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target \n" +
@@ -165,7 +165,7 @@ public class AdminController {
                                             " JOIN ref_role c ON a.id_role = c.id_role\n" +
                                             " JOIN ref_province d ON c.id_prov = d.id_prov\n" +
                                             " WHERE b.year = '"+tahun+"' "+where+"");
-        
+            System.out.println("ini"+where);
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list);

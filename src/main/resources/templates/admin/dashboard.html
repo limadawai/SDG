@@ -116,7 +116,7 @@
         var map         = [[${map}]];
         var tahunmap    = [[${tahunmap}]];
         var filtersdg   = [[${filtersdg}]];
-        console.log(tahunmap);
+//        console.log(tahunmap);
 //        console.log(map);
         var data_map =[];
         $.each(map.content,function(i,x){
@@ -126,8 +126,12 @@
         });
         
         var data_tahun = []
+        var lengthtahun = tahunmap.tahunmap.length;
          $.each(tahunmap.tahunmap,function(i,x){
-             var obj = {'id':x.tahun,'text':x.tahun,'level':'1'}             
+             var obj = {'id':x.tahun,'text':x.tahun,'level':'1'}
+             if(i+1==lengthtahun){
+                 var obj = {'id':x.tahun,'text':x.tahun,'level':'1','selected':true}
+             }
              data_tahun.push(obj)
         });
         
@@ -211,18 +215,18 @@
                             colorAxis: {
                                dataClasses: [{
 //                                   from: 0,
-                                   to: 25,
+                                   to: 40,
                                    color: 'rgba(245,0,0,1)',
                                    }, {
-                                       from: 25,
-                                       to: 50,
+                                       from: 40,
+                                       to: 60,
                                        color:'rgba(233, 255, 36, 1)'
                                    }, {
-                                       from: 50,
-                                       to: 75,
+                                       from: 60,
+                                       to: 80,
                                        color: 'rgba(24,0,245,1)'
                                    }, {
-                                       from: 75,
+                                       from: 80,
 //                                       to: 100,
                                        color: 'rgba(20,245,0,1)'
                                    }]
@@ -241,7 +245,7 @@
                //                    '<span style="font-size:30px">{point.value}/km²</span>',
                                pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
                                                <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
-                                               <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value}</td></tr></table></div>',
+                                               <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value:.2f}</td></tr></table></div>',
                //                positioner: function () {
                //                    return { x: 0, y: 250 };
                //                }
@@ -321,22 +325,22 @@
              colors: ['rgba(245,0,0,1)','rgba(245,208,0,1)', 'rgba(24,0,245,1)','rgba(20,245,0,1)'],
              colorAxis: {
                 dataClasses: [{
-                    from: 0,
-                    to: 25,
-                    color: 'rgba(245,0,0,1)',
-                    }, {
-                        from: 26,
-                        to: 50,
-                        color:'rgba(233, 255, 36, 1)'
-                    }, {
-                        from: 51,
-                        to: 75,
-                        color: 'rgba(24,0,245,1)'
-                    }, {
-                        from: 76,
-                        to: 100,
-                        color: 'rgba(20,245,0,1)'
-                    }]
+//                                   from: 0,
+                                   to: 40,
+                                   color: 'rgba(245,0,0,1)',
+                                   }, {
+                                       from: 40,
+                                       to: 60,
+                                       color:'rgba(233, 255, 36, 1)'
+                                   }, {
+                                       from: 60,
+                                       to: 80,
+                                       color: 'rgba(24,0,245,1)'
+                                   }, {
+                                       from: 80,
+//                                       to: 100,
+                                       color: 'rgba(20,245,0,1)'
+                                   }]
             },
             credits: {
                 enabled: false
@@ -352,7 +356,7 @@
 //                    '<span style="font-size:30px">{point.value}/km²</span>',
                 pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
                                 <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
-                                <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value}</td></tr></table></div>',
+                                <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value:.2f}</td></tr></table></div>',
 //                positioner: function () {
 //                    return { x: 0, y: 250 };
 //                }
