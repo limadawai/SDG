@@ -256,18 +256,29 @@ public class ReportController {
         List list = query.getResultList();
         return list;
     }
+    
+    @GetMapping("admin/getmonper")
+    public @ResponseBody List<Object> getmonper(@RequestParam("id_prov") String idprov) {
+    	String sql = "SELECT id_monper, start_year, end_year FROM ran_rad WHERE id_prov = :id_prov";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        List list = query.getResultList();
+        return list;
+    }
 
     @GetMapping("admin/graphsdg")
-    public @ResponseBody List<Object> graphSdg(@RequestParam("id_prov") String idprov, @RequestParam("id_role") int idrole) {
+    public @ResponseBody List<Object> graphSdg(@RequestParam("id_prov") String idprov, @RequestParam("id_role") int idrole, 
+    		@RequestParam("id_monper") int idmonper) {
         String sql = "SELECT a.*, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, c.id AS idtarget, c.nm_target, c.nm_target_eng, " +
                 "d.id AS idindicator, d.nm_indicator, d.nm_indicator_eng "
                 + "FROM assign_sdg_indicator a LEFT JOIN " +
                 "sdg_goals b ON b.id = a.id_goals LEFT JOIN " +
                 "sdg_target c ON c.id = a.id_target LEFT JOIN " +
-                "sdg_indicator d ON d.id = a.id_indicator WHERE a.id_prov = :id_prov AND id_role = :id_role";
+                "sdg_indicator d ON d.id = a.id_indicator WHERE a.id_prov = :id_prov AND id_role = :id_role AND id_monper = :id_monper ";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
         query.setParameter("id_role", idrole);
+        query.setParameter("id_monper", idmonper);
         List list = query.getResultList();
         return list;
     }

@@ -86,60 +86,76 @@
         
         $("#daerah").on("change", function(){
             var valdaerah = $(this).val();
-            if (valdaerah != "0") {
-                $.ajax({
-                	url: urls + "getrole",
-                    type: 'get',
-                    data: {'id_prov':valdaerah},
-                    dataType: 'json',
-                    cache: false,
-                    success: function (resrole) {
-                    	//console.log(resrole);
-                        $("#divkiri").empty();
-                        $("#kananatas").empty();
-                        $("#kananbawah").empty();
-                    	for (var i=0; i<resrole.length; i++) {
-                    		$.ajax({
-                                url: urls + "graphsdg",
-                                type: 'get',
-                                data: {'id_prov':valdaerah,'id_role':resrole[i]},
-                                dataType: 'json',
-                                cache: false,
-                                async: false,
-                                success: function (result) {
-                                	/* if (result.length > 0) {
-                                    	console.log(result);
-                                	} */
-                                    var isi = "<ol class='tree'>";
-                                    if (result.length > 0) {
-	                                    for (var i=0; i<result.length; i++) {
-	                                    	//console.log(result[i][5]);
-	                                        isi += "<li style='padding:6px'>";
-	                                            isi += "<label class='dok' for='folder"+(i+1)+"'>"+result[i][8]+"</label> <input type='checkbox' id='folder"+(i+1)+"' />";
-	                                            isi += "<ol>";
-	                                                isi += "<li class='dok' style='padding:6px'>";
-	                                                    isi += "<label class='dok' for='subfolder"+(i+1)+"'>"+result[i][11]+"</label><input type='checkbox' id='subfolder"+(i+1)+"' />";
-	                                                    isi += "<ol>";
-	                                                        isi += "<li id='cucu' class='file' style='padding:6px'>" +
-	                                                        "<a href='#' onclick='kanan("+result[i][1]+","+result[i][2]+","+result[i][3]+","+result[i][5]+")'>"+result[i][14]+"</a>" +
-	                                                        "</li>";
-	                                                    isi += "</ol>";
-	                                                isi += "</li>";
-	                                            isi += "</ol>";
-	                                        isi += "</li>";
-	                                    }
+            $.ajax({
+            	url: urls + "getmonper",
+                type: 'get',
+                data: {'id_prov':valdaerah},
+                dataType: 'json',
+                cache: false,
+                success: function (resmonper) {
+                	console.log(resmonper);
+                	$("#periode").empty();
+                	$("#periode").append("<option value='0'>-- Pilih Periode --</option>");
+                	for (var i=0; i<resmonper.length; i++) {
+                		var opt = "<option value='"+resmonper[i][0]+"'>"+resmonper[i][1]+" - "+resmonper[i][2]+"</option";
+                		$("#periode").append(opt);
+                	}
+                }
+            });
+        });
+        
+        $("#periode").on("change", function(){
+        	var valdaerah = $("#daerah").val();
+        	var valperiode = $(this).val();
+        	$.ajax({
+            	url: urls + "getrole",
+                type: 'get',
+                data: {'id_prov':valdaerah},
+                dataType: 'json',
+                cache: false,
+                success: function (resrole) {
+                	//console.log(resrole);
+                    $("#divkiri").empty();
+                    $("#kananatas").empty();
+                    $("#kananbawah").empty();
+                	for (var i=0; i<resrole.length; i++) {
+                		$.ajax({
+                            url: urls + "graphsdg",
+                            type: 'get',
+                            data: {'id_prov':valdaerah,'id_role':resrole[i],'id_monper':valperiode},
+                            dataType: 'json',
+                            cache: false,
+                            async: false,
+                            success: function (result) {
+                            	if (result.length > 0) {
+                                	console.log(result);
+                            	}
+                                var isi = "<ol class='tree'>";
+                                if (result.length > 0) {
+                                    for (var i=0; i<result.length; i++) {
+                                    	console.log(result[i]);
+                                        isi += "<li style='padding:6px'>";
+                                            isi += "<label class='dok' for='folder"+(i+1)+"'>"+result[i][8]+"</label> <input type='checkbox' id='folder"+(i+1)+"' />";
+                                            isi += "<ol>";
+                                                isi += "<li class='dok' style='padding:6px'>";
+                                                    isi += "<label id='dok' class='dok' for='subfolder"+(i+1)+"' value=''>"+result[i][11]+"</label><input type='checkbox' id='subfolder"+(i+1)+"' />";
+                                                    isi += "<ol id=''olindikator>";
+                                                        isi += "<li id='cucu' class='file' style='padding:6px'>" +
+                                                        "<a href='#' onclick='kanan("+result[i][1]+","+result[i][2]+","+result[i][3]+","+result[i][5]+")'>"+result[i][14]+"</a>" +
+                                                        "</li>";
+                                                    isi += "</ol>";
+                                                isi += "</li>";
+                                            isi += "</ol>";
+                                        isi += "</li>";
                                     }
-                                    isi += "</ol>";
-                                    $("#divkiri").append(isi);
                                 }
-                            });
-                    	}
-                    }
-                });
-                
-            } else if (valdaerah == "0") {
-                $("#divkiri").empty();
-            }
+                                isi += "</ol>";
+                                $("#divkiri").append(isi);
+                            }
+                        });
+                	}
+                }
+            });
         });
 
         function kanan(idsdg, idtar, idindi, idmonper) {
