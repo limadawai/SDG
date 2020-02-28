@@ -20,6 +20,9 @@
                         <option value="0" >-- Pilih Daerah --</option>
                         <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
                     </select>
+                    <select id="periode" name="periode" class="form-control">
+                        <option value="0" >-- Pilih Periode --</option>
+                    </select>
                 </div>
                 <div class="widget-box">
                     <div class="widget-title">
