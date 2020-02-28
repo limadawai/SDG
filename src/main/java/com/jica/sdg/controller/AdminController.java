@@ -151,7 +151,10 @@ public class AdminController {
     
        @GetMapping("admin/dashboard/get-map/{tahun}/{indicator}")
         public @ResponseBody Map<String, Object> getUnit(@PathVariable("tahun") String tahun,@PathVariable("indicator") String indicator) {
-            
+        String where = "";
+            if(indicator.equals(0)){
+                where = "AND b.id_sdg_indicator = '"+indicator+"'";
+            }
         Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target \n" +
                                             ", (a.achievement1+a.achievement2+a.achievement3+a.achievement4) AS realisasi\n" +
                                             ",c.id_prov\n" +
@@ -161,7 +164,7 @@ public class AdminController {
                                             " FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year \n" +
                                             " JOIN ref_role c ON a.id_role = c.id_role\n" +
                                             " JOIN ref_province d ON c.id_prov = d.id_prov\n" +
-                                            " WHERE b.year = '"+tahun+"' AND b.id_sdg_indicator = '"+indicator+"'");
+                                            " WHERE b.year = '"+tahun+"' "+where+"");
         
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();

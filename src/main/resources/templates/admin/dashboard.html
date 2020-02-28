@@ -131,7 +131,7 @@
              data_tahun.push(obj)
         });
         
-        var data_filter = []
+        var data_filter = [{'id':'0','text':'ALL','level':'1'}]
          $.each(filtersdg.data,function(i,x){
              var obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3]}
              if(x[3]==1||x[3]==2){
@@ -210,20 +210,20 @@
                             colors: ['rgba(245,0,0,1)','rgba(245,208,0,1)', 'rgba(24,0,245,1)','rgba(20,245,0,1)'],
                             colorAxis: {
                                dataClasses: [{
-                                   from: 0,
+//                                   from: 0,
                                    to: 25,
                                    color: 'rgba(245,0,0,1)',
                                    }, {
-                                       from: 26,
+                                       from: 25,
                                        to: 50,
                                        color:'rgba(233, 255, 36, 1)'
                                    }, {
-                                       from: 51,
+                                       from: 50,
                                        to: 75,
                                        color: 'rgba(24,0,245,1)'
                                    }, {
-                                       from: 76,
-                                       to: 100,
+                                       from: 75,
+//                                       to: 100,
                                        color: 'rgba(20,245,0,1)'
                                    }]
                            },
