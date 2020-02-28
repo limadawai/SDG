@@ -186,13 +186,23 @@
                      type: "GET",
                      url: urls+'dashboard/get-map/'+tahun+'/'+indicator,
                      success: function (result) {
-                         console.log(result);
                         var data_map =[];
+                        var goal;
+                        var target;
+                        var indicator;
+                        var subtitle ;
                         $.each(result.content,function(i,x){
                             var total = (x[2]/x[1])*100;
                             data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total})
-                //            console.log(x[1]);
+                            goal        = x[7];
+                            target      = x[8];
+                            indicator   = x[9];
+        //            console.log(x[1]);
                         });
+                        if(typeof(goal)!=='undefined'){
+                          subtitle = 'Source map: <a href="http://code.highcharts.com/mapdata/countries/id/id-all.js">Indonesia</a><br>'+"Goals : "+goal+"<br>Target : "+target+"<br>Indicator : "+indicator;  
+                        }
+                        
                         var showmap;
                         var optionsMap = {  //Highcharts.mapChart('container', {
                            chart: {
@@ -203,7 +213,7 @@
                                text: 'Indonesian SDGs'
                            },
                            subtitle: {
-                               text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/id/id-all.js">Indonesia</a>'
+                               text: subtitle
                            },
                            mapNavigation: {
                                enabled: true,

@@ -155,17 +155,22 @@ public class AdminController {
             if(!indicator.equals("0")){
                 where = "AND b.id_sdg_indicator = '"+indicator+"'";
             }
-        Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target \n" +
-                                            ", (a.achievement1+a.achievement2+a.achievement3+a.achievement4) AS realisasi\n" +
-                                            ",c.id_prov\n" +
-                                            ",d.id_map\n" +
-                                            ",d.nm_prov\n" +
-                                            ",b.year\n" +
-                                            " FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year \n" +
-                                            " JOIN ref_role c ON a.id_role = c.id_role\n" +
-                                            " JOIN ref_province d ON c.id_prov = d.id_prov\n" +
-                                            " WHERE b.year = '"+tahun+"' "+where+"");
-            System.out.println("ini"+where);
+        Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
+                                            "    , (a.achievement1+a.achievement2+a.achievement3+a.achievement4) AS realisasi \n" +
+                                            "    ,c.id_prov \n" +
+                                            "    ,d.id_map \n" +
+                                            "    ,d.nm_prov \n" +
+                                            "    ,b.year \n" +
+                                            "    ,g.nm_goals\n" +
+                                            "    ,f.nm_target\n" +
+                                            "    ,e.nm_indicator\n" +
+                                            "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                            "     JOIN ref_role c ON a.id_role = c.id_role \n" +
+                                            "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
+                                            "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
+                                            "     JOIN sdg_target f ON e.id_target = f.id\n" +
+                                            "     JOIN sdg_goals g ON f.id_goals = g.id\n" +
+                                            "     WHERE b.year = '"+tahun+"' "+where+"");
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list);
