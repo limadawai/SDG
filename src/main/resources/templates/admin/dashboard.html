@@ -21,6 +21,13 @@
                     <div class="widget-content">
                         <div class="row-fluid">
                             <div class="span12">
+                               <select  class="span3" id="tahun_map">
+                               </select>
+                               <select  class="span3" id="filter_sdg">
+                               </select>
+                                <button class="btn btn-primary" type="button" id="show_map">
+                                    <i class="icon-search"></i>
+                                </button>
                                 <div id="container"></div>
                             </div>
                         </div>
@@ -106,31 +113,182 @@
         function resetMenu() {
             document.gomenu.selector.selectedIndex = 2;
         }
-        var map = [[${map}]];
+        var map         = [[${map}]];
+        var tahunmap    = [[${tahunmap}]];
+        var filtersdg   = [[${filtersdg}]];
+//        console.log(tahunmap);
 //        console.log(map);
         var data_map =[];
         $.each(map.content,function(i,x){
-            var total = x[4]+x[5]+x[6];
-            data_map.push({'hc-key':x[3],'name':x[1],'sdg':x[4],'gov':x[5],'non_gov':x[6],'value':total})
+            var total = (x[2]/x[1])*100;
+            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total})
 //            console.log(x[1]);
         });
+        
+        var data_tahun = []
+        var lengthtahun = tahunmap.tahunmap.length;
+         $.each(tahunmap.tahunmap,function(i,x){
+             var obj = {'id':x.tahun,'text':x.tahun,'level':'1'}
+             if(i+1==lengthtahun){
+                 var obj = {'id':x.tahun,'text':x.tahun,'level':'1','selected':true}
+             }
+             data_tahun.push(obj)
+        });
+        
+        var data_filter = [{'id':'0','text':'ALL','level':'1'}]
+         $.each(filtersdg.data,function(i,x){
+             var obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3]}
+             if(x[3]==1||x[3]==2){
+                 obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3],disabled:true}
+             }
+            data_filter.push(obj)
+        });
+        
+        function formatResult(node) {
+            var $result = $('<span style="padding-left:' + (20 * node.level) + 'px;">' + node.text + '</span>');
+            return $result;
+          };
+
+        $("#filter_sdg").select2({
+          placeholder: 'Select an option',
+          width: "70%",
+          data: data_filter,
+          formatSelection: function(item) {
+            return item.text
+          },
+          formatResult: function(item) {
+            return item.text
+          },
+          templateResult: formatResult,
+        });
+        
+        $("#tahun_map").select2({
+          placeholder: 'Select an option',
+          width: "20%",
+          data: data_tahun,
+          formatSelection: function(item) {
+            return item.text
+          },
+          formatResult: function(item) {
+            return item.text
+          },
+          templateResult: formatResult,
+        });
+        
+        $('#show_map').on("click",function(){
+           var tahun        = $('#tahun_map').val();
+           var indicator    = $('#filter_sdg').val();
+           var data = JSON.stringify({
+                            'tahun':tahun,
+                            'indicator':indicator
+                        });
+            $.ajax({
+                     type: "GET",
+                     url: urls+'dashboard/get-map/'+tahun+'/'+indicator,
+                     success: function (result) {
+                         console.log(result);
+                        var data_map =[];
+                        $.each(result.content,function(i,x){
+                            var total = (x[2]/x[1])*100;
+                            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total})
+                //            console.log(x[1]);
+                        });
+                        var showmap;
+                        var optionsMap = {  //Highcharts.mapChart('container', {
+                           chart: {
+                               map: 'countries/id/id-all',
+                               renderTo: 'container'
+                           },
+                           title: {
+                               text: 'Indonesian SDGs'
+                           },
+                           subtitle: {
+                               text: 'Source map: <a href="http://code.highcharts.com/mapdata/countries/id/id-all.js">Indonesia</a>'
+                           },
+                           mapNavigation: {
+                               enabled: true,
+                               buttonOptions: {
+                                   verticalAlign: 'bottom'
+                               }
+                           },
+                            colors: ['rgba(245,0,0,1)','rgba(245,208,0,1)', 'rgba(24,0,245,1)','rgba(20,245,0,1)'],
+                            colorAxis: {
+                               dataClasses: [{
+//                                   from: 0,
+                                   to: 40,
+                                   color: 'rgba(245,0,0,1)',
+                                   }, {
+                                       from: 40,
+                                       to: 60,
+                                       color:'rgba(233, 255, 36, 1)'
+                                   }, {
+                                       from: 60,
+                                       to: 80,
+                                       color: 'rgba(24,0,245,1)'
+                                   }, {
+                                       from: 80,
+//                                       to: 100,
+                                       color: 'rgba(20,245,0,1)'
+                                   }]
+                           },
+                           credits: {
+                               enabled: false
+                           },
+                           tooltip: {
+                               backgroundColor: 'none',
+                               borderWidth: 0,
+                               shadow: false,
+                               useHTML: true,
+                               padding: 0,
+               //                pointFormat: '<span class="f32"><span class="flag {point.properties.hc-key}">' +
+               //                    '</span></span> {point.name}<br>' +
+               //                    '<span style="font-size:30px">{point.value}/km²</span>',
+                               pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
+                                               <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
+                                               <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value:.2f}</td></tr></table></div>',
+               //                positioner: function () {
+               //                    return { x: 0, y: 250 };
+               //                }
+                           },
+                           series: [{
+                               data: data_map,
+                               name: 'List Entry',
+                               states: {
+                                   hover: {
+                                       color: '#BADA55'
+                                   }
+                               },
+                               dataLabels: {
+                                   enabled: true,
+                                   format: '{point.name}'
+                               }
+                           }]
+                       }
+                       eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'showmap|new|Highcharts|mapChart|optionsMap'.split('|'),0,{}))
+
+
+                     },
+                 });
+        });
+        
+        
 //        console.log(data_map);
         //************************ Highchart Map ************************
-        Highcharts.setOptions({
-            colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
-                return {
-                    radialGradient: {
-                        cx: 0.5,
-                        cy: 0.3,
-                        r: 0.7
-                    },
-                    stops: [
-                        [0, color],
-                        [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
-                    ]
-                };
-            })
-        });
+//        Highcharts.setOptions({
+//            colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+//                return {
+//                    radialGradient: {
+//                        cx: 0.5,
+//                        cy: 0.3,
+//                        r: 0.7
+//                    },
+//                    stops: [
+//                        [0, color],
+//                        [1, Highcharts.Color(color).brighten(-0.3).get('rgb')] // darken
+//                    ]
+//                };
+//            })
+//        });
         
          var data = [
              {
@@ -146,47 +304,11 @@
                 color: "#00FF00"
             }
          ];
-
-//        var data = [
-//            ['id-3700', 0],
-//            ['id-ac', 1],
-//            ['id-ki', 2],
-//            ['id-jt', 3],
-//            ['id-be', 4],
-//            ['id-bt', 5],
-//            ['id-kb', 6],
-//            ['id-bb', 7],
-//            ['id-ba', 8],
-//            ['id-ji', 9],
-//            ['id-ks', 10],
-//            ['id-nt', 11],
-//            ['id-se', 12],
-//            ['id-kr', 13],
-//            ['id-ib', 14],
-//            ['id-su', 15],
-//            ['id-ri', 16],
-//            ['id-sw', 17],
-//            ['id-la', 18],
-//            ['id-sb', 19],
-//            ['id-ma', 20],
-//            ['id-nb', 21],
-//            ['id-sg', 22],
-//            ['id-st', 23],
-//            ['id-pa', 24],
-//            ['id-jr', 25],
-//            ['id-1024', 26],
-//            ['id-jk', 27],
-//            ['id-go', 28],
-//            ['id-yo', 29],
-//            ['id-kt', 30],
-//            ['id-sl', 31],
-//            ['id-sr', 32],
-//            ['id-ja', 33]
-//        ];
-        
-        $('#container').highcharts('Map', {  //Highcharts.mapChart('container', {
+         var showmap;
+         var optionsMap = {  //Highcharts.mapChart('container', {
             chart: {
-                map: 'countries/id/id-all'
+                map: 'countries/id/id-all',
+                renderTo: 'container'
             },
             title: {
                 text: 'Indonesian SDGs'
@@ -200,8 +322,25 @@
                     verticalAlign: 'bottom'
                 }
             },
-            colorAxis: {
-                min: 0
+             colors: ['rgba(245,0,0,1)','rgba(245,208,0,1)', 'rgba(24,0,245,1)','rgba(20,245,0,1)'],
+             colorAxis: {
+                dataClasses: [{
+//                                   from: 0,
+                                   to: 40,
+                                   color: 'rgba(245,0,0,1)',
+                                   }, {
+                                       from: 40,
+                                       to: 60,
+                                       color:'rgba(233, 255, 36, 1)'
+                                   }, {
+                                       from: 60,
+                                       to: 80,
+                                       color: 'rgba(24,0,245,1)'
+                                   }, {
+                                       from: 80,
+//                                       to: 100,
+                                       color: 'rgba(20,245,0,1)'
+                                   }]
             },
             credits: {
                 enabled: false
@@ -216,8 +355,8 @@
 //                    '</span></span> {point.name}<br>' +
 //                    '<span style="font-size:30px">{point.value}/km²</span>',
                 pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
-                                <tr><th colspan="4">{point.name}</th></th></tr><tr><th>SDG</th><th>Gov</th><th>Non Gov</th><th>Total</th></tr>\n\
-                                <tr><td>{point.sdg}</td><td>{point.gov}</td><td>{point.non_gov}</td><td>{point.value}</td></tr></table></div>',
+                                <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
+                                <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value:.2f}</td></tr></table></div>',
 //                positioner: function () {
 //                    return { x: 0, y: 250 };
 //                }
@@ -235,7 +374,11 @@
                     format: '{point.name}'
                 }
             }]
-        });
+        }
+        eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'showmap|new|Highcharts|mapChart|optionsMap'.split('|'),0,{}))
+        
+        
+
         //******************** Barchart ********************
         Highcharts.chart('barcontainer', {
             chart: {

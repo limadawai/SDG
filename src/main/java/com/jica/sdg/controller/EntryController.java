@@ -279,6 +279,9 @@ public class EntryController {
         }
         model.addAttribute("privilege", privilege);
         model.addAttribute("cat_role", cat_role);
+        model.addAttribute("id_role", id_role);
+        model.addAttribute("privilege", privilege);
+        model.addAttribute("id_prov", id_prov);
         return "admin/dataentry/practice";
     }
 

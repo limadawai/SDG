@@ -82,35 +82,40 @@ public class ReportController {
     }
     
     @GetMapping("admin/getentryshowreport")
-    public @ResponseBody Map<String, Object> getentryshowreport(@RequestParam("id_monper") int idmonper, @RequestParam("year") int year) {
-    	String sql = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_sdg'";
+    public @ResponseBody Map<String, Object> getentryshowreport(@RequestParam("id_monper") int idmonper) {
+    	//String sql = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_sdg'";
+    	String sql = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_sdg'";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_monper", idmonper);
-        query.setParameter("year", year);
+        //query.setParameter("year", year);
         List listSdg = query.getResultList();
         
-        String sql1 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_indicator'";
+        //String sql1 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_indicator'";
+        String sql1 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_gov_indicator'";
         Query query1 = manager.createNativeQuery(sql1);
         query1.setParameter("id_monper", idmonper);
-        query1.setParameter("year", year);
+        //query1.setParameter("year", year);
         List listGovInd = query1.getResultList();
         
-        String sql2 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_budget'";
+        //String sql2 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_budget'";
+        String sql2 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_gov_budget'";
         Query query2 = manager.createNativeQuery(sql2);
         query2.setParameter("id_monper", idmonper);
-        query2.setParameter("year", year);
+        //query2.setParameter("year", year);
         List listGovBud = query2.getResultList();
         
-        String sql3 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_budget'";
+        //String sql3 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_budget'";
+        String sql3 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_nsa_budget'";
         Query query3 = manager.createNativeQuery(sql3);
         query3.setParameter("id_monper", idmonper);
-        query3.setParameter("year", year);
+        //query3.setParameter("year", year);
         List listNsaBud = query3.getResultList();
         
-        String sql4 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_indicator'";
+        //String sql4 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_indicator'";
+        String sql4 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_nsa_indicator'";
         Query query4 = manager.createNativeQuery(sql4);
         query4.setParameter("id_monper", idmonper);
-        query4.setParameter("year", year);
+        //query4.setParameter("year", year);
         List listNsaInd = query4.getResultList();
         
         Map<String, Object> hasil = new HashMap<>();
@@ -183,7 +188,7 @@ public class ReportController {
     			+ "from gov_map a "
     			+ "left join entry_gov_indicator b on a.id_gov_indicator = b.id_assign and b.year_entry = :year "
     			+ "left join gov_indicator d on a.id_gov_indicator = d.id "
-    			+ "left join entry_gov_budget c on a.id_gov_indicator = d.id_activity and c.year_entry = :year "
+    			+ "left join entry_gov_budget c on d.id_activity = c.id_gov_activity and c.year_entry = :year "
     			+ "left join gov_program e on d.id_program = e.id "
     			+ "left join gov_activity f on d.id_activity = f.id "
     			+ "left join ref_unit g on d.unit = g.id_unit "
@@ -216,7 +221,7 @@ public class ReportController {
     			+ "from nsa_map a "
     			+ "left join entry_nsa_indicator b on a.id_nsa_indicator = b.id_assign and b.year_entry = :year "
     			+ "left join nsa_indicator d on a.id_nsa_indicator = d.id "
-    			+ "left join entry_nsa_budget c on a.id_nsa_indicator = d.id_activity and c.year_entry = :year "
+    			+ "left join entry_nsa_budget c on d.id_activity = c.id_nsa_activity and c.year_entry = :year "
     			+ "left join nsa_program e on d.id_program = e.id "
     			+ "left join nsa_activity f on d.id_activity = f.id "
     			+ "left join ref_unit g on d.unit = g.id_unit "
@@ -251,6 +256,15 @@ public class ReportController {
     @GetMapping("admin/getrole")
     public @ResponseBody List<Object> getrole(@RequestParam("id_prov") String idprov) {
     	String sql = "SELECT id_role FROM ref_role WHERE id_prov = :id_prov";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getmonper")
+    public @ResponseBody List<Object> getmonper(@RequestParam("id_prov") String idprov) {
+    	String sql = "SELECT id_monper, start_year, end_year FROM ran_rad WHERE id_prov = :id_prov";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
         List list = query.getResultList();

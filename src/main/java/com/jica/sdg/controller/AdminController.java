@@ -4,12 +4,15 @@ import com.jica.sdg.model.Menu;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.Submenu;
+import com.jica.sdg.model.TahunMap;
+import com.jica.sdg.model.Unit;
 import com.jica.sdg.service.IMenuService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.ISubmenuService;
 import com.jica.sdg.service.ProvinsiService;
 import com.jica.sdg.model.User;
 import com.jica.sdg.service.*;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.repository.query.Param;
@@ -31,6 +34,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
+import org.json.JSONObject;
 
 @Controller
 public class AdminController {
@@ -99,19 +104,73 @@ public class AdminController {
         model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
         
-         Query query = em.createNativeQuery("SELECT \n" +
-                                                "a.*\n" +
-                                                ",(SELECT COUNT(*) FROM (SELECT * FROM assign_sdg_indicator) AS tsdg WHERE id_prov = a.id_prov) AS sdg  \n" +
-                                                ",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = a.id_prov) AS gov  \n" +
-                                                ",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = a.id_prov) AS non_gov \n" +
-                                                "FROM ref_province a WHERE id_map IS NOT NULL");
+         Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target \n" +
+                                            ", (a.achievement1+a.achievement2+a.achievement3+a.achievement4) AS realisasi\n" +
+                                            ",c.id_prov\n" +
+                                            ",d.id_map\n" +
+                                            ",d.nm_prov\n" +
+                                            ",b.year\n" +
+                                            " FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year \n" +
+                                            " JOIN ref_role c ON a.id_role = c.id_role\n" +
+                                            " JOIN ref_province d ON c.id_prov = d.id_prov\n" +
+                                            " WHERE b.year = YEAR(NOW())");
         
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list);
+            
+            String sql = "SELECT DISTINCT 'c',year_entry FROM entry_sdg order by 2 asc ";
+            Query list2 = em.createNativeQuery(sql);
+            List<Object[]> rows = list2.getResultList();
+            List<TahunMap> result = new ArrayList<>(rows.size());
+            Map<String, Object> hasiltahun = new HashMap<>();
+            for (Object[] row : rows) {
+                result.add(
+                            new TahunMap((Integer)row[1])
+                );
+            }
+            hasiltahun.put("tahunmap",result);
+            
+            
+            Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "UNION \n" +
+                                                "SELECT DISTINCT  b.id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target) AS id_text FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "UNION \n" +
+                                                "SELECT DISTINCT  c.id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target,'-',c.id_indicator) AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "ORDER BY id_parent");
+        
+            List list3 =  query3.getResultList();
+            Map<String, Object> filtersdg = new HashMap<>();
+            filtersdg.put("data",list3);
+            
             model.addAttribute("map",hasil);
+            model.addAttribute("tahunmap",hasiltahun);
+            model.addAttribute("filtersdg",filtersdg);
          return "admin/dashboard";
     }
+    
+       @GetMapping("admin/dashboard/get-map/{tahun}/{indicator}")
+        public @ResponseBody Map<String, Object> getUnit(@PathVariable("tahun") String tahun,@PathVariable("indicator") String indicator) {
+        String where = "";
+            if(!indicator.equals("0")){
+                where = "AND b.id_sdg_indicator = '"+indicator+"'";
+            }
+        Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target \n" +
+                                            ", (a.achievement1+a.achievement2+a.achievement3+a.achievement4) AS realisasi\n" +
+                                            ",c.id_prov\n" +
+                                            ",d.id_map\n" +
+                                            ",d.nm_prov\n" +
+                                            ",b.year\n" +
+                                            " FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year \n" +
+                                            " JOIN ref_role c ON a.id_role = c.id_role\n" +
+                                            " JOIN ref_province d ON c.id_prov = d.id_prov\n" +
+                                            " WHERE b.year = '"+tahun+"' "+where+"");
+            System.out.println("ini"+where);
+            List list =  query.getResultList();
+            Map<String, Object> hasil = new HashMap<>();
+            hasil.put("content",list);
+            return hasil;
+	}
 
     @PostMapping("admin/bahasa")
     public @ResponseBody void bahasa(@RequestParam("bhs") String bhs, HttpServletRequest request, HttpSession session) {
