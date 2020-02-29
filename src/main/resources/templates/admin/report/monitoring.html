@@ -404,6 +404,12 @@
                             				nilai4 = (row[i][12])?row[i][12]:'';
                             			}
                                 	}
+                            		for(isdg=0;isdg<cekSdg.length;isdg++){
+                            			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:"Not Showing Report yet";
+                            			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:"Not Showing Report yet";
+                            			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:"Not Showing Report yet";
+                            			nilai4 = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==y)?nilai4:"Not Showing Report yet";
+                            		}
                             		/* nilai1 = ((cekSdg[0][cek]=="1" && cekSdg[1][cek]==y ) || (cekSdg[0][cek+1]=="1" && cekSdg[1][cek+1]==y ) || (cekSdg[0][cek+2]=="1" && cekSdg[1][cek+2]==y ) || (cekSdg[0][cek+3]=="1" && cekSdg[1][cek+3]==y ))?nilai1:"Not Showing Report yet";
                             		nilai2 = ((cekSdg[0][cek]=="2" && cekSdg[1][cek]==y ) || (cekSdg[0][cek+1]=="2" && cekSdg[1][cek+1]==y ) || (cekSdg[0][cek+2]=="2" && cekSdg[1][cek+2]==y ) || (cekSdg[0][cek+3]=="2" && cekSdg[1][cek+3]==y ))?nilai2:"Not Showing Report yet";
                             		nilai3 = ((cekSdg[0][cek]=="3" && cekSdg[1][cek]==y ) || (cekSdg[0][cek+1]=="3" && cekSdg[1][cek+1]==y ) || (cekSdg[0][cek+2]=="3" && cekSdg[1][cek+2]==y ) || (cekSdg[0][cek+3]=="3" && cekSdg[1][cek+3]==y ))?nilai3:"Not Showing Report yet";
@@ -530,6 +536,13 @@
     	                            			nilaiGov4 = (rowGov[j][11])?rowGov[j][11]:'';
     	                            		}
     	                            		
+    	                            		for(igov=0;isdg<cekInd.length;igov++){
+    	                            			nilaiGov1 = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:"Not Showing Report yet";
+    	                            			nilaiGov2 = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:"Not Showing Report yet";
+    	                            			nilaiGov3 = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:"Not Showing Report yet";
+    	                            			nilaiGov4 = (cekInd[igov][0]=="4" && cekInd[igov][1]==y)?nilaiGov4:"Not Showing Report yet";
+    	                            		}
+    	                            		
     	                            		/* nilaiGov1 = ((cekInd[0][cekGov]=="1" && cekInd[1][cekGov]==y ) || (cekInd[0][cekGov+1]=="1" && cekInd[1][cekGov+1]==y ) || (cekInd[0][cekGov+2]=="1" && cekInd[1][cekGov+2]==y ) || (cekInd[0][cekGov+3]=="1" && cekInd[1][cekGov+3]==y ))?nilaiGov1:"Not Showing Report yet";
     	                            		nilaiGov2 = ((cekInd[0][cekGov]=="2" && cekInd[1][cekGov]==y ) || (cekInd[0][cekGov+1]=="2" && cekInd[1][cekGov+1]==y ) || (cekInd[0][cekGov+2]=="2" && cekInd[1][cekGov+2]==y ) || (cekInd[0][cekGov+3]=="2" && cekInd[1][cekGov+3]==y ))?nilaiGov2:"Not Showing Report yet";
     	                            		nilaiGov3 = ((cekInd[0][cekGov]=="3" && cekInd[1][cekGov]==y ) || (cekInd[0][cekGov+1]=="3" && cekInd[1][cekGov+1]==y ) || (cekInd[0][cekGov+2]=="3" && cekInd[1][cekGov+2]==y ) || (cekInd[0][cekGov+3]=="3" && cekInd[1][cekGov+3]==y ))?nilaiGov3:"Not Showing Report yet";
@@ -574,6 +587,21 @@
     	                            		}else{
     	                            			nilaiBudGov4 = (rowGov[j][15])?rowGov[j][15]:'';
     	                            		}
+    	                            		
+    	                            		if(cekBud.length>0){
+    	                            			for(ibud=0;ibud<cekBud.length;ibud++){
+        	                            			nilaiBudGov1 = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:"Not Showing Report yet";
+        	                            			nilaiBudGov2 = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:"Not Showing Report yet";
+        	                            			nilaiBudGov3 = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:"Not Showing Report yet";
+        	                            			nilaiBudGov4 = (cekBud[ibud][0]=="4" && cekBud[ibud][1]==y)?nilaiBudGov4:"Not Showing Report yet";
+        	                            		}
+    	                            		}else{
+    	                            			nilaiBudGov1 = "Not Showing Report yet";
+    	                            			nilaiBudGov2 = "Not Showing Report yet";
+    	                            			nilaiBudGov3 = "Not Showing Report yet";
+    	                            			nilaiBudGov4 = "Not Showing Report yet";
+    	                            		}
+    	                            		
     	                            		
     	                            		/* nilaiBudGov1 = ((cekBud[0][cekBudRow]=="1" && cekBud[1][cekBudRow]==y ) || (cekBud[0][cekBudRow+1]=="1" && cekBud[1][cekBudRow+1]==y ) || (cekBud[0][cekBudRow+2]=="1" && cekBud[1][cekBudRow+2]==y ) || (cekBud[0][cekBudRow+3]=="1" && cekBud[1][cekBudRow+3]==y ))?nilaiBudGov1:"Not Showing Report yet";
     	                            		nilaiBudGov2 = ((cekBud[0][cekBudRow]=="2" && cekBud[1][cekBudRow]==y ) || (cekBud[0][cekBudRow+1]=="2" && cekBud[1][cekBudRow+1]==y ) || (cekBud[0][cekBudRow+2]=="2" && cekBud[1][cekBudRow+2]==y ) || (cekBud[0][cekBudRow+3]=="2" && cekBud[1][cekBudRow+3]==y ))?nilaiBudGov2:"Not Showing Report yet";
