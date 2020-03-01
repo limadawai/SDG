@@ -36,11 +36,11 @@
                         </div>
                         <div class="row-fluid">
                             <div class="span12">
-	                        	<select id="pilgrafik" class="pull-right">
+	                        	<select id="pilgrafik" class=" hide">
 	                        		<option value="0">-- Pilih Jenis Grafik --</option>
 	                        		<option value="graf1">Grafik Line</option>
 	                        		<option value="graf2">Grafik Bar</option>
-	                        		<option value="graf3">Grafik Line</option>
+	                        		<option value="graf3">Grafik Combination</option>
 	                        	</select>
                                 <div id="dualaxes"></div>
                             </div>
@@ -652,7 +652,7 @@
         //************************** Grafik / Chart **************************
         $("#btngrafik").click(function () {
             var chart4;
-            $("#pilgrafik").prop( "disabled", false);
+            $("#pilgrafik").show();
             var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
             var valtarget = [
                 parseInt($("#tar1").text(), 10),
@@ -1072,80 +1072,8 @@
               return v.toString(16);
             });
         }
+        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('$(\'#c\').d(\'e\',f(){9 a=$(g).h();9 b=$("#i").j();8(a==\'k\'){b.3[0].4({5:\'7\'});b.3[1].4({5:\'7\'});b.3[2].4({5:\'7\'})}8(a==\'l\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'6\'})}8(a==\'m\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'7\'})}})',23,23,'|||series|update|type|column|spline|if|var|||pilgrafik|on|change|function|this|val|dualaxes|highcharts|graf1|graf2|graf3'.split('|'),0,{}))
         
-        if (!$.trim($('#dualaxes').html()).length) {
-        	$("#pilgrafik").prop( "disabled", true);
-        } else {
-        	$("#pilgrafik").prop( "disabled", false);
-        }
-        
-        $("#pilgrafik").on("change", function(){
-        	$('#dualaxes').empty();
-        	var valpil = $(this).val();
-			var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
-            var valtarget = [
-                parseInt($("#tar1").text(), 10),
-                parseInt($("#tar2").text(), 10),
-                parseInt($("#tar3").text(), 10),
-                parseInt($("#tar4").text(), 10),
-                parseInt($("#tar5").text(), 10)
-            ];
-        	if (valpil == "graf1") {
-        		if (periode == "yearly") {
-                    valreal1 = [
-                        parseInt($("#td1").text(), 10),
-                        parseInt($("#td2").text(), 10),
-                        parseInt($("#td3").text(), 10),
-                        parseInt($("#td4").text(), 10),
-                        parseInt($("#td5").text(), 10)
-                    ];
-        		} else if (periode == "semesterly") {
-                    var valreal1 = [
-                        parseInt($("#td11").text(), 10),
-                        parseInt($("#td12").text(), 10),
-                        parseInt($("#td13").text(), 10),
-                        parseInt($("#td14").text(), 10),
-                        parseInt($("#td15").text(), 10)
-                    ];
-                    var valreal2 = [
-                        parseInt($("#td21").text(), 10),
-                        parseInt($("#td22").text(), 10),
-                        parseInt($("#td23").text(), 10),
-                        parseInt($("#td24").text(), 10),
-                        parseInt($("#td25").text(), 10)
-                    ];
-        		} else if (periode == "quarterly") {
-                    var valreal1 = [
-                        parseInt($("#td11").text(), 10),
-                        parseInt($("#td12").text(), 10),
-                        parseInt($("#td13").text(), 10),
-                        parseInt($("#td14").text(), 10),
-                        parseInt($("#td15").text(), 10)
-                    ];
-                    var valreal2 = [
-                        parseInt($("#td21").text(), 10),
-                        parseInt($("#td22").text(), 10),
-                        parseInt($("#td23").text(), 10),
-                        parseInt($("#td24").text(), 10),
-                        parseInt($("#td25").text(), 10)
-                    ];
-                    var valreal3 = [
-                        parseInt($("#td31").text(), 10),
-                        parseInt($("#td32").text(), 10),
-                        parseInt($("#td33").text(), 10),
-                        parseInt($("#td34").text(), 10),
-                        parseInt($("#td35").text(), 10)
-                    ];
-                    var valreal4 = [
-                        parseInt($("#td41").text(), 10),
-                        parseInt($("#td42").text(), 10),
-                        parseInt($("#td43").text(), 10),
-                        parseInt($("#td44").text(), 10),
-                        parseInt($("#td45").text(), 10)
-                    ];
-        		}
-        	}
-        });
     </script>
 </body>
 </html>
