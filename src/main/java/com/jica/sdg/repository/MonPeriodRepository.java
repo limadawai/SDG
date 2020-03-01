@@ -14,6 +14,6 @@ public interface MonPeriodRepository extends CrudRepository<RanRad, Integer> {
 	@Query(value = "select * from ran_rad where id_prov = :id_prov",nativeQuery = true)
 	public List<RanRad> findAllMonPeriod(@Param("id_prov") String id_prov); 
 	
-	@Query(value = "select count(*) from ran_rad WHERE id_prov = :id_prov and start_year BETWEEN :start and :end or end_year BETWEEN :start and :end",nativeQuery = true)
+	@Query(value = "select count(*) from ran_rad WHERE id_prov = :id_prov and (start_year BETWEEN :start and :end or end_year BETWEEN :start and :end)",nativeQuery = true)
 	public Integer cekPeriode(@Param("id_prov") String id_prov, @Param("start") Integer start, @Param("end") Integer end);
 }
