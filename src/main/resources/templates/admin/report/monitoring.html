@@ -15,30 +15,37 @@
     </div>
     <div class="container-fluid">
         <div class="row-fluid">
-            <div style="width:100%">
-                <select id="daerah" name="daerah" class="form-control">
-                    <option value="0" >-- Pilih Daerah --</option>
-                    <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
-                </select>
-                <select id="role" name="idrole" class="form-control">
-                    <option value="0" >-- Pilih Role --</option>
-                </select>
-                <select id="periode" name="idmonper" class="form-control">
-                    <option value="0" >-- Pilih Periode --</option>
-                </select>
-            </div>
-            <div style="width:100%">
-                <select id="goals" name="goals" class="form-control">
-                    <option value="0" >-- Pilih SDGs --</option>
-                    <option id="optgoals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>
-                </select>
+        	<form id="form-sdgGoals">
+        		<div class="control-group">
+        			<div class="controls">
+	        			<select id="daerah" name="daerah" class="input-xlarge">
+		                    <option value="0" >-- Pilih Daerah --</option>
+		                    <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
+		                </select>
+		                <select id="periode" name="idmonper" class="input-xlarge">
+		                    <option value="0" >-- Pilih Periode --</option>
+		                </select>
+        			</div>
+        		</div>
+        		<div class="control-group">
+        			<div class="controls">
+        				<select id="role" name="idrole" class="input-xlarge">
+		                    <option value="0" >-- Pilih Role --</option>
+		                </select>
+		                <select id="goals" name="goals" class="input-xlarge">
+		                    <option value="0" >-- Pilih SDGs --</option>
+		                    <option id="optgoals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>
+		                </select>
+        			</div>
+        		</div>
+        	</form>
+                
                <!--  <select id="target" name="target" class="form-control">
                     <option value="0" >-- Pilih Target --</option>
                 </select>
                 <select id="indikator" name="indikator" class="form-control">
                     <option value="0" >-- Pilih Indikator --</option>
                 </select> -->
-            </div>
             <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon"><i class="icon-tasks"></i></span>
@@ -55,8 +62,30 @@
         </div>
     </div>
 </div>
+<div class="modal-loading-new"></div>
+<style th:inline="text">
+			.modal-loading-new {
+				opacity: 0.4!important;
+				display:    none;
+				position:   fixed;
+				z-index:    1000;
+				top:        0;
+				left:       0;
+				height:     100%;
+				width:      100%;
+				background: #333 url([[@{/img/loading.gif}]]) 50% 50% no-repeat;
+			}
+			/* When the body has the loading class, we turn the scrollbar off with overflow:hidden */
+			body.loading {
+				overflow: hidden;   
+			}
+			body.loading .modal-loading-new {
+				display: block;
+			}
+		</style>
 <div th:include="admin/layout :: footer"></div>
 <script th:inline="javascript">
+	//$('#goals').select2();
     var lang = [[${lang}]];
     if (lang == null) lang = "0";
     var name = [[${name}]];
@@ -285,9 +314,13 @@
                 dataType: 'json',
                 cache: false,
                 async:false,
+                beforeSend : function(xhr){
+                	$('body').addClass("loading"); 
+                },
                 success: function (res) {
                 	var row = res.content;
                 	var noGoals = 1;
+                	$('body').removeClass("loading");
                 	for(var i=0;i<row.length;i++){
                 		//JUDUL BESAR SDG
                 		if($('#fs').is(':checked')){
