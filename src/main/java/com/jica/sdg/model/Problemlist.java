@@ -10,17 +10,19 @@ public class Problemlist  {
     private String nm_cat;
     private String problem;
     private String follow_up;
+    private String approval;
     
     public Problemlist(){
         
     }
 
-    public Problemlist(Integer id, String id_cat, String nm_cat, String problem, String follow_up) {
+    public Problemlist(Integer id, String id_cat, String nm_cat, String problem, String follow_up,String approval) {
         this.id = id;
         this.id_cat = id_cat;
         this.nm_cat = nm_cat;
         this.problem = problem;
         this.follow_up = follow_up;
+        this.approval = approval;
     }
     
     public Problemlist(Integer id, String id_cat, String nm_cat, String problem) {
@@ -70,6 +72,14 @@ public class Problemlist  {
 
     public void setFollow_up(String follow_up) {
         this.follow_up = follow_up;
+    }
+
+    public String getApproval() {
+        return approval;
+    }
+
+    public void setApproval(String approval) {
+        this.approval = approval;
     }
     
     
