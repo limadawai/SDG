@@ -332,10 +332,10 @@ public class ReportController {
 
     //====================== Grafik Detail ======================
     
-    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{id}/{idmonper}/{flag}")
+    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{id}/{idmonper}/{flag}/{valdaerah}")
     public String grafikdetail(Model model, HttpSession session, @PathVariable("idsdg") String idsdg, @PathVariable("idtar") String idtar,
     		@PathVariable("idindi") String idindi, @PathVariable("id") String id, @PathVariable("idmonper") String idmonper, 
-    		@PathVariable("flag") String flag) {
+    		@PathVariable("flag") String flag, @PathVariable("valdaerah") String valdaerah) {
         model.addAttribute("title", "Report Graphic Detail");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
@@ -345,7 +345,17 @@ public class ReportController {
         model.addAttribute("idindikator", id);
         model.addAttribute("idmonper", idmonper);
         model.addAttribute("flag", flag);
+        model.addAttribute("valdaerah", valdaerah);
         return "admin/report/graphdetail";
+    }
+    
+    @GetMapping("admin/getprov")
+    public @ResponseBody List<Object> getprov(@RequestParam("valdaerah") String val) {
+    	String sql = "SELECT nm_prov, acronym FROM ref_province WHERE id_prov = :id_prov";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", val);
+        List list = query.getResultList();
+        return list;
     }
 
     //********************* Header Table *********************
