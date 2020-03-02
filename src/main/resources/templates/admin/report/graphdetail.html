@@ -16,7 +16,7 @@
         <div class="container-fluid">
             <div class="row-fluid">
                 <div id="divsdg" style="width:100%;">
-
+                	<button id="back" class="btn btn-warning">Kembali</button>
                 </div>
                 <div class="widget-box">
                     <div class="widget-title">
@@ -24,6 +24,9 @@
                         <h5 id="title">Detail Grafik Hasil Pelaporan</h5>
                     </div>
                     <div class="widget-content" style="background:#FFFFFF;">
+                    	<div class="pull-left">
+                			<b><span>Provinsi : </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b>
+                    	</div>
                         <div class="pull-right" style="width:auto;">
                             <button id="btngrafik" class="btn btn-primary">Show Graphic</button>
                             <button id="btnexport" class="btn btn-success" style="margin-right:4px;">Export Excel</button>
@@ -63,6 +66,24 @@
         var idindikator = [[${idindikator}]];
         var idmonper = [[${idmonper}]];
         var flag = [[${flag}]];
+        var valdaerah = [[${valdaerah}]];
+        
+        $("#back").on("click", function(){
+        	location.href = urls+"report-graph";
+        });
+        
+        $.ajax({
+        	url: urls + "getprov",
+            type: 'get',
+            data: "valdaerah="+valdaerah,
+            dataType: 'json',
+            cache: false,
+            async: false,
+            success: function (prov) {
+            	//console.log(prov);
+            	$("#daerah").text(prov[0][0]);
+            }
+        });
 
         //====================== Header Tabel ======================
         if (flag == "0") {
@@ -260,6 +281,7 @@
             $("#th4").text("Realisasi Pendanaan Tahun Berjalan\n(juta)");
             $("#th5").text("Sumber Pendanaan");
             $("#th6").text("Pelaku");
+            $("#back").text("Kembali");
         }
 
         function inggris() {
@@ -276,6 +298,7 @@
             $("#th4").text("Budget Realization in Current Year\n(million)");
             $("#th5").text("Funding Source");
             $("#th6").text("Actor");
+            $("#back").text("B a c k");
         }
         
       
