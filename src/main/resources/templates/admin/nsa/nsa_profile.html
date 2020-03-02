@@ -413,13 +413,15 @@
                             
 //                            alert('kosong');
                             if($("#nm_nsa_profil").val()=="0"){
-                            	$("#tambah").hide();
+//                            	$("#tambah").hide();
+                            	$("#tambah").show();
                             }else if(id_role == id_role){
                                 $("#tambah").show();
                             }else if(id_role == '1'){
                                 $("#tambah").show();
                             }else{
-                                $("#tambah").hide();
+//                                $("#tambah").hide();
+                                $("#tambah").show();
                             }
                             
                             $('#tabel-nsa-profile').DataTable({
@@ -742,11 +744,13 @@
                             if(id_role == id){
                                 $("#tambah").show();
                             }else if(id == '0'){
-                            	$("#tambah").hide();
+//                            	$("#tambah").hide();
+                            	$("#tambah").show();
                             }else if((privilege == 'ADMIN' || privilege == 'SUPER') && id != '0'){
                                 $("#tambah").show();
                             }else{
-                                $("#tambah").hide();
+                                $("#tambah").show();
+//                                $("#tambah").hide();
                             }
                             
                             $('#tabel-nsa-profile').DataTable({
@@ -859,7 +863,8 @@
                         }else{
 //                            alert('isi');
 //                            jika isi
-                            $("#tambah").hide();
+                            $("#tambah").show();
+//                            $("#tambah").hide();
                             $('#tabel-nsa-profile').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
@@ -1455,6 +1460,15 @@
                         $('#nm_org').val(nm_nsa);
                         $('#id_nsa').val(result.v_id_nsa);
                         $('#id_role').val(id_role);
+                        
+                        $('#file_logo').val('');
+                        $('#web_url').val('');
+                        $('#head_office').val('');
+                        $('#name_pic').val('');
+                        $('#pos_pic').val('');
+                        $('#email_pic').val('');
+                        $('#hp_pic').val('');
+                        
                         $('#simpan_detail').show();
                         $('#update_detail').hide();
                         
@@ -1502,7 +1516,7 @@
                     success: function (result) {
 //                        swal(titlesimpan,messsimpan,'success');
 //                        window.location = urls+"nsa/profile";
-                        $('#tambah').hide();
+                        $('#tambah').show();
                         $('#file_logo').val('');
                         $('#web_url').val('');
                         $('#head_office').val('');
