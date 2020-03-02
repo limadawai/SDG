@@ -24,7 +24,7 @@
                         <h5 id="title">Detail Grafik Hasil Pelaporan</h5>
                     </div>
                     <div class="widget-content" style="background:#FFFFFF;">
-                    	<div class="pull-left">
+                    	<div id="divdaerah" class="pull-left">
                 			<b><span>Provinsi : </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b>
                     	</div>
                         <div class="pull-right" style="width:auto;">
@@ -80,7 +80,13 @@
             cache: false,
             async: false,
             success: function (prov) {
-            	console.log(prov);
+            	//console.log(prov);
+            	if (prov[0][0] === "Indonesia") {
+            		$("#divdaerah").empty();
+            		$("#divdaerah").append("<b><span>Pemerintah "+prov[0][0]+"</span></b>");
+            	} else {
+            		$("#daerah").text(prov[0][0]);
+            	}
             	$("#daerah").text(prov[0][0]);
             }
         });
