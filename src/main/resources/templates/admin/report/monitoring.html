@@ -32,9 +32,9 @@
         				<select id="role" name="idrole" class="input-xlarge">
 		                    <option value="0" >-- Pilih Role --</option>
 		                </select>
-		                <select id="goals" name="goals" class="input-xlarge">
-		                    <option value="0" >-- Pilih SDGs --</option>
-		                    <option id="optgoals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>
+		                <select id="goals" name="goals" class="input-xlarge" multiple="multiple">
+		                    <!-- <option value="0" >-- All --</option>
+		                    <option id="optgoals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option> -->
 		                </select>
         			</div>
         		</div>
@@ -82,10 +82,27 @@
 			body.loading .modal-loading-new {
 				display: block;
 			}
+			.select2-results__option{
+			    position: relative;
+			    margin-left: 10px;
+			    list-style: none;
+			}
 		</style>
 <div th:include="admin/layout :: footer"></div>
 <script th:inline="javascript">
 	//$('#goals').select2();
+	$("#goals").select2({
+        width: "30%",
+      });
+	
+	$("#goals").on("change", function(){
+		var val = $(this).val();
+		if(val){
+			if(val[0]==0){	
+				$("#goals").val(null).trigger("change");
+			}
+		}		 
+	});
     var lang = [[${lang}]];
     if (lang == null) lang = "0";
     var name = [[${name}]];
@@ -194,6 +211,29 @@
             }); */
             $("#indi").html("");
             $("#periode").val(0);
+            
+            $.ajax({
+                url: urls + "get-sdg-goals",
+                type: 'get',
+                data: 'id_role=' + idrole,
+                dataType: 'json',
+                cache: false,
+                global: false,
+                success: function (result) {
+					var row = result.sdg;
+					$("#goals").empty();
+                    $("#goals").html('<option value="0" >-- All --</option>');
+                    for (var i = 0; i < row.length; i++) {
+                    	var nm_goals;
+                    	if($('#fs').is(':checked')){
+                    		nm_goals = row[i][1];
+                    	}else{
+                    		nm_goals = row[i][2];
+                    	}
+                        $("#goals").append("<option value='" + row[i][0] + "'>"+nm_goals+"</option>");
+                    }
+                }
+            });
         }
     });
 

@@ -127,7 +127,18 @@ public class ReportController {
         return hasil;
     }
     
-    
+    @GetMapping("admin/get-sdg-goals")
+    public @ResponseBody Map<String, Object> getSdgGoals(@RequestParam("id_role") int id_role) {
+    	String sql = "SELECT distinct a.id_goals, b.nm_goals, b.nm_goals_eng FROM assign_sdg_indicator a "
+    			+ " left join sdg_goals b on a.id_goals = b.id "
+    			+ " WHERE a.id_role = :id_role";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("sdg",listSdg);
+        return hasil;
+    }
     
     @GetMapping("admin/getentrysdgyear")
     public @ResponseBody List<Object> getentrysdgyear(@RequestParam("id_role") int idrole, @RequestParam("id_monper") int idmonper, 
