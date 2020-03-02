@@ -110,6 +110,29 @@
 		  	</div>
 			<div class="modal-body">
 				<form id="form-sdgGoals">
+					<div class="control-group">
+					    <div class="controls">
+							<div class="accordion" id="accordion2">
+								<div class="accordion-group">
+								    <div class="accordion-heading">
+								      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+								        <label class="lang_eng control-label" style="display:none">Goals SDGs</label>
+					    				<label class="lang_indo control-label">Sasaran SDG</label>
+								      </a>
+								    </div>
+								    <div id="collapseOne" class="accordion-body collapse">
+								      <div class="accordion-inner">
+								      </div>
+								    </div>
+								  </div>
+							</div>
+					    	<!-- <select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
+					    		<option value="0">--select--</option>
+		        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
+		        			</select> -->
+						    <span class="help-block" id="error_unit"></span>
+					    </div>
+				  </div>
 				<div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Program</label>
 				    <label class="lang_indo control-label">Program</label>
@@ -120,29 +143,7 @@
 				    	<span class="help-block" id="error_id_program"></span>
 				    </div>
 				  </div>
-				  <div class="control-group">
-				    <div class="controls">
-						<div class="accordion" id="accordion2">
-							<div class="accordion-group">
-							    <div class="accordion-heading">
-							      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-							        <label class="lang_eng control-label" style="display:none">Goals SDGs</label>
-				    				<label class="lang_indo control-label">Sasaran SDG</label>
-							      </a>
-							    </div>
-							    <div id="collapseOne" class="accordion-body collapse">
-							      <div class="accordion-inner">
-							      </div>
-							    </div>
-							  </div>
-						</div>
-				    	<!-- <select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
-				    		<option value="0">--select--</option>
-	        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
-	        			</select> -->
-					    <span class="help-block" id="error_unit"></span>
-				    </div>
-				  </div>
+				  
 				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Location</label>
 				    <label class="lang_indo control-label">Lokasi</label>
@@ -378,110 +379,120 @@
         
         
         $('.app').on('click', '.appl', function(e){
-            swal({
-                title: titleDel,
-                text: "",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: buttApp
-            }).then(function () {
-                var periode             = "1";
-                var id_role             = $('#idrole').val();
-                var v_dataid            = $("#periode").val();
-                var v_data_id           = v_dataid.split("###");;
-                var id_monper           = v_data_id[0];
-                var year                = v_data_id[1];
-//                var id_monper           = monper_1;
-//                var year                = tahun_1;
-                var approval            = "1";
-                var type                = "entry_best_practice";
+        	if($('#id_prov').val()!="0" && $('#periode').val()!="0" && $('#idrole').val()!="0"){
+        		swal({
+                    title: titleDel,
+                    text: "",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttApp
+                }).then(function () {
+                    var periode             = "1";
+                    var id_role             = $('#idrole').val();
+                    var v_dataid            = $("#periode").val();
+                    var v_data_id           = v_dataid.split("###");;
+                    var id_monper           = v_data_id[0];
+                    var year                = v_data_id[1];
+//                    var id_monper           = monper_1;
+//                    var year                = tahun_1;
+                    var approval            = "1";
+                    var type                = "entry_best_practice";
 
-                var data    = JSON.stringify({
-                                'id': null,
-                                'id_form_type': "0",
-                                'id_role': id_role,
-                                'id_monper': id_monper,
-                                'year': year,
-                                'approval': approval,
-                                'approval_date': null,
-                                'type': type,
-                                'periode': periode,
-                                'description': ''
-                            });
-                console.log(data);
-                $.ajax({
-                    type: "POST",
-                    url: urls+'save-approve-gov_prog',
-                    beforeSend : function(xhr){
-                        xhr.setRequestHeader(header,token);
-                    },
-                    headers:{'Accept':'application/json','Content-Type':'application/json'},
-                    data: data,
-                    success: function (result) {
-                        table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
-                        btn_apply();
-                    },
+                    var data    = JSON.stringify({
+                                    'id': null,
+                                    'id_form_type': "0",
+                                    'id_role': id_role,
+                                    'id_monper': id_monper,
+                                    'year': year,
+                                    'approval': approval,
+                                    'approval_date': null,
+                                    'type': type,
+                                    'periode': periode,
+                                    'description': ''
+                                });
+                    console.log(data);
+                    $.ajax({
+                        type: "POST",
+                        url: urls+'save-approve-gov_prog',
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header,token);
+                        },
+                        headers:{'Accept':'application/json','Content-Type':'application/json'},
+                        data: data,
+                        success: function (result) {
+                            table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
+                            btn_apply();
+                        },
+                    });
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
                 });
-            }, function (dismiss) {
-                if (dismiss === 'cancel') {
-                }
-            });
+        	}else{
+        		swal(titleMod,messMod,'error');
+        	}
+            
         });
         
         $('.app').on('click', '.unappl', function(e){
-            swal({
-                title: titleDel,
-                text: "",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: buttApp
-            }).then(function () {
-                var periode             = "1";
-                var id_role             = $('#idrole').val();
-                var v_dataid            = $("#periode").val();
-                var v_data_id           = v_dataid.split("###");;
-                var id_monper           = v_data_id[0];
-                var year                = v_data_id[1];
-//                var id_monper           = monper_1;
-//                var year                = tahun_1;
-                var approval            = "1";
-                var type                = "entry_best_practice";
+        	if($('#id_prov').val()!="0" && $('#periode').val()!="0" && $('#idrole').val()!="0"){
+        		swal({
+                    title: titleDel,
+                    text: "",
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttApp
+                }).then(function () {
+                    var periode             = "1";
+                    var id_role             = $('#idrole').val();
+                    var v_dataid            = $("#periode").val();
+                    var v_data_id           = v_dataid.split("###");;
+                    var id_monper           = v_data_id[0];
+                    var year                = v_data_id[1];
+//                    var id_monper           = monper_1;
+//                    var year                = tahun_1;
+                    var approval            = "1";
+                    var type                = "entry_best_practice";
 
-                var data    = JSON.stringify({
-                                'id': null,
-                                'id_form_type': "0",
-                                'id_role': id_role,
-                                'id_monper': id_monper,
-                                'year': year,
-                                'approval': approval,
-                                'approval_date': null,
-                                'type': type,
-                                'periode': periode,
-                                'description': ''
-                            });
-                console.log(data);
-                $.ajax({
-                    type: "POST",
-                    url: urls+'delete-approve-gov_prog',
-                    beforeSend : function(xhr){
-                        xhr.setRequestHeader(header,token);
-                    },
-                    headers:{'Accept':'application/json','Content-Type':'application/json'},
-                    data: data,
-                    success: function (result) {
-                        table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
-                        btn_apply();
+                    var data    = JSON.stringify({
+                                    'id': null,
+                                    'id_form_type': "0",
+                                    'id_role': id_role,
+                                    'id_monper': id_monper,
+                                    'year': year,
+                                    'approval': approval,
+                                    'approval_date': null,
+                                    'type': type,
+                                    'periode': periode,
+                                    'description': ''
+                                });
+                    console.log(data);
+                    $.ajax({
+                        type: "POST",
+                        url: urls+'delete-approve-gov_prog',
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader(header,token);
+                        },
+                        headers:{'Accept':'application/json','Content-Type':'application/json'},
+                        data: data,
+                        success: function (result) {
+                            table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
+                            btn_apply();
 
-                    },
+                        },
+                    });
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
                 });
-            }, function (dismiss) {
-                if (dismiss === 'cancel') {
-                }
-            });
+        	}else{
+        		swal(titleMod,messMod,'error');
+        	}
+            
         });
         
         function btn_apply(){

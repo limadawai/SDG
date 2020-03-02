@@ -395,6 +395,7 @@
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
+            t.ajax.url(urls+'list-role-approval/0/0/0/0').load();
         });
         
         $("#period").on('change', function(e){
@@ -443,10 +444,11 @@
                     }
                 });
             }
-            grid_role()
+            //grid_role()
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
+            t.ajax.url(urls+'list-role-approval/0/0/0/0').load();
         });
 //
 //        $("#idrole").on('change', function(e){
