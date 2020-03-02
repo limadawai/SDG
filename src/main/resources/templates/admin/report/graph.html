@@ -170,6 +170,9 @@
                 success: function (result) {
                     //console.log(result);
                     //console.log("id monper : "+result[0][1])
+                    if (result.length == 0) {
+                    	swal("Data tidak ditemukan");
+                    }
                     $("#kananatas").empty();
                     for (var i=0; i<result.length; i++) {
                         $.ajax({
@@ -188,7 +191,7 @@
                                             isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
                                                 isi += "<ol>";
                                                     isi += "<li id='cucukanan' class='file' style='padding:6px'>" +
-                                                    	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+result[0][1]+","+0+")'>" + resin[i][4] + "</a>" +
+                                                    	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+result[0][1]+","+0+","+$("#daerah").val()+")'>" + resin[i][4] + "</a>" +
                                                     	"</li>";
                                                 isi += "</ol>";
                                             isi += "</li>";
@@ -231,7 +234,7 @@
                                     isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
                                     isi += "<ol>";
                                     isi += "<li id='cucukanan' class='file' style='padding:6px'>" +
-                                	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+result[0][1]+","+1+")'>" + resin[i][4] + "</a>" +
+                                	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+result[0][1]+","+1+","+$("#daerah").val()+")'>" + resin[i][4] + "</a>" +
                                 	"</li>";
                                     isi += "</ol>";
                                     isi += "</li>";
@@ -247,9 +250,9 @@
             });
         }
 
-        function cucukanan(idsdg, idtar, idindi, id, idmon, flag) {
+        function cucukanan(idsdg, idtar, idindi, id, idmon, flag, valda) {
         	//alert(idsdg+" "+idtar+" "+idindi+" "+id+" "+flag);
-            window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag);
+            location.href = urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag+"/"+valda;
         }
 
     </script>

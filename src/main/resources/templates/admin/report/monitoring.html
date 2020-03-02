@@ -320,7 +320,7 @@
                 success: function (res) {
                 	var row = res.content;
                 	var noGoals = 1;
-                	$('body').removeClass("loading");
+                	
                 	for(var i=0;i<row.length;i++){
                 		//JUDUL BESAR SDG
                 		if($('#fs').is(':checked')){
@@ -671,6 +671,7 @@
         }else{
         	textSdg = "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Not Showing Report yet</b></div><p/>";
         }
+        $('body').removeClass("loading");
         $("#indi").append(textSdg);
         
         /* $.ajax({
