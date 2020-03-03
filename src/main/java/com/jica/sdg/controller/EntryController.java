@@ -138,6 +138,15 @@ public class EntryController {
         model.addAttribute("refcategory",modelCrud.getRefCategory());
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        String sql = "SELECT DISTINCT  a.id,a.id_cat,b.nm_cat, a.problem,a.follow_up,c.approval,a.id_role,a.id_monper,a.year  FROM entry_problem_identify a "
+                     + " LEFT JOIN ref_category b ON  a.id_cat = b.id_cat "
+                     + " JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' "
+                     + "WHERE a.id_goals =  '"+id+"' and a.id_target =  '"+id_target+"' and a.id_indicator =  '"+id_indicator+"' ";        
+        Query list3 = em.createNativeQuery(sql);
+        List<Object[]> rows = list3.getResultList();
+        model.addAttribute("count_data_app", rows.size());
+        System.out.println(rows.size());
+        
         return "admin/dataentry/problemidentify";
     }
     
@@ -197,7 +206,7 @@ public class EntryController {
         String id_target             = jsonObunit.get("id_target").toString();
         String id_indicator          = jsonObunit.get("id_indicator").toString();
             Query query = em.createNativeQuery("INSERT INTO entry_approval (id_role,id_monper,YEAR,TYPE,approval,approval_date)\n" +
-                                                "SELECT a.id_role,a.id_monper,a.year,'entry_problem_identify' AS TYPE,'1' AS approval, CURDATE() AS approval_date FROM entry_problem_identify a \n" +
+                                                "SELECT DISTINCT a.id_role,a.id_monper,a.year,'entry_problem_identify' AS TYPE,'1' AS approval, CURDATE() AS approval_date FROM entry_problem_identify a \n" +
                                                 "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
                                                 " WHERE a.id_goals =  '"+id_goals+"' AND a.id_target =  '"+id_target+"' AND a.id_indicator =  '"+id_indicator+"' ");
             query.executeUpdate();
