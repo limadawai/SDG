@@ -236,6 +236,12 @@
             });
         }
     });
+    
+    $( document ).ajaxStart(function() {
+    	$('body').addClass("loading");
+   	}).ajaxStop(function(){
+   		$('body').removeClass("loading");
+   	});
 
     $("#periode").on("change", function(){
         /* var v_dataid    = $("#periode").val();
@@ -260,7 +266,7 @@
         $.ajax({
             type: "GET",
             url: urls+'list-get-sts-monper/'+id_monper,
-            async:false,
+            //async:false,
             success: function (result1) {
             	sts = result1.content;
             	}
@@ -270,7 +276,7 @@
             type: 'get',
             data: { "id_monper":id_monper},
             dataType: 'json',
-            cache: false,
+            //cache: false,
             async:false,
             success: function (result) {
             	cekSdg = result.sdg;
@@ -288,7 +294,7 @@
         	$.ajax({
                 type: "GET",
                 url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
-                async:false,
+                //async:false,
                 success: function (result1) {
                 	stsGov = result1.content;
                 	}
@@ -296,7 +302,7 @@
         	$.ajax({
                 type: "GET",
                 url: urls+'list-get-sts-monper-nongov/'+id_monper,
-                async:false,
+                //async:false,
                 success: function (result1) {
                 	stsBud = result1.content;
                 	}
@@ -306,7 +312,7 @@
         	$.ajax({
                 type: "GET",
                 url: urls+'list-get-sts-monper-gov_act/'+id_monper,
-                async:false,
+                //async:false,
                 success: function (result1) {
                 	stsGov = result1.content;
                 	}
@@ -314,7 +320,7 @@
         	$.ajax({
                 type: "GET",
                 url: urls+'list-get-sts-monper-gov/'+id_monper,
-                async:false,
+                //async:false,
                 success: function (result1) {
                 	stsBud = result1.content;
                 	}
@@ -352,14 +358,13 @@
             	url: urls + "list-entry-sdg-report/"+idprov+"/"+idrole+"/"+id_monper,
                 type: 'get',
                 dataType: 'json',
-                cache: false,
-                async:false,
-                beforeSend : function(xhr){
+                //async:false,
+                /* beforeSend : function(xhr){
                 	$('body').addClass("loading"); 
-                },
-                complete: function(){
+                }, */
+               /*  complete: function(){
                 	$('body').removeClass("loading");
-                },
+                }, */
                 success: function (res) {
                 	var row = res.content;
                 	var noGoals = 1;
@@ -428,14 +433,7 @@
                             	url: urls + "list-entry-sdg/"+idprov+"/"+idrole+"/"+id_monper+'/'+y,
                                 type: 'get',
                                 dataType: 'json',
-                                cache: false,
                                 async:false,
-                                beforeSend : function(xhr){
-                                	$('body').addClass("loading"); 
-                                },
-                                complete: function(){
-                                	$('body').removeClass("loading");
-                                },
                                 success: function (res) {
                                 	var row = res.content;
                                 	var nilai1 = "";
@@ -486,7 +484,7 @@
                             				nilai4 = (row[i][12])?row[i][12]:'';
                             			}
                                 	}
-                            		for(isdg=0;isdg<cekSdg.length;isdg++){
+                            		for(var isdg=0;isdg<cekSdg.length;isdg++){
                             			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:"Not Showing Report yet";
                             			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:"Not Showing Report yet";
                             			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:"Not Showing Report yet";
@@ -581,14 +579,13 @@
     	                            type: 'get',
     	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":idrole, "year":y},
     	                            dataType: 'json',
-    	                            cache: false,
     	                            async: false,
-    	                            beforeSend : function(xhr){
+    	                           /*  beforeSend : function(xhr){
     	                            	$('body').addClass("loading"); 
-    	                            },
-    	                            complete: function(){
+    	                            }, */
+    	                           /*  complete: function(){
     	                            	$('body').removeClass("loading");
-    	                            },
+    	                            }, */
     	                            success: function (result) {
     	                            	var rowGov = result.content
     	                            	for(var j=0;j<rowGov.length;j++){
@@ -624,7 +621,7 @@
     	                            			nilaiGov4 = (rowGov[j][11])?rowGov[j][11]:'';
     	                            		}
     	                            		
-    	                            		for(igov=0;isdg<cekInd.length;igov++){
+    	                            		for(var igov=0;igov<cekInd.length;igov++){
     	                            			nilaiGov1 = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:"Not Showing Report yet";
     	                            			nilaiGov2 = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:"Not Showing Report yet";
     	                            			nilaiGov3 = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:"Not Showing Report yet";
@@ -677,7 +674,7 @@
     	                            		}
     	                            		
     	                            		if(cekBud.length>0){
-    	                            			for(ibud=0;ibud<cekBud.length;ibud++){
+    	                            			for(var ibud=0;ibud<cekBud.length;ibud++){
         	                            			nilaiBudGov1 = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:"Not Showing Report yet";
         	                            			nilaiBudGov2 = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:"Not Showing Report yet";
         	                            			nilaiBudGov3 = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:"Not Showing Report yet";
@@ -720,13 +717,14 @@
                     		}	
                 		}
                 		textSdg += "</tbody></table>";
+                		$("#indi").append(textSdg);
                 	}
                 }
             });
         }else{
         	textSdg = "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Not Showing Report yet</b></div><p/>";
+        	$("#indi").append(textSdg);
         }
-        $("#indi").append(textSdg);
         
         /* $.ajax({
         	url: urls + "getentryshowreport",
