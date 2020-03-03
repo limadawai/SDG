@@ -237,11 +237,11 @@
         }
     });
     
-    $( document ).ajaxStart(function() {
+   /*  $( document ).ajaxStart(function() {
     	$('body').addClass("loading");
    	}).ajaxStop(function(){
    		$('body').removeClass("loading");
-   	});
+   	}); */
 
     $("#periode").on("change", function(){
         /* var v_dataid    = $("#periode").val();
@@ -359,12 +359,12 @@
                 type: 'get',
                 dataType: 'json',
                 //async:false,
-                /* beforeSend : function(xhr){
+                beforeSend : function(xhr){
                 	$('body').addClass("loading"); 
-                }, */
-               /*  complete: function(){
+                },
+               complete: function(){
                 	$('body').removeClass("loading");
-                }, */
+                },
                 success: function (res) {
                 	var row = res.content;
                 	var noGoals = 1;
