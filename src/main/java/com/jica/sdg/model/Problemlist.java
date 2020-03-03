@@ -25,6 +25,14 @@ public class Problemlist  {
         this.approval = approval;
     }
     
+    public Problemlist(Integer id, String id_cat, String nm_cat, String problem, String follow_up) {
+        this.id = id;
+        this.id_cat = id_cat;
+        this.nm_cat = nm_cat;
+        this.problem = problem;
+        this.follow_up = follow_up;
+    }
+    
     public Problemlist(Integer id, String id_cat, String nm_cat, String problem) {
         this.id = id;
         this.id_cat = id_cat;
