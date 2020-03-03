@@ -115,6 +115,9 @@
                 cache: false,
                 success: function (resrole) {
                 	//console.log(resrole);
+                	if (resrole.length == 0) {
+                		swal("Data tidak ditemukan");
+                	}
                     $("#divkiri").empty();
                     $("#kananatas").empty();
                     $("#kananbawah").empty();
