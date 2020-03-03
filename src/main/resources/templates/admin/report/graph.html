@@ -81,6 +81,36 @@
             $("#patas").text("Government");
             $("#pbawah").text("Non-Government");
         }
+        
+        // ********************** Content Div Kiri **********************
+        $.ajax({
+        	url: urls + "getallgoals",
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            success: function (resgoals) {
+            	console.log(resgoals);
+            	var valperiode = $("#periode").val();
+            	var isi = "<ol class='tree'>";
+                   for (var i=0; i<resgoals.length; i++) {
+                       isi += "<li style='padding:6px'>";
+                           isi += "<label class='dok' for='folder"+(i+1)+"'>"+resgoals[i][1];if(lang == "0"){resgoals[i][1]}else{resgoals[i][2]}+"</label> <input type='checkbox' id='folder"+(i+1)+"' />";
+                           isi += "<ol>";
+                               isi += "<li class='dok' style='padding:6px;width:500px;'>";
+                                   isi += "<label id='dok' class='dok' for='subfolder"+(i+1)+"' value=''>"+resgoals[i][4]+"</label><input type='checkbox' id='subfolder"+(i+1)+"' />";
+                                   isi += "<ol id=''olindikator>";
+                                       isi += "<li id='cucu' class='file' style='padding:6px'>" +
+                                       "<a href='#' onclick='cucukanan("+resgoals[i][0]+","+resgoals[i][3]+","+resgoals[i][6]+","+valperiode+")'>"+resgoals[i][7]+"</a>" +
+                                       "</li>";
+                                   isi += "</ol>";
+                               isi += "</li>";
+                           isi += "</ol>";
+                       isi += "</li>";
+                   }
+                isi += "</ol>";
+                $("#divkiri").append(isi);
+            }
+        });
 
         // ********************** Fungsi pilih select option **********************
         
@@ -104,7 +134,7 @@
             });
         });
         
-        $("#periode").on("change", function(){
+        /* $("#periode").on("change", function(){
         	var valdaerah = $("#daerah").val();
         	var valperiode = $(this).val();
         	$.ajax({
@@ -160,7 +190,7 @@
                 	}
                 }
             });
-        });
+        }); */
 
         function kanan(idsdg, idtar, idindi, idmonper) {
         	//alert(idsdg+" "+idtar+" "+idindi+" "+idmonper);

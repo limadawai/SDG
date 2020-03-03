@@ -264,6 +264,17 @@ public class ReportController {
         return "admin/report/graph";
     }
     
+    @GetMapping("admin/getallgoals")
+    public @ResponseBody List<Object> getallgoals() {
+    	String sql = "SELECT a.id as idgoals, a.nm_goals, a.nm_goals_eng, b.id as idtarget, b.nm_target, b.nm_target_eng, "
+    			+ "c.id as id, c.nm_indicator, c.nm_indicator_eng FROM sdg_goals a LEFT JOIN "
+    			+ "sdg_target b ON b.id_goals = a.id LEFT JOIN "
+    			+ "sdg_indicator c ON c.id_goals = a.id AND c.id_target = b.id GROUP BY idgoals";
+    	Query query = manager.createNativeQuery(sql);
+        List list = query.getResultList();
+        return list;
+    }
+    
     @GetMapping("admin/getrole")
     public @ResponseBody List<Object> getrole(@RequestParam("id_prov") String idprov) {
     	String sql = "SELECT id_role FROM ref_role WHERE id_prov = :id_prov";
