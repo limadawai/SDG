@@ -154,7 +154,7 @@
 		var id_goals = $('#id_goals').val();
 		var id_target = $('#id_target').val();
 		var id_indicator = $('#id_indicator').val();
-
+                var count_data_app = [[${count_data_app}]];
 			//Bahasa
 	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
@@ -450,10 +450,17 @@
                 })
              });
             
+            
              $(window).load(function(){ 
                 var count_data  = table.rows().data().length;
-                if(count_data>0){
-                    $('#apply_btn').show();
+                if(count_data>0&&count_data_app>0){
+                   $('#apply_btn').hide(); 
+                }else if(count_data>0){
+                   $('#apply_btn').show(); 
+                }
+                console.log(count_data_app);
+                if(count_data_app>0){
+                    $('#unapply_btn').show(); 
                 }
              });
            
