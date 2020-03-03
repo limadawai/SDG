@@ -357,6 +357,9 @@
                 beforeSend : function(xhr){
                 	$('body').addClass("loading"); 
                 },
+                complete: function(){
+                	$('body').removeClass("loading");
+                },
                 success: function (res) {
                 	var row = res.content;
                 	var noGoals = 1;
@@ -427,6 +430,12 @@
                                 dataType: 'json',
                                 cache: false,
                                 async:false,
+                                beforeSend : function(xhr){
+                                	$('body').addClass("loading"); 
+                                },
+                                complete: function(){
+                                	$('body').removeClass("loading");
+                                },
                                 success: function (res) {
                                 	var row = res.content;
                                 	var nilai1 = "";
@@ -574,6 +583,12 @@
     	                            dataType: 'json',
     	                            cache: false,
     	                            async: false,
+    	                            beforeSend : function(xhr){
+    	                            	$('body').addClass("loading"); 
+    	                            },
+    	                            complete: function(){
+    	                            	$('body').removeClass("loading");
+    	                            },
     	                            success: function (result) {
     	                            	var rowGov = result.content
     	                            	for(var j=0;j<rowGov.length;j++){
@@ -711,7 +726,6 @@
         }else{
         	textSdg = "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Not Showing Report yet</b></div><p/>";
         }
-        $('body').removeClass("loading");
         $("#indi").append(textSdg);
         
         /* $.ajax({
