@@ -52,10 +52,12 @@
                     <h5 id="title">Laporan Hasil Monitor</h5>
                 </div>
                 <div class="widget-content">
-                    <div id="indi">
+                	<div class="table-responsive">
+                    	<div id="indi">
 	                	<!-- <div id="divgoals" style="width:100%"></div>
 	                	<div id="divtarget" style="width:100%"></div>
                     	<table id="tabatas" class='table table-striped table-bordered'></table><br><br> -->
+                    	</div>
                     </div>
                 </div>
             </div>
@@ -236,6 +238,12 @@
             });
         }
     });
+    
+   /*  $( document ).ajaxStart(function() {
+    	$('body').addClass("loading");
+   	}).ajaxStop(function(){
+   		$('body').removeClass("loading");
+   	}); */
 
     $("#periode").on("change", function(){
         /* var v_dataid    = $("#periode").val();
@@ -270,7 +278,7 @@
             type: 'get',
             data: { "id_monper":id_monper},
             dataType: 'json',
-            cache: false,
+            //cache: false,
             async:false,
             success: function (result) {
             	cekSdg = result.sdg;
@@ -322,40 +330,59 @@
         }
         var tabelSdg = "";
         var textSdg = "";
-        
+        var tabGov = false;
         if(cekSdg.length>0){
-        	tabelSdg += "<table class='table table-striped table-bordered'><thead>";
-        	tabelSdg += "<tr style='font-size:90%;'><td rowspan='2' style='text-align:center;vertical-align:middle'><b>Source of Data</b></td>";
-        	tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Year</b></td>";
-        	tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Unit</b></td>";
-        	tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Baseline</b></td>";
-        	tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
-        	if(sts == 'yearly'){
-        		tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
-        	}else if(sts == 'semesterly'){
-        		tabelSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+        	tabelSdg += "<table id='tabel-sdg' class='table table-striped table-bordered'><thead>";
+        	tabelSdg += "<tr style='font-size:80%;'>";
+        	tabelSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Source of Data</b></td>";
+        	tabelSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Unit</b></td>";
+        	tabelSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Baseline</b></td>";
+        	
+        	for(var y=monper_year[0];y<=monper_year[1];y++){
+        		if(sts == 'yearly'){
+            		tabelSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+            	}else if(sts == 'semesterly'){
+            		tabelSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+            	}
+        		else if(sts == 'quarterly'){
+        			tabelSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+            	}
         	}
-    		else if(sts == 'quarterly'){
-    			tabelSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+        	tabelSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr style='font-size:80%;'>";
+        	for(var y=monper_year[0];y<=monper_year[1];y++){
+        		tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+            	if(sts == 'yearly'){
+            		tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+            	}else if(sts == 'semesterly'){
+            		tabelSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+            	}
+        		else if(sts == 'quarterly'){
+        			tabelSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+            	}
         	}
-        	tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr>";
-        	if(sts == 'yearly'){
-        		tabelSdg += "";
-        	}else if(sts == 'semesterly'){
-        		tabelSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td>";
+        	tabelSdg += "</tr><tr style='font-size:80%;'>";
+        	for(var y=monper_year[0];y<=monper_year[1];y++){
+        		if(sts == 'yearly'){
+            		tabelSdg += "";
+            	}else if(sts == 'semesterly'){
+            		tabelSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td>";
+            	}
+        		else if(sts == 'quarterly'){
+        			tabelSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td><td style='text-align:center;vertical-align:middle'><b>3</b></td><td style='text-align:center;vertical-align:middle'><b>4</b></td>";
+            	}
         	}
-    		else if(sts == 'quarterly'){
-    			tabelSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td><td style='text-align:center;vertical-align:middle'><b>3</b></td><td style='text-align:center;vertical-align:middle'><b>4</b></td>";
-        	}
+        	
         	tabelSdg += "</tr></thead>";
         	$.ajax({
             	url: urls + "list-entry-sdg-report/"+idprov+"/"+idrole+"/"+id_monper,
                 type: 'get',
                 dataType: 'json',
-                cache: false,
-                async:false,
+                //async:false,
                 beforeSend : function(xhr){
                 	$('body').addClass("loading"); 
+                },
+               complete: function(){
+                	$('body').removeClass("loading");
                 },
                 success: function (res) {
                 	var row = res.content;
@@ -388,6 +415,9 @@
                        			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][5]+"</b></p>";
                        		}else if(row[ig][2]!=row[i][2]){
                        			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][5]+"</b></p>";
+                       			
+                       		}else{
+                       			tabGov = true;
                        		}
                        		textSdg += disaggre;
                         }else{
@@ -415,17 +445,20 @@
                        			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][10]+"</b></p>";
                        		}else if(row[ig][2]!=row[i][2]){
                        			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][10]+"</b></p>";
+                       			
+                       		}else{
+                       			tabGov = true;
                        		}
-                       		textSdg += disaggre;
+                       		textSdg += disaggre;                       		
                        	}
                 		textSdg += tabelSdg+"<tbody>";
                 		var cek=0;
+                		textSdg += "<tr style='font-size:80%;'><td></td><td>"+row[i][6]+"</td><td></td>";
                 		for(var y=monper_year[0];y<=monper_year[1];y++){
                 			$.ajax({
                             	url: urls + "list-entry-sdg/"+idprov+"/"+idrole+"/"+id_monper+'/'+y,
                                 type: 'get',
                                 dataType: 'json',
-                                cache: false,
                                 async:false,
                                 success: function (res) {
                                 	var row = res.content;
@@ -477,7 +510,7 @@
                             				nilai4 = (row[i][12])?row[i][12]:'';
                             			}
                                 	}
-                            		for(isdg=0;isdg<cekSdg.length;isdg++){
+                            		for(var isdg=0;isdg<cekSdg.length;isdg++){
                             			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:"Not Showing Report yet";
                             			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:"Not Showing Report yet";
                             			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:"Not Showing Report yet";
@@ -488,7 +521,7 @@
                             		nilai3 = ((cekSdg[0][cek]=="3" && cekSdg[1][cek]==y ) || (cekSdg[0][cek+1]=="3" && cekSdg[1][cek+1]==y ) || (cekSdg[0][cek+2]=="3" && cekSdg[1][cek+2]==y ) || (cekSdg[0][cek+3]=="3" && cekSdg[1][cek+3]==y ))?nilai3:"Not Showing Report yet";
                             		nilai4 = ((cekSdg[0][cek]=="4" && cekSdg[1][cek]==y ) || (cekSdg[0][cek+1]=="4" && cekSdg[1][cek+1]==y ) || (cekSdg[0][cek+2]=="4" && cekSdg[1][cek+2]==y ) || (cekSdg[0][cek+3]=="4" && cekSdg[1][cek+3]==y ))?nilai4:"Not Showing Report yet";
                             		cek = cek+4; */
-                            		textSdg += "<tr style='font-size:90%;'><td></td><td>"+y+"</td><td>"+row[i][6]+"</td><td></td><td>"+(row[i][8]?row[i][8]:'')+"</td>";
+                            		textSdg += "<td>"+(row[i][8]?row[i][8]:'')+"</td>";
                             		if(sts == 'yearly'){
                             			textSdg += "<td>"+nilai1+"</td>";	
                             		}else if(sts == 'semesterly'){
@@ -501,218 +534,212 @@
                             			textSdg += "<td>"+nilai3+"</td>";
                             			textSdg += "<td>"+nilai4+"</td>";
                                 	}
-                            		textSdg += "<td></td></tr>";
+                            		
                                 }
                 			});
                 		}
+                		textSdg += "<td></td></tr>";
                 		textSdg += "<tbody></table>";
-                		
-                		
-                		//tabel GOV Program
-                		textSdg += "<table class='table table-striped table-bordered'><thead>";
-                		textSdg += "<tr style='font-size:90%;color:white;background-color:blue;'><td rowspan='2' style='text-align:center;vertical-align:middle'>Program Name</td>";
-                		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Activity</td>";
-                		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Indicator</td>";
-                		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Year</td>";
-                		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Unit</td>";
-                		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                		var colspan=5;
-                		if(stsGov == 'yearly'){
-                			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
-                			colspan=colspan+1;
-                    	}
-                		else if(stsGov == 'semesterly'){
-                			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
-                			colspan=colspan+2;
-                    	}
-                		else if(stsGov == 'quarterly'){
-                			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
-                			colspan=colspan+4;
-                    	}
-                		if(stsBud == 'yearly'){
-                			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
-                			colspan=colspan+1;
-                    	}
-                		else if(stsBud == 'semesterly'){
-                			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
-                			colspan=colspan+2;
-                    	}
-                		else if(stsBud == 'quarterly'){
-                			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
-                			colspan=colspan+4;
-                    	}
-                		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-                		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Location</td>";
-                		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:90%;color:white;background-color:blue;'>";
-                		colspan=colspan+3;
-                		if(stsGov == 'yearly'){
-                			textSdg += "";
-                    	}
-                		else if(stsGov == 'semesterly'){
-                			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
-                    	}else if(stsGov == 'quarterly'){
-                    		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
-                    	}
-                		if(stsBud == 'yearly'){
-                			textSdg += "";
-                    	}
-                		else if(stsBud == 'semesterly'){
-                			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
-                    	}else if(stsBud == 'quarterly'){
-                    		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
-                    	}
-                		textSdg += "</tr></thead><tbody>"
-                		//ISI TABEL GOV
-                		var cekGov=0;
-                		var cekBudRow=0;
-                		for(var y=monper_year[0];y<=monper_year[1];y++){
-                			if(cekInd.length>0){
-                    			$.ajax({
-    	                			url: urlEntry,
-    	                            type: 'get',
-    	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":idrole, "year":y},
-    	                            dataType: 'json',
-    	                            cache: false,
-    	                            async: false,
-    	                            success: function (result) {
-    	                            	var rowGov = result.content
-    	                            	for(var j=0;j<rowGov.length;j++){
-    	                            		textSdg += "<tr style='font-size:90%;'>"
-        	                            	if($('#fs').is(':checked')){
-        	                            		textSdg += "<td>"+rowGov[j][0]+"</td><td>"+rowGov[j][2]+"</td><td>"+rowGov[j][4];
-        	                            	}else{
-        	                            		textSdg += "<td>"+rowGov[j][1]+"</td><td>"+rowGov[j][3]+"</td><td>"+rowGov[j][5];
-        	                            	}
-    	                            		textSdg +="<td>"+y+"</td>"+"<td>"+rowGov[j][6]+"</td>"+"<td>"+(rowGov[j][7]?rowGov[j][7]:'')+"</td>";
-    	                            		var nilaiGov1;
-    	                            		var nilaiGov2;
-    	                            		var nilaiGov3;
-    	                            		var nilaiGov4;
-    	                            		if(rowGov[j][17]){
-    	                            			nilaiGov1 = (rowGov[j][17])?rowGov[j][17]:'';
-    	                            		}else{
-    	                            			nilaiGov1 = (rowGov[j][8])?rowGov[j][8]:'';
-    	                            		}
-    	                            		if(rowGov[j][18]){
-    	                            			nilaiGov2 = (rowGov[j][18])?rowGov[j][18]:'';
-    	                            		}else{
-    	                            			nilaiGov2 = (rowGov[j][9])?rowGov[j][9]:'';
-    	                            		}
-    	                            		if(rowGov[j][19]){
-    	                            			nilaiGov3 = (rowGov[j][19])?rowGov[j][19]:'';
-    	                            		}else{
-    	                            			nilaiGov3 = (rowGov[j][10])?rowGov[j][10]:'';
-    	                            		}
-    	                            		if(rowGov[j][20]){
-    	                            			nilaiGov4 = (rowGov[j][20])?rowGov[j][20]:'';
-    	                            		}else{
-    	                            			nilaiGov4 = (rowGov[j][11])?rowGov[j][11]:'';
-    	                            		}
-    	                            		
-    	                            		for(igov=0;isdg<cekInd.length;igov++){
-    	                            			nilaiGov1 = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:"Not Showing Report yet";
-    	                            			nilaiGov2 = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:"Not Showing Report yet";
-    	                            			nilaiGov3 = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:"Not Showing Report yet";
-    	                            			nilaiGov4 = (cekInd[igov][0]=="4" && cekInd[igov][1]==y)?nilaiGov4:"Not Showing Report yet";
-    	                            		}
-    	                            		
-    	                            		/* nilaiGov1 = ((cekInd[0][cekGov]=="1" && cekInd[1][cekGov]==y ) || (cekInd[0][cekGov+1]=="1" && cekInd[1][cekGov+1]==y ) || (cekInd[0][cekGov+2]=="1" && cekInd[1][cekGov+2]==y ) || (cekInd[0][cekGov+3]=="1" && cekInd[1][cekGov+3]==y ))?nilaiGov1:"Not Showing Report yet";
-    	                            		nilaiGov2 = ((cekInd[0][cekGov]=="2" && cekInd[1][cekGov]==y ) || (cekInd[0][cekGov+1]=="2" && cekInd[1][cekGov+1]==y ) || (cekInd[0][cekGov+2]=="2" && cekInd[1][cekGov+2]==y ) || (cekInd[0][cekGov+3]=="2" && cekInd[1][cekGov+3]==y ))?nilaiGov2:"Not Showing Report yet";
-    	                            		nilaiGov3 = ((cekInd[0][cekGov]=="3" && cekInd[1][cekGov]==y ) || (cekInd[0][cekGov+1]=="3" && cekInd[1][cekGov+1]==y ) || (cekInd[0][cekGov+2]=="3" && cekInd[1][cekGov+2]==y ) || (cekInd[0][cekGov+3]=="3" && cekInd[1][cekGov+3]==y ))?nilaiGov3:"Not Showing Report yet";
-    	                            		nilaiGov4 = ((cekInd[0][cekGov]=="4" && cekInd[1][cekGov]==y ) || (cekInd[0][cekGov+1]=="4" && cekInd[1][cekGov+1]==y ) || (cekInd[0][cekGov+2]=="4" && cekInd[1][cekGov+2]==y ) || (cekInd[0][cekGov+3]=="4" && cekInd[1][cekGov+3]==y ))?nilaiGov4:"Not Showing Report yet";
-    	                            		cekGov = cekGov+4; */
-    	                            		
-    	                            		if(stsGov == 'yearly'){
-    	                            			textSdg += "<td>"+nilaiGov1+"</td>";
-    	                                	}
-    	                            		else if(stsGov == 'semesterly'){
-    	                            			textSdg += "<td>"+nilaiGov1+"</td>";
-    	                            			textSdg += "<td>"+nilaiGov2+"</td>";
-    	                                	}
-    	                            		else if(stsGov == 'quarterly'){
-    	                            			textSdg += "<td>"+nilaiGov1+"</td>";
-    	                            			textSdg += "<td>"+nilaiGov2+"</td>";
-    	                            			textSdg += "<td>"+nilaiGov3+"</td>";
-    	                            			textSdg += "<td>"+nilaiGov4+"</td>";
-    	                                	}
-    	                            		
-    	                            		var nilaiBudGov1;
-    	                            		var nilaiBudGov2;
-    	                            		var nilaiBudGov3;
-    	                            		var nilaiBudGov4;
-    	                            		if(rowGov[j][21]){
-    	                            			nilaiBudGov1 = (rowGov[j][21])?rowGov[j][21]:'';
-    	                            		}else{
-    	                            			nilaiBudGov1 = (rowGov[j][12])?rowGov[j][12]:'';
-    	                            		}
-    	                            		if(rowGov[j][22]){
-    	                            			nilaiBudGov2 = (rowGov[j][22])?rowGov[j][22]:'';
-    	                            		}else{
-    	                            			nilaiBudGov2 = (rowGov[j][13])?rowGov[j][13]:'';
-    	                            		}
-    	                            		if(rowGov[j][23]){
-    	                            			nilaiBudGov3 = (rowGov[j][23])?rowGov[j][23]:'';
-    	                            		}else{
-    	                            			nilaiBudGov3 = (rowGov[j][14])?rowGov[j][14]:'';
-    	                            		}
-    	                            		if(rowGov[j][24]){
-    	                            			nilaiBudGov4 = (rowGov[j][24])?rowGov[j][24]:'';
-    	                            		}else{
-    	                            			nilaiBudGov4 = (rowGov[j][15])?rowGov[j][15]:'';
-    	                            		}
-    	                            		
-    	                            		if(cekBud.length>0){
-    	                            			for(ibud=0;ibud<cekBud.length;ibud++){
-        	                            			nilaiBudGov1 = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:"Not Showing Report yet";
-        	                            			nilaiBudGov2 = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:"Not Showing Report yet";
-        	                            			nilaiBudGov3 = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:"Not Showing Report yet";
-        	                            			nilaiBudGov4 = (cekBud[ibud][0]=="4" && cekBud[ibud][1]==y)?nilaiBudGov4:"Not Showing Report yet";
+                		console.log(tabGov);
+                		if(disaggre=="" || (disaggre!="" && tabGov)){
+                			//tabel GOV Program
+                    		textSdg += "<table class='table table-striped table-bordered' style='margin-top:30px'><thead>";
+                    		textSdg += "<tr style='font-size:90%;color:white;background-color:blue;'><td rowspan='2' style='text-align:center;vertical-align:middle'>Program Name</td>";
+                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Activity</td>";
+                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Indicator</td>";
+                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Year</td>";
+                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Unit</td>";
+                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                    		var colspan=5;
+                    		if(stsGov == 'yearly'){
+                    			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                    			colspan=colspan+1;
+                        	}
+                    		else if(stsGov == 'semesterly'){
+                    			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                    			colspan=colspan+2;
+                        	}
+                    		else if(stsGov == 'quarterly'){
+                    			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+                    			colspan=colspan+4;
+                        	}
+                    		if(stsBud == 'yearly'){
+                    			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                    			colspan=colspan+1;
+                        	}
+                    		else if(stsBud == 'semesterly'){
+                    			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                    			colspan=colspan+2;
+                        	}
+                    		else if(stsBud == 'quarterly'){
+                    			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                    			colspan=colspan+4;
+                        	}
+                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Location</td>";
+                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:90%;color:white;background-color:blue;'>";
+                    		colspan=colspan+3;
+                    		if(stsGov == 'yearly'){
+                    			textSdg += "";
+                        	}
+                    		else if(stsGov == 'semesterly'){
+                    			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+                        	}else if(stsGov == 'quarterly'){
+                        		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+                        	}
+                    		if(stsBud == 'yearly'){
+                    			textSdg += "";
+                        	}
+                    		else if(stsBud == 'semesterly'){
+                    			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+                        	}else if(stsBud == 'quarterly'){
+                        		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+                        	}
+                    		textSdg += "</tr></thead><tbody>"
+                    		//ISI TABEL GOV
+                    		var cekGov=0;
+                    		var cekBudRow=0;
+                    		for(var y=monper_year[0];y<=monper_year[1];y++){
+                    			if(cekInd.length>0){
+                        			$.ajax({
+        	                			url: urlEntry,
+        	                            type: 'get',
+        	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":idrole, "year":y},
+        	                            dataType: 'json',
+        	                            async: false,
+        	                            success: function (result) {
+        	                            	var rowGov = result.content
+        	                            	for(var j=0;j<rowGov.length;j++){
+        	                            		textSdg += "<tr style='font-size:90%;'>"
+            	                            	if($('#fs').is(':checked')){
+            	                            		textSdg += "<td>"+rowGov[j][0]+"</td><td>"+rowGov[j][2]+"</td><td>"+rowGov[j][4];
+            	                            	}else{
+            	                            		textSdg += "<td>"+rowGov[j][1]+"</td><td>"+rowGov[j][3]+"</td><td>"+rowGov[j][5];
+            	                            	}
+        	                            		textSdg +="<td>"+y+"</td>"+"<td>"+rowGov[j][6]+"</td>"+"<td>"+(rowGov[j][7]?rowGov[j][7]:'')+"</td>";
+        	                            		var nilaiGov1;
+        	                            		var nilaiGov2;
+        	                            		var nilaiGov3;
+        	                            		var nilaiGov4;
+        	                            		if(rowGov[j][17]){
+        	                            			nilaiGov1 = (rowGov[j][17])?rowGov[j][17]:'';
+        	                            		}else{
+        	                            			nilaiGov1 = (rowGov[j][8])?rowGov[j][8]:'';
         	                            		}
-    	                            		}else{
-    	                            			nilaiBudGov1 = "Not Showing Report yet";
-    	                            			nilaiBudGov2 = "Not Showing Report yet";
-    	                            			nilaiBudGov3 = "Not Showing Report yet";
-    	                            			nilaiBudGov4 = "Not Showing Report yet";
-    	                            		}
-    	                            		
-    	                            		
-    	                            		/* nilaiBudGov1 = ((cekBud[0][cekBudRow]=="1" && cekBud[1][cekBudRow]==y ) || (cekBud[0][cekBudRow+1]=="1" && cekBud[1][cekBudRow+1]==y ) || (cekBud[0][cekBudRow+2]=="1" && cekBud[1][cekBudRow+2]==y ) || (cekBud[0][cekBudRow+3]=="1" && cekBud[1][cekBudRow+3]==y ))?nilaiBudGov1:"Not Showing Report yet";
-    	                            		nilaiBudGov2 = ((cekBud[0][cekBudRow]=="2" && cekBud[1][cekBudRow]==y ) || (cekBud[0][cekBudRow+1]=="2" && cekBud[1][cekBudRow+1]==y ) || (cekBud[0][cekBudRow+2]=="2" && cekBud[1][cekBudRow+2]==y ) || (cekBud[0][cekBudRow+3]=="2" && cekBud[1][cekBudRow+3]==y ))?nilaiBudGov2:"Not Showing Report yet";
-    	                            		nilaiBudGov3 = ((cekBud[0][cekBudRow]=="3" && cekBud[1][cekBudRow]==y ) || (cekBud[0][cekBudRow+1]=="3" && cekBud[1][cekBudRow+1]==y ) || (cekBud[0][cekBudRow+2]=="3" && cekBud[1][cekBudRow+2]==y ) || (cekBud[0][cekBudRow+3]=="3" && cekBud[1][cekBudRow+3]==y ))?nilaiBudGov3:"Not Showing Report yet";
-    	                            		nilaiBudGov4 = ((cekBud[0][cekBudRow]=="4" && cekBud[1][cekBudRow]==y ) || (cekBud[0][cekBudRow+1]=="4" && cekBud[1][cekBudRow+1]==y ) || (cekBud[0][cekBudRow+2]=="4" && cekBud[1][cekBudRow+2]==y ) || (cekBud[0][cekBudRow+3]=="4" && cekBud[1][cekBudRow+3]==y ))?nilaiBudGov4:"Not Showing Report yet";
-    	                            		cekBudRow = cekBudRow+4; */
-    	                            		
-    	                            		if(stsBud == 'yearly'){
-    	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
-    	                                	}
-    	                            		else if(stsBud == 'semesterly'){
-    	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
-    	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
-    	                                	}
-    	                            		else if(stsBud == 'quarterly'){
-    	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
-    	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
-    	                            			textSdg += "<td>"+nilaiBudGov3+"</td>";
-    	                            			textSdg += "<td>"+nilaiBudGov4+"</td>";
-    	                                	}
-    	                            		textSdg += "<td>"+rowGov[j][16]+"</td>";
-    	                            		textSdg += "<td></td><td></td></tr>";
-    	                            	}
-    	                            }
-    	                   });
-                    		}else{
-                    			textSdg +="<tr><td colspan='"+colspan+"'>Not Showing Report yet</td></tr>"
-                    		}	
+        	                            		if(rowGov[j][18]){
+        	                            			nilaiGov2 = (rowGov[j][18])?rowGov[j][18]:'';
+        	                            		}else{
+        	                            			nilaiGov2 = (rowGov[j][9])?rowGov[j][9]:'';
+        	                            		}
+        	                            		if(rowGov[j][19]){
+        	                            			nilaiGov3 = (rowGov[j][19])?rowGov[j][19]:'';
+        	                            		}else{
+        	                            			nilaiGov3 = (rowGov[j][10])?rowGov[j][10]:'';
+        	                            		}
+        	                            		if(rowGov[j][20]){
+        	                            			nilaiGov4 = (rowGov[j][20])?rowGov[j][20]:'';
+        	                            		}else{
+        	                            			nilaiGov4 = (rowGov[j][11])?rowGov[j][11]:'';
+        	                            		}
+        	                            		
+        	                            		for(var igov=0;igov<cekInd.length;igov++){
+        	                            			nilaiGov1 = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:"Not Showing Report yet";
+        	                            			nilaiGov2 = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:"Not Showing Report yet";
+        	                            			nilaiGov3 = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:"Not Showing Report yet";
+        	                            			nilaiGov4 = (cekInd[igov][0]=="4" && cekInd[igov][1]==y)?nilaiGov4:"Not Showing Report yet";
+        	                            		}
+        	                            		if(stsGov == 'yearly'){
+        	                            			textSdg += "<td>"+nilaiGov1+"</td>";
+        	                                	}
+        	                            		else if(stsGov == 'semesterly'){
+        	                            			textSdg += "<td>"+nilaiGov1+"</td>";
+        	                            			textSdg += "<td>"+nilaiGov2+"</td>";
+        	                                	}
+        	                            		else if(stsGov == 'quarterly'){
+        	                            			textSdg += "<td>"+nilaiGov1+"</td>";
+        	                            			textSdg += "<td>"+nilaiGov2+"</td>";
+        	                            			textSdg += "<td>"+nilaiGov3+"</td>";
+        	                            			textSdg += "<td>"+nilaiGov4+"</td>";
+        	                                	}
+        	                            		
+        	                            		var nilaiBudGov1;
+        	                            		var nilaiBudGov2;
+        	                            		var nilaiBudGov3;
+        	                            		var nilaiBudGov4;
+        	                            		if(rowGov[j][21]){
+        	                            			nilaiBudGov1 = (rowGov[j][21])?rowGov[j][21]:'';
+        	                            		}else{
+        	                            			nilaiBudGov1 = (rowGov[j][12])?rowGov[j][12]:'';
+        	                            		}
+        	                            		if(rowGov[j][22]){
+        	                            			nilaiBudGov2 = (rowGov[j][22])?rowGov[j][22]:'';
+        	                            		}else{
+        	                            			nilaiBudGov2 = (rowGov[j][13])?rowGov[j][13]:'';
+        	                            		}
+        	                            		if(rowGov[j][23]){
+        	                            			nilaiBudGov3 = (rowGov[j][23])?rowGov[j][23]:'';
+        	                            		}else{
+        	                            			nilaiBudGov3 = (rowGov[j][14])?rowGov[j][14]:'';
+        	                            		}
+        	                            		if(rowGov[j][24]){
+        	                            			nilaiBudGov4 = (rowGov[j][24])?rowGov[j][24]:'';
+        	                            		}else{
+        	                            			nilaiBudGov4 = (rowGov[j][15])?rowGov[j][15]:'';
+        	                            		}
+        	                            		
+        	                            		if(cekBud.length>0){
+        	                            			for(var ibud=0;ibud<cekBud.length;ibud++){
+            	                            			nilaiBudGov1 = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:"Not Showing Report yet";
+            	                            			nilaiBudGov2 = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:"Not Showing Report yet";
+            	                            			nilaiBudGov3 = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:"Not Showing Report yet";
+            	                            			nilaiBudGov4 = (cekBud[ibud][0]=="4" && cekBud[ibud][1]==y)?nilaiBudGov4:"Not Showing Report yet";
+            	                            		}
+        	                            		}else{
+        	                            			nilaiBudGov1 = "Not Showing Report yet";
+        	                            			nilaiBudGov2 = "Not Showing Report yet";
+        	                            			nilaiBudGov3 = "Not Showing Report yet";
+        	                            			nilaiBudGov4 = "Not Showing Report yet";
+        	                            		}
+        	                            		if(stsBud == 'yearly'){
+        	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
+        	                                	}
+        	                            		else if(stsBud == 'semesterly'){
+        	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
+        	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
+        	                                	}
+        	                            		else if(stsBud == 'quarterly'){
+        	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
+        	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
+        	                            			textSdg += "<td>"+nilaiBudGov3+"</td>";
+        	                            			textSdg += "<td>"+nilaiBudGov4+"</td>";
+        	                                	}
+        	                            		textSdg += "<td>"+rowGov[j][16]+"</td>";
+        	                            		textSdg += "<td></td><td></td></tr>";
+        	                            	}
+        	                            }
+        	                   });
+                        		}else{
+                        			textSdg +="<tr><td colspan='"+colspan+"'>Not Showing Report yet</td></tr>"
+                        		}	
+                    		}
+                    		textSdg += "</tbody></table>";
                 		}
-                		textSdg += "</tbody></table>";
+                		
                 	}
+                	$("#indi").append(textSdg);
+                	$('#indi').find("#tabel-sdg").DataTable({
+                		"scrollX": true,
+                		"searching": false,
+                		"paging": false,
+                		"ordering": false,
+                        "info":     false
+               		});
                 }
             });
         }else{
         	textSdg = "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Not Showing Report yet</b></div><p/>";
+        	$("#indi").append(textSdg);
         }
-        $('body').removeClass("loading");
-        $("#indi").append(textSdg);
         
         /* $.ajax({
         	url: urls + "getentryshowreport",
