@@ -344,8 +344,6 @@
         	}
         });
         
-        
-        
         function provChange(){
         	var id_prov = $("#id_prov").val() ;
             $.ajax({
@@ -410,7 +408,6 @@
             $("#periode").val(0).trigger("change");
             btn_apply();
         });
-        
         
         $('.app').on('click', '.appl', function(e){
         	if($('#id_prov').val()!="0" && $('#periode').val()!="0" && $('#idrole').val()!="0"){
@@ -526,7 +523,6 @@
         	}else{
         		swal(titleMod,messMod,'error');
         	}
-            
         });
         
         function btn_apply(){
@@ -714,87 +710,6 @@
         		$("#myModal").modal("show");
         	}else{
         		swal(titleMod,messMod,'error');
-        	}
-        });
-        
-        $('#id_program').on('change', function(){
-        	var id_indicator = $(this).val().split('###')[2];
-        	var id_prov = $('#id_prov').val();
-        	var id_monper = $("#periode").val().split('###')[0];
-        	var cat = $("#idrole").find(":selected").data("cat");
-        	$('.accordion-inner').html("");
-        	if(cat=="NSA"){
-        		$.ajax({
-	                url: urls + 'best-practice/list-nsamap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+id_indicator,
-	                type: 'get',
-	                dataType: 'json',
-	                cache: false,
-	                async : false,
-	                success: function (result1) {
-	                	var text = "";
-	                	$('.accordion-inner').html(text);
-	                	for (var k = 0; k < result1.content.length; k++) {
-	                		var nm_goals;
-	                		var nm_target;
-	                		var nm_indicator;
-	                    	if($("#fs").is(':checked')){
-	                    		nm_goals = result1.content[k][1];
-	                    		nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-	                    		nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-							}else{
-								nm_goals = result1.content[k][2];
-								nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-								nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-							}
-	                    	text += '<label style="display:inline-block;white-space:nowrap;">'+
-				        				'<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
-				                  '</label><br/>';
-		                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-				        					'<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
-				                     '</label><br/>';
-		                     text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-				                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
-				                   '</label><br/>';
-	                	}
-	                	$('.accordion-inner').append(text);
-	                }
-	        	});
-        	}else{
-        		$.ajax({
-                    url: urls + 'best-practice/list-govmap/'+id_prov+'/'+id_monper+'/'+id_indicator,
-                    type: 'get',
-                    dataType: 'json',
-                    cache: false,
-                    async : false,
-                    success: function (result1) {
-                    	var text = "";
-                    	$('.accordion-inner').html(text);
-                    	for (var k = 0; k < result1.content.length; k++) {
-                    		var nm_goals;
-                    		var nm_target;
-                    		var nm_indicator;
-                        	if($("#fs").is(':checked')){
-                        		nm_goals = result1.content[k][1];
-                        		nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-                        		nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-    						}else{
-    							nm_goals = result1.content[k][2];
-    							nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-    							nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-    						}
-                        	text += '<label style="display:inline-block;white-space:nowrap;">'+
-    			        				'<span style="vertical-align:middle">'+nm_goals+'</span>'+
-    			                  '</label><br/>';
-    	                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-    	        					'<span style="vertical-align:middle">'+nm_target+'</span>'+
-    	                     '</label><br/>';
-    	                     text += '<label  style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-    			                         '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
-    			                   '</label><br/>';
-                    	}
-                    	$('.accordion-inner').append(text);
-                    }
-            	});
         	}
         });
         
@@ -1100,6 +1015,20 @@
 //            console.log();
         });
         
+        $('.accordion-inner').on('change', 'input[name="sdg_indicator"]', function(){
+        	var sdg_indicator;
+            var sdg_indicator_val = [];
+		    $.each($("input[name='sdg_indicator']:checked"), function(){
+		                sdg_indicator_val.push($(this).val());
+		    });
+            if(sdg_indicator_val.length>0){
+                    sdg_indicator = sdg_indicator_val.toString();
+            }else{
+                    sdg_indicator = '0';
+            }
+            console.log(sdg_indicator);
+        });
+        
         $('#submit').on('click', function(){
 			var id = $('#id').val();
 			var id_prog = $('#id_program').val();
@@ -1115,25 +1044,20 @@
 			var challenges_learning = $('#challenges_learning').val();
 			var periode = $('#periode').val().split("###");
 			var id_monper = periode[0];
-                        var year = periode[1];
-                        
-//                        var id_gov_indicator = $('#id_gov_indicator').val();
-                        
-//                        $(".accordion-inner").find('.sdg-indikator').prop("checked", false);
-//                        $(".accordion-inner").find('.sdg-indikator').removeAttr("disabled");
-                        
+            var year = periode[1];
+            
 			var sdg_indicator;
-                        var sdg_indicator_val = [];
-		        $.each($("input[name='sdg_indicator']:checked"), function(){
-//		        $.each($(".accordion-inner").find("input[name='sdg_indicator']:checked"), function(){
-                            sdg_indicator_val.push($(this).val());
-		        });
-                        if(sdg_indicator_val.length>0){
-                                sdg_indicator = sdg_indicator_val.toString();
-                        }else{
-                                sdg_indicator = '0';
-                        }
-                        console.log(sdg_indicator);
+            var sdg_indicator_val = [];
+	        $.each($("input[name='sdg_indicator']:checked"), function(){
+                 sdg_indicator_val.push($(this).val());
+	        });
+            if(sdg_indicator_val.length>0){
+                    sdg_indicator = sdg_indicator_val.toString();
+            }else{
+                    sdg_indicator = '0';
+            }
+            console.log(sdg_indicator);
+            
 			$('.control-group').removeClass('error');
 			$('.help-block').text("");
 			var cek = 0;
@@ -1169,34 +1093,32 @@
                             'id_monper':id_monper,
                             'year':year
                             });
-//                $.ajax({
-//                    type: "POST",
-//                    url: urls+'save-best/'+sdg_indicator+'/'+id_monper+'/'+$('#id_prov').val(),
-//                    beforeSend : function(xhr){
-//                    	xhr.setRequestHeader(header,token);
-//                    },
-//                    headers:{'Accept':'application/json','Content-Type':'application/json'},
-//                    data: data,
-//                    success: function (result) {
-//                        
-////                        $.ajax({
-////                            type: "POST",
-////                            url: urls+'save-govIndicatorBest/'+sdg_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
-////                            beforeSend : function(xhr){
-////                                xhr.setRequestHeader(header,token);
-////                            },
-////                            headers:{'Accept':'application/json','Content-Type':'application/json'},
-////                            data: data,
-////                            success: function (result12) {
-////                                
-////                            }
-////                        });
-//                        
-//                        
-//                    	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
-//                    	$('#myModal').modal('hide');
-//                    },
-//                });
+                $.ajax({
+                    type: "POST",
+                    url: urls+'save-best/'+sdg_indicator+'/'+id_monper+'/'+$('#id_prov').val(),
+                    beforeSend : function(xhr){
+                    	xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                    data: data,
+                    success: function (result) {
+                        
+                        $.ajax({
+                            type: "POST",
+                            url: urls+'save-govIndicatorBest/'+sdg_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
+                            beforeSend : function(xhr){
+                                xhr.setRequestHeader(header,token);
+                            },
+                            headers:{'Accept':'application/json','Content-Type':'application/json'},
+                            data: data,
+                            success: function (result12) {
+                                
+                            }
+                        });
+                    	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
+                    	$('#myModal').modal('hide');
+                    },
+                });
 			}
 		});
         
@@ -1223,7 +1145,7 @@
                 	var val = result.content;
                 	$('#showModal').trigger('click');
                 	$('#id').val(val.id);
-                	$('#id_program').val(val.program).trigger("change");
+                	$('#id_program').val(val.program);
                         $('#location').val(val.location);
                         $('#time_activity').val(val.time_activity);
                         $('#background').val(val.background);
