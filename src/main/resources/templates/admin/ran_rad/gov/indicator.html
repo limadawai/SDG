@@ -556,25 +556,25 @@
                     $("#error_unit").text(required);
                     cek += 1;
                 }
-				if(cek==0){
-					var data = JSON.stringify({
-						'id_program':id_program,
-						'id_activity':id_activity,
-						'id_gov_indicator':id_gov_indicator,
-						'id':id,
-						'nm_indicator':nm_indicator,
-						'nm_indicator_eng':nm_indicator_eng,
-						'unit':unit,
-						'internal_code':internal_code
-						});
-					$.ajax({
-						type: "POST",
-	                    url: urls+'save-govIndicator/'+sdg_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
-	                    beforeSend : function(xhr){
-	                    	xhr.setRequestHeader(header,token);
-	                    },
-	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
-						data: data,
+                if(cek==0){
+                var data = JSON.stringify({
+                        'id_program':id_program,
+                        'id_activity':id_activity,
+                        'id_gov_indicator':id_gov_indicator,
+                        'id':id,
+                        'nm_indicator':nm_indicator,
+                        'nm_indicator_eng':nm_indicator_eng,
+                        'unit':unit,
+                        'internal_code':internal_code
+                        });
+                $.ajax({
+                    type: "POST",
+                    url: urls+'save-govIndicator/'+sdg_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                    data: data,
 	                    success: function (result) {
 	                    	table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
 	                    	var id_gov_indicator = result.content;
