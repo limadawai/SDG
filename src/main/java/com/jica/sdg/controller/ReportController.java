@@ -1,11 +1,14 @@
 package com.jica.sdg.controller;
 
-import com.jica.sdg.model.Problemlist;
-import com.jica.sdg.model.SdgGoals;
-import com.jica.sdg.model.SdgIndicator;
-import com.jica.sdg.model.SdgTarget;
-import com.jica.sdg.service.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,14 +17,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.servlet.http.HttpSession;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import com.jica.sdg.model.Problemlist;
+import com.jica.sdg.service.ISdgGoalsService;
+import com.jica.sdg.service.ISdgIndicatorService;
+import com.jica.sdg.service.ISdgTargetService;
+import com.jica.sdg.service.ModelCrud;
+import com.jica.sdg.service.ProvinsiService;
+import com.jica.sdg.service.RanRadService;
+import com.jica.sdg.service.RoleService;
+import com.jica.sdg.service.SdgFundingService;
+import com.jica.sdg.service.SdgGoalsService;
+import com.jica.sdg.service.SdgIndicatorService;
+import com.jica.sdg.service.SdgTargetService;
 
 @Controller
 public class ReportController {
@@ -178,24 +185,11 @@ public class ReportController {
     		@RequestParam("id_monper") int idmonper, 
     		@RequestParam("id_role") int idrole,
     		@RequestParam("year") int year) {
-		/*
-		 * String sql =
-		 * "SELECT a.*, b.nm_program, b.nm_program_eng, c.nm_activity, c.nm_activity_eng, "
-		 * + "d.nm_indicator, d.nm_indicator_eng, e.nm_unit FROM gov_map a LEFT JOIN " +
-		 * "gov_program b ON b.id = (SELECT id_program FROM gov_indicator WHERE id = a.id_gov_indicator) LEFT JOIN "
-		 * +
-		 * "gov_activity c ON c.id = (SELECT id_activity FROM gov_indicator WHERE id = a.id_gov_indicator AND id_role = :id_role) LEFT JOIN "
-		 * + "gov_indicator d ON d.id = a.id_gov_indicator LEFT JOIN " +
-		 * "ref_unit e ON e.id_unit = (SELECT unit FROM gov_indicator WHERE id = a.id_gov_indicator) "
-		 * +
-		 * "WHERE a.id_prov = :id_prov AND a.id_indicator = :id_indicator AND a.id_monper = :id_monper"
-		 * ;
-		 */
     	String sql = "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
     			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
     			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
     			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
-    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4 "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id "
     			+ "from gov_map a "
     			+ "left join entry_gov_indicator b on a.id_gov_indicator = b.id_assign and b.year_entry = :year "
     			+ "left join gov_indicator d on a.id_gov_indicator = d.id "
@@ -218,12 +212,67 @@ public class ReportController {
         return hasil;
     }
     
+    @GetMapping("admin/getgovindicatorisi")
+    public @ResponseBody Map<String, Object> getgovindicatorisi(@RequestParam("id") Integer id, @RequestParam("year") Integer year) {
+    	String sql = "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
+    			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
+    			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
+    			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4 "
+    			+ "from gov_map a "
+    			+ "left join entry_gov_indicator b on a.id_gov_indicator = b.id_assign and b.year_entry = :year "
+    			+ "left join gov_indicator d on a.id_gov_indicator = d.id "
+    			+ "left join entry_gov_budget c on d.id_activity = c.id_gov_activity and c.year_entry = :year "
+    			+ "left join gov_program e on d.id_program = e.id "
+    			+ "left join gov_activity f on d.id_activity = f.id "
+    			+ "left join ref_unit g on d.unit = g.id_unit "
+    			+ "left join gov_target h on a.id_gov_indicator = h.id_gov_indicator and year = :year "
+    			+ "left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper "
+    			+ "where a.id = :id ";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id", id);
+        query.setParameter("year", year);
+        List list = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/getnsaindicator")
     public @ResponseBody Map<String, Object> getnsaindicator(@RequestParam("id_prov") String idprov, 
     		@RequestParam("id_sdg_indicator") int idsdgindikator, 
     		@RequestParam("id_monper") int idmonper, 
     		@RequestParam("id_role") int idrole,
     		@RequestParam("year") int year) {
+    	String sql = "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
+    			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
+    			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
+    			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id_nsa_indicator "
+    			+ "from nsa_map a "
+    			+ "left join entry_nsa_indicator b on a.id_nsa_indicator = b.id_assign and b.year_entry = :year "
+    			+ "left join nsa_indicator d on a.id_nsa_indicator = d.id "
+    			+ "left join entry_nsa_budget c on d.id_activity = c.id_nsa_activity and c.year_entry = :year "
+    			+ "left join nsa_program e on d.id_program = e.id "
+    			+ "left join nsa_activity f on d.id_activity = f.id "
+    			+ "left join ref_unit g on d.unit = g.id_unit "
+    			+ "left join nsa_target h on a.id_nsa_indicator = h.id_nsa_indicator and year = :year "
+    			+ "left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper "
+    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_nsa_indicator = :id_indicator and f.id_role = :id_role ";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        query.setParameter("id_indicator", idsdgindikator);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("id_role", idrole);
+        query.setParameter("year", year);
+        List list = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/getnsaindicatorisi")
+    public @ResponseBody Map<String, Object> getnsaindicatorisi(@RequestParam("id") Integer id, @RequestParam("year") Integer year) {
     	String sql = "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
     			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
     			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
@@ -238,12 +287,9 @@ public class ReportController {
     			+ "left join ref_unit g on d.unit = g.id_unit "
     			+ "left join nsa_target h on a.id_nsa_indicator = h.id_nsa_indicator and year = :year "
     			+ "left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper "
-    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator and f.id_role = :id_role ";
+    			+ "where a.id = :id ";
     	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_prov", idprov);
-        query.setParameter("id_indicator", idsdgindikator);
-        query.setParameter("id_monper", idmonper);
-        query.setParameter("id_role", idrole);
+        query.setParameter("id", id);
         query.setParameter("year", year);
         List list = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
@@ -263,6 +309,112 @@ public class ReportController {
         model.addAttribute("name", session.getAttribute("name"));
         return "admin/report/graph";
     }
+    
+    @GetMapping("admin/getallgoals")
+    public @ResponseBody List<Object> getallgoals() {
+    	String sql = "SELECT id, nm_goals, nm_goals_eng FROM sdg_goals ORDER BY id ASC";
+    	Query query = manager.createNativeQuery(sql);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getalltarget")
+    public @ResponseBody List<Object> getalltarget(@RequestParam("id_goals") int id_goals) {
+    	String sql = "SELECT id, nm_target, nm_target_eng FROM sdg_target WHERE id_goals = :id_goals ORDER BY id ASC";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_goals", id_goals);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallindicator")
+    public @ResponseBody List<Object> getallindicator(@RequestParam("id_goals") int id_goals, @RequestParam("id_target") int id_target) {
+    	String sql = "SELECT id, nm_indicator, nm_indicator_eng FROM sdg_indicator WHERE id_goals = :id_goals AND "
+    			+ "id_target = :id_target GROUP BY id, id_goals, id_target ORDER BY id ASC";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getalldisaggre")
+    public @ResponseBody List<Object> getalldisaggre(@RequestParam("id_indicator") int idindi) {
+    	String sql = "SELECT a.id, a.nm_disaggre, a.nm_disaggre_eng, b.desc_disaggre, b.desc_disaggre_eng "
+    			+ "FROM sdg_ranrad_disaggre a LEFT JOIN sdg_ranrad_disaggre_detail b ON b.id_disaggre = a.id "
+    			+ "WHERE a.id = :id_indicator ORDER BY a.id ASC";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_indicator", idindi);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallgovprogram")
+    public @ResponseBody List<Object> getallgovprogram() {
+    	String sql = "SELECT id, nm_program, nm_program_eng FROM gov_program";
+    	Query query = manager.createNativeQuery(sql);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallgovactivity")
+    public @ResponseBody List<Object> getallgovactivity(@RequestParam("id_program") int idprogram) {
+    	String sql = "SELECT id, nm_activity, nm_activity_eng FROM gov_activity WHERE id = :id_program ORDER BY id ASC";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_program", idprogram);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallgovindi")
+    public @ResponseBody List<Object> getallgovindi(@RequestParam("id_program") int idprogram, @RequestParam("id_activity") int idactivity) {
+    	String sql = "SELECT id, nm_indicator, nm_indicator_eng FROM gov_indicator WHERE id_program = :id_program AND "
+    			+ "id_activity = :id_activity GROUP BY id, id_program, id_activity ORDER BY id ASC";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_program", idprogram);
+        query.setParameter("id_activity", idactivity);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallnsaprogram")
+    public @ResponseBody List<Object> getallnsaprogram() {
+    	String sql = "SELECT id, nm_program, nm_program_eng FROM nsa_program";
+    	Query query = manager.createNativeQuery(sql);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallnsaactivity")
+    public @ResponseBody List<Object> getallnsaactivity(@RequestParam("id_program") int idprogram) {
+    	String sql = "SELECT id, nm_activity, nm_activity_eng FROM nsa_activity WHERE id = :id_program ORDER BY id ASC";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_program", idprogram);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallnsaindi")
+    public @ResponseBody List<Object> getallnsaindi(@RequestParam("id_program") int idprogram, @RequestParam("id_activity") int idactivity) {
+    	String sql = "SELECT id, nm_indicator, nm_indicator_eng FROM nsa_indicator WHERE id_program = :id_program AND "
+    			+ "id_activity = :id_activity GROUP BY id, id_program, id_activity ORDER BY id ASC";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_program", idprogram);
+        query.setParameter("id_activity", idactivity);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/cekshowreport")
+    public @ResponseBody List<Object> cekshowreport(@RequestParam("id_monper") int idmonper) {
+    	String sql = "SELECT id_monper, year, period FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_sdg'";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
+ // ****************************** End Of Report Grafik ******************************
     
     @GetMapping("admin/getrole")
     public @ResponseBody List<Object> getrole(@RequestParam("id_prov") String idprov) {
