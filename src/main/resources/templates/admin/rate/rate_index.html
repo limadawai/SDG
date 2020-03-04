@@ -31,7 +31,7 @@
                         <h5>Pengajuan Nilai </h5>
                     </div>
                     <div class="widget-content">
-                        <div class="pull-left" style="width:100%">
+                        <div class="pull-left app" style="width:100%">
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
                                 <option value="0" >-- Pilih --</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
@@ -46,6 +46,10 @@
                             <select id="period" name="period" class="form-control">
                                 <option value="0" ><span class=""> -- Pilih -- </span> </option>
                             </select>
+                            <a class="btn btn-success appl" id="apply_btn" data-periode="1" style="margin-left: 10px; margin-top: -10px">
+                                <span class="lang_indo">Cari</span>
+                                <span class="lang_eng">Submit</span>
+                            </a>
 <!--                            <div class="input-append pull-right">
                                 <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
                                 <span class="add-on"><i class="icon-search"></i></span>
@@ -147,6 +151,32 @@
     
 
 </body>
+<div class="modal-loading-new"></div>
+<style th:inline="text">
+			.modal-loading-new {
+				opacity: 0.4!important;
+				display:    none;
+				position:   fixed;
+				z-index:    1000;
+				top:        0;
+				left:       0;
+				height:     100%;
+				width:      100%;
+				background: #333 url([[@{/img/loading.gif}]]) 50% 50% no-repeat;
+			}
+			/* When the body has the loading class, we turn the scrollbar off with overflow:hidden */
+			body.loading {
+				overflow: hidden;   
+			}
+			body.loading .modal-loading-new {
+				display: block;
+			}
+			.select2-results__option{
+			    position: relative;
+			    margin-left: 10px;
+			    list-style: none;
+			}
+		</style>
 
 <script th:inline="javascript" >
     // <![CDATA[
@@ -203,7 +233,7 @@
             });
 
             $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
-            grid();
+//            grid();
         }
             
         $("#id_prov").on('change', function(e){
@@ -232,7 +262,7 @@
             });
             
             
-            grid();
+//            grid();
         });
             
         $("#periode").on('change', function(e){
@@ -283,11 +313,11 @@
 //            $("#tabel-approve-gov-activity").hide();
 //            $("#tabel-approve-gov-indicator").hide();
 //            grid_role();
-            grid();
+//            grid();
         });
         
         $("#period").on('change', function(e){
-            grid();
+//            grid();
         });
             
             
@@ -353,7 +383,10 @@
             var tahun       = v_data_id[1];
             
             
-
+            $('.app').on('click', '.appl', function(e){
+                grid();
+            });
+            
             //memanggil tb spp
             function grid()
             {
@@ -390,7 +423,14 @@
                     "ajax": {
                         "url": urls+'x/val/'+v_idprov+'/'+v_period+'/'+id_monper+'/'+tahun,
                         dataSrc: 'content',
+                        beforeSend : function(xhr){
+                            $('body').addClass("loading"); 
+                        },
+                       complete: function(){
+                                $('body').removeClass("loading");
+                        },
                     },
+                    
                     "searching": true,
                     "columns": [
                         {"data": function (row, data, index, display) {
