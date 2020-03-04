@@ -256,6 +256,7 @@
         var idprov = $("#daerah").val();
         var cat = $("#role").find(":selected").data("cat");
         var urlEntry;
+        var urlEntryIsi;
         
         var sts;
         var stsBud;
@@ -293,6 +294,7 @@
         });
         if(cat=="NSA"){
         	urlEntry = urls + "getnsaindicator";
+        	urlEntryIsi = urls + "getnsaindicatorisi";
         	$.ajax({
                 type: "GET",
                 url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
@@ -311,6 +313,7 @@
                 });
         }else{
         	urlEntry = urls + "getgovindicator";
+        	urlEntryIsi = urls + "getgovindicatorisi";
         	$.ajax({
                 type: "GET",
                 url: urls+'list-get-sts-monper-gov_act/'+id_monper,
@@ -665,9 +668,9 @@
         	                            		
         	                            		for(var y=monper_year[0];y<=monper_year[1];y++){
         	                            			$.ajax({
-        	            	                			url: urlEntry,
+        	            	                			url: urlEntryIsi,
         	            	                            type: 'get',
-        	            	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":idrole, "year":y},
+        	            	                            data: {"id":rowGov[j][25], "year":y},
         	            	                            dataType: 'json',
         	            	                            async: false,
         	            	                            success: function (result) {
@@ -787,7 +790,6 @@
                 		}
                 		
                 	}
-                	console.log(textSdg);
                 	$("#indi").append(textSdg);
                 	$('#indi').find(".tabel-sdg,").DataTable({
                 		"scrollX": true,
