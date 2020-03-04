@@ -37,6 +37,9 @@ public class BestPractice implements Serializable {
     @Column(name = "location")
     private String location;
     
+    @Column(name = "program")
+    private String program;
+    
     @Column(nullable = false)
     @JsonFormat(pattern="yyyy-mm-dd HH:mm")
     @Temporal(TemporalType.TIMESTAMP)
@@ -61,7 +64,7 @@ public class BestPractice implements Serializable {
     }
 
 	public BestPractice(Integer id, Integer id_program, Integer id_activity, Integer id_indicator, Integer id_role,
-			String location, Date time_activity, String background, String implementation_process,
+			String location, Date time_activity, String program, String background, String implementation_process,
 			String challenges_learning, Integer id_monper, Integer year) {
 		super();
 		this.id = id;
@@ -72,12 +75,22 @@ public class BestPractice implements Serializable {
 		this.location = location;
 		this.time_activity = time_activity;
 		this.background = background;
+		this.program = program;
 		this.implementation_process = implementation_process;
 		this.challenges_learning = challenges_learning;
 		this.id_monper = id_monper;
 		this.year = year;
 	}
 
+    public String getProgram() {
+        return program;
+    }
+
+    public void setProgram(String program) {
+        this.program = program;
+    }
+
+        
 	public Integer getId() {
 		return id;
 	}
