@@ -115,7 +115,7 @@
         			//console.log(resindi);
         			var isiindi = "<ul id='ulindi"+idgoals+"'>";
         			for (var i=0; i<resindi.length; i++) {
-        				isiindi += "<li onclick='cekshowreport("+idgoals+", "+idtarget+", "+resindi[i][0]+", "+$("#periode").val()+")'>"+resindi[0][1]+"</li>";
+        				isiindi += "<li onclick='cucukanan("+idgoals+", "+idtarget+", "+resindi[i][0]+", "+$("#periode").val()+","+1+")'>"+resindi[0][1]+"</li>";
         				getDisaggre(idgoals, resindi[i][0]);
         			}
         			isiindi += "</ul>";
@@ -141,25 +141,6 @@
         			$("#ulindi"+idgoals).append(isidis);
         		}
         	});
-        }
-        
-        function cekshowreport(idgoals, idtarget, idindikator, idmonper) {
-        	alert("Garfik Detail On-Progress");
-        	/* if (idmonper == "0") {
-        		swal("Anda harus memilih periode");
-        	} else {
-        		$.ajax({
-        			url: urls + "cekshowreport",
-            		type: 'get',
-            		data: {'id_monper':idmonper},
-            		dataType: 'json',
-            		cache: false,
-            		success: function (resmonper) {
-            			console.log(resmonper);
-            		}
-        		});
-        	} */
-        	
         }
         
         // ********************** Content Div Kanan Atas **********************
@@ -194,7 +175,7 @@
         			//console.log(restarget);
         			var isiindicator = "<ul id='ulindi"+idprogram+"'>";
         			for (var i=0; i<resgovindicator.length; i++) {
-        				isiindicator += "<li onclick='cekshowreport("+idprogram+", "+idactivity+", "+resgovindicator[i][0]+", "+$("#periode").val()+")'>"+resgovindicator[i][1]+"</li>";
+        				isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idprogram+","+idactivity+","+resgovindicator[i][0]+","+$("#periode").val()+","+2+")'>"+resgovindicator[i][1]+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#ulact"+idprogram).append(isiindicator);
@@ -231,10 +212,10 @@
         		dataType: 'json',
         		cache: false,
         		success: function (resnsaindicator) {
-        			//console.log(restarget);
+        			//console.log(resnsaindicator);
         			var isiindicator = "<ul id='ulindinsa"+idprogram+"'>";
         			for (var i=0; i<resnsaindicator.length; i++) {
-        				isiindicator += "<li  onclick='cekshowreport("+idprogram+", "+idactivity+", "+resgovindicator[i][0]+", "+$("#periode").val()+")'>"+resnsaindicator[i][1]+"</li>";
+        				isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+$("#periode").val()+","+3+")'>"+resnsaindicator[i][1]+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#ulactnsa"+idprogram).append(isiindicator);
@@ -471,11 +452,11 @@
             });
         } */
 
-        function cucukanan(idsdg, idtar, idindi, id, idmon, flag) {
-        	//alert(idsdg+" "+idtar+" "+idindi+" "+id+" "+flag);
+        function cucukanan(idsdg, idtar, idindi, idmon, flag) {
+        	//alert(idsdg+" "+idtar+" "+idindi+" "+idmon+" "+flag);
         	var valda = $("#daerah").val();
-            location.href = urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag+"/"+valda;
-            //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag+"/"+valda;);
+            //location.href = urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda;
+            window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
         }
 
     </script>

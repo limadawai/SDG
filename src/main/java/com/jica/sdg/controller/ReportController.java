@@ -456,17 +456,16 @@ public class ReportController {
 
     //====================== Grafik Detail ======================
     
-    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{id}/{idmonper}/{flag}/{valdaerah}")
-    public String grafikdetail(Model model, HttpSession session, @PathVariable("idsdg") String idsdg, @PathVariable("idtar") String idtar,
-    		@PathVariable("idindi") String idindi, @PathVariable("id") String id, @PathVariable("idmonper") String idmonper, 
-    		@PathVariable("flag") String flag, @PathVariable("valdaerah") String valdaerah) {
+    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{idmonper}/{flag}/{valdaerah}")
+    public String grafikdetail(Model model, HttpSession session, @PathVariable("idsdg") int idsdg, @PathVariable("idtar") int idtar,
+    		@PathVariable("idindi") int idindi, @PathVariable("idmonper") int idmonper, 
+    		@PathVariable("flag") int flag, @PathVariable("valdaerah") String valdaerah) {
         model.addAttribute("title", "Report Graphic Detail");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("idsdg", idsdg);
         model.addAttribute("idtar", idtar);
         model.addAttribute("idsdgindikator", idindi);
-        model.addAttribute("idindikator", id);
         model.addAttribute("idmonper", idmonper);
         model.addAttribute("flag", flag);
         model.addAttribute("valdaerah", valdaerah);
@@ -483,6 +482,33 @@ public class ReportController {
     }
 
     //********************* Header Table *********************
+    @GetMapping("admin/ceksdgmonper")
+    public @ResponseBody List<Object> ceksdgmonper(@RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT sdg_indicator FROM ran_rad WHERE id_monper = :id_monper";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/cekgmonper")
+    public @ResponseBody List<Object> cekgmonper(@RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT gov_prog FROM ran_rad WHERE id_monper = :id_monper";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/ceknmonper")
+    public @ResponseBody List<Object> ceknmonper(@RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT gov_prog FROM ran_rad WHERE id_monper = :id_monper";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
     @GetMapping("admin/cekgovmonper")
     public @ResponseBody List<Object> cekgovmonper(@RequestParam("id_goals") int idsdg, @RequestParam("id_target") int idtarget,
     		@RequestParam("id_indicator") int idsdgindi, @RequestParam("id_gov_indicator") int id) {

@@ -63,10 +63,11 @@
         var idsdg = [[${idsdg}]];
         var idtarget = [[${idtar}]];
         var idsdgindikator = [[${idsdgindikator}]];
-        var idindikator = [[${idindikator}]];
         var idmonper = [[${idmonper}]];
         var flag = [[${flag}]];
         var valdaerah = [[${valdaerah}]];
+        
+        //alert(idsdg+" - "+idtarget+" - "+idsdgindikator+" - "+idmonper+" - "+flag+" - "+valdaerah);
         
         $("#back").on("click", function(){
         	location.href = urls+"report-graph";
@@ -92,7 +93,59 @@
         });
 
         //====================== Header Tabel ======================
-        if (flag == "0") {
+        if (flag == "1") {
+        	$.ajax({
+        		url: urls + "ceksdgmonper",
+        		type: 'get',
+        		data: "id_monper="+idmonper,
+        		cache: false,
+        		async: false,
+        		success: function (monper) {
+        			if (monper[0] == "yearly") {
+                        headyearly();
+                    } else if (monper[0] == "semesterly") {
+                        headsemesterly();
+                    } else if (monper[0] == "quarterly") {
+                        headquarterly();
+                    }
+        		}
+        	});
+        } else if (flag == "2") {
+        	$.ajax({
+        		url: urls + "cekgmonper",
+        		type: 'get',
+        		data: "id_monper="+idmonper,
+        		cache: false,
+        		async: false,
+        		success: function (monper) {
+        			if (monper[0] == "yearly") {
+                        headyearly();
+                    } else if (monper[0] == "semesterly") {
+                        headsemesterly();
+                    } else if (monper[0] == "quarterly") {
+                        headquarterly();
+                    }
+        		}
+        	});
+        } else if (flag == "3") {
+        	$.ajax({
+        		url: urls + "ceknmonper",
+        		type: 'get',
+        		data: "id_monper="+idmonper,
+        		cache: false,
+        		async: false,
+        		success: function (monper) {
+        			if (monper[0] == "yearly") {
+                        headyearly();
+                    } else if (monper[0] == "semesterly") {
+                        headsemesterly();
+                    } else if (monper[0] == "quarterly") {
+                        headquarterly();
+                    }
+        		}
+        	});
+        }
+        /* if (flag == "0") {
             $.ajax({
                 url: urls + "cekgovmonper",
                 type: 'get',
@@ -131,7 +184,7 @@
                     }
                 }
             });
-        }
+        } */
 
         var periode;
         function percallback(period) {
@@ -307,800 +360,8 @@
             $("#back").text("B a c k");
         }
         
-      
-        //******************** Content ********************
-        //********** Flag 0 => Gov || Flag 1 => Non-Gov **********
-        if (flag == "0") {
-        	//********** Header tabel ***********
-            $.ajax({
-                url: urls + "getperiodeheader",
-                type: 'get',
-                data: "id_gov_indicator="+idindikator,
-                dataType: 'json',
-                cache: false,
-                success: function (resheader) {
-                	//console.log("resheader : "+resheader);
-                    var a = parseInt(resheader[0][1], 10);
-                    var b = parseInt(resheader[0][2], 10);
-                    $("#tahun1").text(a);$("#tahun2").text(a+1);$("#tahun3").text(a+2);$("#tahun4").text(a+3);$("#tahun5").text(a+4);
-                    $("#tahun11").text(a);$("#tahun12").text(a+1);$("#tahun13").text(a+2);$("#tahun14").text(a+3);$("#tahun15").text(a+4);
-                }
-            });
-            //================= Get Mapping Program Indicator ke SDG Indicator ===============
-            $.ajax({
-                url: urls + "reportgovgrap",
-                type: 'get',
-                data: {"id_sdg_goals":idsdg,"id_sdg_target":idtarget,"id_sdg_indicator":idsdgindikator,"id_gov_indicator":idindikator},
-                dataType: 'json',
-                cache: false,
-                success: function (resgovindi) {
-                    //console.log(resgovindi);
-                    for ( var i=0; i<resgovindi.length; i++) {
-                        var row = "<tr>";
-                        row += "<td style='text-align:center;'>"+resgovindi[i][7]+"</td>";
-                        row += "<td id='tar1' style='text-align:center;'></td>";
-                        row += "<td id='tar2' style='text-align:center;'></td>";
-                        row += "<td id='tar3' style='text-align:center;'></td>";
-                        row += "<td id='tar4' style='text-align:center;'></td>";
-                        row += "<td id='tar5' style='text-align:center;'></td>";
-                        if (periode == "yearly") {
-                            row += "<td id='td1' style='text-align:center;'>0</td>";
-                            row += "<td id='td2' style='text-align:center;'>0</td>";
-                            row += "<td id='td3' style='text-align:center;'>0</td>";
-                            row += "<td id='td4' style='text-align:center;'>0</td>";
-                            row += "<td id='td5' style='text-align:center;'>0</td>";
-                        } else if (periode == "semesterly") {
-                            row += "<td id='td11' style='text-align:center;'>0</td>";
-                            row += "<td id='td21' style='text-align:center;'>0</td>";
-                            row += "<td id='td12' style='text-align:center;'>0</td>";
-                            row += "<td id='td22' style='text-align:center;'>0</td>";
-                            row += "<td id='td13' style='text-align:center;'>0</td>";
-                            row += "<td id='td23' style='text-align:center;'>0</td>";
-                            row += "<td id='td14' style='text-align:center;'>0</td>";
-                            row += "<td id='td24' style='text-align:center;'>0</td>";
-                            row += "<td id='td15' style='text-align:center;'>0</td>";
-                            row += "<td id='td25' style='text-align:center;'>0</td>";
-                        } else if (periode == "quarterly") {
-                            row += "<td id='td11' style='text-align:center;'>0</td>";
-                            row += "<td id='td21' style='text-align:center;'>0</td>";
-                            row += "<td id='td31' style='text-align:center;'>0</td>";
-                            row += "<td id='td41' style='text-align:center;'>0</td>";
-                            row += "<td id='td12' style='text-align:center;'>0</td>";
-                            row += "<td id='td22' style='text-align:center;'>0</td>";
-                            row += "<td id='td32' style='text-align:center;'>0</td>";
-                            row += "<td id='td42' style='text-align:center;'>0</td>";
-                            row += "<td id='td13' style='text-align:center;'>0</td>";
-                            row += "<td id='td23' style='text-align:center;'>0</td>";
-                            row += "<td id='td33' style='text-align:center;'>0</td>";
-                            row += "<td id='td43' style='text-align:center;'>0</td>";
-                            row += "<td id='td14' style='text-align:center;'>0</td>";
-                            row += "<td id='td24' style='text-align:center;'>0</td>";
-                            row += "<td id='td34' style='text-align:center;'>0</td>";
-                            row += "<td id='td44' style='text-align:center;'>0</td>";
-                            row += "<td id='td15' style='text-align:center;'>0</td>";
-                            row += "<td id='td25' style='text-align:center;'>0</td>";
-                            row += "<td id='td35' style='text-align:center;'>0</td>";
-                            row += "<td id='td45' style='text-align:center;'>0</td>";
-                        }
-                        if (resgovindi[i][14] == null){resgovindi[i][14] = 0};
-                        row += "<td style='text-align:center;width:8%;'>"+resgovindi[i][14]+"</td>";
-                        row += "<td id='fund' style='width:12%;'></td>";
-                        row += "<td>"+name+"</td>";
-                        row += "</tr>";
-                        $("#tabgrafik > tbody").append(row);
-                    }
-                    //******************* Isi kolom target *******************
-                    var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
-                    var arrtahun = [];
-                    for (var i=0; i<tahun.length; i++) {
-        	            $.ajax({
-        	            	url: urls + "targetgov",
-        	                type: 'get',
-        	                data: {"id_gov_indicator":idindikator,"year":tahun[i]},
-        	                dataType: 'json',
-        	                cache: false,
-        	                async: false,
-        	                success: function (restarget) {
-        	                	//console.log(restarget);
-        	                	arrtahun.push(restarget[0]);
-        	                }
-        	            });
-                    }
-                    //console.log(arrtahun);
-                    for (var i=0; i<arrtahun.length; i++) {
-                    	$("#tar"+(i+1)).text(arrtahun[i]);
-                    }
-                	
-                    if (periode == "yearly") {
-                    	for (var i=0; i<tahun.length; i++) {
-                    		$.ajax({
-            	            	url: urls + "realgovyear",
-            	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i],"id_gov_indicator":idindikator},
-            	                dataType: 'json',
-            	                cache: false,
-            	                async: false,
-            	                success: function (resreal) {
-            	                	//console.log(resreal);
-            	                	for (var i=1; i<=5; i++) {
-            	                		$("#td"+i).text(resreal[0]);
-            	                	}
-            	                }
-                    		});
-                    	}
-                    } else if (periode == "semesterly") {
-                    	var realarr = [];
-                    	for (var i=0; i<tahun.length; i++) {
-                    		$.ajax({
-            	            	url: urls + "realgovsemester",
-            	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i],"id_gov_indicator":idindikator},
-            	                dataType: 'json',
-            	                cache: false,
-            	                async: false,
-            	                success: function (resreal) {
-            	                	//console.log(resreal);
-            	                	realarr.push(resreal[0]);
-            	                }
-                    		});
-                    	}
-                    	console.log(realarr);
-                    	for (var i=0; i<realarr.length; i++) {
-                    		if (typeof realarr[i] == 'undefined') {
-                    			realarr[i] = [0,0];
-                    		}
-                			$("td#td1"+(i+1)).text(realarr[i][0]);
-                			$("td#td2"+(i+1)).text(realarr[i][1]);
-                    	}
-                    } else if (periode == "quarterly") {
-                    	//console.log(tahun);
-                    	var realarr = [];
-                    	for (var i=0; i<tahun.length; i++) {
-                    		$.ajax({
-            	            	url: urls + "realgovquarter",
-            	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i],"id_gov_indicator":idindikator},
-            	                dataType: 'json',
-            	                cache: false,
-            	                async: false,
-            	                success: function (resreal) {
-            	                	//console.log(resreal[0]);
-            	                	realarr.push(resreal[0]);
-            	                }
-                    		});
-                    	}
-                    	for (var i=0; i<realarr.length; i++) {
-                    		if (typeof realarr[i] == 'undefined') {
-                    			realarr[i] = [0,0];
-                    		}
-                			$("#td1"+(i+1)).text(realarr[i][0]);
-                			$("#td2"+(i+1)).text(realarr[i][1]);
-                			$("#td3"+(i+1)).text(realarr[i][2]);
-                			$("#td4"+(i+1)).text(realarr[i][3]);
-                    	}
-                    }
-                    $.ajax({
-    	            	url: urls + "getgovfundsource",
-    	                type: 'get',
-    	                data: {"id_monper":idmonper,"id_gov_indicator":idindikator},
-    	                dataType: 'json',
-    	                cache: false,
-    	                success: function (resfund) {
-    	                	//console.log(resfund[0][4]);
-    	                	$("#fund").text(resfund[0][4]);
-    	                }
-            		});
-                }
-            });
-        } else if (flag == "1") {
-        	//********** Header tabel ***********
-            $.ajax({
-                url: urls + "getnsaperiodeheader",
-                type: 'get',
-                data: "id_nsa_indicator="+idindikator,
-                dataType: 'json',
-                cache: false,
-                success: function (resheader) {
-                    var a = parseInt(resheader[0][1], 10);
-                    var b = parseInt(resheader[0][2], 10);
-                    $("#tahun1").text(a);$("#tahun2").text(a+1);$("#tahun3").text(a+2);$("#tahun4").text(a+3);$("#tahun5").text(a+4);
-                    $("#tahun11").text(a);$("#tahun12").text(a+1);$("#tahun13").text(a+2);$("#tahun14").text(a+3);$("#tahun15").text(a+4);
-                }
-            });
-            //================= Get Mapping Program Indicator ke SDG Indicator ===============
-            $.ajax({
-                url: urls + "reportnsagrap",
-                type: 'get',
-                data: {"id_sdg_goals":idsdg,"id_sdg_target":idtarget,"id_sdg_indicator":idsdgindikator,"id_nsa_indicator":idindikator},
-                dataType: 'json',
-                cache: false,
-                success: function (resnsaindi) {
-                    //console.log(resnsaindi);
-                    for ( var i=0; i<resnsaindi.length; i++) {
-                        var row = "<tr>";
-                        row += "<td style='text-align:center;'>"+resnsaindi[i][7]+"</td>";
-                        if (resnsaindi[i][8] == null){resnsaindi[i][8] = 0};
-                        row += "<td id='tar1' style='text-align:center;'>"+resnsaindi[i][8]+"</td>";
-                        if (resnsaindi[i][9] == null){resnsaindi[i][9] = 0};
-                        row += "<td id='tar2' style='text-align:center;'>"+resnsaindi[i][9]+"</td>";
-                        if (resnsaindi[i][10] == null){resnsaindi[i][10] = 0};
-                        row += "<td id='tar3' style='text-align:center;'>"+resnsaindi[i][10]+"</td>";
-                        if (resnsaindi[i][11] == null){resnsaindi[i][11] = 0};
-                        row += "<td id='tar4' style='text-align:center;'>"+resnsaindi[i][11]+"</td>";
-                        if (resnsaindi[i][12] == null){resnsaindi[i][12] = 0};
-                        row += "<td id='tar5' style='text-align:center;'>"+resnsaindi[i][12]+"</td>";
-                        if (periode == "yearly") {
-                            row += "<td id='td1' style='text-align:center;'></td>";
-                            row += "<td id='td2' style='text-align:center;'></td>";
-                            row += "<td id='td3' style='text-align:center;'></td>";
-                            row += "<td id='td4' style='text-align:center;'></td>";
-                            row += "<td id='td5' style='text-align:center;'></td>";
-                        } else if (periode == "semesterly") {
-                            row += "<td id='td11' style='text-align:center;'></td>";
-                            row += "<td id='td21' style='text-align:center;'></td>";
-                            row += "<td id='td12' style='text-align:center;'></td>";
-                            row += "<td id='td22' style='text-align:center;'></td>";
-                            row += "<td id='td13' style='text-align:center;'></td>";
-                            row += "<td id='td23' style='text-align:center;'></td>";
-                            row += "<td id='td14' style='text-align:center;'></td>";
-                            row += "<td id='td24' style='text-align:center;'></td>";
-                            row += "<td id='td15' style='text-align:center;'></td>";
-                            row += "<td id='td25' style='text-align:center;'></td>";
-                        } else if (periode == "quarterly") {
-                            row += "<td id='td11' style='text-align:center;'></td>";
-                            row += "<td id='td21' style='text-align:center;'></td>";
-                            row += "<td id='td31' style='text-align:center;'></td>";
-                            row += "<td id='td41' style='text-align:center;'></td>";
-                            row += "<td id='td12' style='text-align:center;'></td>";
-                            row += "<td id='td22' style='text-align:center;'></td>";
-                            row += "<td id='td32' style='text-align:center;'></td>";
-                            row += "<td id='td42' style='text-align:center;'></td>";
-                            row += "<td id='td13' style='text-align:center;'></td>";
-                            row += "<td id='td23' style='text-align:center;'></td>";
-                            row += "<td id='td33' style='text-align:center;'></td>";
-                            row += "<td id='td43' style='text-align:center;'></td>";
-                            row += "<td id='td14' style='text-align:center;'></td>";
-                            row += "<td id='td24' style='text-align:center;'></td>";
-                            row += "<td id='td34' style='text-align:center;'></td>";
-                            row += "<td id='td44' style='text-align:center;'></td>";
-                            row += "<td id='td15' style='text-align:center;'></td>";
-                            row += "<td id='td25' style='text-align:center;'></td>";
-                            row += "<td id='td35' style='text-align:center;'></td>";
-                            row += "<td id='td45' style='text-align:center;'></td>";
-                        }
-                        if (resnsaindi[i][14] == null){resnsaindi[i][14] = 0};
-                        row += "<td style='text-align:center;'>"+resnsaindi[i][14]+"</td>";
-                        row += "<td id='fund' style='width:12%;'></td>";
-                        row += "<td>"+name+"</td>";
-                        row += "</tr>";
-                        $("#tabgrafik > tbody").append(row);
-                    }
-                    //******************* Isi kolom target *******************
-                    var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
-                    var arrnsatahun = [];
-                    for (var i=0; i<tahun.length; i++) {
-        	            $.ajax({
-        	            	url: urls + "targetnsa",
-        	                type: 'get',
-        	                data: {"id_nsa_indicator":idindikator,"year":tahun[i]},
-        	                dataType: 'json',
-        	                cache: false,
-        	                async: false,
-        	                success: function (restarget) {
-        	                	//console.log(restarget);
-        	                	arrnsatahun.push(restarget[0]);
-        	                }
-        	            });
-                    }
-                    for (var i=0; i<arrnsatahun.length; i++) {
-                    	$("#tar"+(i+1)).text(arrnsatahun[i]);
-                    }
-                    if (periode == "yearly") {
-                    	for (var i=0; i<tahun.length; i++) {
-                    		$.ajax({
-            	            	url: urls + "realnsayear",
-            	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i],"id_nsa_indicator":idindikator},
-            	                dataType: 'json',
-            	                cache: false,
-            	                async: false,
-            	                success: function (resreal) {
-            	                	//console.log(resreal);
-            	                	for (var i=1; i<=5; i++) {
-            	                		$("#td"+i).text(resreal[0]);
-            	                	}
-            	                }
-                    		});
-                    	}
-                    } else if (periode == "semesterly") {
-                    	var realarr = [];
-                    	for (var i=0; i<tahun.length; i++) {
-                    		$.ajax({
-            	            	url: urls + "realnsasemester",
-            	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i],"id_nsa_indicator":idindikator},
-            	                dataType: 'json',
-            	                cache: false,
-            	                async: false,
-            	                success: function (resreal) {
-            	                	//console.log(resreal);
-            	                	realarr.push(resreal[0]);
-            	                }
-                    		});
-                    	}
-                    	console.log(realarr[2]);
-                    	for (var i=0; i<realarr.length; i++) {
-                    		if (typeof realarr[i] == 'undefined') {
-                    			realarr[i] = [0,0];
-                    		}
-                			$("td#td1"+(i+1)).text(realarr[i][0]);
-                			$("td#td2"+(i+1)).text(realarr[i][1]);
-                    	}
-                    } else if (periode == "quarterly") {
-                    	var realarr = [];
-                    	for (var i=0; i<tahun.length; i++) {
-                    		$.ajax({
-            	            	url: urls + "realnsaquarter",
-            	                type: 'get',
-            	                data: {"id_monper":idmonper,"year":tahun[i],"id_nsa_indicator":idindikator},
-            	                dataType: 'json',
-            	                cache: false,
-            	                async: false,
-            	                success: function (resreal) {
-            	                	//console.log(resreal[0]);
-            	                	realarr.push(resreal[0]);
-            	                }
-                    		});
-                    	}
-                    	for (var i=0; i<realarr.length; i++) {
-                    		if (typeof realarr[i] == 'undefined') {
-                    			realarr[i] = [0,0];
-                    		}
-                			$("#td1"+(i+1)).text(realarr[i][0]);
-                			$("#td2"+(i+1)).text(realarr[i][1]);
-                			$("#td3"+(i+1)).text(realarr[i][2]);
-                			$("#td4"+(i+1)).text(realarr[i][3]);
-                    	}
-                    }
-                    $.ajax({
-    	            	url: urls + "getnsafundsource",
-    	                type: 'get',
-    	                data: {"id_monper":idmonper,"id_nsa_indicator":idindikator},
-    	                dataType: 'json',
-    	                cache: false,
-    	                success: function (resfund) {
-    	                	//console.log(resfund[0][4]);
-    	                	$("#fund").text(resfund[0][4]);
-    	                }
-            		});
-                }
-            });
-        }
-
-        //************************** Grafik / Chart **************************
-        $("#btngrafik").click(function () {
-            var chart4;
-            $("#pilgrafik").show();
-            var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
-            var valtarget = [
-                parseInt($("#tar1").text(), 10),
-                parseInt($("#tar2").text(), 10),
-                parseInt($("#tar3").text(), 10),
-                parseInt($("#tar4").text(), 10),
-                parseInt($("#tar5").text(), 10)
-            ];
-            if (periode == "yearly") {
-                valreal1 = [
-                    parseInt($("#td1").text(), 10),
-                    parseInt($("#td2").text(), 10),
-                    parseInt($("#td3").text(), 10),
-                    parseInt($("#td4").text(), 10),
-                    parseInt($("#td5").text(), 10)
-                ];
-                 var options4 ={
-                    chart: {
-                        zoomType: 'xy',
-                        renderTo: 'dualaxes'
-                    },
-                    //colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
-
-                    title: {
-                        text: 'Komparasi Target dan Realisasi '
-                    },
-                    credits: {
-                        enabled: false
-                      },
-                    subtitle: {
-                        text: 'Combination chart'
-                    },
-                    xAxis: [{
-                        categories: tahun
-                    }],
-                    yAxis: [{ // Primary yAxis
-                        labels: {
-                            format: '{value}',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        min: 0,
-                        //max:100,
-                        title: {
-                            text: '',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        }, opposite: true
-                    }, { // Secondary yAxis
-                        title: {
-                            text: '',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        },
-                        min: 0,
-                        //max: 100,
-                        labels: {
-                            format: '{value}',
-                            style: {
-                                color: Highcharts.getOptions().colors[0],
-//                                display:'none'
-                            }
-                        },
-                       
-                    }],
-                    tooltip: {
-                        shared: true
-                    },
-                     legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        x: 0,
-                        verticalAlign: 'top',
-                        y: 55,
-                        floating: true,
-                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-                    },
-                    plotOptions: {
-                        column: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    series: [
-                        {
-                            name: 'Yearly',
-                            type: 'column',
-
-                            yAxis: 1,
-                            data: valreal1,
-                            tooltip: {
-    //                            valueSuffix: ' %'
-                                }
-                        },
-                        {
-                            name: 'Target',
-                            type: 'spline',
-                            data: valtarget,
-                             yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        }],
-                    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
-                            return {
-                                radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
-                                stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
-                            };
-                        })
-              }
-              eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
-            } else if (periode == "semesterly") {
-//                if (typeof(chart4)==='object'){
-//                    console.log(typeof(chart4));
-//                    return false;
-////                    chart4.destroy();
-//                }else{
-//                     console.log(typeof(chart4));
-////                     return false;
-//                }
-                var valreal1 = [
-                    parseInt($("#td11").text(), 10),
-                    parseInt($("#td12").text(), 10),
-                    parseInt($("#td13").text(), 10),
-                    parseInt($("#td14").text(), 10),
-                    parseInt($("#td15").text(), 10)
-                ];
-                var valreal2 = [
-                    parseInt($("#td21").text(), 10),
-                    parseInt($("#td22").text(), 10),
-                    parseInt($("#td23").text(), 10),
-                    parseInt($("#td24").text(), 10),
-                    parseInt($("#td25").text(), 10)
-                ];
-//                console.log(parseInt($("#td11").text(), 10));
-              var options4 ={
-                    chart: {
-                        zoomType: 'xy',
-                        renderTo: 'dualaxes'
-                    },
-                    //colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
-
-                    title: {
-                        text: 'Komparasi Target dan Realisasi '
-                    },
-                    credits: {
-                        enabled: false
-                      },
-                    subtitle: {
-                        text: 'Combination chart'
-                    },
-                    xAxis: [{
-                        categories: tahun
-                    }],
-                    yAxis: [{ // Primary yAxis
-                        labels: {
-                            format: '{value}',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-//                        min: 0,
-                        //max:100,
-                        title: {
-                            text: '',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        opposite: true
-                    }, { // Secondary yAxis
-                        title: {
-                            text: '',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        },
-//                        min: 0,
-                        //max: 100,
-                        labels: {
-                            format: '{value}',
-                            style: {
-                                color: Highcharts.getOptions().colors[0],
-//                                display:'none'
-                            }
-                        },
-                        
-                    }],
-                    tooltip: {
-                        shared: true
-                    },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        x: 0,
-                        verticalAlign: 'top',
-                        y: 55,
-                        floating: true,
-                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-                    },
-                    plotOptions: {
-                        column: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    series: [
-                        {
-                            name: 'Semester I',
-                            type: 'column',
-
-                            yAxis: 1,
-                            data: valreal1,
-                            tooltip: {
-    //                            valueSuffix: ' %'
-                                }
-                        },
-                        {
-                          name: 'Semester II',
-                          yAxis: 1,
-                          type: 'column',
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-                          data: valreal2
-                        },
-                        {
-                            name: 'Target',
-                            type: 'spline',
-                            yAxis: 1,
-                            data: valtarget,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        }],
-                     colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
-                            return {
-                                radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
-                                stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
-                            };
-                        })
-              }
-
-              eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
-//                                            });
-            } else if (periode == "quarterly") {
-                var valreal1 = [
-                    parseInt($("#td11").text(), 10),
-                    parseInt($("#td12").text(), 10),
-                    parseInt($("#td13").text(), 10),
-                    parseInt($("#td14").text(), 10),
-                    parseInt($("#td15").text(), 10)
-                ];
-                var valreal2 = [
-                    parseInt($("#td21").text(), 10),
-                    parseInt($("#td22").text(), 10),
-                    parseInt($("#td23").text(), 10),
-                    parseInt($("#td24").text(), 10),
-                    parseInt($("#td25").text(), 10)
-                ];
-                var valreal3 = [
-                    parseInt($("#td31").text(), 10),
-                    parseInt($("#td32").text(), 10),
-                    parseInt($("#td33").text(), 10),
-                    parseInt($("#td34").text(), 10),
-                    parseInt($("#td35").text(), 10)
-                ];
-                var valreal4 = [
-                    parseInt($("#td41").text(), 10),
-                    parseInt($("#td42").text(), 10),
-                    parseInt($("#td43").text(), 10),
-                    parseInt($("#td44").text(), 10),
-                    parseInt($("#td45").text(), 10)
-                ];
-                
-                 var options4 ={
-                    chart: {
-                        zoomType: 'xy',
-                        renderTo: 'dualaxes'
-                    },
-                    //colors: ['#7cb5ec', '#91e8e1', '#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#e4d354', '#8085e8', '#8d4653', '#91e8e1'],
-
-                    title: {
-                        text: 'Komparasi Target dan Realisasi '
-                    },
-                    credits: {
-                        enabled: false
-                      },
-                    subtitle: {
-                        text: 'Combination chart'
-                    },
-                    xAxis: [{
-                        categories: tahun
-                    }],
-                    yAxis: [{ // Primary yAxis
-                        labels: {
-                            format: '{value}',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },
-                        min: 0,
-                        //max:100,
-                        title: {
-                            text: '',
-                            style: {
-                                color: Highcharts.getOptions().colors[1]
-                            }
-                        },opposite: true
-                    }, { // Secondary yAxis
-                        title: {
-                            text: '',
-                            style: {
-                                color: Highcharts.getOptions().colors[0]
-                            }
-                        },
-                        min: 0,
-                        //max: 100,
-                        labels: {
-                            format: '{value}',
-                            style: {
-                                color: Highcharts.getOptions().colors[0],
-//                                display:'none'
-                            }
-                        },
-                        
-                    }],
-                    tooltip: {
-                        shared: true
-                    },
-                    legend: {
-                        layout: 'vertical',
-                        align: 'right',
-                        x: 0,
-                        verticalAlign: 'top',
-                        y: 55,
-                        floating: true,
-                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
-                    },
-                    plotOptions: {
-                        column: {
-                            stacking: 'normal',
-                            dataLabels: {
-                                enabled: true
-                            }
-                        }
-                    },
-                    series: [
-                        {
-                            name: 'Triwulan I',
-                            type: 'column',
-
-                            yAxis: 1,
-                            data: valreal1,
-                            tooltip: {
-    //                            valueSuffix: ' %'
-                                }
-                        },
-                        {
-                          name: 'Triwulan II',
-                          yAxis: 1,
-                          type: 'column',
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-                          data: valreal2
-                        },
-                        {
-                          name: 'Triwulan III',
-                          yAxis: 1,
-                          type: 'column',
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-                          data: valreal3
-                        },
-                        {
-                          name: 'Triwulan IV',
-                          yAxis: 1,
-                          type: 'column',
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-                          data: valreal4
-                        },
-                        {
-                            name: 'Target',
-                            type: 'spline',
-                            data: valtarget,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                        }
-                        }],
-                    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
-                            return {
-                                radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
-                                stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
-                            };
-                        })
-              }
-              eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
-            }
-           
-            
-        });
-        function uuidv4() {
-            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-              var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-              return v.toString(16);
-            });
-        }
-        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('$(\'#c\').d(\'e\',f(){9 a=$(g).h();9 b=$("#i").j();8(a==\'k\'){b.3[0].4({5:\'7\'});b.3[1].4({5:\'7\'});b.3[2].4({5:\'7\'})}8(a==\'l\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'6\'})}8(a==\'m\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'7\'})}})',23,23,'|||series|update|type|column|spline|if|var|||pilgrafik|on|change|function|this|val|dualaxes|highcharts|graf1|graf2|graf3'.split('|'),0,{}))
+        //============================== Content Table ==============================
+        
         
     </script>
 </body>
