@@ -81,6 +81,166 @@
             $("#patas").text("Government");
             $("#pbawah").text("Non-Government");
         }
+        
+        // ********************** Content Div Kiri **********************
+        
+        function getTarget(id) {
+        	$.ajax({
+        		url: urls + "getalltarget",
+        		type: 'get',
+        		data: 'id_goals='+id,
+        		dataType: 'json',
+        		cache: false,
+        		success: function (restarget) {
+        			//console.log(restarget);
+        			var isitarget = "<ul id='ultar"+id+"'>";
+        			for (var i=0; i<restarget.length; i++) {
+        				isitarget += "<li>"+restarget[i][1]+"</li>";
+        				getIndicator(id, restarget[i][0]);
+        			}
+        			isitarget += "</ul>";
+        			$("#li"+id).append(isitarget);
+        		}
+      	   	});
+        }
+        
+        function getIndicator(idgoals, idtarget) {
+        	$.ajax({
+        		url: urls + "getallindicator",
+        		type: 'get',
+        		data: {'id_goals':idgoals, 'id_target':idtarget},
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resindi) {
+        			//console.log(resindi);
+        			var isiindi = "<ul id='ulindi"+idgoals+"'>";
+        			for (var i=0; i<resindi.length; i++) {
+        				isiindi += "<li onclick='cekshowreport("+idgoals+", "+idtarget+", "+resindi[i][0]+", "+$("#periode").val()+")'>"+resindi[0][1]+"</li>";
+        				getDisaggre(idgoals, resindi[i][0]);
+        			}
+        			isiindi += "</ul>";
+        			$("#ultar"+idgoals).append(isiindi);
+        		}
+        	});
+        }
+        
+        function getDisaggre(idgoals, idindicator) {
+        	$.ajax({
+        		url: urls + "getalldisaggre",
+        		type: 'get',
+        		data: 'id_indicator='+idindicator,
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resdis) {
+        			//console.log(resdis);
+        			var isidis = "<ul style='list-style:none;margin-left:-4px;'>";
+        			for (var i=0; i<resdis.length; i++) {
+        				isidis += "<li><p>Jenis Agregasi : "+resdis[i][1]+"</p><p>"+resdis[i][3]+"</p><p>"+resdis[i][4]+"</p></li>";
+        			}
+        			isidis += "</ul>";
+        			$("#ulindi"+idgoals).append(isidis);
+        		}
+        	});
+        }
+        
+        function cekshowreport(idgoals, idtarget, idindikator, idmonper) {
+        	alert("Garfik Detail On-Progress");
+        	/* if (idmonper == "0") {
+        		swal("Anda harus memilih periode");
+        	} else {
+        		$.ajax({
+        			url: urls + "cekshowreport",
+            		type: 'get',
+            		data: {'id_monper':idmonper},
+            		dataType: 'json',
+            		cache: false,
+            		success: function (resmonper) {
+            			console.log(resmonper);
+            		}
+        		});
+        	} */
+        	
+        }
+        
+        // ********************** Content Div Kanan Atas **********************
+        function getGovActivity(idprogram) {
+        	$.ajax({
+        		url: urls + "getallgovactivity",
+        		type: 'get',
+        		data: 'id_program='+idprogram,
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resactivity) {
+        			//console.log(restarget);
+        			var isiactivity = "<ul id='ulact"+idprogram+"'>";
+        			for (var i=0; i<resactivity.length; i++) {
+        				isiactivity += "<li>"+resactivity[i][1]+"</li>";
+        				getGovIndicator(idprogram, resactivity[i][0]);
+        			}
+        			isiactivity += "</ul>";
+        			$("#li"+idprogram).append(isiactivity);
+        		}
+      	   	});
+        }
+        
+        function getGovIndicator(idprogram, idactivity) {
+        	$.ajax({
+        		url: urls + "getallgovindi",
+        		type: 'get',
+        		data: {'id_program':idprogram, 'id_activity':idactivity},
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resgovindicator) {
+        			//console.log(restarget);
+        			var isiindicator = "<ul id='ulindi"+idprogram+"'>";
+        			for (var i=0; i<resgovindicator.length; i++) {
+        				isiindicator += "<li onclick='cekshowreport("+idprogram+", "+idactivity+", "+resgovindicator[i][0]+", "+$("#periode").val()+")'>"+resgovindicator[i][1]+"</li>";
+        			}
+        			isiindicator += "</ul>";
+        			$("#ulact"+idprogram).append(isiindicator);
+        		}
+      	   	});
+        }
+        
+     	// ********************** Content Div Kanan Bawah **********************
+     	function getNsaActivity(idprogram) {
+        	$.ajax({
+        		url: urls + "getallnsaactivity",
+        		type: 'get',
+        		data: 'id_program='+idprogram,
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resactivity) {
+        			//console.log(restarget);
+        			var isiactivity = "<ul id='ulactnsa"+idprogram+"'>";
+        			for (var i=0; i<resactivity.length; i++) {
+        				isiactivity += "<li>"+resactivity[i][1]+"</li>";
+        				getNsaIndicator(idprogram, resactivity[i][0]);
+        			}
+        			isiactivity += "</ul>";
+        			$("#linsa"+idprogram).append(isiactivity);
+        		}
+      	   	});
+        }
+     	
+     	function getNsaIndicator(idprogram, idactivity) {
+        	$.ajax({
+        		url: urls + "getallnsaindi",
+        		type: 'get',
+        		data: {'id_program':idprogram, 'id_activity':idactivity},
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resnsaindicator) {
+        			//console.log(restarget);
+        			var isiindicator = "<ul id='ulindinsa"+idprogram+"'>";
+        			for (var i=0; i<resnsaindicator.length; i++) {
+        				isiindicator += "<li  onclick='cekshowreport("+idprogram+", "+idactivity+", "+resgovindicator[i][0]+", "+$("#periode").val()+")'>"+resnsaindicator[i][1]+"</li>";
+        			}
+        			isiindicator += "</ul>";
+        			$("#ulactnsa"+idprogram).append(isiindicator);
+        		}
+      	   	});
+        }
 
         // ********************** Fungsi pilih select option **********************
         
@@ -107,7 +267,63 @@
         $("#periode").on("change", function(){
         	var valdaerah = $("#daerah").val();
         	var valperiode = $(this).val();
+        	//=============== SDG Goals ================
+            $.ajax({
+            	url: urls + "getallgoals",
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                success: function (resgoals) {
+                	//console.log(resgoals);
+                	$("#divkiri").empty();
+                	var isi = "<ol id='olgoals'>";
+               		for (var i=0; i<resgoals.length; i++) {
+                  	   	isi += "<li id='li"+resgoals[i][0]+"'>"+resgoals[i][1]+"</li>";
+                  	   	getTarget(resgoals[i][0]);
+                    }
+                    isi += "</ol>";
+                    $("#divkiri").append(isi);
+                }
+            });
+            
+          	//=============== Gov Program ================
+          	$.ajax({
+            	url: urls + "getallgovprogram",
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                success: function (resprog) {
+                	//console.log(resgoals);
+                	$("#kananatas").empty();
+                	var isi = "<ol id='olprog'>";
+               		for (var i=0; i<resprog.length; i++) {
+                  	   	isi += "<li id='li"+resprog[i][0]+"'>"+resprog[i][1]+"</li>";
+                  	   	getGovActivity(resprog[i][0])
+                    }
+                    isi += "</ol>";
+                    $("#kananatas").append(isi);
+                }
+            });
+          	
+          	//=============== Non Nsa Program ================
         	$.ajax({
+            	url: urls + "getallnsaprogram",
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                success: function (resprog) {
+                	//console.log(resgoals);
+                	$("#kananbawah").empty();
+                	var isi = "<ol id='olprog'>";
+               		for (var i=0; i<resprog.length; i++) {
+                  	   	isi += "<li id='linsa"+resprog[i][0]+"'>"+resprog[i][1]+"</li>";
+                  	   	getNsaActivity(resprog[i][0])
+                    }
+                    isi += "</ol>";
+                    $("#kananbawah").append(isi);
+                }
+            });
+        	/*$.ajax({
             	url: urls + "getrole",
                 type: 'get',
                 data: {'id_prov':valdaerah},
@@ -115,6 +331,9 @@
                 cache: false,
                 success: function (resrole) {
                 	//console.log(resrole);
+                	if (resrole.length == 0) {
+                		swal("Data tidak ditemukan");
+                	}
                     $("#divkiri").empty();
                     $("#kananatas").empty();
                     $("#kananbawah").empty();
@@ -156,10 +375,10 @@
                         });
                 	}
                 }
-            });
+            }); */
         });
 
-        function kanan(idsdg, idtar, idindi, idmonper) {
+        /* function kanan(idsdg, idtar, idindi, idmonper) {
         	//alert(idsdg+" "+idtar+" "+idindi+" "+idmonper);
         	var valda = $("#daerah").val();
         	//alert(valda);
@@ -250,12 +469,13 @@
                     }
                 }
             });
-        }
+        } */
 
         function cucukanan(idsdg, idtar, idindi, id, idmon, flag) {
         	//alert(idsdg+" "+idtar+" "+idindi+" "+id+" "+flag);
         	var valda = $("#daerah").val();
             location.href = urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag+"/"+valda;
+            //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag+"/"+valda;);
         }
 
     </script>
