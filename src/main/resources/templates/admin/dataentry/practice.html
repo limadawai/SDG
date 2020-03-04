@@ -1130,9 +1130,12 @@
 			$('#background').val("").removeAttr("readonly");
 			$('#implementation_process').val("").removeAttr("readonly");
 			$('#challenges_learning').val("").removeAttr("readonly");
+			$('#sdg_indicator').val("").trigger('change');
+			$('#sdg_indicator').removeAttr("disabled");
+			$(".accordion-inner").find('.sdg-indikator').prop("checked", false);
+			$(".accordion-inner").find('.sdg-indikator').removeAttr("disabled");
 			$('.control-group').removeClass('error');
 			$('.help-block').text("");
-			$('.accordion-inner').html("");
 		}
         
         $('#tbody-best').on('click', '.update', function(){
@@ -1146,11 +1149,23 @@
                 	$('#showModal').trigger('click');
                 	$('#id').val(val.id);
                 	$('#id_program').val(val.program);
-                        $('#location').val(val.location);
-                        $('#time_activity').val(val.time_activity);
-                        $('#background').val(val.background);
-                        $('#implementation_process').val(val.implementation_process);
-                        $('#challenges_learning').val(val.challenges_learning);
+                    $('#location').val(val.location);
+                    $('#time_activity').val(val.time_activity);
+                    $('#background').val(val.background);
+                    $('#implementation_process').val(val.implementation_process);
+                    $('#challenges_learning').val(val.challenges_learning);
+                    $.ajax({
+    					type: "GET",
+                        url: urls+'list-getBestMapByGovInd/'+val.id,
+                        success: function (hasil) {
+                        		var val = hasil.content;
+                        		var selectedValues = new Array();
+                        		for(var i=0;i<val.length;i++){
+                        			selectedValues[i] = val[i].id_goals+'---'+(val[i].id_target?val[i].id_target:0)+'---'+(val[i].id_indicator?val[i].id_indicator:0);
+                        			$(".accordion-inner").find('.sdg-indikator[value="'+selectedValues[i]+'"]').prop("checked", true);
+                        		}
+                        	}
+                    });
                 },
             })
          });
