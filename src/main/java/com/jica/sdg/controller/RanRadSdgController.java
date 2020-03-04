@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import com.jica.sdg.model.BestMap;
 import com.jica.sdg.model.GovActivity;
 import com.jica.sdg.model.GovFunding;
 import com.jica.sdg.model.GovIndicator;
@@ -32,6 +33,8 @@ import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.model.Unit;
+import com.jica.sdg.service.IBestMapService;
+import com.jica.sdg.service.IBestPracticeService;
 import com.jica.sdg.service.IGovActivityService;
 import com.jica.sdg.service.IGovFundingService;
 import com.jica.sdg.service.IGovIndicatorService;
@@ -161,6 +164,9 @@ public class RanRadSdgController {
 	
 	@Autowired
 	INsaFundingService nsaFundingService;
+	
+	@Autowired
+	IBestMapService bestMapService;
 	
 	//*********************** SDG ***********************
 
@@ -1324,6 +1330,14 @@ public class RanRadSdgController {
     @GetMapping("admin/list-getGovMapByGovInd/{id}")
     public @ResponseBody Map<String, Object> getGovMapByGovInd(HttpSession session, @PathVariable("id") Integer id) {
         List <GovMap> list = govMapService.findAllByGovInd(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-getBestMapByGovInd/{id}")
+    public @ResponseBody Map<String, Object> getBestMapByGovInd(HttpSession session, @PathVariable("id") Integer id) {
+        List <BestMap> list = bestMapService.findAllByGovInd(id);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;

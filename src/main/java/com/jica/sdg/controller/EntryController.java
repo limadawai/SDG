@@ -1,5 +1,6 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.BestMap;
 import com.jica.sdg.model.BestPractice;
 import com.jica.sdg.model.EntryBestPractice;
 import com.jica.sdg.model.EntryProblemIdentify;
@@ -73,6 +74,9 @@ public class EntryController {
     
     @Autowired
     IBestPracticeService bestService;
+    
+    @Autowired
+    IBestMapService bestMapService;
     
     @Autowired
     IEntryBestPracticeService enbestService;
@@ -399,10 +403,35 @@ public class EntryController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-best", consumes = "application/json", produces = "application/json")
-	@ResponseBody
-	public void saveBest(@RequestBody BestPractice best) {
+    @PostMapping(path = "admin/save-best/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveBest(@RequestBody BestPractice best,
+			@PathVariable("sdg_indicator") String sdg_indicator,
+			@PathVariable("id_monper") Integer id_monper,
+			@PathVariable("id_prov") String id_prov) {
     	bestService.saveBestPractice(best);
+        if(!sdg_indicator.equals("0")) {
+            bestMapService.deleteGovMapByGovInd(best.getId());
+            String[] sdg = sdg_indicator.split(",");
+            for(int i=0;i<sdg.length;i++) {
+                String[] a = sdg[i].split("---");
+                Integer id_goals = Integer.parseInt(a[0]);
+                Integer id_target = Integer.parseInt(a[1]);
+                Integer id_indicator = Integer.parseInt(a[2]);
+                BestMap map = new BestMap();
+                map.setId_goals(id_goals);
+                if(id_target!=0) {
+                        map.setId_target(id_target);
+                }
+                if(id_indicator!=0) {
+                        map.setId_indicator(id_indicator);
+                }
+                map.setId_best_practice(best.getId());
+                map.setId_monper(id_monper);
+                map.setId_prov(id_prov);
+                bestMapService.saveGovMap(map);
+            }
+    	}
     }
     
     @PostMapping(path = "admin/save-best-entry", consumes = "application/json", produces = "application/json")

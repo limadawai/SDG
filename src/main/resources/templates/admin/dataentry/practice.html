@@ -103,36 +103,59 @@
             </div>
         </div>
         <div id="myModal"data-backdrop="static" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 class="lang_eng" style="display:none">Add Best Pactice</h3>
-			    <h3 class="lang_indo">Tambah Praktik Terbaik</h3>
-		  	</div>
-			<div class="modal-body">
-				<form id="form-sdgGoals">
-					<div class="control-group">
-					    <div class="controls">
-							<div class="accordion" id="accordion2">
-								<div class="accordion-group">
-								    <div class="accordion-heading">
-								      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-								        <label class="lang_eng control-label" style="display:none">Goals SDGs</label>
-					    				<label class="lang_indo control-label">Sasaran SDG</label>
-								      </a>
-								    </div>
-								    <div id="collapseOne" class="accordion-body collapse">
-								      <div class="accordion-inner">
-								      </div>
-								    </div>
-								  </div>
-							</div>
-					    	<!-- <select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="lang_eng" style="display:none">Add Best Pactice</h3>
+                <h3 class="lang_indo">Tambah Praktik Terbaik</h3>
+            </div>
+            <div class="modal-body">
+                <form id="form-sdgGoals">
+<!--                    <div class="control-group">
+                        <div class="controls">
+                            <div class="accordion" id="accordion2">
+                                <div class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                                            <label class="lang_eng control-label" style="display:none">Goals SDGs</label>
+                                            <label class="lang_indo control-label">Sasaran SDG</label>
+                                        </a>
+                                    </div>
+                                    <div id="collapseOne" class="accordion-body collapse">
+                                          <div class="accordion-inner">
+                                          </div>
+                                    </div>
+                                </div>
+                            </div>
+					    	 <select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
 					    		<option value="0">--select--</option>
 		        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
-		        			</select> -->
-						    <span class="help-block" id="error_unit"></span>
-					    </div>
-				  </div>
+		        			</select> 
+                            <span class="help-block" id="error_unit"></span>
+                        </div>
+                    </div>-->
+                    <div class="control-group">
+                        <div class="controls">
+                            <div class="accordion" id="accordion2">
+                                <div class="accordion-group">
+                                    <div class="accordion-heading">
+                                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                                            <label class="lang_eng control-label" style="display:none">Select SDGs Indicator</label>
+                                            <label class="lang_indo control-label">Pilih Indikator SDG</label>
+                                        </a>
+                                    </div>
+                                    <div id="collapseOne" class="accordion-body collapse">
+                                        <div class="accordion-inner">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
+                                    <option value="0">--select--</option>
+                                    <option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
+                            </select> -->
+                            <span class="help-block" id="error_unit"></span>
+                        </div>
+                    </div>
 <!--				<div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Program</label>
 				    <label class="lang_indo control-label">Program</label>
@@ -143,24 +166,24 @@
 				    	<span class="help-block" id="error_id_program"></span>
 				    </div>
 				  </div>-->
-                                <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Program</label>
-				    <label class="lang_indo control-label">Program</label>
-				    <div class="controls">
-				    	<textarea id="id_program" name="id_program" class="input-xlarge input-block-level"></textarea>
-				    	<input id="id" name="id" class="input-medium input-block-level" type="hidden"/>
-                                        <span class="help-block" id="error_background"></span>
-				    </div>
-				</div>
+                    <div class="control-group">
+                        <label class="lang_eng control-label" style="display:none">Program</label>
+                        <label class="lang_indo control-label">Program</label>
+                        <div class="controls">
+                            <textarea id="id_program" name="id_program" class="input-xlarge input-block-level"></textarea>
+                            <input id="id" name="id" class="input-medium input-block-level" type="hidden"/>
+                            <span class="help-block" id="error_background"></span>
+                        </div>
+                    </div>
 				  
-				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Location</label>
-				    <label class="lang_indo control-label">Lokasi</label>
-				    <div class="controls">
-				    	<input id="location" name="location" class="input-xlarge input-block-level" type="text"/>
-				    	<span class="help-block" id="error_location"></span>
-				    </div>
-				  </div>
+                    <div class="control-group">
+                        <label class="lang_eng control-label" style="display:none">Location</label>
+                        <label class="lang_indo control-label">Lokasi</label>
+                        <div class="controls">
+                            <input id="location" name="location" class="input-xlarge input-block-level" type="text"/>
+                            <span class="help-block" id="error_location"></span>
+                        </div>
+                    </div>
 				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Date and Time</label>
 				    <label class="lang_indo control-label">Tanggal dan Waktu</label>
@@ -386,7 +409,6 @@
             btn_apply();
         });
         
-        
         $('.app').on('click', '.appl', function(e){
         	if($('#id_prov').val()!="0" && $('#periode').val()!="0" && $('#idrole').val()!="0"){
         		swal({
@@ -501,7 +523,6 @@
         	}else{
         		swal(titleMod,messMod,'error');
         	}
-            
         });
         
         function btn_apply(){
@@ -692,87 +713,6 @@
         	}
         });
         
-        $('#id_program').on('change', function(){
-        	var id_indicator = $(this).val().split('###')[2];
-        	var id_prov = $('#id_prov').val();
-        	var id_monper = $("#periode").val().split('###')[0];
-        	var cat = $("#idrole").find(":selected").data("cat");
-        	$('.accordion-inner').html("");
-        	if(cat=="NSA"){
-        		$.ajax({
-	                url: urls + 'best-practice/list-nsamap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+id_indicator,
-	                type: 'get',
-	                dataType: 'json',
-	                cache: false,
-	                async : false,
-	                success: function (result1) {
-	                	var text = "";
-	                	$('.accordion-inner').html(text);
-	                	for (var k = 0; k < result1.content.length; k++) {
-	                		var nm_goals;
-	                		var nm_target;
-	                		var nm_indicator;
-	                    	if($("#fs").is(':checked')){
-	                    		nm_goals = result1.content[k][1];
-	                    		nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-	                    		nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-							}else{
-								nm_goals = result1.content[k][2];
-								nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-								nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-							}
-	                    	text += '<label style="display:inline-block;white-space:nowrap;">'+
-				        				'<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
-				                  '</label><br/>';
-		                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-				        					'<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
-				                     '</label><br/>';
-		                     text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-				                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
-				                   '</label><br/>';
-	                	}
-	                	$('.accordion-inner').append(text);
-	                }
-	        	});
-        	}else{
-        		$.ajax({
-                    url: urls + 'best-practice/list-govmap/'+id_prov+'/'+id_monper+'/'+id_indicator,
-                    type: 'get',
-                    dataType: 'json',
-                    cache: false,
-                    async : false,
-                    success: function (result1) {
-                    	var text = "";
-                    	$('.accordion-inner').html(text);
-                    	for (var k = 0; k < result1.content.length; k++) {
-                    		var nm_goals;
-                    		var nm_target;
-                    		var nm_indicator;
-                        	if($("#fs").is(':checked')){
-                        		nm_goals = result1.content[k][1];
-                        		nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-                        		nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-    						}else{
-    							nm_goals = result1.content[k][2];
-    							nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-    							nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-    						}
-                        	text += '<label style="display:inline-block;white-space:nowrap;">'+
-    			        				'<span style="vertical-align:middle">'+nm_goals+'</span>'+
-    			                  '</label><br/>';
-    	                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-    	        					'<span style="vertical-align:middle">'+nm_target+'</span>'+
-    	                     '</label><br/>';
-    	                     text += '<label  style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-    			                         '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
-    			                   '</label><br/>';
-                    	}
-                    	$('.accordion-inner').append(text);
-                    }
-            	});
-        	}
-        });
-        
         var table = $('#tabel-practice').DataTable({
 			responsive: true,
 			sDom: 'lrtip',
@@ -956,6 +896,139 @@
                 btn_apply();
         });
         
+        
+        //Indikator SDG untuk mapping
+	        
+        $.ajax({
+        url: urls + 'list-sdgGoals',
+        type: 'get',
+        dataType: 'json',
+        cache: false,
+        async : false,
+        success: function (response) {
+                        var option = "";
+                        var cekbok = "";
+                        for (var i = 0; i < response.content.length; i++) {
+                                var nm_goals;
+                                var id_goals=response.content[i].id;
+                        if($("#fs").is(':checked')){
+                                nm_goals = response.content[i].nm_goals;
+                                        }else{
+                                                nm_goals = response.content[i].nm_goals_eng;
+                                        }
+                        option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
+                        cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
+                                                '<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
+                                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+                                      '</label><br/>';
+                        $.ajax({
+                        url: urls + 'list-sdgTarget/'+response.content[i].id,
+                        type: 'get',
+                        dataType: 'json',
+                        cache: false,
+                        async : false,
+                        success: function (result) {
+                                for (var j = 0; j < result.content.length; j++) {
+                                        var nm_target;
+                                        var id_target=result.content[j].id;
+                                if($("#fs").is(':checked')){
+                                        nm_target = result.content[j].nm_target;
+                                                        }else{
+                                                                nm_target = result.content[j].nm_target_eng;
+                                                        }
+                                option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
+                                cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                                                '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+                                                                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+                                                                      '</label><br/>';
+                                $.ajax({
+                                    url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
+                                    type: 'get',
+                                    dataType: 'json',
+                                    cache: false,
+                                    async : false,
+                                    success: function (result1) {
+                                        for (var k = 0; k < result1.content.length; k++) {
+                                                var nm_indicator;
+                                                var id_indicator=result1.content[k][0];
+                                                if($("#fs").is(':checked')){
+                                                        nm_indicator = result1.content[k][4];
+                                                                }else{
+                                                                        nm_indicator = result1.content[k][6];
+                                                                }
+                                                option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
+                                                cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                                                                                    '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
+                                                                                    '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+                                                                              '</label><br/>';
+                                        }
+                                    }
+                                });
+                                option += '</optgroup>';
+                                }
+                        }
+                        });
+                        option += '</optgroup>';
+                        }
+                        $('.accordion-inner').append(cekbok);
+                }
+        });
+        $('.accordion-inner').on('click', '.menu-master', function(){
+                var id = $(this).data('id');
+                if ($(this).is(":checked")) {
+                $(".accordion-inner").find('.menu'+id).prop("checked", false);
+            } else {
+                 $(".accordion-inner").find('.menu'+id).prop("checked", false);
+            }
+        });
+
+        $('.accordion-inner').on('click', '.menu-slave', function(){
+                var id = $(this).data('id');
+                var goals = $(this).data('goals');
+                if ($(this).is(":checked")) {
+                $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+            } else {
+                 $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+            }
+
+                if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+            } else {
+                 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+            }
+        });
+
+        $('.accordion-inner').on('click', '.menu-slave-1', function(){
+                var id = $(this).data('id');
+                var goals = $(this).data('goals');
+                if ($(".menu-slave-1-"+id+":checked").length==$(".menu-slave-1-"+id).length) {
+                $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+            } else {
+                 $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+            }
+
+                if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+            } else {
+                 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+            }
+//            console.log();
+        });
+        
+        $('.accordion-inner').on('change', 'input[name="sdg_indicator"]', function(){
+        	var sdg_indicator;
+            var sdg_indicator_val = [];
+		    $.each($("input[name='sdg_indicator']:checked"), function(){
+		                sdg_indicator_val.push($(this).val());
+		    });
+            if(sdg_indicator_val.length>0){
+                    sdg_indicator = sdg_indicator_val.toString();
+            }else{
+                    sdg_indicator = '0';
+            }
+            console.log(sdg_indicator);
+        });
+        
         $('#submit').on('click', function(){
 			var id = $('#id').val();
 			var id_prog = $('#id_program').val();
@@ -971,11 +1044,29 @@
 			var challenges_learning = $('#challenges_learning').val();
 			var periode = $('#periode').val().split("###");
 			var id_monper = periode[0];
-        	var year = periode[1];
-			
+            var year = periode[1];
+            
+			var sdg_indicator;
+            var sdg_indicator_val = [];
+	        $.each($("input[name='sdg_indicator']:checked"), function(){
+                 sdg_indicator_val.push($(this).val());
+	        });
+            if(sdg_indicator_val.length>0){
+                    sdg_indicator = sdg_indicator_val.toString();
+            }else{
+                    sdg_indicator = '0';
+            }
+            console.log(sdg_indicator);
+            
 			$('.control-group').removeClass('error');
 			$('.help-block').text("");
 			var cek = 0;
+                        
+//                        if (id_gov_indicator == ""){
+//                            $("#error_id_gov_indicator").parents(".control-group").first().addClass("error");
+//                            $("#error_id_gov_indicator").text(required);
+//                            cek += 1;
+//                        }
 			/* if (id_gov_indicator == ""){
                 $("#error_id_gov_indicator").parents(".control-group").first().addClass("error");
                 $("#error_id_gov_indicator").text(required);
@@ -986,31 +1077,44 @@
                 $("#error_unit").text(required);
                 cek += 1;
             } */
-			if(cek==0){
-				var data = JSON.stringify({
-					'id':id,
-					'id_program':'',
-					'id_activity':'',
-					'id_indicator':'',
-					'id_role':id_role,
-					'location':location,
-					'program':id_prog,
-					'time_activity':time_activity,
-					'background':background,
-					'implementation_process':implementation_process,
-					'challenges_learning':challenges_learning,
-					'id_monper':id_monper,
-					'year':year
-					});
-				$.ajax({
-					type: "POST",
-                    url: urls+'save-best',
+                if(cek==0){
+                    var data = JSON.stringify({
+                            'id':id,
+                            'id_program':'',
+                            'id_activity':'',
+                            'id_indicator':'',
+                            'id_role':id_role,
+                            'location':location,
+                            'program':id_prog,
+                            'time_activity':time_activity,
+                            'background':background,
+                            'implementation_process':implementation_process,
+                            'challenges_learning':challenges_learning,
+                            'id_monper':id_monper,
+                            'year':year
+                            });
+                $.ajax({
+                    type: "POST",
+                    url: urls+'save-best/'+sdg_indicator+'/'+id_monper+'/'+$('#id_prov').val(),
                     beforeSend : function(xhr){
                     	xhr.setRequestHeader(header,token);
                     },
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
-					data: data,
+                    data: data,
                     success: function (result) {
+                        
+                        $.ajax({
+                            type: "POST",
+                            url: urls+'save-govIndicatorBest/'+sdg_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
+                            beforeSend : function(xhr){
+                                xhr.setRequestHeader(header,token);
+                            },
+                            headers:{'Accept':'application/json','Content-Type':'application/json'},
+                            data: data,
+                            success: function (result12) {
+                                
+                            }
+                        });
                     	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
                     	$('#myModal').modal('hide');
                     },
@@ -1026,9 +1130,12 @@
 			$('#background').val("").removeAttr("readonly");
 			$('#implementation_process').val("").removeAttr("readonly");
 			$('#challenges_learning').val("").removeAttr("readonly");
+			$('#sdg_indicator').val("").trigger('change');
+			$('#sdg_indicator').removeAttr("disabled");
+			$(".accordion-inner").find('.sdg-indikator').prop("checked", false);
+			$(".accordion-inner").find('.sdg-indikator').removeAttr("disabled");
 			$('.control-group').removeClass('error');
 			$('.help-block').text("");
-			$('.accordion-inner').html("");
 		}
         
         $('#tbody-best').on('click', '.update', function(){
@@ -1041,12 +1148,24 @@
                 	var val = result.content;
                 	$('#showModal').trigger('click');
                 	$('#id').val(val.id);
-                	$('#id_program').val(val.program).trigger("change");
-                        $('#location').val(val.location);
-                        $('#time_activity').val(val.time_activity);
-                        $('#background').val(val.background);
-                        $('#implementation_process').val(val.implementation_process);
-                        $('#challenges_learning').val(val.challenges_learning);
+                	$('#id_program').val(val.program);
+                    $('#location').val(val.location);
+                    $('#time_activity').val(val.time_activity);
+                    $('#background').val(val.background);
+                    $('#implementation_process').val(val.implementation_process);
+                    $('#challenges_learning').val(val.challenges_learning);
+                    $.ajax({
+    					type: "GET",
+                        url: urls+'list-getBestMapByGovInd/'+val.id,
+                        success: function (hasil) {
+                        		var val = hasil.content;
+                        		var selectedValues = new Array();
+                        		for(var i=0;i<val.length;i++){
+                        			selectedValues[i] = val[i].id_goals+'---'+(val[i].id_target?val[i].id_target:0)+'---'+(val[i].id_indicator?val[i].id_indicator:0);
+                        			$(".accordion-inner").find('.sdg-indikator[value="'+selectedValues[i]+'"]').prop("checked", true);
+                        		}
+                        	}
+                    });
                 },
             })
          });
