@@ -136,7 +136,7 @@ public class ReportController {
     
     @GetMapping("admin/get-sdg-goals")
     public @ResponseBody Map<String, Object> getSdgGoals(@RequestParam("id_role") int id_role) {
-    	String sql = "SELECT distinct a.id_goals, b.nm_goals, b.nm_goals_eng FROM assign_sdg_indicator a "
+    	String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM assign_sdg_indicator a "
     			+ " left join sdg_goals b on a.id_goals = b.id "
     			+ " WHERE a.id_role = :id_role";
         Query query = manager.createNativeQuery(sql);
@@ -248,7 +248,7 @@ public class ReportController {
     			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
     			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
     			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
-    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id_nsa_indicator "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id "
     			+ "from nsa_map a "
     			+ "left join entry_nsa_indicator b on a.id_nsa_indicator = b.id_assign and b.year_entry = :year "
     			+ "left join nsa_indicator d on a.id_nsa_indicator = d.id "
