@@ -41,14 +41,10 @@
                                                 	<span class="lang_eng" style="display:none">Company</span>
                                                 	<span class="lang_indo">Perusahaan</span>
                                                 </th>
-                                                 <th style="text-align:center;font-size:80%;">
+                                                <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">Year</span>
                                                 	<span class="lang_indo">Tahun</span>
                                                 </th>
-                                                <th style="text-align:center;font-size:80%;">
-                                                	<span class="lang_eng" style="display:none">Status</span>
-                                                	<span class="lang_indo">Status</span>
-                                                </th>                                               
                                                 <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">Action</span>
                                                 	<span class="lang_indo">Aksi</span>
@@ -67,7 +63,7 @@
     </div>
 
     <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog"
-         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" style="width:1000px!important;left:35%!important">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -75,63 +71,65 @@
                         <span aria-hidden="true">&times;</span>
                     </button>
                     <h3 class="modal-title" id="exampleModalLabel"><i class="icon-cog"></i> 
-                    	<span class="lang_eng" style="display:none">Approval</span>
-                        <span class="lang_indo">Persetujuan</span>
-                  	</h3>
+                        <span class="lang_eng" style="display:none">Detail</span>
+                        <span class="lang_indo">Detail</span>
+                    </h3>
                 </div>
-                <form  id='form-gri-ojk'>
-                    <div class="modal-body">
-                        <div class="control-group">
-                            <label class="control-label" for="year">
-                            	<span class="lang_eng" style="display:none">Choose Approval</span>
-                            	<span class="lang_indo">Pilih Persetujuan</span>
-                            </label>
-                            <div class="controls">
-                                <input name="id" id="id" type="hidden" class="input-block-level">
-                                <div class="radio">
-                                    <label>
-                                        <input id="approval" type="radio" name="approval" value="1" >
-                                        <span class="lang_eng" style="display:none">No Action</span>
-                                        <span class="lang_indo">Tidak Ada Aksi</span>
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input id="approval" type="radio" name="approval" value="2">
-                                        <span class="lang_eng" style="display:none">Approve</span>
-                                        <span class="lang_indo">Setuju</span>
-                                    </label>
-                                </div>
-                                <div class="radio">
-                                    <label>
-                                        <input id="approval" type="radio" name="approval" value="3">
-                                        <span class="lang_eng" style="display:none">Reject</span>
-                                        <span class="lang_indo">Tolak</span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="control-group">
-                            <label class="control-label" for="company_name">
-                            	<span class="lang_eng" style="display:none">Description</span>
-                            	<span class="lang_indo">Deskripsi</span>
-                            </label>
-                            <div class="controls">
-                                <textarea class="input-block-level" id="description" name="description" rows="3"></textarea>
-                            </div>
-                        </div>
-                    </div>
-                    </form>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">
-				    		<span class="lang_eng" style="display:none">Close</span>
-				    		<span class="lang_indo">Tutup</span>
-				    	</button>
-				    	<button class="btn btn-primary" id="submit">
-				    		<span class="lang_eng" style="display:none">Submit</span>
-				    		<span class="lang_indo">Simpan</span>
-				    	</button>
-                    </div>
+                <div class="modal-body">
+                    <table id="detailGri" class="table table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">Code</span>
+                                    <span class="lang_indo">Kode</span>
+                                </th>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">PJOK</span>
+                                    <span class="lang_indo">PJOK</span>
+                                </th>
+                                 <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">SDGS</span>
+                                    <span class="lang_indo">SDGS</span>
+                                </th>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">SDGS Description</span>
+                                    <span class="lang_indo">SDGS Descripsi</span>
+                                </th>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">GRI</span>
+                                    <span class="lang_indo">GRI</span>
+                                </th>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">GRI Description</span>
+                                    <span class="lang_indo">GRI Deskripsi</span>
+                                </th>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">Year</span>
+                                    <span class="lang_indo">Tahun</span>
+                                </th>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">Company</span>
+                                    <span class="lang_indo">Perusahaan</span>
+                                </th>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">Value</span>
+                                    <span class="lang_indo">Nilai</span>
+                                </th>
+                                <th style="text-align:center;font-size:80%;">
+                                    <span class="lang_eng" style="display:none">Unit</span>
+                                    <span class="lang_indo">Unit</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody-role"></tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn" data-dismiss="modal" aria-hidden="true">
+                        <span class="lang_eng" style="display:none">Close</span>
+                        <span class="lang_indo">Tutup</span>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -324,26 +322,9 @@
                 return "<div style='font-size:90%;text-align:center;'>"+(row.year)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                var status = '';
-                if(row.approval==null||row.approval==1||row.approval==3){
-                    status = '-'
-                }
-                if(row.approval==2){
-                    status = 'Approve'
-                }
-                return "<div style='font-size:90%;text-align:center;'>"+status+"</div>";}
-            },
-            {"data": function (row, data, index, display) {
-                    var button = "";
-                    if(row.approval==2){
-                        button = '<button data-id="'+row.id+'" type="button" title="unUprove" class="btn btn-success btn-mini unuprove">UnApprove</button>&nbsp;&nbsp;';
-                    }else{
-                        button = '<button data-id="'+row.id+'" type="button" title="update" class="btn btn-success btn-mini update"><i class="icon-circle-blank"></i></button>&nbsp;&nbsp;';
-                    }
 //            	if(privilege=="SUPER"){
             		 return "<div style='text-align:center;'>"+
-                     '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file1+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+button;
-                     
+                     '<button data-id="'+row.id+'" data-year="'+row.year+'"  data-company="'+row.company_name+'" type="button" title="update" class="btn btn-success btn-mini update"><i class="icon-list"></i></button>&nbsp;&nbsp;</div>';
               }
             }
         ],
@@ -409,30 +390,59 @@
                             });
     		}
 	});
-	
-	$('#tbody-role').on('click', '.update', function(){
-		var id = $(this).attr('data-id');
-		$.ajax({
-                    type: "GET",
-                    url: urls+'get-approval/gri-ojk/'+id,
-                    success: function (result) {
-                        var val = result.content;
-                        $('#id').val(id);
-                        $('#description').val(val[0].description);
-                         $("input:radio[value='"+val[0].approval+"']").prop('checked',true);
-                        $('#myModal').modal('show');
-                    },
-                })
-            }).on('click','.unuprove',function(){
-                var id = $(this).attr('data-id');
-                $.ajax({
-                      type: "GET",
-                      url: urls+'set-unUprove/gri-ojk/'+id,
-                      success: function (result) {
-                          table.ajax.url(urls+'list-entry/gri-ojk/').load();
-                      },
-                  }) 
-                
-            });
+	var table2 = $('#detailGri').DataTable({
+                        responsive: true,
+                        sDom: 'lrtip',
+                        "bLengthChange": false,
+                        "cache": false,
+                        "autoWidth": true,
+                        "responsive":true,
+                        "ajax": {
+                            "url": '/sdg/admin/get-report/gri-ojk',
+                            dataSrc: 'content',
+                        },
+                        "searching": true,
+                        "columns": [
+                            {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[0])+"</div>";}
+                            },
+                              {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[1])+"</div>";}
+                            },
+                              {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[2])+"</div>";}
+                            },
+                              {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[3])+"</div>";}
+                            },  {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[4])+"</div>";}
+                            },  {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[5])+"</div>";}
+                            },
+                              {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[6])+"</div>";}
+                            },
+                             {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[7])+"</div>";}
+                            },
+                              {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[8])+"</div>";}
+                            },
+                              {"data": function (row, data, index, display) {
+                                return "<div style='font-size:90%;'>"+(row[9])+"</div>";}
+                            },
+                        ],
+                        "columnDefs": [
+                        ],
+                        select: true
+                    });
+                $('#tbody-role').on('click', '.update', function(){
+                    var year    = $(this).attr('data-year');
+                    var company = $(this).attr('data-company');
+                        table2.ajax.url(urls+'get-report/gri-ojk/'+year+'/'+company).load(function(){
+                            $('#myModal').modal('show');
+                        });
+                        
+                 });
 </script>
 </html>

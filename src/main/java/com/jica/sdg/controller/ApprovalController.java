@@ -303,11 +303,19 @@ public class ApprovalController {
         Map<String, Object> hasil = new HashMap<>();
         for (Object[] row : rows) {
             result.add(
-                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(Integer)row[5],(String) row[6])
+                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
             );
         }
         hasil.put("content",result);
         return hasil;
+    }
+    
+    @GetMapping("admin/set-unUprove/gri-ojk/{id}")
+    @Transactional
+    public @ResponseBody Map<String, Object> setUnUprove(@PathVariable("id") Integer id) {
+        String sql = "Update entry_gri_ojk set approval = NULL where id  = '"+id+"'";
+        em.createNativeQuery(sql).executeUpdate();        
+        return null;
     }
     
     @PostMapping(path = "admin/save-approval/gri-ojk", consumes = "application/json", produces = "application/json")

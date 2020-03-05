@@ -115,7 +115,6 @@
                             </label>
                             <div class="controls">
                                 <input type="file" name="files"/>
-                                <input type="file" name="files"/>
                             </div>
                         </div>
                     </div>
@@ -324,19 +323,8 @@
             {"data": function (row, data, index, display) {
 //            	if(privilege=="SUPER"){
             		 return "<div style='text-align:center;'>"+
-//                     '<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
                      '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file1+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+
-                      '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file2+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+
-//                     '<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
                      '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-//            	}else if(id_role==row.id_role){
-//            		 return "<div style='text-align:center;'>"+
-//                     '<button data-id="'+row.id_unit+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
-//                     '<button data-id="'+row.id_unit+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
-//                     '<button data-id="'+row.id_unit+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-//            	}else{
-//            		return "";
-//            	}
               }
             }
         ],
