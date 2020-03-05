@@ -193,7 +193,7 @@ public class ReportController {
     			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
     			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
     			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
-    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id, j.nm_role, j.cat_role "
     			+ "from gov_map a "
     			+ "left join entry_gov_indicator b on a.id_gov_indicator = b.id_assign and b.year_entry = :year "
     			+ "left join gov_indicator d on a.id_gov_indicator = d.id "
@@ -203,6 +203,7 @@ public class ReportController {
     			+ "left join ref_unit g on d.unit = g.id_unit "
     			+ "left join gov_target h on a.id_gov_indicator = h.id_gov_indicator and year = :year "
     			+ "left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper "
+    			+ "left join ref_role j on j.id_role = f.id_role "
     			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator and f.id_role = :id_role ";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
@@ -252,7 +253,7 @@ public class ReportController {
     			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
     			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
     			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
-    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id, j.nm_role, j.cat_role "
     			+ "from nsa_map a "
     			+ "left join entry_nsa_indicator b on a.id_nsa_indicator = b.id_assign and b.year_entry = :year "
     			+ "left join nsa_indicator d on a.id_nsa_indicator = d.id "
@@ -262,12 +263,63 @@ public class ReportController {
     			+ "left join ref_unit g on d.unit = g.id_unit "
     			+ "left join nsa_target h on a.id_nsa_indicator = h.id_nsa_indicator and year = :year "
     			+ "left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper "
+    			+ "left join ref_role j on j.id_role = f.id_role "
     			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_nsa_indicator = :id_indicator and f.id_role = :id_role ";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
         query.setParameter("id_indicator", idsdgindikator);
         query.setParameter("id_monper", idmonper);
         query.setParameter("id_role", idrole);
+        query.setParameter("year", year);
+        List list = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/getallindicatorreport")
+    public @ResponseBody Map<String, Object> getallindicator(@RequestParam("id_prov") String idprov, 
+    		@RequestParam("id_sdg_indicator") int idsdgindikator, 
+    		@RequestParam("id_monper") int idmonper, 
+    		@RequestParam("id_role") String idrole,
+    		@RequestParam("year") int year) {
+    	String sql = "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
+    			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
+    			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
+    			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id, j.nm_role, j.cat_role "
+    			+ "from gov_map a "
+    			+ "left join entry_gov_indicator b on a.id_gov_indicator = b.id_assign and b.year_entry = :year "
+    			+ "left join gov_indicator d on a.id_gov_indicator = d.id "
+    			+ "left join entry_gov_budget c on d.id_activity = c.id_gov_activity and c.year_entry = :year "
+    			+ "left join gov_program e on d.id_program = e.id "
+    			+ "left join gov_activity f on d.id_activity = f.id "
+    			+ "left join ref_unit g on d.unit = g.id_unit "
+    			+ "left join gov_target h on a.id_gov_indicator = h.id_gov_indicator and year = :year "
+    			+ "left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper "
+    			+ "left join ref_role j on j.id_role = f.id_role "
+    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator ";
+    	sql += " UNION ALL ";
+    	sql += "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
+    			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
+    			+ "b.achievement4, c.achievement1 as bud1, c.achievement2 as bud2, c.achievement3 as bud3, c.achievement4 as bud4, "
+    			+ "i.funding_source, b.new_value1, b.new_value2, b.new_value3, b.new_value4, c.new_value1 as newbud1, "
+    			+ "c.new_value2 as newbud2, c.new_value3 as newbud3, c.new_value4 as newbud4, a.id, j.nm_role, j.cat_role "
+    			+ "from nsa_map a "
+    			+ "left join entry_nsa_indicator b on a.id_nsa_indicator = b.id_assign and b.year_entry = :year "
+    			+ "left join nsa_indicator d on a.id_nsa_indicator = d.id "
+    			+ "left join entry_nsa_budget c on d.id_activity = c.id_nsa_activity and c.year_entry = :year "
+    			+ "left join nsa_program e on d.id_program = e.id "
+    			+ "left join nsa_activity f on d.id_activity = f.id "
+    			+ "left join ref_unit g on d.unit = g.id_unit "
+    			+ "left join nsa_target h on a.id_nsa_indicator = h.id_nsa_indicator and year = :year "
+    			+ "left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper "
+    			+ "left join ref_role j on j.id_role = f.id_role "
+    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_nsa_indicator = :id_indicator ";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        query.setParameter("id_indicator", idsdgindikator);
+        query.setParameter("id_monper", idmonper);
         query.setParameter("year", year);
         List list = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
@@ -299,8 +351,7 @@ public class ReportController {
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
-    }
-    
+    }    
 
     // ****************************** Report Grafik ******************************
 
