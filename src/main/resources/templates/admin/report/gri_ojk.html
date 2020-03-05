@@ -14,6 +14,23 @@
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
+                            <form class="form-horizontal">
+                                <div class="control-group">
+                                     <span> Company :  </span>
+                                    <select name="company" id="company">
+                                        
+                                    </select>
+                                    <span> Year : </span>
+                                    <select name="year" id="year">
+                                        
+                                    </select>
+                                    <button class="btn btn-primary" type="button" id="show">
+                                    <i class="icon-search"></i>
+                                </button>
+                                </div>
+                            </form>
+                        </div>
+            <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-user"></i></span>
@@ -23,35 +40,18 @@
                         </h5>
                     </div>
                     <div class="widget-content">
-                        <div class="pull-left" style="width:100%">
+                        
+<!--                        <div class="pull-left" style="width:100%">
                             <div class="input-append" style="margin-right:50px;">
                                 <input placeholder="Search..." class="span12" id="text-cari" type="text"/>
                                 <span class="add-on"><i class="icon-search"></i></span>
                             </div>
                            
-                        </div>
+                        </div>-->
                         <div class="row-fluid">
                             <div class="span12">
-                                <div class="table-responsive">
+                                <div class="table-responsive" id="content-table">
                                     <table id="tabel-role" class="table table-striped table-bordered">
-                                        <thead>
-                                            <tr>
-                                                <th style="text-align:center;font-size:80%;width:15%;">No.</th>
-                                                <th style="text-align:center;font-size:80%;">
-                                                	<span class="lang_eng" style="display:none">Company</span>
-                                                	<span class="lang_indo">Perusahaan</span>
-                                                </th>
-                                                <th style="text-align:center;font-size:80%;">
-                                                	<span class="lang_eng" style="display:none">Year</span>
-                                                	<span class="lang_indo">Tahun</span>
-                                                </th>
-                                                <th style="text-align:center;font-size:80%;">
-                                                	<span class="lang_eng" style="display:none">Action</span>
-                                                	<span class="lang_indo">Aksi</span>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="tbody-role"></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -138,6 +138,9 @@
 <script th:inline="javascript">
     var token = $("meta[name='_csrf']").attr("content");
     var header = $("meta[name='_csrf_header']").attr("content");
+    
+    
+    console.log(data_filter);
   //Bahasa
     var titleDel = "Anda Yakin";
     var messDel = "Menghapus Data?";
@@ -189,8 +192,220 @@
     var privilege = [[${privilege}]];
     var id_prov = [[${id_prov}]];
     var id_role = [[${id_role}]];
+    var data_filter   = [[${data}]];
+    function formatResult(node) {
+            var $result = $('<span style="padding-left:' + (20 * node.level) + 'px;">' + node.text + '</span>');
+            return $result;
+          };
+     
+    var data_company = [{'id':'0','text':'ALL','level':'1'}]
+         $.each(data_filter.company,function(i,x){
+             var obj = {'id':x,'text':x,'level':'1'}             
+            data_company.push(obj)
+        });
+    var data_year = [];
+         $.each(data_filter.tahun,function(i,x){
+             var obj = {'id':x,'text':x,'level':'1'}             
+            data_year.push(obj)
+        });
+        
+    $("#company").select2({
+          placeholder: 'Select an option',
+//          width: "70%",
+          data: data_company,
+          formatSelection: function(item) {
+            return item.text
+          },
+          formatResult: function(item) {
+            return item.text
+          },
+          templateResult: formatResult,
+        });  
     
-    console.log(id_role);
+    $('#company').on('change',function(){
+        var id = $(this).val();
+            if(id==0){
+                console.log("ALL");
+                 $("#year").select2({
+                    placeholder: 'Select an option',
+          //          width: "70%",
+                    data: data_year,
+                    formatSelection: function(item) {
+                      return item.text
+                    },
+                    formatResult: function(item) {
+                      return item.text
+                    },
+                    templateResult: formatResult,
+                  }).trigger('change');
+        }else{
+//            $('#year').select2('data', null);
+            $('#year').empty().trigger("change");
+        }
+    });
+    
+   $("#year").select2({
+            placeholder: 'Select an option',
+        //          width: "70%",
+            data: data_year,
+            formatSelection: function(item) {
+              return item.text
+            },
+            formatResult: function(item) {
+              return item.text
+            },
+            templateResult: formatResult,
+    });
+    
+    $('#show').on('click',function(){
+       var company_id = $('#company').val();
+       var uuid = uuidv4();
+       $("#content-table").html("");
+       $("#content-table").html('<table id="'+uuid+'" class="table table-striped table-bordered"></table>');
+       if(company_id==0){
+           var values = $("#company>option").map(function() { return $(this).val(); });
+           var tahun = $('#year').val();
+           var data_column =[{ "title": "PJOK","targets": 0 },
+                                      { "title": "KODE" },
+                                      { "title": "SDGS" },
+                                      { "title": "SDGS DESCRIPTION" },
+                                      { "title": "GRI" },
+                                      { "title": "GRI DESC" },
+                                      { "title": "UNIT" }];
+           var subquery ="";
+           $.each(values,function(i,x){
+               if(x!=0){
+                  subquery  +=",(SELECT b.value FROM trx_excell  b WHERE b.company_name = '"+x+"' AND  b.year = '"+tahun+"' AND  b.kode=a.kode) AS '"+x+"' ";
+                  data_column.push({"title":x}); 
+               }
+           });
+           var query = "SELECT a.pjok,a.kode,a.sdgs,a.sdgs_desc,a.gri,a.gri_desc,a.unit  "+subquery+"FROM excell a";
+           
+           function getAllRow(selected, thangi) {
+                        return $.ajax({
+                            url: urls+'get-all-row-company/gri-ojk/'+query ,
+                            data: {
+                                issession: 1,
+                                selector: selector
+                            },
+                            // dataType: "json",
+                            async: false,
+                            error: function () {
+                                alert("Error occured")
+                            }
+                        });
+
+                    }
+                    var selector = !0;
+                    var ajaxObj = getAllRow(selector, $(this).val());
+                    var allRow = JSON.parse(ajaxObj.responseText); 
+//                 var datarow =[];
+//                 $.each(allRow.content,function(i,x){
+//                     datarow.push(x);
+//                 });
+//                 console.log(datarow);
+                $('#'+uuid).DataTable({
+                        responsive: true,
+                        sDom: 'lrtip',
+                        "retrieve": true,
+                        "bLengthChange": false,
+                        "cache": false,
+                        "autoWidth": true,
+                        "responsive":true,
+                        "ordering": false,
+                        "info":     false,
+                        "searching": true,
+                        "aaData" : allRow.content,
+                        "aoColumns":data_column,
+//                        "data": datarow,
+                        select: true
+                    });
+       }else{
+           
+           function getLastYear(selected, thangi) {
+                        return $.ajax({
+                            url: urls+'get-last-year-company/gri-ojk/'+company_id ,
+                            data: {
+                                issession: 1,
+                                selector: selector
+                            },
+                            // dataType: "json",
+                            async: false,
+                            error: function () {
+                                alert("Error occured")
+                            }
+                        });
+
+                    }
+                    var selector = !0;
+                    var ajaxObj = getLastYear(selector, $(this).val());
+                    var lastYear = JSON.parse(ajaxObj.responseText);
+                    var year = lastYear.content[0]-2;
+                    var subquery ="";
+                    var data_column =[{ "title": "PJOK","targets": 0 },
+                                      { "title": "KODE" },
+                                      { "title": "SDGS" },
+                                      { "title": "SDGS DESCRIPTION" },
+                                      { "title": "GRI" },
+                                      { "title": "GRI DESC" },
+                                      { "title": "UNIT" }];
+                    for(var i=lastYear.content[0]-2;i<=lastYear.content[0];i++){
+                        subquery  +=",(SELECT b.value FROM trx_excell  b WHERE b.company_name = '"+company_id+"' AND  b.year = '"+i+"' AND  b.kode=a.kode) AS '"+i+"' ";
+                        data_column.push({"title":i});
+                    }
+                    
+                    var query = "SELECT a.pjok,a.kode,a.sdgs,a.sdgs_desc,a.gri,a.gri_desc,a.unit  "+subquery+"FROM excell a";
+//                    console.log();
+            
+                
+               function getAllRow(selected, thangi) {
+                        return $.ajax({
+                            url: urls+'get-all-row-company/gri-ojk/'+query ,
+                            data: {
+                                issession: 1,
+                                selector: selector
+                            },
+                            // dataType: "json",
+                            async: false,
+                            error: function () {
+                                alert("Error occured")
+                            }
+                        });
+
+                    }
+                    var selector = !0;
+                    var ajaxObj = getAllRow(selector, $(this).val());
+                    var allRow = JSON.parse(ajaxObj.responseText); 
+//                 var datarow =[];
+//                 $.each(allRow.content,function(i,x){
+//                     datarow.push(x);
+//                 });
+//                 console.log(datarow);
+                $('#'+uuid).DataTable({
+                        responsive: true,
+                        sDom: 'lrtip',
+                        "retrieve": true,
+                        "bLengthChange": false,
+                        "cache": false,
+                        "autoWidth": true,
+                        "responsive":true,
+//                        "paging":   false,
+                        "ordering": false,
+                        "info":     false,
+//                        "ajax": {
+//                            "url": urls+'get-all-row-company/gri-ojk/'+query ,
+//                            dataSrc: 'content',
+//                        },
+                        "searching": true,
+                        "aaData" : allRow.content,
+                        "aoColumns":data_column,
+//                        "data": datarow,
+                        select: true
+                    });
+                    
+       }
+        
+    });
     
     if((privilege=="SUPER" || privilege=="ADMIN") && id_prov=="000"){
     	$('#addNew').show();
@@ -299,39 +514,7 @@
 	if(privilege=="USER"){
 		$('#addNew').hide();
 	}
-    var table = $('#tabel-role').DataTable({
-        responsive: true,
-        sDom: 'lrtip',
-        "bLengthChange": false,
-        "cache": false,
-        "autoWidth": true,
-        "responsive":true,
-        "ajax": {
-            "url": '/sdg/admin/list-entry/gri-ojk/',
-            dataSrc: 'content',
-        },
-        "searching": true,
-        "columns": [
-            {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";}
-            },
-            {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.company_name)+"</div>";}
-            },
-            {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;text-align:center;'>"+(row.year)+"</div>";}
-            },
-            {"data": function (row, data, index, display) {
-//            	if(privilege=="SUPER"){
-            		 return "<div style='text-align:center;'>"+
-                     '<button data-id="'+row.id+'" data-year="'+row.year+'"  data-company="'+row.company_name+'" type="button" title="update" class="btn btn-success btn-mini update"><i class="icon-list"></i></button>&nbsp;&nbsp;</div>';
-              }
-            }
-        ],
-        "columnDefs": [
-        ],
-        select: true
-    });
+   
     $('#text-cari').on( 'keyup', function () {
         var val=$(this).val();
         table.search(val).draw();
@@ -444,5 +627,11 @@
                         });
                         
                  });
+    function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+            });
+        }
 </script>
 </html>
