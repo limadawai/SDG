@@ -837,97 +837,99 @@
                     },
                     "searching": true,
                     "columns": [
-                        {"data": function (row, data, index, display) {
-                            var cat = $("#idrole").find(":selected").data("cat");
-                            if(cat == "NSA"){
-                                    var text = "";
-                                    $.ajax({
-                            url: urls + 'best-practice/list-nsamap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+row[8],
-                            type: 'get',
-                            dataType: 'json',
-                            cache: false,
-                            async : false,
-                            success: function (result1) {
-                                    for (var k = 0; k < result1.content.length; k++) {
-                                            var nm_goals;
-                                            var nm_target;
-                                            var nm_indicator;
-                                    if($("#fs").is(':checked')){
-                                            nm_goals = result1.content[k][1];
-                                            nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-                                            nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-                                                            }else{
-                                                                    nm_goals = result1.content[k][2];
-                                                                    nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-                                                                    nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-                                                            }
-                                    text += '<label style="display:inline-block;white-space:nowrap;">'+
-                                                                            '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
-                                                      '</label><br/>';
-                                        text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-                                                                                    '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
-                                                         '</label><br/>';
-                                         text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-                                                             '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
-                                                       '</label><br/>';
-                                    }
-                            }
-                            });
-                            }else{
-                                    var text = "";
-                                    $.ajax({
-                            url: urls + 'best-practice/list-govmap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+row[8],
-                            type: 'get',
-                            dataType: 'json',
-                            cache: false,
-                            async : false,
-                            success: function (result1) {
-                                    for (var k = 0; k < result1.content.length; k++) {
-                                            var nm_goals;
-                                            var nm_target;
-                                            var nm_indicator;
-                                    if($("#fs").is(':checked')){
-                                            nm_goals = result1.content[k][1];
-                                            nm_target = (result1.content[k][3]?result1.content[k][3]:"");
-                                            nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
-                                                            }else{
-                                                                    nm_goals = result1.content[k][2];
-                                                                    nm_target = (result1.content[k][4]?result1.content[k][4]:"");
-                                                                    nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
-                                                            }
-                                    text += '<label style="display:inline-block;white-space:nowrap;">'+
-                                                                            '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
-                                                      '</label><br/>';
-                                        text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-                                                                                    '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
-                                                         '</label><br/>';
-                                         text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-                                                             '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
-                                                       '</label><br/>';
-                                    }
-                            }
-                            });
-                            }
-                            return "<div style='font-size:90%;'>"+text+"</div>";
-                    }},
                     {"data": function (row, data, index, display) {
-                                    var nama="";
-                                    var cat = $("#idrole").find(":selected").data("cat");
+                        var cat = $("#idrole").find(":selected").data("cat");
+                        if(cat == "NSA"){
+                                var text = "";
+                                $.ajax({
+                        url: urls + 'best-practice/list-nsamap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+row[0],
+                        type: 'get',
+                        dataType: 'json',
+                        cache: false,
+                        async : false,
+                        success: function (result1) {
+                                for (var k = 0; k < result1.content.length; k++) {
+                                        var nm_goals;
+                                        var nm_target;
+                                        var nm_indicator;
+                                if($("#fs").is(':checked')){
+                                        nm_goals = result1.content[k][1];
+                                        nm_target = (result1.content[k][3]?result1.content[k][3]:"");
+                                        nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
+                                                        }else{
+                                                                nm_goals = result1.content[k][2];
+                                                                nm_target = (result1.content[k][4]?result1.content[k][4]:"");
+                                                                nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
+                                                        }
+                                text += '<label style="display:inline-block;white-space:nowrap;">'+
+                                                                        '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
+                                                  '</label><br/>';
+                                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                                                                '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+                                                     '</label><br/>';
+                                     text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                                                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+                                                   '</label><br/>';
+                                }
+                        }
+                        });
+                        }else{
+                            var text = '';
+//                                            var text = row[11];
+                            $.ajax({
+                            url: urls + 'best-practice/list-govmap/'+$('#id_prov').val()+'/'+$("#periode").val().split('###')[0]+'/'+row[0],
+                            type: 'get',
+                            dataType: 'json',
+                            cache: false,
+                            async : false,
+                            success: function (result1) {
+                                    for (var k = 0; k < result1.content.length; k++) {
+                                            var nm_goals;
+                                            var nm_target;
+                                            var nm_indicator;
                                     if($("#fs").is(':checked')){
-                                            if(cat=="NSA"){
-                                                    nama = row[9];
-                                            }else{
-                                                    nama = row[1];	
-                                            }
-                                    }else{
-                                            if(cat=="NSA"){
-                                                    nama = row[10];
-                                            }else{
-                                                    nama = row[2];
-                                            }
+                                            nm_goals = result1.content[k][1];
+                                            nm_target = (result1.content[k][3]?result1.content[k][3]:"");
+                                            nm_indicator = (result1.content[k][5]?result1.content[k][5]:"");
+                                                            }else{
+                                                                    nm_goals = result1.content[k][2];
+                                                                    nm_target = (result1.content[k][4]?result1.content[k][4]:"");
+                                                                    nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
+                                                            }
+                                    text += '<label style="display:inline-block;white-space:nowrap;">'+
+                                                                            '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
+                                                      '</label><br/>';
+                                        text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                                                                    '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+                                                         '</label><br/>';
+                                         text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                                                             '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+                                                       '</label><br/>';
                                     }
-                                    return "<div style='font-size:90%;'>"+nama+"</div>";
-                            }},
+                            }
+                            });
+                        }
+                        return "<div style='font-size:90%;'>"+text+"</div>";
+                }},
+                {"data": function (row, data, index, display) {
+//						var nama="";
+//						var cat = $("#idrole").find(":selected").data("cat");
+//						if($("#fs").is(':checked')){
+//							if(cat=="NSA"){
+//								nama = row[9];
+//							}else{
+//								nama = row[1];	
+//							}
+//						}else{
+//							if(cat=="NSA"){
+//								nama = row[10];
+//							}else{
+//								nama = row[2];
+//							}
+//						}
+//						return "<div style='font-size:90%;'>"+nama+"</div>";
+                                return "<div style='font-size:90%;'>"+row[11]+"</div>";
+                }},
                     {"data": function (row, data, index, display) {
                                     return "<div style='font-size:90%;'>"+row[3]+" "+row[4]+"</div>";
                             }},
