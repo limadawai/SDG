@@ -39,7 +39,7 @@ public class EntryGriojk implements Serializable {
         this.file2 = file2;
     }
 
-    public EntryGriojk(Integer id, String company_name, Integer year, String file1, String file2, Integer approval, String description) {
+    public EntryGriojk(Integer id, String company_name, Integer year, String file1, String file2, String description,Integer approval ) {
         this.id = id;
         this.company_name = company_name;
         this.year = year;
