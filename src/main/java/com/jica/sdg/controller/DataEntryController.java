@@ -1292,7 +1292,7 @@ public class DataEntryController {
         Map<String, Object> hasil = new HashMap<>();
         for (Object[] row : rows) {
             result.add(
-                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4])
+                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
             );
         }
         hasil.put("content",result);

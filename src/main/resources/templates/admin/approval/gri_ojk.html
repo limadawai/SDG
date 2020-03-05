@@ -41,10 +41,14 @@
                                                 	<span class="lang_eng" style="display:none">Company</span>
                                                 	<span class="lang_indo">Perusahaan</span>
                                                 </th>
-                                                <th style="text-align:center;font-size:80%;">
+                                                 <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">Year</span>
                                                 	<span class="lang_indo">Tahun</span>
                                                 </th>
+                                                <th style="text-align:center;font-size:80%;">
+                                                	<span class="lang_eng" style="display:none">Status</span>
+                                                	<span class="lang_indo">Status</span>
+                                                </th>                                               
                                                 <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">Action</span>
                                                 	<span class="lang_indo">Aksi</span>
@@ -320,10 +324,26 @@
                 return "<div style='font-size:90%;text-align:center;'>"+(row.year)+"</div>";}
             },
             {"data": function (row, data, index, display) {
+                var status = '';
+                if(row.approval==null||row.approval==1||row.approval==3){
+                    status = '-'
+                }
+                if(row.approval==2){
+                    status = 'Approve'
+                }
+                return "<div style='font-size:90%;text-align:center;'>"+status+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                    var button = "";
+                    if(row.approval==2){
+                        button = '<button data-id="'+row.id+'" type="button" title="unUprove" class="btn btn-success btn-mini unuprove">UnApprove</button>&nbsp;&nbsp;';
+                    }else{
+                        button = '<button data-id="'+row.id+'" type="button" title="update" class="btn btn-success btn-mini update"><i class="icon-circle-blank"></i></button>&nbsp;&nbsp;';
+                    }
 //            	if(privilege=="SUPER"){
             		 return "<div style='text-align:center;'>"+
-                     '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file1+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+
-                     '<button data-id="'+row.id+'" type="button" title="update" class="btn btn-success btn-mini update"><i class="icon-circle-blank"></i></button>&nbsp;&nbsp;';
+                     '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file1+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+button;
+                     
               }
             }
         ],
@@ -403,6 +423,16 @@
                         $('#myModal').modal('show');
                     },
                 })
-     });
+            }).on('click','.unuprove',function(){
+                var id = $(this).attr('data-id');
+                $.ajax({
+                      type: "GET",
+                      url: urls+'set-unUprove/gri-ojk/'+id,
+                      success: function (result) {
+                          table.ajax.url(urls+'list-entry/gri-ojk/').load();
+                      },
+                  }) 
+                
+            });
 </script>
 </html>
