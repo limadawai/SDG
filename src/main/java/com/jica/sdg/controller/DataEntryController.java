@@ -58,6 +58,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 //import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellReference;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -1284,7 +1292,7 @@ public class DataEntryController {
             if(id.equals("")){
                  UUID uuid1 = UUID.randomUUID();
                  UUID uuid2 = UUID.randomUUID();
-                 String file1 =  uuid1.toString() + ".xls";
+                 String file1 =  company_name+"-"+year+".xls";
                  String file2 =  uuid2.toString() + ".xls";
                 em.createNativeQuery("INSERT INTO entry_gri_ojk (company_name,year,file1,file2) values ('"+company_name+"','"+year+"','"+file1+"','"+file2+"')").executeUpdate();
                 String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
@@ -1292,7 +1300,7 @@ public class DataEntryController {
                 if (!StringUtils.isEmpty(uploadedFileName)) {
                     try {
 
-                            saveUploadedFiles(Arrays.asList(uploadfiles),file1,file2);
+                            saveUploadedFiles(Arrays.asList(uploadfiles),file1,file2,year,company_name);
 
                         } catch (IOException e) {
 //                            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -1306,7 +1314,7 @@ public class DataEntryController {
                 + "test", HttpStatus.OK);
 	}
         
-        private void saveUploadedFiles(List<MultipartFile> files,String file1,String file2) throws IOException {
+        private void saveUploadedFiles(List<MultipartFile> files,String file1,String file2,String year,String company) throws IOException {
             int i = 1;
             for (MultipartFile file : files) {
                 
@@ -1322,17 +1330,39 @@ public class DataEntryController {
                     }
     //                System.out.println(uploadpath);
                     String fileExtension=file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
-                    //String fileName = StringUtils.cleanPath(period+"_file"+Integer.toString(i)+"_"+file.getOriginalFilename()).toLowerCase();
                     String fileName = StringUtils.cleanPath(rename).toLowerCase();
                     Path path = Paths.get(uploadpath +"/"+ fileName);
                     Files.write(path, bytes);
-                   
+                    
+                    String vImportExcell = uploadpath +"/"+ fileName;
+                    importExcell(vImportExcell,year,company);
                 }
                 
                  i++;
             }
 
         }
+        
+
+    public  void importExcell(String path,String year,String company) throws FileNotFoundException, IOException {
+       FileInputStream fis = new FileInputStream(path);
+       DataFormatter formatter = new DataFormatter();
+       Workbook wb = new HSSFWorkbook(fis);
+       Sheet sheet1 = wb.getSheetAt(0);
+       int i=0;
+        for (Row row : sheet1) {
+                String Kode = formatter.formatCellValue(wb.getSheetAt(0).getRow(i).getCell(CellReference.convertColStringToIndex("B")));
+                String value = formatter.formatCellValue(wb.getSheetAt(0).getRow(i).getCell(CellReference.convertColStringToIndex("I")));
+                if(!value.equals("VALUE")&&!value.equals("")){
+                    String filename= company+"-"+year+".xls";
+                   em.createNativeQuery("INSERT INTO trx_excell (year,kode,company_name,value,name_file) values ('"+year+"','"+Kode+"','"+company+"','"+value+"','"+filename+"')").executeUpdate(); 
+//                   System.out.println(year+"=>"+company+"=>"+Kode+"=>"+value); 
+                }
+            i++;
+        }
+    }
+        
+        
         
        @DeleteMapping("admin/delete-entry/gri-ojk/{id}")
         @ResponseBody

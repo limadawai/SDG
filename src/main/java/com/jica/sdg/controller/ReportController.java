@@ -1,5 +1,6 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.EntryGriojk;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jica.sdg.model.Problemlist;
+import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.Role;
 import com.jica.sdg.service.ISdgGoalsService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.ISdgTargetService;
@@ -29,6 +32,7 @@ import com.jica.sdg.service.SdgFundingService;
 import com.jica.sdg.service.SdgGoalsService;
 import com.jica.sdg.service.SdgIndicatorService;
 import com.jica.sdg.service.SdgTargetService;
+import java.util.Optional;
 
 @Controller
 public class ReportController {
@@ -827,5 +831,43 @@ public class ReportController {
         return hasil;
     }
 
+     @GetMapping("admin/home-report/gri-ojk")
+        public String listgriojk(Model model, HttpSession session) {
+            Integer id_role = (Integer) session.getAttribute("id_role");
+            Optional<Role> list = roleService.findOne(id_role);
+            String id_prov = list.get().getId_prov();
+            String privilege = list.get().getPrivilege();
+            if(privilege.equals("SUPER")) {
+                    model.addAttribute("listprov", provinsiService.findAllProvinsi());
+            }else {
+                    Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+                    list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+            }
+            model.addAttribute("lang", session.getAttribute("bahasa"));
+                    model.addAttribute("name", session.getAttribute("name"));
+                    model.addAttribute("id_prov", id_prov);
+                    model.addAttribute("privilege", privilege);
+                    model.addAttribute("id_role", id_role);
+            return "admin/report/gri_ojk";
 
+        }
+        
+        @GetMapping("admin/get-report/gri-ojk/{year}/{company}")
+        public @ResponseBody Map<String, Object> getReport(@PathVariable("year") Integer year,@PathVariable("company") String  company) {
+            String sql = "SELECT a.kode,a.pjok,a.sdgs,a.sdgs_desc,a.gri,a.gri_desc,b.year,b.company_name,b.value,a.unit FROM excell a JOIN trx_excell b ON a.kode = b.kode \n" +
+                          "where b.year = '"+year+"' and company_name ='"+company+"'";
+            Query list = em.createNativeQuery(sql);
+            Map<String, Object> hasil = new HashMap<>();
+            hasil.put("content",list.getResultList());
+            return hasil;
+        }
+        @GetMapping("admin/get-report/gri-ojk")
+        public @ResponseBody Map<String, Object> getReport() {
+            String sql = "SELECT a.kode,a.pjok,a.sdgs,a.sdgs_desc,a.gri,a.gri_desc,b.year,b.company_name,b.value,a.unit FROM excell a JOIN trx_excell b ON a.kode = b.kode ";
+            Query list = em.createNativeQuery(sql);
+            Map<String, Object> hasil = new HashMap<>();
+            hasil.put("content",list.getResultList());
+            return hasil;
+        }
+        
 }
