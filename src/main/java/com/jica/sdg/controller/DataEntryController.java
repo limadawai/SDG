@@ -244,28 +244,54 @@ public class DataEntryController {
         return hasil;
     }
     
-    @GetMapping("admin/list-entry-sdg-report/{id_prov}/{id_role}/{id_monper}")
-    public @ResponseBody Map<String, Object> listEntrySdgReport(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper) {
+    @GetMapping("admin/list-entry-sdg-report/{id_prov}/{id_role}/{id_monper}/{sdg}")
+    public @ResponseBody Map<String, Object> listEntrySdgReport(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("sdg") String sdg) {
     	Query query;
-    	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
-                "b.nm_goals_eng, \n" +
-                "c.nm_target_eng, d.nm_indicator_eng, \n" +
-                "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis "+
-                "from ran_rad as g \n" +
-                "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
-                "left join sdg_goals as b on a.id_goals = b.id \n" +
-                "left join sdg_target as c on a.id_target = c.id \n" +
-                "left join sdg_indicator as d on a.id_indicator = d.id \n" +
-                "left join ref_unit as h on d.unit = h.id_unit \n" +
-                "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
-                "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
-                "left join ref_role as l on a.id_role = l.id_role \n" +
-                "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
-        query = em.createNativeQuery(sql);
-        query.setParameter("id_prov", id_prov);
-        query.setParameter("id_role", id_role);
-        query.setParameter("id_monper", id_monper);
-    	
+    	if(sdg.equals("0")) {
+    		String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
+                    "b.nm_goals_eng, \n" +
+                    "c.nm_target_eng, d.nm_indicator_eng, \n" +
+                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis "+
+                    "from ran_rad as g \n" +
+                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
+                    "left join sdg_goals as b on a.id_goals = b.id \n" +
+                    "left join sdg_target as c on a.id_target = c.id \n" +
+                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
+                    "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
+                    "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
+                    "left join ref_role as l on a.id_role = l.id_role \n" +
+                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_monper", id_monper);
+    	}else {
+    		String[] arrOfStr = sdg.split(","); 
+    		StringBuffer goals = new StringBuffer();
+    		for (int i = 0; i < arrOfStr.length; i++) {
+    			String[] arrOfStr1 = arrOfStr[i].split("---");
+    			
+    		}
+    		String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
+                    "b.nm_goals_eng, \n" +
+                    "c.nm_target_eng, d.nm_indicator_eng, \n" +
+                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis "+
+                    "from ran_rad as g \n" +
+                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
+                    "left join sdg_goals as b on a.id_goals = b.id \n" +
+                    "left join sdg_target as c on a.id_target = c.id \n" +
+                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
+                    "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
+                    "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
+                    "left join ref_role as l on a.id_role = l.id_role \n" +
+                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_monper", id_monper);
+    	}
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
