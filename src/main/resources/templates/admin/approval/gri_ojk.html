@@ -322,19 +322,8 @@
             {"data": function (row, data, index, display) {
 //            	if(privilege=="SUPER"){
             		 return "<div style='text-align:center;'>"+
-//                     '<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
                      '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file1+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+
-                      '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file2+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt">   </i></a>&nbsp;&nbsp;'+
                      '<button data-id="'+row.id+'" type="button" title="update" class="btn btn-success btn-mini update"><i class="icon-circle-blank"></i></button>&nbsp;&nbsp;';
-//                     '<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-//            	}else if(id_role==row.id_role){
-//            		 return "<div style='text-align:center;'>"+
-//                     '<button data-id="'+row.id_unit+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
-//                     '<button data-id="'+row.id_unit+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
-//                     '<button data-id="'+row.id_unit+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-//            	}else{
-//            		return "";
-//            	}
               }
             }
         ],
@@ -404,58 +393,16 @@
 	$('#tbody-role').on('click', '.update', function(){
 		var id = $(this).attr('data-id');
 		$.ajax({
-			type: "GET",
-            url: urls+'get-approval/gri-ojk/'+id,
-            success: function (result) {
-            	var val = result.content;
-                $('#id').val(id);
-                $('#description').val(val[0].description);
-                 $("input:radio[value='"+val[0].approval+"']").prop('checked',true);
-                $('#myModal').modal('show');
-            },
-        })
-     }).on('click', '.detail', function(){
-		var id = $(this).attr('data-id');
-		$.ajax({
-			type: "GET",
-            url: urls+'manajemen/get-unit/'+id,
-            success: function (result) {
-            	var val = result.content;
-                    $('#nm_unit').val(val[0].nm_unit).attr("readonly",true);
-                    $('#submit').prop('disabled',true)
-                    $('#myModal').modal('show');
-            },
-        })
-     }).on('click', '.delete', function(){
-		var id = $(this).attr('data-id');
-		swal({
-            title: titleDel,
-            text: messDel,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: buttDel
-        }).then(function () {
-        	$.ajax({
-				type: "DELETE",
-                url: urls+'delete-entry/gri-ojk/'+id,
-                beforeSend : function(xhr){
-                	xhr.setRequestHeader(header,token);
-                },
-                success: function (result) {
-                	swal(titleOk,messOk,'success');
-                	table.ajax.url(urls+'list-entry/gri-ojk/').load();
-                },
-                error:function (result) {
-                	swal(titleOk,messNOk,'error');
-                },
-            })
-            
-        }, function (dismiss) {
-            if (dismiss === 'cancel') {
-            }
-        })
+                    type: "GET",
+                    url: urls+'get-approval/gri-ojk/'+id,
+                    success: function (result) {
+                        var val = result.content;
+                        $('#id').val(id);
+                        $('#description').val(val[0].description);
+                         $("input:radio[value='"+val[0].approval+"']").prop('checked',true);
+                        $('#myModal').modal('show');
+                    },
+                })
      });
 </script>
 </html>
