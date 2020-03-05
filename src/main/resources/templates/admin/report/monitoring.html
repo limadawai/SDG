@@ -195,7 +195,6 @@
                 dataType: 'json',
                 cache: false,
                 success: function(result) {
-                    //console.log(result);
                     $("#role").empty();
                     $("#role").append("<option value='0'>-- Pilih Role --</option>");
                     for (var i=0; i<result.length; i++) {
@@ -418,7 +417,6 @@
 		}else{
 			sdg_indicator = '0';
 		}
-		console.log(sdg_indicator);
 		loadData(sdg_indicator);
     });
 
@@ -510,7 +508,7 @@
         }
         var tabelSdg = "";
         var textSdg = "";
-        var tabGov = false;
+        
         if(cekSdg.length>0){
         	var spansdg;
         	if(sts == 'yearly'){
@@ -606,10 +604,21 @@
                        			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][5]+"</b></p>";
                        		}else if(row[ig][2]!=row[i][2]){
                        			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][5]+"</b></p>";
-                       			
                        		}else{
-                       			tabGov = true;
+                       			//tabGov = false;
                        		}
+                       		var ids = i+1;
+                       		var tabGov = false;
+                       		if(i<row.length-1){
+                       			if((row[ids][2]!=row[i][2]) && disaggre!=""){
+                       				tabGov = true;
+                       			}
+                       		}else if(i==row.length-1){
+                       			if(disaggre!=""){
+                       				tabGov = true;
+                       			}
+                       		}
+                       		
                        		textSdg += disaggre;
                         }else{
                         	var disaggre = "";
@@ -636,9 +645,17 @@
                        			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][10]+"</b></p>";
                        		}else if(row[ig][2]!=row[i][2]){
                        			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][10]+"</b></p>";
-                       			
-                       		}else{
-                       			tabGov = true;
+                       		}
+                       		var ids = i+1;
+                       		var tabGov = false;
+                       		if(i<row.length-1){
+                       			if((row[ids][2]!=row[i][2]) && disaggre!=""){
+                       				tabGov = true;
+                       			}
+                       		}else if(i==row.length-1){
+                       			if(disaggre!=""){
+                       				tabGov = true;
+                       			}
                        		}
                        		textSdg += disaggre;                       		
                        	}
@@ -726,7 +743,7 @@
                 			});
                 		}
                 		textSdg += "<td></td></tr>";
-                		textSdg += "<tbody></table>";
+                		textSdg += "</tbody></table>";
 
                 		if(disaggre=="" || (disaggre!="" && tabGov)){
                 			//tabel GOV Program
