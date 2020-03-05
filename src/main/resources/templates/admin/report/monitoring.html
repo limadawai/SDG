@@ -197,6 +197,7 @@
                 success: function(result) {
                     $("#role").empty();
                     $("#role").append("<option value='0'>-- Pilih Role --</option>");
+                    $("#role").append("<option data-cat='all' value='all'>-- ALL --</option>");
                     for (var i=0; i<result.length; i++) {
                         $("#role").append("<option data-cat='"+result[i]['cat_role']+"' value='" + result[i]['id_role'] + "'>" + result[i]['nm_role'] + "</option>");
                     }
@@ -259,110 +260,165 @@
             }); */
             $("#indi").html("");
             
-            $.ajax({
-                url: urls + "get-sdg-goals",
-                type: 'get',
-                data: 'id_role=' + idrole,
-                dataType: 'json',
-                cache: false,
-                global: false,
-                success: function (result) {
-					var row = result.sdg;
-					$("#goals").empty();
-                    $("#goals").html('<option value="0" >-- All --</option>');
-                    for (var i = 0; i < row.length; i++) {
-                    	var nm_goals;
-                    	if($('#fs').is(':checked')){
-                    		nm_goals = row[i][1];
-                    	}else{
-                    		nm_goals = row[i][2];
-                    	}
-                        $("#goals").append("<option value='" + row[i][0] + "'>"+nm_goals+"</option>");
-                    }
-                }
-            });
-            
             /* SDG INDICATOR */
             //Indikator SDG untuk mapping
-        	        
-        	        $.ajax({
-                        //url: urls + 'list-sdgGoals',
-                        url: urls + "get-sdg-goals",
-                        data: 'id_role=' + idrole,
-                        type: 'get',
-                        dataType: 'json',
-                        cache: false,
-                        async : false,
-                        success: function (response) {
-                        		var option = "";
-                        		var cekbok = "";
-                        		$('.accordion-inner').html(cekbok);
-                        		for (var i = 0; i < response.sdg.length; i++) {
-                        			var nm_goals;
-                        			var id_goals=response.sdg[i][0];
-                                	if($("#fs").is(':checked')){
-                                		nm_goals = response.sdg[i][1];
-            						}else{
-            							nm_goals = response.sdg[i][2];
-            						}
-                                	option += '<optgroup id="" label="'+response.sdg[i][3]+' '+nm_goals+'">';
-                                	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
-                                				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.sdg[i][0]+'---0---0">&nbsp;&nbsp;&nbsp;'+
-        			                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
-        			                      '</label><br/>';
-                                	$.ajax({
-                                        url: urls + 'list-sdgTarget/'+response.sdg[i][0],
-                                        type: 'get',
-                                        dataType: 'json',
-                                        cache: false,
-                                        async : false,
-                                        success: function (result) {
-                                        	for (var j = 0; j < result.content.length; j++) {
-                                        		var nm_target;
-                                        		var id_target=result.content[j].id;
-                                            	if($("#fs").is(':checked')){
-                                            		nm_target = result.content[j].nm_target;
-                        						}else{
-                        							nm_target = result.content[j].nm_target_eng;
-                        						}
-                                            	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
-                                            	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-                                            					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.sdg[i][0]+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-        							                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
-        							                      '</label><br/>';
-                                            	$.ajax({
-                                                    url: urls + 'list-sdgIndicator/'+response.sdg[i][0]+'/'+result.content[j].id,
-                                                    type: 'get',
-                                                    dataType: 'json',
-                                                    cache: false,
-                                                    async : false,
-                                                    success: function (result1) {
-                                                    	for (var k = 0; k < result1.content.length; k++) {
-                                                    		var nm_indicator;
-                                                    		var id_indicator=result1.content[k][0];
-                                                        	if($("#fs").is(':checked')){
-                                                        		nm_indicator = result1.content[k][4];
-                                    						}else{
-                                    							nm_indicator = result1.content[k][6];
-                                    						}
-                                                        	option += '<option value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
-                                                        	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-        								                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-        								                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+        	        if(idrole=="all"){
+        	        	$.ajax({
+        	                url: urls + 'list-sdgGoals',
+        	                type: 'get',
+        	                dataType: 'json',
+        	                cache: false,
+        	                async : false,
+        	                success: function (response) {
+        	                		var option = "";
+        	                		var cekbok = "";
+        	                		$('.accordion-inner').html(cekbok);
+        	                		for (var i = 0; i < response.content.length; i++) {
+        	                			var nm_goals;
+        	                			var id_goals=response.content[i].id;
+        	                        	if($("#fs").is(':checked')){
+        	                        		nm_goals = response.content[i].nm_goals;
+        	    						}else{
+        	    							nm_goals = response.content[i].nm_goals_eng;
+        	    						}
+        	                        	option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
+        	                        	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
+        	                        				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
+        				                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+        				                      '</label><br/>';
+        	                        	$.ajax({
+        	                                url: urls + 'list-sdgTarget/'+response.content[i].id,
+        	                                type: 'get',
+        	                                dataType: 'json',
+        	                                cache: false,
+        	                                async : false,
+        	                                success: function (result) {
+        	                                	for (var j = 0; j < result.content.length; j++) {
+        	                                		var nm_target;
+        	                                		var id_target=result.content[j].id;
+        	                                    	if($("#fs").is(':checked')){
+        	                                    		nm_target = result.content[j].nm_target;
+        	                						}else{
+        	                							nm_target = result.content[j].nm_target_eng;
+        	                						}
+        	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
+        	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+        								                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
         								                      '</label><br/>';
-                                                    	}
-                                                    }
-                                            	});
-                                            	option += '</optgroup>';
-                                        	}
-                                        }
-                                	});
-                                	option += '</optgroup>';
-                        		}
-                        		cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
-                        		$('.accordion-inner').append(cekbok);
-                        	}
-                        });
+        	                                    	$.ajax({
+        	                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
+        	                                            type: 'get',
+        	                                            dataType: 'json',
+        	                                            cache: false,
+        	                                            async : false,
+        	                                            success: function (result1) {
+        	                                            	for (var k = 0; k < result1.content.length; k++) {
+        	                                            		var nm_indicator;
+        	                                            		var id_indicator=result1.content[k][0];
+        	                                                	if($("#fs").is(':checked')){
+        	                                                		nm_indicator = result1.content[k][4];
+        	                            						}else{
+        	                            							nm_indicator = result1.content[k][6];
+        	                            						}
+        	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
+        	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
+        									                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+        									                      '</label><br/>';
+        	                                            	}
+        	                                            }
+        	                                    	});
+        	                                    	option += '</optgroup>';
+        	                                	}
+        	                                }
+        	                        	});
+        	                        	option += '</optgroup>';
+        	                		}
+        	                		$('.accordion-inner').append(cekbok);
+        	                	}
+        	                });
+        	        }else{
+        	        	$.ajax({
+                            //url: urls + 'list-sdgGoals',
+                            url: urls + "get-sdg-goals",
+                            data: 'id_role=' + idrole,
+                            type: 'get',
+                            dataType: 'json',
+                            cache: false,
+                            async : false,
+                            success: function (response) {
+                            		var option = "";
+                            		var cekbok = "";
+                            		$('.accordion-inner').html(cekbok);
+                            		for (var i = 0; i < response.sdg.length; i++) {
+                            			var nm_goals;
+                            			var id_goals=response.sdg[i][0];
+                                    	if($("#fs").is(':checked')){
+                                    		nm_goals = response.sdg[i][1];
+                						}else{
+                							nm_goals = response.sdg[i][2];
+                						}
+                                    	option += '<optgroup id="" label="'+response.sdg[i][3]+' '+nm_goals+'">';
+                                    	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
+                                    				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.sdg[i][0]+'---0---0">&nbsp;&nbsp;&nbsp;'+
+            			                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+            			                      '</label><br/>';
+                                    	$.ajax({
+                                            url: urls + 'list-sdgTarget/'+response.sdg[i][0],
+                                            type: 'get',
+                                            dataType: 'json',
+                                            cache: false,
+                                            async : false,
+                                            success: function (result) {
+                                            	for (var j = 0; j < result.content.length; j++) {
+                                            		var nm_target;
+                                            		var id_target=result.content[j].id;
+                                                	if($("#fs").is(':checked')){
+                                                		nm_target = result.content[j].nm_target;
+                            						}else{
+                            							nm_target = result.content[j].nm_target_eng;
+                            						}
+                                                	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
+                                                	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                                					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.sdg[i][0]+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+            							                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+            							                      '</label><br/>';
+                                                	$.ajax({
+                                                        url: urls + 'list-sdgIndicator/'+response.sdg[i][0]+'/'+result.content[j].id,
+                                                        type: 'get',
+                                                        dataType: 'json',
+                                                        cache: false,
+                                                        async : false,
+                                                        success: function (result1) {
+                                                        	for (var k = 0; k < result1.content.length; k++) {
+                                                        		var nm_indicator;
+                                                        		var id_indicator=result1.content[k][0];
+                                                            	if($("#fs").is(':checked')){
+                                                            		nm_indicator = result1.content[k][4];
+                                        						}else{
+                                        							nm_indicator = result1.content[k][6];
+                                        						}
+                                                            	option += '<option value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
+                                                            	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+            								                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
+            								                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+            								                      '</label><br/>';
+                                                        	}
+                                                        }
+                                                	});
+                                                	option += '</optgroup>';
+                                            	}
+                                            }
+                                    	});
+                                    	option += '</optgroup>';
+                            		}
+                            		cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
+                            		$('.accordion-inner').append(cekbok);
+                            	}
+                            });
+        	        }
+        	        
         	        $('.accordion-inner').on('click', '.menu-master', function(){
         	        	var id = $(this).data('id');
         	        	if ($(this).is(":checked")) {
@@ -440,6 +496,10 @@
         var cekSdg;
         var cekInd;
         var cekBud;
+        var cekNsaInd;
+        var cekNsaBud;
+        var cekGovInd;
+        var cekGovBud;
         $("#indi").html("");
         $.ajax({
             type: "GET",
@@ -458,6 +518,10 @@
             async:false,
             success: function (result) {
             	cekSdg = result.sdg;
+            	cekNsaInd = result.NsaInd;
+            	cekNsaBud = result.NsaBud;
+            	cekGovInd = result.GovInd;
+            	cekGovBud = result.GovBud;
             	if(cat=="NSA"){
             		cekInd = result.NsaInd;
             		cekBud = result.NsaBud;
@@ -506,6 +570,11 @@
                 	}
                 });
         }
+        
+        /* if($("#role").val()=="all"){
+        	urlEntry = urls + "getallindicatorreport";
+        } */
+        
         var tabelSdg = "";
         var textSdg = "";
         
@@ -576,7 +645,6 @@
                 success: function (res) {
                 	var row = res.content;
                 	var noGoals = 1;
-                	
                 	for(var i=0;i<row.length;i++){
                 		//JUDUL BESAR SDG
                 		if($('#fs').is(':checked')){
@@ -662,6 +730,7 @@
                 		textSdg += tabelSdg+"<tbody>";
                 		var cek=0;
                 		textSdg += "<tr style='font-size:80%;'><td></td><td>"+row[i][6]+"</td><td></td>";
+                		
                 		for(var y=monper_year[0];y<=monper_year[1];y++){
                 			$.ajax({
                             	url: urls + "list-entry-sdg/"+idprov+"/"+idrole+"/"+id_monper+'/'+y,
@@ -670,75 +739,76 @@
                                 async:false,
                                 success: function (res) {
                                 	var row = res.content;
-                                	var nilai1 = "";
-                            		var nilai2 = "";
-                            		var nilai3 = "";
-                            		var nilai4 = "";
-                            		var tahun = "";
-                            		if(row[i][30] && row[i][31]){
-                            			if(row[i][37]){
-                            				nilai1 = (row[i][37])?row[i][37]:'';
-                            			}else{
-                            				nilai1 = (row[i][33])?row[i][33]:'';
-                            			}
-                            			if(row[i][38]){
-                            				nilai2 = (row[i][38])?row[i][38]:'';
-                            			}else{
-                            				nilai2 = (row[i][34])?row[i][34]:'';
-                            			}
-                            			if(row[i][39]){
-                            				nilai3 = (row[i][39])?row[i][39]:'';
-                            			}else{
-                            				nilai3 = (row[i][35])?row[i][35]:'';
-                            			}
-                            			if(row[i][40]){
-                            				nilai4 = (row[i][40])?row[i][40]:'';
-                            			}else{
-                            				nilai4 = (row[i][36])?row[i][36]:'';
-                            			}
-                                	}else{
-                                		if(row[i][21]){
-                                			nilai1 = (row[i][21])?row[i][21]:'';
-                            			}else{
-                            				nilai1 = (row[i][9])?row[i][9]:'';
-                            			}
-                                		if(row[i][22]){
-                                			nilai2 = (row[i][22])?row[i][22]:'';
-                            			}else{
-                            				nilai2 = (row[i][10])?row[i][10]:'';
-                            			}
-                                		if(row[i][23]){
-                                			nilai3 = (row[i][23])?row[i][23]:'';
-                            			}else{
-                            				nilai3 = (row[i][11])?row[i][11]:'';
-                            			}
-                                		if(row[i][23]){
-                                			nilai4 = (row[i][24])?row[i][24]:'';
-                            			}else{
-                            				nilai4 = (row[i][12])?row[i][12]:'';
-                            			}
-                                	}
-                            		for(var isdg=0;isdg<cekSdg.length;isdg++){
-                            			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:"";
-                            			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:"";
-                            			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:"";
-                            			nilai4 = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==y)?nilai4:"";
-                            		}
+                                	if(row){
+                                		var nilai1 = "";
+                                		var nilai2 = "";
+                                		var nilai3 = "";
+                                		var nilai4 = "";
+                                		var tahun = "";
+                                		if(row[i][30] && row[i][31]){
+                                			if(row[i][37]){
+                                				nilai1 = (row[i][37])?row[i][37]:'';
+                                			}else{
+                                				nilai1 = (row[i][33])?row[i][33]:'';
+                                			}
+                                			if(row[i][38]){
+                                				nilai2 = (row[i][38])?row[i][38]:'';
+                                			}else{
+                                				nilai2 = (row[i][34])?row[i][34]:'';
+                                			}
+                                			if(row[i][39]){
+                                				nilai3 = (row[i][39])?row[i][39]:'';
+                                			}else{
+                                				nilai3 = (row[i][35])?row[i][35]:'';
+                                			}
+                                			if(row[i][40]){
+                                				nilai4 = (row[i][40])?row[i][40]:'';
+                                			}else{
+                                				nilai4 = (row[i][36])?row[i][36]:'';
+                                			}
+                                    	}else{
+                                    		if(row[i][21]){
+                                    			nilai1 = (row[i][21])?row[i][21]:'';
+                                			}else{
+                                				nilai1 = (row[i][9])?row[i][9]:'';
+                                			}
+                                    		if(row[i][22]){
+                                    			nilai2 = (row[i][22])?row[i][22]:'';
+                                			}else{
+                                				nilai2 = (row[i][10])?row[i][10]:'';
+                                			}
+                                    		if(row[i][23]){
+                                    			nilai3 = (row[i][23])?row[i][23]:'';
+                                			}else{
+                                				nilai3 = (row[i][11])?row[i][11]:'';
+                                			}
+                                    		if(row[i][23]){
+                                    			nilai4 = (row[i][24])?row[i][24]:'';
+                                			}else{
+                                				nilai4 = (row[i][12])?row[i][12]:'';
+                                			}
+                                    	}
+                                		for(var isdg=0;isdg<cekSdg.length;isdg++){
+                                			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:"";
+                                			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:"";
+                                			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:"";
+                                			nilai4 = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==y)?nilai4:"";
+                                		}
 
-                            		textSdg += "<td>"+(row[i][8]?row[i][8]:'')+"</td>";
-                            		if(sts == 'yearly'){
-                            			textSdg += "<td>"+nilai1+"</td>";	
-                            		}else if(sts == 'semesterly'){
-                            			textSdg += "<td>"+nilai1+"</td>";
-                            			textSdg += "<td>"+nilai2+"</td>";
+                                		textSdg += "<td>"+(row[i][8]?row[i][8]:'')+"</td>";
+                                		if(sts == 'yearly'){
+                                			textSdg += "<td>"+nilai1+"</td>";	
+                                		}else if(sts == 'semesterly'){
+                                			textSdg += "<td>"+nilai1+"</td>";
+                                			textSdg += "<td>"+nilai2+"</td>";
+                                    	}
+                                		else if(sts == 'quarterly'){
+                                			textSdg += "<td>"+nilai1+"</td>";
+                                			textSdg += "<td>"+nilai2+"</td>";
+                                			textSdg += "<td>"+nilai3+"</td>";
+                                			textSdg += "<td>"+nilai4+"</td>";
+                                    	}
                                 	}
-                            		else if(sts == 'quarterly'){
-                            			textSdg += "<td>"+nilai1+"</td>";
-                            			textSdg += "<td>"+nilai2+"</td>";
-                            			textSdg += "<td>"+nilai3+"</td>";
-                            			textSdg += "<td>"+nilai4+"</td>";
-                                	}
-                            		
                                 }
                 			});
                 		}
@@ -842,138 +912,150 @@
                     		//ISI TABEL GOV
                     		var cekGov=0;
                     		var cekBudRow=0;
+                    		if(row[i][20]=="Government"){
+                    			cekInd = cekGovInd;
+                    			urlEntry = "getgovindicator";
+                    			urlEntryIsi = "getgovindicatorisi";
+                    		}else{
+                    			cekInd = cekNsaInd;
+                    			urlEntry = "getnsaindicator";
+                    			urlEntryIsi = "getnsaindicatorisi";
+                    		}
                     			if(cekInd.length>0){
                         			$.ajax({
         	                			url: urlEntry,
         	                            type: 'get',
-        	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":idrole, "year":monper_year[0]},
+        	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":row[i][18], "year":monper_year[0]},
         	                            dataType: 'json',
         	                            async: false,
         	                            success: function (result) {
         	                            	var rowGov = result.content
         	                            	for(var j=0;j<rowGov.length;j++){
-        	                            		textSdg += "<tr style='font-size:80%;'>"
-            	                            	if($('#fs').is(':checked')){
-            	                            		textSdg += "<td>"+rowGov[j][0]+"</td><td>"+rowGov[j][2]+"</td><td>"+rowGov[j][4];
-            	                            	}else{
-            	                            		textSdg += "<td>"+rowGov[j][1]+"</td><td>"+rowGov[j][3]+"</td><td>"+rowGov[j][5];
-            	                            	}
-        	                            		textSdg += "<td>"+rowGov[j][6]+"</td>";
-        	                            		
-        	                            		for(var y=monper_year[0];y<=monper_year[1];y++){
-        	                            			$.ajax({
-        	            	                			url: urlEntryIsi,
-        	            	                            type: 'get',
-        	            	                            data: {"id":rowGov[j][25], "year":y},
-        	            	                            dataType: 'json',
-        	            	                            async: false,
-        	            	                            success: function (result) {
-        	            	                            	var rowGov = result.content;
-        	            	                            	for(var j=0;j<rowGov.length;j++){
-        	            	                            		var nilaiGov1;
-        	            	                            		var nilaiGov2;
-        	            	                            		var nilaiGov3;
-        	            	                            		var nilaiGov4;
-        	            	                            		if(rowGov[j][17]){
-        	            	                            			nilaiGov1 = (rowGov[j][17])?rowGov[j][17]:'';
-        	            	                            		}else{
-        	            	                            			nilaiGov1 = (rowGov[j][8])?rowGov[j][8]:'';
-        	            	                            		}
-        	            	                            		if(rowGov[j][18]){
-        	            	                            			nilaiGov2 = (rowGov[j][18])?rowGov[j][18]:'';
-        	            	                            		}else{
-        	            	                            			nilaiGov2 = (rowGov[j][9])?rowGov[j][9]:'';
-        	            	                            		}
-        	            	                            		if(rowGov[j][19]){
-        	            	                            			nilaiGov3 = (rowGov[j][19])?rowGov[j][19]:'';
-        	            	                            		}else{
-        	            	                            			nilaiGov3 = (rowGov[j][10])?rowGov[j][10]:'';
-        	            	                            		}
-        	            	                            		if(rowGov[j][20]){
-        	            	                            			nilaiGov4 = (rowGov[j][20])?rowGov[j][20]:'';
-        	            	                            		}else{
-        	            	                            			nilaiGov4 = (rowGov[j][11])?rowGov[j][11]:'';
-        	            	                            		}
-        	            	                            		
-        	            	                            		for(var igov=0;igov<cekInd.length;igov++){
-        	            	                            			nilaiGov1 = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:"";
-        	            	                            			nilaiGov2 = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:"";
-        	            	                            			nilaiGov3 = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:"";
-        	            	                            			nilaiGov4 = (cekInd[igov][0]=="4" && cekInd[igov][1]==y)?nilaiGov4:"";
-        	            	                            		}
-        	            	                            		textSdg += "<td>"+(rowGov[j][7]?rowGov[j][7]:'')+"</td>";
-        	            	                            		if(stsGov == 'yearly'){
-        	            	                            			textSdg += "<td>"+nilaiGov1+"</td>";
-        	            	                                	}
-        	            	                            		else if(stsGov == 'semesterly'){
-        	            	                            			textSdg += "<td>"+nilaiGov1+"</td>";
-        	            	                            			textSdg += "<td>"+nilaiGov2+"</td>";
-        	            	                                	}
-        	            	                            		else if(stsGov == 'quarterly'){
-        	            	                            			textSdg += "<td>"+nilaiGov1+"</td>";
-        	            	                            			textSdg += "<td>"+nilaiGov2+"</td>";
-        	            	                            			textSdg += "<td>"+nilaiGov3+"</td>";
-        	            	                            			textSdg += "<td>"+nilaiGov4+"</td>";
-        	            	                                	}
-        	            	                            		
-        	            	                            		var nilaiBudGov1;
-        	            	                            		var nilaiBudGov2;
-        	            	                            		var nilaiBudGov3;
-        	            	                            		var nilaiBudGov4;
-        	            	                            		if(rowGov[j][21]){
-        	            	                            			nilaiBudGov1 = (rowGov[j][21])?rowGov[j][21]:'';
-        	            	                            		}else{
-        	            	                            			nilaiBudGov1 = (rowGov[j][12])?rowGov[j][12]:'';
-        	            	                            		}
-        	            	                            		if(rowGov[j][22]){
-        	            	                            			nilaiBudGov2 = (rowGov[j][22])?rowGov[j][22]:'';
-        	            	                            		}else{
-        	            	                            			nilaiBudGov2 = (rowGov[j][13])?rowGov[j][13]:'';
-        	            	                            		}
-        	            	                            		if(rowGov[j][23]){
-        	            	                            			nilaiBudGov3 = (rowGov[j][23])?rowGov[j][23]:'';
-        	            	                            		}else{
-        	            	                            			nilaiBudGov3 = (rowGov[j][14])?rowGov[j][14]:'';
-        	            	                            		}
-        	            	                            		if(rowGov[j][24]){
-        	            	                            			nilaiBudGov4 = (rowGov[j][24])?rowGov[j][24]:'';
-        	            	                            		}else{
-        	            	                            			nilaiBudGov4 = (rowGov[j][15])?rowGov[j][15]:'';
-        	            	                            		}
-        	            	                            		
-        	            	                            		if(cekBud.length>0){
-        	            	                            			for(var ibud=0;ibud<cekBud.length;ibud++){
-        	                	                            			nilaiBudGov1 = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:"";
-        	                	                            			nilaiBudGov2 = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:"";
-        	                	                            			nilaiBudGov3 = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:"";
-        	                	                            			nilaiBudGov4 = (cekBud[ibud][0]=="4" && cekBud[ibud][1]==y)?nilaiBudGov4:"";
-        	                	                            		}
-        	            	                            		}else{
-        	            	                            			nilaiBudGov1 = "";
-        	            	                            			nilaiBudGov2 = "";
-        	            	                            			nilaiBudGov3 = "";
-        	            	                            			nilaiBudGov4 = "";
-        	            	                            		}
-        	            	                            		if(stsBud == 'yearly'){
-        	            	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
-        	            	                                	}
-        	            	                            		else if(stsBud == 'semesterly'){
-        	            	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
-        	            	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
-        	            	                                	}
-        	            	                            		else if(stsBud == 'quarterly'){
-        	            	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
-        	            	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
-        	            	                            			textSdg += "<td>"+nilaiBudGov3+"</td>";
-        	            	                            			textSdg += "<td>"+nilaiBudGov4+"</td>";
-        	            	                                	}
-        	            	                            	}
-        	            	                            }
-        	                            			});
+        	                            		if(rowGov[j][0]){
+        	                            			textSdg += "<tr style='font-size:80%;'>"
+                    	                            	if($('#fs').is(':checked')){
+                    	                            		textSdg += "<td>"+rowGov[j][0]+"</td><td>"+rowGov[j][2]+"</td><td>"+rowGov[j][4];
+                    	                            	}else{
+                    	                            		textSdg += "<td>"+rowGov[j][1]+"</td><td>"+rowGov[j][3]+"</td><td>"+rowGov[j][5];
+                    	                            	}
+                	                            		textSdg += "<td>"+rowGov[j][6]+"</td>";
+                	                            	
+                	                            		for(var y=monper_year[0];y<=monper_year[1];y++){
+                	                            			$.ajax({
+                	            	                			url: urlEntryIsi,
+                	            	                            type: 'get',
+                	            	                            data: {"id":rowGov[j][25], "year":y},
+                	            	                            dataType: 'json',
+                	            	                            async: false,
+                	            	                            success: function (result) {
+                	            	                            	var rowGov = result.content;
+                	            	                            	for(var j=0;j<rowGov.length;j++){
+                	            	                            		var nilaiGov1;
+                	            	                            		var nilaiGov2;
+                	            	                            		var nilaiGov3;
+                	            	                            		var nilaiGov4;
+                	            	                            		if(rowGov[j][17]){
+                	            	                            			nilaiGov1 = (rowGov[j][17])?rowGov[j][17]:'';
+                	            	                            		}else{
+                	            	                            			nilaiGov1 = (rowGov[j][8])?rowGov[j][8]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][18]){
+                	            	                            			nilaiGov2 = (rowGov[j][18])?rowGov[j][18]:'';
+                	            	                            		}else{
+                	            	                            			nilaiGov2 = (rowGov[j][9])?rowGov[j][9]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][19]){
+                	            	                            			nilaiGov3 = (rowGov[j][19])?rowGov[j][19]:'';
+                	            	                            		}else{
+                	            	                            			nilaiGov3 = (rowGov[j][10])?rowGov[j][10]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][20]){
+                	            	                            			nilaiGov4 = (rowGov[j][20])?rowGov[j][20]:'';
+                	            	                            		}else{
+                	            	                            			nilaiGov4 = (rowGov[j][11])?rowGov[j][11]:'';
+                	            	                            		}
+                	            	                            		
+                	            	                            		for(var igov=0;igov<cekInd.length;igov++){
+                	            	                            			nilaiGov1 = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:"";
+                	            	                            			nilaiGov2 = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:"";
+                	            	                            			nilaiGov3 = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:"";
+                	            	                            			nilaiGov4 = (cekInd[igov][0]=="4" && cekInd[igov][1]==y)?nilaiGov4:"";
+                	            	                            		}
+                	            	                            		textSdg += "<td>"+(rowGov[j][7]?rowGov[j][7]:'')+"</td>";
+                	            	                            		if(stsGov == 'yearly'){
+                	            	                            			textSdg += "<td>"+nilaiGov1+"</td>";
+                	            	                                	}
+                	            	                            		else if(stsGov == 'semesterly'){
+                	            	                            			textSdg += "<td>"+nilaiGov1+"</td>";
+                	            	                            			textSdg += "<td>"+nilaiGov2+"</td>";
+                	            	                                	}
+                	            	                            		else if(stsGov == 'quarterly'){
+                	            	                            			textSdg += "<td>"+nilaiGov1+"</td>";
+                	            	                            			textSdg += "<td>"+nilaiGov2+"</td>";
+                	            	                            			textSdg += "<td>"+nilaiGov3+"</td>";
+                	            	                            			textSdg += "<td>"+nilaiGov4+"</td>";
+                	            	                                	}
+                	            	                            		
+                	            	                            		var nilaiBudGov1;
+                	            	                            		var nilaiBudGov2;
+                	            	                            		var nilaiBudGov3;
+                	            	                            		var nilaiBudGov4;
+                	            	                            		if(rowGov[j][21]){
+                	            	                            			nilaiBudGov1 = (rowGov[j][21])?rowGov[j][21]:'';
+                	            	                            		}else{
+                	            	                            			nilaiBudGov1 = (rowGov[j][12])?rowGov[j][12]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][22]){
+                	            	                            			nilaiBudGov2 = (rowGov[j][22])?rowGov[j][22]:'';
+                	            	                            		}else{
+                	            	                            			nilaiBudGov2 = (rowGov[j][13])?rowGov[j][13]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][23]){
+                	            	                            			nilaiBudGov3 = (rowGov[j][23])?rowGov[j][23]:'';
+                	            	                            		}else{
+                	            	                            			nilaiBudGov3 = (rowGov[j][14])?rowGov[j][14]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][24]){
+                	            	                            			nilaiBudGov4 = (rowGov[j][24])?rowGov[j][24]:'';
+                	            	                            		}else{
+                	            	                            			nilaiBudGov4 = (rowGov[j][15])?rowGov[j][15]:'';
+                	            	                            		}
+                	            	                            		
+                	            	                            		if(cekBud.length>0){
+                	            	                            			for(var ibud=0;ibud<cekBud.length;ibud++){
+                	                	                            			nilaiBudGov1 = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:"";
+                	                	                            			nilaiBudGov2 = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:"";
+                	                	                            			nilaiBudGov3 = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:"";
+                	                	                            			nilaiBudGov4 = (cekBud[ibud][0]=="4" && cekBud[ibud][1]==y)?nilaiBudGov4:"";
+                	                	                            		}
+                	            	                            		}else{
+                	            	                            			nilaiBudGov1 = "";
+                	            	                            			nilaiBudGov2 = "";
+                	            	                            			nilaiBudGov3 = "";
+                	            	                            			nilaiBudGov4 = "";
+                	            	                            		}
+                	            	                            		if(stsBud == 'yearly'){
+                	            	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
+                	            	                                	}
+                	            	                            		else if(stsBud == 'semesterly'){
+                	            	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
+                	            	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
+                	            	                                	}
+                	            	                            		else if(stsBud == 'quarterly'){
+                	            	                            			textSdg += "<td>"+nilaiBudGov1+"</td>";
+                	            	                            			textSdg += "<td>"+nilaiBudGov2+"</td>";
+                	            	                            			textSdg += "<td>"+nilaiBudGov3+"</td>";
+                	            	                            			textSdg += "<td>"+nilaiBudGov4+"</td>";
+                	            	                                	}
+                	            	                            	}
+                	            	                            }
+                	                            			});
+                	                            		}
+                	                            		
+                	                            		textSdg += "<td>"+rowGov[j][16]+"</td>";
+                	                            		textSdg += "<td></td><td>"+rowGov[j][26]+"</td></tr>";
         	                            		}
         	                            		
-        	                            		textSdg += "<td>"+rowGov[j][16]+"</td>";
-        	                            		textSdg += "<td></td><td></td></tr>";
         	                            	}
         	                            }
         	                   });

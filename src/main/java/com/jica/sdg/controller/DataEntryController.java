@@ -255,11 +255,18 @@ public class DataEntryController {
     @GetMapping("admin/list-entry-sdg-report/{id_prov}/{id_role}/{id_monper}/{sdg}")
     public @ResponseBody Map<String, Object> listEntrySdgReport(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("sdg") String sdg) {
     	Query query;
+    	String role="";
+    	String sql;
+    	if(id_role.equals("all")) {
+			role = "";
+		}else {
+			role = " and a.id_role = '"+id_role+"' ";
+		}
     	if(sdg.equals("0")) {
-    		String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
+    		sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
                     "b.nm_goals_eng, \n" +
                     "c.nm_target_eng, d.nm_indicator_eng, \n" +
-                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis "+
+                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, l.id_role, l.nm_role, l.cat_role "+
                     "from ran_rad as g \n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -269,19 +276,24 @@ public class DataEntryController {
                     "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
                     "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
                     "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
+                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role;
             query = em.createNativeQuery(sql);
-            query.setParameter("id_prov", id_prov);
-            query.setParameter("id_role", id_role);
-            query.setParameter("id_monper", id_monper);
+            System.out.print(sql);
     	}else {
     		String[] arrOfStr = sdg.split(","); 
     		StringBuffer goals = new StringBuffer();
+    		StringBuffer target = new StringBuffer();
+    		StringBuffer indicator = new StringBuffer();
     		for (int i = 0; i < arrOfStr.length; i++) {
     			String[] arrOfStr1 = arrOfStr[i].split("---");
-    			
+    			for(int j=0;j<arrOfStr1.length;j++) {
+    				if(!arrOfStr1[j].equals("0")) {
+    					goals.append(", ");
+    				}
+    				
+    			}
     		}
-    		String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
+    		sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
                     "b.nm_goals_eng, \n" +
                     "c.nm_target_eng, d.nm_indicator_eng, \n" +
                     "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis "+
@@ -294,15 +306,14 @@ public class DataEntryController {
                     "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
                     "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
                     "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
+                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role;
             query = em.createNativeQuery(sql);
-            query.setParameter("id_prov", id_prov);
-            query.setParameter("id_role", id_role);
-            query.setParameter("id_monper", id_monper);
+            System.out.print(sql);
     	}
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
+        hasil.put("query",sql);
         return hasil;
     }
     
