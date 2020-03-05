@@ -115,7 +115,7 @@
         			//console.log(resindi);
         			var isiindi = "<ul id='ulindi"+idgoals+"'>";
         			for (var i=0; i<resindi.length; i++) {
-        				isiindi += "<li onclick='cekshowreport("+idgoals+", "+idtarget+", "+resindi[i][0]+", "+$("#periode").val()+")'>"+resindi[0][1]+"</li>";
+        				isiindi += "<li onclick='cucukanan("+idgoals+", "+idtarget+", "+resindi[i][0]+", "+$("#periode").val()+","+1+")'>"+resindi[i][1]+"</li>";
         				getDisaggre(idgoals, resindi[i][0]);
         			}
         			isiindi += "</ul>";
@@ -143,25 +143,6 @@
         	});
         }
         
-        function cekshowreport(idgoals, idtarget, idindikator, idmonper) {
-        	alert("Garfik Detail On-Progress");
-        	/* if (idmonper == "0") {
-        		swal("Anda harus memilih periode");
-        	} else {
-        		$.ajax({
-        			url: urls + "cekshowreport",
-            		type: 'get',
-            		data: {'id_monper':idmonper},
-            		dataType: 'json',
-            		cache: false,
-            		success: function (resmonper) {
-            			console.log(resmonper);
-            		}
-        		});
-        	} */
-        	
-        }
-        
         // ********************** Content Div Kanan Atas **********************
         function getGovActivity(idprogram) {
         	$.ajax({
@@ -171,14 +152,14 @@
         		dataType: 'json',
         		cache: false,
         		success: function (resactivity) {
-        			//console.log(restarget);
+        			//console.log(resactivity);
         			var isiactivity = "<ul id='ulact"+idprogram+"'>";
         			for (var i=0; i<resactivity.length; i++) {
-        				isiactivity += "<li>"+resactivity[i][1]+"</li>";
+        				isiactivity += "<li>"+resactivity[i][2]+"</li>";
         				getGovIndicator(idprogram, resactivity[i][0]);
         			}
         			isiactivity += "</ul>";
-        			$("#li"+idprogram).append(isiactivity);
+        			$("#olprog").append(isiactivity);
         		}
       	   	});
         }
@@ -191,10 +172,10 @@
         		dataType: 'json',
         		cache: false,
         		success: function (resgovindicator) {
-        			//console.log(restarget);
+        			//console.log(resgovindicator);
         			var isiindicator = "<ul id='ulindi"+idprogram+"'>";
         			for (var i=0; i<resgovindicator.length; i++) {
-        				isiindicator += "<li onclick='cekshowreport("+idprogram+", "+idactivity+", "+resgovindicator[i][0]+", "+$("#periode").val()+")'>"+resgovindicator[i][1]+"</li>";
+        				isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idprogram+","+idactivity+","+resgovindicator[i][0]+","+$("#periode").val()+","+2+")'>"+resgovindicator[i][1]+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#ulact"+idprogram).append(isiindicator);
@@ -231,10 +212,10 @@
         		dataType: 'json',
         		cache: false,
         		success: function (resnsaindicator) {
-        			//console.log(restarget);
+        			//console.log(resnsaindicator);
         			var isiindicator = "<ul id='ulindinsa"+idprogram+"'>";
         			for (var i=0; i<resnsaindicator.length; i++) {
-        				isiindicator += "<li  onclick='cekshowreport("+idprogram+", "+idactivity+", "+resgovindicator[i][0]+", "+$("#periode").val()+")'>"+resnsaindicator[i][1]+"</li>";
+        				isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+$("#periode").val()+","+3+")'>"+resnsaindicator[i][1]+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#ulactnsa"+idprogram).append(isiindicator);
@@ -255,6 +236,8 @@
                 success: function (resmonper) {
                 	//console.log(resmonper);
                 	$("#periode").empty();
+                	$("#kananatas").empty();
+                	$("#kananbawah").empty();
                 	$("#periode").append("<option value='0'>-- Pilih Periode --</option>");
                 	for (var i=0; i<resmonper.length; i++) {
                 		var opt = "<option value='"+resmonper[i][0]+"'>"+resmonper[i][1]+" - "+resmonper[i][2]+"</option";
@@ -262,11 +245,7 @@
                 	}
                 }
             });
-        });
-        
-        $("#periode").on("change", function(){
-        	var valdaerah = $("#daerah").val();
-        	var valperiode = $(this).val();
+            
         	//=============== SDG Goals ================
             $.ajax({
             	url: urls + "getallgoals",
@@ -285,20 +264,26 @@
                     $("#divkiri").append(isi);
                 }
             });
+        });
+        
+        $("#periode").on("change", function(){
+        	var valdaerah = $("#daerah").val();
+        	var valperiode = $(this).val();
             
           	//=============== Gov Program ================
           	$.ajax({
             	url: urls + "getallgovprogram",
                 type: 'get',
+                data: {'id_prov':valdaerah},
                 dataType: 'json',
                 cache: false,
                 success: function (resprog) {
-                	//console.log(resgoals);
+                	//console.log(resprog);
                 	$("#kananatas").empty();
                 	var isi = "<ol id='olprog'>";
                		for (var i=0; i<resprog.length; i++) {
-                  	   	isi += "<li id='li"+resprog[i][0]+"'>"+resprog[i][1]+"</li>";
-                  	   	getGovActivity(resprog[i][0])
+                  	   	isi += "<li id='li"+resprog[i][1]+"'>"+resprog[i][2]+"</li>";
+                  	   	getGovActivity(resprog[i][1]);
                     }
                     isi += "</ol>";
                     $("#kananatas").append(isi);
@@ -309,14 +294,15 @@
         	$.ajax({
             	url: urls + "getallnsaprogram",
                 type: 'get',
+                data: {'id_prov':valdaerah},
                 dataType: 'json',
                 cache: false,
                 success: function (resprog) {
-                	//console.log(resgoals);
+                	//console.log(resprog);
                 	$("#kananbawah").empty();
                 	var isi = "<ol id='olprog'>";
                		for (var i=0; i<resprog.length; i++) {
-                  	   	isi += "<li id='linsa"+resprog[i][0]+"'>"+resprog[i][1]+"</li>";
+                  	   	isi += "<li id='linsa"+resprog[i][0]+"'>"+resprog[i][2]+"</li>";
                   	   	getNsaActivity(resprog[i][0])
                     }
                     isi += "</ol>";
@@ -471,11 +457,11 @@
             });
         } */
 
-        function cucukanan(idsdg, idtar, idindi, id, idmon, flag) {
-        	//alert(idsdg+" "+idtar+" "+idindi+" "+id+" "+flag);
+        function cucukanan(idsdg, idtar, idindi, idmon, flag) {
+        	//alert(idsdg+" "+idtar+" "+idindi+" "+idmon+" "+flag);
         	var valda = $("#daerah").val();
-            location.href = urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag+"/"+valda;
-            //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+id+"/"+idmon+"/"+flag+"/"+valda;);
+            location.href = urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda;
+            //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
         }
 
     </script>

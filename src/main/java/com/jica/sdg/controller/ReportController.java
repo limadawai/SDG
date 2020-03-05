@@ -405,16 +405,19 @@ public class ReportController {
     }
     
     @GetMapping("admin/getallgovprogram")
-    public @ResponseBody List<Object> getallgovprogram() {
-    	String sql = "SELECT id, nm_program, nm_program_eng FROM gov_program";
+    public @ResponseBody List<Object> getallgovprogram(@RequestParam("id_prov") String idprov) {
+    	String sql = "SELECT a.id_gov_indicator, b.id, b.nm_program, b.nm_program_eng FROM gov_map a LEFT JOIN "
+    			+ "gov_program b ON b.id = (SELECT id_program FROM gov_indicator WHERE id = a.id_gov_indicator) "
+    			+ "WHERE a.id_prov = :id_prov";
     	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
         List list = query.getResultList();
         return list;
     }
     
     @GetMapping("admin/getallgovactivity")
     public @ResponseBody List<Object> getallgovactivity(@RequestParam("id_program") int idprogram) {
-    	String sql = "SELECT id, nm_activity, nm_activity_eng FROM gov_activity WHERE id = :id_program ORDER BY id ASC";
+    	String sql = "SELECT id, nm_activity, nm_activity_eng FROM gov_activity WHERE id_program = :id_program";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_program", idprogram);
         List list = query.getResultList();
@@ -433,9 +436,12 @@ public class ReportController {
     }
     
     @GetMapping("admin/getallnsaprogram")
-    public @ResponseBody List<Object> getallnsaprogram() {
-    	String sql = "SELECT id, nm_program, nm_program_eng FROM nsa_program";
+    public @ResponseBody List<Object> getallnsaprogram(@RequestParam("id_prov") String idprov) {
+    	String sql = "SELECT a.id_nsa_indicator, b.id, b.nm_program, b.nm_program_eng FROM nsa_map a LEFT JOIN "
+    			+ "nsa_program b ON b.id = (SELECT id_program FROM nsa_indicator WHERE id = a.id_nsa_indicator) "
+    			+ "WHERE a.id_prov = :id_prov";
     	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
         List list = query.getResultList();
         return list;
     }
@@ -461,10 +467,110 @@ public class ReportController {
     }
     
     @GetMapping("admin/cekshowreport")
-    public @ResponseBody List<Object> cekshowreport(@RequestParam("id_monper") int idmonper) {
-    	String sql = "SELECT id_monper, year, period FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_sdg'";
+    public @ResponseBody List<Object> cekshowreport(@RequestParam("id_monper") int idmonper, @RequestParam("year") int year) {
+    	String sql = "SELECT EXISTS(SELECT * FROM entry_show_report WHERE id_monper = :id_monper AND year = :year)";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_monper", idmonper);
+        query.setParameter("year", year);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getgovtarget")
+    public @ResponseBody List<Object> getgovtarget(@RequestParam("id_gov_indicator") int idgovindi, @RequestParam("year") int year) {
+    	String sql = "SELECT value FROM gov_target WHERE id_gov_indicator = :id_gov_indicator AND year = :year";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_gov_indicator", idgovindi);
+        query.setParameter("year", year);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getidassign")
+    public @ResponseBody List<Object> getidassign(@RequestParam("id_monper") int idmonper, @RequestParam("id_prov") int idprov) {
+    	String sql = "SELECT id FROM assign_sdg_indicator WHERE id_monper = :id_monper AND id_prov = :id_prov GROUP BY id";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("id_prov", idprov);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getgovrealyear")
+    public @ResponseBody List<Object> getgovrealyear(@RequestParam("id_monper") int idmonper, @RequestParam("year_entry") int year) {
+    	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1) "
+    			+ "FROM entry_gov_indicator WHERE id_monper = :id_monper AND year_entry = :year_entry";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("year_entry", year);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getgovrealsemester")
+    public @ResponseBody List<Object> getgovrealsemester(@RequestParam("id_monper") int idmonper, @RequestParam("year_entry") int year) {
+    	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1), COALESCE(NULLIF(new_value2,''),achievement2) "
+    			+ "FROM entry_gov_indicator WHERE id_monper = :id_monper AND year_entry = :year_entry";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("year_entry", year);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getgovrealquarter")
+    public @ResponseBody List<Object> getgovrealquarter(@RequestParam("id_monper") int idmonper, @RequestParam("year_entry") int year) {
+    	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1), COALESCE(NULLIF(new_value2,''),achievement2), "
+    			+ "SELECT COALESCE(NULLIF(new_value3,''),achievement3), COALESCE(NULLIF(new_value4,''),achievement4) "
+    			+ "FROM entry_gov_indicator WHERE id_monper = :id_monper AND year_entry = :year_entry";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("year_entry", year);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getgovunit")
+    public @ResponseBody List<Object> getgovunit(@RequestParam("id_gov_indicator") int idindi) {
+    	String sql = "SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM gov_indicator WHERE id = :id_gov_indicator)";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_gov_indicator", idindi);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getgovfund")
+    public @ResponseBody List<Object> getgovfund(@RequestParam("id_gov_indicator") int idindi, @RequestParam("id_monper") int idmonper) {
+    	String sql = "SELECT funding_source, baseline FROM gov_funding WHERE id_gov_indicator = :id_gov_indicator AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_gov_indicator", idindi);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getgovgoals")
+    public @ResponseBody List<Object> getgovgoals(@RequestParam("id_prov") String idprov, @RequestParam("id_monper") int idmonper, 
+    		@RequestParam("id_gov_indicator") int idindi) {
+    	String sql = "SELECT a.id_gov_indicator, b.id as idgoals, b.nm_goals, b.nm_goals_eng, "
+    			+ "c.id as idtarget, c.nm_target, c.nm_target_eng, d.id as idindi, d.nm_indicator, d.nm_indicator_eng "
+    			+ "FROM gov_map a LEFT JOIN sdg_goals b ON b.id = a.id_goals LEFT JOIN "
+    			+ "sdg_target c ON c.id = a.id_target LEFT JOIN sdg_indicator d ON d.id = a.id_indicator "
+    			+ "WHERE id_prov = :id_prov AND id_monper = :id_monper AND id_gov_indicator = :id_gov_indicator";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("id_gov_indicator", idindi);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/cekgovranrad")
+    public @ResponseBody List<Object> cekgovranrad(@RequestParam("id_monper") int idmonper, @RequestParam("id_prov") String idprov) {
+    	String sql = "SELECT sdg_indicator FROM ran_rad WHERE id_monper = :id_monper AND id_prov = :id_prov";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("id_prov", idprov);
         List list = query.getResultList();
         return list;
     }
@@ -550,17 +656,16 @@ public class ReportController {
 
     //====================== Grafik Detail ======================
     
-    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{id}/{idmonper}/{flag}/{valdaerah}")
-    public String grafikdetail(Model model, HttpSession session, @PathVariable("idsdg") String idsdg, @PathVariable("idtar") String idtar,
-    		@PathVariable("idindi") String idindi, @PathVariable("id") String id, @PathVariable("idmonper") String idmonper, 
-    		@PathVariable("flag") String flag, @PathVariable("valdaerah") String valdaerah) {
+    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{idmonper}/{flag}/{valdaerah}")
+    public String grafikdetail(Model model, HttpSession session, @PathVariable("idsdg") int idsdg, @PathVariable("idtar") int idtar,
+    		@PathVariable("idindi") int idindi, @PathVariable("idmonper") int idmonper, 
+    		@PathVariable("flag") int flag, @PathVariable("valdaerah") String valdaerah) {
         model.addAttribute("title", "Report Graphic Detail");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("idsdg", idsdg);
         model.addAttribute("idtar", idtar);
         model.addAttribute("idsdgindikator", idindi);
-        model.addAttribute("idindikator", id);
         model.addAttribute("idmonper", idmonper);
         model.addAttribute("flag", flag);
         model.addAttribute("valdaerah", valdaerah);
@@ -575,8 +680,99 @@ public class ReportController {
         List list = query.getResultList();
         return list;
     }
+    
+    @GetMapping("admin/getgoals")
+    public @ResponseBody List<Object> getgoals(@RequestParam("id_goals") int idgoals, @RequestParam("id_target") int idtarget, 
+    		@RequestParam("id_indicator") int idindikator) {
+    	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, "
+    			+ "c.id AS idtarget, c.nm_target, c.nm_target_eng, d.id AS iddisagre, d.nm_disaggre, d.nm_disaggre_eng, "
+    			+ "e.desc_disaggre, e.desc_disaggre_eng FROM sdg_indicator a LEFT JOIN "
+    			+ "sdg_goals b ON b.id = :id_goals LEFT JOIN "
+    			+ "sdg_target c ON c.id = :id_target LEFT JOIN "
+    			+ "sdg_ranrad_disaggre d ON d.id = :id_indicator LEFT JOIN "
+    			+ "sdg_ranrad_disaggre_detail e ON e.id_disaggre = d.id WHERE a.id = :id_indicator";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_goals", idgoals);
+        query.setParameter("id_target", idtarget);
+        query.setParameter("id_indicator", idindikator);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getprogov")
+    public @ResponseBody List<Object> getprogov(@RequestParam("id_program") int idgoals, @RequestParam("id_activity") int idtarget, 
+    		@RequestParam("id_indicator") int idindikator) {
+    	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idprog, b.nm_program, b.nm_program_eng, "
+    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, d.id AS iddisagre, d.nm_disaggre, d.nm_disaggre_eng, "
+    			+ "e.desc_disaggre, e.desc_disaggre_eng FROM gov_indicator a LEFT JOIN "
+    			+ "gov_program b ON b.id = :id_program LEFT JOIN "
+    			+ "gov_activity c ON c.id = :id_activity LEFT JOIN "
+    			+ "sdg_ranrad_disaggre d ON d.id = :id_indicator LEFT JOIN "
+    			+ "sdg_ranrad_disaggre_detail e ON e.id_disaggre = d.id WHERE a.id = :id_indicator";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_program", idgoals);
+        query.setParameter("id_activity", idtarget);
+        query.setParameter("id_indicator", idindikator);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getpronsa")
+    public @ResponseBody List<Object> getpronsa(@RequestParam("id_program") int idgoals, @RequestParam("id_activity") int idtarget, 
+    		@RequestParam("id_indicator") int idindikator) {
+    	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idprog, b.nm_program, b.nm_program_eng, "
+    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, d.id AS iddisagre, d.nm_disaggre, d.nm_disaggre_eng, "
+    			+ "e.desc_disaggre, e.desc_disaggre_eng FROM nsa_indicator a LEFT JOIN "
+    			+ "nsa_program b ON b.id = :id_program LEFT JOIN "
+    			+ "nsa_activity c ON c.id = :id_activity LEFT JOIN "
+    			+ "sdg_ranrad_disaggre d ON d.id = :id_indicator LEFT JOIN "
+    			+ "sdg_ranrad_disaggre_detail e ON e.id_disaggre = d.id WHERE a.id = :id_indicator";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_program", idgoals);
+        query.setParameter("id_activity", idtarget);
+        query.setParameter("id_indicator", idindikator);
+        List list = query.getResultList();
+        return list;
+    }
 
     //********************* Header Table *********************
+    @GetMapping("admin/getheaderyear")
+    public @ResponseBody List<Object> getheaderyear(@RequestParam("id_monper") int idmonper, @RequestParam("id_prov") int idprov) {
+    	String sql = "SELECT start_year FROM ran_rad WHERE id_monper = :id_monper AND id_prov = :id_prov";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        query.setParameter("id_prov", idprov);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/ceksdgmonper")
+    public @ResponseBody List<Object> ceksdgmonper(@RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT sdg_indicator FROM ran_rad WHERE id_monper = :id_monper";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/cekgmonper")
+    public @ResponseBody List<Object> cekgmonper(@RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT gov_prog FROM ran_rad WHERE id_monper = :id_monper";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/ceknmonper")
+    public @ResponseBody List<Object> ceknmonper(@RequestParam("id_monper") int idmonper) {
+        String sql = "SELECT gov_prog FROM ran_rad WHERE id_monper = :id_monper";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
     @GetMapping("admin/cekgovmonper")
     public @ResponseBody List<Object> cekgovmonper(@RequestParam("id_goals") int idsdg, @RequestParam("id_target") int idtarget,
     		@RequestParam("id_indicator") int idsdgindi, @RequestParam("id_gov_indicator") int id) {
@@ -778,6 +974,59 @@ public class ReportController {
     	Query query = manager.createNativeQuery(sql);
     	query.setParameter("id_nsa_indicator", idindi);
     	query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
+  //****************************** Isi Table ****************************** 
+    @GetMapping("admin/getentrysdg")
+    public @ResponseBody List<Object> getentrysdg(@RequestParam("id_sdg_indicator") int idsdgindikator, @RequestParam("id_role") int idrole, @RequestParam("year") int year) {
+    	String sql = "SELECT value FROM sdg_indicator_target WHERE id_sdg_indicator = :id_sdg_indicator AND id_role = :id_role "
+    			+ "AND year = :year";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_sdg_indicator", idsdgindikator);
+    	query.setParameter("id_role", idrole);
+    	query.setParameter("year", year);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getunit")
+    public @ResponseBody List<Object> getunit(@RequestParam("id_sdg_indicator") int idsdgindikator) {
+    	String sql = "SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM sdg_indicator WHERE id = :id_sdg_indicator)";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_sdg_indicator", idsdgindikator);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getsdgfunding")
+    public @ResponseBody List<Object> getsdgfunding(@RequestParam("id_sdg_indicator") int idsdgindikator, @RequestParam("id_monper") int idmonper) {
+    	String sql = "SELECT funding_source FROM sdg_funding WHERE id_sdg_indicator = :id_sdg_indicator AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_sdg_indicator", idsdgindikator);
+    	query.setParameter("id_monper", idmonper);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getshowrep")
+    public @ResponseBody List<Object> getrealisasi(@RequestParam("id_monper") int idmonper, @RequestParam("year") int year) {
+    	String sql = "SELECT EXISTS(SELECT * FROM entry_show_report WHERE id_monper = :id_monper AND year = :year LIMIT 1)";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_monper", idmonper);
+    	query.setParameter("year", year);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getrealyear")
+    public @ResponseBody List<Object> getreal(@RequestParam("id_monper") int idmonper, @RequestParam("year") int year) {
+    	String sql = "SELECT id_disaggre, id_disaggre_detail, COALESCE(NULLIF(new_value1,''),achievement1) FROM entry_sdg_detail "
+    			+ "WHERE year_entry = :year AND id_monper = :id_monper";
+    	Query query = manager.createNativeQuery(sql);
+    	query.setParameter("id_monper", idmonper);
+    	query.setParameter("year", year);
         List list = query.getResultList();
         return list;
     }
