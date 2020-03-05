@@ -649,26 +649,131 @@
        	        	                	gls += "<b><span>Target : "+resgoal[0][5]+"</span></b><br>";
        	        	                	gls += "<b><span>Indikator : "+resgoal[0][8]+"</span></b><br><hr>";
        	        	                	$("#divgoals").append(gls);
-       	        	                	$.ajax({
-       	        	                		url: urls + "cekgovranrad",
-       	       	        	                type: 'get',
-       	       	        	                data: {'id_monper':idmonper,'id_prov':valdaerah},
-       	       	        	                dataType: 'json',
-       	       	        	                cache: false,
-       	       	        	                success: function (resranrad) {
-       	       	        	                	console.log(resranrad);
-       	       	        	                	if (resranrad[0] == "yearly") {
-       	       	        	                		/* var head = headyearly();
-       	       	        	                		$("table#tabsdg > thead").append(head); */
-       	       	        	                	} else if (resranrad[0] == "semesterly") {
-	       	       	        	                	
-       	       	        	                	} else if (resranrad[0] == "quarterly") {
-	       	       	        	                	
-       	       	        	                	}
-       	       	        	                }
-       	        	                	});
        	        	                }
        	                		});
+        	                	$.ajax({
+	        	                	url: urls + "cekgovranrad",
+  	       	        	            type: 'get',
+  	       	        	            data: {'id_monper':idmonper,'id_prov':valdaerah},
+  	       	        	            dataType: 'json',
+  	       	        	            cache: false,
+  	       	        	            success: function (resranrad) {
+  	       	        	               	//console.log(resranrad);
+  	       	        	             	if (resranrad[0] == "yearly") {
+  	       	        	             		var th = "<tr>";
+		  	       	        	            th += "<th id='th1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
+		  	       	        	            th += "<th id='th2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
+		  	       	        	            th += "<th id='th3' style='vertical-align:middle;' colspan='5'>Realisasi per Tahun</th>";
+		  	       	        	            th += "<th id='th4' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+		  	       	        	            th += "<th id='th5' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
+		  	       	        	            th += "<th id='th6' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr class='trtarget'>";
+		  	       	        	            th += "<th id='tahun11' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun21' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun31' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun41' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun51' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr class='trreal'>";
+		  	       	        	            th += "<th id='tahun111' colspan='1'></th>";
+		  	       	        	            th += "<th id='tahun121' colspan='1'></th>";
+		  	       	        	            th += "<th id='tahun131' colspan='1'></th>";
+		  	       	        	            th += "<th id='tahun141' colspan='1'></th>";
+		  	       	        	            th += "<th id='tahun151' colspan='1'></th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "</tr>";
+  	       	        	                	$("#tabsdg > thead").append(th);
+		  	       	        	            var row = "<tr>";
+		  	       	        	            for (var i=1; i<=14; i++) {
+		  	       	        	            	row += "<td style='text-align:center;' id='colsdg"+i+"'></td>";
+		  	       	        	            }
+		  	       	        	            row += "</tr>";
+  	       	        	                	$("#tabsdg > tbody").append(row);
+  	       	        	                	$("#colsdg14").text(name);
+		  	       	        	            $.ajax({
+		  	       	        	        		url: urls + "getheaderyear",
+		  	       	        	                type: 'get',
+		  	       	        	                data: {'id_monper':idmonper,'id_prov':valdaerah},
+		  	       	        	                dataType: 'json',
+		  	       	        	                cache: false,
+		  	       	        	                success: function (resheader) {
+		  	       	        	                	//console.log(resheader);
+		  	       	        	                	var a = parseInt(resheader[0], 10);
+		  	       	        	                	$("#tahun11").text(a);$("#tahun21").text(a+1);$("#tahun31").text(a+2);$("#tahun41").text(a+3);$("#tahun51").text(a+4);
+		  	       	        	                    $("#tahun111").text(a);$("#tahun121").text(a+1);$("#tahun131").text(a+2);$("#tahun141").text(a+3);$("#tahun151").text(a+4);
+		  	       	        	                    var tsdg = [$("#tahun11").text(),$("#tahun21").text(),$("#tahun31").text(),$("#tahun41").text(),$("#tahun51").text()];
+		  	       	        	                    var psh = [];
+		  	       	        	                    for (var i=0; i<tsdg.length; i++) {
+			  	       	        	                    $.ajax({
+				  	       	        	                   	url: urls + "getsdgtar",
+					  	       	        	                type: 'get',
+					  	       	        	                data: {'id_gov_indicator':idsdgindikator,'name':name,'year':tsdg[i]},
+					  	       	        	                dataType: 'json',
+					  	       	        	                cache: false,
+					  	       	        	                async: false,
+					  	       	        	                success: function (ressdgtar) {
+					  	       	        	                	//console.log(ressdgtar[0]);
+					  	       	        	                	psh.push(ressdgtar[0]);
+					  	       	        	                }
+			  	       	        	                    });
+		  	       	        	                    }
+		  	       	        	                	$("#colsdg2").text(psh[0]);$("#colsdg3").text(psh[1]);$("#colsdg4").text(psh[2]);$("#colsdg5").text(psh[3]);$("#colsdg6").text(psh[4]);
+		  	       	        	                	var nil = [];
+			  	       	        	               	for (var i=0; i<tsdg.length; i++) {
+			  	       	        	                    $.ajax({
+				  	       	        	                   	url: urls + "getsdgreal",
+					  	       	        	                type: 'get',
+					  	       	        	                data: {'id_gov_indicator':idsdgindikator,'name':name,'year':tsdg[i],'id_monper':idmonper},
+					  	       	        	                dataType: 'json',
+					  	       	        	                cache: false,
+					  	       	        	                async: false,
+					  	       	        	                success: function (ressdgtar) {
+					  	       	        	                	//console.log(ressdgtar[0]);
+					  	       	        	                	nil.push(ressdgtar[0]);
+					  	       	        	                }
+			  	       	        	                    });
+		  	       	        	                     }
+			  	       	        	                 $("#colsdg7").text(nil[0]);$("#colsdg8").text(nil[1]);$("#colsdg9").text(nil[2]);$("#colsdg10").text(nil[3]);$("#colsdg11").text(nil[4]);
+			  	       	        	                 $.ajax({
+				  	       	        	                url: urls + "getsdgfund",
+				  	       	        	                type: 'get',
+				  	       	        	                data: {'id_gov_indicator':idsdgindikator,'id_monper':idmonper},
+				  	       	        	                dataType: 'json',
+				  	       	        	                cache: false,
+				  	       	        	                async: false,
+				  	       	        	                success: function (res) {
+				  	       	        	                	//console.log(res);
+				  	       	        	               		$("#colsdg12").text(res[0][1]);$("#colsdg13").text(res[0][0]);
+				  	       	        	                }
+			  	       	        	                 });
+				  	       	        	            $.ajax({
+				  	       	        	                url: urls + "getsdgunit",
+				  	       	        	                type: 'get',
+				  	       	        	                data: {'id_gov_indicator':idsdgindikator},
+				  	       	        	                dataType: 'json',
+				  	       	        	                cache: false,
+				  	       	        	                async: false,
+				  	       	        	                success: function (hasil) {
+				  	       	        	                	console.log(hasil);
+				  	       	        	               		$("#colsdg1").text(hasil[0]);
+				  	       	        	                }
+			  	       	        	                 });
+		  	       	        	                }
+		  	       	        	        	});
+  	       	        	                } else if (resranrad[0] == "semesterly") {
+      	       	        	                	
+  	       	        	                } else if (resranrad[0] == "quarterly") {
+      	       	        	                	
+  	       	        	                }
+  	       	        	            }
+  	        	                });
        	                	} else {
        	                		swal("Data belum ada di daftar show report");
        	                	}
