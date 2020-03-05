@@ -336,11 +336,11 @@ public class EntryController {
     public @ResponseBody Map<String, Object> getOptionMonperList(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper,@PathVariable("id") String id) {
         String sql  = "select a.id, b.nm_goals, b.nm_goals_eng, c.nm_target, c.nm_target_eng, d.nm_indicator, d.nm_indicator_eng, "
         		+ "b.id_goals, c.id_target, d.id_indicator "
-        		+ "from gov_map as a "
+        		+ "from best_map as a "
         		+ "left join sdg_goals b on a.id_goals = b.id "
         		+ "left join sdg_target c on a.id_target = c.id "
         		+ "left join sdg_indicator d on a.id_indicator = d.id "
-        		+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_gov_indicator = :id";
+        		+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_best_practice = :id";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         query.setParameter("id_monper", id_monper);
@@ -355,11 +355,11 @@ public class EntryController {
     public @ResponseBody Map<String, Object> getNsa(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper,@PathVariable("id") String id) {
         String sql  = "select a.id, b.nm_goals, b.nm_goals_eng, c.nm_target, c.nm_target_eng, d.nm_indicator, d.nm_indicator_eng, "
         		+ "b.id_goals, c.id_target, d.id_indicator "
-        		+ "from nsa_map as a "
+        		+ "from best_map as a "
         		+ "left join sdg_goals b on a.id_goals = b.id "
         		+ "left join sdg_target c on a.id_target = c.id "
         		+ "left join sdg_indicator d on a.id_indicator = d.id "
-        		+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_nsa_indicator = :id";
+        		+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_best_practice = :id";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         query.setParameter("id_monper", id_monper);
