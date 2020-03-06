@@ -363,6 +363,15 @@ public class ReportController {
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("idrole", session.getAttribute("id_role"));
+        
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        
         return "admin/report/graph";
     }
     
