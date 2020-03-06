@@ -277,28 +277,64 @@ public class DataEntryController {
                     "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
                     "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
                     "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role;
+                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role+" order by b.id_goals, c.id_target, d.id_indicator";
             query = em.createNativeQuery(sql);
-            System.out.print(sql);
     	}else {
     		String[] arrOfStr = sdg.split(","); 
     		StringBuffer goals = new StringBuffer();
     		StringBuffer target = new StringBuffer();
     		StringBuffer indicator = new StringBuffer();
-    		for (int i = 0; i < arrOfStr.length; i++) {
-    			String[] arrOfStr1 = arrOfStr[i].split("---");
+    		if(arrOfStr.length>0) {
+    			for (int i = 0; i < arrOfStr.length; i++) {
+        			String[] arrOfStr1 = arrOfStr[i].split("---");
+        			int cek=1;
+        			for(int j=0;j<arrOfStr1.length;j++) {
+        				cek = (cek==4)?1:cek;
+        				System.out.println(cek);
+        				if(!arrOfStr1[j].equals("0") && cek==1) {
+        					goals.append("'"+arrOfStr1[j]+"',");
+        				}
+        				if(!arrOfStr1[j].equals("0") && cek==2) {
+        					target.append("'"+arrOfStr1[j]+"',");
+        				}
+        				if(!arrOfStr1[j].equals("0") && cek==3) {
+        					indicator.append("'"+arrOfStr1[j]+"',");
+        				}
+        				cek = cek+1;
+        			}
+        		}
+    		}else{
+    			String[] arrOfStr1 = sdg.split("---");
+    			int cek=1;
     			for(int j=0;j<arrOfStr1.length;j++) {
-    				if(!arrOfStr1[j].equals("0")) {
-    					goals.append(", ");
+    				cek = (cek==4)?1:cek;
+    				System.out.println(cek);
+    				if(!arrOfStr1[j].equals("0") && cek==1) {
+    					goals.append("'"+arrOfStr1[j]+"',");
     				}
-    				
+    				if(!arrOfStr1[j].equals("0") && cek==2) {
+    					target.append("'"+arrOfStr1[j]+"',");
+    				}
+    				if(!arrOfStr1[j].equals("0") && cek==3) {
+    					indicator.append("'"+arrOfStr1[j]+"',");
+    				}
+    				cek = cek+1;
     			}
     		}
+    		String hasilgoals = (goals.length()==0)?"":goals.substring(0, goals.length() - 1);
+    		String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
+    		String hasilindicator = (indicator.length()==0)?"":indicator.substring(0, indicator.length() - 1);
+    		
+    		String gol = (hasilgoals.equals(""))?"":" a.id_goals in("+hasilgoals+") ";
+    		String tar = (hasiltarget.equals(""))?"":" a.id_target in("+hasiltarget+") ";
+    		String ind = (hasilindicator.equals(""))?"":" a.id_indicator in("+hasilindicator+") ";
+    		tar = (gol.equals("") || tar.equals(""))?tar:" or "+tar;
+    		ind = ((gol.equals("") && tar.equals("")) || ind.equals(""))?ind:" or "+ind;
     		sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
                     "b.nm_goals_eng, \n" +
                     "c.nm_target_eng, d.nm_indicator_eng, \n" +
-                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis,"
-                    + " b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
+                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, "
+                    + "l.id_role, l.nm_role, l.cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
                     "from ran_rad as g \n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -308,7 +344,7 @@ public class DataEntryController {
                     "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
                     "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
                     "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role;
+                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role+" and ("+gol+" "+tar+" "+ind+") order by b.id_goals, c.id_target, d.id_indicator";
             query = em.createNativeQuery(sql);
             System.out.print(sql);
     	}

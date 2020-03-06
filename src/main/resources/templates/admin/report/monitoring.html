@@ -273,6 +273,10 @@
         	                		var option = "";
         	                		var cekbok = "";
         	                		$('.accordion-inner').html(cekbok);
+        	                		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
+		                    				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
+				                            '<span style="vertical-align:middle">ALL</span>'+
+				                      '</label><br/>';
         	                		for (var i = 0; i < response.content.length; i++) {
         	                			var nm_goals;
         	                			var id_goals=response.content[i].id;
@@ -303,7 +307,7 @@
         	                						}
         	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
         	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="0---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
         								                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
         								                      '</label><br/>';
         	                                    	$.ajax({
@@ -323,7 +327,7 @@
         	                            						}
         	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
         	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
+        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="0---0---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
         									                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
         									                      '</label><br/>';
         	                                            	}
@@ -335,6 +339,7 @@
         	                        	});
         	                        	option += '</optgroup>';
         	                		}
+        	                		cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
         	                		$('.accordion-inner').append(cekbok);
         	                	}
         	                });
@@ -351,6 +356,10 @@
                             		var option = "";
                             		var cekbok = "";
                             		$('.accordion-inner').html(cekbok);
+                            		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
+		                    				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
+				                            '<span style="vertical-align:middle">ALL</span>'+
+				                      '</label><br/>';
                             		for (var i = 0; i < response.sdg.length; i++) {
                             			var nm_goals;
                             			var id_goals=response.sdg[i][0];
@@ -425,6 +434,7 @@
         	                $(".accordion-inner").find('.menu'+id).prop("checked", false);
         	            } else {
         	            	 $(".accordion-inner").find('.menu'+id).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
         	            }
         	        });
         	        
@@ -435,12 +445,14 @@
         	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
         	            } else {
         	            	 $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
         	            }
         	        	
         	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
         	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
         	            } else {
         	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
         	            }
         	        });
         	        
@@ -451,13 +463,22 @@
         	                $(".accordion-inner").find('#submenu'+id).prop("checked", false);
         	            } else {
         	            	 $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
         	            }
         	        	
         	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
         	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
         	            } else {
         	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
         	            }
+        	        });
+        	        
+        	        $('.accordion-inner').on('change', '#all-sdg', function(){
+        	        	var status = this.checked;
+        	        	$('.accordion-inner').find("input[name='sdg_indicator']").each(function(){
+        	        		this.checked = status;
+        	        	});
         	        });
         }
     });
@@ -478,6 +499,7 @@
 
     $("#role").on("change", function(){
     	loadData(0);
+    	$('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
     });
     
     function loadData(sdg_indicator){
