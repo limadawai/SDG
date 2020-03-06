@@ -357,8 +357,8 @@
     });
     
     function clearForm(){
-		$('#nm_unit').val("").removeAttr("readonly");
-                $('#id_unit').val("").removeAttr("readonly");
+                $("input:radio[name='approval']").prop('checked',false);
+		$('#description').val("").removeAttr("readonly");
                 $('#submit').removeAttr("disabled");
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
