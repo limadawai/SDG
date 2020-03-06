@@ -266,7 +266,8 @@ public class DataEntryController {
     		sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
                     "b.nm_goals_eng, \n" +
                     "c.nm_target_eng, d.nm_indicator_eng, \n" +
-                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, l.id_role, l.nm_role, l.cat_role "+
+                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, "
+                    + "l.id_role, l.nm_role, l.cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
                     "from ran_rad as g \n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -296,7 +297,8 @@ public class DataEntryController {
     		sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
                     "b.nm_goals_eng, \n" +
                     "c.nm_target_eng, d.nm_indicator_eng, \n" +
-                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis "+
+                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis,"
+                    + " b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
                     "from ran_rad as g \n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -310,6 +312,33 @@ public class DataEntryController {
             query = em.createNativeQuery(sql);
             System.out.print(sql);
     	}
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        hasil.put("query",sql);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry-sdg-isi/{id_indicator}/{year}/{id_role}/{id_disaggre}/{id_disaggre_detail}/{id_monper}")
+    public @ResponseBody Map<String, Object> listEntrySdgIsi(@PathVariable("id_indicator") String id_indicator, 
+    		@PathVariable("year") String year, 
+    		@PathVariable("id_role") String id_role, 
+    		@PathVariable("id_monper") String id_monper, 
+    		@PathVariable("id_disaggre") String id_disaggre,
+    		@PathVariable("id_disaggre_detail") String id_disaggre_detail) {
+    	Query query;
+    	String sql;
+    	sql  = "select b.value, a.achievement1, a.achievement2, a.achievement3, a.achievement4, "
+    			+ "a.new_value1, a.new_value2, a.new_value3, a.new_value4, "
+    			+ "c.achievement1 as achi1, c.achievement2 as achi2, c.achievement3 as achi3, c.achievement4 as achi4,"
+    			+ "a.new_value1 as new1, a.new_value2 as new2, a.new_value3 as new3, a.new_value4 as new4, id_disaggre, id_disaggre_detail, e.nm_role "
+    			+ "from assign_sdg_indicator d "
+    			+ "left join entry_sdg a on a.id_sdg_indicator = d.id_indicator and a.id_role = d.id_role and a.id_monper = d.id_monper and a.year_entry = '"+year+"' "
+    			+ "left join sdg_indicator_target b on b.id_sdg_indicator = d.id_indicator and b.id_role = d.id_role and b.year = '"+year+"' "
+    			+ "left join entry_sdg_detail c on c.id_disaggre = '"+id_disaggre+"' and c.id_disaggre_detail = '"+id_disaggre_detail+"' and c.year_entry = '"+year+"' and c.id_role = d.id_role and c.id_monper = d.id_monper "
+    			+ "left join ref_role e on d.id_role = e.id_role "
+                + "where d.id_indicator = '"+id_indicator+"' and d.id_role = '"+id_role+"' and d.id_monper = '"+id_monper+"'";
+        query = em.createNativeQuery(sql);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
