@@ -811,6 +811,18 @@
                 parseInt($("#col5").text(), 10),
                 parseInt($("#col6").text(), 10)
             ];
+            var tahun1 = [ parseInt($("#colsdg2").text(), 10)
+                          ,parseInt($("#colsdg3").text(), 10)
+                          ,parseInt($("#colsdg4").text(), 10)
+                          ,parseInt($("#colsdg5").text(), 10)
+                          ,parseInt($("#colsdg6").text(), 10)
+                        ];
+           var tahun2 =  [ parseInt($("#colsdg7").text(), 10)
+                          ,parseInt($("#colsdg8").text(), 10)
+                          ,parseInt($("#colsdg9").text(), 10)
+                          ,parseInt($("#colsdg10").text(), 10)
+                          ,parseInt($("#colsdg11").text(), 10)
+                        ];
             if (periode == "yearly") {
                 valreal1 = [
                     parseInt($("#col7").text(), 10),
@@ -907,6 +919,23 @@
                             type: 'spline',
                             data: valtarget,
                              yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },{
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi SDGS',
+                            type: 'spline',
+                            data: tahun2,
+                            yAxis: 1,
                             tooltip: {
 //                          valueSuffix: '%'
                             }
@@ -1041,6 +1070,23 @@
                             type: 'spline',
                             yAxis: 1,
                             data: valtarget,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },{
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi SDGS',
+                            type: 'spline',
+                            data: tahun2,
+                            yAxis: 1,
                             tooltip: {
 //                          valueSuffix: '%'
                             }
@@ -1202,7 +1248,25 @@
                             yAxis: 1,
                             tooltip: {
 //                          valueSuffix: '%'
-                        }
+                            }
+                        },
+                        {
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi SDGS',
+                            type: 'spline',
+                            data: tahun2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
                         }],
                     colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
                             return {
@@ -1213,7 +1277,7 @@
               }
               eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
             }
-           
+             
             
         });
         function uuidv4() {
@@ -1223,6 +1287,7 @@
             });
         }
         eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('$(\'#c\').d(\'e\',f(){9 a=$(g).h();9 b=$("#i").j();8(a==\'k\'){b.3[0].4({5:\'7\'});b.3[1].4({5:\'7\'});b.3[2].4({5:\'7\'})}8(a==\'l\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'6\'})}8(a==\'m\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'7\'})}})',23,23,'|||series|update|type|column|spline|if|var|||pilgrafik|on|change|function|this|val|dualaxes|highcharts|graf1|graf2|graf3'.split('|'),0,{}))
+       
     </script>
 </body>
 </html>

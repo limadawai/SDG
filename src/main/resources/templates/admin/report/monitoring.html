@@ -601,7 +601,7 @@
         			tabelSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
             	}
         	}
-        	tabelSdg += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr style='font-size:80%;'>";
+        	tabelSdg += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Status</b></td><td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Actor</b></td></tr><tr style='font-size:80%;'>";
         	for(var y=monper_year[0];y<=monper_year[1];y++){
             	if(sts == 'yearly'){
             		tabelSdg += "<td style='text-align:center;vertical-align:middle'><b>Target</b></td>";
@@ -655,23 +655,23 @@
         					//Goals
         					var ig=i-1;
         					if(ig<0){
-        						textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][0]+". "+row[i][3]+"</b></div><p/>";
+        						textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][21]+". "+row[i][3]+"</b></div><p/>";
         					}else if(row[ig][0]!=row[i][0]){
-        						textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][0]+". "+row[i][3]+"</b></div><p/>";	
+        						textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][21]+". "+row[i][3]+"</b></div><p/>";	
         					}
                        		//Target
                        		var it=i-1;
                        		if(it<0){
-                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][1]+" "+row[i][4]+"</b><p/>";
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][22]+" "+row[i][4]+"</b><p/>";
                        		}else if(row[ig][1]!=row[i][1]){
-                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][1]+" "+row[i][4]+"</b><p/>";
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][22]+" "+row[i][4]+"</b><p/>";
                        		}
                        		//Indicator
                        		var ii=i-1;
                        		if(ii<0){
-                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][5]+"</b></p>";
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][23]+" "+row[i][5]+"</b></p>";
                        		}else if(row[ig][2]!=row[i][2]){
-                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][5]+"</b></p>";
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][23]+" "+row[i][5]+"</b></p>";
                        		}else{
                        			//tabGov = false;
                        		}
@@ -696,23 +696,23 @@
                        		//Goals
                        		var ig=i-1;
                        		if(ig<0){
-                       			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][0]+". "+row[i][8]+"</b></div><p/>";
+                       			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][21]+". "+row[i][8]+"</b></div><p/>";
                        		}else if(row[ig][0]!=row[i][0]){
-                       			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][0]+". "+row[i][8]+"</b></div><p/>";	
+                       			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][21]+". "+row[i][8]+"</b></div><p/>";	
                        		}
                        		//Target
                        		var it=i-1;
                        		if(it<0){
-                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][1]+" "+row[i][9]+"</b><p/>";
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][22]+" "+row[i][9]+"</b><p/>";
                        		}else if(row[ig][1]!=row[i][1]){
-                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][1]+" "+row[i][9]+"</b><p/>";
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][22]+" "+row[i][9]+"</b><p/>";
                        		}
                        		//Indicator
                        		var ii=i-1;
                        		if(ii<0){
-                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][10]+"</b></p>";
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][23]+" "+row[i][10]+"</b></p>";
                        		}else if(row[ig][2]!=row[i][2]){
-                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][2]+" "+row[i][10]+"</b></p>";
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][23]+" "+row[i][10]+"</b></p>";
                        		}
                        		var ids = i+1;
                        		var tabGov = false;
@@ -733,86 +733,92 @@
                 		
                 		for(var y=monper_year[0];y<=monper_year[1];y++){
                 			$.ajax({
-                            	url: urls + "list-entry-sdg/"+idprov+"/"+idrole+"/"+id_monper+'/'+y,
+                            	url: urls + "list-entry-sdg-isi/"+row[i][2]+"/"+y+"/"+row[i][18]+"/"+row[i][16]+'/'+row[i][17]+'/'+id_monper,
+                            	//url: urls + "list-entry-sdg/"+idprov+"/"+row[i][18]+'/'+id_monper+'/'+y,
                                 type: 'get',
                                 dataType: 'json',
                                 async:false,
                                 success: function (res) {
-                                	var row = res.content;
-                                	if(row){
-                                		var nilai1 = "";
-                                		var nilai2 = "";
-                                		var nilai3 = "";
-                                		var nilai4 = "";
-                                		var tahun = "";
-                                		if(row[i][30] && row[i][31]){
-                                			if(row[i][37]){
-                                				nilai1 = (row[i][37])?row[i][37]:'';
-                                			}else{
-                                				nilai1 = (row[i][33])?row[i][33]:'';
-                                			}
-                                			if(row[i][38]){
-                                				nilai2 = (row[i][38])?row[i][38]:'';
-                                			}else{
-                                				nilai2 = (row[i][34])?row[i][34]:'';
-                                			}
-                                			if(row[i][39]){
-                                				nilai3 = (row[i][39])?row[i][39]:'';
-                                			}else{
-                                				nilai3 = (row[i][35])?row[i][35]:'';
-                                			}
-                                			if(row[i][40]){
-                                				nilai4 = (row[i][40])?row[i][40]:'';
-                                			}else{
-                                				nilai4 = (row[i][36])?row[i][36]:'';
-                                			}
-                                    	}else{
-                                    		if(row[i][21]){
-                                    			nilai1 = (row[i][21])?row[i][21]:'';
-                                			}else{
-                                				nilai1 = (row[i][9])?row[i][9]:'';
-                                			}
-                                    		if(row[i][22]){
-                                    			nilai2 = (row[i][22])?row[i][22]:'';
-                                			}else{
-                                				nilai2 = (row[i][10])?row[i][10]:'';
-                                			}
-                                    		if(row[i][23]){
-                                    			nilai3 = (row[i][23])?row[i][23]:'';
-                                			}else{
-                                				nilai3 = (row[i][11])?row[i][11]:'';
-                                			}
-                                    		if(row[i][23]){
-                                    			nilai4 = (row[i][24])?row[i][24]:'';
-                                			}else{
-                                				nilai4 = (row[i][12])?row[i][12]:'';
-                                			}
-                                    	}
-                                		for(var isdg=0;isdg<cekSdg.length;isdg++){
-                                			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:"";
-                                			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:"";
-                                			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:"";
-                                			nilai4 = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==y)?nilai4:"";
-                                		}
+                                	var rowi = res.content;
+                                	//console.log(res.query);
+                                	if(rowi.length>0){	
+                                    	for(var ii=0; ii<rowi.length;ii++){
+                                    		var nilai1 = "";
+                                    		var nilai2 = "";
+                                    		var nilai3 = "";
+                                    		var nilai4 = "";
+                                    		var tahun = "";
+                                    		if(rowi[ii][17]){
+                                    			if(rowi[ii][13]){
+                                    				nilai1 = (rowi[ii][13])?rowi[ii][13]:'';
+                                    			}else{
+                                    				nilai1 = (rowi[ii][9])?rowi[ii][9]:'';
+                                    			}
+                                    			if(rowi[ii][14]){
+                                    				nilai2 = (rowi[ii][14])?rowi[ii][14]:'';
+                                    			}else{
+                                    				nilai2 = (rowi[ii][10])?rowi[ii][10]:'';
+                                    			}
+                                    			if(rowi[ii][15]){
+                                    				nilai3 = (rowi[ii][15])?rowi[ii][15]:'';
+                                    			}else{
+                                    				nilai3 = (rowi[ii][11])?rowi[ii][11]:'';
+                                    			}
+                                    			if(rowi[ii][16]){
+                                    				nilai4 = (rowi[ii][16])?rowi[ii][16]:'';
+                                    			}else{
+                                    				nilai4 = (rowi[ii][12])?rowi[ii][12]:'';
+                                    			}
+                                        	}else{
+                                        		if(rowi[ii][5]){
+                                        			nilai1 = (rowi[ii][5])?rowi[ii][5]:'';
+                                    			}else{
+                                    				nilai1 = (rowi[ii][1])?rowi[ii][1]:'';
+                                    			}
+                                        		if(rowi[ii][6]){
+                                        			nilai2 = (rowi[ii][6])?rowi[ii][6]:'';
+                                    			}else{
+                                    				nilai2 = (rowi[ii][2])?rowi[ii][2]:'';
+                                    			}
+                                        		if(rowi[ii][7]){
+                                        			nilai3 = (rowi[ii][7])?rowi[ii][7]:'';
+                                    			}else{
+                                    				nilai3 = (rowi[ii][3])?rowi[ii][3]:'';
+                                    			}
+                                        		if(rowi[ii][8]){
+                                        			nilai4 = (rowi[ii][8])?rowi[ii][8]:'';
+                                    			}else{
+                                    				nilai4 = (rowi[ii][4])?rowi[ii][4]:'';
+                                    			}
+                                        	}
+                                    		for(var isdg=0;isdg<cekSdg.length;isdg++){
+                                    			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:"";
+                                    			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:"";
+                                    			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:"";
+                                    			nilai4 = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==y)?nilai4:"";
+                                    		}
 
-                                		textSdg += "<td>"+(row[i][8]?row[i][8]:'')+"</td>";
-                                		if(sts == 'yearly'){
-                                			textSdg += "<td>"+nilai1+"</td>";	
-                                		}else if(sts == 'semesterly'){
-                                			textSdg += "<td>"+nilai1+"</td>";
-                                			textSdg += "<td>"+nilai2+"</td>";
-                                    	}
-                                		else if(sts == 'quarterly'){
-                                			textSdg += "<td>"+nilai1+"</td>";
-                                			textSdg += "<td>"+nilai2+"</td>";
-                                			textSdg += "<td>"+nilai3+"</td>";
-                                			textSdg += "<td>"+nilai4+"</td>";
+                                    		textSdg += "<td>"+(rowi[ii][0]?rowi[ii][0]:'')+"</td>";
+                                    		if(sts == 'yearly'){
+                                    			textSdg += "<td>"+nilai1+"</td>";	
+                                    		}else if(sts == 'semesterly'){
+                                    			textSdg += "<td>"+nilai1+"</td>";
+                                    			textSdg += "<td>"+nilai2+"</td>";
+                                        	}
+                                    		else if(sts == 'quarterly'){
+                                    			textSdg += "<td>"+nilai1+"</td>";
+                                    			textSdg += "<td>"+nilai2+"</td>";
+                                    			textSdg += "<td>"+nilai3+"</td>";
+                                    			textSdg += "<td>"+nilai4+"</td>";
+                                        	}
+                                    		//textSdg += "<td>"+rowi[ii][19]+"</td>";
                                     	}
                                 	}
                                 }
                 			});
                 		}
-                		textSdg += "<td></td></tr>";
+                		textSdg += "<td></td>";
+                		textSdg += "<td>"+row[i][19]+"</td></tr>";
                 		textSdg += "</tbody></table>";
 
                 		if(disaggre=="" || (disaggre!="" && tabGov)){
