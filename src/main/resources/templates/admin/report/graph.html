@@ -309,6 +309,11 @@
                     $("#kananbawah").append(isi);
                 }
             });
+          	
+        	var valda = $("#daerah").val();
+        	if (valda != "000") {
+        		$("##olgoals > li > ul > li > ul > li").css("clear","both");
+        	}
         	/*$.ajax({
             	url: urls + "getrole",
                 type: 'get',
