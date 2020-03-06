@@ -362,6 +362,7 @@ public class ReportController {
         model.addAttribute("title", "Report Graphic");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("idrole", session.getAttribute("id_role"));
         return "admin/report/graph";
     }
     
@@ -576,28 +577,27 @@ public class ReportController {
     }
     
     @GetMapping("admin/getsdgtar")
-    public @ResponseBody List<Object> getsdgtar(@RequestParam("id_gov_indicator") int idindi, @RequestParam("name") String name, 
+    public @ResponseBody List<Object> getsdgtar(@RequestParam("id_gov_indicator") int idindi, @RequestParam("id_role") int valrole, 
     		@RequestParam("year") int year) {
     	String sql = "SELECT value FROM sdg_indicator_target WHERE id_sdg_indicator = (SELECT id_indicator FROM gov_map WHERE id_gov_indicator = :id_gov_indicator) AND "
-    			+ "id_role = (SELECT id_role FROM ref_user WHERE name = :name) AND year = :year";
+    			+ "id_role = :id_role AND year = :year";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_gov_indicator", idindi);
-        query.setParameter("name", name);
+        query.setParameter("id_role", valrole);
         query.setParameter("year", year);
         List list = query.getResultList();
         return list;
     }
     
     @GetMapping("admin/getsdgreal")
-    public @ResponseBody List<Object> getsdgreal(@RequestParam("id_gov_indicator") int idindi, @RequestParam("name") String name, 
+    public @ResponseBody List<Object> getsdgreal(@RequestParam("id_gov_indicator") int idindi, @RequestParam("id_role") int valrole, 
     		@RequestParam("year") int year, @RequestParam("id_monper") int idmonper) {
     	String sql = "SELECT COALESCE(NULLIF(new_value1,''),achievement1) FROM entry_sdg WHERE "
     			+ "id_sdg_indicator = (SELECT id_indicator FROM gov_map WHERE id_gov_indicator = :id_gov_indicator) AND "
-    			+ "id_role = (SELECT id_role FROM ref_user WHERE name = :name) AND "
-    			+ "year_entry = :year_entry AND id_monper = :id_monper";
+    			+ "id_role = :id_role AND year_entry = :year_entry AND id_monper = :id_monper";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_gov_indicator", idindi);
-        query.setParameter("name", name);
+        query.setParameter("id_role", valrole);
         query.setParameter("year_entry", year);
         query.setParameter("id_monper", idmonper);
         List list = query.getResultList();
@@ -639,6 +639,15 @@ public class ReportController {
     @GetMapping("admin/getmonper")
     public @ResponseBody List<Object> getmonper(@RequestParam("id_prov") String idprov) {
     	String sql = "SELECT id_monper, start_year, end_year FROM ran_rad WHERE id_prov = :id_prov";
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallrolebyprov")
+    public @ResponseBody List<Object> getallrolebyprov(@RequestParam("id_prov") String idprov) {
+    	String sql = "SELECT id_role, nm_role FROM ref_role WHERE id_prov = :id_prov";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
         List list = query.getResultList();
@@ -706,10 +715,10 @@ public class ReportController {
 
     //====================== Grafik Detail ======================
     
-    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{idmonper}/{flag}/{valdaerah}")
+    @GetMapping("admin/report-graph-detail/{idsdg}/{idtar}/{idindi}/{idmonper}/{flag}/{valdaerah}/{valrole}")
     public String grafikdetail(Model model, HttpSession session, @PathVariable("idsdg") int idsdg, @PathVariable("idtar") int idtar,
     		@PathVariable("idindi") int idindi, @PathVariable("idmonper") int idmonper, 
-    		@PathVariable("flag") int flag, @PathVariable("valdaerah") String valdaerah) {
+    		@PathVariable("flag") int flag, @PathVariable("valdaerah") String valdaerah, @PathVariable("valrole") String valrole) {
         model.addAttribute("title", "Report Graphic Detail");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
@@ -719,6 +728,7 @@ public class ReportController {
         model.addAttribute("idmonper", idmonper);
         model.addAttribute("flag", flag);
         model.addAttribute("valdaerah", valdaerah);
+        model.addAttribute("valrole", valrole);
         return "admin/report/graphdetail";
     }
     

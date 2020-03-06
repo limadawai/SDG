@@ -97,7 +97,7 @@
                             	<span class="lang_indo">Tahun</span>
                             </label>
                             <div class="controls">
-                                <input type="text" pattern="\d*" maxlength="4"minlength="4"  name="year"/>
+                                <input type="text" id="year" pattern="\d*" maxlength="4"minlength="4"  name="year"/>
                             </div>
                         </div>
                         <div class="control-group">
@@ -106,7 +106,7 @@
                             	<span class="lang_indo">Lampiran</span>
                             </label>
                             <div class="controls">
-                                <input type="file" name="files"/>
+                                <input id="files" type="file" name="files"/>
                             </div>
                         </div>
                     </div>
@@ -330,8 +330,9 @@
     });
     
     function clearForm(){
-		$('#nm_unit').val("").removeAttr("readonly");
-                $('#id_unit').val("").removeAttr("readonly");
+		$('#company_name').val("").removeAttr("readonly");
+                $('#year').val("").removeAttr("readonly");
+                $('#files').val("").removeAttr("readonly");
                 $('#submit').removeAttr("disabled");
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");

@@ -15,10 +15,13 @@
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
-                <div style="width:100%">
+                <div id="selopt" style="width:100%">
                     <select id="daerah" name="daerah" class="form-control">
                         <option value="0" >-- Pilih Daerah --</option>
                         <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
+                    </select>
+                    <select id="selrole" name="role" class="form-control">
+                        <option value="0" >-- Pilih Role --</option>
                     </select>
                     <select id="periode" name="periode" class="form-control">
                         <option value="0" >-- Pilih Periode --</option>
@@ -51,7 +54,7 @@
         var lang = [[${lang}]];
         if (lang == null ) {lang = "0";};
         var name = [[${name}]];
-        var role = [[${role}]];
+        var idrole = [[${idrole}]];
         $("#welcome").html("Welcome, "+name);
 
         indo();
@@ -115,7 +118,7 @@
         			//console.log(resindi);
         			var isiindi = "<ul id='ulindi"+idgoals+"'>";
         			for (var i=0; i<resindi.length; i++) {
-        				isiindi += "<li onclick='cucukanan("+idgoals+", "+idtarget+", "+resindi[i][0]+", "+$("#periode").val()+","+1+")'>"+resindi[i][1]+"</li>";
+        				isiindi += "<li id='lisdg' style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+", "+idtarget+", "+resindi[i][0]+", "+$("#periode").val()+","+1+")'>"+resindi[i][1]+"</li>";
         				getDisaggre(idgoals, resindi[i][0]);
         			}
         			isiindi += "</ul>";
@@ -228,6 +231,22 @@
         $("#daerah").on("change", function(){
             var valdaerah = $(this).val();
             $.ajax({
+            	url: urls + "getallrolebyprov",
+                type: 'get',
+                data: {'id_prov':valdaerah},
+                dataType: 'json',
+                cache: false,
+                success: function (resrole) {
+                	//console.log(resrole);
+                	$("#selrole").empty();
+                	$("#selrole").append("<option value='0'>-- Pilih Role --</option>");
+                	for (var i=0; i<resrole.length; i++) {
+                		var opt = "<option value='"+resrole[i][0]+"'>"+resrole[i][1]+"</option>";
+                		$("#selrole").append(opt);
+                	}
+                }
+            });
+            $.ajax({
             	url: urls + "getmonper",
                 type: 'get',
                 data: {'id_prov':valdaerah},
@@ -309,164 +328,23 @@
                     $("#kananbawah").append(isi);
                 }
             });
-          	
-        	var valda = $("#daerah").val();
-        	if (valda != "000") {
-        		$("##olgoals > li > ul > li > ul > li").css("clear","both");
-        	}
-        	/*$.ajax({
-            	url: urls + "getrole",
-                type: 'get',
-                data: {'id_prov':valdaerah},
-                dataType: 'json',
-                cache: false,
-                success: function (resrole) {
-                	//console.log(resrole);
-                	if (resrole.length == 0) {
-                		swal("Data tidak ditemukan");
-                	}
-                    $("#divkiri").empty();
-                    $("#kananatas").empty();
-                    $("#kananbawah").empty();
-                	for (var i=0; i<resrole.length; i++) {
-                		$.ajax({
-                            url: urls + "graphsdg",
-                            type: 'get',
-                            data: {'id_prov':valdaerah,'id_role':resrole[i]},
-                            dataType: 'json',
-                            cache: false,
-                            async: false,
-                            success: function (result) {
-                            	//console.log(result);
-                            	if (result.length > 0) {
-                                	//console.log(result);
-                            	}
-                                var isi = "<ol class='tree'>";
-                                if (result.length > 0) {
-                                    for (var i=0; i<result.length; i++) {
-                                    	//console.log(result[i]);
-                                        isi += "<li style='padding:6px'>";
-                                            isi += "<label class='dok' for='folder"+(i+1)+"'>"+result[i][8]+"</label> <input type='checkbox' id='folder"+(i+1)+"' />";
-                                            isi += "<ol>";
-                                                isi += "<li class='dok' style='padding:6px'>";
-                                                    isi += "<label id='dok' class='dok' for='subfolder"+(i+1)+"' value=''>"+result[i][11]+"</label><input type='checkbox' id='subfolder"+(i+1)+"' />";
-                                                    isi += "<ol id=''olindikator>";
-                                                        isi += "<li id='cucu' class='file' style='padding:6px'>" +
-                                                        "<a href='#' onclick='kanan("+result[i][1]+","+result[i][2]+","+result[i][3]+","+valperiode+")'>"+result[i][14]+"</a>" +
-                                                        "</li>";
-                                                    isi += "</ol>";
-                                                isi += "</li>";
-                                            isi += "</ol>";
-                                        isi += "</li>";
-                                    }
-                                }
-                                isi += "</ol>";
-                                $("#divkiri").append(isi);
-                            }
-                        });
-                	}
-                }
-            }); */
         });
-
-        /* function kanan(idsdg, idtar, idindi, idmonper) {
-        	//alert(idsdg+" "+idtar+" "+idindi+" "+idmonper);
-        	var valda = $("#daerah").val();
-        	//alert(valda);
-            $.ajax({
-                url: urls + "graphidgovindi",
-                type: 'get',
-                data: {"id_indicator":idindi,"id_monper":idmonper},
-                dataType: 'json',
-                cache: false,
-                success: function (result) {
-                    //console.log(result);
-                    //console.log("id monper : "+result[0][1])
-                    if (result.length == 0) {
-                    	swal("Data tidak ditemukan");
-                    }
-                    $("#kananatas").empty();
-                    for (var i=0; i<result.length; i++) {
-                        $.ajax({
-                            url: urls + "isigovmap",
-                            type: 'get',
-                            data: 'id='+result[i][0],
-                            dataType: 'json',
-                            cache: false,
-                            success: function (resin) {
-                                var isi = "<ol class='treekanan'>";
-                                for (var i=0; i<resin.length; i++) {
-                                    isi += "<li style='padding:6px'>";
-                                        isi += "<label class='dokkanan' for='folder" + (i + 1) + "'>" + resin[i][10] + "</label> <input type='checkbox' id='folder" + (i + 1) + "' />";
-                                        isi += "<ol>";
-                                            isi += "<li style='padding:6px'>";
-                                            isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
-                                                isi += "<ol>";
-                                                    isi += "<li id='cucukanan' class='file' style='padding:6px'>" +
-                                                    	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+result[0][1]+","+0+")'>" + resin[i][4] + "</a>" +
-                                                    	"</li>";
-                                                isi += "</ol>";
-                                            isi += "</li>";
-                                        isi += "</ol>";
-                                    isi += "</li>";
-                                }
-                                isi += "</ol>";
-                                $("#kananatas").append(isi);
-                            }
-                        });
-                    }
-                }
-            });
-            //************************** Non Government ****************************
-            $.ajax({
-                url: urls + "graphidnsaindi",
-                type: 'get',
-                data: {"id_indicator":idindi,"id_monper":idmonper},
-                dataType: 'json',
-                cache: false,
-                success: function (result) {
-                    //console.log(result);
-                    $("#kananbawah").empty();
-                    for (var i=0; i<result.length; i++) {
-                        $.ajax({
-                            url: urls + "isinsamap",
-                            type: 'get',
-                            data: 'id='+result[i][0],
-                            dataType: 'json',
-                            cache: false,
-                            success: function (resin) {
-                            	//console.log(resin);
-                            	//console.log("id monper : "+result[0][1])
-                                var isi = "<ol class='treekanan'>";
-                                for (var i=0; i<resin.length; i++) {
-                                    isi += "<li style='padding:6px'>";
-                                    isi += "<label class='dokkanan' for='folder" + (i + 1) + "'>" + resin[i][10] + "</label> <input type='checkbox' id='folder" + (i + 1) + "' />";
-                                    isi += "<ol>";
-                                    isi += "<li style='padding:6px'>";
-                                    isi += "<label class='dokkanan' for='subfolder" + (i + 1) + "'>" + resin[i][13] + "</label><input type='checkbox' id='subfolder" + (i + 1) + "' />";
-                                    isi += "<ol>";
-                                    isi += "<li id='cucukanan' class='file' style='padding:6px'>" +
-                                	"<a onclick='cucukanan("+idsdg+","+idtar+","+idindi+","+resin[i][0]+","+result[0][1]+","+1+")'>" + resin[i][4] + "</a>" +
-                                	"</li>";
-                                    isi += "</ol>";
-                                    isi += "</li>";
-                                    isi += "</ol>";
-                                    isi += "</li>";
-                                }
-                                isi += "</ol>";
-                                $("#kananbawah").append(isi);
-                            }
-                        });
-                    }
-                }
-            });
-        } */
+        
+        var valprov = $("#daerah option:selected").val();
+        if (valprov == "000") {
+        	//$("#lisdg").css({"cursor":"pointer","color":"#7F7FFF"});
+        }
 
         function cucukanan(idsdg, idtar, idindi, idmon, flag) {
         	//alert(idsdg+" "+idtar+" "+idindi+" "+idmon+" "+flag);
-        	var valda = $("#daerah").val();
-            location.href = urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda;
-            //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
+        	var valda = $("#daerah option:selected").val();
+        	var valrole = $("#selrole option:selected").val();
+        	if (valrole == "0") {
+        		swal("Anda harus memilih tipe Role");
+        	} else {
+        		location.href = urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda+"/"+valrole;
+                //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
+        	}
         }
 
     </script>
