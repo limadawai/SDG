@@ -547,7 +547,6 @@
        		       	                data: {'id_monper':idmonper,'id_prov':valdaerah},
        		       	                dataType: 'json',
        		       	                cache: false,
-       		       	                async: false,
        		       	                success: function (resreal) {
        		       	                	//console.log(resreal);
        		       	                	if (periode == "yearly") {
@@ -561,7 +560,7 @@
 							       	                cache: false,
 							       	                async: false,
 							       	                success: function (resreal) {
-							       	                	console.log(resreal);
+							       	                	//console.log(resreal);
 							       	                	val.push(resreal[0]);
 							       	                }
 						                		});
@@ -601,7 +600,7 @@
 							       	                cache: false,
 							       	                async: false,
 							       	                success: function (resreal) {
-							       	                	console.log(resreal);
+							       	                	//console.log(resreal);
 							       	                	val.push(resreal[0]);
 							       	                }
 						                		});
@@ -717,7 +716,6 @@
 					  	       	        	                data: {'id_gov_indicator':idsdgindikator,'id_role':valrole,'year':tsdg[i]},
 					  	       	        	                dataType: 'json',
 					  	       	        	                cache: false,
-					  	       	        	                async: false,
 					  	       	        	                success: function (ressdgtar) {
 					  	       	        	                	console.log(ressdgtar);
 					  	       	        	                	psh.push(ressdgtar[0]);
@@ -733,7 +731,6 @@
 					  	       	        	                data: {'id_gov_indicator':idsdgindikator,'id_role':valrole,'year':tsdg[i],'id_monper':idmonper},
 					  	       	        	                dataType: 'json',
 					  	       	        	                cache: false,
-					  	       	        	                async: false,
 					  	       	        	                success: function (ressdgtar) {
 					  	       	        	                	//console.log(ressdgtar[0]);
 					  	       	        	                	nil.push(ressdgtar[0]);
@@ -747,7 +744,6 @@
 				  	       	        	                data: {'id_gov_indicator':idsdgindikator,'id_monper':idmonper},
 				  	       	        	                dataType: 'json',
 				  	       	        	                cache: false,
-				  	       	        	                async: false,
 				  	       	        	                success: function (res) {
 				  	       	        	                	//console.log(res);
 				  	       	        	               		$("#colsdg12").text(res[0][1]);$("#colsdg13").text(res[0][0]);
@@ -759,7 +755,6 @@
 				  	       	        	                data: {'id_gov_indicator':idsdgindikator},
 				  	       	        	                dataType: 'json',
 				  	       	        	                cache: false,
-				  	       	        	                async: false,
 				  	       	        	                success: function (hasil) {
 				  	       	        	                	//console.log(hasil);
 				  	       	        	               		$("#colsdg1").text(hasil[0]);
@@ -768,9 +763,102 @@
 		  	       	        	                }
 		  	       	        	        	});
   	       	        	                } else if (resranrad[0] == "semesterly") {
-      	       	        	                	
+  	       	        	                	//alert(resranrad[0]);
+	  	       	        	               	var th = "<tr>";
+		  	       	        	            th += "<th id='th1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
+		  	       	        	            th += "<th id='th2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
+		  	       	        	            th += "<th id='th3' style='vertical-align:middle;' colspan='10'>Realisasi per Semester</th>";
+		  	       	        	            th += "<th id='th4' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+		  	       	        	            th += "<th id='th5' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
+		  	       	        	            th += "<th id='th6' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr class='trtarget'>";
+		  	       	        	            th += "<th id='tahun1' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun2' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun3' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun4' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun5' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr class='trreal'>";
+		  	       	        	            th += "<th id='tahun11' colspan='2'></th>";
+		  	       	        	            th += "<th id='tahun12' colspan='2'></th>";
+		  	       	        	            th += "<th id='tahun13' colspan='2'></th>";
+		  	       	        	            th += "<th id='tahun14' colspan='2'></th>";
+		  	       	        	            th += "<th id='tahun15' colspan='2'></th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            $("#tabsdg > thead").append(th);
+		  	       	        	            var row = "<tr>";
+		  	       	        	            for (var i=1; i<=19; i++) {
+		  	       	        	            	row += "<td style='text-align:center;' id='colsdg"+i+"'></td>";
+		  	       	        	            }
+		  	       	        	            row += "</tr>";
+  	       	        	                	$("#tabsdg > tbody").append(row);
+  	       	        	                	$("#colsdg19").text(name);
   	       	        	                } else if (resranrad[0] == "quarterly") {
-      	       	        	                	
+	  	       	        	               	var th = "<tr>";
+		  	       	        	            th += "<th id='th1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
+		  	       	        	            th += "<th id='th2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
+		  	       	        	            th += "<th id='th3' style='vertical-align:middle;' colspan='20'>Realisasi per Semester</th>";
+		  	       	        	            th += "<th id='th4' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+		  	       	        	            th += "<th id='th5' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
+		  	       	        	            th += "<th id='th6' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr class='trtarget'>";
+		  	       	        	            th += "<th id='tahun1' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun2' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun3' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun4' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "<th id='tahun5' style='vertical-align:middle;' rowspan='3'></th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr class='trreal'>";
+		  	       	        	            th += "<th id='tahun11' colspan='4'></th>";
+		  	       	        	            th += "<th id='tahun12' colspan='4'></th>";
+		  	       	        	            th += "<th id='tahun13' colspan='4'></th>";
+		  	       	        	            th += "<th id='tahun14' colspan='4'></th>";
+		  	       	        	            th += "<th id='tahun15' colspan='4'></th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            th += "<tr>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>III</th>";
+		  	       	        	            th += "<th>IV</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>III</th>";
+		  	       	        	            th += "<th>IV</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>III</th>";
+		  	       	        	            th += "<th>IV</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>III</th>";
+		  	       	        	            th += "<th>IV</th>";
+		  	       	        	            th += "<th>I</th>";
+		  	       	        	            th += "<th>II</th>";
+		  	       	        	            th += "<th>III</th>";
+		  	       	        	            th += "<th>IV</th>";
+		  	       	        	            th += "</tr>";
+		  	       	        	            $("#tabsdg > thead").append(th);
+		  	       	        	            var row = "<tr>";
+		  	       	        	            for (var i=1; i<=29; i++) {
+		  	       	        	            	row += "<td style='text-align:center;' id='colsdg"+i+"'></td>";
+		  	       	        	            }
+		  	       	        	            row += "</tr>";
+  	       	        	                	$("#tabsdg > tbody").append(row);
+  	       	        	                	$("#colsdg29").text(name);
   	       	        	                }
   	       	        	            }
   	        	                });
