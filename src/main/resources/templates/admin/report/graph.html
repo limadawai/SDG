@@ -58,6 +58,11 @@
         $("#welcome").html("Welcome, "+name);
 
         indo();
+        
+        var id_role     = [[${id_role}]];
+        var id_prov     = [[${id_prov}]];
+        var privilege   = [[${privilege}]];
+        
 
         if (lang == "0") {
             indo();
@@ -227,6 +232,54 @@
         }
 
         // ********************** Fungsi pilih select option **********************
+        
+        if(id_role == '1'){
+
+        }else{
+            
+            $.ajax({
+            	url: urls + "getallrolebyprov",
+                type: 'get',
+                data: {'id_prov': id_prov},
+                dataType: 'json',
+                cache: false,
+                success: function (resrole) {
+                    //console.log(resrole);
+                    $("#selrole").empty();
+                    $("#selrole").append("<option value='0'>-- Pilih Role --</option>");
+                    for (var i=0; i<resrole.length; i++) {
+                            var opt = "<option value='"+resrole[i][0]+"'>"+resrole[i][1]+"</option>";
+                            $("#selrole").append(opt);
+                    }
+                    if(privilege == 'ADMIN'){
+                        $("#selrole").val('0').trigger("change").attr('disabled',false);
+                    }else{
+                        $("#selrole").val(id_role).trigger("change").attr('disabled',true);
+                    }
+                }
+            });
+
+            $.ajax({
+            	url: urls + "getmonper",
+                type: 'get',
+                data: {'id_prov': id_prov},
+                dataType: 'json',
+                cache: false,
+                success: function (resmonper) {
+                	//console.log(resmonper);
+                	$("#periode").empty();
+                	$("#kananatas").empty();
+                	$("#kananbawah").empty();
+                	$("#periode").append("<option value='0'>-- Pilih Periode --</option>");
+                	for (var i=0; i<resmonper.length; i++) {
+                		var opt = "<option value='"+resmonper[i][0]+"'>"+resmonper[i][1]+" - "+resmonper[i][2]+"</option";
+                		$("#periode").append(opt);
+                	}
+                }
+            });
+            $("#daerah").val(id_prov).trigger("change").attr('disabled',true);
+        }
+        
         
         $("#daerah").on("change", function(){
             var valdaerah = $(this).val();
