@@ -39,6 +39,7 @@
                                 <option value="0" >-- Pilih --</option>
                                 <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
+                            
 <!--                            <div class="lang_indo"><span> Periode</span></div>
                             <div class="lang_eng"><span> Period</span></div>-->
                             <select id="periode" name="periode" class="form-control">
@@ -46,8 +47,19 @@
                                 <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
                             </select>
                             <div class="input-append pull-right">
-                                <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
-                                <span class="add-on"><i class="icon-search"></i></span>
+                                <div class="span6" align="right">
+                    			<button data-toggle="modal" id="add_problem" data-target="#myModal" class="btn btn-primary hide"><i class="icon-plus"></i>
+                    				<span class="lang_eng" style="display:none">Add Problem Identify</span><span class="lang_indo">Tambah Identifikasi Masalah</span>
+                    			</button>
+                                        <a class="btn btn-success appl" id="apply_btn" data-periode="1" style=" margin-left: 10px;display: none">
+                                            <span class="lang_indo">Terapkan</span>
+                                            <span class="lang_eng">Apply</span>
+                                        </a>
+                                        <a class="btn btn-warning unappl" id="unapply_btn" data-periode="1" style="margin-left: 10px;display: none">
+                                            <span class="lang_indo">Batal Terapkan</span>
+                                            <span class="lang_eng">UnApply</span>
+                                        </a>
+                    		</div>
                             </div>
 <!--                            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
                                 <button class="btn btn-warning btn-small tambah">
@@ -69,22 +81,30 @@
                                 <table class="table table-bordered table-striped" id="tabel-goals">
                                     <thead>
                                         <tr>
-                                            <th style="text-align:center;font-size:80%;" width="5%">
+                                            <th style="text-align:center;font-size:80%;" >
                                                 <span class="lang_eng" style="display:none">No</span>
                                                 <span class="lang_indo">No</span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;" width="10%">
-                                                <span class="lang_eng" style="display:none">Code</span>
-                                                <span class="lang_indo">Kode</span>
+                                            <th style="text-align:center;font-size:80%;" >
+                                                <span class="lang_eng" style="display:none">Sdgs Indicator</span>
+                                                <span class="lang_indo">Sdg Indicator</span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;" width="75%">
-                                                <span class="lang_eng" style="display:none">Goals</span>
-                                                <span class="lang_indo">Sasaran</span>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Category</span>
+                                                <span class="lang_indo">Kategory</span>
                                             </th>
-<!--                                            <th style="text-align:center;font-size:80%;" width="10%">
+                                            <th style="text-align:center;font-size:80%;" >
+                                                <span class="lang_eng" style="display:none">Problem Identify</span>
+                                                <span class="lang_indo">Identifikasi Masalah</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;" >
+                                                <span class="lang_eng" style="display:none">Follow Up</span>
+                                                <span class="lang_indo">Solusi</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;" >
                                                 <span class="lang_eng" style="display:none">Action</span>
                                                 <span class="lang_indo">Aksi</span>
-                                            </th>-->
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody id="tbody-goals">
@@ -96,10 +116,60 @@
                 </div>
             </div>
         </div>
+        <div id="myModal"data-backdrop="static" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+			<div class="modal-header">
+			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 class="lang_eng" style="display:none">Add Disaggregation</h3>
+			    <h3 class="lang_indo">Tambah Disaggregation</h3>
+		  	</div>
+			<div class="modal-body">
+				<form>
+                                    <input type="hidden" id="id" name="id"/>
+                                    <div class="control-group">
+				    <label class="lang_eng" style="display:none">Ref Category</label>
+				    <label class="lang_indo">Ref Category</label>
+                                    <select id="ref_category" name="ref_category" class="form-control">
+                                        <option value="0" >-- Pilih Category --</option>
+                                        <option th:each="f:${refcategory.content}" th:value="${f.id_cat}" th:text="${f.nm_cat}"></option>
+                                    </select>
+                                    </div>
+                                    <div class="control-group">
+				    <label class="lang_eng" style="display:none">SDG Indicator</label>
+				    <label class="lang_indo">SDG Indikator</label>
+                                    <select  class="span3" id="filter_sdg">
+                                    </select>
+                                    </div>
+                                    <div class="control-group">
+                                        <label th:class="control-label" for="detail">Problem</label>
+                                        <div class="controls">
+                                            <textarea class="input-block-level" id="problem" name="problem" rows="3"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="control-group">
+                                        <label th:class="control-label" for="detail">Follow Up</label>
+                                        <div class="controls">
+                                            <textarea class="input-block-level" id="follow_up" name="follow_up" rows="3"></textarea>                                            
+                                        </div>
+                                    </div>
+				</form>
+			</div>
+			<div class="modal-footer">
+		    	<button class="btn" data-dismiss="modal" aria-hidden="true">
+		    		<span class="lang_eng" style="display:none">Close</span>
+		    		<span class="lang_indo">Tutup</span>
+		    	</button>
+		    	<button class="btn btn-primary" id="submit">
+		    		<span class="lang_eng" style="display:none">Submit</span>
+		    		<span class="lang_indo">Simpan</span>
+		    	</button>
+		  	</div>
+		</div>
     </div>
-
+    
     <script th:inline="javascript" >
         
+        var token       = $("meta[name='_csrf']").attr("content");
+	var header      = $("meta[name='_csrf_header']").attr("content");
         var id_role     = [[${id_role}]];
         var id_prov     = [[${id_prov}]];
         var privilege   = [[${privilege}]];
@@ -198,6 +268,7 @@
             var id_monper   = data_id[0];
             var tahun       = data_id[1];
             grid();
+            $('#add_problem').show();
         });
 
         $("#idrole").on('change', function(e){
@@ -263,45 +334,6 @@
             var id_monper   = v_data_id[0];
             var tahun       = v_data_id[1];
             var table = $('#tabel-goals').DataTable(
-//                    {
-//                responsive: true,
-//                sDom: 'lrtip',
-//                "bLengthChange": false,
-//                "cache": false,
-//                "autoWidth": true,
-//                "responsive":true,
-//                "bDestroy": true,
-//                "ajax": {
-//                    "url": urls+'list-problem/'+id_monper,
-//                    dataSrc: 'content',
-//                },
-//                "searching": true,
-//                "columns": [
-//                    {"data": function (row, data, index, display) {
-//                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-//                    }},
-//                    {"data": function (row, data, index, display) {
-//                        return "<div style='font-size:90%;'>"+row.id_program+"</div>";
-//                    }},
-//                    {"data": function (row, data, index, display) {
-//                        var v_idrole1   = $("#idrole").val();
-//                        var v_dataid2   = $("#periode").val();
-//                        var v_dataid1   = v_dataid2.split("###");;
-//                        var id_monper1  = v_dataid1[0];
-//                        var tahun1      = v_dataid1[1];
-//                        var v_idprov1   = $("#id_prov").val();
-//                        if($('#fs').is(':checked')){
-//                            return "<div style='font-size:90%;'><a href='"+urls+"government-program-monitoring/gov/program/"+row.id+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"/activity' class='target'>"+row.nm_program+"</div>";
-//                        }else{
-//                            return "<div style='font-size:90%;'><a href='"+urls+"government-program-monitoring/gov/program/"+row.id+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"/activity' class='target'>"+row.nm_program_eng+"</div>";
-//                        }
-//                        
-//                    }},
-//                ],
-//                "columnDefs": [
-//                ],
-//                select: true
-//            }
             {
 				sDom: 'lrtip',
 				"bLengthChange": false,
@@ -318,21 +350,36 @@
 							return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
-						}},
-					{"data": function (row, data, index, display) {
-							if ($('#fs').is(':checked')) {
-								return "<div style='font-size:90%;'><a href='" + urls + "problem-identification/" + row.id + "/target' class='target' data-id='" + row.id + "'>" + row.nm_goals + "</a></div>";
-							} else {
-								return "<div style='font-size:90%;'><a href='" + urls + "problem-identification/" + row.id + "/target' class='target' data-id='" + row.id + "'>" + row.nm_goals_eng + "</a></div>";
-							}
-						}},
-//					{"data": function (row, data, index, display) {
-//							return "<div style='text-align:center;'>"+
-//									'<button data-id="'+row.id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-//									'<button data-id="'+row.id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-//									'<button data-id="'+row.id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-//						}}
+                                                var goals       = '<label style="display:inline-block;white-space:nowrap;"><span style="vertical-align:middle">'+row[0]+' '+row[2]+'</span></label><br>';
+                                                var target      = '<label style="display:inline-block;white-space:nowrap;margin-left:20px"><span style="vertical-align:middle">'+row[4]+' '+row[6]+'</span></label><br>';
+                                                var indicator   = '<label style="display:inline-block;white-space:nowrap;margin-left:40px"><span style="vertical-align:middle">'+row[8]+' '+row[10]+'</span></label><br>';
+                                                var group = goals+target+indicator;
+							return "<div style='font-size:90%;'>"+group+"</div>";
+					}},
+                                        {"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row[13]+"</div>";
+					}},
+                                        {"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row[14]+"</div>";
+					}},
+                                        {"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row[15]+"</div>";
+					}},
+                                        {"data": function (row, data, index, display) {
+                                                var data =  JSON.stringify(row).replace(/'/g, "&#39");
+                                                var id = row[16];
+							if(row[17]!=1){
+                                                            $('#apply_btn').show();
+                                                           return "<div style='text-align:center;'>"+
+                                                            '<button data-id="'+id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+                                                            '<button data-id="'+id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                                                            '<button data-id="'+id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>'; 
+                                                        }else{
+                                                            $('#unapply_btn').show();
+                                                            return '';
+                                                        }
+					}}
+					
 				],
 				"columnDefs": [
 				],
@@ -350,8 +397,14 @@
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
 //                alert(urls+'list-problem/'+id_monper);
-                table.ajax.url(urls+'list-problem/'+id_monper ).load();
-                
+                table.ajax.url(urls+'list-problem/'+id_monper ).load(function(result){
+                    var count_data = result.content.length;
+                    if(count_data==0){
+                        $('#apply_btn,#unapply_btn').hide();
+                    }
+                   
+                });
+                 $('#add_problem').hide();
             }
             
             $('#text-cari').on( 'keyup', function () {
@@ -359,7 +412,274 @@
                 table.search(val).draw();
             });
             
-            
+            $('#apply_btn').on('click',function(){
+                 var data_ref = table.rows( 0 ).data();
+                 var id_goals        = data_ref[0][1];
+                 var id_target       = data_ref[0][5];
+                 var id_indicator    = data_ref[0][9];
+                 var id_monper       = data_ref[0][18];
+                            swal({
+                                title: "Are You Sure",
+                                text: "",
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes'
+                            }).then(function () {
+                               
+//                                console.log(data[0][2]);
+//                                return false;
+                                 
+                                 var data = JSON.stringify({
+                                                'id_goals'      :id_goals,
+                                                'id_target'     :id_target,
+                                                'id_indicator'  :id_indicator
+                                            });
+                                    
+                                    $.ajax({
+						type: "POST",
+                                                url: urls+'problem-identification/aply',
+                                                beforeSend : function(xhr){
+                                                    xhr.setRequestHeader(header,token);
+                                                },
+                                                headers:{'Accept':'application/json','Content-Type':'application/json'},
+                                                data: data,
+                                                success: function (result) {
+                                                    table.ajax.url(urls+'list-problem/'+id_monper).load(function(e){
+//                                                        if(e.count_data>0){
+                                                             $('#apply_btn').hide();
+                                                             $('#unapply_btn').show();
+//                                                        }
+                                                    });
+                                                },
+                                            });
+                             }, function (dismiss) {
+                                if (dismiss === 'cancel') {
+                                }
+                            });
+                               
+                        });
+            $('#unapply_btn').on('click',function(){
+                 var data_ref = table.rows( 0 ).data();
+                 var id_goals        = data_ref[0][1];
+                 var id_target       = data_ref[0][5];
+                 var id_indicator    = data_ref[0][9];
+                 var id_monper       = data_ref[0][18];
+                            swal({
+                                title: "Are You Sure",
+                                text: "",
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonColor: '#3085d6',
+                                cancelButtonColor: '#d33',
+                                confirmButtonText: 'Yes'
+                            }).then(function () {
+                               
+//                                console.log(data[0][2]);
+//                                return false;
+                                 
+                                 var data = JSON.stringify({
+                                                'id_goals'      :id_goals,
+                                                'id_target'     :id_target,
+                                                'id_indicator'  :id_indicator
+                                            });
+                                    
+                                    $.ajax({
+						type: "POST",
+                                                url: urls+'problem-identification/un-aply',
+                                                beforeSend : function(xhr){
+                                                    xhr.setRequestHeader(header,token);
+                                                },
+                                                headers:{'Accept':'application/json','Content-Type':'application/json'},
+                                                data: data,
+                                                success: function (result) {
+                                                    table.ajax.url(urls+'list-problem/'+id_monper).load(function(e){
+//                                                        if(e.count_data>0){
+                                                             $('#apply_btn').show();
+                                                             $('#unapply_btn').hide();
+//                                                        }
+                                                    });
+                                                },
+                                            });
+                             }, function (dismiss) {
+                                if (dismiss === 'cancel') {
+                                }
+                            });
+             });
+             
+             
+             $('#tabel-goals').on('click', '.update', function(){
+				var id = $(this).attr('data-id');
+                                var tr          = $(this).closest('tr');
+                                var datatable   = table.row(tr).data();
+                                var id_goals        = datatable[1];
+                                var id_target       = datatable[5];
+                                var id_indicator    = datatable[9];
+                                var id_filter_sdg   = id_goals+"."+id_target+"."+id_indicator;
+				$.ajax({
+					type: "GET",
+                                    url: urls+'problem/get-problem/'+id,
+                                    success: function (result) {
+                                        var val = result.content;
+                                        $('#id').val(val[0].id);
+                                        $('#ref_category').val(val[0].id_cat)
+                                        $('#problem').val(val[0].problem)
+                                        $('#filter_sdg').val(id_filter_sdg).trigger('change');
+                                        $('#follow_up').val(val[0].follow_up)
+                                        $('#myModal').modal('show');
+                                    },
+                                })
+             }).on('click', '.detail', function(){
+                    var tr          = $(this).closest('tr');
+                    var datatable   = table.row(tr).data();
+                    var id_goals        = datatable[1];
+                    var id_target       = datatable[5];
+                    var id_indicator    = datatable[9];
+                    var id_filter_sdg   = id_goals+"."+id_target+"."+id_indicator;
+                    console.log(id_filter_sdg);
+				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                                    url: urls+'problem/get-problem/'+id,
+                                    success: function (result) {
+                                        var val = result.content;
+                                        $('#id').val(val[0].id);
+                                        $('#ref_category').val(val[0].id_cat).attr("readonly",true);
+                                        $('#problem').val(val[0].problem).attr("readonly",true);
+                                        $('#follow_up').val(val[0].follow_up).attr("readonly",true);
+                                        $('#filter_sdg').val(id_filter_sdg).trigger('change');//attr("readonly",true);
+                                        $("#filter_sdg").attr("disabled",true);
+                                        $('#submit').prop('disabled',true);
+                                        $('#myModal').modal('show');
+                                    },
+                                })
+             }).on('click', '.delete', function(){
+                    var id          = $(this).attr('data-id');
+                    var tr          = $(this).closest('tr');
+                    var datatable   = table.row(tr).data();
+                    var id_monper   = datatable[18];
+                    swal({
+                    title: titleDel,
+                    text: messDel,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttDel
+                }).then(function () {
+                	$.ajax({
+    					type: "DELETE",
+                        url: urls+'problem-identification/delete/'+id,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        success: function (result) {
+                        	swal(titleOk,messOk,'success');
+                        	table.ajax.url(urls+'list-problem/'+id_monper).load();
+                        },
+                        error:function (result) {
+                        	swal(titleOk,messNOk,'error');
+                        },
+                    })
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                    }
+                })
+             });
+             
+             function clearForm(){
+				$('#id').val("").removeAttr("readonly");
+				$('#ref_category').val("").removeAttr("readonly");
+				$('#problem').val("").removeAttr("readonly");
+				$('#follow_up').val("").removeAttr("readonly");
+                                $('#filter_sdg').val("").removeAttr("readonly");
+                                $('#submit').removeAttr("Disabled");
+                                $("#filter_sdg").attr("disabled",false);
+				$('.control-group').removeClass('error');
+				$('.help-block').text("");
+			}
+			
+			$('#myModal').on('hidden.bs.modal',function(){
+				clearForm();
+			});
+        $('#submit').on('click', function(){
+            var id              = $('#id').val();
+            var id_cat          = $('#ref_category').val();
+            var v_dataid        = $("#periode").val();
+            var v_data_id       = v_dataid.split("###");;
+            var id_monper       = v_data_id[0];
+            var problem         = $('#problem').val();
+            var follow_up       = $('#follow_up').val();
+            var sdgs_group      = $('#filter_sdg').val();
+            console.log(sdgs_group);
+            var sdgs_group_split = sdgs_group.split(".");
+            var id_goals         = sdgs_group_split[0];
+            var id_target        = sdgs_group_split[1];
+            var id_indicator     = sdgs_group_split[2];
+            $('.control-group').removeClass('error');
+            $('.help-block').text("");
+
+            var data = JSON.stringify({
+                            'id'            :id,
+                            'id_cat'        :id_cat,
+                            'id_goals'      :id_goals,
+                            'id_target'     :id_target,
+                            'id_indicator'  :id_indicator,
+                            'problem'       :problem,
+                            'follow_up'     :follow_up,
+                        });
+                    $.ajax({
+                            type: "POST",
+                            url: urls+'problem-identification/save',
+                            beforeSend : function(xhr){
+                                xhr.setRequestHeader(header,token);
+                            },
+                            headers:{'Accept':'application/json','Content-Type':'application/json'},
+                                                data: data,
+                            success: function (result) {
+                                table.ajax.url(urls+'list-problem/'+id_monper).load();
+                                $('#myModal').modal('hide');
+                            },
+                        });
+        });
+        
+        
+        var filtersdg   = [[${filtersdg}]];
+        console.log(filtersdg)
+        var data_filter = [{'id':'0','text':'ALL','level':'1'}]
+         $.each(filtersdg.data,function(i,x){
+             var obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3]}
+             if(x[3]==1||x[3]==2){
+                 obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3],disabled:true}
+             }
+            data_filter.push(obj)
+        });
+        
+        function formatResult(node) {
+            var $result = $('<span style="padding-left:' + (20 * node.level) + 'px;">' + node.text + '</span>');
+            return $result;
+          };
+         
+         
+        
+        $("#filter_sdg").select2({
+          placeholder: 'Select an option',
+          width: "100%",
+          data: data_filter,
+          formatSelection: function(item) {
+            return item.text
+          },
+          formatResult: function(item) {
+            return item.text
+          },
+          templateResult: formatResult,
+        });
     </script>
 </body>
+<style>
+    .select2-container--open {
+        z-index: 9999999
+    }
+</style>
 </html>

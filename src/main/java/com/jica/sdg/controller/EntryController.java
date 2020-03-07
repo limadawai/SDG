@@ -102,8 +102,21 @@ public class EntryController {
             Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
             list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
+        
+         Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "UNION \n" +
+                                                "SELECT DISTINCT  b.id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target) AS id_text FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "UNION \n" +
+                                                "SELECT DISTINCT  CONCAT(a.id,\".\",b.id,\".\",c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target,'-',c.id_indicator) AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "ORDER BY id_parent");
+        
+        List list3 =  query3.getResultList();
+        Map<String, Object> filtersdg = new HashMap<>();
+        filtersdg.put("data",list3);
+        model.addAttribute("filtersdg",filtersdg);
         model.addAttribute("id_prov", id_prov);
-        model.addAttribute("privilege", privilege);
+        model.addAttribute("privilege", privilege);        
+        model.addAttribute("refcategory",modelCrud.getRefCategory());
         return "admin/dataentry/problemgoals";
     }
     @GetMapping("admin/problem-identification/{id}/target")
@@ -191,8 +204,11 @@ public class EntryController {
                      .executeUpdate();
             }
             else{
-                Query query = em.createNativeQuery("Update entry_problem_identify set id_cat=:id_cat,problem=:problem,follow_up=:follow_up where id = :id");
+                Query query = em.createNativeQuery("Update entry_problem_identify set id_goals=:id_goals,id_target=:id_target,id_indicator=:id_indicator,id_cat=:id_cat,problem=:problem,follow_up=:follow_up where id = :id");
                  query.setParameter("id", id)
+                     .setParameter("id_goals", id_goals)
+                     .setParameter("id_target", id_target)
+                     .setParameter("id_indicator", id_indicator)
                      .setParameter("id_cat", id_cat)
                      .setParameter("problem", problem)
                      .setParameter("follow_up", follow_up)
@@ -243,15 +259,23 @@ public class EntryController {
     
     @GetMapping("admin/list-problem/{id_monper}")
      public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper) {
-        String sql = "SELECT a.* FROM sdg_goals a JOIN assign_sdg_indicator b ON a.id = b.id_goals WHERE b.id_monper =  '"+id_monper+"'";        
+        String sql = "SELECT  \n" +
+                        " d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng \n" +
+                        ",e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng \n" +
+                        ",f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng\n" +
+                        ",b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper\n" +
+                        "FROM entry_problem_identify a \n" +
+                        "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
+                        "LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify'\n" +
+                        "LEFT JOIN sdg_goals d ON a.id_goals = d.id\n" +
+                        "LEFT JOIN sdg_target e ON a.id_target = e.id\n" +
+                        "LEFT JOIN sdg_indicator f ON a.id_indicator = f.id\n" +
+                        " WHERE a.id_monper = '"+id_monper+"'";        
         Query list = em.createNativeQuery(sql);
-        List<Object[]> rows = list.getResultList();
-        List<SdgGoals> result = new ArrayList<>(rows.size());
+        
         Map<String, Object> hasil = new HashMap<>();
-        for (Object[] row : rows) {
-            result.add(new SdgGoals((Integer)row[0], (String) row[1], (String) row[2], (String) row[3]) );
-        }
-        hasil.put("content",result);
+        
+        hasil.put("content",list.getResultList());
         return hasil;
     }
      
