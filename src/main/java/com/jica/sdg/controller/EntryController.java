@@ -185,9 +185,9 @@ public class EntryController {
         goalsMap.put("goalsMap",list.getResultList());
         JSONObject objGoals = new JSONObject(goalsMap); 
         JSONArray  arrayGoals = objGoals.getJSONArray("goalsMap");
-        String id_role   = arrayGoals.getJSONArray(0).get(0).toString();
-        String id_prov   = arrayGoals.getJSONArray(0).get(1).toString();
-        String id_monper = arrayGoals.getJSONArray(0).get(2).toString();
+        String id_role   = jsonObunit.get("id_role").toString();
+        String id_prov   = jsonObunit.get("id_prov").toString();
+        String id_monper = jsonObunit.get("id_monper").toString();
             if(id.equals("")){
                 Query query = em.createNativeQuery("INSERT INTO entry_problem_identify \n" +
                                                     "(id_goals,id_target,id_indicator,id_cat,problem,follow_up,id_prov,id_role,`year`,year_entry,created_by,date_created,summary,id_monper) \n" +

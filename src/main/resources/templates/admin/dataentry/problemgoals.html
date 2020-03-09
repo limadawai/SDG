@@ -609,6 +609,8 @@
             var v_dataid        = $("#periode").val();
             var v_data_id       = v_dataid.split("###");;
             var id_monper       = v_data_id[0];
+            var v_idrole        = $("#idrole").val();
+            var id_prov         = $("#id_prov").val();
             var problem         = $('#problem').val();
             var follow_up       = $('#follow_up').val();
             var sdgs_group      = $('#filter_sdg').val();
@@ -617,6 +619,7 @@
             var id_goals         = sdgs_group_split[0];
             var id_target        = sdgs_group_split[1];
             var id_indicator     = sdgs_group_split[2];
+            
             $('.control-group').removeClass('error');
             $('.help-block').text("");
 
@@ -628,6 +631,9 @@
                             'id_indicator'  :id_indicator,
                             'problem'       :problem,
                             'follow_up'     :follow_up,
+                            'id_monper'     :id_monper,
+                            'id_role'       :v_idrole,
+                            'id_prov'       :id_prov
                         });
                     $.ajax({
                             type: "POST",
