@@ -37,9 +37,12 @@
                                 <option value="0" >-- Pilih --</option>
                                 <!--<option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
                             </select>
-                            <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none">
+                            <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none;">
                                 <span class="lang_indo">Tambah</span>
                                 <span class="lang_eng" style="display: none">Add</span>
+                            </button>
+                            <button type="button" id="export" class="btn btn-primary pull-right" style="display: none;margin-right:5px;">
+                                <span class="lang_indo">Export to Excel</span>
                             </button>
                         </div>
 <!--                        <div class="row-fluid">
@@ -415,13 +418,17 @@
                             if($("#nm_nsa_profil").val()=="0"){
 //                            	$("#tambah").hide();
                             	$("#tambah").show();
+                            	$("#export").show();
                             }else if(id_role == id_role){
                                 $("#tambah").show();
+                            	$("#export").show();
                             }else if(id_role == '1'){
                                 $("#tambah").show();
+                            	$("#export").show();
                             }else{
 //                                $("#tambah").hide();
                                 $("#tambah").show();
+                            	$("#export").show();
                             }
                             
                             $('#tabel-nsa-profile').DataTable({
@@ -535,6 +542,7 @@
 //                            alert('isi');
 //                            jika isi
                             $("#tambah").hide();
+                            $('#export').hide();
                             $('#tabel-nsa-profile').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
@@ -743,13 +751,17 @@
 //                            alert('kosong');
                             if(id_role == id){
                                 $("#tambah").show();
+                            	$("#export").show();
                             }else if(id == '0'){
 //                            	$("#tambah").hide();
                             	$("#tambah").show();
+                            	$("#export").show();
                             }else if((privilege == 'ADMIN' || privilege == 'SUPER') && id != '0'){
                                 $("#tambah").show();
+                            	$("#export").show();
                             }else{
                                 $("#tambah").show();
+                            	$("#export").show();
 //                                $("#tambah").hide();
                             }
                             
@@ -864,6 +876,7 @@
 //                            alert('isi');
 //                            jika isi
                             $("#tambah").show();
+                            $("#export").show();
 //                            $("#tambah").hide();
                             $('#tabel-nsa-profile').DataTable({
                                 responsive: true,
@@ -1517,6 +1530,7 @@
 //                        swal(titlesimpan,messsimpan,'success');
 //                        window.location = urls+"nsa/profile";
                         $('#tambah').show();
+                        $('#export').show();
                         $('#file_logo').val('');
                         $('#web_url').val('');
                         $('#head_office').val('');
@@ -1995,5 +2009,9 @@
 
         //});
     // ]]>
+    
+    $("#export").on("click", function(){
+    	alert('export');
+    });
 </script>
 </html>
