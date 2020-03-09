@@ -548,12 +548,12 @@
         $('.input-append').on('click', '#show_report', function(){
 //            alert('lolo');
             var v_dataid    = $("#periode").val();
-            var v_period    = '1';
+            var v_period    = '0';
             var v_data_id   = v_dataid.split("###");
             var id_monper   = v_data_id[0];
             var tahun       = v_data_id[1];
             var v_idprov    = $("#id_prov").val();
-            var v_type      = 'entry_best_practice';	
+            var v_type      = 'entry_problem_identify';	
             swal({
                 title: titleDel,
                 text: "",
@@ -608,12 +608,12 @@
         $('.input-append').on('click', '#unshow_report', function(){
 //            alert('lolo');
             var v_dataid    = $("#periode").val();
-            var v_period    = '1';
+            var v_period    = '0';
             var v_data_id   = v_dataid.split("###");
             var id_monper   = v_data_id[0];
             var tahun       = v_data_id[1];
             var v_idprov    = $("#id_prov").val();
-            var v_type      = 'entry_best_practice';	
+            var v_type      = 'entry_problem_identify';	
             swal({
                 title: titleDel,
                 text: "",
@@ -950,7 +950,7 @@
 //                        var year                = v_data_id[1];
 //            //            var id_monper           = monper_1;
 //            //            var year                = tahun_1;
-//                        var type                = "entry_best_practice";
+//                        var type                = "entry_problem_identify";
 //                        var text1 = "";
 //                        $.ajax({
 //                            url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+year+'/'+type+'/1',
