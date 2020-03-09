@@ -224,12 +224,13 @@ public class EntryController {
         @Transactional
 	public void aplyProblemidentification(@RequestBody Map<String, Object> payload,HttpSession session) {
         JSONObject jsonObunit = new JSONObject(payload);
-        String id_monper              = jsonObunit.get("id_monper").toString();  
+        String id_monper         = jsonObunit.get("id_monper").toString();  
         String tahun             = jsonObunit.get("tahun").toString();
+        String id_role           = jsonObunit.get("id_role").toString();
             Query query = em.createNativeQuery("INSERT INTO entry_approval (id_role,id_monper,YEAR,TYPE,approval,approval_date,periode)\n" +
                                                 "SELECT DISTINCT a.id_role,a.id_monper,a.year,'entry_problem_identify' AS TYPE,'1' AS approval, CURDATE() AS approval_date ,'0' as periode FROM entry_problem_identify a \n" +
                                                 "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
-                                                "WHERE a.id_monper = '"+id_monper+"' AND a.year = '"+tahun+"'  ");
+                                                "WHERE a.id_monper = '"+id_monper+"' AND a.year = '"+tahun+"' AND a.id_role = '"+id_role+"'  ");
             query.executeUpdate();
 	}    
     @PostMapping(path = "admin/problem-identification/un-aply", consumes = "application/json", produces = "application/json")
@@ -253,8 +254,8 @@ public class EntryController {
         return null;
     }
     
-    @GetMapping("admin/list-problem/{id_monper}/{tahun}")
-     public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper,@PathVariable("tahun") String tahun) {
+    @GetMapping("admin/list-problem/{id_monper}/{tahun}/{id_role}")
+     public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper,@PathVariable("tahun") String tahun,@PathVariable("id_role") String id_role) {
         String sql = "SELECT  \n" +
                         " d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng \n" +
                         ",e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng \n" +
@@ -266,7 +267,7 @@ public class EntryController {
                         "LEFT JOIN sdg_goals d ON a.id_goals = d.id\n" +
                         "LEFT JOIN sdg_target e ON a.id_target = e.id\n" +
                         "LEFT JOIN sdg_indicator f ON a.id_indicator = f.id\n" +
-                        " WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"'";        
+                        " WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";        
         Query list = em.createNativeQuery(sql);
         
         Map<String, Object> hasil = new HashMap<>();
