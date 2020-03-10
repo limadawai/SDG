@@ -252,6 +252,64 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-entry-gov/{id_prov}/{id_role}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> listEntryGov(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+    	Query query;
+    	String sql = "select b.id_program, a.id_activity, c.id_gov_indicator, b.nm_program, "
+    			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng, "
+    			+ "f.nm_role, d.nm_unit, e.value, h.achievement1, h.achievement2, h.achievement3, h.achievement4, "
+    			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
+    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact "
+    			+ "from gov_activity as a "
+    			+ "left join gov_program b on a.id_program = b.id "
+    			+ "left join gov_indicator c on a.id_program = c.id_program and a.id = c.id_activity "
+    			+ "left join ref_unit d on c.unit = d.id_unit "
+    			+ "left join gov_target e on e.id_gov_indicator = c.id and year = :year "
+    			+ "left join ref_role f on a.id_role = f.id_role "
+    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+    			+ "left join entry_gov_indicator h on h.id_assign = c.id and h.year_entry = :year and h.id_monper = g.id_monper "
+    			+ "left join entry_gov_budget i on i.id_gov_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
+    			+ "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov "
+    			+ "order by b.id, c.id, a.id ";
+        query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+    	
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry-gov-bud/{id_prov}/{id_role}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> listEntryGovBud(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+    	Query query;
+    	String sql = "select b.id_program, a.id_activity, '' as id_gov_indicator, b.nm_program, "
+    			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, '' as nm_indicator, '' as nm_indicator_eng, "
+    			+ "f.nm_role, '' as nm_unit, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
+    			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
+    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact "
+    			+ "from gov_activity as a "
+    			+ "left join gov_program b on a.id_program = b.id "
+    			+ "left join ref_role f on a.id_role = f.id_role "
+    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+    			+ "left join entry_gov_budget i on i.id_gov_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
+    			+ "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov "
+    			+ "order by b.id, a.id ";
+        query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+    	
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-entry-sdg-report/{id_prov}/{id_role}/{id_monper}/{sdg}")
     public @ResponseBody Map<String, Object> listEntrySdgReport(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("sdg") String sdg) {
     	Query query;
@@ -428,7 +486,7 @@ public class DataEntryController {
     	}
         model.addAttribute("id_prov", id_prov);
         model.addAttribute("privilege", privilege);
-        return "admin/dataentry/govprogram";
+        return "admin/dataentry/entry_gov";
     }
     
     @GetMapping("admin/government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity")
