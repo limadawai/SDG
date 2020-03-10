@@ -19,7 +19,7 @@
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
 	        			<select name="id_role" id="id_role">
-	        				<option th:each="f:${role}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+	        				<!-- <option th:each="f:${role}" th:value="${f.id_role}" th:text="${f.nm_role}"></option> -->
 	        			</select>
 	        			<span> RAN/RAD : </span>
 	        			<select name="id_monper" id="id_monper">
@@ -241,6 +241,22 @@
 	        		swal(titleMod,messMod,'error');
 	        	}
 	        });
+	        
+	        $.ajax({
+                type: "GET",
+                url: urls+'manajemen/list-role-gov/'+$("#id_prov").val(),
+                async:false,
+                success: function (result) {
+                	//$("#id_role").html('<option value="0" >-- Pilih --</option>');
+                    var array = result.content;
+                    if (array != '') {
+                        for (i in array) {
+                            $("#id_role").append('<option value="'+array[i].id_role+'" >'+array[i].nm_role+'</option>');
+                        }
+                    }
+                }
+            });
+	        
 			var table = $('#tabel-target').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
