@@ -341,7 +341,7 @@
 				"autoWidth": true,
 				"responsive":true,
 				"ajax": {
-					"url": urls+'list-problem/'+id_monper,
+					"url": urls+'list-problem/'+id_monper+'/'+0+'/'+0,
 					dataSrc: 'content',
 				},
 				"searching": true,
@@ -368,15 +368,24 @@
                                         {"data": function (row, data, index, display) {
                                                 var data =  JSON.stringify(row).replace(/'/g, "&#39");
                                                 var id = row[16];
-							if(row[17]!=1){
+							if(row[17]==1){
+                                                            $('#unapply_btn').show();
+                                                            $('#add_problem').hide();
+                                                            $('#apply_btn').hide();
+                                                            return '';
+                                                        }else if(row[17]==2||row[17]==4){
+                                                            $('#unapply_btn').hide();
+                                                            $('#add_problem').hide();
+                                                            $('#apply_btn').hide();
+                                                            return '';
+                                                        }else{
                                                             $('#apply_btn').show();
+                                                            $('#unapply_btn').hide(); 
+                                                            $('#add_problem').show();
                                                            return "<div style='text-align:center;'>"+
                                                             '<button data-id="'+id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
                                                             '<button data-id="'+id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
                                                             '<button data-id="'+id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>'; 
-                                                        }else{
-                                                            $('#unapply_btn').show();
-                                                            return '';
                                                         }
 					}}
 					
@@ -397,14 +406,15 @@
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
 //                alert(urls+'list-problem/'+id_monper);
-                table.ajax.url(urls+'list-problem/'+id_monper ).load(function(result){
+                table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole ).load(function(result){
                     var count_data = result.content.length;
                     if(count_data==0){
                         $('#apply_btn,#unapply_btn').hide();
+                        $('#add_problem').show();
                     }
                    
                 });
-                 $('#add_problem').hide();
+//                 $('#add_problem').hide();
             }
             
             $('#text-cari').on( 'keyup', function () {
@@ -418,6 +428,8 @@
                  var id_target       = data_ref[0][5];
                  var id_indicator    = data_ref[0][9];
                  var id_monper       = data_ref[0][18];
+                 var tahun           = data_ref[0][19];
+                 var id_role         = data_ref[0][20];
                             swal({
                                 title: "Are You Sure",
                                 text: "",
@@ -434,7 +446,10 @@
                                  var data = JSON.stringify({
                                                 'id_goals'      :id_goals,
                                                 'id_target'     :id_target,
-                                                'id_indicator'  :id_indicator
+                                                'id_indicator'  :id_indicator,
+                                                'id_monper'     :id_monper,
+                                                'tahun'         :tahun,
+                                                'id_role'       :id_role
                                             });
                                     
                                     $.ajax({
@@ -446,9 +461,10 @@
                                                 headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                 data: data,
                                                 success: function (result) {
-                                                    table.ajax.url(urls+'list-problem/'+id_monper).load(function(e){
+                                                    table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+id_role).load(function(e){
 //                                                        if(e.count_data>0){
                                                              $('#apply_btn').hide();
+                                                             $('#add_problem').hide();
                                                              $('#unapply_btn').show();
 //                                                        }
                                                     });
@@ -466,6 +482,8 @@
                  var id_target       = data_ref[0][5];
                  var id_indicator    = data_ref[0][9];
                  var id_monper       = data_ref[0][18];
+                 var tahun           = data_ref[0][19];
+                 var id_role         = data_ref[0][20];
                             swal({
                                 title: "Are You Sure",
                                 text: "",
@@ -482,7 +500,10 @@
                                  var data = JSON.stringify({
                                                 'id_goals'      :id_goals,
                                                 'id_target'     :id_target,
-                                                'id_indicator'  :id_indicator
+                                                'id_indicator'  :id_indicator,
+                                                'id_monper'     :id_monper,
+                                                'tahun'         :tahun,
+                                                'id_role'       :id_role
                                             });
                                     
                                     $.ajax({
@@ -494,10 +515,11 @@
                                                 headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                 data: data,
                                                 success: function (result) {
-                                                    table.ajax.url(urls+'list-problem/'+id_monper).load(function(e){
+                                                    table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+id_role).load(function(e){
 //                                                        if(e.count_data>0){
                                                              $('#apply_btn').show();
                                                              $('#unapply_btn').hide();
+                                                             $('#add_problem').show();
 //                                                        }
                                                     });
                                                 },
@@ -559,6 +581,8 @@
                     var tr          = $(this).closest('tr');
                     var datatable   = table.row(tr).data();
                     var id_monper   = datatable[18];
+                    var tahun       = datatable[19];
+                    var id_role     = datatable[20];
                     swal({
                     title: titleDel,
                     text: messDel,
@@ -576,7 +600,7 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-problem/'+id_monper).load();
+                        	table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+id_role).load();
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');
@@ -609,6 +633,9 @@
             var v_dataid        = $("#periode").val();
             var v_data_id       = v_dataid.split("###");;
             var id_monper       = v_data_id[0];
+            var tahun           = v_data_id[1];
+            var v_idrole        = $("#idrole").val();
+            var id_prov         = $("#id_prov").val();
             var problem         = $('#problem').val();
             var follow_up       = $('#follow_up').val();
             var sdgs_group      = $('#filter_sdg').val();
@@ -617,6 +644,7 @@
             var id_goals         = sdgs_group_split[0];
             var id_target        = sdgs_group_split[1];
             var id_indicator     = sdgs_group_split[2];
+            
             $('.control-group').removeClass('error');
             $('.help-block').text("");
 
@@ -628,6 +656,10 @@
                             'id_indicator'  :id_indicator,
                             'problem'       :problem,
                             'follow_up'     :follow_up,
+                            'id_monper'     :id_monper,
+                            'id_role'       :v_idrole,
+                            'id_prov'       :id_prov,
+                            'tahun'         :tahun
                         });
                     $.ajax({
                             type: "POST",
@@ -638,7 +670,7 @@
                             headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                 data: data,
                             success: function (result) {
-                                table.ajax.url(urls+'list-problem/'+id_monper).load();
+                                table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole).load();
                                 $('#myModal').modal('hide');
                             },
                         });
