@@ -102,8 +102,21 @@ public class EntryController {
             Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
             list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
+        
+         Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "UNION \n" +
+                                                "SELECT DISTINCT  b.id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target) AS id_text FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "UNION \n" +
+                                                "SELECT DISTINCT  CONCAT(a.id,\".\",b.id,\".\",c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target,'-',c.id_indicator) AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "ORDER BY id_parent");
+        
+        List list3 =  query3.getResultList();
+        Map<String, Object> filtersdg = new HashMap<>();
+        filtersdg.put("data",list3);
+        model.addAttribute("filtersdg",filtersdg);
         model.addAttribute("id_prov", id_prov);
-        model.addAttribute("privilege", privilege);
+        model.addAttribute("privilege", privilege);        
+        model.addAttribute("refcategory",modelCrud.getRefCategory());
         return "admin/dataentry/problemgoals";
     }
     @GetMapping("admin/problem-identification/{id}/target")
@@ -172,13 +185,14 @@ public class EntryController {
         goalsMap.put("goalsMap",list.getResultList());
         JSONObject objGoals = new JSONObject(goalsMap); 
         JSONArray  arrayGoals = objGoals.getJSONArray("goalsMap");
-        String id_role   = arrayGoals.getJSONArray(0).get(0).toString();
-        String id_prov   = arrayGoals.getJSONArray(0).get(1).toString();
-        String id_monper = arrayGoals.getJSONArray(0).get(2).toString();
+        String id_role   = jsonObunit.get("id_role").toString();
+        String id_prov   = jsonObunit.get("id_prov").toString();
+        String id_monper = jsonObunit.get("id_monper").toString();
+        String tahun     = jsonObunit.get("tahun").toString();
             if(id.equals("")){
                 Query query = em.createNativeQuery("INSERT INTO entry_problem_identify \n" +
                                                     "(id_goals,id_target,id_indicator,id_cat,problem,follow_up,id_prov,id_role,`year`,year_entry,created_by,date_created,summary,id_monper) \n" +
-                                                    "VALUES(:id_goals,:id_target,:id_indicator,:id_cat,:problem,:follow_up,:id_prov,:id_role,DATE_FORMAT(NOW(), '%Y'),DATE_FORMAT(NOW(), '%Y'),'1',DATE_FORMAT(NOW(), '%Y-%m-%d '),'1',:id_monper)");
+                                                    "VALUES(:id_goals,:id_target,:id_indicator,:id_cat,:problem,:follow_up,:id_prov,:id_role,:year,DATE_FORMAT(NOW(), '%Y'),'1',DATE_FORMAT(NOW(), '%Y-%m-%d '),'1',:id_monper)");
                 query.setParameter("id_goals", id_goals)
                      .setParameter("id_target", id_target)
                      .setParameter("id_indicator", id_indicator)
@@ -188,11 +202,15 @@ public class EntryController {
                      .setParameter("id_prov", id_prov)
                      .setParameter("id_role", id_role)
                      .setParameter("id_monper", id_monper)
+                     .setParameter("year", tahun)
                      .executeUpdate();
             }
             else{
-                Query query = em.createNativeQuery("Update entry_problem_identify set id_cat=:id_cat,problem=:problem,follow_up=:follow_up where id = :id");
+                Query query = em.createNativeQuery("Update entry_problem_identify set id_goals=:id_goals,id_target=:id_target,id_indicator=:id_indicator,id_cat=:id_cat,problem=:problem,follow_up=:follow_up where id = :id");
                  query.setParameter("id", id)
+                     .setParameter("id_goals", id_goals)
+                     .setParameter("id_target", id_target)
+                     .setParameter("id_indicator", id_indicator)
                      .setParameter("id_cat", id_cat)
                      .setParameter("problem", problem)
                      .setParameter("follow_up", follow_up)
@@ -206,13 +224,13 @@ public class EntryController {
         @Transactional
 	public void aplyProblemidentification(@RequestBody Map<String, Object> payload,HttpSession session) {
         JSONObject jsonObunit = new JSONObject(payload);
-        String id_goals              = jsonObunit.get("id_goals").toString();  
-        String id_target             = jsonObunit.get("id_target").toString();
-        String id_indicator          = jsonObunit.get("id_indicator").toString();
-            Query query = em.createNativeQuery("INSERT INTO entry_approval (id_role,id_monper,YEAR,TYPE,approval,approval_date)\n" +
-                                                "SELECT DISTINCT a.id_role,a.id_monper,a.year,'entry_problem_identify' AS TYPE,'1' AS approval, CURDATE() AS approval_date FROM entry_problem_identify a \n" +
+        String id_monper         = jsonObunit.get("id_monper").toString();  
+        String tahun             = jsonObunit.get("tahun").toString();
+        String id_role           = jsonObunit.get("id_role").toString();
+            Query query = em.createNativeQuery("INSERT INTO entry_approval (id_role,id_monper,YEAR,TYPE,approval,approval_date,periode)\n" +
+                                                "SELECT DISTINCT a.id_role,a.id_monper,a.year,'entry_problem_identify' AS TYPE,'1' AS approval, CURDATE() AS approval_date ,'0' as periode FROM entry_problem_identify a \n" +
                                                 "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
-                                                " WHERE a.id_goals =  '"+id_goals+"' AND a.id_target =  '"+id_target+"' AND a.id_indicator =  '"+id_indicator+"' ");
+                                                "WHERE a.id_monper = '"+id_monper+"' AND a.year = '"+tahun+"' AND a.id_role = '"+id_role+"'  ");
             query.executeUpdate();
 	}    
     @PostMapping(path = "admin/problem-identification/un-aply", consumes = "application/json", produces = "application/json")
@@ -220,15 +238,10 @@ public class EntryController {
         @Transactional
 	public void unaplyProblemidentification(@RequestBody Map<String, Object> payload,HttpSession session) {
         JSONObject jsonObunit = new JSONObject(payload);
-        String id_goals              = jsonObunit.get("id_goals").toString();  
-        String id_target             = jsonObunit.get("id_target").toString();
-        String id_indicator          = jsonObunit.get("id_indicator").toString();
-            Query query = em.createNativeQuery(" DELETE FROM entry_approval WHERE (id_role,id_monper,YEAR,TYPE) IN (\n" +
-                                                "SELECT DISTINCT  a.id_role,a.id_monper,a.year,c.type FROM entry_problem_identify a \n" +
-                                                "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
-                                                "LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify'\n" +
-                                                "  WHERE a.id_goals =  '"+id_goals+"' AND a.id_target =  '"+id_target+"' AND a.id_indicator =  '"+id_indicator+"' \n" +
-                                                ") ");
+        String id_monper            = jsonObunit.get("id_monper").toString();  
+        String tahun                = jsonObunit.get("tahun").toString();
+        String id_role              = jsonObunit.get("id_role").toString();
+            Query query = em.createNativeQuery(" DELETE FROM entry_approval WHERE id_role='"+id_role+"' AND id_monper='"+id_monper+"' AND YEAR='"+tahun+"' AND  TYPE='entry_problem_identify'");
             query.executeUpdate();
 	}    
     @GetMapping("testcrud")
@@ -241,17 +254,25 @@ public class EntryController {
         return null;
     }
     
-    @GetMapping("admin/list-problem/{id_monper}")
-     public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper) {
-        String sql = "SELECT a.* FROM sdg_goals a JOIN assign_sdg_indicator b ON a.id = b.id_goals WHERE b.id_monper =  '"+id_monper+"'";        
+    @GetMapping("admin/list-problem/{id_monper}/{tahun}/{id_role}")
+     public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper,@PathVariable("tahun") String tahun,@PathVariable("id_role") String id_role) {
+        String sql = "SELECT  \n" +
+                        " d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng \n" +
+                        ",e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng \n" +
+                        ",f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng\n" +
+                        ",b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role\n" +
+                        "FROM entry_problem_identify a \n" +
+                        "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
+                        "LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify'\n" +
+                        "LEFT JOIN sdg_goals d ON a.id_goals = d.id\n" +
+                        "LEFT JOIN sdg_target e ON a.id_target = e.id\n" +
+                        "LEFT JOIN sdg_indicator f ON a.id_indicator = f.id\n" +
+                        " WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";        
         Query list = em.createNativeQuery(sql);
-        List<Object[]> rows = list.getResultList();
-        List<SdgGoals> result = new ArrayList<>(rows.size());
+        
         Map<String, Object> hasil = new HashMap<>();
-        for (Object[] row : rows) {
-            result.add(new SdgGoals((Integer)row[0], (String) row[1], (String) row[2], (String) row[3]) );
-        }
-        hasil.put("content",result);
+        
+        hasil.put("content",list.getResultList());
         return hasil;
     }
      

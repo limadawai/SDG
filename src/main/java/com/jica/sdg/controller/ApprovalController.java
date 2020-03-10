@@ -376,7 +376,7 @@ public class ApprovalController {
     	}
         model.addAttribute("id_prov", id_prov);
         model.addAttribute("privilege", privilege);
-        return "admin/approval/best_practice";
+        return "admin/approval/problem_identify";
     }
     
 }
