@@ -404,6 +404,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "paging": false,
+                                "ordering": false,
                                 "drawCallback": function( settings ) {
                                 	$('#tabel-entri-sdg thead').html(header);
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
@@ -472,23 +473,27 @@
                                 	{"data": function (row, data, index, display) {
                                     	var disaggre = "";
                                     	if(row[25]){
-                                    		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    		return "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    	}else{
+                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>";
                                     	}
-                                        return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>"+disaggre;
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
                                         	var disaggre = "";
-                                       		if(row[26]){
-                                           		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[26]+"</div><div style='font-size:90%; padding-left: 40px'>"+row[28]+"</div>";
+                                       		if(row[25]){
+                                       			return "<div style='font-size:90%; padding-left: 35px'>"+row[26]+" "+row[28]+"</div>";
+                                           	}else{
+                                           		return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
                                            	}
-                                            return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>"+disaggre;
+                                            
                                         }else{
                                         	var disaggre = "";
-                                        	if(row[27]){
-                                           		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[27]+"</div><div style='font-size:90%; padding-left: 40px'>"+row[29]+"</div>";
+                                        	if(row[25]){
+                                        		return "<div style='font-size:90%; padding-left: 35px'>"+row[27]+" "+row[29]+"</div>";
+                                           	}else{
+                                           		return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>";
                                            	}
-                                            return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
@@ -509,62 +514,67 @@
                                     	var color_sts = "";
                                     	var text = "";
                                     	var update = ""
-                                        if(row[9]){
-                                        	var target  = row[8];
-                                            var achieve = row[9];
-                                            var IncDec     = row[7];
-                                            text = " "+row[9];
-                                            if(IncDec == 'Increment'){
-                                                if(achieve >= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }else{
-                                                if(achieve <= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }
-                                            update="update";
-                                         }else if(row[33]){
-                                        	var target  = row[8];
-                                            var achieve = row[33];
-                                            var IncDec  = row[7];
-                                     		if(IncDec == 'Increment'){
-                                                if(achieve >= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }else{
-                                                if(achieve <= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }
-                                        	text = " "+row[33];
-                                        	update="update";
-                                        }else{
-                                        	text = " - ";
-                                        	update="update";
-                                        }
                                     	var id = "";
                                     	var val = "";
-                                    	if(row[30] && row[31]){
+                                    	if(row[30]){
                                     		id = row[32];
                                     		val1 = row[33];
                                     		val2 = row[34];
                                     		val3 = row[35];
                                     		val4 = row[36];
+                                    		
+                                    		var target  = row[8];
+                                            var achieve = row[33];
+                                            var IncDec  = row[7];
+                                            if(achieve!=null){
+                                            	if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                            	text = " "+row[33];
+                                            	update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
+                                            }
                                     	}else{
                                     		id = row[14];
                                     		val1 = row[9];
                                     		val2 = row[10];
                                     		val3 = row[11];
                                     		val4 = row[12];
+                                    		var target  = row[8];
+                                            var achieve = row[9];
+                                            var IncDec  = row[7];
+                                            if(achieve!=null){
+                                            	text = " "+row[9];
+                                                if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                                update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
+                                            }
                                     	}
                                     	$.ajax({
                         					type: "GET",
@@ -619,6 +629,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "paging": false,
+                                "ordering": false,
                                 "drawCallback": function( settings ) {
                                 	$('#tabel-entri-sdg thead').html(header);
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
@@ -728,26 +739,30 @@
                                 },
                                 "searching": true,
                                 "columns": [
-                                    {"data": function (row, data, index, display) {
+                                	{"data": function (row, data, index, display) {
                                     	var disaggre = "";
                                     	if(row[25]){
-                                    		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    		return "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    	}else{
+                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>";
                                     	}
-                                        return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>"+disaggre;
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
                                         	var disaggre = "";
-                                       		if(row[26]){
-                                           		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[26]+"</div><div style='font-size:90%; padding-left: 40px'>"+row[28]+"</div>";
+                                       		if(row[25]){
+                                       			return "<div style='font-size:90%; padding-left: 35px'>"+row[26]+" "+row[28]+"</div>";
+                                           	}else{
+                                           		return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
                                            	}
-                                            return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>"+disaggre;
+                                            
                                         }else{
                                         	var disaggre = "";
-                                        	if(row[27]){
-                                           		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[27]+"</div><div style='font-size:90%; padding-left: 40px'>"+row[29]+"</div>";
+                                        	if(row[25]){
+                                        		return "<div style='font-size:90%; padding-left: 35px'>"+row[27]+" "+row[29]+"</div>";
+                                           	}else{
+                                           		return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>";
                                            	}
-                                            return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
@@ -768,62 +783,67 @@
                                     	var color_sts = "";
                                     	var text = "";
                                     	var update = ""
-                                        if(row[9]){
-                                        	var target  = row[8];
-                                            var achieve = row[9];
-                                            var IncDec     = row[7];
-                                            text = " "+row[9];
-                                            if(IncDec == 'Increment'){
-                                                if(achieve >= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }else{
-                                                if(achieve <= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }
-                                            update="update";
-                                         }else if(row[33]){
-                                        	var target  = row[8];
-                                            var achieve = row[33];
-                                            var IncDec  = row[7];
-                                     		if(IncDec == 'Increment'){
-                                                if(achieve >= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }else{
-                                                if(achieve <= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }
-                                        	text = " "+row[33];
-                                        	update="update";
-                                        }else{
-                                        	text = " - ";
-                                        	update="update";
-                                        }
                                     	var id = "";
                                     	var val = "";
-                                    	if(row[30] && row[31]){
+                                    	if(row[30]){
                                     		id = row[32];
                                     		val1 = row[33];
                                     		val2 = row[34];
                                     		val3 = row[35];
                                     		val4 = row[36];
+                                    		
+                                    		var target  = row[8];
+                                            var achieve = row[33];
+                                            var IncDec  = row[7];
+                                            if(achieve!=null){
+                                            	if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                            	text = " "+row[33];
+                                            	update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
+                                            }
                                     	}else{
                                     		id = row[14];
                                     		val1 = row[9];
                                     		val2 = row[10];
                                     		val3 = row[11];
                                     		val4 = row[12];
+                                    		var target  = row[8];
+                                            var achieve = row[9];
+                                            var IncDec  = row[7];
+                                            if(achieve!=null){
+                                            	text = " "+row[9];
+                                                if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                                update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
+                                            }
                                     	}
                                     	$.ajax({
                         					type: "GET",
@@ -855,57 +875,61 @@
                                     	var color_sts = "";
                                     	var text = "";
                                     	var update = ""
-                                        if(row[10]){
-                                        	var target  = row[8];
-                                            var achieve = row[10];
-                                            var IncDec     = row[7];
-                                            text = " "+row[10];
-                                            if(IncDec == 'Increment'){
-                                                if(achieve >= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }else{
-                                                if(achieve <= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }
-                                            update="update";
-                                         }else if(row[34]){
-                                        	var target  = row[8];
-                                            var achieve = row[34];
-                                            var IncDec  = row[7];
-                                     		if(IncDec == 'Increment'){
-                                                if(achieve >= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }else{
-                                                if(achieve <= target){
-                                                    color_sts = 'btn btn-success';
-                                                }else{
-                                                    color_sts = 'btn btn-danger';
-                                                }
-                                            }
-                                        	text = " "+row[34];
-                                        	update="update";
-                                        }else{
-                                        	text = " - ";
-                                        	update="update";
-                                        }
                                     	var id = "";
                                     	var val = "";
-                                    	if(row[30] && row[31]){
+                                    	if(row[30]){
+                                    		var target  = row[8];
+                                            var achieve = row[34];
+                                            var IncDec  = row[7];
+                                            if(achieve!=null){
+                                            	if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                            	text = " "+row[34];
+                                            	update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
+                                            }
                                     		id = row[32];
                                     		val1 = row[33];
                                     		val2 = row[34];
                                     		val3 = row[35];
                                     		val4 = row[36];
                                     	}else{
+                                    		var target  = row[8];
+                                            var achieve = row[10];
+                                            var IncDec     = row[7];
+                                            if(achieve!=null){
+                                            	text = " "+row[10];
+                                                if(IncDec == 'Increment'){
+                                                    if(achieve >= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }else{
+                                                    if(achieve <= target){
+                                                        color_sts = 'btn btn-success';
+                                                    }else{
+                                                        color_sts = 'btn btn-danger';
+                                                    }
+                                                }
+                                                update="update";
+                                            }else{
+                                            	text = " - ";
+                                            	update="update";
+                                            }
                                     		id = row[14];
                                     		val1 = row[9];
                                     		val2 = row[10];
@@ -972,6 +996,7 @@
                                 "responsive":true,
                                 "bDestroy": true,
                                 "paging": false,
+                                "ordering": false,
                                 "drawCallback": function( settings ) {
                                 	$('#tabel-entri-sdg thead').html(header);
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
@@ -1169,23 +1194,27 @@
                                 	{"data": function (row, data, index, display) {
                                     	var disaggre = "";
                                     	if(row[25]){
-                                    		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    		return "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    	}else{
+                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>";
                                     	}
-                                        return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>"+disaggre;
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
                                         	var disaggre = "";
-                                       		if(row[26]){
-                                           		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[26]+"</div><div style='font-size:90%; padding-left: 40px'>"+row[28]+"</div>";
+                                       		if(row[25]){
+                                       			return "<div style='font-size:90%; padding-left: 35px'>"+row[26]+" "+row[28]+"</div>";
+                                           	}else{
+                                           		return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
                                            	}
-                                            return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>"+disaggre;
+                                            
                                         }else{
                                         	var disaggre = "";
-                                        	if(row[27]){
-                                           		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[27]+"</div><div style='font-size:90%; padding-left: 40px'>"+row[29]+"</div>";
+                                        	if(row[25]){
+                                        		return "<div style='font-size:90%; padding-left: 35px'>"+row[27]+" "+row[29]+"</div>";
+                                           	}else{
+                                           		return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>";
                                            	}
-                                            return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
@@ -1251,62 +1280,67 @@
                                         	var color_sts = "";
                                         	var text = "";
                                         	var update = ""
-                                            if(row[9]){
-                                            	var target  = row[8];
-                                                var achieve = row[9];
-                                                var IncDec     = row[7];
-                                                text = " "+row[9];
-                                                if(IncDec == 'Increment'){
-                                                    if(achieve >= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }else{
-                                                    if(achieve <= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }
-                                                update="update";
-                                             }else if(row[33]){
-                                            	var target  = row[8];
-                                                var achieve = row[33];
-                                                var IncDec  = row[7];
-                                         		if(IncDec == 'Increment'){
-                                                    if(achieve >= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }else{
-                                                    if(achieve <= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }
-                                            	text = " "+row[33];
-                                            	update="update";
-                                            }else{
-                                            	text = " - ";
-                                            	update="update";
-                                            }
                                         	var id = "";
                                         	var val = "";
-                                        	if(row[30] && row[31]){
+                                        	if(row[30]){
                                         		id = row[32];
                                         		val1 = row[33];
                                         		val2 = row[34];
                                         		val3 = row[35];
                                         		val4 = row[36];
+                                        		
+                                        		var target  = row[8];
+                                                var achieve = row[33];
+                                                var IncDec  = row[7];
+                                                if(achieve!=null){
+                                                	if(IncDec == 'Increment'){
+                                                        if(achieve >= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }else{
+                                                        if(achieve <= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }
+                                                	text = " "+row[33];
+                                                	update="update";
+                                                }else{
+                                                	text = " - ";
+                                                	update="update";
+                                                }
                                         	}else{
                                         		id = row[14];
                                         		val1 = row[9];
                                         		val2 = row[10];
                                         		val3 = row[11];
                                         		val4 = row[12];
+                                        		var target  = row[8];
+                                                var achieve = row[9];
+                                                var IncDec  = row[7];
+                                                if(achieve!=null){
+                                                	text = " "+row[9];
+                                                    if(IncDec == 'Increment'){
+                                                        if(achieve >= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }else{
+                                                        if(achieve <= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }
+                                                    update="update";
+                                                }else{
+                                                	text = " - ";
+                                                	update="update";
+                                                }
                                         	}
                                         	$.ajax({
                             					type: "GET",
@@ -1369,57 +1403,61 @@
                                         	var color_sts = "";
                                         	var text = "";
                                         	var update = ""
-                                            if(row[10]){
-                                            	var target  = row[8];
-                                                var achieve = row[10];
-                                                var IncDec     = row[7];
-                                                text = " "+row[10];
-                                                if(IncDec == 'Increment'){
-                                                    if(achieve >= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }else{
-                                                    if(achieve <= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }
-                                                update="update";
-                                             }else if(row[34]){
-                                            	var target  = row[8];
-                                                var achieve = row[34];
-                                                var IncDec  = row[7];
-                                         		if(IncDec == 'Increment'){
-                                                    if(achieve >= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }else{
-                                                    if(achieve <= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }
-                                            	text = " "+row[34];
-                                            	update="update";
-                                            }else{
-                                            	text = " - ";
-                                            	update="update";
-                                            }
                                         	var id = "";
                                         	var val = "";
-                                        	if(row[30] && row[31]){
+                                        	if(row[30]){
+                                        		var target  = row[8];
+                                                var achieve = row[34];
+                                                var IncDec  = row[7];
+                                                if(achieve!=null){
+                                                	if(IncDec == 'Increment'){
+                                                        if(achieve >= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }else{
+                                                        if(achieve <= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }
+                                                	text = " "+row[34];
+                                                	update="update";
+                                                }else{
+                                                	text = " - ";
+                                                	update="update";
+                                                }
                                         		id = row[32];
                                         		val1 = row[33];
                                         		val2 = row[34];
                                         		val3 = row[35];
                                         		val4 = row[36];
                                         	}else{
+                                        		var target  = row[8];
+                                                var achieve = row[10];
+                                                var IncDec     = row[7];
+                                                if(achieve!=null){
+                                                	text = " "+row[10];
+                                                    if(IncDec == 'Increment'){
+                                                        if(achieve >= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }else{
+                                                        if(achieve <= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }
+                                                    update="update";
+                                                }else{
+                                                	text = " - ";
+                                                	update="update";
+                                                }
                                         		id = row[14];
                                         		val1 = row[9];
                                         		val2 = row[10];
@@ -1471,62 +1509,69 @@
                                         	var color_sts = "";
                                         	var text = "";
                                         	var update = ""
-                                            if(row[11]){
-                                            	var target  = row[8];
-                                                var achieve = row[11];
-                                                var IncDec     = row[7];
-                                                text = " "+row[11];
-                                                if(IncDec == 'Increment'){
-                                                    if(achieve >= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }else{
-                                                    if(achieve <= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }
-                                                update="update";
-                                             }else if(row[35]){
-                                            	var target  = row[8];
-                                                var achieve = row[35];
-                                                var IncDec  = row[7];
-                                         		if(IncDec == 'Increment'){
-                                                    if(achieve >= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }else{
-                                                    if(achieve <= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }
-                                            	text = " "+row[35];
-                                            	update="update";
-                                            }else{
-                                            	text = " - ";
-                                            	update="update";
-                                            }
                                         	var id = "";
                                         	var val = "";
-                                        	if(row[30] && row[31]){
+                                        	if(row[30]){
                                         		id = row[32];
                                         		val1 = row[33];
                                         		val2 = row[34];
                                         		val3 = row[35];
                                         		val4 = row[36];
+                                        		
+                                        		var target  = row[8];
+                                                var achieve = row[35];
+                                                var IncDec  = row[7];
+                                                if(achieve!=null){
+                                                	if(IncDec == 'Increment'){
+                                                        if(achieve >= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }else{
+                                                        if(achieve <= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }
+                                                	text = " "+row[35];
+                                                	update="update";
+                                                }else{
+                                                	text = " - ";
+                                                	update="update";
+                                                }
+                                         		
                                         	}else{
                                         		id = row[14];
                                         		val1 = row[9];
                                         		val2 = row[10];
                                         		val3 = row[11];
                                         		val4 = row[12];
+                                        		
+                                        		var target  = row[8];
+                                                var achieve = row[11];
+                                                var IncDec     = row[7];
+                                                if(achieve!=null){
+                                                	 text = " "+row[11];
+                                                     if(IncDec == 'Increment'){
+                                                         if(achieve >= target){
+                                                             color_sts = 'btn btn-success';
+                                                         }else{
+                                                             color_sts = 'btn btn-danger';
+                                                         }
+                                                     }else{
+                                                         if(achieve <= target){
+                                                             color_sts = 'btn btn-success';
+                                                         }else{
+                                                             color_sts = 'btn btn-danger';
+                                                         }
+                                                     }
+                                                     update="update";
+                                                }else{
+                                                	text = " - ";
+                                                	update="update";
+                                                }
                                         	}
                                         	$.ajax({
                             					type: "GET",
@@ -1573,46 +1618,11 @@
                                         	var text = "";
                                         	var update = ""
                                             if(row[12]){
-                                            	var target  = row[8];
-                                                var achieve = row[12];
-                                                var IncDec     = row[7];
-                                                text = " "+row[12];
-                                                if(IncDec == 'Increment'){
-                                                    if(achieve >= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }else{
-                                                    if(achieve <= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }
-                                                update="update";
+                                            	
                                              }else if(row[36]){
-                                            	var target  = row[8];
-                                                var achieve = row[36];
-                                                var IncDec  = row[7];
-                                         		if(IncDec == 'Increment'){
-                                                    if(achieve >= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }else{
-                                                    if(achieve <= target){
-                                                        color_sts = 'btn btn-success';
-                                                    }else{
-                                                        color_sts = 'btn btn-danger';
-                                                    }
-                                                }
-                                            	text = " "+row[36];
-                                            	update="update";
+                                            	
                                             }else{
-                                            	text = " - ";
-                                            	update="update";
+                                            	
                                             }
                                         	var id = "";
                                         	var val = "";
@@ -1622,12 +1632,60 @@
                                         		val2 = row[34];
                                         		val3 = row[35];
                                         		val4 = row[36];
+                                        		
+                                        		var target  = row[8];
+                                                var achieve = row[36];
+                                                var IncDec  = row[7];
+                                                if(achieve!=null){
+                                                	if(IncDec == 'Increment'){
+                                                        if(achieve >= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }else{
+                                                        if(achieve <= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }
+                                                	text = " "+row[36];
+                                                	update="update";
+                                                }else{
+                                                	text = " - ";
+                                                	update="update";
+                                                }
                                         	}else{
                                         		id = row[14];
                                         		val1 = row[9];
                                         		val2 = row[10];
                                         		val3 = row[11];
                                         		val4 = row[12];
+                                        		
+                                        		var target  = row[8];
+                                                var achieve = row[12];
+                                                var IncDec     = row[7];
+                                                if(achieve!=null){
+                                                	text = " "+row[12];
+                                                    if(IncDec == 'Increment'){
+                                                        if(achieve >= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }else{
+                                                        if(achieve <= target){
+                                                            color_sts = 'btn btn-success';
+                                                        }else{
+                                                            color_sts = 'btn btn-danger';
+                                                        }
+                                                    }
+                                                    update="update";
+                                                }else{
+                                                	text = " - ";
+                                                	update="update";
+                                                }
                                         	}
                                         	$.ajax({
                             					type: "GET",
@@ -1699,7 +1757,7 @@
                 var tahun               = v_data_id[1];
                 var id_disaggre			= $('#id_disaggre').val();
                 var id_disaggre_detail	= $('#id_disaggre_detail').val();
-                if(id_disaggre!="" && id_disaggre!="null"){
+                if(id_disaggre!="0"){
                 	var data = JSON.stringify({
                         'id': id,
                         'id_disaggre': id_disaggre,
@@ -1772,23 +1830,23 @@
                 var id_disaggre_detail = (datadisnya[1])?datadisnya[1]:'0';
                 
                 if(value1 == 'null' || value1 == ""){
-                    var achieve1 = '0';
+                    var achieve1 = '';
                 }else{
                     var achieve1 = value1;
                 }
                 
                 if(value2 == 'null' || value2 == ""){
-                    var achieve2 = '0';
+                    var achieve2 = '';
                 }else{
                     var achieve2 = value2;
                 }
                 if(value3 == 'null' || value3 == ""){
-                    var achieve3 = '0';
+                    var achieve3 = '';
                 }else{
                     var achieve3 = value3;
                 }
                 if(value4 == 'null' || value4 == ""){
-                    var achieve4 = '0';
+                    var achieve4 = '';
                 }else{
                     var achieve4 = value4;
                 }
@@ -1814,11 +1872,6 @@
                     $('#achievement2').val(achieve2).hide();
                     $('#achievement3').val(achieve3).hide();
                     $('#achievement4').val(achieve4).show();
-                }else{
-                    $('#achievement1').val("0").hide();
-                    $('#achievement2').val("0").hide();
-                    $('#achievement3').val("0").hide();
-                    $('#achievement4').val("0").hide();
                 }
                 $('#id_disaggre').val(id_disaggre);
                 $('#id_disaggre_detail').val(id_disaggre_detail);
