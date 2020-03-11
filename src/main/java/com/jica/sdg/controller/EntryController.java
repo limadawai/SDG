@@ -31,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import org.json.JSONArray;
@@ -174,47 +175,102 @@ public class EntryController {
         JSONObject jsonObunit = new JSONObject(payload);
         String id               = jsonObunit.get("id").toString();  
         String id_cat           = jsonObunit.get("id_cat").toString();        
-        String id_goals         = jsonObunit.get("id_goals").toString();
-        String id_target        = jsonObunit.get("id_target").toString();
-        String id_indicator     = jsonObunit.get("id_indicator").toString();
         String problem          = jsonObunit.get("problem").toString();
         String follow_up        = jsonObunit.get("follow_up").toString();
-        String sqlGetGoals = "SELECT b.id_role,b.id_prov,b.id_monper FROM sdg_goals a JOIN assign_sdg_indicator b ON a.id = b.id_goals WHERE a.id ='"+id_goals+"'";
-        Query list = em.createNativeQuery(sqlGetGoals);
-        Map<String, Object> goalsMap = new HashMap<>();
-        goalsMap.put("goalsMap",list.getResultList());
-        JSONObject objGoals = new JSONObject(goalsMap); 
-        JSONArray  arrayGoals = objGoals.getJSONArray("goalsMap");
+        UUID uuid = UUID.randomUUID();
+        String id_relation      =  uuid.toString();
         String id_role   = jsonObunit.get("id_role").toString();
         String id_prov   = jsonObunit.get("id_prov").toString();
         String id_monper = jsonObunit.get("id_monper").toString();
         String tahun     = jsonObunit.get("tahun").toString();
+        String sdgs_map  = jsonObunit.get("sdgs_map").toString();
+        String id_relation_update  = jsonObunit.get("id_relation").toString();
+        JSONArray  arraySdgsMap = jsonObunit.getJSONArray("sdgs_map");
+         
             if(id.equals("")){
                 Query query = em.createNativeQuery("INSERT INTO entry_problem_identify \n" +
-                                                    "(id_goals,id_target,id_indicator,id_cat,problem,follow_up,id_prov,id_role,`year`,year_entry,created_by,date_created,summary,id_monper) \n" +
-                                                    "VALUES(:id_goals,:id_target,:id_indicator,:id_cat,:problem,:follow_up,:id_prov,:id_role,:year,DATE_FORMAT(NOW(), '%Y'),'1',DATE_FORMAT(NOW(), '%Y-%m-%d '),'1',:id_monper)");
-                query.setParameter("id_goals", id_goals)
-                     .setParameter("id_target", id_target)
-                     .setParameter("id_indicator", id_indicator)
-                     .setParameter("id_cat", id_cat)
+                                                    "(id_cat,problem,follow_up,id_prov,id_role,`year`,year_entry,created_by,date_created,summary,id_monper,id_relation) \n" +
+                                                    "VALUES(:id_cat,:problem,:follow_up,:id_prov,:id_role,:year,DATE_FORMAT(NOW(), '%Y'),'1',DATE_FORMAT(NOW(), '%Y-%m-%d '),'1',:id_monper,:id_relation)");
+                query.setParameter("id_cat", id_cat)
                      .setParameter("problem", problem)
                      .setParameter("follow_up", follow_up)
                      .setParameter("id_prov", id_prov)
                      .setParameter("id_role", id_role)
                      .setParameter("id_monper", id_monper)
                      .setParameter("year", tahun)
+                     .setParameter("id_relation", id_relation)
                      .executeUpdate();
+                
+                for(int i=0;i<arraySdgsMap.length();i++){
+                    JSONObject  resultSdg = arraySdgsMap.getJSONObject(i);
+                    String id_prov2     = resultSdg.getString("id_prov");
+                    String id_monper2   = resultSdg.getString("id_monper");
+                    String id_goals     = resultSdg.getString("id_goals");
+                    String id_sdgs      = resultSdg.getString("id_sdgs");
+                    if(id_goals.equals("")){
+                        id_goals = null;
+                    }
+                    String id_target    = resultSdg.getString("id_target");
+                    if(id_target.equals("")){
+                        id_target = null;
+                    }
+                    String id_indicator = resultSdg.getString("id_indicator");
+                    if(id_indicator.equals("")){
+                        id_indicator = null;
+                    }
+                        Query query2 = em.createNativeQuery("INSERT into entry_problem_identify_map (id_prov,id_monper,id_goals,id_target,id_indicator,id_relation_entry_problem_identify,id_sdgs)"
+                                                            + "Values(:id_prov,:id_monper,:id_goals,:id_target,:id_indicator,:id_relation_entry_problem_identify,:id_sdgs)");
+                        query2.setParameter("id_prov", id_prov2)
+                             .setParameter("id_monper", id_monper2)
+                             .setParameter("id_goals", id_goals)
+                             .setParameter("id_target", id_target)
+                             .setParameter("id_indicator", id_indicator)
+                             .setParameter("id_relation_entry_problem_identify", id_relation)
+                             .setParameter("id_sdgs", id_sdgs)
+                             .executeUpdate();
+
+                 }
+                
+                
             }
             else{
-                Query query = em.createNativeQuery("Update entry_problem_identify set id_goals=:id_goals,id_target=:id_target,id_indicator=:id_indicator,id_cat=:id_cat,problem=:problem,follow_up=:follow_up where id = :id");
-                 query.setParameter("id", id)
-                     .setParameter("id_goals", id_goals)
-                     .setParameter("id_target", id_target)
-                     .setParameter("id_indicator", id_indicator)
+                Query query = em.createNativeQuery("Update entry_problem_identify set id_cat=:id_cat,problem=:problem,follow_up=:follow_up where id = :id");
+                 query.setParameter("id", id)                     
                      .setParameter("id_cat", id_cat)
                      .setParameter("problem", problem)
                      .setParameter("follow_up", follow_up)
                      .executeUpdate();
+                 
+                 em.createNativeQuery("delete from entry_problem_identify_map where id_relation_entry_problem_identify ='"+id_relation_update+"'").executeUpdate();
+                 for(int i=0;i<arraySdgsMap.length();i++){
+                    JSONObject  resultSdg = arraySdgsMap.getJSONObject(i);
+                    String id_prov2     = resultSdg.getString("id_prov");
+                    String id_monper2   = resultSdg.getString("id_monper");
+                    String id_goals     = resultSdg.getString("id_goals");
+                    String id_sdgs      = resultSdg.getString("id_sdgs");
+                    if(id_goals.equals("")){
+                        id_goals = null;
+                    }
+                    String id_target    = resultSdg.getString("id_target");
+                    if(id_target.equals("")){
+                        id_target = null;
+                    }
+                    String id_indicator = resultSdg.getString("id_indicator");
+                    if(id_indicator.equals("")){
+                        id_indicator = null;
+                    }
+                        Query query2 = em.createNativeQuery("INSERT into entry_problem_identify_map (id_prov,id_monper,id_goals,id_target,id_indicator,id_relation_entry_problem_identify,id_sdgs)"
+                                                            + "Values(:id_prov,:id_monper,:id_goals,:id_target,:id_indicator,:id_relation_entry_problem_identify,:id_sdgs)");
+                        query2.setParameter("id_prov", id_prov2)
+                             .setParameter("id_monper", id_monper2)
+                             .setParameter("id_goals", id_goals)
+                             .setParameter("id_target", id_target)
+                             .setParameter("id_indicator", id_indicator)
+                             .setParameter("id_relation_entry_problem_identify", id_relation_update)
+                             .setParameter("id_sdgs", id_sdgs)
+                             .executeUpdate();
+
+                 }
             }
         
 	}
@@ -256,18 +312,18 @@ public class EntryController {
     
     @GetMapping("admin/list-problem/{id_monper}/{tahun}/{id_role}")
      public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper,@PathVariable("tahun") String tahun,@PathVariable("id_role") String id_role) {
-        String sql = "SELECT  \n" +
-                        " d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng \n" +
-                        ",e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng \n" +
-                        ",f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng\n" +
-                        ",b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role\n" +
-                        "FROM entry_problem_identify a \n" +
-                        "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
-                        "LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify'\n" +
-                        "LEFT JOIN sdg_goals d ON a.id_goals = d.id\n" +
-                        "LEFT JOIN sdg_target e ON a.id_target = e.id\n" +
-                        "LEFT JOIN sdg_indicator f ON a.id_indicator = f.id\n" +
-                        " WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";        
+        String sql = "SELECT   \n" +
+"                         d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng  \n" +
+"                        ,e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
+"                        ,f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
+"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
+"                        ,(SELECT  CONCAT('[', GROUP_CONCAT(JSON_OBJECT('id_sdgs', id_sdgs)),']') AS id_sdgs FROM entry_problem_identify_map WHERE id_relation_entry_problem_identify = a.id_relation) AS id_sdgs\n" +
+"                         FROM entry_problem_identify a  \n" +
+"                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
+"                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
+"                        LEFT JOIN sdg_goals d ON a.id_goals = d.id \n" +
+"                        LEFT JOIN sdg_target e ON a.id_target = e.id \n" +
+"                        LEFT JOIN sdg_indicator f ON a.id_indicator = f.id WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";        
         Query list = em.createNativeQuery(sql);
         
         Map<String, Object> hasil = new HashMap<>();
@@ -312,11 +368,12 @@ public class EntryController {
         return hasil;
     }
     
-    @DeleteMapping("admin/problem-identification/delete/{id}")
+    @DeleteMapping("admin/problem-identification/delete/{id}/{id_relation}")
     @ResponseBody    
     @Transactional
-    public void deleteUnit(@PathVariable("id") Integer id) {
+    public void deleteUnit(@PathVariable("id") Integer id,@PathVariable("id_relation") String id_relation) {
         em.createNativeQuery("delete from entry_problem_identify where id ='"+id+"'").executeUpdate();
+        em.createNativeQuery("delete from entry_problem_identify_map where id_relation_entry_problem_identify ='"+id_relation+"'").executeUpdate();
     }
      
 
