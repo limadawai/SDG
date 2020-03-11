@@ -379,7 +379,7 @@
 							}else if(row[3]==4){
 								statusApp = 1;
 							}
-							return "<div style='font-size:90%;'><a class='id_role' data-id='"+row[1]+"' data-statusApp='"+statusApp+"' data-period='"+row[4]+"' href='#'>"+row[2]+"</a></div>";
+							return "<div style='font-size:90%;'><a class='id_role' data-id='"+row[1]+"' data-statusApp='"+statusApp+"' data-period='"+row[6]+"' href='#'>"+row[2]+"</a></div>";
 						}},
 						{"data": function (row, data, index, display) {
 	                        if(row[3] == '1'){
@@ -742,6 +742,7 @@
                     "autoWidth": true,
                     "responsive":true,
                     "bDestroy": true,
+                    "ordering": false,
                     "ajax": {
                         "url": urls+'list-entry-sdg/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
                         dataSrc: 'content',
@@ -751,23 +752,28 @@
                         {"title": header1,"data": function (row, data, index, display) {
                         	var disaggre = "";
                         	if(row[25]){
-                        		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                        		return "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                        	}else{
+                        		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>";
                         	}
-                            return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>"+disaggre;
                         }},
                         {"title": header2,"data": function (row, data, index, display) {
                         	if($('#fs').is(':checked')){
                             	var disaggre = "";
-                           		if(row[26]){
-                               		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[26]+"</div><div style='font-size:90%; padding-left: 40px'>"+row[28]+"</div>";
+                           		if(row[25]){
+                           			return "<div style='font-size:90%; padding-left: 35px'>"+row[26]+" "+row[28]+"</div>";
+                               	}else{
+                               		return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>";
                                	}
-                                return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</div>"+disaggre;
+                                
                             }else{
                             	var disaggre = "";
-                            	if(row[27]){
-                               		disaggre = "<div style='font-size:90%; padding-left: 35px'>"+row[27]+"</div><div style='font-size:90%; padding-left: 40px'>"+row[29]+"</div>";
+                            	if(row[25]){
+                            		return "<div style='font-size:90%; padding-left: 35px'>"+row[27]+" "+row[29]+"</div>";
+                               	}else{
+                               		return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>";
                                	}
-                                return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[20]+"</div>"+disaggre;
+                                
                             }
                         }},
                         {"title": header3,"data": function (row, data, index, display) {
@@ -786,25 +792,25 @@
                             var IncDec  = row[7];
 							var nilai="";
 							if(period==1){
-								if(row[30] && row[31]){
+								if(row[30]){
 									nilai = row[33];
 								}else{
 									nilai = row[9];
 								}
 							}else if(period==2){
-								if(row[30] && row[31]){
+								if(row[30]){
 									nilai = row[34];
 								}else{
 									nilai = row[10];
 								}
 							}else if(period==3){
-								if(row[30] && row[31]){
+								if(row[30]){
 									nilai = row[35];
 								}else{
 									nilai = row[11];
 								}
 							}else if(period==4){
-								if(row[30] && row[31]){
+								if(row[30]){
 									nilai = row[36];
 								}else{
 									nilai = row[12];
@@ -823,30 +829,31 @@
                                     var color_sts = 'btn btn-danger';
                                 }
                             }
-                            return '<button type="button" data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" class="'+color_sts+'">'+nilai+"</button>";
+							
+                            return (nilai)?'<button type="button" data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" class="'+color_sts+'">'+nilai+"</button>":"";
                         }},
                         {"title": header6,"data": function (row, data, index, display) {
                         	var nilai="";
 							if(period==1){
-								if(row[30] && row[31]){
+								if(row[30]){
 									nilai = row[37];
 								}else{
 									nilai = row[21];
 								}
 							}else if(period==2){
-								if(row[30] && row[31]){
+								if(row[30]){
 									nilai = row[38];
 								}else{
 									nilai = row[22];
 								}
 							}else if(period==3){
-								if(row[30] && row[31]){
+								if(row[30]){
 									nilai = row[39];
 								}else{
 									nilai = row[23];
 								}
 							}else if(period==4){
-								if(row[30] && row[31]){
+								if(row[30]){
 									nilai = row[40];
 								}else{
 									nilai = row[24];
