@@ -1189,7 +1189,6 @@ public class RanRadSdgController {
             JSONArray  finalArrayRanRad = arrayRanRad.getJSONArray(i);
             Row rowChild = sheet1.createRow(begin);
             
-            
             Cell cellChild0 = rowChild.createCell(0);
             cellChild0.setCellValue(no++);
             cellChild0.setCellStyle(cellStyleChild);

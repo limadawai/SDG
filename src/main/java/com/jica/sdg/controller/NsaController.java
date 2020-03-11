@@ -38,6 +38,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -414,18 +416,20 @@ public class NsaController {
     }
     
     //========================== Export to Excell ========================
-    @GetMapping("admin/nsa/download_profil")
-    public void download_profil(HttpServletResponse response) throws IOException {
-        String[] coba = {"1","Blablablabla","Pesanggrahan","Rakyat Ciledug","2020","Dinas Pariwisata"};
+    @GetMapping("admin/nsa/download_profil/{id_prov}/{id_role}")
+    @ResponseBody
+    public void download_profil(HttpServletResponse response, @PathVariable("id_prov") String idprov, @PathVariable("id_role") int idrole) throws IOException {
     	response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=Profile.xlsx");
-        ByteArrayInputStream stream = exprofil(coba);
+        response.setHeader("Content-Disposition", "attachment; filename=Profile"+idprov+"-"+idrole+".xlsx");
+        
+        ByteArrayInputStream stream = exprofil(idprov, idrole);
         IOUtils.copy(stream, response.getOutputStream());
+        //System.out.println(dataprof);
     }
     
-    private ByteArrayInputStream exprofil(String[] data) throws IOException {
-    	try (Workbook workbook = new XSSFWorkbook()) {
-    		Sheet sheet = workbook.createSheet("Customers");
+    private ByteArrayInputStream exprofil(String idprov, int idrole) throws IOException {
+    		Workbook workbook = new XSSFWorkbook();
+    		Sheet sheet = workbook.createSheet("Profile");
 			
 			Row row = sheet.createRow(0);
 	        CellStyle headerCellStyle = workbook.createCellStyle();
@@ -437,32 +441,98 @@ public class NsaController {
 	        cell.setCellStyle(headerCellStyle);
 	        
 	        cell = row.createCell(1);
-	        cell.setCellValue("Pencapaian");
+	        cell.setCellValue("Nama Organisasi");
 	        cell.setCellStyle(headerCellStyle);
 	
 	        cell = row.createCell(2);
-	        cell.setCellValue("Lokasi");
+	        cell.setCellValue("Institusi");
 	        cell.setCellStyle(headerCellStyle);
 	
 	        cell = row.createCell(3);
-	        cell.setCellValue("Penerima Manfaat");
+	        cell.setCellValue("Atribut");
 	        cell.setCellStyle(headerCellStyle);
 	        
 	        cell = row.createCell(4);
-	        cell.setCellValue("Tahun Implementasi");
+	        cell.setCellValue("Situs");
 	        cell.setCellStyle(headerCellStyle);
 	        
 	        cell = row.createCell(5);
-	        cell.setCellValue("Partner");
+	        cell.setCellValue("Lokasi");
 	        cell.setCellStyle(headerCellStyle);
 	        
+	        cell = row.createCell(6);
+	        cell.setCellValue("Detail Perwakilan");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        //=================== Isi tabel atas =================
+
+	        String sql = "SELECT a.nm_nsa, a.loc_nsa, b.web_url, b.name_pic FROM nsa_profile a LEFT JOIN "
+	        		+ "nsa_detail b ON b.id_nsa = a.id "
+	        		+ "WHERE a.id_role = :id_role";
+	        Query query = em.createNativeQuery(sql);
+	        query.setParameter("id_role", idrole);
+	        Map<String, Object> mapDetail = new HashMap<>();
+	        mapDetail.put("mapDetail",query.getResultList());
+	        JSONObject objDetail = new JSONObject(mapDetail); 
+	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
+	        JSONArray  finalDetail = arrayDetail.getJSONArray(0);
+	        
         	Row dataRow = sheet.createRow(1);
-        	dataRow.createCell(0).setCellValue(data[0]);
-        	dataRow.createCell(1).setCellValue(data[1]);
-        	dataRow.createCell(2).setCellValue(data[2]);
-        	dataRow.createCell(3).setCellValue(data[3]);
-        	dataRow.createCell(4).setCellValue(data[4]);
-        	dataRow.createCell(5).setCellValue(data[5]);
+        	dataRow.createCell(0).setCellValue("1.");
+        	dataRow.createCell(1).setCellValue(finalDetail.getString(0));
+        	dataRow.createCell(2).setCellValue("Civil Society Organization/Organisasi Kepemudaan/Komunitas");
+        	dataRow.createCell(3).setCellValue("");
+        	dataRow.createCell(4).setCellValue(finalDetail.getString(2));
+        	dataRow.createCell(5).setCellValue(finalDetail.getString(1));
+        	dataRow.createCell(6).setCellValue(finalDetail.getString(3));
+        	
+        	//============= Spasi =============
+//        	Row spasi = sheet.createRow(1);
+//        	Cell cellspasi = spasi.createCell(0);cell.setCellValue("");
+//        	cellspasi = spasi.createCell(1);cellspasi.setCellValue("");
+//        	cellspasi = spasi.createCell(2);cellspasi.setCellValue("");
+//        	cellspasi = spasi.createCell(3);cellspasi.setCellValue("");
+//        	cellspasi = spasi.createCell(4);cellspasi.setCellValue("");
+//        	cellspasi = spasi.createCell(5);cellspasi.setCellValue("");
+//        	cellspasi = spasi.createCell(6);cellspasi.setCellValue("");
+        	
+        	//================= Tabel Pencapaian =================
+//        	Row pencapaian = sheet.createRow(2);
+//        	CellStyle headerCellStyle2 = workbook.createCellStyle();
+//	        headerCellStyle2.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+//	        headerCellStyle2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+//	        
+//	        Cell celltab2 = pencapaian.createCell(0);
+//	        celltab2.setCellValue("No.");
+//	        celltab2.setCellStyle(headerCellStyle);
+//	        
+//	        celltab2 = pencapaian.createCell(1);
+//	        celltab2.setCellValue("Pencapaian");
+//	        celltab2.setCellStyle(headerCellStyle);
+//	
+//	        celltab2 = pencapaian.createCell(2);
+//	        celltab2.setCellValue("Lokasi");
+//	        celltab2.setCellStyle(headerCellStyle);
+//	
+//	        celltab2 = pencapaian.createCell(3);
+//	        celltab2.setCellValue("Penerima Manfaat");
+//	        celltab2.setCellStyle(headerCellStyle);
+//	        
+//	        celltab2 = pencapaian.createCell(4);
+//	        celltab2.setCellValue("Tahun Implementasi");
+//	        celltab2.setCellStyle(headerCellStyle);
+//	        
+//	        celltab2 = pencapaian.createCell(5);
+//	        celltab2.setCellValue("Partner");
+//	        celltab2.setCellStyle(headerCellStyle);
+//	        
+//	        Row dataRow2 = sheet.createRow(2);
+//	        dataRow2.createCell(0).setCellValue(data[0]+".");
+//	        dataRow2.createCell(1).setCellValue(data[7]);
+//	        dataRow2.createCell(2).setCellValue(data[8]);
+//	        dataRow2.createCell(3).setCellValue(data[9]);
+//	        dataRow2.createCell(4).setCellValue(data[10]);
+//	        dataRow2.createCell(5).setCellValue(data[11]);
 	
 	        sheet.autoSizeColumn(0);
 	        sheet.autoSizeColumn(1);
@@ -470,14 +540,11 @@ public class NsaController {
 	        sheet.autoSizeColumn(3);
 	        sheet.autoSizeColumn(4);
 	        sheet.autoSizeColumn(5);
+	        sheet.autoSizeColumn(6);
 	        
 	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	        workbook.write(outputStream);
 	        return new ByteArrayInputStream(outputStream.toByteArray());
-    	} catch (IOException ex) {
-			ex.printStackTrace();
-			return null;
-		}
     }
 
 }

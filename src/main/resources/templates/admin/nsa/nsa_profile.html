@@ -2011,15 +2011,9 @@
     // ]]>
     
     $("#export").on("click", function(){
-    	$.ajax({
-    		type: "get",
-            url: urls+'nsa/download_profil',
-            //data: "data=1",
-            cache: false,
-            success: function (result) {
-            	
-            }
-    	});
+    	var idprov = $("#id_prov").val();
+    	var idrole = $("#nm_nsa_profil").val();
+    	window.open(urls+"nsa/download_profil/"+idprov+"/"+idrole, "_blank");
     });
 </script>
 </html>
