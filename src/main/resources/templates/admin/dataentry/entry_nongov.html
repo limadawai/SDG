@@ -16,19 +16,19 @@
 <!--  Content  -->
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Government Program Monitoring</a></div>
-            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Program Pemerintah</a></div>
+            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Non Government Program Monitoring</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Monitor Program Non Pemerintah</a></div>
         </div>
         <div class="container-fluid" id="teruskan">
             <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title lang_eng" id="judul-eng" style="display: none">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Government Program Monitoring Table</h5>
+                        <h5>Non Government Program Monitoring Table</h5>
                     </div>
                     <div class="widget-title lang_indo" id="judul-indo">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Tabel Monitor Program Pemerintah</h5>
+                        <h5>Tabel Monitor Program Non Pemerintah</h5>
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
@@ -175,7 +175,7 @@
             }else{
                 $.ajax({
                     type: "GET",
-                    url: urls+'list-get-option-role-gov-profil/'+id_prov,
+                    url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                     success: function (result) {
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
                         var array = result.content;
@@ -219,7 +219,7 @@
                 var id_prov = this.value ;
                 $.ajax({
                     type: "GET",
-                    url: urls+'list-get-option-role-gov-profil/'+id_prov,
+                    url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                     success: function (result) {
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
                         var array = result.content;
@@ -441,19 +441,19 @@
                         if(cektabel==0){
                         	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
                         	//Indicator
-                        	var btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApply3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApply4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApply3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApply4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
                             $.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_indicator/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
                                 	if(apply.length>0){
                                 		if(apply[0][1]=="1"){
-                                			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                			btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                 		}else if(apply[0][1]=="2"){
                                 			if($("#fs").is(':checked')){
                                 				btnApply1 = "<span class='label label-success'>Disetujui</span>";
@@ -473,7 +473,7 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -481,20 +481,20 @@
                 							}else{
                 								label = "<span class='label label-default'>No Action</span>";
                 							}
-                                			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}
                                 	}
                                 },
                             });
                             $.ajax({
             					type: "GET",
-            					url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
+            					url: urls+'get-approve/entry_nsa_indicator/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
                                 	if(apply.length>0){
                                 		if(apply[0][1]=="1"){
-                                			btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                			btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                 		}else if(apply[0][1]=="2"){
                                 			if($("#fs").is(':checked')){
                                 				btnApply2 = "<span class='label label-success'>Disetujui</span>";
@@ -514,7 +514,7 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -522,7 +522,7 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}
                                 		
                                 	}
@@ -530,13 +530,13 @@
                             });
                             $.ajax({
             					type: "GET",
-            					url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
+            					url: urls+'get-approve/entry_nsa_indicator/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
                                 	if(apply.length>0){
                                 		if(apply[0][1]=="1"){
-                                			btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                			btnApply2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                 		}else if(apply[0][1]=="2"){
                                 			if($("#fs").is(':checked')){
                                 				btnApply3 = "<span class='label label-success'>Disetujui</span>";
@@ -556,7 +556,7 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -564,7 +564,7 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}
                                 		
                                 	}
@@ -572,13 +572,13 @@
                             });
                             $.ajax({
             					type: "GET",
-            					url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
+            					url: urls+'get-approve/entry_nsa_indicator/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
                                 	if(apply.length>0){
                                 		if(apply[0][1]=="1"){
-                                			btnApply4=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                			btnApply4=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                 		}else if(apply[0][1]=="2"){
                                 			if($("#fs").is(':checked')){
                                 				btnApply4 = "<span class='label label-success'>Disetujui</span>";
@@ -598,7 +598,7 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -606,7 +606,7 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}
                                 		
                                 	}
@@ -634,7 +634,7 @@
                         }
                     },
                     "ajax": {
-                        "url": urls+'list-entry-gov/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
+                        "url": urls+'list-entry-nsa/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
                         dataSrc: 'content',
                     },
                     "searching": true,
@@ -679,7 +679,7 @@
                     		val4 = row[15];
                         	$.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_indicator/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
@@ -712,7 +712,7 @@
                     		val4 = row[15];
                         	$.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_indicator/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
@@ -745,7 +745,7 @@
                     		val4 = row[15];
                         	$.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_indicator/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
@@ -778,7 +778,7 @@
                     		val4 = row[15];
                         	$.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_indicator/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
@@ -823,7 +823,7 @@
                 
                 $.ajax({
                     type: "GET",
-                    url: urls+'list-get-sts-monper-gov/'+id_monper,
+                    url: urls+'list-get-sts-monper-nongov/'+id_monper,
                     async:false,
                     success: function (result1) {
                     	stsBud = result1.content[0];
@@ -895,19 +895,19 @@
                         	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
                         	
                           //Budget
-                        	var btnApplyBud1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApplyBud2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApplyBud3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApplyBud4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApplyBud1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApplyBud2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApplyBud3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApplyBud4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
                             $.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_budget/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
                                 	if(apply.length>0){
                                 		if(apply[0][1]=="1"){
-                                			btnApplyBud1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                			btnApplyBud1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                 		}else if(apply[0][1]=="2"){
                                 			if($("#fs").is(':checked')){
                                 				btnApplyBud1 = "<span class='label label-success'>Disetujui</span>";
@@ -927,7 +927,7 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApplyBud1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApplyBud1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -935,20 +935,20 @@
                 							}else{
                 								label = "<span class='label label-default'>No Action</span>";
                 							}
-                                			btnApplyBud1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApplyBud1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}
                                 	}
                                 },
                             });
                             $.ajax({
             					type: "GET",
-            					url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
+            					url: urls+'get-approve/entry_nsa_budget/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
                                 	if(apply.length>0){
                                 		if(apply[0][1]=="1"){
-                                			btnApplyBud2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                			btnApplyBud2=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                 		}else if(apply[0][1]=="2"){
                                 			if($("#fs").is(':checked')){
                                 				btnApplyBud2 = "<span class='label label-success'>Disetujui</span>";
@@ -968,7 +968,7 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApplyBud2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApplyBud2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -976,7 +976,7 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApplyBud2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApplyBud2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}
                                 		
                                 	}
@@ -984,13 +984,13 @@
                             });
                             $.ajax({
             					type: "GET",
-            					url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
+            					url: urls+'get-approve/entry_nsa_budget/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
                                 	if(apply.length>0){
                                 		if(apply[0][1]=="1"){
-                                			btnApplyBud3=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                			btnApplyBud3=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                 		}else if(apply[0][1]=="2"){
                                 			if($("#fs").is(':checked')){
                                 				btnApplyBud3 = "<span class='label label-success'>Disetujui</span>";
@@ -1010,7 +1010,7 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApplyBud3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApplyBud3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -1018,7 +1018,7 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApplyBud3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApplyBud3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}
                                 		
                                 	}
@@ -1026,13 +1026,13 @@
                             });
                             $.ajax({
             					type: "GET",
-            					url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
+            					url: urls+'get-approve/entry_nsa_budget/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
                                 	if(apply.length>0){
                                 		if(apply[0][1]=="1"){
-                                			btnApplyBud4=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
+                                			btnApplyBud4=' <a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a>';
                                 		}else if(apply[0][1]=="2"){
                                 			if($("#fs").is(':checked')){
                                 				btnApplyBud4 = "<span class='label label-success'>Disetujui</span>";
@@ -1052,7 +1052,7 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApplyBud4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApplyBud4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -1060,7 +1060,7 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApplyBud4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			btnApplyBud4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_nsa_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
                                 		}
                                 		
                                 	}
@@ -1086,7 +1086,7 @@
                         }
                     },
                     "ajax": {
-                        "url": urls+'list-entry-gov-bud/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
+                        "url": urls+'list-entry-nsa-bud/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
                         dataSrc: 'content',
                     },
                     "searching": true,
@@ -1131,7 +1131,7 @@
                     		val4 = row[19];
                         	$.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_budget/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
@@ -1164,7 +1164,7 @@
                     		val4 = row[19];
                         	$.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_budget/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
@@ -1197,7 +1197,7 @@
                     		val4 = row[19];
                         	$.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_budget/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
@@ -1230,7 +1230,7 @@
                     		val4 = row[19];
                         	$.ajax({
             					type: "GET",
-                                url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
+                                url: urls+'get-approve/entry_nsa_budget/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
                                 async:false,
                                 success: function (result) {
                                 	apply = result.content;
@@ -1317,7 +1317,7 @@
                     });
     		        $.ajax({
     		            type: "POST",
-    		            url: urls+'save-entry-gov_prog_indicator',
+    		            url: urls+'save-entry-non-gov_prog_indicator',
     		            beforeSend : function(xhr){
     		            	xhr.setRequestHeader(header,token);
     		            },
@@ -1336,7 +1336,7 @@
                 }else{
                 	var data = JSON.stringify({
                         'id': id,
-                        'id_gov_activity': id_sdg_indicator,
+                        'id_nsa_activity': id_sdg_indicator,
                         'achievement1': achievement1,
                         'achievement2': achievement2,
                         'achievement3': achievement3,
@@ -1347,7 +1347,7 @@
                     });
     		        $.ajax({
     		            type: "POST",
-    		            url: urls+'save-entry-gov_prog',
+    		            url: urls+'save-entry-non-gov_prog',
     		            beforeSend : function(xhr){
     		            	xhr.setRequestHeader(header,token);
     		            },

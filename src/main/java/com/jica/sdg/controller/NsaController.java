@@ -237,7 +237,7 @@ public class NsaController {
     @GetMapping("admin/list-get-option-role-gov-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionGovProfilList(@PathVariable("id") String id) {
         
-        String sql  = "select * from ref_role as a where a.id_prov = :id and cat_role = 'Government' ";
+        String sql  = "select * from ref_role as a where a.id_prov = :id and cat_role = 'Government' and a.id_role!=1";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
