@@ -2011,7 +2011,15 @@
     // ]]>
     
     $("#export").on("click", function(){
-    	alert('export');
+    	$.ajax({
+    		type: "get",
+            url: urls+'nsa/download_profil',
+            //data: "data=1",
+            cache: false,
+            success: function (result) {
+            	
+            }
+    	});
     });
 </script>
 </html>

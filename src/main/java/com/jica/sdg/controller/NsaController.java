@@ -22,7 +22,22 @@ import com.jica.sdg.service.PhilanthropyService;
 import java.util.ArrayList;
 import java.util.Collection;
 import static java.util.Collections.list;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.HashMap;
+
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +50,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -396,6 +411,73 @@ public class NsaController {
         int id_philanthropy = nsaCollaboration.getId_philanthropy();
         int id              = nsaCollaboration.getId();
         nsaCollaborationService.updateIdPhilanthropy(id_philanthropy, id);
+    }
+    
+    //========================== Export to Excell ========================
+    @GetMapping("admin/nsa/download_profil")
+    public void download_profil(HttpServletResponse response) throws IOException {
+        String[] coba = {"1","Blablablabla","Pesanggrahan","Rakyat Ciledug","2020","Dinas Pariwisata"};
+    	response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=Profile.xlsx");
+        ByteArrayInputStream stream = exprofil(coba);
+        IOUtils.copy(stream, response.getOutputStream());
+    }
+    
+    private ByteArrayInputStream exprofil(String[] data) throws IOException {
+    	try (Workbook workbook = new XSSFWorkbook()) {
+    		Sheet sheet = workbook.createSheet("Customers");
+			
+			Row row = sheet.createRow(0);
+	        CellStyle headerCellStyle = workbook.createCellStyle();
+	        headerCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+	        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	        // Creating header
+	        Cell cell = row.createCell(0);
+	        cell.setCellValue("No.");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(1);
+	        cell.setCellValue("Pencapaian");
+	        cell.setCellStyle(headerCellStyle);
+	
+	        cell = row.createCell(2);
+	        cell.setCellValue("Lokasi");
+	        cell.setCellStyle(headerCellStyle);
+	
+	        cell = row.createCell(3);
+	        cell.setCellValue("Penerima Manfaat");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(4);
+	        cell.setCellValue("Tahun Implementasi");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(5);
+	        cell.setCellValue("Partner");
+	        cell.setCellStyle(headerCellStyle);
+	        
+        	Row dataRow = sheet.createRow(1);
+        	dataRow.createCell(0).setCellValue(data[0]);
+        	dataRow.createCell(1).setCellValue(data[1]);
+        	dataRow.createCell(2).setCellValue(data[2]);
+        	dataRow.createCell(3).setCellValue(data[3]);
+        	dataRow.createCell(4).setCellValue(data[4]);
+        	dataRow.createCell(5).setCellValue(data[5]);
+	
+	        sheet.autoSizeColumn(0);
+	        sheet.autoSizeColumn(1);
+	        sheet.autoSizeColumn(2);
+	        sheet.autoSizeColumn(3);
+	        sheet.autoSizeColumn(4);
+	        sheet.autoSizeColumn(5);
+	        
+	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	        workbook.write(outputStream);
+	        return new ByteArrayInputStream(outputStream.toByteArray());
+    	} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
     }
 
 }
