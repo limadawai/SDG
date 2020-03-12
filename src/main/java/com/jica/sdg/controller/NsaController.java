@@ -420,7 +420,7 @@ public class NsaController {
     @ResponseBody
     public void download_profil(HttpServletResponse response, @PathVariable("id_prov") String idprov, @PathVariable("id_role") int idrole) throws IOException {
     	response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=Profile"+idprov+"-"+idrole+".xlsx");
+        response.setHeader("Content-Disposition", "attachment; filename=Profile-"+idprov+"-"+idrole+".xlsx");
         
         ByteArrayInputStream stream = exprofil(idprov, idrole);
         IOUtils.copy(stream, response.getOutputStream());
