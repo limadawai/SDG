@@ -2011,7 +2011,9 @@
     // ]]>
     
     $("#export").on("click", function(){
-    	alert('export');
+    	var idprov = $("#id_prov").val();
+    	var idrole = $("#nm_nsa_profil").val();
+    	window.open(urls+"nsa/download_profil/"+idprov+"/"+idrole, "_blank");
     });
 </script>
 </html>

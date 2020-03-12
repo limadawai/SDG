@@ -814,10 +814,10 @@
                                     			}
                                         	}
                                     		for(var isdg=0;isdg<cekSdg.length;isdg++){
-                                    			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:"";
-                                    			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:"";
-                                    			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:"";
-                                    			nilai4 = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==y)?nilai4:"";
+                                    			nilai1 = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:(nilai1)?nilai1:"";
+                                    			nilai2 = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:(nilai2)?nilai2:"";
+                                    			nilai3 = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:(nilai3)?nilai3:"";
+                                    			nilai4 = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==y)?nilai4:(nilai4)?nilai4:"";
                                     		}
 
                                     		textSdg += "<td>"+(rowi[ii][0]?rowi[ii][0]:'')+"</td>";
@@ -942,10 +942,12 @@
                     		var cekBudRow=0;
                     		if(row[i][20]=="Government"){
                     			cekInd = cekGovInd;
+                    			cekBud = cekGovBud;
                     			urlEntry = "getgovindicator";
                     			urlEntryIsi = "getgovindicatorisi";
                     		}else{
                     			cekInd = cekNsaInd;
+                    			cekBud = cekNsaBud;
                     			urlEntry = "getnsaindicator";
                     			urlEntryIsi = "getnsaindicatorisi";
                     		}
@@ -1004,10 +1006,10 @@
                 	            	                            		}
                 	            	                            		
                 	            	                            		for(var igov=0;igov<cekInd.length;igov++){
-                	            	                            			nilaiGov1 = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:"";
-                	            	                            			nilaiGov2 = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:"";
-                	            	                            			nilaiGov3 = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:"";
-                	            	                            			nilaiGov4 = (cekInd[igov][0]=="4" && cekInd[igov][1]==y)?nilaiGov4:"";
+                	            	                            			nilaiGov1 = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:(nilaiGov1)?nilaiGov1:"";
+                	            	                            			nilaiGov2 = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:(nilaiGov2)?nilaiGov2:"";
+                	            	                            			nilaiGov3 = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:(nilaiGov3)?nilaiGov3:"";
+                	            	                            			nilaiGov4 = (cekInd[igov][0]=="4" && cekInd[igov][1]==y)?nilaiGov4:(nilaiGov4)?nilaiGov4:"";
                 	            	                            		}
                 	            	                            		textSdg += "<td>"+(rowGov[j][7]?rowGov[j][7]:'')+"</td>";
                 	            	                            		if(stsGov == 'yearly'){
@@ -1051,10 +1053,10 @@
                 	            	                            		
                 	            	                            		if(cekBud.length>0){
                 	            	                            			for(var ibud=0;ibud<cekBud.length;ibud++){
-                	                	                            			nilaiBudGov1 = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:"";
-                	                	                            			nilaiBudGov2 = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:"";
-                	                	                            			nilaiBudGov3 = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:"";
-                	                	                            			nilaiBudGov4 = (cekBud[ibud][0]=="4" && cekBud[ibud][1]==y)?nilaiBudGov4:"";
+                	                	                            			nilaiBudGov1 = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:(nilaiBudGov1)?nilaiBudGov1:"";
+                	                	                            			nilaiBudGov2 = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:(nilaiBudGov2)?nilaiBudGov2:"";
+                	                	                            			nilaiBudGov3 = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:(nilaiBudGov3)?nilaiBudGov3:"";
+                	                	                            			nilaiBudGov4 = (cekBud[ibud][0]=="4" && cekBud[ibud][1]==y)?nilaiBudGov4:(nilaiBudGov4)?nilaiBudGov4:"";
                 	                	                            		}
                 	            	                            		}else{
                 	            	                            			nilaiBudGov1 = "";

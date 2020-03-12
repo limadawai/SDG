@@ -95,35 +95,35 @@ public class ReportController {
     @GetMapping("admin/getentryshowreport")
     public @ResponseBody Map<String, Object> getentryshowreport(@RequestParam("id_monper") int idmonper) {
     	//String sql = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_sdg'";
-    	String sql = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_sdg'";
+    	String sql = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_sdg' order by year, period";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_monper", idmonper);
         //query.setParameter("year", year);
         List listSdg = query.getResultList();
         
         //String sql1 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_indicator'";
-        String sql1 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_gov_indicator'";
+        String sql1 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_gov_indicator' order by year, period";
         Query query1 = manager.createNativeQuery(sql1);
         query1.setParameter("id_monper", idmonper);
         //query1.setParameter("year", year);
         List listGovInd = query1.getResultList();
         
         //String sql2 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_gov_budget'";
-        String sql2 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_gov_budget'";
+        String sql2 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_gov_budget' order by year, period";
         Query query2 = manager.createNativeQuery(sql2);
         query2.setParameter("id_monper", idmonper);
         //query2.setParameter("year", year);
         List listGovBud = query2.getResultList();
         
         //String sql3 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_budget'";
-        String sql3 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_nsa_budget'";
+        String sql3 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_nsa_budget' order by year, period";
         Query query3 = manager.createNativeQuery(sql3);
         query3.setParameter("id_monper", idmonper);
         //query3.setParameter("year", year);
         List listNsaBud = query3.getResultList();
         
         //String sql4 = "SELECT period FROM entry_show_report WHERE id_monper = :id_monper AND year = :year AND type = 'entry_nsa_indicator'";
-        String sql4 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_nsa_indicator'";
+        String sql4 = "SELECT period, year FROM entry_show_report WHERE id_monper = :id_monper AND type = 'entry_nsa_indicator' order by year, period";
         Query query4 = manager.createNativeQuery(sql4);
         query4.setParameter("id_monper", idmonper);
         //query4.setParameter("year", year);

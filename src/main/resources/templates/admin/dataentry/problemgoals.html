@@ -29,6 +29,8 @@
                         <span class="icon"><i class="icon-tasks"></i></span>
                         <h5>Tabel Identifikasi Masalah dan Solusi</h5>
                     </div>
+                    
+                   
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
@@ -116,7 +118,7 @@
                 </div>
             </div>
         </div>
-        <div id="myModal"data-backdrop="static" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div id="myModal"data-backdrop="static" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:1000px!important;left:35%!important">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 			    <h3 class="lang_eng" style="display:none">Add Disaggregation</h3>
@@ -125,6 +127,7 @@
 			<div class="modal-body">
 				<form>
                                     <input type="hidden" id="id" name="id"/>
+                                    <input type="hidden" id="id_relation" name="id_relation"/>
                                     <div class="control-group">
 				    <label class="lang_eng" style="display:none">Ref Category</label>
 				    <label class="lang_indo">Ref Category</label>
@@ -134,10 +137,22 @@
                                     </select>
                                     </div>
                                     <div class="control-group">
-				    <label class="lang_eng" style="display:none">SDG Indicator</label>
-				    <label class="lang_indo">SDG Indikator</label>
-                                    <select  class="span3" id="filter_sdg">
-                                    </select>
+                                    <div class="accordion" id="accordion2">
+                                        <div class="accordion-group">
+                                            <div class="accordion-heading">
+                                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+                                                    <label class="lang_eng control-label" style="display:none">Select SDGs Indicator</label>
+                                                    <label class="lang_indo control-label">Pilih Indikator SDG</label>
+                                                </a>
+                                            </div>
+                                            <div id="collapseOne" class="accordion-body collapse">
+                                                <div class="accordion-inner">
+                                                    <div id="filter_sdg">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </div>
                                     <div class="control-group">
                                         <label th:class="control-label" for="detail">Problem</label>
@@ -173,6 +188,63 @@
         var id_role     = [[${id_role}]];
         var id_prov     = [[${id_prov}]];
         var privilege   = [[${privilege}]];
+        var filtersdg   = [[${filtersdg}]];
+        var lisdg2       = [];
+        $2.each(filtersdg.data,function(i,x){
+            var obj2 = {'id':x[0],'parent':x[5],'text':x[1],'a_attr':{'level':x[3],'id_parent':x[0]},'state' : {'opened' : true} }
+            lisdg2.push(obj2);
+        });
+        
+        $2('#filter_sdg').jstree({ 
+                    'core'   : {
+                        'data' : lisdg2,
+                        'check_callback': false,
+                        "themes" : {
+                                    "variant" : "small"
+                                  }
+                    },"checkbox" : {
+                        "three_state"   : false,
+                        "whole_node"    : false,  // to avoid checking the box just clicking the node 
+                        "tie_selection" : false //
+                      },
+                    "plugins" : [ "checkbox" ] 
+                }).on("check_node.jstree", function(e, data) {
+//                    console.log(data.node.id + ' ' + data.node.text + ' level '+data.node.level +
+//                          (data.node.state.checked ? ' CHECKED': ' NOT CHECKED'));
+                    var level = data.node.a_attr.level;
+//                    console.log(data);
+                    if(level==1){
+                        $2('#filter_sdg').jstree(true).uncheck_node(data.node.children_d)
+                    }
+                     if(level==2){
+                        $2('#filter_sdg').jstree(true).uncheck_node(data.node.parent)
+                        $2('#filter_sdg').jstree(true).uncheck_node(data.node.children_d)
+                    }
+                     if(level==3){
+                        $2('#filter_sdg').jstree(true).uncheck_node(data.node.parents)
+                    }
+//                    console.log($2('#filter_sdg').jstree(true).get_checked());
+                  });
+        function tree(id,data,node_data){
+            $2('#sdg_data'+id).jstree({ 
+                    'core'   : {
+                        'data' : data,
+                        'check_callback': false,
+                        "themes" : {
+                                    "variant" : "small"
+                                  }
+                    },"checkbox" : {
+                        "three_state"   : false,
+                        "whole_node"    : false,  // to avoid checking the box just clicking the node 
+                        "tie_selection" : false //
+                      },
+                    "plugins" : [ "checkbox" ] 
+                }).on("load_node.jstree", function(e, data) {
+                    $2('#sdg_data'+id).jstree(true).check_node(node_data);
+                    $2('#sdg_data'+id).jstree(true).disable_checkbox(data.node.children_d);
+                    console.log(data);
+                  });
+        }
         if(id_role == '1'){
 
         }else{
@@ -341,7 +413,7 @@
 				"autoWidth": true,
 				"responsive":true,
 				"ajax": {
-					"url": urls+'list-problem/'+id_monper,
+					"url": urls+'list-problem/'+id_monper+'/'+0+'/'+0,
 					dataSrc: 'content',
 				},
 				"searching": true,
@@ -354,7 +426,10 @@
                                                 var target      = '<label style="display:inline-block;white-space:nowrap;margin-left:20px"><span style="vertical-align:middle">'+row[4]+' '+row[6]+'</span></label><br>';
                                                 var indicator   = '<label style="display:inline-block;white-space:nowrap;margin-left:40px"><span style="vertical-align:middle">'+row[8]+' '+row[10]+'</span></label><br>';
                                                 var group = goals+target+indicator;
-							return "<div style='font-size:90%;'>"+group+"</div>";
+                                                var html = `<div id="sdg_data`+row[21]+`">
+                                                            </div>`;
+                                                    
+							return html;
 					}},
                                         {"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row[13]+"</div>";
@@ -368,15 +443,23 @@
                                         {"data": function (row, data, index, display) {
                                                 var data =  JSON.stringify(row).replace(/'/g, "&#39");
                                                 var id = row[16];
-							if(row[17]!=1){
+							if(row[17]==1){
+                                                            $('#unapply_btn').show();
+                                                            $('#add_problem').hide();
+                                                            $('#apply_btn').hide();
+                                                            return '';
+                                                        }else if(row[17]==2||row[17]==4){
+                                                            $('#unapply_btn').hide();
+                                                            $('#add_problem').hide();
+                                                            $('#apply_btn').hide();
+                                                            return '';
+                                                        }else{
                                                             $('#apply_btn').show();
+                                                            $('#unapply_btn').hide(); 
+                                                            $('#add_problem').show();
                                                            return "<div style='text-align:center;'>"+
-                                                            '<button data-id="'+id+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
                                                             '<button data-id="'+id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
                                                             '<button data-id="'+id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>'; 
-                                                        }else{
-                                                            $('#unapply_btn').show();
-                                                            return '';
                                                         }
 					}}
 					
@@ -397,14 +480,24 @@
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
 //                alert(urls+'list-problem/'+id_monper);
-                table.ajax.url(urls+'list-problem/'+id_monper ).load(function(result){
+                table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole ).load(function(result){
                     var count_data = result.content.length;
                     if(count_data==0){
                         $('#apply_btn,#unapply_btn').hide();
+                        $('#add_problem').show();
+                    }else{
+                         $.each(result.content,function(i,x){
+                            var node_data =[];
+                            $.each(JSON.parse(x[22]),function(ii,xx){
+                                node_data.push(xx.id_sdgs);
+                            });
+                            tree(x[21],lisdg2,node_data);
+//                            var id = x[21];
+//                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
+
+                        })
                     }
-                   
                 });
-                 $('#add_problem').hide();
             }
             
             $('#text-cari').on( 'keyup', function () {
@@ -418,6 +511,8 @@
                  var id_target       = data_ref[0][5];
                  var id_indicator    = data_ref[0][9];
                  var id_monper       = data_ref[0][18];
+                 var tahun           = data_ref[0][19];
+                 var id_role         = data_ref[0][20];
                             swal({
                                 title: "Are You Sure",
                                 text: "",
@@ -434,7 +529,10 @@
                                  var data = JSON.stringify({
                                                 'id_goals'      :id_goals,
                                                 'id_target'     :id_target,
-                                                'id_indicator'  :id_indicator
+                                                'id_indicator'  :id_indicator,
+                                                'id_monper'     :id_monper,
+                                                'tahun'         :tahun,
+                                                'id_role'       :id_role
                                             });
                                     
                                     $.ajax({
@@ -446,10 +544,21 @@
                                                 headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                 data: data,
                                                 success: function (result) {
-                                                    table.ajax.url(urls+'list-problem/'+id_monper).load(function(e){
+                                                    table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+id_role).load(function(e){
 //                                                        if(e.count_data>0){
                                                              $('#apply_btn').hide();
+                                                             $('#add_problem').hide();
                                                              $('#unapply_btn').show();
+                                                              $.each(e.content,function(i,x){
+                                                                    var node_data =[];
+                                                                    $.each(JSON.parse(x[22]),function(ii,xx){
+                                                                        node_data.push(xx.id_sdgs);
+                                                                    });
+                                                                    tree(x[21],lisdg2,node_data);
+                                        //                            var id = x[21];
+                                        //                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
+
+                                                                })
 //                                                        }
                                                     });
                                                 },
@@ -466,6 +575,8 @@
                  var id_target       = data_ref[0][5];
                  var id_indicator    = data_ref[0][9];
                  var id_monper       = data_ref[0][18];
+                 var tahun           = data_ref[0][19];
+                 var id_role         = data_ref[0][20];
                             swal({
                                 title: "Are You Sure",
                                 text: "",
@@ -482,7 +593,10 @@
                                  var data = JSON.stringify({
                                                 'id_goals'      :id_goals,
                                                 'id_target'     :id_target,
-                                                'id_indicator'  :id_indicator
+                                                'id_indicator'  :id_indicator,
+                                                'id_monper'     :id_monper,
+                                                'tahun'         :tahun,
+                                                'id_role'       :id_role
                                             });
                                     
                                     $.ajax({
@@ -494,10 +608,21 @@
                                                 headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                 data: data,
                                                 success: function (result) {
-                                                    table.ajax.url(urls+'list-problem/'+id_monper).load(function(e){
+                                                    table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+id_role).load(function(e){
 //                                                        if(e.count_data>0){
                                                              $('#apply_btn').show();
                                                              $('#unapply_btn').hide();
+                                                             $('#add_problem').show();
+                                                              $.each(e.content,function(i,x){
+                                                                    var node_data =[];
+                                                                    $.each(JSON.parse(x[22]),function(ii,xx){
+                                                                        node_data.push(xx.id_sdgs);
+                                                                    });
+                                                                    tree(x[21],lisdg2,node_data);
+                                        //                            var id = x[21];
+                                        //                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
+
+                                                                })
 //                                                        }
                                                     });
                                                 },
@@ -517,6 +642,13 @@
                                 var id_target       = datatable[5];
                                 var id_indicator    = datatable[9];
                                 var id_filter_sdg   = id_goals+"."+id_target+"."+id_indicator;
+                                var check_node      = datatable[22];
+                                var id_relation     = datatable[21];
+                                var node_data =[];
+                                $.each(JSON.parse(check_node),function(ii,xx){
+                                    node_data.push(xx.id_sdgs);
+                                });
+                                $2('#filter_sdg').jstree(true).check_node(node_data);
 				$.ajax({
 					type: "GET",
                                     url: urls+'problem/get-problem/'+id,
@@ -527,6 +659,7 @@
                                         $('#problem').val(val[0].problem)
                                         $('#filter_sdg').val(id_filter_sdg).trigger('change');
                                         $('#follow_up').val(val[0].follow_up)
+                                        $('#id_relation').val(id_relation);
                                         $('#myModal').modal('show');
                                     },
                                 })
@@ -559,6 +692,9 @@
                     var tr          = $(this).closest('tr');
                     var datatable   = table.row(tr).data();
                     var id_monper   = datatable[18];
+                    var tahun       = datatable[19];
+                    var id_role     = datatable[20];
+                    var id_relation = datatable[21];
                     swal({
                     title: titleDel,
                     text: messDel,
@@ -570,13 +706,13 @@
                 }).then(function () {
                 	$.ajax({
     					type: "DELETE",
-                        url: urls+'problem-identification/delete/'+id,
+                        url: urls+'problem-identification/delete/'+id+'/'+id_relation,
                         beforeSend : function(xhr){
                         	xhr.setRequestHeader(header,token);
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-problem/'+id_monper).load();
+                                grid();
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');
@@ -590,12 +726,13 @@
              
              function clearForm(){
 				$('#id').val("").removeAttr("readonly");
+                                $('#id_relation').val("").removeAttr("readonly");
 				$('#ref_category').val("").removeAttr("readonly");
 				$('#problem').val("").removeAttr("readonly");
 				$('#follow_up').val("").removeAttr("readonly");
                                 $('#filter_sdg').val("").removeAttr("readonly");
                                 $('#submit').removeAttr("Disabled");
-                                $("#filter_sdg").attr("disabled",false);
+                                $2('#filter_sdg').jstree(true).uncheck_all();
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -605,18 +742,57 @@
 			});
         $('#submit').on('click', function(){
             var id              = $('#id').val();
+            var id_relation     = $('#id_relation').val();
             var id_cat          = $('#ref_category').val();
             var v_dataid        = $("#periode").val();
             var v_data_id       = v_dataid.split("###");;
             var id_monper       = v_data_id[0];
+            var tahun           = v_data_id[1];
+            var v_idrole        = $("#idrole").val();
+            var id_prov         = $("#id_prov").val();
             var problem         = $('#problem').val();
             var follow_up       = $('#follow_up').val();
             var sdgs_group      = $('#filter_sdg').val();
-            console.log(sdgs_group);
+            var data_sdgs_map   = $2('#filter_sdg').jstree(true).get_checked();
+            var sdgs_map =[];
+            $.each(data_sdgs_map,function(i,x){
+                var id_goals,id_target,id_indicator ="";
+                var split_length = (x.split('.').length-1);
+                var split        =  x.split('.');
+                if(split_length==0){
+                    id_goals = x;
+                    id_target       = "";
+                    id_indicator    = "";
+                    
+                }
+                if(split_length==1){
+                    
+                    id_goals     = split[0];
+                    id_target    = split[1];
+                    id_indicator    = "";
+                }
+                if(split_length==2){
+                    
+                    id_goals        = split[0];
+                    id_target       = split[1];
+                    id_indicator    = split[2];
+                }
+                sdgs_map.push({
+                                'id_prov'       :id_prov,
+                                'id_monper'     :id_monper,
+                                'id_goals'      :id_goals,
+                                'id_target'     :id_target,
+                                'id_indicator'  :id_indicator
+                                ,'id_sdgs'      :x
+                            });
+                
+            });
+           
             var sdgs_group_split = sdgs_group.split(".");
             var id_goals         = sdgs_group_split[0];
             var id_target        = sdgs_group_split[1];
             var id_indicator     = sdgs_group_split[2];
+            
             $('.control-group').removeClass('error');
             $('.help-block').text("");
 
@@ -628,6 +804,12 @@
                             'id_indicator'  :id_indicator,
                             'problem'       :problem,
                             'follow_up'     :follow_up,
+                            'id_monper'     :id_monper,
+                            'id_role'       :v_idrole,
+                            'id_prov'       :id_prov,
+                            'tahun'         :tahun,
+                            'id_relation'   :id_relation,
+                            'sdgs_map'      :sdgs_map
                         });
                     $.ajax({
                             type: "POST",
@@ -638,48 +820,21 @@
                             headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                 data: data,
                             success: function (result) {
-                                table.ajax.url(urls+'list-problem/'+id_monper).load();
+                               grid();// table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole).load();
                                 $('#myModal').modal('hide');
                             },
                         });
         });
         
         
-        var filtersdg   = [[${filtersdg}]];
-        console.log(filtersdg)
-        var data_filter = [{'id':'0','text':'ALL','level':'1'}]
-         $.each(filtersdg.data,function(i,x){
-             var obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3]}
-             if(x[3]==1||x[3]==2){
-                 obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3],disabled:true}
-             }
-            data_filter.push(obj)
-        });
-        
-        function formatResult(node) {
-            var $result = $('<span style="padding-left:' + (20 * node.level) + 'px;">' + node.text + '</span>');
-            return $result;
-          };
-         
-         
-        
-        $("#filter_sdg").select2({
-          placeholder: 'Select an option',
-          width: "100%",
-          data: data_filter,
-          formatSelection: function(item) {
-            return item.text
-          },
-          formatResult: function(item) {
-            return item.text
-          },
-          templateResult: formatResult,
-        });
+       
     </script>
 </body>
 <style>
     .select2-container--open {
         z-index: 9999999
     }
+    
 </style>
+
 </html>

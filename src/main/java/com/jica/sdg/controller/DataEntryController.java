@@ -221,6 +221,24 @@ public class DataEntryController {
         	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
                     "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
+                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, "+
+                    "'' as achi1, '' as achi2, '' as achi3, '' as achi4, \n" +
+                    "'' as new1, '' as new2, '' as new3, '' as new4, l.nm_role \n" +
+                    "from ran_rad as g \n" +
+                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
+                    "left join sdg_goals as b on a.id_goals = b.id \n" +
+                    "left join sdg_target as c on a.id_target = c.id \n" +
+                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
+                    "left join \n" +
+                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
+                    "left join \n" +
+                    "(select * from entry_sdg where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
+                    "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join ref_role as l on a.id_role = l.id_role \n" +
+                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
+        	sql  += "union select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
+                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
+                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
                     "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
                     "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
                     "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role \n" +
@@ -234,17 +252,133 @@ public class DataEntryController {
                     "left join \n" +
                     "(select * from entry_sdg where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
+                    "right join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
                     "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
                     "left join (select * from entry_sdg_detail where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail \n" +
                     "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
+                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov order by 1,2,3,31,32 ";
 	        query = em.createNativeQuery(sql);
 	        query.setParameter("id_prov", id_prov);
 	        query.setParameter("id_role", id_role);
 	        query.setParameter("id_monper", id_monper);
 	        query.setParameter("year", year);
         }
+    	
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry-gov/{id_prov}/{id_role}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> listEntryGov(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+    	Query query;
+    	String sql = "select b.id_program, a.id_activity, c.id_gov_indicator, b.nm_program, "
+    			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng, "
+    			+ "f.nm_role, d.nm_unit, e.value, h.achievement1, h.achievement2, h.achievement3, h.achievement4, "
+    			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
+    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact "
+    			+ "from gov_activity as a "
+    			+ "left join gov_program b on a.id_program = b.id "
+    			+ "left join gov_indicator c on a.id_program = c.id_program and a.id = c.id_activity "
+    			+ "left join ref_unit d on c.unit = d.id_unit "
+    			+ "left join gov_target e on e.id_gov_indicator = c.id and year = :year "
+    			+ "left join ref_role f on a.id_role = f.id_role "
+    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+    			+ "left join entry_gov_indicator h on h.id_assign = c.id and h.year_entry = :year and h.id_monper = g.id_monper "
+    			+ "left join entry_gov_budget i on i.id_gov_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
+    			+ "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov "
+    			+ "order by b.id, c.id, a.id ";
+        query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+    	
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry-nsa/{id_prov}/{id_role}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> listEntryNsa(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+    	Query query;
+    	String sql = "select b.id_program, a.id_activity, c.id_nsa_indicator, b.nm_program, "
+    			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng, "
+    			+ "f.nm_role, d.nm_unit, e.value, h.achievement1, h.achievement2, h.achievement3, h.achievement4, "
+    			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
+    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact "
+    			+ "from nsa_activity as a "
+    			+ "left join nsa_program b on a.id_program = b.id "
+    			+ "left join nsa_indicator c on a.id_program = c.id_program and a.id = c.id_activity "
+    			+ "left join ref_unit d on c.unit = d.id_unit "
+    			+ "left join nsa_target e on e.id_nsa_indicator = c.id and year = :year "
+    			+ "left join ref_role f on a.id_role = f.id_role "
+    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+    			+ "left join entry_nsa_indicator h on h.id_assign = c.id and h.year_entry = :year and h.id_monper = g.id_monper "
+    			+ "left join entry_nsa_budget i on i.id_nsa_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
+    			+ "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov "
+    			+ "order by b.id, c.id, a.id ";
+        query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+    	
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry-gov-bud/{id_prov}/{id_role}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> listEntryGovBud(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+    	Query query;
+    	String sql = "select b.id_program, a.id_activity, '' as id_gov_indicator, b.nm_program, "
+    			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, '' as nm_indicator, '' as nm_indicator_eng, "
+    			+ "f.nm_role, '' as nm_unit, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
+    			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
+    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact "
+    			+ "from gov_activity as a "
+    			+ "left join gov_program b on a.id_program = b.id "
+    			+ "left join ref_role f on a.id_role = f.id_role "
+    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+    			+ "left join entry_gov_budget i on i.id_gov_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
+    			+ "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov "
+    			+ "order by b.id, a.id ";
+        query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+    	
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry-nsa-bud/{id_prov}/{id_role}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> listEntryNsaBud(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+    	Query query;
+    	String sql = "select b.id_program, a.id_activity, '' as id_nsa_indicator, b.nm_program, "
+    			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, '' as nm_indicator, '' as nm_indicator_eng, "
+    			+ "f.nm_role, '' as nm_unit, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
+    			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
+    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact "
+    			+ "from nsa_activity as a "
+    			+ "left join nsa_program b on a.id_program = b.id "
+    			+ "left join ref_role f on a.id_role = f.id_role "
+    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+    			+ "left join entry_nsa_budget i on i.id_nsa_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
+    			+ "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov "
+    			+ "order by b.id, a.id ";
+        query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
     	
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
@@ -385,14 +519,6 @@ public class DataEntryController {
     @PostMapping(path = "admin/save-entry-sdg", consumes = "application/json", produces = "application/json")
     @ResponseBody
     public void saveEntrySdg(@RequestBody EntrySdg entrySdg) {
-        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
-        int achievement1        = entrySdg.getAchievement1();
-        int achievement2        = entrySdg.getAchievement2();
-        int achievement3        = entrySdg.getAchievement3();
-        int achievement4        = entrySdg.getAchievement4();
-        int year_entry          = entrySdg.getYear_entry();
-        int id_role             = entrySdg.getId_role();
-        int id_monper           = entrySdg.getId_monper();
         entrySdgService.saveEntrySdg(entrySdg);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
@@ -428,7 +554,7 @@ public class DataEntryController {
     	}
         model.addAttribute("id_prov", id_prov);
         model.addAttribute("privilege", privilege);
-        return "admin/dataentry/govprogram";
+        return "admin/dataentry/entry_gov";
     }
     
     @GetMapping("admin/government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity")
@@ -825,7 +951,8 @@ public class DataEntryController {
     	}
         model.addAttribute("id_prov", id_prov);
         model.addAttribute("privilege", privilege);
-        return "admin/dataentry/nongovprogram";
+        //return "admin/dataentry/nongovprogram";
+        return "admin/dataentry/entry_nongov";
     }
     
     @GetMapping("admin/non-government-program-monitoring/gov/program/{id_program}/{id_prov_1}/{id_role_1}/{monper}/{tahun}/activity")
