@@ -1,36 +1,25 @@
 package com.jica.sdg.controller;
 
-import com.jica.sdg.model.Insprofile;
-import com.jica.sdg.model.Menu;
-import com.jica.sdg.model.Nsaprofile;
-import com.jica.sdg.model.NsaCollaboration;
-import com.jica.sdg.model.PhilanthropyCollaboration;
-import com.jica.sdg.model.Nsadetail;
-import com.jica.sdg.model.Nsaprofile2;
-import com.jica.sdg.model.Provinsi;
-import com.jica.sdg.model.Role;
-import com.jica.sdg.model.Submenu;
-import com.jica.sdg.service.IMenuService;
-import com.jica.sdg.service.IProvinsiService;
-import com.jica.sdg.service.IRoleService;
-import com.jica.sdg.service.ISubmenuService;
-import com.jica.sdg.service.InsProfileService;
-import com.jica.sdg.service.NsaDetailService;
-import com.jica.sdg.service.NsaProfileService;
-import com.jica.sdg.service.NsaCollaborationService;
-import com.jica.sdg.service.PhilanthropyService;
-import java.util.ArrayList;
-import java.util.Collection;
-import static java.util.Collections.list;
-
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
@@ -41,19 +30,35 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import com.jica.sdg.model.Insprofile;
+import com.jica.sdg.model.NsaCollaboration;
+import com.jica.sdg.model.Nsadetail;
+import com.jica.sdg.model.Nsaprofile;
+import com.jica.sdg.model.Nsaprofile2;
+import com.jica.sdg.model.PhilanthropyCollaboration;
+import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.Role;
+import com.jica.sdg.service.IProvinsiService;
+import com.jica.sdg.service.IRoleService;
+import com.jica.sdg.service.InsProfileService;
+import com.jica.sdg.service.NsaCollaborationService;
+import com.jica.sdg.service.NsaDetailService;
+import com.jica.sdg.service.NsaProfileService;
+import com.jica.sdg.service.PhilanthropyService;
 
 @Controller
 public class NsaController {
@@ -418,18 +423,31 @@ public class NsaController {
     //========================== Export to Excell ========================
     @GetMapping("admin/nsa/download_profil/{id_prov}/{id_role}")
     @ResponseBody
-    public void download_profil(HttpServletResponse response, @PathVariable("id_prov") String idprov, @PathVariable("id_role") int idrole) throws IOException {
-    	response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", "attachment; filename=Profile"+idprov+"-"+idrole+".xlsx");
-        
+    public void download_profil(HttpServletResponse response, @PathVariable("id_prov") String idprov, 
+    		@PathVariable("id_role") int idrole) throws IOException {
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=NSA_Profile-"+idrole+".xlsx");
         ByteArrayInputStream stream = exprofil(idprov, idrole);
         IOUtils.copy(stream, response.getOutputStream());
-        //System.out.println(dataprof);
     }
     
-    private ByteArrayInputStream exprofil(String idprov, int idrole) throws IOException {
-    		Workbook workbook = new XSSFWorkbook();
-    		Sheet sheet = workbook.createSheet("Profile");
+    private ByteArrayInputStream exprofil(String idprov, int idrole) {
+        
+        String sql = "SELECT a.nm_nsa, a.loc_nsa, b.web_url, b.name_pic FROM nsa_profile a LEFT JOIN "
+          		+ "nsa_detail b ON b.id_nsa = a.id_nsa "
+          		+ "WHERE a.id_role = :id_role";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", idrole);
+        Map<String, Object> mapDetail = new HashMap<>();
+        mapDetail.put("mapDetail",query.getResultList());
+        JSONObject objDetail = new JSONObject(mapDetail);
+        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
+        JSONArray  finalDetail = arrayDetail.getJSONArray(0);
+        
+//        System.out.print(finalDetail.getString(0));
+        
+		try(Workbook workbook = new XSSFWorkbook()) {
+			Sheet sheet = workbook.createSheet("Profile");
 			
 			Row row = sheet.createRow(0);
 	        CellStyle headerCellStyle = workbook.createCellStyle();
@@ -465,74 +483,19 @@ public class NsaController {
 	        cell.setCellStyle(headerCellStyle);
 	        
 	        //=================== Isi tabel atas =================
-
-	        String sql = "SELECT a.nm_nsa, a.loc_nsa, b.web_url, b.name_pic FROM nsa_profile a LEFT JOIN "
-	        		+ "nsa_detail b ON b.id_nsa = a.id "
-	        		+ "WHERE a.id_role = :id_role";
-	        Query query = em.createNativeQuery(sql);
-	        query.setParameter("id_role", idrole);
-	        Map<String, Object> mapDetail = new HashMap<>();
-	        mapDetail.put("mapDetail",query.getResultList());
-	        JSONObject objDetail = new JSONObject(mapDetail); 
-	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
-	        JSONArray  finalDetail = arrayDetail.getJSONArray(0);
 	        
-        	Row dataRow = sheet.createRow(1);
-        	dataRow.createCell(0).setCellValue("1.");
-        	dataRow.createCell(1).setCellValue(finalDetail.getString(0));
-        	dataRow.createCell(2).setCellValue("Civil Society Organization/Organisasi Kepemudaan/Komunitas");
-        	dataRow.createCell(3).setCellValue("");
-        	dataRow.createCell(4).setCellValue(finalDetail.getString(2));
-        	dataRow.createCell(5).setCellValue(finalDetail.getString(1));
-        	dataRow.createCell(6).setCellValue(finalDetail.getString(3));
-        	
-        	//============= Spasi =============
-//        	Row spasi = sheet.createRow(1);
-//        	Cell cellspasi = spasi.createCell(0);cell.setCellValue("");
-//        	cellspasi = spasi.createCell(1);cellspasi.setCellValue("");
-//        	cellspasi = spasi.createCell(2);cellspasi.setCellValue("");
-//        	cellspasi = spasi.createCell(3);cellspasi.setCellValue("");
-//        	cellspasi = spasi.createCell(4);cellspasi.setCellValue("");
-//        	cellspasi = spasi.createCell(5);cellspasi.setCellValue("");
-//        	cellspasi = spasi.createCell(6);cellspasi.setCellValue("");
-        	
-        	//================= Tabel Pencapaian =================
-//        	Row pencapaian = sheet.createRow(2);
-//        	CellStyle headerCellStyle2 = workbook.createCellStyle();
-//	        headerCellStyle2.setFillForegroundColor(IndexedColors.AQUA.getIndex());
-//	        headerCellStyle2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-//	        
-//	        Cell celltab2 = pencapaian.createCell(0);
-//	        celltab2.setCellValue("No.");
-//	        celltab2.setCellStyle(headerCellStyle);
-//	        
-//	        celltab2 = pencapaian.createCell(1);
-//	        celltab2.setCellValue("Pencapaian");
-//	        celltab2.setCellStyle(headerCellStyle);
-//	
-//	        celltab2 = pencapaian.createCell(2);
-//	        celltab2.setCellValue("Lokasi");
-//	        celltab2.setCellStyle(headerCellStyle);
-//	
-//	        celltab2 = pencapaian.createCell(3);
-//	        celltab2.setCellValue("Penerima Manfaat");
-//	        celltab2.setCellStyle(headerCellStyle);
-//	        
-//	        celltab2 = pencapaian.createCell(4);
-//	        celltab2.setCellValue("Tahun Implementasi");
-//	        celltab2.setCellStyle(headerCellStyle);
-//	        
-//	        celltab2 = pencapaian.createCell(5);
-//	        celltab2.setCellValue("Partner");
-//	        celltab2.setCellStyle(headerCellStyle);
-//	        
-//	        Row dataRow2 = sheet.createRow(2);
-//	        dataRow2.createCell(0).setCellValue(data[0]+".");
-//	        dataRow2.createCell(1).setCellValue(data[7]);
-//	        dataRow2.createCell(2).setCellValue(data[8]);
-//	        dataRow2.createCell(3).setCellValue(data[9]);
-//	        dataRow2.createCell(4).setCellValue(data[10]);
-//	        dataRow2.createCell(5).setCellValue(data[11]);
+	    	Row dataRow = sheet.createRow(1);
+	    	dataRow.createCell(0).setCellValue("1.");
+//	    	String nm_nsa = finalDetail.getString(0);
+	    	dataRow.createCell(1).setCellValue(finalDetail.getString(0));
+	    	dataRow.createCell(2).setCellValue("Civil Society Organization/Organisasi Kepemudaan/Komunitas");
+	    	dataRow.createCell(3).setCellValue("");
+//	    	String web = finalDetail.getString(2);
+	    	dataRow.createCell(4).setCellValue(finalDetail.getString(2));
+//	    	String lokasi = finalDetail.getString(1);
+	    	dataRow.createCell(5).setCellValue(finalDetail.getString(1));
+//	    	String pic = finalDetail.getString(3);
+	    	dataRow.createCell(6).setCellValue(finalDetail.getString(3));
 	
 	        sheet.autoSizeColumn(0);
 	        sheet.autoSizeColumn(1);
@@ -545,6 +508,10 @@ public class NsaController {
 	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 	        workbook.write(outputStream);
 	        return new ByteArrayInputStream(outputStream.toByteArray());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
     }
 
 }
