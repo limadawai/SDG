@@ -886,7 +886,12 @@ public class DataEntryController {
                     "left join (select * from gov_activity where id_role = :id_role ) as d on a.id_activity = d.id \n" +
                     "left join (select * from gov_program ) as e on a.id_program = e.id \n" +
                     "left join (select * from entry_gov_indicator where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_assign \n" +
-                    "left join (select * from gov_target where id_role = :id_role and year = :tahun )  as c on a.id = c.id_gov_indicator \n" +
+                    "left join ("
+                + "select z.* from gov_target z \n" +
+                    "left join gov_indicator v on z.id_gov_indicator = v.id\n" +
+                    "left join gov_activity m on v.id_activity = m.id\n" +
+                    "where m.id_role = :id_role and z.year = :tahun "
+                + ")  as c on a.id = c.id_gov_indicator \n" +
                     "where d.id_role = :id_role ";
         Query query = em.createNativeQuery(sql);
 //        query.setParameter("id_program", id_program);
