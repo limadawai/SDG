@@ -531,7 +531,9 @@
              
              $("#export").click(function(){
                  var data = $(this).attr("data");
-                 var id_monper = [[${id_monper}]];
+                 //var id_monper = [[${id_monper}]];
+                 var id_monper = $("#id_monper").val();
+                 alert(id_monper);
                  var url = data+"/"+id_monper;
                   window.open(url, '_blank');   
              })
