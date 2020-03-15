@@ -11,8 +11,7 @@
     </style>
 </head>
 <body>
-    <div th:include="admin/layout :: menu"></div>
-
+    <div th:include="admin/layout :: menu"></div>    
     <div id="content">
         <div id="content-header">
             <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Problem Identification form & follow up </a></div>
@@ -242,7 +241,7 @@
                 }).on("load_node.jstree", function(e, data) {
                     $2('#sdg_data'+id).jstree(true).check_node(node_data);
                     $2('#sdg_data'+id).jstree(true).disable_checkbox(data.node.children_d);
-                    console.log(data);
+//                    console.log(data);
                   });
         }
         if(id_role == '1'){

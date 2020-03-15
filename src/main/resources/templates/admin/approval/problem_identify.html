@@ -286,7 +286,7 @@
                 }).on("load_node.jstree", function(e, data) {
                     $2('#sdg_data'+id).jstree(true).check_node(node_data);
                     $2('#sdg_data'+id).jstree(true).disable_checkbox(data.node.children_d);
-                    console.log(data);
+//                    console.log(data);
                   });
         }
         $("#tabel-approve-gov-activity").hide();
@@ -1171,7 +1171,7 @@
                             });
                 }else{}
 //                alert('yess '+id_monper);
-                console.log(data);
+//                console.log(data);
                 $.ajax({
                     type: "POST",
                     url: urls+ur,
