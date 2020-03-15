@@ -708,23 +708,22 @@ public class NsaController {
 	        		+ "WHERE a.id_role = :id_role";
 	        Query query = em.createNativeQuery(sql);
 	        query.setParameter("id_role", idrole);
-	        List<Object> list = query.getResultList();
-//	        Map<String, Object> mapDetail = new HashMap<>();
-//	        mapDetail.put("mapDetail",query.getResultList());
-//	        JSONObject objDetail = new JSONObject(mapDetail);
-//	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
+	        Map<String, Object> mapDetail = new HashMap<>();
+	        mapDetail.put("mapDetail",query.getResultList());
+	        JSONObject objDetail = new JSONObject(mapDetail);
+	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
 	        
-	        for (int i=0; i<list.size(); i++) {
-	        	System.out.println(list.get(i));
-//	        	Row dataRow = sheet.createRow(i+1);
-//		    	dataRow.createCell(0).setCellValue(i+1);
-//		    	dataRow.createCell(1).setCellValue(finalDetail.getString(1));
-//		    	dataRow.createCell(2).setCellValue(finalDetail.getString(0));
-//		    	dataRow.createCell(3).setCellValue(finalDetail.getString(2));
-//		    	dataRow.createCell(4).setCellValue(finalDetail.getString(3));
-//		    	dataRow.createCell(5).setCellValue(finalDetail.getString(4));
-//		    	dataRow.createCell(6).setCellValue(finalDetail.getString(5));
-//		    	dataRow.createCell(7).setCellValue(finalDetail.getString(6));
+	        for (int i=0; i<arrayDetail.length(); i++) {
+	        	JSONArray finalDetail = arrayDetail.getJSONArray(i);
+	        	Row dataRow = sheet.createRow(i+1);
+		    	dataRow.createCell(0).setCellValue(i+1);
+		    	dataRow.createCell(1).setCellValue(finalDetail.get(1).toString());
+		    	dataRow.createCell(2).setCellValue(finalDetail.get(0).toString());
+		    	dataRow.createCell(3).setCellValue(finalDetail.get(2).toString());
+		    	dataRow.createCell(4).setCellValue(finalDetail.get(3).toString());
+		    	dataRow.createCell(5).setCellValue(finalDetail.get(4).toString());
+		    	dataRow.createCell(6).setCellValue(finalDetail.get(5).toString());
+		    	dataRow.createCell(7).setCellValue(finalDetail.get(6).toString());
 	        }
 	    	
 	        sheet.autoSizeColumn(0);
