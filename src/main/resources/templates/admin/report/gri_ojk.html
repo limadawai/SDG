@@ -197,17 +197,23 @@
             var $result = $('<span style="padding-left:' + (20 * node.level) + 'px;">' + node.text + '</span>');
             return $result;
           };
-     
-    var data_company = [{'id':'0','text':'ALL','level':'1'}]
-         $.each(data_filter.company,function(i,x){
+    
+    
+    if(data_filter.company.length!=0){
+        var data_company = [{'id':'0','text':'ALL','level':'1'}]
+       $.each(data_filter.company,function(i,x){
              var obj = {'id':x,'text':x,'level':'1'}             
             data_company.push(obj)
-        });
-    var data_year = [];
+        }); 
+    }
+     if(data_filter.tahun.length!=0){
+         var data_year = [];
          $.each(data_filter.tahun,function(i,x){
              var obj = {'id':x,'text':x,'level':'1'}             
             data_year.push(obj)
         });
+     }     
+   
         
     $("#company").select2({
           placeholder: 'Select an option',
@@ -272,8 +278,29 @@
                                       { "title": "GRI" },
                                       { "title": "GRI DESC" },
                                       { "title": "UNIT" }];
-           var subquery ="";
-           $.each(values,function(i,x){
+                                  
+           function getAllCompany(selected, thangi) {
+                return $.ajax({
+                    url: urls+'get-all-company/gri-ojk/'+tahun ,
+                    data: {
+                        issession: 1,
+                        selector: selector
+                    },
+                    // dataType: "json",
+                    async: false,
+                    error: function () {
+                        alert("Error occured")
+                    }
+                });
+
+            }
+            var selector = !0;
+            var ajaxObj = getAllCompany(selector, $(this).val());
+            var allCompany = JSON.parse(ajaxObj.responseText);
+            
+            
+            var subquery ="";
+           $.each(allCompany.content,function(i,x){
                if(x!=0){
                   subquery  +=",(SELECT b.value FROM trx_excell  b WHERE b.company_name = '"+x+"' AND  b.year = '"+tahun+"' AND  b.kode=a.kode) AS '"+x+"' ";
                   data_column.push({"title":x}); 
@@ -349,13 +376,13 @@
                                       { "title": "GRI" },
                                       { "title": "GRI DESC" },
                                       { "title": "UNIT" }];
-                    for(var i=lastYear.content[0]-2;i<=lastYear.content[0];i++){
-                        subquery  +=",(SELECT b.value FROM trx_excell  b WHERE b.company_name = '"+company_id+"' AND  b.year = '"+i+"' AND  b.kode=a.kode) AS '"+i+"' ";
-                        data_column.push({"title":i});
-                    }
+                   $.each(lastYear.content,function(i,x){
+                       subquery  +=",(SELECT b.value FROM trx_excell  b WHERE b.company_name = '"+company_id+"' AND  b.year = '"+x+"' AND  b.kode=a.kode) AS '"+x+"' ";
+                        data_column.push({"title":x});
+                   });
+
                     
                     var query = "SELECT a.pjok,a.kode,a.sdgs,a.sdgs_desc,a.gri,a.gri_desc,a.unit  "+subquery+"FROM excell a";
-//                    console.log();
             
                 
                function getAllRow(selected, thangi) {

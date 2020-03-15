@@ -51,7 +51,8 @@
                                                 </th>                                               
                                                 <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">Action</span>
-                                                	<span class="lang_indo">Aksi</span>
+                                                        <span class="lang_indo">Aksi</span><br>
+                                                        <button  type="button" title="Approve All" id="approve-all" class="btn btn-success btn-medium "><i class="icon-circle-blank"></i></button>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -409,7 +410,17 @@
                             });
     		}
 	});
-	
+	$("#approve-all").on('click',function(){
+                $.ajax({
+                      type: "GET",
+                      url: urls+'set-approve-all/gri-ojk/',
+                      success: function (result) {
+                          table.ajax.url(urls+'list-entry/gri-ojk/').load();
+                      },
+                  }) 
+                
+            });
+            
 	$('#tbody-role').on('click', '.update', function(){
 		var id = $(this).attr('data-id');
 		$.ajax({

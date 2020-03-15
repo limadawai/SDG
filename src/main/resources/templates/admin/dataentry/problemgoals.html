@@ -11,8 +11,7 @@
     </style>
 </head>
 <body>
-    <div th:include="admin/layout :: menu"></div>
-
+    <div th:include="admin/layout :: menu"></div>    
     <div id="content">
         <div id="content-header">
             <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Input Data / Problem Identification form & follow up </a></div>
@@ -242,7 +241,7 @@
                 }).on("load_node.jstree", function(e, data) {
                     $2('#sdg_data'+id).jstree(true).check_node(node_data);
                     $2('#sdg_data'+id).jstree(true).disable_checkbox(data.node.children_d);
-                    console.log(data);
+//                    console.log(data);
                   });
         }
         if(id_role == '1'){
@@ -487,13 +486,10 @@
                         $('#add_problem').show();
                     }else{
                          $.each(result.content,function(i,x){
-                            var node_data =[];
-                            $.each(JSON.parse(x[22]),function(ii,xx){
-                                node_data.push(xx.id_sdgs);
-                            });
+                            var node_data = x[22].split(",")
                             tree(x[21],lisdg2,node_data);
-//                            var id = x[21];
-//                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
+                            var id = x[21];
+                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
 
                         })
                     }
@@ -549,14 +545,11 @@
                                                              $('#apply_btn').hide();
                                                              $('#add_problem').hide();
                                                              $('#unapply_btn').show();
-                                                              $.each(e.content,function(i,x){
-                                                                    var node_data =[];
-                                                                    $.each(JSON.parse(x[22]),function(ii,xx){
-                                                                        node_data.push(xx.id_sdgs);
-                                                                    });
+                                                               $.each(e.content,function(i,x){
+                                                                    var node_data = x[22].split(",")
                                                                     tree(x[21],lisdg2,node_data);
-                                        //                            var id = x[21];
-                                        //                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
+                                                                    var id = x[21];
+                                                                    $2('#sdg_data'+id).jstree(true).check_node(node_data);
 
                                                                 })
 //                                                        }
@@ -613,14 +606,11 @@
                                                              $('#apply_btn').show();
                                                              $('#unapply_btn').hide();
                                                              $('#add_problem').show();
-                                                              $.each(e.content,function(i,x){
-                                                                    var node_data =[];
-                                                                    $.each(JSON.parse(x[22]),function(ii,xx){
-                                                                        node_data.push(xx.id_sdgs);
-                                                                    });
+                                                               $.each(e.content,function(i,x){
+                                                                    var node_data = x[22].split(",")
                                                                     tree(x[21],lisdg2,node_data);
-                                        //                            var id = x[21];
-                                        //                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
+                                                                    var id = x[21];
+                                                                    $2('#sdg_data'+id).jstree(true).check_node(node_data);
 
                                                                 })
 //                                                        }

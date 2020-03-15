@@ -318,6 +318,15 @@ public class ApprovalController {
         return null;
     }
     
+    @GetMapping("admin/set-approve-all/gri-ojk/")
+    @Transactional
+    public @ResponseBody Map<String, Object> setUnUprove() {
+        String sql = "Update entry_gri_ojk set approval = 2 where approval IS NULL ";
+        em.createNativeQuery(sql).executeUpdate();        
+        return null;
+    }
+    
+    
     @PostMapping(path = "admin/save-approval/gri-ojk", consumes = "application/json", produces = "application/json")
 	@ResponseBody
         @Transactional
