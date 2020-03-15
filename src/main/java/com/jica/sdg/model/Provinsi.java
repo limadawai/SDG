@@ -53,5 +53,10 @@ public class Provinsi implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+        public static long getSerialVersionUID() {
+            return serialVersionUID;
+        }
+        
     
 }

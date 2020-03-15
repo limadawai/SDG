@@ -317,7 +317,7 @@ public class EntryController {
 "                        ,e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
 "                        ,f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
 "                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
-"                        ,(SELECT  CONCAT('[', GROUP_CONCAT(JSON_OBJECT('id_sdgs', id_sdgs)),']') AS id_sdgs FROM entry_problem_identify_map WHERE id_relation_entry_problem_identify = a.id_relation) AS id_sdgs\n" +
+"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs\n" +
 "                         FROM entry_problem_identify a  \n" +
 "                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
 "                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
