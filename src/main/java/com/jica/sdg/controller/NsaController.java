@@ -21,6 +21,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.FillPatternType;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -433,17 +434,6 @@ public class NsaController {
     
     private ByteArrayInputStream exprofil(String idprov, int idrole) {
         
-        String sql = "SELECT a.nm_nsa, a.loc_nsa, b.web_url, b.name_pic FROM nsa_profile a LEFT JOIN "
-          		+ "nsa_detail b ON b.id_nsa = a.id_nsa "
-          		+ "WHERE a.id_role = :id_role";
-        Query query = em.createNativeQuery(sql);
-        query.setParameter("id_role", idrole);
-        Map<String, Object> mapDetail = new HashMap<>();
-        mapDetail.put("mapDetail",query.getResultList());
-        JSONObject objDetail = new JSONObject(mapDetail);
-        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
-        JSONArray  finalDetail = arrayDetail.getJSONArray(0);
-        
 //        System.out.print(finalDetail.getString(0));
         
 		try(Workbook workbook = new XSSFWorkbook()) {
@@ -453,6 +443,8 @@ public class NsaController {
 	        CellStyle headerCellStyle = workbook.createCellStyle();
 	        headerCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
 	        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+	        headerCellStyle.setWrapText(true);
 	        // Creating header
 	        Cell cell = row.createCell(0);
 	        cell.setCellValue("No.");
@@ -482,20 +474,77 @@ public class NsaController {
 	        cell.setCellValue("Detail Perwakilan");
 	        cell.setCellStyle(headerCellStyle);
 	        
+	        Row row2 = sheet.createRow(3);
+	        CellStyle headerCellStyle2 = workbook.createCellStyle();
+	        headerCellStyle2.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+	        headerCellStyle2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	        headerCellStyle2.setAlignment(HorizontalAlignment.CENTER);
+	        headerCellStyle2.setWrapText(true);
+	        // Creating header
+	        Cell cell2 = row2.createCell(0);
+	        cell2.setCellValue("No.");
+	        cell2.setCellStyle(headerCellStyle);
+	        
+	        cell2 = row2.createCell(1);
+	        cell2.setCellValue("Pencapaian");
+	        cell2.setCellStyle(headerCellStyle);
+	
+	        cell2 = row2.createCell(2);
+	        cell2.setCellValue("Lokasi");
+	        cell2.setCellStyle(headerCellStyle);
+	
+	        cell2 = row2.createCell(3);
+	        cell2.setCellValue("Penerima Manfaat");
+	        cell2.setCellStyle(headerCellStyle);
+	        
+	        cell2 = row2.createCell(4);
+	        cell2.setCellValue("Tahun Implementasi");
+	        cell2.setCellStyle(headerCellStyle);
+	        
+	        cell2 = row2.createCell(5);
+	        cell2.setCellValue("Partner");
+	        cell2.setCellStyle(headerCellStyle);
+	        
 	        //=================== Isi tabel atas =================
+	        
+	        String sql = "SELECT a.nm_nsa, a.loc_nsa, b.web_url, b.name_pic FROM nsa_profile a LEFT JOIN "
+	          		+ "nsa_detail b ON b.id_nsa = a.id_nsa "
+	          		+ "WHERE a.id_role = :id_role";
+	        Query query = em.createNativeQuery(sql);
+	        query.setParameter("id_role", idrole);
+	        Map<String, Object> mapDetail = new HashMap<>();
+	        mapDetail.put("mapDetail",query.getResultList());
+	        JSONObject objDetail = new JSONObject(mapDetail);
+	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
+	        JSONArray  finalDetail = arrayDetail.getJSONArray(0);
 	        
 	    	Row dataRow = sheet.createRow(1);
 	    	dataRow.createCell(0).setCellValue("1.");
-//	    	String nm_nsa = finalDetail.getString(0);
 	    	dataRow.createCell(1).setCellValue(finalDetail.getString(0));
 	    	dataRow.createCell(2).setCellValue("Civil Society Organization/Organisasi Kepemudaan/Komunitas");
 	    	dataRow.createCell(3).setCellValue("");
-//	    	String web = finalDetail.getString(2);
 	    	dataRow.createCell(4).setCellValue(finalDetail.getString(2));
-//	    	String lokasi = finalDetail.getString(1);
 	    	dataRow.createCell(5).setCellValue(finalDetail.getString(1));
-//	    	String pic = finalDetail.getString(3);
 	    	dataRow.createCell(6).setCellValue(finalDetail.getString(3));
+	        
+	    	//================ Data table ke 2 =================
+	        String sql2 = "SELECT a.achieve_nsa, a.loc_nsa, a.beneficiaries, a.year_impl, a.major_part "
+	        		+ "FROM nsa_profile a WHERE id_role = :id_role";
+	        Query query2 = em.createNativeQuery(sql2);
+	        query2.setParameter("id_role", idrole);
+	        Map<String, Object> mapDetail2 = new HashMap<>();
+	        mapDetail2.put("mapDetail2",query2.getResultList());
+	        JSONObject objDetail2 = new JSONObject(mapDetail2);
+	        JSONArray  arrayDetail2 = objDetail2.getJSONArray("mapDetail2");
+	        JSONArray  finalDetail2 = arrayDetail2.getJSONArray(0);
+	        
+	        Row dataRow2 = sheet.createRow(4);
+	    	dataRow2.createCell(0).setCellValue("1.");
+	    	dataRow2.createCell(1).setCellValue(finalDetail2.getString(0));
+	    	dataRow2.createCell(2).setCellValue(finalDetail2.getString(1));
+	    	dataRow2.createCell(3).setCellValue(finalDetail2.getString(2));
+	    	dataRow2.createCell(4).setCellValue(finalDetail2.getInt(3));
+	    	dataRow2.createCell(5).setCellValue(finalDetail2.getString(4));
 	
 	        sheet.autoSizeColumn(0);
 	        sheet.autoSizeColumn(1);

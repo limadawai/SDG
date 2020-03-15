@@ -1,15 +1,18 @@
 package com.jica.sdg.controller;
 
-import com.jica.sdg.model.EntryGriojk;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +35,6 @@ import com.jica.sdg.service.SdgFundingService;
 import com.jica.sdg.service.SdgGoalsService;
 import com.jica.sdg.service.SdgIndicatorService;
 import com.jica.sdg.service.SdgTargetService;
-import java.util.Optional;
 
 @Controller
 public class ReportController {
@@ -1647,6 +1649,13 @@ public class ReportController {
             hasil.put("content",list.getResultList());
             return hasil;
         }
-       
         
+         @GetMapping("admin/exportgraph")
+         public void exportgraph(HttpServletResponse response) {
+//        	 response.setContentType("application/octet-stream");
+//           response.setHeader("Content-Disposition", "attachment; filename=NSA_Profile-"+idrole+".xlsx");
+//           ByteArrayInputStream stream = exprofil(idprov, idrole);
+//           IOUtils.copy(stream, response.getOutputStream());
+         }
+         
 }
