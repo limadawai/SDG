@@ -120,26 +120,50 @@ public class RateController {
         return "admin/rate/rate_index";
     }
     
-    @GetMapping("admin/x/val/{id_prov}/{period}/{id_monper}/{year}")
-    public @ResponseBody Map<String, Object>  val_rate_sdg(@PathVariable("id_prov") String id_prov, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
-        String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
-                    "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
-                    "union all\n" +
-                    "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
-                    "from ref_role a\n" +
-                    "where a.cat_role = 'Government' and a.id_prov = :id_prov \n" +
-                    "union all\n" +
-                    "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
-                    "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
-                    "union all\n" +
-                    "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
-                    "from ref_role a\n" +
-                    "where a.cat_role = 'NSA' and a.id_prov = :id_prov ";
-        Query query = em.createNativeQuery(sql);
-        query.setParameter("id_prov", id_prov);
-        query.setParameter("period", period);
-        query.setParameter("id_monper", id_monper);
-        query.setParameter("year", year);
+    @GetMapping("admin/x/val/{id_prov}/{period}/{id_monper}/{year}/{id_role}")
+    public @ResponseBody Map<String, Object>  val_rate_sdg(@PathVariable("id_prov") String id_prov, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year, @PathVariable("id_role") String id_role) {
+        Query query = em.createNativeQuery("");
+//        System.out.println("id "+id_role);
+        if(id_role.equals("999999")){
+            String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
+                        "from ref_role a\n" +
+                        "where a.cat_role = 'Government' and a.id_prov = :id_prov \n" +
+                        "union all\n" +
+                        "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
+                        "from ref_role a\n" +
+                        "where a.cat_role = 'NSA' and a.id_prov = :id_prov ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("period", period);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+        }else{
+            String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
+                        "from ref_role a\n" +
+                        "where a.cat_role = 'Government' and a.id_prov = :id_prov and a.id_role = :id_role \n" +
+                        "union all\n" +
+                        "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
+                        "from ref_role a\n" +
+                        "where a.cat_role = 'NSA' and a.id_prov = :id_prov and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("period", period);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+            query.setParameter("id_role", id_role);
+        }
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         
@@ -177,9 +201,34 @@ public class RateController {
         return hasil;
     }    
     
-    @GetMapping("admin/get-cek-data-all/{id_role}/{year}/{period}/{type}/{tb}/{tb2}")
-    public @ResponseBody Map<String, Object>  cek_data_all(@PathVariable("id_role") String id_role,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2) {
-        
+    @GetMapping("admin/get-cek-data-all/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}")
+    public @ResponseBody Map<String, Object>  cek_data_all(@PathVariable("id_role") String id_role,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time) {
+        String tg_date = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
         String sql  = "select \n" +
                     "(\n" +
                     "select count(*) as total_all from\n" +
@@ -187,7 +236,7 @@ public class RateController {
                     "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
                     "from "+tb2+" b\n" +
                     "left join "+tb+" c on b.id_activity = c.id\n" +
-                    "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 ) d on b.id = d.id_assign\n" +
+                    "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" ) d on b.id = d.id_assign\n" +
                     "where c.id_role = :id_role \n" +
                     ") as a\n" +
                     ") as isi,\n" +
@@ -197,7 +246,92 @@ public class RateController {
                     "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
                     "from "+tb2+" b\n" +
                     "left join "+tb+" c on b.id_activity = c.id\n" +
-                    "left join (select * from "+type+" where year_entry = :year) d on b.id = d.id_assign\n" +
+                    "left join (select * from "+type+" where year_entry = :year "+tg_date+") d on b.id = d.id_assign\n" +
+                    "where c.id_role = :id_role\n" +
+                    ") as a\n" +
+                    ") as semua";
+        Query query = em.createNativeQuery(sql);
+//        query.setParameter("period", period);
+        query.setParameter("id_role", id_role);
+        query.setParameter("year", year);
+//        query.setParameter("type", type);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }  
+    
+    @GetMapping("admin/get-cek-data-all-deadline/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{sts}/{isi_time}")
+    public @ResponseBody Map<String, Object>  cek_data_all_deadline(@PathVariable("id_role") String id_role,@PathVariable("year") int year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("sts") String sts_monper, @PathVariable("isi_time") String isi_time) {
+        String tg_date = "";
+        if(sts_monper.equals("yearly")){
+            if(period.equals("1")){
+                tg_date = "and date_created <= '"+(year+1)+"-01-15' ";
+            }else{}
+        }else if(sts_monper.equals("semesterly")){
+            if(period.equals("1")){
+                tg_date = "and date_created <= '"+year+"-07-15' ";
+            }else if(period.equals("2")){
+                tg_date = "and date_created2 <= '"+(year+1)+"-01-15' ";
+            }else {}
+        }else if(sts_monper.equals("quarterly")){
+            if(period.equals("1")){
+                tg_date = "and date_created <= '"+year+"-04-15' ";
+            }else if(period.equals("2")){
+                tg_date = "and date_created2 <= '"+year+"-07-15' ";
+            }else if(period.equals("3")){
+                tg_date = "and date_created3 <= '"+year+"-10-15' ";
+            }else if(period.equals("4")){
+                tg_date = "and date_created4 <= '"+(year+1)+"-01-15' ";
+            }else{}
+        }else{}
+        
+        String tg_date_1 = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
+        System.out.println("tgdate = "+tg_date);
+        String sql  = "select \n" +
+                    "(\n" +
+                    "select count(*) as total_all from\n" +
+                    "(\n" +
+                    "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
+                    "from "+tb2+" b\n" +
+                    "left join "+tb+" c on b.id_activity = c.id\n" +
+                    "inner join (select * from "+type+" where year_entry = :year "+tg_date+" "+tg_date_1+" ) d on b.id = d.id_assign\n" +
+                    "where c.id_role = :id_role \n" +
+                    ") as a\n" +
+                    ") as isi,\n" +
+                    "(\n" +
+                    "select count(*) as total_all from\n" +
+                    "(\n" +
+                    "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
+                    "from "+tb2+" b\n" +
+                    "left join "+tb+" c on b.id_activity = c.id\n" +
+                    "left join (select * from "+type+" where year_entry = :year "+tg_date_1+") d on b.id = d.id_assign\n" +
                     "where c.id_role = :id_role\n" +
                     ") as a\n" +
                     ") as semua";

@@ -36,6 +36,9 @@
                                 <option value="0" >-- Pilih --</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
+                            <select id="idrole" name="idrole" class="form-control">
+                                <option value="0" >-- Pilih --</option>
+                            </select>
                             <select id="periode" name="periode" class="form-control">
                                 <option value="0" >-- Pilih --</option>
                             </select>
@@ -46,6 +49,13 @@
                             <select id="period" name="period" class="form-control">
                                 <option value="0" ><span class=""> -- Pilih -- </span> </option>
                             </select>
+                            <div id="datetimepicker1" class="input-append date">
+                                <input id="time_activity" class="input-small" name="time_activity" data-format="yyyy/MM/dd" type="text"></input>
+                                <span class="add-on">
+                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar">
+                                    </i>
+				</span>
+                            </div>
                             <a class="btn btn-success appl" id="apply_btn" data-periode="1" style="margin-left: 10px; margin-top: -10px">
                                 <span class="lang_indo">Cari</span>
                                 <span class="lang_eng">Submit</span>
@@ -188,27 +198,34 @@
         var id_prov     = [[${id_prov}]];
         var privilege   = [[${privilege}]];
             
+        $('#time_activity').datepicker({
+            autoclose: true,
+            format: "yyyy-mm-dd"
+        });
+        
         if(id_role == '1'){
 
         }else{
-//            $.ajax({
-//                type: "GET",
-//                url: urls+'list-get-option-role-gov-profil/'+id_prov,
-//                success: function (result) {
-//                    $("#idrole").html('<option value="0" >-- Pilih --</option>');
-//                    var array = result.content;
-//                    if (array != '') {
-//                        for (i in array) {
-//                            $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
-//                        }
-//                    }
-////                    if(privilege == 'ADMIN'){
-////                        $("#idrole").val('0').trigger("change").attr('disabled',false);
-////                    }else{
-////                        $("#idrole").val(id_role).trigger("change").attr('disabled',true);
-////                    }
-//                }
-//            });
+            $.ajax({
+                type: "GET",
+                url: urls+'list-get-option-role-all-profil/'+id_prov,
+                success: function (result) {
+                    $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                    var array = result.content;
+                    if (array != '') {
+                        for (i in array) {
+                            $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                        }
+                    }
+                    if(privilege == 'SUPER'){
+                        $("#idrole").val('0').trigger("change").attr('disabled',false);
+                    }else if(privilege == 'ADMIN'){
+                        $("#idrole").val('0').trigger("change").attr('disabled',false);
+                    }else{
+                        $("#idrole").val(id_role).trigger("change").attr('disabled',true);
+                    }
+                }
+            });
 
             $.ajax({
                 type: "GET",
@@ -238,7 +255,27 @@
             
         $("#id_prov").on('change', function(e){
             var id_prov = this.value ;
-
+            $.ajax({
+                type: "GET",
+                url: urls+'list-get-option-role-all-profil/'+id_prov,
+                success: function (result) {
+                    $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                    $("#idrole").html('<option value="999999" >All</option>');
+                    var array = result.content;
+                    if (array != '') {
+                        for (i in array) {
+                            $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                        }
+                    }
+                    if(privilege == 'SUPER'){
+                        $("#idrole").val('0').trigger("change").attr('disabled',false);
+                    }else if(privilege == 'ADMIN'){
+                        $("#idrole").val('0').trigger("change").attr('disabled',false);
+                    }else{
+                        $("#idrole").val(id_role).trigger("change").attr('disabled',true);
+                    }
+                }
+            });
             $.ajax({
                 type: "GET",
                 url: urls+'list-get-option-monper/'+id_prov,
@@ -396,6 +433,7 @@
                 var id_monper   = v_data_id[0];
                 var tahun       = v_data_id[1];
                 var v_period    = $("#period").val();
+                var v_id_role   = $("#idrole").val();
                 
 
                 var header = '';
@@ -421,7 +459,7 @@
                     "bDestroy": true,
                     "ordering": false,
                     "ajax": {
-                        "url": urls+'x/val/'+v_idprov+'/'+v_period+'/'+id_monper+'/'+tahun,
+                        "url": urls+'x/val/'+v_idprov+'/'+v_period+'/'+id_monper+'/'+tahun+'/'+v_id_role,
                         dataSrc: 'content',
                         beforeSend : function(xhr){
                             $('body').addClass("loading"); 
@@ -436,10 +474,11 @@
                         {"data": function (row, data, index, display) {
                             if(row[3] == '1'){
                                 var ps = "style='font-size:90%;'";
+                                return "<div "+ps+" ><b>"+row[1]+"</b></div>";
                             }else{
                                 var ps = "style='font-size:90%; margin-left: 30px'";
+                                return "<div "+ps+" >"+row[1]+"</div>";
                             }
-                            return "<div "+ps+" >"+row[1]+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
                             var d_id_role    = row[0];
@@ -448,7 +487,15 @@
                             var d_id_monper = d_data_id[0];
                             var d_tahun     = d_data_id[1];
                             var d_period    = $("#period").val();
+                            var d_time      = $("#time_activity").val();
                             var dt          = "";
+                            if(d_time == ''){
+                                var isi_time = '777777';
+//                                console.log('kosong')
+                            }else{
+                                var isi_time = d_time;
+//                                console.log('isi '+d_time)
+                            }
                             if(row[2] == 'Government'){
                                 var type    = 'entry_gov_indicator';
                                 var tb      = 'gov_activity';
@@ -462,7 +509,7 @@
                             $.ajax({
                                 type: "GET",
                                 async:false,
-                                url: urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2,
+                                url: urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time,
                                 success: function (result3) {
                                     dt = result3.content[0];
                                 }
@@ -491,7 +538,15 @@
                             var d_id_monper = d_data_id[0];
                             var d_tahun     = d_data_id[1];
                             var d_period    = $("#period").val();
+                            var d_time      = $("#time_activity").val();
                             var dt          = "";
+                            if(d_time == ''){
+                                var isi_time = '777777';
+//                                console.log('kosong')
+                            }else{
+                                var isi_time = d_time;
+//                                console.log('isi '+d_time)
+                            }
                             if(row[2] == 'Government'){
                                 var type    = 'entry_gov_indicator';
                                 var tb      = 'gov_activity';
@@ -505,7 +560,7 @@
                             $.ajax({
                                 type: "GET",
                                 async:false,
-                                url: urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2,
+                                url: urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time,
                                 success: function (result3) {
                                     dt = result3.content[0];
                                 }
@@ -528,25 +583,266 @@
                                 var kk = hsl_ps+'1';
 //                                console.log(" - - "+kk+' -- '+ketdt1+' -- '+(ketdt/ketdt1)*100);
                                 if(kk == 'NaN1'){
-                                    var hsl_ps1 = '0';
+                                    var hsl_ps1 = '0.00';
                                 }else{
-                                    var hsl_ps1 = hsl_ps;
+                                    var hsl_ps1 = hsl_ps.toFixed(2);
                                 }
                                 return "<div style='font-size:90%;'>"+hsl_ps1+"%</div>";
                             }
                         }},
                         {"data": function (row, data, index, display) {
-                            if(row[3] == '1'){
-                                return "<div style='font-size:90%;'></div>";
+                            var d_id_role    = row[0];
+                            var d_dataid    = $("#periode").val();
+                            var d_data_id   = d_dataid.split("###");;
+                            var d_id_monper = d_data_id[0];
+                            var d_tahun     = d_data_id[1];
+                            var d_period    = $("#period").val();
+                            var dt          = "";
+                            var sts         = '';
+                            var d_time      = $("#time_activity").val();
+                            if(d_time == ''){
+                                var isi_time = '777777';
+//                                console.log('kosong')
                             }else{
-                                return "<div style='font-size:90%;'>.. / ..</div>";
+                                var isi_time = d_time;
+//                                console.log('isi '+d_time)
+                            }
+                            if(row[2] == 'Government'){
+                                var type    = 'entry_gov_indicator';
+                                var tb      = 'gov_activity';
+                                var tb2     = 'gov_indicator';
+                            }else if(row[2] == 'NSA'){
+                                var type    = 'entry_nsa_indicator';
+                                var tb      = 'nsa_activity';
+                                var tb2     = 'nsa_indicator';
+                            }else{}
+                            if(row[2] == 'Government'){
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls+'list-get-sts-monper-gov_act/'+id_monper,
+                                    success: function (resultmonper) {
+                                        sts = resultmonper.content;
+                                    }
+                                });
+//                                if(sts == 'yearly'){
+//                                    
+//                                    if(v_period == '1'){
+//                                        
+//                                        
+//                                    }else{}
+//                                }else if(sts == 'semesterly'){
+//                                    if(v_period == '1'){
+//                                        
+//                                    }else if(v_period == '2'){
+//                                        
+//                                    }else{}
+//                                }else if(sts == 'quarterly'){
+//                                    if(v_period == '1'){
+//                                        
+//                                    }else if(v_period == '2'){
+//                                        
+//                                    }else if(v_period == '3'){
+//                                        
+//                                    }else if(v_period == '4'){
+//                                        
+//                                    }else{}
+//                                }else{}
+                                
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time,
+                                    success: function (result3) {
+                                        dt = result3.content[0];
+                                    }
+                                });
+                                
+                                if(row[3] == '1'){
+                                    return "<div style='font-size:90%;'></div>";
+                                }else{
+                                    if(dt[0] == null){
+                                        var ketdt = '0';
+                                    }else{
+                                        var ketdt = dt[0];
+                                    }
+                                    if(dt[1] == null){
+                                        var ketdt1 = '0';
+                                    }else{
+                                        var ketdt1 = dt[1];
+                                    }
+                                    return "<div style='font-size:90%;'>"+ketdt+" / "+ketdt1+"</div>";
+                                }
+                                
+                            }else if(row[2] == 'NSA'){
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
+                                    success: function (resultmonper) {
+                                        sts = resultmonper.content;
+                                    }
+                                });
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time,
+                                    success: function (result3) {
+                                        dt = result3.content[0];
+                                    }
+                                });
+                                if(row[3] == '1'){
+                                    return "<div style='font-size:90%;'></div>";
+                                }else{
+                                    if(dt[0] == null){
+                                        var ketdt = '0';
+                                    }else{
+                                        var ketdt = dt[0];
+                                    }
+                                    if(dt[1] == null){
+                                        var ketdt1 = '0';
+                                    }else{
+                                        var ketdt1 = dt[1];
+                                    }
+                                    return "<div style='font-size:90%;'>"+ketdt+" / "+ketdt1+"</div>";
+                                }
+                            }else{
+                                
                             }
                         }},
                         {"data": function (row, data, index, display) {
-                            if(row[3] == '1'){
-                                return "<div style='font-size:90%;'></div>";
+                            var d_id_role    = row[0];
+                            var d_dataid    = $("#periode").val();
+                            var d_data_id   = d_dataid.split("###");;
+                            var d_id_monper = d_data_id[0];
+                            var d_tahun     = d_data_id[1];
+                            var d_period    = $("#period").val();
+                            var dt          = "";
+                            var sts         = '';
+                            var d_time      = $("#time_activity").val();
+                            if(d_time == ''){
+                                var isi_time = '777777';
+//                                console.log('kosong')
                             }else{
-                                return "<div style='font-size:90%;'>0%</div>";
+                                var isi_time = d_time;
+//                                console.log('isi '+d_time)
+                            }
+                            if(row[2] == 'Government'){
+                                var type    = 'entry_gov_indicator';
+                                var tb      = 'gov_activity';
+                                var tb2     = 'gov_indicator';
+                            }else if(row[2] == 'NSA'){
+                                var type    = 'entry_nsa_indicator';
+                                var tb      = 'nsa_activity';
+                                var tb2     = 'nsa_indicator';
+                            }else{}
+                            if(row[2] == 'Government'){
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls+'list-get-sts-monper-gov_act/'+id_monper,
+                                    success: function (resultmonper) {
+                                        sts = resultmonper.content;
+                                    }
+                                });
+//                                if(sts == 'yearly'){
+//                                    
+//                                    if(v_period == '1'){
+//                                        
+//                                        
+//                                    }else{}
+//                                }else if(sts == 'semesterly'){
+//                                    if(v_period == '1'){
+//                                        
+//                                    }else if(v_period == '2'){
+//                                        
+//                                    }else{}
+//                                }else if(sts == 'quarterly'){
+//                                    if(v_period == '1'){
+//                                        
+//                                    }else if(v_period == '2'){
+//                                        
+//                                    }else if(v_period == '3'){
+//                                        
+//                                    }else if(v_period == '4'){
+//                                        
+//                                    }else{}
+//                                }else{}
+                                
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time,
+                                    success: function (result3) {
+                                        dt = result3.content[0];
+                                    }
+                                });
+                                if(dt[0] == null){
+                                    var ketdt = '0';
+                                }else{
+                                    var ketdt = dt[0];
+                                }
+                                if(dt[1] == null){
+                                    var ketdt1 = '0';
+                                }else{
+                                    var ketdt1 = dt[1];
+                                }
+                                var hsl_ps = (ketdt/ketdt1)*100
+                                if(row[3] == '1'){
+                                    return "<div style='font-size:90%;'></div>";
+                                }else{
+                                    var kk = hsl_ps+'1';
+    //                                console.log(" - - "+kk+' -- '+ketdt1+' -- '+(ketdt/ketdt1)*100);
+                                    if(kk == 'NaN1'){
+                                        var hsl_ps1 = '0.00';
+                                    }else{
+                                        var hsl_ps1 = hsl_ps.toFixed(2);
+                                    }
+                                    return "<div style='font-size:90%;'>"+hsl_ps1+"%</div>";
+                                }
+                                
+                            }else if(row[2] == 'NSA'){
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
+                                    success: function (resultmonper) {
+                                        sts = resultmonper.content;
+                                    }
+                                });
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time,
+                                    success: function (result3) {
+                                        dt = result3.content[0];
+                                    }
+                                });
+                                if(dt[0] == null){
+                                    var ketdt = '0';
+                                }else{
+                                    var ketdt = dt[0];
+                                }
+                                if(dt[1] == null){
+                                    var ketdt1 = '0';
+                                }else{
+                                    var ketdt1 = dt[1];
+                                }
+                                var hsl_ps = (ketdt/ketdt1)*100
+                                if(row[3] == '1'){
+                                    return "<div style='font-size:90%;'></div>";
+                                }else{
+                                    var kk = hsl_ps+'1';
+    //                                console.log(" - - "+kk+' -- '+ketdt1+' -- '+(ketdt/ketdt1)*100);
+                                    if(kk == 'NaN1'){
+                                        var hsl_ps1 = '0.00';
+                                    }else{
+                                        var hsl_ps1 = hsl_ps.toFixed(2);
+                                    }
+                                    return "<div style='font-size:90%;'>"+hsl_ps1+"%</div>";
+                                }
+                            }else{
+                                
                             }
                         }},
                         {"data": function (row, data, index, display) {
