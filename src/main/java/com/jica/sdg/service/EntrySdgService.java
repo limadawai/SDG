@@ -68,7 +68,7 @@ public class EntrySdgService implements IEntrySdgService{
             Date date = new Date();
             //esdg.setApproval_date(date);
 //            esdg.setShow_report_date(date);
-            entryGovIndicator.setDate_created(date);
+            //entryGovIndicator.setDate_created(date);
             entryGovIndicatorRepo.save(entryGovIndicator);
 	}
         
@@ -152,6 +152,16 @@ public class EntrySdgService implements IEntrySdgService{
 	@Override
 	public Optional<EntrySdg> findOne(Long id) {
 		return (Optional<EntrySdg>) entrySdgRepo.findById(id);
+	}
+
+	@Override
+	public Optional<EntryGovIndicator> findOneGovInd(Integer id) {
+		return entryGovIndicatorRepo.findById(id);
+	}
+	
+	@Override
+	public Optional<EntryNsaIndicator> findOneNsaInd(Integer id) {
+		return entryNsaIndicatorRepo.findById(id);
 	}
         
 }

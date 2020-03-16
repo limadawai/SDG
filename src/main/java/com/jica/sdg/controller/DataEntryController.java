@@ -770,9 +770,10 @@ public class DataEntryController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-entry-gov_prog_indicator", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-entry-gov_prog_indicator/{achiev}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveEntryGovProgIndicator(@RequestBody EntryGovIndicator entryGovIndicator) {
+    @Transactional
+    public void saveEntryGovProgIndicator(@RequestBody EntryGovIndicator entryGovIndicator,@PathVariable("achiev") String achiev, HttpSession session) {
 //        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
 //        int achievement1        = entrySdg.getAchievement1();
 //        int achievement2        = entrySdg.getAchievement2();
@@ -781,7 +782,51 @@ public class DataEntryController {
 //        int year_entry          = entrySdg.getYear_entry();
 //        int id_role             = entrySdg.getId_role();
 //        int id_monper           = entrySdg.getId_monper();
-        entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+    	if(entryGovIndicator.getId()!=null) {
+    		Optional<EntryGovIndicator> list = entrySdgService.findOneGovInd((entryGovIndicator.getId()));
+        	if(list.isPresent()) {
+        		list.get().setId(entryGovIndicator.getId());
+            	list.get().setId_assign(entryGovIndicator.getId_assign());
+            	list.get().setAchievement1(entryGovIndicator.getAchievement1());
+            	list.get().setAchievement2(entryGovIndicator.getAchievement2());
+            	list.get().setAchievement3(entryGovIndicator.getAchievement3());
+            	list.get().setAchievement4(entryGovIndicator.getAchievement4());
+            	list.get().setYear_entry(entryGovIndicator.getYear_entry());
+            	list.get().setId_monper(entryGovIndicator.getId_monper());
+        		list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryGovIndicator(foundUpdateObject));
+        	}else {
+        		entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+        	}
+    	}else {
+    		entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+    	}
+    	
+        Query query;
+        if(achiev.equals("1")) {
+        	query = em.createNativeQuery("update entry_gov_indicator set created_by = :created_by, date_created = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryGovIndicator.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("2")) {
+    		query = em.createNativeQuery("update entry_gov_indicator set created_by2 = :created_by, date_created2 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryGovIndicator.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("3")) {
+    		query = em.createNativeQuery("update entry_gov_indicator set created_by3 = :created_by, date_created3 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryGovIndicator.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("4")) {
+    		query = em.createNativeQuery("update entry_gov_indicator set created_by4 = :created_by, date_created4 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryGovIndicator.getId());
+	        query.executeUpdate();
+    	}
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
     
@@ -1083,9 +1128,10 @@ public class DataEntryController {
     }
     
     
-    @PostMapping(path = "admin/save-entry-non-gov_prog_indicator", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-entry-non-gov_prog_indicator/{achiev}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveEntryNonGovProgIndicator(@RequestBody EntryNsaIndicator entryNsaIndicator) {
+    @Transactional
+    public void saveEntryNonGovProgIndicator(@RequestBody EntryNsaIndicator entryNsaIndicator,@PathVariable("achiev") String achiev, HttpSession session) {
 //        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
 //        int achievement1        = entrySdg.getAchievement1();
 //        int achievement2        = entrySdg.getAchievement2();
@@ -1094,7 +1140,52 @@ public class DataEntryController {
 //        int year_entry          = entrySdg.getYear_entry();
 //        int id_role             = entrySdg.getId_role();
 //        int id_monper           = entrySdg.getId_monper();
-        entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+    	if(entryNsaIndicator.getId()!=null) {
+    		Optional<EntryNsaIndicator> list = entrySdgService.findOneNsaInd((entryNsaIndicator.getId()));
+        	if(list.isPresent()) {
+        		list.get().setId(entryNsaIndicator.getId());
+            	list.get().setId_assign(entryNsaIndicator.getId_assign());
+            	list.get().setAchievement1(entryNsaIndicator.getAchievement1());
+            	list.get().setAchievement2(entryNsaIndicator.getAchievement2());
+            	list.get().setAchievement3(entryNsaIndicator.getAchievement3());
+            	list.get().setAchievement4(entryNsaIndicator.getAchievement4());
+            	list.get().setYear_entry(entryNsaIndicator.getYear_entry());
+            	list.get().setId_monper(entryNsaIndicator.getId_monper());
+        		list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryNsaIndicator(foundUpdateObject));
+        	}else {
+        		entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+        	}
+    	}else {
+    		entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+    	}
+    	
+    	Query query;
+        if(achiev.equals("1")) {
+        	query = em.createNativeQuery("update entry_nsa_indicator set created_by = :created_by, date_created = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryNsaIndicator.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("2")) {
+    		query = em.createNativeQuery("update entry_nsa_indicator set created_by2 = :created_by, date_created2 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryNsaIndicator.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("3")) {
+    		query = em.createNativeQuery("update entry_nsa_indicator set created_by3 = :created_by, date_created3 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryNsaIndicator.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("4")) {
+    		query = em.createNativeQuery("update entry_nsa_indicator set created_by4 = :created_by, date_created4 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryNsaIndicator.getId());
+	        query.executeUpdate();
+    	}
+        
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
     

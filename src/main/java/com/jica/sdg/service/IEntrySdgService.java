@@ -17,6 +17,10 @@ public interface IEntrySdgService {
     
     Optional<EntrySdg> findOne(Long id);
     
+    Optional<EntryGovIndicator> findOneGovInd(Integer id);
+    
+    Optional<EntryNsaIndicator> findOneNsaInd(Integer id);
+    
 //    List<Nsadetail> findId(String id);
 //
     void saveEntrySdg(EntrySdg esdg);
