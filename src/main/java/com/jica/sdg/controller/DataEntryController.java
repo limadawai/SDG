@@ -411,7 +411,20 @@ public class DataEntryController {
                     "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
                     "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
                     "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role+" order by b.id_goals, c.id_target, d.id_indicator";
+                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role+" ";
+    		sql  += "union select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
+                    "b.nm_goals_eng, \n" +
+                    "c.nm_target_eng, d.nm_indicator_eng, \n" +
+                    "'0' as id_disaggre, '0' as nm_disaggre, '0' as nm_disaggre_eng, '0' as desc_disaggre, '0' as desc_disaggre_eng, '0' as iddisaggre, '0' as iddetaildis, "
+                    + "l.id_role, l.nm_role, l.cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
+                    "from ran_rad as g \n" +
+                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
+                    "left join sdg_goals as b on a.id_goals = b.id \n" +
+                    "left join sdg_target as c on a.id_target = c.id \n" +
+                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
+                    "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join ref_role as l on a.id_role = l.id_role \n" +
+                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role+" order by 1,2,3,17,18 ";
             query = em.createNativeQuery(sql);
     	}else {
     		String[] arrOfStr = sdg.split(","); 
@@ -501,7 +514,7 @@ public class DataEntryController {
     	sql  = "select b.value, a.achievement1, a.achievement2, a.achievement3, a.achievement4, "
     			+ "a.new_value1, a.new_value2, a.new_value3, a.new_value4, "
     			+ "c.achievement1 as achi1, c.achievement2 as achi2, c.achievement3 as achi3, c.achievement4 as achi4,"
-    			+ "a.new_value1 as new1, a.new_value2 as new2, a.new_value3 as new3, a.new_value4 as new4, id_disaggre, id_disaggre_detail, e.nm_role "
+    			+ "c.new_value1 as new1, c.new_value2 as new2, c.new_value3 as new3, c.new_value4 as new4, id_disaggre, id_disaggre_detail, e.nm_role "
     			+ "from assign_sdg_indicator d "
     			+ "left join entry_sdg a on a.id_sdg_indicator = d.id_indicator and a.id_role = d.id_role and a.id_monper = d.id_monper and a.year_entry = '"+year+"' "
     			+ "left join sdg_indicator_target b on b.id_sdg_indicator = d.id_indicator and b.id_role = d.id_role and b.year = '"+year+"' "
