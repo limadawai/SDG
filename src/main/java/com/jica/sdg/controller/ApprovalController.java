@@ -83,28 +83,24 @@ public class ApprovalController {
 	        query.setParameter("id_role", app.getId_role());
 	        query.executeUpdate();
 		}else if(app.getType().equals("entry_gov_budget")) {
-			query = em.createNativeQuery("update entry_gov_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
+			query = em.createNativeQuery("update entry_gov_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
 			query.setParameter("year", app.getYear());
 	        query.setParameter("id_monper", app.getId_monper());
-	        query.setParameter("id_role", app.getId_role());
 	        query.executeUpdate();
 		}else if(app.getType().equals("entry_gov_indicator")) {
-			query = em.createNativeQuery("update entry_gov_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
+			query = em.createNativeQuery("update entry_gov_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
 			query.setParameter("year", app.getYear());
 	        query.setParameter("id_monper", app.getId_monper());
-	        query.setParameter("id_role", app.getId_role());
 	        query.executeUpdate();
 		}else if(app.getType().equals("entry_nsa_budget")) {
-			query = em.createNativeQuery("update entry_nsa_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
+			query = em.createNativeQuery("update entry_nsa_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
 			query.setParameter("year", app.getYear());
 	        query.setParameter("id_monper", app.getId_monper());
-	        query.setParameter("id_role", app.getId_role());
 	        query.executeUpdate();
 		}else if(app.getType().equals("entry_nsa_indicator")) {
-			query = em.createNativeQuery("update entry_nsa_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
+			query = em.createNativeQuery("update entry_nsa_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
 			query.setParameter("year", app.getYear());
 	        query.setParameter("id_monper", app.getId_monper());
-	        query.setParameter("id_role", app.getId_role());
 	        query.executeUpdate();
 		}
 		
