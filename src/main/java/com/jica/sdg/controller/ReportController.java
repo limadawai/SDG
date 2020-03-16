@@ -1,15 +1,18 @@
 package com.jica.sdg.controller;
 
-import com.jica.sdg.model.EntryGriojk;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.util.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,7 +35,6 @@ import com.jica.sdg.service.SdgFundingService;
 import com.jica.sdg.service.SdgGoalsService;
 import com.jica.sdg.service.SdgIndicatorService;
 import com.jica.sdg.service.SdgTargetService;
-import java.util.Optional;
 
 @Controller
 public class ReportController {
@@ -1596,10 +1598,10 @@ public class ReportController {
                     model.addAttribute("id_role", id_role);
                     
             
-            String sql = "SELECT DISTINCT company_name FROM trx_excell";             
+            String sql = "SELECT DISTINCT company_name FROM entry_gri_ojk where approval = 2 ";             
             Query list2 = em.createNativeQuery(sql);
             
-            String sql2 = "SELECT DISTINCT year FROM trx_excell";             
+            String sql2 = "SELECT DISTINCT year FROM entry_gri_ojk where approval = 2  ";             
             Query list3 = em.createNativeQuery(sql2);
             Map<String, Object> hasil = new HashMap<>();
             
@@ -1631,13 +1633,22 @@ public class ReportController {
         
        @GetMapping("admin/get-last-year-company/gri-ojk/{company}")
         public @ResponseBody Map<String, Object> getLastYear(@PathVariable("company") String  company) {
-            String sql = "SELECT DISTINCT YEAR FROM trx_excell WHERE company_name = '"+company+"' ORDER BY YEAR DESC LIMIT 1";
+            String sql = "SELECT DISTINCT YEAR FROM entry_gri_ojk WHERE company_name = '"+company+"' AND approval = '2'  ORDER BY YEAR ";
             Query list = em.createNativeQuery(sql);
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list.getResultList());
             return hasil;
         }
         
+        
+        @GetMapping("admin/get-all-company/gri-ojk/{year}")
+        public @ResponseBody Map<String, Object> getAllCompany(@PathVariable("year") String  year) {
+            String sql = "SELECT DISTINCT company_name FROM entry_gri_ojk WHERE YEAR  = '"+year+"' AND approval = '2'  ORDER BY company_name ";
+            Query list = em.createNativeQuery(sql);
+            Map<String, Object> hasil = new HashMap<>();
+            hasil.put("content",list.getResultList());
+            return hasil;
+        }
         
          @GetMapping("admin/get-all-row-company/gri-ojk/{query}")
         public @ResponseBody Map<String, Object> getAllRow(@PathVariable("query") String  query) {
@@ -1647,6 +1658,13 @@ public class ReportController {
             hasil.put("content",list.getResultList());
             return hasil;
         }
-       
         
+         @GetMapping("admin/exportgraph")
+         public void exportgraph(HttpServletResponse response) {
+//        	 response.setContentType("application/octet-stream");
+//           response.setHeader("Content-Disposition", "attachment; filename=NSA_Profile-"+idrole+".xlsx");
+//           ByteArrayInputStream stream = exprofil(idprov, idrole);
+//           IOUtils.copy(stream, response.getOutputStream());
+         }
+         
 }

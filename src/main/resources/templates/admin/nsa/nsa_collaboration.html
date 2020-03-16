@@ -30,13 +30,14 @@
                     <div class="widget-content">
                         <div class="pull-left adddetail" style="width:100%">
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
-                                <option value="0" >-- Pilih --</option>
+                                <option value="0" >-- Pilih Daerah --</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="nm_nsa_profil" name="nm_nsa_profil" class="form-control">
-                                <option value="0" >-- Pilih --</option>
+                                <option value="0" >-- Pilih Institusi --</option>
                                 <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
+                            <button id="export" class="btn btn-warning pull-right">Export Excel</button>
 <!--                            <div class="btn-toolbar" style="float:right">
                                 <button class="btn btn-success detail">Add Detail</button>
                             </div>-->
@@ -2201,5 +2202,14 @@
 
         //});
     // ]]>
+    
+    $("#export").on("click", function(){
+    	var idrole = $("#nm_nsa_profil").val();
+    	if (idrole == "0") {
+    		swal("Anda harus memilih institusi");
+    	} else {
+    		window.open(urls+"nsa/dowload_inst_colab/"+idrole, "_blank");
+    	}
+    });
 </script>
 </html>

@@ -286,7 +286,7 @@
                 }).on("load_node.jstree", function(e, data) {
                     $2('#sdg_data'+id).jstree(true).check_node(node_data);
                     $2('#sdg_data'+id).jstree(true).disable_checkbox(data.node.children_d);
-                    console.log(data);
+//                    console.log(data);
                   });
         }
         $("#tabel-approve-gov-activity").hide();
@@ -886,13 +886,10 @@
 				select: true,
                                 "initComplete": function( settings, json) {
                                     $.each(json.content,function(i,x){
-                                            var node_data =[];
-                                            $.each(JSON.parse(x[22]),function(ii,xx){
-                                                node_data.push(xx.id_sdgs);
-                                            });
+                                            var node_data = x[22].split(",")
                                             tree(x[21],lisdg2,node_data);
-                //                            var id = x[21];
-                //                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
+                                            var id = x[21];
+                                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
 
                                         })
                                   }
@@ -1174,7 +1171,7 @@
                             });
                 }else{}
 //                alert('yess '+id_monper);
-                console.log(data);
+//                console.log(data);
                 $.ajax({
                     type: "POST",
                     url: urls+ur,

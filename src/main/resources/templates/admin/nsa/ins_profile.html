@@ -30,13 +30,14 @@
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
-                                <option value="0" >-- Pilih --</option>
+                                <option value="0" >-- Pilih Daerah --</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="nm_ins_profil" name="nm_ins_profil" class="form-control">
-                                <option value="0" >-- Pilih --</option>
+                                <option value="0" >-- Pilih Institusi --</option>
                                 <option th:each="f:${listInsProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
+                            <button id="export" class="btn btn-warning pull-right">Export Excel</button>
                             <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none">
                                 <span class="lang_indo">Tambah</span>
                                 <span class="lang_eng" style="display: none">Add</span>
@@ -876,5 +877,14 @@
 
         //});
     // ]]>
+    
+    $("#export").on("click", function(){
+    	var idrole = $("#nm_ins_profil").val();
+    	if (idrole == "0") {
+    		swal("Anda harus memilih institusi");
+    	} else {
+    		window.open(urls+"nsa/dowload_inst_profil/"+idrole, "_blank");
+    	}
+    });
 </script>
 </html>
