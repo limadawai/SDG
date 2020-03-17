@@ -11,8 +11,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.DynamicUpdate;
+import org.hibernate.annotations.SelectBeforeUpdate;
+
 @Entity
 @Table(name = "entry_gov_indicator")
+@SelectBeforeUpdate(true)
+@DynamicUpdate(true)
 public class EntryGovIndicator implements Serializable {
 
     @Id

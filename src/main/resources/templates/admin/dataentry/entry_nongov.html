@@ -147,6 +147,7 @@
                                 <input name="achievement2" id="achievement2" type="text" class="input-block-level"/>
                                 <input name="achievement3" id="achievement3" type="text" class="input-block-level"/>
                                 <input name="achievement4" id="achievement4" type="text" class="input-block-level"/>
+                                <input name="achiev" id="achiev" type="hidden" class="input-block-level"/>
                             </div>
                         </div>
                         <div class="modal-footer" id="simpan_">
@@ -1296,6 +1297,7 @@
                 var achievement2        = $('#achievement2').val();
                 var achievement3        = $('#achievement3').val();
                 var achievement4        = $('#achievement4').val();
+                var achiev        		= $('#achiev').val();
                 var v_idrole            = $("#idrole").val();
                 var v_dataid            = $("#periode").val();
                 var v_data_id           = v_dataid.split("###");;
@@ -1312,12 +1314,12 @@
                         'achievement3': achievement3,
                         'achievement4': achievement4,
                         'year_entry': tahun,
-                        'created_by': v_idrole,
-                        'id_monper': id_monper
+                        /* 'created_by': v_idrole,*/
+                        'id_monper': id_monper 
                     });
     		        $.ajax({
     		            type: "POST",
-    		            url: urls+'save-entry-non-gov_prog_indicator',
+    		            url: urls+'save-entry-non-gov_prog_indicator/'+achiev,
     		            beforeSend : function(xhr){
     		            	xhr.setRequestHeader(header,token);
     		            },
@@ -1380,23 +1382,23 @@
                 var jenis           = data[7];
                 
                 if(value1 == 'null' || value1 == ""){
-                    var achieve1 = '0';
+                    var achieve1 = '';
                 }else{
                     var achieve1 = value1;
                 }
                 
                 if(value2 == 'null' || value2 == ""){
-                    var achieve2 = '0';
+                    var achieve2 = '';
                 }else{
                     var achieve2 = value2;
                 }
                 if(value3 == 'null' || value3 == ""){
-                    var achieve3 = '0';
+                    var achieve3 = '';
                 }else{
                     var achieve3 = value3;
                 }
                 if(value4 == 'null' || value4 == ""){
-                    var achieve4 = '0';
+                    var achieve4 = '';
                 }else{
                     var achieve4 = value4;
                 }
@@ -1407,21 +1409,25 @@
                     $('#achievement2').val(achieve2).hide();
                     $('#achievement3').val(achieve3).hide();
                     $('#achievement4').val(achieve4).hide();
+                    $('#achiev').val(1);
                 }else if(kode == '2'){
                     $('#achievement1').val(achieve1).hide();
                     $('#achievement2').val(achieve2).show();
                     $('#achievement3').val(achieve3).hide();
                     $('#achievement4').val(achieve4).hide();
+                    $('#achiev').val(2);
                 }else if(kode == '3'){
                     $('#achievement1').val(achieve1).hide();
                     $('#achievement2').val(achieve2).hide();
                     $('#achievement3').val(achieve3).show();
                     $('#achievement4').val(achieve4).hide();
+                    $('#achiev').val(3);
                 }else if(kode == '4'){
                     $('#achievement1').val(achieve1).hide();
                     $('#achievement2').val(achieve2).hide();
                     $('#achievement3').val(achieve3).hide();
                     $('#achievement4').val(achieve4).show();
+                    $('#achiev').val(4);
                 }else{
                     $('#achievement1').val("0").hide();
                     $('#achievement2').val("0").hide();
