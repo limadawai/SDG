@@ -35,6 +35,7 @@ import com.jica.sdg.service.SdgFundingService;
 import com.jica.sdg.service.SdgGoalsService;
 import com.jica.sdg.service.SdgTargetService;
 import com.jica.sdg.service.UnitService;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class RateController {
@@ -130,14 +131,14 @@ public class RateController {
                         "union all\n" +
                         "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
                         "from ref_role a\n" +
-                        "where a.cat_role = 'Government' and a.id_prov = :id_prov \n" +
+                        "where a.cat_role = 'Government' and a.id_role <> '1' and a.id_prov = :id_prov \n" +
                         "union all\n" +
                         "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
                         "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
                         "union all\n" +
                         "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
                         "from ref_role a\n" +
-                        "where a.cat_role = 'NSA' and a.id_prov = :id_prov ";
+                        "where a.cat_role = 'NSA' and a.id_role <> '1' and a.id_prov = :id_prov ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_prov", id_prov);
             query.setParameter("period", period);
@@ -346,5 +347,129 @@ public class RateController {
         hasil.put("content",list);
         return hasil;
     }    
+    
+    @GetMapping("admin/get_sub_prog_level1/{id_monper}/{id_role}/{catrole}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level1(@PathVariable("id_monper") String id_monper,@PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole) {
+        System.out.println("catrole = "+catrole+", id_monper = "+id_monper);
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select distinct a.id, a.nm_program, a.nm_program_eng from gov_program a \n" +
+                        "left join gov_activity b on a.id = b.id_program\n" +
+                        "where a.id_monper = :id_monper and b.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_monper", id_monper);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select a.id, a.nm_program, a.nm_program_eng from nsa_program a \n" +
+                        "where a.id_monper = :id_monper and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_monper", id_monper);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get_sub_prog_level2/{id_program}/{id_role}/{catrole}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level2(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole) {
+        
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng from gov_activity a\n" +
+                        "where a.id_program = :id_program and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng from nsa_activity a\n" +
+                        "where a.id_program = :id_program and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get_sub_prog_level3/{id_program}/{id_activity}/{id_role}/{catrole}/{period}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level3(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year) {
+        
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit, \n" +
+                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end\n" +
+                        "from gov_indicator a\n" +
+                        "left join gov_activity b on a.id_activity = b.id\n" +
+                        "left join (select * from entry_gov_indicator where year_entry = :year and id_monper = :id_monper) c on a.id = c.id_assign\n" +
+                        "where a.id_program = :id_program and a.id_activity = :id_activity and b.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+            query.setParameter("id_activity", id_activity);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit,\n" +
+                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end\n" +
+                        "from nsa_indicator a\n" +
+                        "left join nsa_activity b on a.id_activity = b.id\n" +
+                        "left join (select * from entry_nsa_indicator where year_entry = :year and id_monper = :id_monper) c on a.id = c.id_assign\n" +
+                        "where a.id_program = :id_program and a.id_activity = :id_activity and b.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+            query.setParameter("id_activity", id_activity);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @PostMapping(path = "admin/save-submission/{dat_id_indicator}/{dat_achievement}", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    public void saveBest(@PathVariable("dat_id_indicator") String dat_id_indicator,
+			@PathVariable("dat_achievement") String dat_achievement) {
+        System.out.println("data "+dat_id_indicator+" - "+dat_achievement);
+//        if(!sdg_indicator.equals("0")) {
+//            bestMapService.deleteGovMapByGovInd(best.getId());
+//            String[] sdg = sdg_indicator.split(",");
+//            for(int i=0;i<sdg.length;i++) {
+//                String[] a = sdg[i].split("---");
+//                Integer id_goals = Integer.parseInt(a[0]);
+//                Integer id_target = Integer.parseInt(a[1]);
+//                Integer id_indicator = Integer.parseInt(a[2]);
+//                BestMap map = new BestMap();
+//                map.setId_goals(id_goals);
+//                if(id_target!=0) {
+//                        map.setId_target(id_target);
+//                }
+//                if(id_indicator!=0) {
+//                        map.setId_indicator(id_indicator);
+//                }
+//                map.setId_best_practice(best.getId());
+//                map.setId_monper(id_monper);
+//                map.setId_prov(id_prov);
+//                bestMapService.saveGovMap(map);
+//            }
+//    	}
+    }
     
 }

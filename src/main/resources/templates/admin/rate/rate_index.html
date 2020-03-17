@@ -128,26 +128,26 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h3 class="modal-title lang_indo" id="exampleModalLabel">Monitor Indikator SDG</h3>
-                        <h3 class="modal-title lang_eng" id="exampleModalLabel" style="display: none">SDG Indicators Monitoring</h3>
+                        <h3 class="modal-title lang_indo" id="exampleModalLabel">Pengajuan Nilai</h3>
+                        <h3 class="modal-title lang_eng" id="exampleModalLabel" style="display: none">Submission Rate</h3>
                     </div>
                     <form class="form-horizontal">
                         <div class="modal-body">
-                            <div class="control-group">
-                                <label for="nm_inst" class="lang_indo">Pencapaian SDG Tahun Ini :</label>
-                                <label for="nm_inst" class="lang_eng" style="display: none">SDGs Achievements For The Year :</label>
-                                <input name="id" id="id" type="text" class="input-block-level">
-                                <input name="achievement1" id="achievement1" type="text" class="input-block-level">
-                                <input name="achievement2" id="achievement2" type="text" class="input-block-level">
-                                <input name="achievement3" id="achievement3" type="text" class="input-block-level">
-                                <input name="achievement4" id="achievement4" type="text" class="input-block-level">
-                                <input name="id_sdg_indicator" id="id_sdg_indicator" type="hidden" class="input-block-level">
-                            </div>
+                            <form id="form-submission">
+                                <div class="control-group">
+                                    <table id="tbl_program" class='table table-bordered'>
+                                        <thead></thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    <input name="id_role" id="id_role" type="hidden" class="input-block-level">
+                                    <input name="catrole" id="catrole" type="hidden" class="input-block-level">
+                                </div>
+                            </form>
                         </div>
                         <div class="modal-footer" id="simpan_">
                             <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
                             <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal" style="display: none">Close</button>
-                            <button type="button" id="simpan" class="btn btn-success lang_indo">
+                            <button type="button" id="simpan" class="btn btn-success">
                             	<span class="lang_indo">Simpan</span>
                             	<span class="lang_eng" style="display: none">Submit</span>
                             </button>
@@ -401,16 +401,19 @@
 	    	        buttApp = 'Ya, Apply this data!';
 	        	}
 	        }
-	        if(lang){
-	        	bhs(lang=="0");
-	        }else{
-	        	bhs($('#fs').is(':checked'));
-	        }
-	        
-	        $('#fs').on('change', function(e){
-                    grid();
-	        	bhs($(this).is(':checked'));
-	        });
+            if(lang){
+                    bhs(lang=="0");
+                    grid_modal();
+            }else{
+                    bhs($('#fs').is(':checked'));
+                    grid_modal();
+            }
+
+            $('#fs').on('change', function(e){
+                grid_modal();
+                grid();
+                bhs($(this).is(':checked'));
+            });
 
             var v_idprov    = $("#id_prov").val();
             var v_idrole    = $("#idrole").val();
@@ -423,6 +426,117 @@
             $('.app').on('click', '.appl', function(e){
                 grid();
             });
+            
+            
+            //modal
+            $('#tabel-entri-sdg').on('click', ".id_role", function(e){
+                var id_role     = $(this).data("id_role");
+                var catrole     = $(this).data("catrole");
+                $("#catrole").val(catrole);
+                $("#id_role").val(id_role);
+                grid_modal();
+                
+                $('.addModal').modal("show");
+            });
+            
+            //grid modal
+            function grid_modal(){
+                var id_role     = $("#id_role").val();
+                var catrole     = $("#catrole").val();
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                var v_period    = $("#period").val();
+                $("#tbl_program > tbody").html("");
+                $.ajax({
+                    type: "GET",
+                    async:false,
+                    url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
+                    success: function (data_level1) {
+                        console.log(data_level1.content);
+                        var level1 = data_level1.content;
+                        if (level1 != '') {
+                            for (i in level1) {
+                                if($("#fs").is(':checked')){
+                                    var prog_1 = level1[i][1];
+                                }else{
+                                    var prog_1 = level1[i][2];
+                                }
+                                var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
+                                $("#tbl_program > tbody").append(tb_prog);
+                                
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls + "get_sub_prog_level2/"+level1[i][0]+"/"+id_role+"/"+catrole,
+                                    success: function (data_level2) {
+//                                        console.log(data_level2.content);
+                                        var level2 = data_level2.content;
+                                        if (level2 != '') {
+                                            for (o in level2) {
+                                                if($("#fs").is(':checked')){
+                                                    var prog_2 = level2[o][1];
+                                                }else{
+                                                    var prog_2 = level2[o][2];
+                                                }
+                                                var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
+                                                $("#tbl_program > tbody").append(tb_prog2);
+
+                                                $.ajax({
+                                                    type: "GET",
+                                                    async:false,
+                                                    url: urls + "get_sub_prog_level3/"+level1[i][0]+"/"+level2[o][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun,
+                                                    success: function (data_level3) {
+                //                                        console.log(data_level2.content);
+                                                        var level3 = data_level3.content;
+                                                        if (level3 != '') {
+                                                            for (p in level3) {
+                                                                if($("#fs").is(':checked')){
+                                                                    var prog_3 = level3[p][1];
+                                                                }else{
+                                                                    var prog_3 = level3[p][2];
+                                                                }
+                                                                if(v_period == '1'){
+                                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="text" value="'+level3[p][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+                                                                }else if(v_period == '2'){
+                                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="text" value="'+level3[p][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+                                                                }else if(v_period == '3'){
+                                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="text" value="'+level3[p][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+                                                                }else if(v_period == '4'){
+                                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="text" value="'+level3[p][8]+'" class="input-block-level">';
+                                                                }else{}
+//                                                                if(v_period == '1'){
+//                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="text" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+//                                                                }else if(v_period == '2'){
+//                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="text" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+//                                                                }else if(v_period == '3'){
+//                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="text" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+//                                                                }else if(v_period == '4'){
+//                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="text" value="'+level3[p][8]+'" class="input-block-level">';
+//                                                                }else{}
+                                                                
+                                                                var tb_prog3 = '<tr> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator" id="id_indicator" type="hidden" value="'+level3[p][0]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
+                                                                $("#tbl_program > tbody").append(tb_prog3);
+
+                                                                
+
+                                                            }
+                                                        }
+                                                    }
+                                                });
+
+                                            }
+                                        }
+                                    }
+                                });
+                                
+                            }
+                        }
+                    }
+                });
+            }
+            
             
             //memanggil tb spp
             function grid()
@@ -477,7 +591,8 @@
                                 return "<div "+ps+" ><b>"+row[1]+"</b></div>";
                             }else{
                                 var ps = "style='font-size:90%; margin-left: 30px'";
-                                return "<div "+ps+" >"+row[1]+"</div>";
+//                                return "<div "+ps+" >"+row[1]+"</div>";
+                                return "<div "+ps+" ><a class='id_role' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+row[1]+"</a></div>";
                             }
                         }},
                         {"data": function (row, data, index, display) {
@@ -915,58 +1030,65 @@
             }
             
 
-            $('#text-cari').on( 'keyup', function () {
-                var val=$(this).val();
-                table.search(val).draw();
-            });
             
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
             
-            $("#tabel-entri-sdg").on('click', '.myCheck', function () {
-                var dataid      = $(this).attr('data-id');
-                var checkBox    = document.getElementById("myCheck"+dataid);
-                
-            });
             
             $('#simpan_').on('click', '#simpan', function(e){
-                var id                  = ($('#id').val())?$('#id').val():null;
-                var id_sdg_indicator    = $('#id_sdg_indicator').val();
-                var achievement1        = $('#achievement1').val();
-                var achievement2        = $('#achievement2').val();
-                var achievement3        = $('#achievement3').val();
-                var achievement4        = $('#achievement4').val();
-                var v_idrole            = $("#idrole").val();
-                var v_dataid            = $("#periode").val();
-                var v_data_id           = v_dataid.split("###");;
-                var id_monper           = v_data_id[0];
-                var tahun               = v_data_id[1];
-                var data    = JSON.stringify({
-                                'id': id,
-                                'id_sdg_indicator': id_sdg_indicator,
-                                'achievement1': achievement1,
-                                'achievement2': achievement2,
-                                'achievement3': achievement3,
-                                'achievement4': achievement4,
-                                /* 'new_value1': '0',
-                                'new_value2': '0',
-                                'new_value3': '0',
-                                'new_value4': '0', */
-                                'year_entry': tahun,
-                                'id_role': v_idrole,
-                                'created_by': v_idrole,
-                                'id_monper': id_monper
-                            });
+                var v_period    = $("#period").val();
+                var f_achievement = [];
+                var dat_achievement;
+                $.each($("input[name='achievement"+v_period+"']"), function(){
+                    f_achievement.push($(this).val());
+	        });
+                if(f_achievement.length>0){
+                    dat_achievement = f_achievement.toString();
+                }else{
+                    dat_achievement = '0';
+                }
+                console.log(dat_achievement);
+                
+                var f_id_indicator = [];
+                var dat_id_indicator;
+                $.each($("input[name='id_indicator']"), function(){
+                    f_id_indicator.push($(this).val());
+	        });
+                if(f_id_indicator.length>0){
+                    dat_id_indicator = f_id_indicator.toString();
+                }else{
+                    dat_id_indicator = '0';
+                }
+                console.log(dat_id_indicator);
+                
+//                var data    = JSON.stringify({
+//                                'id': id,
+//                                'id_sdg_indicator': id_sdg_indicator,
+//                                'achievement1': achievement1,
+//                                'achievement2': achievement2,
+//                                'achievement3': achievement3,
+//                                'achievement4': achievement4,
+//                                /* 'new_value1': '0',
+//                                'new_value2': '0',
+//                                'new_value3': '0',
+//                                'new_value4': '0', */
+//                                'year_entry': tahun,
+//                                'id_role': v_idrole,
+//                                'created_by': v_idrole,
+//                                'id_monper': id_monper
+//                            });
                 $.ajax({
                     type: "POST",
-                    url: urls+'save-entry-sdg',
+                    url: urls+'save-submission/'+dat_id_indicator+'/'+dat_achievement,
                     beforeSend : function(xhr){
                     	xhr.setRequestHeader(header,token);
+//                        $('body').addClass("loading"); 
                     },
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
-                    data: data,
+//                    data: data,
                     success: function (result) {
-                        grid();
+//                        $('body').removeClass("loading");
+//                        grid();
                     	$('.addModal').modal('hide');
                     },
                 });
