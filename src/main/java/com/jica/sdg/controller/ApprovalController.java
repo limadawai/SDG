@@ -233,8 +233,8 @@ public class ApprovalController {
         	String 	id = obj.getString("new_val_id");
         	String 	period = obj.getString("new_val_period");
         	String 	id_disaggre = obj.getString("new_val_id_disaggre");
-        	if(!nilai.equals("")) {
-        		if(id_disaggre.equals("null") || id_disaggre.equals("")) {
+        	if(!nilai.equals("") || !nilai.equals("null")) {
+        		if(!id_disaggre.equals("null") || !id_disaggre.equals("")) {
         			if(period.equals("1")) {
             			sdgService.updateNew1(Integer.parseInt(id), Integer.parseInt(nilai));
             		}else if(period.equals("2")) {

@@ -38,12 +38,15 @@ public class GovActivity implements Serializable {
     
     @Column(nullable = false, length = 50)
     private String internal_code;
+    
+    @Column(nullable = true, length = 11)
+    private Integer budget_allocation;
 
 	public GovActivity() {
 	}
 
 	public GovActivity(Integer id, String id_activity, String id_program, Integer id_role, String nm_activity,
-			String nm_activity_eng, Integer created_by, Date date_created, String internal_code) {
+			String nm_activity_eng, Integer created_by, Date date_created, String internal_code, Integer budget_allocation) {
 		super();
 		this.id = id;
 		this.id_activity = id_activity;
@@ -54,6 +57,7 @@ public class GovActivity implements Serializable {
 		this.created_by = created_by;
 		this.date_created = date_created;
 		this.internal_code = internal_code;
+		this.budget_allocation = budget_allocation;
 	}
 
 	public Integer getId() {
@@ -130,5 +134,13 @@ public class GovActivity implements Serializable {
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Integer getBudget_allocation() {
+		return budget_allocation;
+	}
+
+	public void setBudget_allocation(Integer budget_allocation) {
+		this.budget_allocation = budget_allocation;
 	}
 }

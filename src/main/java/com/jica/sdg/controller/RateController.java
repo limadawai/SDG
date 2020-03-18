@@ -1,5 +1,7 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.EntryGovIndicator;
+import com.jica.sdg.model.EntryNsaIndicator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,10 @@ import com.jica.sdg.service.SdgFundingService;
 import com.jica.sdg.service.SdgGoalsService;
 import com.jica.sdg.service.SdgTargetService;
 import com.jica.sdg.service.UnitService;
+import java.util.Date;
+import javax.transaction.Transactional;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class RateController {
@@ -130,14 +136,14 @@ public class RateController {
                         "union all\n" +
                         "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
                         "from ref_role a\n" +
-                        "where a.cat_role = 'Government' and a.id_prov = :id_prov \n" +
+                        "where a.cat_role = 'Government' and a.id_role <> '1' and a.id_prov = :id_prov \n" +
                         "union all\n" +
                         "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
                         "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
                         "union all\n" +
                         "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
                         "from ref_role a\n" +
-                        "where a.cat_role = 'NSA' and a.id_prov = :id_prov ";
+                        "where a.cat_role = 'NSA' and a.id_role <> '1' and a.id_prov = :id_prov ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_prov", id_prov);
             query.setParameter("period", period);
@@ -346,5 +352,244 @@ public class RateController {
         hasil.put("content",list);
         return hasil;
     }    
+    
+    @GetMapping("admin/get_sub_prog_level1/{id_monper}/{id_role}/{catrole}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level1(@PathVariable("id_monper") String id_monper,@PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole) {
+        System.out.println("catrole = "+catrole+", id_monper = "+id_monper);
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select distinct a.id, a.nm_program, a.nm_program_eng from gov_program a \n" +
+                        "left join gov_activity b on a.id = b.id_program\n" +
+                        "where a.id_monper = :id_monper and b.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_monper", id_monper);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select a.id, a.nm_program, a.nm_program_eng from nsa_program a \n" +
+                        "where a.id_monper = :id_monper and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_monper", id_monper);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get_sub_prog_level2/{id_program}/{id_role}/{catrole}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level2(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole) {
+        
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng from gov_activity a\n" +
+                        "where a.id_program = :id_program and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng from nsa_activity a\n" +
+                        "where a.id_program = :id_program and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get_sub_prog_level3/{id_program}/{id_activity}/{id_role}/{catrole}/{period}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level3(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year) {
+        
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit, \n" +
+                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end\n" +
+                        "from gov_indicator a\n" +
+                        "left join gov_activity b on a.id_activity = b.id\n" +
+                        "left join (select * from entry_gov_indicator where year_entry = :year and id_monper = :id_monper) c on a.id = c.id_assign\n" +
+                        "where a.id_program = :id_program and a.id_activity = :id_activity and b.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+            query.setParameter("id_activity", id_activity);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit,\n" +
+                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end\n" +
+                        "from nsa_indicator a\n" +
+                        "left join nsa_activity b on a.id_activity = b.id\n" +
+                        "left join (select * from entry_nsa_indicator where year_entry = :year and id_monper = :id_monper) c on a.id = c.id_assign\n" +
+                        "where a.id_program = :id_program and a.id_activity = :id_activity and b.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+            query.setParameter("id_activity", id_activity);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    
+    @PostMapping(path = "admin/save-submission/{dat_id_indicator}/{dat_achievement}/{dat_entry}/{period}/{catrole}/{id_monper}/{tahun}", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    @Transactional
+    public void saveBest(
+                        @PathVariable("dat_id_indicator") String dat_id_indicator,
+			@PathVariable("dat_achievement") String dat_achievement,
+			@PathVariable("dat_entry") String dat_entry,
+                        @PathVariable("period") String period,
+                        @PathVariable("catrole") String catrole,
+                        @PathVariable("id_monper") int id_monper,
+                        @PathVariable("tahun") int tahun) {
+        System.out.println("data "+dat_id_indicator+" - "+dat_achievement+" - "+dat_entry);
+        Query query;
+        Query query_d;
+        if(catrole.equals("Government")){
+            if(!dat_id_indicator.equals("0")) {
+                String[] data_indicator      = dat_id_indicator.split(",");
+                String[] data_achievement    = dat_achievement.split(",");
+                String[] data_entry          = dat_entry.split(",");
+                for(int i=0;i<data_entry.length;i++) {
+                    System.out.println("coba : "+data_entry[i]);
+                    if(!data_entry[i].equals("null")) {
+                        System.out.println("tidak null : "+data_entry[i]);
+                        query = em.createNativeQuery("update entry_gov_indicator set achievement"+period+" = :achievement where id=:id");
+//                            query.setParameter("created_by", data_indicator[i]);  
+                        query.setParameter("achievement", data_achievement[i]);
+                        query.setParameter("id", data_entry[i]);
+                        query.executeUpdate();
+                    }else {
+                        System.out.println("null : "+data_entry[i]);
+                        if(period.equals("1")) {
+                            System.out.println("ke 1");
+                            EntryGovIndicator entryGovIndicator = new EntryGovIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryGovIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryGovIndicator.setAchievement1(Integer.parseInt(data_achievement[i]));
+                            entryGovIndicator.setYear_entry(tahun);
+                            entryGovIndicator.setDate_created(new Date());
+                            entryGovIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+                        }else if(period.equals("2")) {
+                            System.out.println("ke 2");
+                            EntryGovIndicator entryGovIndicator = new EntryGovIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryGovIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryGovIndicator.setAchievement2(Integer.parseInt(data_achievement[i]));
+                            entryGovIndicator.setYear_entry(tahun);
+                            entryGovIndicator.setDate_created(new Date());
+                            entryGovIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+                        }else if(period.equals("3")) {
+                            System.out.println("ke 3");
+                            EntryGovIndicator entryGovIndicator = new EntryGovIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryGovIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryGovIndicator.setAchievement3(Integer.parseInt(data_achievement[i]));
+                            entryGovIndicator.setYear_entry(tahun);
+                            entryGovIndicator.setDate_created(new Date());
+                            entryGovIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+                        }else if(period.equals("4")) {
+                            System.out.println("ke 4");
+                            EntryGovIndicator entryGovIndicator = new EntryGovIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryGovIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryGovIndicator.setAchievement4(Integer.parseInt(data_achievement[i]));
+                            entryGovIndicator.setYear_entry(tahun);
+                            entryGovIndicator.setDate_created(new Date());
+                            entryGovIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+                        }else{
+                            System.out.println("ke gak ada");
+                        };
+                    }
+                }
+            }
+            
+        }else if(catrole.equals("NSA")){
+            if(!dat_id_indicator.equals("0")) {
+                String[] data_indicator      = dat_id_indicator.split(",");
+                String[] data_achievement    = dat_achievement.split(",");
+                String[] data_entry          = dat_entry.split(",");
+                for(int i=0;i<data_entry.length;i++) {
+                    System.out.println("coba : "+data_entry[i]);
+                    if(!data_entry[i].equals("null")) {
+                        System.out.println("tidak null : "+data_entry[i]);
+                        query = em.createNativeQuery("update entry_nsa_indicator set achievement"+period+" = :achievement where id=:id");
+//                            query.setParameter("created_by", data_indicator[i]);  
+                        query.setParameter("achievement", data_achievement[i]);
+                        query.setParameter("id", data_entry[i]);
+                        query.executeUpdate();
+                    }else {
+                        System.out.println("null : "+data_entry[i]);
+                        if(period.equals("1")) {
+                            System.out.println("ke 1");
+                            EntryNsaIndicator entryNsaIndicator = new EntryNsaIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryNsaIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryNsaIndicator.setAchievement1(Integer.parseInt(data_achievement[i]));
+                            entryNsaIndicator.setYear_entry(tahun);
+                            entryNsaIndicator.setDate_created(new Date());
+                            entryNsaIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else if(period.equals("2")) {
+                            System.out.println("ke 2");
+                            EntryNsaIndicator entryNsaIndicator = new EntryNsaIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryNsaIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryNsaIndicator.setAchievement2(Integer.parseInt(data_achievement[i]));
+                            entryNsaIndicator.setYear_entry(tahun);
+                            entryNsaIndicator.setDate_created(new Date());
+                            entryNsaIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else if(period.equals("3")) {
+                            System.out.println("ke 3");
+                            EntryNsaIndicator entryNsaIndicator = new EntryNsaIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryNsaIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryNsaIndicator.setAchievement3(Integer.parseInt(data_achievement[i]));
+                            entryNsaIndicator.setYear_entry(tahun);
+                            entryNsaIndicator.setDate_created(new Date());
+                            entryNsaIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else if(period.equals("4")) {
+                            System.out.println("ke 4");
+                            EntryNsaIndicator entryNsaIndicator = new EntryNsaIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryNsaIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryNsaIndicator.setAchievement4(Integer.parseInt(data_achievement[i]));
+                            entryNsaIndicator.setYear_entry(tahun);
+                            entryNsaIndicator.setDate_created(new Date());
+                            entryNsaIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else{
+                            System.out.println("ke gak ada");
+                        };
+                    }
+                }
+            }
+        }
+        
+    }
     
 }
