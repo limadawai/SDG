@@ -197,6 +197,41 @@ public class ReportController {
         return hasil;
     }
     
+    @GetMapping("admin/get-sdg-disaggre")
+    public @ResponseBody Map<String, Object> getSdgDisaggre(
+    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_goals") int id_goals, 
+    		@RequestParam("id_target") int id_target, 
+    		@RequestParam("year") int year,
+    		@RequestParam("id_monper") int id_monper,
+    		@RequestParam("id_indicator") int id_indicator) {
+    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
+    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+    			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+    			+ " h.desc_disaggre, h.desc_disaggre_eng "
+    			+ " FROM assign_sdg_indicator a "
+    			+ " left join sdg_indicator b on a.id_indicator = b.id "
+    			+ " left join ref_unit c on b.unit = c.id_unit "
+    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
+    			+ " left join sdg_indicator_target e on a.id_indicator = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+    			+ " right join sdg_ranrad_disaggre g on a.id_indicator = g.id_indicator "
+    			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
+    			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator ";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
+        query.setParameter("year", year);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("id_indicator", id_indicator);
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",listSdg);
+        return hasil;
+    }
+    
     @GetMapping("admin/getentrysdgyear")
     public @ResponseBody List<Object> getentrysdgyear(@RequestParam("id_role") int idrole, @RequestParam("id_monper") int idmonper, 
     		@RequestParam("year_entry") int year) {
