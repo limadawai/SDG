@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<meta name="_csrf" th:content="${_csrf.token}"/>
+<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+<head th:include="admin/layout :: header">
+    <title th:text="SDG Indicator Monitoring">Report Evaluation</title>
+</head>
+<body>
+<div th:include="admin/layout :: menu"></div>
+<div id="content">
+    <div id="content-header">
+        <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Laporan / Evaluasi</a></div>
+        <div id="breadcrumb" class="lang_eng" style="display:none"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Report / Evaluation</a></div>
+    </div>
+    <div class="container-fluid">
+        <div class="row-fluid">
+        	<form id="form-sdgGoals">
+        		<div class="row-fluid">
+        			<div class="control-group">
+	        			<div class="controls">
+		        			<select id="daerah" name="daerah" class="input-xlarge">
+			                    <option value="0" >-- Pilih Daerah --</option>
+			                    <option th:each="f:${listprov}" th:value="${f.id_prov}" th:text="${f.acronym}"></option>
+			                </select>
+			                <select id="role" name="idrole" class="input-xlarge">
+			                    <option value="0" >-- Pilih Role --</option>
+			                </select>
+			                <select id="periode" name="idmonper" class="input-xlarge">
+			                    <option value="0" >-- Pilih Tahun --</option>
+			                </select>
+	        			</div>
+	        		</div>
+        		</div>
+        		<div class="row-fluid">
+        			<div class="control-group">
+	        			<div class="controls">
+	        				
+			                <!-- <select id="goals" name="goals" class="input-xlarge" multiple="multiple">
+			                    <option value="0" >-- All --</option>
+			                    <option id="optgoals" th:each="f:${listgoals}" th:value="${f.id}" th:text="${f.nm_goals}"></option>
+			                </select> -->
+	        			</div>
+	        		</div>
+	        		<div class="control-group">
+					    <div class="controls">
+							<div class="accordion" id="accordion2">
+								<div class="accordion-group">
+								    <div class="accordion-heading">
+								      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+								        <label class="lang_eng control-label" style="display:none">Choose SDGs Goals/Target</label>
+					    				<label class="lang_indo control-label">Pilih Goals/Target SDG</label>
+								      </a>
+								    </div>
+								    <div id="collapseOne" class="accordion-body collapse">
+								      <div class="accordion-inner">
+								      </div>
+								    </div>
+								  </div>
+							</div>
+					    	<!-- <select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
+					    		<option value="0">--select--</option>
+		        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
+		        			</select> -->
+						    <span class="help-block" id="error_unit"></span>
+					    </div>
+					  </div>
+        		</div>
+        		
+        	</form>
+                
+               <!--  <select id="target" name="target" class="form-control">
+                    <option value="0" >-- Pilih Target --</option>
+                </select>
+                <select id="indikator" name="indikator" class="form-control">
+                    <option value="0" >-- Pilih Indikator --</option>
+                </select> -->
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-tasks"></i></span>
+                    <h5 class="lang_indo">Laporan Evaluasi</h5>
+                    <h5 class="lang_eng" style="display:none">Evaluation Report</h5>
+                </div>
+                <div class="widget-content">
+                	<div class="table-responsive">
+                    	<div id="indi">
+	                	<!-- <div id="divgoals" style="width:100%"></div>
+	                	<div id="divtarget" style="width:100%"></div>
+                    	<table id="tabatas" class='table table-striped table-bordered'></table><br><br> -->
+                    	</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal-loading-new"></div>
+<style th:inline="text">
+			.modal-loading-new {
+				opacity: 0.4!important;
+				display:    none;
+				position:   fixed;
+				z-index:    1000;
+				top:        0;
+				left:       0;
+				height:     100%;
+				width:      100%;
+				background: #333 url([[@{/img/loading.gif}]]) 50% 50% no-repeat;
+			}
+			/* When the body has the loading class, we turn the scrollbar off with overflow:hidden */
+			body.loading {
+				overflow: hidden;   
+			}
+			body.loading .modal-loading-new {
+				display: block;
+			}
+			.select2-results__option{
+			    position: relative;
+			    margin-left: 10px;
+			    list-style: none;
+			}
+			
+			.dotOk {
+			  height: 25px;
+			  width: 25px;
+			  background-color: green;
+			  border-radius: 50%;
+			  display: inline-block;
+			}
+			.dotNok {
+			  height: 25px;
+			  width: 25px;
+			  background-color: red;
+			  border-radius: 50%;
+			  display: inline-block;
+			}
+		</style>
+<div th:include="admin/layout :: footer"></div>
+<script th:inline="javascript">
+	//$('#goals').select2();
+	$("#goals").select2({
+        width: "30%",
+      });
+	
+	$("#goals").on("change", function(){
+		var val = $(this).val();
+		if(val){
+			if(val[0]==0){	
+				$("#goals").val(null).trigger("change");
+			}
+		}		 
+	});
+    var lang = [[${lang}]];
+    if (lang == null) lang = "0";
+    var name = [[${name}]];
+    var role = [[${role}]];
+    $("#welcome").html("Welcome, "+name);
+
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+	//Bahasa
+    var titleDel = "Anda Yakin";
+    var messDel = "Menghapus Data?";
+    var buttDel = 'Ya, Hapus data ini!';
+    var titleOk	= "Hapus";
+    var messOk = "Data berhasil dihapus";
+    var messNOk = "Data tidak dapat dihapus";
+    var required = "Harus diisi";
+    function bhs(cek){
+		if(cek){
+			$(".lang_indo").show();
+    		$(".lang_eng").hide();
+    		titleDel = "Anda Yakin";
+    		messDel = "Menghapus Data?";
+    		buttDel = 'Ya, Hapus data ini!';
+    		titleOk	= "Hapus";
+	        messOk = "Data berhasil dihapus";
+	        messNOk = "Data tidak dapat dihapus";
+	        required = "Harus diisi";
+    	}else{	    	        
+	        $(".lang_indo").hide();
+    		$(".lang_eng").show();
+    		titleDel = "Are you sure";
+    		messDel = "Delete this data?";
+    		buttDel = 'Yes, Delete this data!';
+    		titleOk	= "Delete";
+	        messOk = "Delete successful";
+	        messNOk = "Can't delete data";
+	        required = "Required";
+    	}
+    }
+    if(lang){
+    	bhs(lang=="0");
+    }else{
+    	bhs($('#fs').is(':checked'));
+    }
+    $('#fs').on('change', function(e){
+    	bhs($(this).is(':checked'));
+    	$("#role").trigger("change");
+    });
+    
+    // ********************** Fungsi pilih select option Provinsi **********************
+    $("#daerah").on("change", function(){
+        var valdaerah = $(this).val();
+        if (valdaerah != "0") {
+            $.ajax({
+                url: urls + "getrolebyidprov",
+                type: 'get',
+                data: 'id_prov='+valdaerah,
+                dataType: 'json',
+                cache: false,
+                success: function(result) {
+                    $("#role").empty();
+                    $("#role").append("<option value='0'>-- Pilih Role --</option>");
+                    /* $("#role").append("<option data-cat='all' value='all'>-- ALL --</option>"); */
+                    for (var i=0; i<result.length; i++) {
+                        $("#role").append("<option data-cat='"+result[i]['cat_role']+"' value='" + result[i]['id_role'] + "'>" + result[i]['nm_role'] + "</option>");
+                    }
+                }
+            });
+            $.ajax({
+                type: "GET",
+                url: urls+'list-get-option-monper/'+valdaerah,
+                success: function (result1) {
+                	$("#periode").empty();
+                    $("#periode").html('<option value="0" >-- Pilih Tahun --</option>');
+                    var array1 = result1.content;
+                    if (array1 != '') {
+                        for (i in array1) {
+                            var selisih     = (array1[i][2] - array1[i][1]);
+                            var x;
+                            for(x=0; x<=selisih; x++){
+                                $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+                            }
+                            
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    // ********************** Fungsi pilih select option Role **********************
+    var status;
+    function callback(response) {
+        status = response;
+    }
+    
+    $("#periode").on("change", function(){
+    	$("#indi").html("");
+    	ambilData(0);
+    	$('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
+    });
+    
+    $("#role").on("change", function(){
+        var idrole = $(this).val();
+        if (idrole != "0") {
+            $("#indi").html("");
+            
+            /* SDG INDICATOR */
+            //Indikator SDG untuk mapping
+        	        if(idrole=="all"){
+        	        	$.ajax({
+        	                url: urls + 'list-sdgGoals',
+        	                type: 'get',
+        	                dataType: 'json',
+        	                cache: false,
+        	                async : false,
+        	                success: function (response) {
+        	                		var option = "";
+        	                		var cekbok = "";
+        	                		$('.accordion-inner').html(cekbok);
+        	                		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
+		                    				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
+				                            '<span style="vertical-align:middle">ALL</span>'+
+				                      '</label><br/>';
+        	                		for (var i = 0; i < response.content.length; i++) {
+        	                			var nm_goals;
+        	                			var id_goals=response.content[i].id;
+        	                        	if($("#fs").is(':checked')){
+        	                        		nm_goals = response.content[i].nm_goals;
+        	    						}else{
+        	    							nm_goals = response.content[i].nm_goals_eng;
+        	    						}
+        	                        	option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
+        	                        	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
+        	                        				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
+        				                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+        				                      '</label><br/>';
+        	                        	$.ajax({
+        	                                url: urls + 'list-sdgTarget/'+response.content[i].id,
+        	                                type: 'get',
+        	                                dataType: 'json',
+        	                                cache: false,
+        	                                async : false,
+        	                                success: function (result) {
+        	                                	for (var j = 0; j < result.content.length; j++) {
+        	                                		var nm_target;
+        	                                		var id_target=result.content[j].id;
+        	                                    	if($("#fs").is(':checked')){
+        	                                    		nm_target = result.content[j].nm_target;
+        	                						}else{
+        	                							nm_target = result.content[j].nm_target_eng;
+        	                						}
+        	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
+        	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="0---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+        								                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+        								                      '</label><br/>';
+        	                                    	$.ajax({
+        	                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
+        	                                            type: 'get',
+        	                                            dataType: 'json',
+        	                                            cache: false,
+        	                                            async : false,
+        	                                            success: function (result1) {
+        	                                            	for (var k = 0; k < result1.content.length; k++) {
+        	                                            		var nm_indicator;
+        	                                            		var id_indicator=result1.content[k][0];
+        	                                                	if($("#fs").is(':checked')){
+        	                                                		nm_indicator = result1.content[k][4];
+        	                            						}else{
+        	                            							nm_indicator = result1.content[k][6];
+        	                            						}
+        	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
+        	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="0---0---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
+        									                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+        									                      '</label><br/>';
+        	                                            	}
+        	                                            }
+        	                                    	});
+        	                                    	option += '</optgroup>';
+        	                                	}
+        	                                }
+        	                        	});
+        	                        	option += '</optgroup>';
+        	                		}
+        	                		cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
+        	                		$('.accordion-inner').append(cekbok);
+        	                	}
+        	                });
+        	        }else{
+        	        	$.ajax({
+                            //url: urls + 'list-sdgGoals',
+                            url: urls + "get-sdg-goals",
+                            data: 'id_role=' + idrole,
+                            type: 'get',
+                            dataType: 'json',
+                            cache: false,
+                            async : false,
+                            success: function (response) {
+                            		var option = "";
+                            		var cekbok = "";
+                            		$('.accordion-inner').html(cekbok);
+                            		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
+		                    				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
+				                            '<span style="vertical-align:middle">ALL</span>'+
+				                      '</label><br/>';
+                            		for (var i = 0; i < response.sdg.length; i++) {
+                            			var nm_goals;
+                            			var id_goals=response.sdg[i][0];
+                                    	if($("#fs").is(':checked')){
+                                    		nm_goals = response.sdg[i][1];
+                						}else{
+                							nm_goals = response.sdg[i][2];
+                						}
+                                    	option += '<optgroup id="" label="'+response.sdg[i][3]+' '+nm_goals+'">';
+                                    	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
+                                    				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.sdg[i][0]+'---0---0">&nbsp;&nbsp;&nbsp;'+
+            			                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+            			                      '</label><br/>';
+                                    	$.ajax({
+                                            url: urls + 'list-sdgTarget/'+response.sdg[i][0],
+                                            type: 'get',
+                                            dataType: 'json',
+                                            cache: false,
+                                            async : false,
+                                            success: function (result) {
+                                            	for (var j = 0; j < result.content.length; j++) {
+                                            		var nm_target;
+                                            		var id_target=result.content[j].id;
+                                                	if($("#fs").is(':checked')){
+                                                		nm_target = result.content[j].nm_target;
+                            						}else{
+                            							nm_target = result.content[j].nm_target_eng;
+                            						}
+                                                	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
+                                                	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                                					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.sdg[i][0]+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+            							                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+            							                      '</label><br/>';
+                                                	$.ajax({
+                                                        url: urls + 'list-sdgIndicator/'+response.sdg[i][0]+'/'+result.content[j].id,
+                                                        type: 'get',
+                                                        dataType: 'json',
+                                                        cache: false,
+                                                        async : false,
+                                                        success: function (result1) {
+                                                        	for (var k = 0; k < result1.content.length; k++) {
+                                                        		var nm_indicator;
+                                                        		var id_indicator=result1.content[k][0];
+                                                            	if($("#fs").is(':checked')){
+                                                            		nm_indicator = result1.content[k][4];
+                                        						}else{
+                                        							nm_indicator = result1.content[k][6];
+                                        						}
+                                                            	option += '<option value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
+                                                            	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+            								                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
+            								                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+            								                      '</label><br/>';
+                                                        	}
+                                                        }
+                                                	});
+                                                	option += '</optgroup>';
+                                            	}
+                                            }
+                                    	});
+                                    	option += '</optgroup>';
+                            		}
+                            		cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
+                            		$('.accordion-inner').append(cekbok);
+                            	}
+                            });
+        	        }
+        	        
+        	        $('.accordion-inner').on('click', '.menu-master', function(){
+        	        	var id = $(this).data('id');
+        	        	if ($(this).is(":checked")) {
+        	                $(".accordion-inner").find('.menu'+id).prop("checked", false);
+        	            } else {
+        	            	 $(".accordion-inner").find('.menu'+id).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+        	            }
+        	        });
+        	        
+        	        $('.accordion-inner').on('click', '.menu-slave', function(){
+        	        	var id = $(this).data('id');
+        	        	var goals = $(this).data('goals');
+        	        	if ($(this).is(":checked")) {
+        	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+        	            } else {
+        	            	 $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+        	            }
+        	        	
+        	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+        	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+        	            } else {
+        	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+        	            }
+        	        });
+        	        
+        	        $('.accordion-inner').on('click', '.menu-slave-1', function(){
+        	        	var id = $(this).data('id');
+        	        	var goals = $(this).data('goals');
+        	        	if ($(".menu-slave-1-"+id+":checked").length==$(".menu-slave-1-"+id).length) {
+        	                $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+        	            } else {
+        	            	 $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+        	            }
+        	        	
+        	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+        	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+        	            } else {
+        	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+        	            }
+        	        });
+        	        
+        	        $('.accordion-inner').on('change', '#all-sdg', function(){
+        	        	var status = this.checked;
+        	        	$('.accordion-inner').find("input[name='sdg_indicator']").each(function(){
+        	        		this.checked = status;
+        	        	});
+        	        });
+        }
+    });
+    
+    $('.accordion-inner').on('click', '#filter-sdg', function(){
+    	var sdg_indicator;
+		var sdg_indicator_val = [];
+        $.each($("input[name='sdg_indicator']:checked"), function(){
+        	sdg_indicator_val.push($(this).val());
+        });
+		if(sdg_indicator_val.length>0){
+			sdg_indicator = sdg_indicator_val.toString();
+		}else{
+			sdg_indicator = '0';
+		}
+		loadData(sdg_indicator);
+    });
+    
+    function ambilData(sdg_indicator){
+    	var monper = $("#periode").val().split("###");
+    	var id_monper   = monper[0];
+    	var year   = monper[1];
+        var idrole = $("#role").val();
+        var idprov = $("#daerah").val();
+        var cat = $("#role").find(":selected").data("cat");
+        var sts;
+        var cekSdg;
+        $("#indi").html("");
+        $.ajax({
+            type: "GET",
+            url: urls+'list-get-sts-monper/'+id_monper,
+            async:false,
+            success: function (result1) {
+            	sts = result1.content;
+            	}
+            });
+        $.ajax({
+			url: urls + "getentryshowreport",
+            type: 'get',
+            data: { "id_monper":id_monper},
+            dataType: 'json',
+            async:false,
+            success: function (result) {
+            	cekSdg = result.sdg;
+            }
+        });
+        var text="";
+        $.ajax({
+            //url: urls + 'list-sdgGoals',
+            url: urls + "get-sdg-goals",
+            data: 'id_role=' + idrole,
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            async : false,
+            success: function (response) {
+            	for (var i = 0; i < response.sdg.length; i++) {
+        			var nm_goals;
+        			var id_goals=response.sdg[i][0];
+        			var kode_goals=response.sdg[i][3];
+                	if($("#fs").is(':checked')){
+                		nm_goals = response.sdg[i][1];
+					}else{
+						nm_goals = response.sdg[i][2];
+					}
+                	if(i>0){text += "<br/>";}
+                	text += "<div style='font-size:90%;width:100%;text-align:left;display:block;border-style:ridge;'>Goal Name : "+kode_goals+". "+nm_goals+"</div>";
+                	
+                	$.ajax({
+                        url: urls + 'get-sdg-target/',
+                        type: 'get',
+                        data: {'id_role':idrole,'id_goals':id_goals},
+                        dataType: 'json',
+                        cache: false,
+                        async : false,
+                        success: function (result) {
+                        	for (var j = 0; j < result.content.length; j++) {
+                        		var nm_target;
+                        		var id_target=result.content[j][0];
+                        		var kode_target=result.content[j][3];
+                            	if($("#fs").is(':checked')){
+                            		nm_target = result.content[j][1];
+        						}else{
+        							nm_target = result.content[j][2];
+        						}
+                            	if(j>0){text += "<br/>";}
+                            	text += "<div style='font-size:90%;width:100%;text-align:left;display:block;border-style:ridge;'>Target Name : "+kode_target+". "+nm_target+"</div>";
+                        		
+                            	var spansdg;
+                            	var colspan;
+                            	if(sts == 'yearly'){
+                            		spansdg = 2;
+                            		colspan = 1;
+                            	}else{
+                            		spansdg = 3;
+                            		if(sts == "semesterly"){
+                            			colspan = 2;
+                            		}else{
+                            			colspan = 3;
+                            		}
+                            	}
+                            	text += "<table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
+                            	text += "<tr style='font-size:80%;'>";
+                            	text += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Indicator Code</b></td>";
+                            	text += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Indicator Name</b></td>";
+                            	text += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Data Source</b></td>";
+                            	text += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Unit</b></td>";
+                            	text += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Baseline</b></td>";
+                            	text += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Target SDGs for<br/>the current year</b></td>";
+                            	text += "<td colspan='"+colspan+"' style='text-align:center;vertical-align:middle'><b>SDGs Achievements<br/>for the current year</b></td>";
+                            	text += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Status</b></td>";
+                            	text += "</tr><tr style='font-size:80%;'>";
+                            	if(sts == 'yearly'){
+                            		text += "<td style='text-align:center;vertical-align:middle'><b>1</b></td>";
+                            	}else if(sts == 'semesterly'){
+                            		text += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td>";
+                            	}
+                        		else if(sts == 'quarterly'){
+                        			text += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td><td style='text-align:center;vertical-align:middle'><b>3</b></td><td style='text-align:center;vertical-align:middle'><b>4</b></td>";
+                            	}
+                            	text += "</tr></thead><tbody>";
+                            	
+                            	$.ajax({
+                                    url: urls + 'get-sdg-indicator',
+                                    type: 'get',
+                                    data: {'id_role':idrole,'id_goals':id_goals,'id_target':id_target,'year':year,'id_monper':id_monper},
+                                    dataType: 'json',
+                                    cache: false,
+                                    async : false,
+                                    success: function (hasil) {
+                                    	for (var k = 0; k < hasil.content.length; k++) {
+                                    		var nm_indicator;
+                                    		var id_indicator=hasil.content[k][0];
+                                    		var kode_indicator=hasil.content[k][3];
+                                        	if($("#fs").is(':checked')){
+                                        		nm_indicator = hasil.content[k][1];
+                    						}else{
+                    							nm_indicator = hasil.content[k][2];
+                    						}
+                                    		text += "<tr style='font-size:80%;'>";
+                                    		text += "<td>"+kode_indicator+"</td>";
+                                    		text += "<td>"+nm_indicator+"</td>";
+                                    		text += "<td></td>";
+                                    		text += "<td>"+(hasil.content[k][5]?hasil.content[k][5]:'')+"</td>";
+                                    		text += "<td>"+(hasil.content[k][6]?hasil.content[k][6]:'')+"</td>";
+                                    		text += "<td>"+(hasil.content[k][7]?hasil.content[k][7]:'')+"</td>";
+                                    		
+                                    		var nilai1=(hasil.content[k][12])?hasil.content[k][12]:hasil.content[k][8];
+                                    		var nilai2=(hasil.content[k][13])?hasil.content[k][13]:hasil.content[k][9];
+                                    		var nilai3=(hasil.content[k][14])?hasil.content[k][14]:hasil.content[k][10];
+                                    		var nilai4=(hasil.content[k][15])?hasil.content[k][15]:hasil.content[k][11];
+                                    		
+                                    		var nilai1sdg="";
+                                    		var nilai2sdg="";
+                                    		var nilai3sdg="";
+                                    		var nilai4sdg="";
+                                    		for(var isdg=0;isdg<cekSdg.length;isdg++){
+                                    			nilai1sdg = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==year)?nilai1:(nilai1sdg)?nilai1sdg:"";
+                                    			nilai2sdg = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==year)?nilai2:(nilai2sdg)?nilai2sdg:"";
+                                    			nilai3sdg = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==year)?nilai3:(nilai3sdg)?nilai3sdg:"";
+                                    			nilai4sdg = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==year)?nilai4:(nilai4sdg)?nilai4sdg:"";
+                                    		}
+                                    		
+                                    		if(sts == 'yearly'){
+                                    			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";	
+                                    		}else if(sts == 'semesterly'){
+                                    			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai2sdg?nilai2sdg:'')+"</td>";
+                                        	}
+                                    		else if(sts == 'quarterly'){
+                                    			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai2sdg?nilai2sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai3sdg?nilai3sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai4sdg?nilai4sdg:'')+"</td>";
+                                        	}
+                                    		text += "<td style='text-align:center'><span class='dotOk'></span></td></tr>";
+                                    		
+                                    		$.ajax({
+                                                url: urls + 'get-sdg-disaggre',
+                                                type: 'get',
+                                                data: {'id_role':idrole,'id_goals':id_goals,'id_target':id_target,'year':year,'id_monper':id_monper,'id_indicator':id_indicator},
+                                                dataType: 'json',
+                                                cache: false,
+                                                async : false,
+                                                success: function (hasilnya) {
+                                                	if(hasilnya.content.length>0){
+                                                		for (var l = 0; l < hasilnya.content.length; l++) {
+                                                    		var nm_disaggre;
+															var nm_disaggre_detail;
+                                                        	if($("#fs").is(':checked')){
+                                                        		nm_disaggre = hasilnya.content[l][16];
+                                                        		nm_disaggre_detail = hasilnya.content[l][18];
+                                    						}else{
+                                    							nm_disaggre = hasilnya.content[l][17];
+                                    							nm_disaggre_detail = hasilnya.content[l][19];
+                                    						}
+                                                        	text += "<tr style='font-size:80%;'>";
+                                                    		text += "<td></td>";
+                                                    		text += "<td><div style='margin-left:20px'>Disaggregation "+nm_disaggre+" "+nm_disaggre_detail+"</div></td>";
+                                                    		text += "<td></td>";
+                                                    		text += "<td>"+(hasilnya.content[l][5]?hasilnya.content[l][5]:'')+"</td>";
+                                                    		text += "<td>"+(hasilnya.content[l][6]?hasilnya.content[l][6]:'')+"</td>";
+                                                    		text += "<td>"+(hasilnya.content[l][7]?hasilnya.content[l][7]:'')+"</td>";
+                                                    		
+                                                    		var nilai1Detail=(hasilnya.content[l][12])?hasilnya.content[l][12]:hasilnya.content[l][8];
+                                                    		var nilai2Detail=(hasilnya.content[l][13])?hasilnya.content[l][13]:hasilnya.content[l][9];
+                                                    		var nilai3Detail=(hasilnya.content[l][14])?hasilnya.content[l][14]:hasilnya.content[l][10];
+                                                    		var nilai4Detail=(hasilnya.content[l][15])?hasilnya.content[l][15]:hasilnya.content[l][11];
+                                                    		
+                                                    		var nilai1sdgDetail="";
+                                                    		var nilai2sdgDetail="";
+                                                    		var nilai3sdgDetail="";
+                                                    		var nilai4sdgDetail="";
+                                                    		for(var isdg=0;isdg<cekSdg.length;isdg++){
+                                                    			nilai1sdgDetail = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==year)?nilai1Detail:(nilai1sdgDetail)?nilai1sdgDetail:"";
+                                                    			nilai2sdgDetail = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==year)?nilai2Detail:(nilai2sdgDetail)?nilai2sdgDetail:"";
+                                                    			nilai3sdgDetail = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==year)?nilai3Detail:(nilai3sdgDetail)?nilai3sdgDetail:"";
+                                                    			nilai4sdgDetail = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==year)?nilai4Detail:(nilai4sdgDetail)?nilai4sdgDetail:"";
+                                                    		}
+                                                    		
+                                                    		if(sts == 'yearly'){
+                                                    			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";	
+                                                    		}else if(sts == 'semesterly'){
+                                                    			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai2sdgDetail?nilai2sdgDetail:'')+"</td>";
+                                                        	}
+                                                    		else if(sts == 'quarterly'){
+                                                    			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai2sdgDetail?nilai2sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai3sdgDetail?nilai3sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai4sdgDetail?nilai4sdgDetail:'')+"</td>";
+                                                        	}
+                                                    		text += "<td style='text-align:center'><span class='dotOk'></span></td></tr>";
+                                                    	}
+                                                	}
+                                                }
+                                    		});
+                                    	}
+                                    }
+                            	});
+                            	text += "</tbody></table>";
+                        	}
+                        }
+                	});
+            	}
+            }
+        });
+        $("#indi").html(text);
+    }
+    
+    function loadData(sdg_indicator){
+    	var id_monper   = $("#periode").val();
+        var monper_year = $("#periode").find(":selected").text().split('-');
+        var idrole = $("#role").val();
+        var idprov = $("#daerah").val();
+        var cat = $("#role").find(":selected").data("cat");
+        var urlEntry;
+        var urlEntryIsi;
+        
+        var sts;
+        var stsBud;
+        var stsGov;
+        var periodSdg;
+        var cekSdg;
+        var cekInd;
+        var cekBud;
+        var cekNsaInd;
+        var cekNsaBud;
+        var cekGovInd;
+        var cekGovBud;
+        $("#indi").html("");
+        $.ajax({
+            type: "GET",
+            url: urls+'list-get-sts-monper/'+id_monper,
+            async:false,
+            success: function (result1) {
+            	sts = result1.content;
+            	}
+            });
+        $.ajax({
+			url: urls + "getentryshowreport",
+            type: 'get',
+            data: { "id_monper":id_monper},
+            dataType: 'json',
+            //cache: false,
+            async:false,
+            success: function (result) {
+            	cekSdg = result.sdg;
+            	cekNsaInd = result.NsaInd;
+            	cekNsaBud = result.NsaBud;
+            	cekGovInd = result.GovInd;
+            	cekGovBud = result.GovBud;
+            	if(cat=="NSA"){
+            		cekInd = result.NsaInd;
+            		cekBud = result.NsaBud;
+            	}else{
+            		cekInd = result.GovInd;
+            		cekBud = result.GovBud;
+            	}
+            }
+        });
+        if(cat=="NSA"){
+        	urlEntry = urls + "getnsaindicator";
+        	urlEntryIsi = urls + "getnsaindicatorisi";
+        	$.ajax({
+                type: "GET",
+                url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
+                async:false,
+                success: function (result1) {
+                	stsGov = result1.content;
+                	}
+                });
+        	$.ajax({
+                type: "GET",
+                url: urls+'list-get-sts-monper-nongov/'+id_monper,
+                async:false,
+                success: function (result1) {
+                	stsBud = result1.content;
+                	}
+                });
+        }else{
+        	urlEntry = urls + "getgovindicator";
+        	urlEntryIsi = urls + "getgovindicatorisi";
+        	$.ajax({
+                type: "GET",
+                url: urls+'list-get-sts-monper-gov_act/'+id_monper,
+                async:false,
+                success: function (result1) {
+                	stsGov = result1.content;
+                	}
+                });
+        	$.ajax({
+                type: "GET",
+                url: urls+'list-get-sts-monper-gov/'+id_monper,
+                async:false,
+                success: function (result1) {
+                	stsBud = result1.content;
+                	}
+                });
+        }
+        
+        /* if($("#role").val()=="all"){
+        	urlEntry = urls + "getallindicatorreport";
+        } */
+        
+        var tabelSdg = "";
+        var textSdg = "";
+        
+        if(cekSdg.length>0){
+        	var spansdg;
+        	if(sts == 'yearly'){
+        		spansdg = 2;
+        	}else{
+        		spansdg = 3;
+        	}
+        	tabelSdg += "<table class='table table-striped table-bordered tabel-sdg'><thead>";
+        	tabelSdg += "<tr style='font-size:80%;'>";
+        	tabelSdg += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Source of Data</b></td>";
+        	tabelSdg += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Unit</b></td>";
+        	tabelSdg += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Baseline</b></td>";
+        	
+        	for(var y=monper_year[0];y<=monper_year[1];y++){
+        		if(sts == 'yearly'){
+            		tabelSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+            	}else if(sts == 'semesterly'){
+            		tabelSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+            	}
+        		else if(sts == 'quarterly'){
+        			tabelSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+            	}
+        	}
+        	tabelSdg += "<td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Status</b></td><td rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle'><b>Actor</b></td></tr><tr style='font-size:80%;'>";
+        	for(var y=monper_year[0];y<=monper_year[1];y++){
+            	if(sts == 'yearly'){
+            		tabelSdg += "<td style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+            		tabelSdg += "<td style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+            	}else if(sts == 'semesterly'){
+            		tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+            		tabelSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+            	}
+        		else if(sts == 'quarterly'){
+        			tabelSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+        			tabelSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+            	}
+        	}
+        	tabelSdg += "</tr>";
+        	var tabelSdgNomor="";
+        	for(var y=monper_year[0];y<=monper_year[1];y++){
+        		if(sts == 'yearly'){
+        			tabelSdgNomor += "";
+            	}else if(sts == 'semesterly'){
+            		tabelSdgNomor += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td>";
+            	}
+        		else if(sts == 'quarterly'){
+        			tabelSdgNomor += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td><td style='text-align:center;vertical-align:middle'><b>3</b></td><td style='text-align:center;vertical-align:middle'><b>4</b></td>";
+            	}
+        	}
+        	if(sts != 'yearly'){
+        		tabelSdg += "<tr style='font-size:80%;'>"+tabelSdgNomor+"</tr>";
+        	}
+        	tabelSdg += "</thead>";
+        	$.ajax({
+            	url: urls + "list-entry-sdg-report/"+idprov+"/"+idrole+"/"+id_monper+"/"+sdg_indicator,
+                type: 'get',
+                dataType: 'json',
+                //async:false,
+                beforeSend : function(xhr){
+                	$('body').addClass("loading"); 
+                },
+               complete: function(){
+                	$('body').removeClass("loading");
+                },
+                success: function (res) {
+                	var row = res.content;
+                	var noGoals = 1;
+                	for(var i=0;i<row.length;i++){
+                		//JUDUL BESAR SDG
+                		if($('#fs').is(':checked')){
+                        	var disaggre = "";
+                       		if(row[i][16]!="0" && row[i][16]){
+                           		disaggre = "<p style='font-size:90%;'><b>Disaggregation "+row[i][11]+" "+row[i][12]+" "+row[i][14]+"</b></p>";
+                           	}
+        					//Goals
+        					var ig=i-1;
+        					if(ig<0){
+        						textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][21]+". "+row[i][3]+"</b></div><p/>";
+        					}else if(row[ig][0]!=row[i][0]){
+        						textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][21]+". "+row[i][3]+"</b></div><p/>";	
+        					}
+                       		//Target
+                       		var it=i-1;
+                       		if(it<0){
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][22]+" "+row[i][4]+"</b><p/>";
+                       		}else if(row[ig][1]!=row[i][1]){
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][22]+" "+row[i][4]+"</b><p/>";
+                       		}
+                       		//Indicator
+                       		var ii=i-1;
+                       		if(ii<0){
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][23]+" "+row[i][5]+"</b></p>";
+                       		}else if(row[ig][2]!=row[i][2]){
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][23]+" "+row[i][5]+"</b></p>";
+                       		}else{
+                       			//tabGov = false;
+                       		}
+                       		var ids = i+1;
+                       		var tabGov = false;
+                       		if(i<row.length-1){
+                       			if((row[ids][2]!=row[i][2])){
+                       				tabGov = true;
+                       			}
+                       		}else if(i==row.length-1){
+                       			tabGov = true;
+                       		}
+                       		
+                       		textSdg += disaggre;
+                        }else{
+                        	var disaggre = "";
+                       		if(row[i][16]!="0" && row[i][16]){
+                           		disaggre = "<p style='font-size:90%;'><b>Disaggregation "+row[i][11]+" "+row[i][13]+" "+row[i][15]+"</b></p>";
+                           	}
+                       		//Goals
+                       		var ig=i-1;
+                       		if(ig<0){
+                       			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][21]+". "+row[i][8]+"</b></div><p/>";
+                       		}else if(row[ig][0]!=row[i][0]){
+                       			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+row[i][21]+". "+row[i][8]+"</b></div><p/>";	
+                       		}
+                       		//Target
+                       		var it=i-1;
+                       		if(it<0){
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][22]+" "+row[i][9]+"</b><p/>";
+                       		}else if(row[ig][1]!=row[i][1]){
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Targets "+row[i][22]+" "+row[i][9]+"</b><p/>";
+                       		}
+                       		//Indicator
+                       		var ii=i-1;
+                       		if(ii<0){
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][23]+" "+row[i][10]+"</b></p>";
+                       		}else if(row[ig][2]!=row[i][2]){
+                       			textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+row[i][23]+" "+row[i][10]+"</b></p>";
+                       		}
+                       		var ids = i+1;
+                       		var tabGov = false;
+                       		if(i<row.length-1){
+                       			if((row[ids][2]!=row[i][2])){
+                       				tabGov = true;
+                       			}
+                       		}else if(i==row.length-1){
+                       			tabGov = true;
+                       		}
+                       		textSdg += disaggre;                       		
+                       	}
+                		//if((row[i][16]!="0" && row[i][16]) || disaggre == ""){
+                			if(row[i][16]){
+                			textSdg += tabelSdg+"<tbody>";
+                    		var cek=0;
+                    		textSdg += "<tr style='font-size:80%;'><td></td><td>"+row[i][6]+"</td><td></td>";
+                    		//console.log(cekSdg);
+                    		for(var y=monper_year[0];y<=monper_year[1];y++){
+                    			$.ajax({
+                                	url: urls + "list-entry-sdg-isi/"+row[i][2]+"/"+y+"/"+row[i][18]+"/"+row[i][16]+'/'+row[i][17]+'/'+id_monper,
+                                	//url: urls + "list-entry-sdg/"+idprov+"/"+row[i][18]+'/'+id_monper+'/'+y,
+                                    type: 'get',
+                                    dataType: 'json',
+                                    async:false,
+                                    success: function (res) {
+                                    	var rowi = res.content;
+                                    	//console.log(res.query);
+                                    	if(rowi.length>0){	
+                                        	for(var ii=0; ii<rowi.length;ii++){
+                                        		var nilai1 = "";
+                                        		var nilai2 = "";
+                                        		var nilai3 = "";
+                                        		var nilai4 = "";
+                                        		var tahun = "";
+                                        		if(row[i][16]!="0" && row[i][16]){
+                                        			if(rowi[ii][13]){
+                                        				nilai1 = (rowi[ii][13])?rowi[ii][13]:'';
+                                        			}else{
+                                        				nilai1 = (rowi[ii][9])?rowi[ii][9]:'';
+                                        			}
+                                        			if(rowi[ii][14]){
+                                        				nilai2 = (rowi[ii][14])?rowi[ii][14]:'';
+                                        			}else{
+                                        				nilai2 = (rowi[ii][10])?rowi[ii][10]:'';
+                                        			}
+                                        			if(rowi[ii][15]){
+                                        				nilai3 = (rowi[ii][15])?rowi[ii][15]:'';
+                                        			}else{
+                                        				nilai3 = (rowi[ii][11])?rowi[ii][11]:'';
+                                        			}
+                                        			if(rowi[ii][16]){
+                                        				nilai4 = (rowi[ii][16])?rowi[ii][16]:'';
+                                        			}else{
+                                        				nilai4 = (rowi[ii][12])?rowi[ii][12]:'';
+                                        			}
+                                            	}else{
+                                            		if(rowi[ii][5]){
+                                            			nilai1 = (rowi[ii][5])?rowi[ii][5]:'';
+                                        			}else{
+                                        				nilai1 = (rowi[ii][1])?rowi[ii][1]:'';
+                                        			}
+                                            		if(rowi[ii][6]){
+                                            			nilai2 = (rowi[ii][6])?rowi[ii][6]:'';
+                                        			}else{
+                                        				nilai2 = (rowi[ii][2])?rowi[ii][2]:'';
+                                        			}
+                                            		if(rowi[ii][7]){
+                                            			nilai3 = (rowi[ii][7])?rowi[ii][7]:'';
+                                        			}else{
+                                        				nilai3 = (rowi[ii][3])?rowi[ii][3]:'';
+                                        			}
+                                            		if(rowi[ii][8]){
+                                            			nilai4 = (rowi[ii][8])?rowi[ii][8]:'';
+                                        			}else{
+                                        				nilai4 = (rowi[ii][4])?rowi[ii][4]:'';
+                                        			}
+                                            	}
+                                        		var nilai1sdg="";
+                                        		var nilai2sdg="";
+                                        		var nilai3sdg="";
+                                        		var nilai4sdg="";
+                                        		for(var isdg=0;isdg<cekSdg.length;isdg++){
+                                        			nilai1sdg = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==y)?nilai1:(nilai1sdg)?nilai1sdg:"";
+                                        			nilai2sdg = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==y)?nilai2:(nilai2sdg)?nilai2sdg:"";
+                                        			nilai3sdg = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==y)?nilai3:(nilai3sdg)?nilai3sdg:"";
+                                        			nilai4sdg = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==y)?nilai4:(nilai4sdg)?nilai4sdg:"";
+                                        		}
+
+                                        		textSdg += "<td>"+(rowi[ii][0]?rowi[ii][0]:'')+"</td>";
+                                        		if(sts == 'yearly'){
+                                        			textSdg += "<td>"+nilai1sdg+"</td>";	
+                                        		}else if(sts == 'semesterly'){
+                                        			textSdg += "<td>"+nilai1sdg+"</td>";
+                                        			textSdg += "<td>"+nilai2sdg+"</td>";
+                                            	}
+                                        		else if(sts == 'quarterly'){
+                                        			textSdg += "<td>"+nilai1sdg+"</td>";
+                                        			textSdg += "<td>"+nilai2sdg+"</td>";
+                                        			textSdg += "<td>"+nilai3sdg+"</td>";
+                                        			textSdg += "<td>"+nilai4sdg+"</td>";
+                                            	}
+                                        		//textSdg += "<td>"+rowi[ii][19]+"</td>";
+                                        	}
+                                    	}
+                                    }
+                    			});
+                    		}
+                    		textSdg += "<td></td>";
+                    		textSdg += "<td>"+row[i][19]+"</td></tr>";
+                    		textSdg += "</tbody></table>";
+                		}
+                		
+                		//if((disaggre=="" && row[i][16]) || (disaggre!="" && tabGov)){
+                			if(tabGov){
+                			//tabel GOV Program
+                			var spangov;
+                        	if(stsGov != 'yearly' || stsBud != 'yearly'){
+                        		spangov = 3;
+                        	}else{
+                        		spangov = 2;
+                        	}
+
+                    		textSdg += "<br/><br/><table class='table table-striped table-bordered tabel-gov'><thead>";
+                    		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='"+spangov+"' style='text-align:center;vertical-align:middle'>Program Name</td>";
+                    		textSdg += "<td rowspan='"+spangov+"' style='text-align:center;vertical-align:middle'>Activity</td>";
+                    		textSdg += "<td rowspan='"+spangov+"' style='text-align:center;vertical-align:middle'>Indicator</td>";
+                    		textSdg += "<td rowspan='"+spangov+"' style='text-align:center;vertical-align:middle'>Unit</td>";
+                    		var span;
+                    		for(var y=monper_year[0];y<=monper_year[1];y++){
+                    			span=1;
+                        		if(stsGov == 'yearly'){
+                        			span=span+1;
+                            	}else if(stsGov == 'semesterly'){
+                            		span=span+2;
+                            	}
+                        		else if(stsGov == 'quarterly'){
+                        			span=span+4;
+                            	}
+                        		if(stsBud == 'yearly'){
+                        			span=span+1;
+                            	}
+                        		else if(stsBud == 'semesterly'){
+                        			span=span+2;
+                            	}
+                        		else if(stsBud == 'quarterly'){
+                        			span=span+4;
+                            	}
+                        		textSdg += "<td colspan='"+span+"' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                        	}
+                    		
+                    		textSdg += "<td rowspan='"+spangov+"' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+                    		textSdg += "<td rowspan='"+spangov+"' style='text-align:center;vertical-align:middle'>Location</td>";
+                    		textSdg += "<td rowspan='"+spangov+"' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                    		
+                    		var colspan=5;
+                    		for(var y=monper_year[0];y<=monper_year[1];y++){
+                    			if(stsGov == 'yearly'){
+                    				textSdg += "<td rowspan='"+(spangov-1)+"' style='text-align:center;vertical-align:middle'>Target</td>";
+                        			textSdg += "<td rowspan='"+(spangov-1)+"' style='text-align:center;vertical-align:middle'>Actual</td>";
+                        			colspan=colspan+1;
+                            	}else if(stsGov == 'semesterly'){
+                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                        			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                        			colspan=colspan+2;
+                            	}else if(stsGov == 'quarterly'){
+                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                        			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+                        			colspan=colspan+4;
+                            	}
+                    			if(stsBud == 'yearly'){
+                        			textSdg += "<td rowspan='"+(spangov-1)+"' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                        			colspan=colspan+1;
+                            	}
+                        		else if(stsBud == 'semesterly'){
+                        			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                        			colspan=colspan+2;
+                            	}
+                        		else if(stsBud == 'quarterly'){
+                        			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                        			colspan=colspan+4;
+                            	}
+                        	}
+                    		textSdg += "</tr>";
+                    		colspan=colspan+3;
+                    		var textSdgNomor="";
+                    		for(var y=monper_year[0];y<=monper_year[1];y++){
+                    			if(stsGov == 'yearly'){
+                    				textSdgNomor += "";
+                            	}
+                        		else if(stsGov == 'semesterly'){
+                        			textSdgNomor += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+                            	}else if(stsGov == 'quarterly'){
+                            		textSdgNomor += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+                            	}
+                        		if(stsBud == 'yearly'){
+                        			textSdgNomor += "";
+                            	}
+                        		else if(stsBud == 'semesterly'){
+                        			textSdgNomor += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+                            	}else if(stsBud == 'quarterly'){
+                            		textSdgNomor += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+                            	}
+                    		}
+                    		if(stsGov != 'yearly' || stsBud != 'yearly'){
+                    			textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>"+textSdgNomor+"</tr>"
+                    		}
+                    		textSdg += "</thead><tbody>";
+                    		//ISI TABEL GOV
+                    		var cekGov=0;
+                    		var cekBudRow=0;
+                    		if(row[i][20]=="Government"){
+                    			cekInd = cekGovInd;
+                    			cekBud = cekGovBud;
+                    			urlEntry = "getgovindicator";
+                    			urlEntryIsi = "getgovindicatorisi";
+                    		}else{
+                    			cekInd = cekNsaInd;
+                    			cekBud = cekNsaBud;
+                    			urlEntry = "getnsaindicator";
+                    			urlEntryIsi = "getnsaindicatorisi";
+                    		}
+                    			if(cekInd.length>0){
+                        			$.ajax({
+        	                			url: urlEntry,
+        	                            type: 'get',
+        	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":row[i][18], "year":monper_year[0]},
+        	                            dataType: 'json',
+        	                            async: false,
+        	                            success: function (result) {
+        	                            	var rowGov = result.content
+        	                            	for(var j=0;j<rowGov.length;j++){
+        	                            		if(rowGov[j][0]){
+        	                            			textSdg += "<tr style='font-size:80%;'>"
+                    	                            	if($('#fs').is(':checked')){
+                    	                            		textSdg += "<td>"+rowGov[j][0]+"</td><td>"+rowGov[j][2]+"</td><td>"+rowGov[j][4];
+                    	                            	}else{
+                    	                            		textSdg += "<td>"+rowGov[j][1]+"</td><td>"+rowGov[j][3]+"</td><td>"+rowGov[j][5];
+                    	                            	}
+                	                            		textSdg += "<td>"+rowGov[j][6]+"</td>";
+                	                            	
+                	                            		for(var y=monper_year[0];y<=monper_year[1];y++){
+                	                            			$.ajax({
+                	            	                			url: urlEntryIsi,
+                	            	                            type: 'get',
+                	            	                            data: {"id":rowGov[j][25], "year":y},
+                	            	                            dataType: 'json',
+                	            	                            async: false,
+                	            	                            success: function (result) {
+                	            	                            	var rowGov = result.content;
+                	            	                            	for(var j=0;j<rowGov.length;j++){
+                	            	                            		var nilaiGov1;
+                	            	                            		var nilaiGov2;
+                	            	                            		var nilaiGov3;
+                	            	                            		var nilaiGov4;
+                	            	                            		if(rowGov[j][17]){
+                	            	                            			nilaiGov1 = (rowGov[j][17])?rowGov[j][17]:'';
+                	            	                            		}else{
+                	            	                            			nilaiGov1 = (rowGov[j][8])?rowGov[j][8]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][18]){
+                	            	                            			nilaiGov2 = (rowGov[j][18])?rowGov[j][18]:'';
+                	            	                            		}else{
+                	            	                            			nilaiGov2 = (rowGov[j][9])?rowGov[j][9]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][19]){
+                	            	                            			nilaiGov3 = (rowGov[j][19])?rowGov[j][19]:'';
+                	            	                            		}else{
+                	            	                            			nilaiGov3 = (rowGov[j][10])?rowGov[j][10]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][20]){
+                	            	                            			nilaiGov4 = (rowGov[j][20])?rowGov[j][20]:'';
+                	            	                            		}else{
+                	            	                            			nilaiGov4 = (rowGov[j][11])?rowGov[j][11]:'';
+                	            	                            		}
+                	            	                            		
+                	            	                            		var nilai1GovInd="";
+                	                                            		var nilai2GovInd="";
+                	                                            		var nilai3GovInd="";
+                	                                            		var nilai4GovInd="";
+                	                                            		
+                	            	                            		for(var igov=0;igov<cekInd.length;igov++){
+                	            	                            			nilai1GovInd = (cekInd[igov][0]=="1" && cekInd[igov][1]==y)?nilaiGov1:(nilai1GovInd)?nilai1GovInd:"";
+                	            	                            			nilai2GovInd = (cekInd[igov][0]=="2" && cekInd[igov][1]==y)?nilaiGov2:(nilai2GovInd)?nilai2GovInd:"";
+                	            	                            			nilai3GovInd = (cekInd[igov][0]=="3" && cekInd[igov][1]==y)?nilaiGov3:(nilai3GovInd)?nilai3GovInd:"";
+                	            	                            			nilai4GovInd = (cekInd[igov][0]=="4" && cekInd[igov][1]==y)?nilaiGov4:(nilai4GovInd)?nilai4GovInd:"";
+                	            	                            		}
+                	            	                            		textSdg += "<td>"+(rowGov[j][7]?rowGov[j][7]:'')+"</td>";
+                	            	                            		if(stsGov == 'yearly'){
+                	            	                            			textSdg += "<td>"+nilai1GovInd+"</td>";
+                	            	                                	}
+                	            	                            		else if(stsGov == 'semesterly'){
+                	            	                            			textSdg += "<td>"+nilai1GovInd+"</td>";
+                	            	                            			textSdg += "<td>"+nilai2GovInd+"</td>";
+                	            	                                	}
+                	            	                            		else if(stsGov == 'quarterly'){
+                	            	                            			textSdg += "<td>"+nilai1GovInd+"</td>";
+                	            	                            			textSdg += "<td>"+nilai2GovInd+"</td>";
+                	            	                            			textSdg += "<td>"+nilai3GovInd+"</td>";
+                	            	                            			textSdg += "<td>"+nilai4GovInd+"</td>";
+                	            	                                	}
+                	            	                            		
+                	            	                            		var nilaiBudGov1;
+                	            	                            		var nilaiBudGov2;
+                	            	                            		var nilaiBudGov3;
+                	            	                            		var nilaiBudGov4;
+                	            	                            		if(rowGov[j][21]){
+                	            	                            			nilaiBudGov1 = (rowGov[j][21])?rowGov[j][21]:'';
+                	            	                            		}else{
+                	            	                            			nilaiBudGov1 = (rowGov[j][12])?rowGov[j][12]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][22]){
+                	            	                            			nilaiBudGov2 = (rowGov[j][22])?rowGov[j][22]:'';
+                	            	                            		}else{
+                	            	                            			nilaiBudGov2 = (rowGov[j][13])?rowGov[j][13]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][23]){
+                	            	                            			nilaiBudGov3 = (rowGov[j][23])?rowGov[j][23]:'';
+                	            	                            		}else{
+                	            	                            			nilaiBudGov3 = (rowGov[j][14])?rowGov[j][14]:'';
+                	            	                            		}
+                	            	                            		if(rowGov[j][24]){
+                	            	                            			nilaiBudGov4 = (rowGov[j][24])?rowGov[j][24]:'';
+                	            	                            		}else{
+                	            	                            			nilaiBudGov4 = (rowGov[j][15])?rowGov[j][15]:'';
+                	            	                            		}
+                	            	                            		
+                	            	                            		if(cekBud.length>0){
+                	            	                            			
+                	            	                            			var nilai1GovBud="";
+                    	                                            		var nilai2GovBud="";
+                    	                                            		var nilai3GovBud="";
+                    	                                            		var nilai4GovBud="";
+                    	                                            		
+                	            	                            			for(var ibud=0;ibud<cekBud.length;ibud++){
+                	            	                            				nilai1GovBud = (cekBud[ibud][0]=="1" && cekBud[ibud][1]==y)?nilaiBudGov1:(nilai1GovBud)?nilai1GovBud:"";
+                	            	                            				nilai2GovBud = (cekBud[ibud][0]=="2" && cekBud[ibud][1]==y)?nilaiBudGov2:(nilai2GovBud)?nilai2GovBud:"";
+                	            	                            				nilai3GovBud = (cekBud[ibud][0]=="3" && cekBud[ibud][1]==y)?nilaiBudGov3:(nilai3GovBud)?nilai3GovBud:"";
+                	            	                            				nilai4GovBud = (cekBud[ibud][0]=="4" && cekBud[ibud][1]==y)?nilaiBudGov4:(nilai4GovBud)?nilai4GovBud:"";
+                	                	                            		}
+                	            	                            		}else{
+                	            	                            			nilai1GovBud = "";
+                	            	                            			nilai2GovBud = "";
+                	            	                            			nilai3GovBud = "";
+                	            	                            			nilai4GovBud = "";
+                	            	                            		}
+                	            	                            		if(stsBud == 'yearly'){
+                	            	                            			textSdg += "<td>"+nilai1GovBud+"</td>";
+                	            	                                	}
+                	            	                            		else if(stsBud == 'semesterly'){
+                	            	                            			textSdg += "<td>"+nilai1GovBud+"</td>";
+                	            	                            			textSdg += "<td>"+nilai2GovBud+"</td>";
+                	            	                                	}
+                	            	                            		else if(stsBud == 'quarterly'){
+                	            	                            			textSdg += "<td>"+nilai1GovBud+"</td>";
+                	            	                            			textSdg += "<td>"+nilai2GovBud+"</td>";
+                	            	                            			textSdg += "<td>"+nilai3GovBud+"</td>";
+                	            	                            			textSdg += "<td>"+nilai4GovBud+"</td>";
+                	            	                                	}
+                	            	                            	}
+                	            	                            }
+                	                            			});
+                	                            		}
+                	                            		
+                	                            		textSdg += "<td>"+rowGov[j][16]+"</td>";
+                	                            		textSdg += "<td></td><td>"+rowGov[j][26]+"</td></tr>";
+        	                            		}
+        	                            		
+        	                            	}
+        	                            }
+        	                   });
+                        		}	
+                    		textSdg += "</tbody></table>";
+                		}
+                		
+                	}
+                	$("#indi").append(textSdg);
+                	/* $('#indi').find(".tabel-sdg").DataTable({
+                		"scrollX": true,
+                		"searching": false,
+                		"paging": false,
+                		"ordering": false,
+                        "info":     false
+               		}); */
+                	$('#indi').find(".tabel-gov").DataTable({
+                		"scrollX": true,
+                		"searching": false,
+                		"paging": false,
+                		"ordering": false,
+                        "info":     false
+               		});
+                }
+            });
+        }else{
+        	textSdg = "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Not Showing Report yet</b></div><p/>";
+        	$("#indi").append(textSdg);
+        }
+    }
+    
+</script>
+</body>
+</html>
