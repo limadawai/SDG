@@ -152,6 +152,14 @@
 				    	<span class="help-block" id="error_nm_activity"></span>
 				    </div>
 				  </div>
+				  <div class="control-group">
+				  	<label class="lang_eng control-label" style="display:none">Budget Allocation</label>
+				    <label class="lang_indo control-label">Alokasi Anggaran</label>
+				    <div class="controls">
+				    	<input type="text" id="budget_allocation" name="budget_allocation" class=" input-xlarge input-block-level"/>
+				    	<span class="help-block" id="error_nm_activity"></span>
+				    </div>
+				  </div>
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -311,6 +319,7 @@
 				$('#nm_activity').val("").removeAttr("readonly");
 				$('#nm_activity_eng').val("").removeAttr("readonly");
 				$('#internal_code').val("").removeAttr("readonly");
+				$('#budget_allocation').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -328,6 +337,7 @@
 				var nm_activity_eng = $('#nm_activity_eng').val();
 				var internal_code = $('#internal_code').val();
 				var id_role = $('#id_role').val();
+				var budget_allocation = $('#budget_allocation').val();
 				/* if(internal_code==""){
 					internal_code = id_activity;
 				} */
@@ -352,7 +362,8 @@
 						'nm_activity':nm_activity,
 						'nm_activity_eng':nm_activity_eng,
 						'id_role':id_role,
-						'internal_code':internal_code});
+						'internal_code':internal_code,
+						'budget_allocation':budget_allocation});
 					$.ajax({
 						type: "POST",
 	                    url: urls+'save-govActivity',
@@ -381,6 +392,7 @@
         				$('#nm_activity').val(val.nm_activity);
         				$('#nm_activity_eng').val(val.nm_activity_eng);
         				$('#internal_code').val(val.internal_code);
+        				$('#budget_allocation').val(val.budget_allocation);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();
@@ -400,6 +412,7 @@
         				$('#nm_activity').val(val.nm_activity).attr("readonly",true);
         				$('#nm_activity_eng').val(val.nm_activity_eng).attr("readonly",true);
         				$('#internal_code').val(val.internal_code).attr("readonly",true);
+        				$('#budget_allocation').val(val.budget_allocation).attr("readonly",true);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();
