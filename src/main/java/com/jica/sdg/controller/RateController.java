@@ -1,5 +1,7 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.EntryGovIndicator;
+import com.jica.sdg.model.EntryNsaIndicator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +37,10 @@ import com.jica.sdg.service.SdgFundingService;
 import com.jica.sdg.service.SdgGoalsService;
 import com.jica.sdg.service.SdgTargetService;
 import com.jica.sdg.service.UnitService;
+import java.util.Date;
+import javax.transaction.Transactional;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class RateController {
@@ -443,33 +448,148 @@ public class RateController {
         return hasil;
     }    
     
-    @PostMapping(path = "admin/save-submission/{dat_id_indicator}/{dat_achievement}", consumes = "application/json", produces = "application/json")
+    
+    @PostMapping(path = "admin/save-submission/{dat_id_indicator}/{dat_achievement}/{dat_entry}/{period}/{catrole}/{id_monper}/{tahun}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveBest(@PathVariable("dat_id_indicator") String dat_id_indicator,
-			@PathVariable("dat_achievement") String dat_achievement) {
-        System.out.println("data "+dat_id_indicator+" - "+dat_achievement);
-//        if(!sdg_indicator.equals("0")) {
-//            bestMapService.deleteGovMapByGovInd(best.getId());
-//            String[] sdg = sdg_indicator.split(",");
-//            for(int i=0;i<sdg.length;i++) {
-//                String[] a = sdg[i].split("---");
-//                Integer id_goals = Integer.parseInt(a[0]);
-//                Integer id_target = Integer.parseInt(a[1]);
-//                Integer id_indicator = Integer.parseInt(a[2]);
-//                BestMap map = new BestMap();
-//                map.setId_goals(id_goals);
-//                if(id_target!=0) {
-//                        map.setId_target(id_target);
-//                }
-//                if(id_indicator!=0) {
-//                        map.setId_indicator(id_indicator);
-//                }
-//                map.setId_best_practice(best.getId());
-//                map.setId_monper(id_monper);
-//                map.setId_prov(id_prov);
-//                bestMapService.saveGovMap(map);
-//            }
-//    	}
+    @Transactional
+    public void saveBest(
+                        @PathVariable("dat_id_indicator") String dat_id_indicator,
+			@PathVariable("dat_achievement") String dat_achievement,
+			@PathVariable("dat_entry") String dat_entry,
+                        @PathVariable("period") String period,
+                        @PathVariable("catrole") String catrole,
+                        @PathVariable("id_monper") int id_monper,
+                        @PathVariable("tahun") int tahun) {
+        System.out.println("data "+dat_id_indicator+" - "+dat_achievement+" - "+dat_entry);
+        Query query;
+        Query query_d;
+        if(catrole.equals("Government")){
+            if(!dat_id_indicator.equals("0")) {
+                String[] data_indicator      = dat_id_indicator.split(",");
+                String[] data_achievement    = dat_achievement.split(",");
+                String[] data_entry          = dat_entry.split(",");
+                for(int i=0;i<data_entry.length;i++) {
+                    System.out.println("coba : "+data_entry[i]);
+                    if(!data_entry[i].equals("null")) {
+                        System.out.println("tidak null : "+data_entry[i]);
+                        query = em.createNativeQuery("update entry_gov_indicator set achievement"+period+" = :achievement where id=:id");
+//                            query.setParameter("created_by", data_indicator[i]);  
+                        query.setParameter("achievement", data_achievement[i]);
+                        query.setParameter("id", data_entry[i]);
+                        query.executeUpdate();
+                    }else {
+                        System.out.println("null : "+data_entry[i]);
+                        if(period.equals("1")) {
+                            System.out.println("ke 1");
+                            EntryGovIndicator entryGovIndicator = new EntryGovIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryGovIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryGovIndicator.setAchievement1(Integer.parseInt(data_achievement[i]));
+                            entryGovIndicator.setYear_entry(tahun);
+                            entryGovIndicator.setDate_created(new Date());
+                            entryGovIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+                        }else if(period.equals("2")) {
+                            System.out.println("ke 2");
+                            EntryGovIndicator entryGovIndicator = new EntryGovIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryGovIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryGovIndicator.setAchievement2(Integer.parseInt(data_achievement[i]));
+                            entryGovIndicator.setYear_entry(tahun);
+                            entryGovIndicator.setDate_created(new Date());
+                            entryGovIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+                        }else if(period.equals("3")) {
+                            System.out.println("ke 3");
+                            EntryGovIndicator entryGovIndicator = new EntryGovIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryGovIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryGovIndicator.setAchievement3(Integer.parseInt(data_achievement[i]));
+                            entryGovIndicator.setYear_entry(tahun);
+                            entryGovIndicator.setDate_created(new Date());
+                            entryGovIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+                        }else if(period.equals("4")) {
+                            System.out.println("ke 4");
+                            EntryGovIndicator entryGovIndicator = new EntryGovIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryGovIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryGovIndicator.setAchievement4(Integer.parseInt(data_achievement[i]));
+                            entryGovIndicator.setYear_entry(tahun);
+                            entryGovIndicator.setDate_created(new Date());
+                            entryGovIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+                        }else{
+                            System.out.println("ke gak ada");
+                        };
+                    }
+                }
+            }
+            
+        }else if(catrole.equals("NSA")){
+            if(!dat_id_indicator.equals("0")) {
+                String[] data_indicator      = dat_id_indicator.split(",");
+                String[] data_achievement    = dat_achievement.split(",");
+                String[] data_entry          = dat_entry.split(",");
+                for(int i=0;i<data_entry.length;i++) {
+                    System.out.println("coba : "+data_entry[i]);
+                    if(!data_entry[i].equals("null")) {
+                        System.out.println("tidak null : "+data_entry[i]);
+                        query = em.createNativeQuery("update entry_nsa_indicator set achievement"+period+" = :achievement where id=:id");
+//                            query.setParameter("created_by", data_indicator[i]);  
+                        query.setParameter("achievement", data_achievement[i]);
+                        query.setParameter("id", data_entry[i]);
+                        query.executeUpdate();
+                    }else {
+                        System.out.println("null : "+data_entry[i]);
+                        if(period.equals("1")) {
+                            System.out.println("ke 1");
+                            EntryNsaIndicator entryNsaIndicator = new EntryNsaIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryNsaIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryNsaIndicator.setAchievement1(Integer.parseInt(data_achievement[i]));
+                            entryNsaIndicator.setYear_entry(tahun);
+                            entryNsaIndicator.setDate_created(new Date());
+                            entryNsaIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else if(period.equals("2")) {
+                            System.out.println("ke 2");
+                            EntryNsaIndicator entryNsaIndicator = new EntryNsaIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryNsaIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryNsaIndicator.setAchievement2(Integer.parseInt(data_achievement[i]));
+                            entryNsaIndicator.setYear_entry(tahun);
+                            entryNsaIndicator.setDate_created(new Date());
+                            entryNsaIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else if(period.equals("3")) {
+                            System.out.println("ke 3");
+                            EntryNsaIndicator entryNsaIndicator = new EntryNsaIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryNsaIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryNsaIndicator.setAchievement3(Integer.parseInt(data_achievement[i]));
+                            entryNsaIndicator.setYear_entry(tahun);
+                            entryNsaIndicator.setDate_created(new Date());
+                            entryNsaIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else if(period.equals("4")) {
+                            System.out.println("ke 4");
+                            EntryNsaIndicator entryNsaIndicator = new EntryNsaIndicator();
+//                            entryGovIndicator.setId(null);
+                            entryNsaIndicator.setId_assign(Integer.parseInt(data_indicator[i]));
+                            entryNsaIndicator.setAchievement4(Integer.parseInt(data_achievement[i]));
+                            entryNsaIndicator.setYear_entry(tahun);
+                            entryNsaIndicator.setDate_created(new Date());
+                            entryNsaIndicator.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else{
+                            System.out.println("ke gak ada");
+                        };
+                    }
+                }
+            }
+        }
+        
     }
     
 }

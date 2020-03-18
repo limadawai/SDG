@@ -435,9 +435,43 @@
                 $("#catrole").val(catrole);
                 $("#id_role").val(id_role);
                 grid_modal();
-                
+                apply_btn();
                 $('.addModal').modal("show");
             });
+            
+            //cek apply
+            function apply_btn(){
+                var id_role     = $("#id_role").val();
+                var catrole     = $("#catrole").val();
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                var v_period    = $("#period").val();
+                if(catrole == 'Government'){
+                    var type = 'entry_gov_indicator';
+                }else if(catrole == 'NSA'){
+                    var type = 'entry_nsa_indicator';
+                }
+                console.log('get-status-approve/'+id_role+'/'+id_monper+'/'+tahun+'/'+type+'/'+v_period);
+                $.ajax({
+                    type: "GET",
+                    url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+tahun+'/'+type+'/'+v_period,
+                    success: function (result1) {
+                        if(result1.content == "1"){
+                            $('#simpan').hide();
+                        }else if(result1.content == "2"){
+                            $('#simpan').hide();
+                        }else if(result1.content == "3"){
+                            $('#simpan').hide();
+                        }else if(result1.content == "4"){
+                            $('#simpan').hide();
+                        }else{
+                            $('#simpan').show();
+                        }
+                    }
+                });
+            } 
             
             //grid modal
             function grid_modal(){
@@ -516,7 +550,7 @@
 //                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="text" value="'+level3[p][8]+'" class="input-block-level">';
 //                                                                }else{}
                                                                 
-                                                                var tb_prog3 = '<tr> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator" id="id_indicator" type="hidden" value="'+level3[p][0]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
+                                                                var tb_prog3 = '<tr> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator" id="id_indicator" type="hidden" value="'+level3[p][0]+'" class="input-block-level"><input name="id_entry" id="id_entry" type="hidden" value="'+level3[p][4]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
                                                                 $("#tbl_program > tbody").append(tb_prog3);
 
                                                                 
@@ -1036,7 +1070,13 @@
             
             
             $('#simpan_').on('click', '#simpan', function(e){
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                
                 var v_period    = $("#period").val();
+                var catrole     = $("#catrole").val();
                 var f_achievement = [];
                 var dat_achievement;
                 $.each($("input[name='achievement"+v_period+"']"), function(){
@@ -1061,6 +1101,18 @@
                 }
                 console.log(dat_id_indicator);
                 
+                var f_id_entry = [];
+                var dat_id_entry;
+                $.each($("input[name='id_entry']"), function(){
+                    f_id_entry.push($(this).val());
+	        });
+                if(f_id_entry.length>0){
+                    dat_id_entry = f_id_entry.toString();
+                }else{
+                    dat_id_entry = '0';
+                }
+                console.log(dat_id_entry);
+                
 //                var data    = JSON.stringify({
 //                                'id': id,
 //                                'id_sdg_indicator': id_sdg_indicator,
@@ -1079,7 +1131,7 @@
 //                            });
                 $.ajax({
                     type: "POST",
-                    url: urls+'save-submission/'+dat_id_indicator+'/'+dat_achievement,
+                    url: urls+'save-submission/'+dat_id_indicator+'/'+dat_achievement+'/'+dat_id_entry+'/'+v_period+'/'+catrole+'/'+id_monper+'/'+tahun,
                     beforeSend : function(xhr){
                     	xhr.setRequestHeader(header,token);
 //                        $('body').addClass("loading"); 
@@ -1088,7 +1140,7 @@
 //                    data: data,
                     success: function (result) {
 //                        $('body').removeClass("loading");
-//                        grid();
+                        grid();
                     	$('.addModal').modal('hide');
                     },
                 });
