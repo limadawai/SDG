@@ -1,5 +1,7 @@
 package com.jica.sdg.controller;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -18,19 +20,24 @@ import javax.persistence.Query;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
+import javax.websocket.server.PathParam;
 
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.Font;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
+import org.apache.poi.util.IOUtils;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1359,5 +1366,228 @@ public class RanRadSdgController {
         hasil.put("content",list);
         return hasil;
     }
+    
+    //======================= RAN/RAD Export SDG ========================
+    @GetMapping("admin/ranrad/dowload_sdg")
+    @ResponseBody
+    public void dowload_sdg(HttpServletResponse response, @PathParam("id_goals") int idgoals) throws IOException {
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=SDG-"+idgoals+".xlsx");
+        ByteArrayInputStream stream = sdg(idgoals);
+        IOUtils.copy(stream, response.getOutputStream());
+    }
+
+	private ByteArrayInputStream sdg(int idgoals) {
+		try(Workbook workbook = new XSSFWorkbook()) {
+			Sheet sheet = workbook.createSheet("SDG Goals");
+	        
+	        Row row = sheet.createRow(0);
+	        CellStyle headerCellStyle = workbook.createCellStyle();
+	        headerCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+	        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+	        headerCellStyle.setWrapText(true);
+	        // Creating header
+	        Cell cell = row.createCell(0);
+	        cell.setCellValue("No.");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(1);
+	        cell.setCellValue("Goals");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(2);
+	        cell.setCellValue("Target");
+	        cell.setCellStyle(headerCellStyle);
 	
+	        cell = row.createCell(3);
+	        cell.setCellValue("Indicator");
+	        cell.setCellStyle(headerCellStyle);
+	
+	        cell = row.createCell(4);
+	        cell.setCellValue("Unit");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(5);
+	        cell.setCellValue("Baseline");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(6);
+	        cell.setCellValue("Target");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        //=================== Isi tabel =================
+	        String sql = "SELECT b.nm_goals, c.nm_indicator as sdgindi  ";
+	        Query query = em.createNativeQuery(sql);
+	        query.setParameter("id_goals", idgoals);
+	        Map<String, Object> mapDetail = new HashMap<>();
+	        mapDetail.put("mapDetail",query.getResultList());
+	        JSONObject objDetail = new JSONObject(mapDetail);
+	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
+	        
+	        System.out.println(arrayDetail);
+	        
+//	        for (int i=0; i<arrayDetail.length(); i++) {
+//	        	JSONArray finalDetail = arrayDetail.getJSONArray(i);
+//	        	Row dataRow = sheet.createRow(i+1);
+//		    	dataRow.createCell(0).setCellValue(i+1);
+//		    	dataRow.createCell(1).setCellValue(finalDetail.get(1).toString());
+//		    	dataRow.createCell(2).setCellValue(finalDetail.get(0).toString());
+//		    	dataRow.createCell(3).setCellValue(finalDetail.get(2).toString());
+//		    	dataRow.createCell(4).setCellValue(finalDetail.get(3).toString());
+//		    	dataRow.createCell(5).setCellValue(finalDetail.get(4).toString());
+//		    	dataRow.createCell(6).setCellValue(finalDetail.get(5).toString());
+//	        }
+	    	
+	        workbook.getSheetAt(0).autoSizeColumn(0);
+	        workbook.getSheetAt(0).autoSizeColumn(1);
+	        workbook.getSheetAt(0).autoSizeColumn(2);
+	        workbook.getSheetAt(0).autoSizeColumn(3);
+	        workbook.getSheetAt(0).autoSizeColumn(4);
+	        workbook.getSheetAt(0).autoSizeColumn(5);
+	        workbook.getSheetAt(0).autoSizeColumn(6);
+	        
+	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	        workbook.write(outputStream);
+	        return new ByteArrayInputStream(outputStream.toByteArray());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	//======================= RAN/RAD Gov Program Export SDG ========================
+	@GetMapping("admin/ranrad/dowload_gov_prog/{id_prov}/{id_monper}")
+    @ResponseBody
+    public void dowload_gov_prog(HttpServletResponse response, @PathVariable("id_prov") String idprov, @PathVariable("id_monper") int idmonper) throws IOException {
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=SDG-"+"govprog"+".xlsx");
+        ByteArrayInputStream stream = govprog(idprov, idmonper);
+        IOUtils.copy(stream, response.getOutputStream());
+    }
+	
+	private ByteArrayInputStream govprog(String idprov, int idmonper) {
+		try(Workbook workbook = new XSSFWorkbook()) {
+			Sheet sheet = workbook.createSheet("Goverment Program");
+	        
+	        Row row = sheet.createRow(0);
+	        CellStyle headerCellStyle = workbook.createCellStyle();
+	        headerCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+	        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+	        headerCellStyle.setVerticalAlignment(VerticalAlignment.CENTER);
+	        headerCellStyle.setBorderLeft(BorderStyle.THIN);
+	        headerCellStyle.setBorderTop(BorderStyle.THIN);
+	        headerCellStyle.setBorderRight(BorderStyle.THIN);
+	        headerCellStyle.setBorderBottom(BorderStyle.THIN);
+	        headerCellStyle.setWrapText(true);
+	        
+	        String qry = "SELECT start_year FROM ran_rad WHERE id_monper = :id_monper";
+	        Query q = em.createNativeQuery(qry);
+	        q.setParameter("id_monper", idmonper);
+	        Map<String, Object> thnDetail = new HashMap<>();
+	        thnDetail.put("tahun", q.getResultList());
+	        JSONObject objTahun = new JSONObject(thnDetail);
+	        JSONArray  thnArray = objTahun.getJSONArray("tahun");
+	        
+//	        System.out.println(thnArray.get(0));
+	        
+	        int thnawal = (int) thnArray.get(0);
+	        
+	        Cell cell = row.createCell(0);
+	        cell.setCellValue("Program/Kegiatan/Output Kegiatan");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(2);
+	        cell.setCellValue("Satuan");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(3);
+	        cell.setCellValue("Baseline ("+thnawal+")");
+	        cell.setCellStyle(headerCellStyle);
+	
+	        cell = row.createCell(4);
+	        cell.setCellValue("Target Tahunan");
+	        cell.setCellStyle(headerCellStyle);
+	
+	        cell = row.createCell(8);
+	        cell.setCellValue("Indikatif Alokasi Anggaran 5 Tahun (Rp Juta)");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(9);
+	        cell.setCellValue("Sumber Pendanaan");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(10);
+	        cell.setCellValue("Instansi Pelaksana");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        sheet.addMergedRegion(CellRangeAddress.valueOf("A1:B2"));
+	        sheet.addMergedRegion(CellRangeAddress.valueOf("C1:C2"));
+	        sheet.addMergedRegion(CellRangeAddress.valueOf("D1:D2"));
+	        sheet.addMergedRegion(CellRangeAddress.valueOf("E1:H1"));
+	        sheet.addMergedRegion(CellRangeAddress.valueOf("I1:I2"));
+	        sheet.addMergedRegion(CellRangeAddress.valueOf("J1:J2"));
+	        sheet.addMergedRegion(CellRangeAddress.valueOf("K1:K2"));
+	        
+	        Row row2 = sheet.createRow(1);
+	        Cell cell2 = row2.createCell(4);
+	        cell2.setCellValue(thnawal+1);
+	        cell2.setCellStyle(headerCellStyle);
+	        
+	        cell2 = row2.createCell(5);
+	        cell2.setCellValue(thnawal+2);
+	        cell2.setCellStyle(headerCellStyle);
+	        
+	        cell2 = row2.createCell(6);
+	        cell2.setCellValue(thnawal+3);
+	        cell2.setCellStyle(headerCellStyle);
+	        
+	        cell2 = row2.createCell(7);
+	        cell2.setCellValue(thnawal+4);
+	        cell2.setCellStyle(headerCellStyle);
+	        
+	        //=================== Isi tabel =================
+	        String sql = "SELECT DISTINCT a.id_goals, b.nm_goals FROM gov_map a LEFT JOIN "
+	        		+ "sdg_goals b ON b.id = a.id_goals "
+	        		+ "WHERE a.id_prov = :id_prov AND a.id_monper = :id_monper ";
+	        Query query = em.createNativeQuery(sql);
+	        query.setParameter("id_prov", idprov);
+	        query.setParameter("id_monper", idmonper);
+	        Map<String, Object> result = new HashMap<>();
+	        result.put("mapDetail",query.getResultList());
+	        JSONObject objDetail = new JSONObject(result);
+	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
+	        
+	        System.out.println(arrayDetail);
+	        
+	        for (int i=0; i<arrayDetail.length(); i++) {
+	        	JSONArray data = arrayDetail.getJSONArray(i);
+	        	Row dataGoals = sheet.createRow(i+2);
+	        	Cell cellGoals = dataGoals.createCell(0);
+	        	cellGoals.setCellValue("TUJUAN   : "+data.get(1));
+	        	sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(i+3)+":K"+(i+3)));
+	        }
+	        
+	        workbook.getSheetAt(0).autoSizeColumn(0);
+	        workbook.getSheetAt(0).autoSizeColumn(1);
+	        workbook.getSheetAt(0).autoSizeColumn(2);
+	        workbook.getSheetAt(0).autoSizeColumn(3);
+	        workbook.getSheetAt(0).autoSizeColumn(4);
+	        workbook.getSheetAt(0).autoSizeColumn(5);
+	        workbook.getSheetAt(0).autoSizeColumn(6);
+	        workbook.getSheetAt(0).autoSizeColumn(7);
+	        workbook.getSheetAt(0).autoSizeColumn(8);
+	        workbook.getSheetAt(0).autoSizeColumn(9);
+	        workbook.getSheetAt(0).autoSizeColumn(10);
+	        
+	        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	        workbook.write(outputStream);
+	        return new ByteArrayInputStream(outputStream.toByteArray());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+	}
+    
 }
