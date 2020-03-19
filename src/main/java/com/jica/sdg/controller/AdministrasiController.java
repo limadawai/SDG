@@ -225,7 +225,7 @@ public class AdministrasiController {
         String id_unit           = jsonObunit.get("id_unit").toString();
         String calculation       = jsonObunit.get("calculation").toString();
             if(id_unit.equals("")){
-                em.createNativeQuery("INSERT INTO ref_unit (nm_unit,id_role,calculation) values ('"+nm_unit+"','"+id_role+"')").executeUpdate();
+                em.createNativeQuery("INSERT INTO ref_unit (nm_unit,id_role,calculation) values ('"+nm_unit+"','"+id_role+"','"+calculation+"')").executeUpdate();
             }else{
                 em.createNativeQuery("UPDATE ref_unit set nm_unit = '"+nm_unit+"', calculation = '"+calculation+"' where id_unit ='"+id_unit+"'").executeUpdate();
             }
