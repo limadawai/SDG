@@ -288,7 +288,7 @@ public class RanRadSdgController {
         Map<String, Object> hasil = new HashMap<>();
         for (Object[] row : rows) {
             result.add(
-                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2], (Integer)row[3])
             );
         }
         model.addAttribute("title", "Define RAN/RAD/SDGs Indicator");
@@ -593,7 +593,7 @@ public class RanRadSdgController {
         Map<String, Object> hasil = new HashMap<>();
         for (Object[] row : rows) {
             result.add(
-                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2],(Integer)row[3])
             );
         }
         model.addAttribute("title", "Define RAN/RAD/Government Program");
@@ -882,7 +882,7 @@ public class RanRadSdgController {
         Map<String, Object> hasil = new HashMap<>();
         for (Object[] row : rows) {
             result.add(
-                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2],(Integer)row[3])
             );
         }
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));

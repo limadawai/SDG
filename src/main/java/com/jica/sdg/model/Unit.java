@@ -19,11 +19,15 @@ public class Unit implements Serializable {
     @Column(nullable = false, length = 11)
     private Integer id_role;
     
-	public Unit(Integer id_unit, String nm_unit,Integer id_role) {
+    @Column(nullable = true, length = 1)
+    private Integer calculation;
+    
+	public Unit(Integer id_unit, String nm_unit,Integer id_role, Integer calculation) {
 		super();
 		this.id_unit = id_unit;
 		this.nm_unit = nm_unit;
                 this.id_role = id_role;
+                this.calculation = calculation;
 	}
 
 	public Unit() {
@@ -56,7 +60,12 @@ public class Unit implements Serializable {
         public void setId_role(Integer id_role) {
             this.id_role = id_role;
         }
-        
-        
-	
+
+		public Integer getCalculation() {
+			return calculation;
+		}
+
+		public void setCalculation(Integer calculation) {
+			this.calculation = calculation;
+		}   
 }
