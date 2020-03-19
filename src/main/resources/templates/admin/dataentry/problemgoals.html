@@ -632,13 +632,16 @@
                                 var id_target       = datatable[5];
                                 var id_indicator    = datatable[9];
                                 var id_filter_sdg   = id_goals+"."+id_target+"."+id_indicator;
-                                var check_node      = datatable[22];
+                                var check_node      = datatable[22].split(",");
+                                console.log(check_node);
+//                                return false;
                                 var id_relation     = datatable[21];
-                                var node_data =[];
-                                $.each(JSON.parse(check_node),function(ii,xx){
-                                    node_data.push(xx.id_sdgs);
-                                });
-                                $2('#filter_sdg').jstree(true).check_node(node_data);
+//                                var node_data =[];
+//                                $.each(check_node,function(ii,xx){
+//                                    node_data.push(xx.id_sdgs);
+//                                });
+//                                console.log(node_data);
+                                $2('#filter_sdg').jstree(true).check_node(check_node);
 				$.ajax({
 					type: "GET",
                                     url: urls+'problem/get-problem/'+id,
