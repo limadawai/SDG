@@ -639,20 +639,46 @@
                                     			nilai3sdg = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==year)?nilai3:(nilai3sdg)?nilai3sdg:"";
                                     			nilai4sdg = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==year)?nilai4:(nilai4sdg)?nilai4sdg:"";
                                     		}
-                                    		
+                                    		var color_sts="";
+                                    		var achive = "";
                                     		if(sts == 'yearly'){
-                                    			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";	
+                                    			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";
+                                    			if(nilai1sdg){
+                                    				achive = nilai1sdg;
+                                    			}
                                     		}else if(sts == 'semesterly'){
                                     			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";
                                     			text += "<td>"+(nilai2sdg?nilai2sdg:'')+"</td>";
+                                    			if(nilai1sdg || nilai2sdg){
+                                    				achive = nilai1sdg+nilai2sdg;
+                                    			}
                                         	}
                                     		else if(sts == 'quarterly'){
                                     			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";
                                     			text += "<td>"+(nilai2sdg?nilai2sdg:'')+"</td>";
                                     			text += "<td>"+(nilai3sdg?nilai3sdg:'')+"</td>";
                                     			text += "<td>"+(nilai4sdg?nilai4sdg:'')+"</td>";
+                                    			if(nilai1sdg || nilai2sdg || nilai3sdg || nilai4sdg){
+                                    				achive = nilai1sdg+nilai2sdg+nilai3sdg+nilai4sdg;
+                                    			}
                                         	}
-                                    		text += "<td style='text-align:center'><span class='dotOk'></span></td></tr>";
+                                    		if(achive){
+                                    			if(hasil.content[k][4] == 'Increment'){
+                                                    if((achive >= hasil.content[k][7])){
+                                                        color_sts = '<span class="dotOk"></span>';
+                                                    }else{
+                                                        color_sts = '<span class="dotNok"></span>';
+                                                    }
+                                                }else{
+                                                    if((achive <= hasil.content[k][7])){
+                                                        color_sts = '<span class="dotOk"></span>';
+                                                    }else{
+                                                        color_sts = '<span class="dotNok"></span>';
+                                                    }
+                                                }
+                                    		}
+                                    		
+                                    		text += "<td style='text-align:center'>"+color_sts+"</td></tr>";
                                     		
                                     		$.ajax({
                                                 url: urls + 'get-sdg-disaggre',
@@ -696,20 +722,45 @@
                                                     			nilai3sdgDetail = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==year)?nilai3Detail:(nilai3sdgDetail)?nilai3sdgDetail:"";
                                                     			nilai4sdgDetail = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==year)?nilai4Detail:(nilai4sdgDetail)?nilai4sdgDetail:"";
                                                     		}
-                                                    		
+                                                    		var achive = "";
+                                                    		var color_sts="";
                                                     		if(sts == 'yearly'){
-                                                    			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";	
+                                                    			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";
+                                                    			if(nilai1sdgDetail){
+                                                    				achive = nilai1sdgDetail;
+                                                    			}
                                                     		}else if(sts == 'semesterly'){
                                                     			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";
                                                     			text += "<td>"+(nilai2sdgDetail?nilai2sdgDetail:'')+"</td>";
+                                                    			if(nilai1sdgDetail || nilai2sdgDetail){
+                                                    				achive = nilai1sdgDetail+nilai2sdgDetail;
+                                                    			}
                                                         	}
                                                     		else if(sts == 'quarterly'){
                                                     			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";
                                                     			text += "<td>"+(nilai2sdgDetail?nilai2sdgDetail:'')+"</td>";
                                                     			text += "<td>"+(nilai3sdgDetail?nilai3sdgDetail:'')+"</td>";
                                                     			text += "<td>"+(nilai4sdgDetail?nilai4sdgDetail:'')+"</td>";
+                                                    			if(nilai1sdgDetail || nilai2sdgDetail || nilai3sdgDetail || nilai4sdgDetail){
+                                                    				achive = nilai1sdgDetail+nilai2sdgDetail+nilai3sdgDetail+nilai4sdgDetail;
+                                                    			}
                                                         	}
-                                                    		text += "<td style='text-align:center'><span class='dotOk'></span></td></tr>";
+                                                    		if(achive){
+                                                    			if(hasilnya.content[l][4] == 'Increment'){
+                                                                    if(achive >= hasilnya.content[l][7]){
+                                                                        color_sts = '<span class="dotOk"></span>';
+                                                                    }else{
+                                                                        color_sts = '<span class="dotNok"></span>';
+                                                                    }
+                                                                }else{
+                                                                    if(achive <= hasilnya.content[l][7]){
+                                                                        color_sts = '<span class="dotOk"></span>';
+                                                                    }else{
+                                                                        color_sts = '<span class="dotNok"></span>';
+                                                                    }
+                                                                }
+                                                    		}
+                                                    		text += "<td style='text-align:center'>"+color_sts+"</td></tr>";
                                                     	}
                                                 	}
                                                 }

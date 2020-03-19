@@ -530,11 +530,14 @@
              }
              
              $("#export").click(function(){
-                 var data = $(this).attr("data");
+                 //var data = $(this).attr("data");
                  //var id_monper = [[${id_monper}]];
-                 var id_monper = $("#id_monper").val();
-                 var url = data+"/"+id_monper;
-                  window.open(url, '_blank');   
+                 //var id_monper = $("#id_monper").val();
+                 //var url = data+"/"+id_monper;
+                 //window.open(url, '_blank');
+                 var idprov = $("#id_prov").val();
+                 var idmonper = $("#id_monper").val();
+                 window.open(urls+"ranrad/dowload_gov_prog/"+idprov+"/"+idmonper, "_blank");
              })
 		//});
 		// ]]>
