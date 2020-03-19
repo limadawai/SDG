@@ -25,10 +25,8 @@
                         <h5 id="title">Detail Grafik Hasil Pelaporan</h5>
                     </div>
                     <div class="widget-content" style="background:#FFFFFF;">
-                        <b><span>SDG : </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b><br>
-                    	<div id="divdaerah" class="pull-left">
-                            <b><span>Provinsi : </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b><br>
-                    	</div>
+                        
+                    	
                         <div class="pull-right" style="width:auto;">
                             <select id="pilgrafik">
                                     <option value="0">-- Pilih Jenis Grafik --</option>
@@ -37,9 +35,13 @@
                             </select>
                             <button id="btnexport" class="btn btn-success" style="margin-right:4px; margin-top: -10px"><span class="lang_eng" style="display: none">Export Excel</span><span class="lang_indo">Ekspor Excel</span></button>
                         </div><br><br><br><br><hr>
-                        <div id="divgoals"></div><br>
+                        
                        	<div id="divtabgoals" style="width:100%;">
-                            <b><span>SDG </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b><br>
+                            <!--<b><span>SDG </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b><br>-->
+                            <b><span>SDG : </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b><br>
+                            <div id="divdaerah" class="pull-left">
+                                <b><span>Provinsi : </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b><br>
+                            </div>
                             <table id="tabsdg" class='table table-striped table-bordered'>
                                 <thead></thead>
                                 <tbody></tbody>
@@ -55,6 +57,7 @@
                                 <tbody></tbody>
                             </table>
                         </div>
+                        <div id="divgoals"></div>
                         <div id="divtab" style="width:100%;">
                             <table id="tabgrafik" class='table table-striped table-bordered'>
                                 <thead></thead>
@@ -218,13 +221,13 @@
                             var isihead1 = "<b><span class=''>Pemerintah</span></b><span class='lang_eng' style='display: none'>Government</span></b><br>";
                             isihead1 += "<b><span>Program : "+goal[0][4]+"</span></b><br>";
                             isihead1 += "<b><span>Kegiatan : "+goal[0][7]+"</span></b><br>";
-                            isihead1 += "<b><span>Indikator : "+goal[0][1]+"</span></b><br><br><br>";
+                            isihead1 += "<b><span>Indikator : "+goal[0][1]+"</span></b><br>";
                         }else{
                             //eng
                             var isihead1 = "<b><span class=''>Government</span></b><span class='lang_eng' style='display: none'>Government</span></b><br>";
                             isihead1 += "<b><span>Program : "+goal[0][5]+"</span></b><br>";
                             isihead1 += "<b><span>Activity : "+goal[0][8]+"</span></b><br>";
-                            isihead1 += "<b><span>Indicator : "+goal[0][2]+"</span></b><br><br><br>";
+                            isihead1 += "<b><span>Indicator : "+goal[0][2]+"</span></b><br>";
                         }
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divgoals").html(isihead1); 
@@ -245,12 +248,12 @@
                             //indo
                             var isihead = "<b><span>Goal : "+goal[0][4]+"</span></b><br>";
                             isihead += "<b><span>Target : "+goal[0][7]+"</span></b><br>";
-                            isihead += "<b><span>Indikator : "+goal[0][1]+"</span></b><br><br><br>";
+                            isihead += "<b><span>Indikator : "+goal[0][1]+"</span></b><br>";
                         }else{
                             //eng
                             var isihead = "<b><span>Goal : "+goal[0][5]+"</span></b><br>";
                             isihead += "<b><span>Target : "+goal[0][8]+"</span></b><br>";
-                            isihead += "<b><span>Indicator : "+goal[0][2]+"</span></b><br><br><br>";
+                            isihead += "<b><span>Indicator : "+goal[0][2]+"</span></b><br>";
                         }
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divdaerah").html(isihead); 
@@ -273,7 +276,7 @@
                 	var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
                 	isihead1 += "<b><span>Program : "+goal[0][4]+"</span></b><br>";
                 	isihead1 += "<b><span>Kegiatan : "+goal[0][7]+"</span></b><br>";
-                	isihead1 += "<b><span>Indikator : "+goal[0][1]+"</span></b><br><br><br>";
+                	isihead1 += "<b><span>Indikator : "+goal[0][1]+"</span></b><br>";
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divgoals").html(isihead1); 
                 }
@@ -291,7 +294,7 @@
                 	//console.log(goal);
                 	var isihead = "<b><span>Goal : "+goal[0][4]+"</span></b><br>";
                 	isihead += "<b><span>Target : "+goal[0][7]+"</span></b><br>";
-                	isihead += "<b><span>Indikator : "+goal[0][1]+"</span></b><br><br><br>";
+                	isihead += "<b><span>Indikator : "+goal[0][1]+"</span></b><br>";
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divdaerah").html(isihead); 
                 }

@@ -327,7 +327,7 @@ public class RateController {
                     "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
                     "from "+tb2+" b\n" +
                     "left join "+tb+" c on b.id_activity = c.id\n" +
-                    "inner join (select * from "+type+" where year_entry = :year "+tg_date+" "+tg_date_1+" ) d on b.id = d.id_assign\n" +
+                    "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" "+tg_date_1+" ) d on b.id = d.id_assign\n" +
                     "where c.id_role = :id_role \n" +
                     ") as a\n" +
                     ") as isi,\n" +
