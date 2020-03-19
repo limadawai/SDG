@@ -743,6 +743,7 @@
                     "responsive":true,
                     "bDestroy": true,
                     "ordering": false,
+                    "paging": false,
                     "ajax": {
                         "url": urls+'list-entry-sdg/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
                         dataSrc: 'content',
@@ -859,8 +860,14 @@
 									nilai = row[24];
 								}
 							}
+							var new_val_id="";
+							if(row[25]){
+								new_val_id="";
+							}else{
+								new_val_id=row[14];
+							}
                              return "<input type='text' class='new_value' name='sdg[][new_val_nilai]' readonly='true' value='"+(nilai?nilai:'')+"'/>"+
-                             "<input type='hidden' name='sdg[][new_val_id]' value='"+row[14]+"' />"+
+                             "<input type='hidden' name='sdg[][new_val_id]' value='"+new_val_id+"' />"+
                              "<input type='hidden' name='sdg[][new_val_id_disaggre]' value='"+row[32]+"' />"+
                              "<input type='hidden' name='sdg[][new_val_period]' value='"+period+"' />";
                         }},
@@ -877,6 +884,7 @@
 			
 			$('.simpan-new').on('click', function(){
 				var sdg =  $('#form-detail').serializeObject();
+				console.log(sdg);
 				$.ajax({
 	                type    :"POST",
 	                url     :urls+'update-new-sdg',
