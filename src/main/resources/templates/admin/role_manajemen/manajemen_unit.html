@@ -87,6 +87,20 @@
                             	<span class="help-block" id="error_nm_unit"></span>
                             </div>
                         </div>
+                        <div class="control-group">
+                            <label class="control-label" for="selkategori">
+                            	<span class="lang_eng" style="display:none">Calculation</span>
+                            	<span class="lang_indo">Kalkulasi</span>
+                            </label>
+                            <div class="controls">
+	                            <select id="calculation" name="calculation" class="span3">
+	                                <option value="0">-- Pilih --</option>
+	                                <option value="1">Accumulated</option>
+	                                <option value="2">Not Accumulated</option>
+	                            </select>
+	                            <span class="help-block" id="error_cat_role"></span>
+	                         </div>
+                        </div>
                     </div>
                     </form>
                     <div class="modal-footer">
@@ -314,9 +328,10 @@
     });
     
     function clearForm(){
+		$('#calculation').val("").removeAttr("disabled");
 		$('#nm_unit').val("").removeAttr("readonly");
-                $('#id_unit').val("").removeAttr("readonly");
-                $('#submit').removeAttr("disabled");
+        $('#id_unit').val("").removeAttr("readonly");
+        $('#submit').removeAttr("disabled");
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
 	}
@@ -327,21 +342,23 @@
 	
 	$('#submit').on('click', function(){
 		var nm_unit = $('#nm_unit').val();
-                var id_unit = $('#id_unit').val();
+        var id_unit = $('#id_unit').val();
+        var calculation = $('#calculation').val();
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
 		var cek = 0;
 		
 		if (nm_unit == ""){
-                    $("#error_nm_role").parents(".control-group").first().addClass("error");
-                    $("#error_nm_role").text(required);
+                    $("#error_nm_unit").parents(".control-group").first().addClass("error");
+                    $("#error_nm_unit").text(required);
                     cek += 1;
                 }
 //		console.log(id_unit);return false;
 		if(cek==0){
     			var data = JSON.stringify({
                                 'id_unit':id_unit,
-    				'nm_unit':nm_unit
+    							'nm_unit':nm_unit,
+    							'calculation':calculation
     				});
     			$.ajax({
     				type: "POST",
@@ -368,6 +385,7 @@
             	var val = result.content;
                 $('#id_unit').val(id);
                 $('#nm_unit').val(val[0].nm_unit);
+                $('#calculation').val(val[0].calculation);
                 $('#myModal').modal('show');
             },
         })
@@ -379,6 +397,7 @@
             success: function (result) {
             	var val = result.content;
                     $('#nm_unit').val(val[0].nm_unit).attr("readonly",true);
+                    $('#calculation').val(val[0].calculation).attr("disabled",true);
                     $('#submit').prop('disabled',true)
                     $('#myModal').modal('show');
             },

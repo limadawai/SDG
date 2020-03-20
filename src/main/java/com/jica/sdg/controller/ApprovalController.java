@@ -233,30 +233,29 @@ public class ApprovalController {
         	String 	id = obj.getString("new_val_id");
         	String 	period = obj.getString("new_val_period");
         	String 	id_disaggre = obj.getString("new_val_id_disaggre");
-        	if(!nilai.equals("") || !nilai.equals("null")) {
-        		if(!id_disaggre.equals("null") || !id_disaggre.equals("")) {
+        	if(id_disaggre.equals("null") || id_disaggre.equals("")) {
+        		if(!id.equals("null") && !id.equals("")) {
         			if(period.equals("1")) {
-            			sdgService.updateNew1(Integer.parseInt(id), Integer.parseInt(nilai));
+            			sdgService.updateNew1(Integer.parseInt(id), (nilai.equals("")?null:Integer.parseInt(nilai)));
             		}else if(period.equals("2")) {
-            			sdgService.updateNew2(Integer.parseInt(id), Integer.parseInt(nilai));
+            			sdgService.updateNew2(Integer.parseInt(id), (nilai.equals("")?null:Integer.parseInt(nilai)));
             		}else if(period.equals("3")) {
-            			sdgService.updateNew3(Integer.parseInt(id), Integer.parseInt(nilai));
+            			sdgService.updateNew3(Integer.parseInt(id), (nilai.equals("")?null:Integer.parseInt(nilai)));
             		}else if(period.equals("4")) {
-            			sdgService.updateNew4(Integer.parseInt(id), Integer.parseInt(nilai));
-            		}
-        		}else {
-        			if(period.equals("1")) {
-            			sdgDetailService.updateNew1(Integer.parseInt(id_disaggre), Integer.parseInt(nilai));
-            		}else if(period.equals("2")) {
-            			sdgDetailService.updateNew2(Integer.parseInt(id_disaggre), Integer.parseInt(nilai));
-            		}else if(period.equals("3")) {
-            			sdgDetailService.updateNew3(Integer.parseInt(id_disaggre), Integer.parseInt(nilai));
-            		}else if(period.equals("4")) {
-            			sdgDetailService.updateNew4(Integer.parseInt(id_disaggre), Integer.parseInt(nilai));
+            			sdgService.updateNew4(Integer.parseInt(id), (nilai.equals("")?null:Integer.parseInt(nilai)));
             		}
         		}
-        		
-        	}
+    		}else {
+    			if(period.equals("1")) {
+        			sdgDetailService.updateNew1(Integer.parseInt(id_disaggre), (nilai.equals("")?null:Integer.parseInt(nilai)));
+        		}else if(period.equals("2")) {
+        			sdgDetailService.updateNew2(Integer.parseInt(id_disaggre), (nilai.equals("")?null:Integer.parseInt(nilai)));
+        		}else if(period.equals("3")) {
+        			sdgDetailService.updateNew3(Integer.parseInt(id_disaggre), (nilai.equals("")?null:Integer.parseInt(nilai)));
+        		}else if(period.equals("4")) {
+        			sdgDetailService.updateNew4(Integer.parseInt(id_disaggre), (nilai.equals("")?null:Integer.parseInt(nilai)));
+        		}
+    		}
         }
 	}
         

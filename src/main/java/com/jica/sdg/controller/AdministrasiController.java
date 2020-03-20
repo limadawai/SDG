@@ -145,7 +145,7 @@ public class AdministrasiController {
         Map<String, Object> hasil = new HashMap<>();
         for (Object[] row : rows) {
             result.add(
-                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2], (Integer)row[3])
             );
         }
         hasil.put("content",result);
@@ -223,10 +223,11 @@ public class AdministrasiController {
         JSONObject jsonObunit = new JSONObject(payload);
         String nm_unit           = jsonObunit.get("nm_unit").toString();  
         String id_unit           = jsonObunit.get("id_unit").toString();
+        String calculation       = jsonObunit.get("calculation").toString();
             if(id_unit.equals("")){
-                em.createNativeQuery("INSERT INTO ref_unit (nm_unit,id_role) values ('"+nm_unit+"','"+id_role+"')").executeUpdate();
+                em.createNativeQuery("INSERT INTO ref_unit (nm_unit,id_role,calculation) values ('"+nm_unit+"','"+id_role+"','"+calculation+"')").executeUpdate();
             }else{
-                em.createNativeQuery("UPDATE ref_unit set nm_unit = '"+nm_unit+"' where id_unit ='"+id_unit+"'").executeUpdate();
+                em.createNativeQuery("UPDATE ref_unit set nm_unit = '"+nm_unit+"', calculation = '"+calculation+"' where id_unit ='"+id_unit+"'").executeUpdate();
             }
         
 	}
@@ -248,7 +249,7 @@ public class AdministrasiController {
         Map<String, Object> hasil = new HashMap<>();
         for (Object[] row : rows) {
             result.add(
-                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2])
+                        new Unit((Integer)row[0], (String) row[1], (Integer)row[2], (Integer)row[3])
             );
         }
         hasil.put("content",result);
