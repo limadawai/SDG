@@ -57,7 +57,7 @@
             <form method="post" th:action="@{/login}">
                 <div class="span5">
                     <img th:src="@{/img/logo.png}" style="width:60%;">
-                    <h4>Selamat Datang</h4>
+                    <h4 id="welcome">Selamat Datang</h4>
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon icon-user"></i></span>
                         <input name="username" type="text" class="span4" placeholder="Username" required>
@@ -80,6 +80,17 @@
                 interval: 5000
             })
         });
+        
+        $.urlParam = function(name){
+        	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+        	return results[1] || 0;
+        }
+        if ($.urlParam('error') == "true") {
+        	$("#welcome").text("Username / Password anda salah!");
+        } else if ($.urlParam('session-expired') == "true") {
+        	$("#welcome").text("Session anda telah berakhir!");
+        }
+        
     </script>
 </body>
 </html>
