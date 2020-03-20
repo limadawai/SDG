@@ -406,17 +406,43 @@ public class RateController {
         return hasil;
     }    
     
-    @GetMapping("admin/get_sub_prog_level3/{id_program}/{id_activity}/{id_role}/{catrole}/{period}/{id_monper}/{year}")
-    public @ResponseBody Map<String, Object>  get_sub_prog_level3(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year) {
-        
+    @GetMapping("admin/get_sub_prog_level3/{id_program}/{id_activity}/{id_role}/{catrole}/{period}/{id_monper}/{year}/{isi_time}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level3(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("isi_time") String isi_time) {
+        String tg_date_1 = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
         Query query = em.createNativeQuery("");
         if(catrole.equals("Government")){
             String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit, \n" +
-                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end\n" +
+                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end,\n" +
+                        "c.date_created, c.date_created2, c.date_created3, c.date_created4 \n" +
                         "from gov_indicator a\n" +
                         "left join gov_activity b on a.id_activity = b.id\n" +
-                        "left join (select * from entry_gov_indicator where year_entry = :year and id_monper = :id_monper) c on a.id = c.id_assign\n" +
+                        "inner join (select * from entry_gov_indicator where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_assign\n" +
                         "where a.id_program = :id_program and a.id_activity = :id_activity and b.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
@@ -427,10 +453,11 @@ public class RateController {
         }else if(catrole.equals("NSA")){
             String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit,\n" +
-                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end\n" +
+                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end, \n" +
+                        "c.date_created, c.date_created2, c.date_created3, c.date_created4 \n" +
                         "from nsa_indicator a\n" +
                         "left join nsa_activity b on a.id_activity = b.id\n" +
-                        "left join (select * from entry_nsa_indicator where year_entry = :year and id_monper = :id_monper) c on a.id = c.id_assign\n" +
+                        "inner join (select * from entry_nsa_indicator where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_assign\n" +
                         "where a.id_program = :id_program and a.id_activity = :id_activity and b.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
