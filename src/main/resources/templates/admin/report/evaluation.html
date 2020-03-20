@@ -642,24 +642,40 @@
                                     		var color_sts="";
                                     		var achive = "";
                                     		if(sts == 'yearly'){
-                                    			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";
-                                    			if(nilai1sdg){
-                                    				achive = nilai1sdg;
-                                    			}
+                                    			text += "<td>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                   				if(nilai1sdg){
+                                       				achive = nilai1sdg;
+                                       			}	
                                     		}else if(sts == 'semesterly'){
-                                    			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";
-                                    			text += "<td>"+(nilai2sdg?nilai2sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
                                     			if(nilai1sdg || nilai2sdg){
-                                    				achive = nilai1sdg+nilai2sdg;
+                                    				if(hasil.content[k][16]=="2"){
+                                           				achive = (nilai2sdg)?nilai2sdg:nilai1sdg;
+                                        			}else{
+                                           				achive = nilai1sdg+nilai2sdg;
+                                        			}
                                     			}
                                         	}
                                     		else if(sts == 'quarterly'){
-                                    			text += "<td>"+(nilai1sdg?nilai1sdg:'')+"</td>";
-                                    			text += "<td>"+(nilai2sdg?nilai2sdg:'')+"</td>";
-                                    			text += "<td>"+(nilai3sdg?nilai3sdg:'')+"</td>";
-                                    			text += "<td>"+(nilai4sdg?nilai4sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
+                                    			text += "<td>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
                                     			if(nilai1sdg || nilai2sdg || nilai3sdg || nilai4sdg){
-                                    				achive = nilai1sdg+nilai2sdg+nilai3sdg+nilai4sdg;
+                                    				if(hasil.content[k][16]=="2"){
+                                    					if(nilai4sdg){
+                                    						achive = nilai4sdg;
+                                    					}else if(nilai3sdg){
+                                    						achive = nilai3sdg;
+                                    					}else if(nilai2sdg){
+                                    						achive = nilai2sdg;
+                                    					}else{
+                                    						achive = nilai1sdg;
+                                    					}
+                                    				}else{
+                                    					achive = nilai1sdg+nilai2sdg+nilai3sdg+nilai4sdg;	
+                                    				}
                                     			}
                                         	}
                                     		if(achive){
@@ -725,24 +741,40 @@
                                                     		var achive = "";
                                                     		var color_sts="";
                                                     		if(sts == 'yearly'){
-                                                    			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
                                                     			if(nilai1sdgDetail){
                                                     				achive = nilai1sdgDetail;
                                                     			}
                                                     		}else if(sts == 'semesterly'){
-                                                    			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";
-                                                    			text += "<td>"+(nilai2sdgDetail?nilai2sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
                                                     			if(nilai1sdgDetail || nilai2sdgDetail){
-                                                    				achive = nilai1sdgDetail+nilai2sdgDetail;
+                                                    				if(hasil.content[k][20]=="2"){
+                                                           				achive = (nilai2sdgDetail)?nilai2sdgDetail:nilai1sdgDetail;
+                                                        			}else{
+                                                           				achive = nilai1sdgDetail+nilai2sdgDetail;
+                                                        			}
                                                     			}
                                                         	}
                                                     		else if(sts == 'quarterly'){
-                                                    			text += "<td>"+(nilai1sdgDetail?nilai1sdgDetail:'')+"</td>";
-                                                    			text += "<td>"+(nilai2sdgDetail?nilai2sdgDetail:'')+"</td>";
-                                                    			text += "<td>"+(nilai3sdgDetail?nilai3sdgDetail:'')+"</td>";
-                                                    			text += "<td>"+(nilai4sdgDetail?nilai4sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai3sdgDetail!=null?nilai3sdgDetail:'')+"</td>";
+                                                    			text += "<td>"+(nilai4sdgDetail!=null?nilai4sdgDetail:'')+"</td>";
                                                     			if(nilai1sdgDetail || nilai2sdgDetail || nilai3sdgDetail || nilai4sdgDetail){
-                                                    				achive = nilai1sdgDetail+nilai2sdgDetail+nilai3sdgDetail+nilai4sdgDetail;
+                                                    				if(hasil.content[k][20]=="2"){
+                                                    					if(nilai4sdgDetail){
+                                                    						achive = nilai4sdgDetail;
+                                                    					}else if(nilai3sdgDetail){
+                                                    						achive = nilai3sdgDetail;
+                                                    					}else if(nilai2sdgDetail){
+                                                    						achive = nilai2sdgDetail;
+                                                    					}else{
+                                                    						achive = nilai1sdgDetail;
+                                                    					}
+                                                    				}else{
+                                                    					achive = nilai1sdgDetail+nilai2sdgDetail+nilai3sdgDetail+nilai4sdgDetail;	
+                                                    				}
                                                     			}
                                                         	}
                                                     		if(achive){
