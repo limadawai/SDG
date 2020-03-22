@@ -176,6 +176,78 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-option-category/{id_prov}/{id_role}/{id_monper}")
+    public @ResponseBody Map<String, Object> getOptionCategoryList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper) {
+        String sql  = " SELECT Distinct b.id_cat,b.nm_cat FROM entry_problem_identify a JOIN ref_category b ON a.id_cat = b.id_cat WHERE  a.id_prov = :id_prov AND a.id_role = :id_role AND  a.id_monper = :id_monper";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov)
+             .setParameter("id_role", id_role)
+             .setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}")
+    public @ResponseBody Map<String, Object> getOptionGoalsList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category) {
+        String sql  = " SELECT DISTINCT b.id,b.nm_goals  FROM entry_problem_identify_map a \n" +
+                    "JOIN sdg_goals b ON a.id_goals = b.id \n" +
+                    "LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation  \n" +
+                    "WHERE a.id_prov = :id_prov AND c.id_role = :id_role AND a.id_monper = :id_monper AND c.id_cat = :id_category";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov)
+             .setParameter("id_role", id_role)
+             .setParameter("id_monper", id_monper)
+             .setParameter("id_category", id_category);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}")
+    public @ResponseBody Map<String, Object> getOptionTargetList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals) {
+        String sql  =   " SELECT DISTINCT b.id,b.nm_target  FROM entry_problem_identify_map a \n" +
+                        " JOIN sdg_target b ON a.id_target = b.id\n" +
+                        " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation    \n" +
+                        " WHERE a.id_prov = :id_prov AND c.id_role = :id_role AND a.id_monper = :id_monper AND c.id_cat = :id_category and a.id_goals = :id_goals";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov)
+             .setParameter("id_role", id_role)
+             .setParameter("id_monper", id_monper)
+             .setParameter("id_category", id_category)
+             .setParameter("id_goals", id_goals);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+     @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}/{id_target}")
+    public @ResponseBody Map<String, Object> getOptionIndicatorList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals,@PathVariable("id_target") String id_target) {
+        String sql  =   " SELECT DISTINCT b.id,b.nm_indicator  FROM entry_problem_identify_map a \n" +
+                        " JOIN sdg_indicator b ON a.id_indicator = b.id\n" +
+                        " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation \n " +
+                        " WHERE a.id_prov = :id_prov AND c.id_role = :id_role AND a.id_monper = :id_monper AND c.id_cat = :id_category and a.id_goals = :id_goals and a.id_target = :id_target";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov)
+             .setParameter("id_role", id_role)
+             .setParameter("id_monper", id_monper)
+             .setParameter("id_category", id_category)
+             .setParameter("id_goals", id_goals)
+             .setParameter("id_target", id_target);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    
     @GetMapping("admin/list-get-sts-monper/{id_monper}")
     public @ResponseBody Map<String, Object> getGetStsMonper(@PathVariable("id_monper") String id_monper) {
         String sql  = "select sdg_indicator from ran_rad as a where a.id_monper = :id_monper ";
