@@ -101,7 +101,7 @@
         }else{
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-role-gov-profil/'+id_prov,
+                url: urls+'list-get-option-role-all-profil/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     var array = result.content;
@@ -151,7 +151,7 @@
                 var id_prov = this.value ;
                 $.ajax({
                     type: "GET",
-                    url: urls+'list-get-option-role-gov-profil/'+id_prov,
+                    url: urls+'list-get-option-role-all-profil/'+id_prov,
                     success: function (result) {
                         $("#idrole").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>');
                         var array = result.content;
