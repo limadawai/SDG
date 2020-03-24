@@ -156,6 +156,58 @@ public class ReportController {
         return hasil;
     }
     
+    @GetMapping("admin/get-sdg-goals/{sdg}")
+    public @ResponseBody Map<String, Object> getSdgGoalsEva(@RequestParam("id_role") int id_role, @PathVariable("sdg") String sdg) {
+    	Query query;
+    	if(sdg.equals("0")) {
+    		String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM assign_sdg_indicator a "
+        			+ " left join sdg_goals b on a.id_goals = b.id "
+        			+ " WHERE a.id_role = :id_role";
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+    	}else {
+    		String[] arrOfStr = sdg.split(","); 
+    		StringBuffer goals = new StringBuffer();
+    		if(arrOfStr.length>0) {
+    			for (int i = 0; i < arrOfStr.length; i++) {
+        			String[] arrOfStr1 = arrOfStr[i].split("---");
+        			int cek=1;
+        			for(int j=0;j<arrOfStr1.length;j++) {
+        				cek = (cek==4)?1:cek;
+        				System.out.println(cek);
+        				if(!arrOfStr1[j].equals("0") && cek==1) {
+        					goals.append("'"+arrOfStr1[j]+"',");
+        				}
+        				cek = cek+1;
+        			}
+        		}
+    		}else{
+    			String[] arrOfStr1 = sdg.split("---");
+    			int cek=1;
+    			for(int j=0;j<arrOfStr1.length;j++) {
+    				cek = (cek==4)?1:cek;
+    				System.out.println(cek);
+    				if(!arrOfStr1[j].equals("0") && cek==1) {
+    					goals.append("'"+arrOfStr1[j]+"',");
+    				}
+    				cek = cek+1;
+    			}
+    		}
+    		String hasilgoals = (goals.length()==0)?"":goals.substring(0, goals.length() - 1);
+    		String gol = (hasilgoals.equals(""))?"":" and a.id_goals in("+hasilgoals+") ";
+    		String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM assign_sdg_indicator a "
+        			+ " left join sdg_goals b on a.id_goals = b.id "
+        			+ " WHERE a.id_role = :id_role "+gol;
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+    	}
+    	
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("sdg",listSdg);
+        return hasil;
+    }
+    
     @GetMapping("admin/get-sdg-target")
     public @ResponseBody Map<String, Object> getSdgTarget(@RequestParam("id_role") int id_role, @RequestParam("id_goals") int id_goals) {
     	String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM assign_sdg_indicator a "
@@ -164,6 +216,59 @@ public class ReportController {
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_role", id_role);
         query.setParameter("id_goals", id_goals);
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",listSdg);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-sdg-target/{sdg}")
+    public @ResponseBody Map<String, Object> getSdgTargetEva(@RequestParam("id_role") int id_role, @RequestParam("id_goals") int id_goals, @PathVariable("sdg") String sdg) {
+    	Query query;
+    	if(sdg.equals("0")) {
+    		String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM assign_sdg_indicator a "
+        			+ " left join sdg_target b on a.id_target = b.id "
+        			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals";
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_goals", id_goals);
+    	}else {
+    		String[] arrOfStr = sdg.split(","); 
+    		StringBuffer target = new StringBuffer();
+    		if(arrOfStr.length>0) {
+    			for (int i = 0; i < arrOfStr.length; i++) {
+        			String[] arrOfStr1 = arrOfStr[i].split("---");
+        			int cek=1;
+        			for(int j=0;j<arrOfStr1.length;j++) {
+        				cek = (cek==4)?1:cek;
+        				if(!arrOfStr1[j].equals("0") && cek==2) {
+        					target.append("'"+arrOfStr1[j]+"',");
+        				}
+        				cek = cek+1;
+        			}
+        		}
+    		}else{
+    			String[] arrOfStr1 = sdg.split("---");
+    			int cek=1;
+    			for(int j=0;j<arrOfStr1.length;j++) {
+    				cek = (cek==4)?1:cek;
+    				if(!arrOfStr1[j].equals("0") && cek==2) {
+    					target.append("'"+arrOfStr1[j]+"',");
+    				}
+    				cek = cek+1;
+    			}
+    		}
+    		String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
+    		
+    		String tar = (hasiltarget.equals(""))?"":" and a.id_target in("+hasiltarget+") ";
+    		String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM assign_sdg_indicator a "
+        			+ " left join sdg_target b on a.id_target = b.id "
+        			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals "+tar;
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_goals", id_goals);
+    	}
+    	
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);
