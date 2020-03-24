@@ -37,7 +37,7 @@ public class NsaActivity implements Serializable {
     private Date date_created;
     
     @Column(nullable = true, length = 150)
-    private String internal_code;
+    private Integer internal_code;
     
     @Column(nullable = true, length = 11)
     private Integer budget_allocation;
@@ -46,7 +46,7 @@ public class NsaActivity implements Serializable {
 	}
 
 	public NsaActivity(Integer id, String id_activity, String id_program, Integer id_role, String nm_activity,
-			String nm_activity_eng, Integer created_by, Date date_created, String internal_code, Integer budget_allocation) {
+			String nm_activity_eng, Integer created_by, Date date_created, Integer internal_code, Integer budget_allocation) {
 		super();
 		this.id = id;
 		this.id_activity = id_activity;
@@ -124,11 +124,11 @@ public class NsaActivity implements Serializable {
 		this.date_created = date_created;
 	}
 
-	public String getInternal_code() {
+	public Integer getInternal_code() {
 		return internal_code;
 	}
 
-	public void setInternal_code(String internal_code) {
+	public void setInternal_code(Integer internal_code) {
 		this.internal_code = internal_code;
 	}
 

@@ -790,8 +790,13 @@ public class RanRadSdgController {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaProgService.saveNsaProgram(gov);
-    	if(gov.getInternal_code().equals("")) {
-    		em.createNativeQuery("UPDATE nsa_program set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
+    		String sql = "select IFNULL(max(internal_code)+1,1) as no from nsa_program where id_monper = :id_monper";
+        	Query query = em.createNativeQuery(sql);
+        	query.setParameter("id_monper", gov.getId_monper());
+        	System.out.print(query.getResultList().get(0).toString()+" "+gov.getId_monper());
+        	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
+    		em.createNativeQuery("UPDATE nsa_program set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
 	}
     
@@ -843,15 +848,19 @@ public class RanRadSdgController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-nsaActivity", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-nsaActivity/{id_monper}", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	@Transactional
-	public void saveNsaActivity(@RequestBody NsaActivity gov) {
+	public void saveNsaActivity(@RequestBody NsaActivity gov,@PathVariable("id_monper") Integer id_monper) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaActivityService.saveNsaActivity(gov);
-    	if(gov.getInternal_code().equals("")) {
-    		em.createNativeQuery("UPDATE nsa_activity set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
+    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no from nsa_activity a left join nsa_program b on a.id_program = b.id where b.id_monper = :id_monper";
+        	Query query = em.createNativeQuery(sql);
+        	query.setParameter("id_monper", id_monper);
+        	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
+    		em.createNativeQuery("UPDATE nsa_activity set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
 	}
     
@@ -938,8 +947,12 @@ public class RanRadSdgController {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaIndicatorService.saveNsaIndicator(gov);
-    	if(gov.getInternal_code().equals("")) {
-    		em.createNativeQuery("UPDATE nsa_indicator set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
+    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no from nsa_indicator a left join nsa_program b on a.id_program = b.id where b.id_monper = :id_monper";
+        	Query query = em.createNativeQuery(sql);
+        	query.setParameter("id_monper", id_monper);
+        	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
+    		em.createNativeQuery("UPDATE nsa_indicator set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
     	if(!sdg_indicator.equals("0")) {
     		nsaMapService.deleteNsaMapByNsaInd(gov.getId());
