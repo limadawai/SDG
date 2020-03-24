@@ -288,7 +288,7 @@
                     success: function (result) {
                     	var val = result.content;
                     	$('#id').val(val.id);
-                    	$('#id_goals').val(val.id_goals).attr("readonly",true);
+                    	$('#id_goals').val(val.id_goals);
         				$('#nm_goals').val(val.nm_goals);
         				$('#nm_goals_eng').val(val.nm_goals_eng);
 						$('#myModal').modal('show');

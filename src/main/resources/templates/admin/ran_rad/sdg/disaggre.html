@@ -311,7 +311,7 @@
                     success: function (result) {
                     	var val = result.content;
                     	$('#id').val(val.id);
-                    	$('#id_disaggre').val(val.id_disaggre).attr("readonly",true);
+                    	$('#id_disaggre').val(val.id_disaggre);
                     	$('#nm_disaggre').val(val.nm_disaggre);
                     	$('#nm_disaggre_eng').val(val.nm_disaggre_eng);
 						$('#myModal').modal('show');
