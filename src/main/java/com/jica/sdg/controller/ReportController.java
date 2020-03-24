@@ -2330,4 +2330,82 @@ public class ReportController {
     }
          
          
+    
+    @GetMapping("admin/generate-report/problem-identify/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}/{id_target}/{id_indicator}/{group}")
+    public @ResponseBody Map<String, Object> getOptionIndicatorList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals,@PathVariable("id_target") String id_target,@PathVariable("id_indicator") String id_indicator,@PathVariable("group") String group) {
+        String whereidrole ="";
+        String wheremonper = "";
+        String whereidcategory ="";
+        String whereidgoals ="";
+        String whereidtarget ="";
+        String whereidindicator ="";
+        /*WHERE a.id_prov = '000' AND d.id_role = '5' AND a.id_monper = '1' AND c.id_cat = '01' AND a.id_goals = '1'  AND a.id_target = '2' AND a.id_indicator = '1'*/
+        if(!id_monper.equals("*")&&!id_monper.equals("0")){
+          wheremonper = " AND  a.id_monper = '"+id_monper+"'";  
+        }
+
+        if(!id_role.equals("*")&&!id_role.equals("0")){
+          whereidrole = " AND d.id_role = '"+id_role+"'";  
+        }
+
+        if(!id_category.equals("*")&&!id_category.equals("0")){
+          whereidcategory = " AND c.id_cat =  '"+id_category+"'";  
+        }        
+        if(!id_goals.equals("*")&&!id_goals.equals("0")){
+          whereidgoals = "  and a.id_goals =  '"+id_goals+"'";  
+        }
+
+        if(!id_target.equals("*")&&!id_target.equals("0")){
+          whereidtarget = "and a.id_target =  '"+id_target+"'";  
+        }
+        
+        if(!id_indicator.equals("*")&&!id_indicator.equals("0")){
+          whereidindicator = "and a.id_indicator =  '"+id_indicator+"'";  
+        }
+
+        String sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up FROM entry_problem_identify_map a\n" +
+                        "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
+                        "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
+                        "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
+                        "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
+                        "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
+        
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        List list   = query.getResultList();
+        
+        String wheregroup = "";
+        if(group.equals("1")){
+            wheregroup = " t.id_cat,t.nm_cat ";
+        }
+        
+        if(group.equals("2")){
+            wheregroup = " t.id_goals,t.nm_goals ";
+        }
+        
+        if(group.equals("3")){
+            wheregroup = " t.id_role,t.nm_role ";
+        }
+        
+        String sql2  =   "SELECT DISTINCT "+wheregroup+" FROM (\n" +
+                         " SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up FROM entry_problem_identify_map a\n" +
+                         "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
+                         "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
+                         "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
+                         "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
+                         "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
+        
+        Query query2 = em.createNativeQuery(sql2);
+              query2.setParameter("id_prov", id_prov);
+        List list2   = query2.getResultList();
+        
+        
+        
+        Map<String, Object> hasil = new HashMap<>();        
+        hasil.put("content",list);
+        hasil.put("group",list2);
+        return hasil;
+    }
+         
+         
 }

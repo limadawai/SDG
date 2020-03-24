@@ -185,6 +185,7 @@
         var token       = $("meta[name='_csrf']").attr("content");
 	var header      = $("meta[name='_csrf_header']").attr("content");
         var id_role     = [[${id_role}]];
+        console.log(id_role);
         var id_prov     = [[${id_prov}]];
         var privilege   = [[${privilege}]];
         var filtersdg   = [[${filtersdg}]];
@@ -249,7 +250,7 @@
         }else{
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-role-gov-profil/'+id_prov,
+                url: urls+'list-get-option-role-all-profil/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     var array = result.content;

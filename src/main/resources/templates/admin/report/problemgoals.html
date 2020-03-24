@@ -70,7 +70,6 @@
                                 <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
                             </select>
                             <select id="group" name="group" class="form-control">
-                                <option value="0" >-- Pilih --</option>
                                 <option value="1" selected='true' >Category</option>
                                 <option value="2" >Goals</option>
                                 <option value="3" >Role</option>
@@ -393,17 +392,96 @@
        $('#show_report').on('click',function(){
            var id_prov          = $('#id_prov').val();
            var idrole           = $('#idrole').val();
-           var periode          = $('#periode').val();
+           var periode          = $('#periode').val().split("###");
+           periode              = periode[0];
            var ref_category     = $('#ref_category').val();
            var goals            = $('#goals').val();
            var target           = $('#target').val();
            var indicator        = $('#indicator').val();
+           var group            = $('#group').val();
            if(id_prov!='0'){
-               console.log('hasil');
+            function getReport(selected) {
+                             return $.ajax({
+                                 url: urls+'generate-report/problem-identify/'+id_prov+'/'+idrole+'/'+periode+'/'+ref_category+'/'+goals+'/'+target+'/'+indicator+'/'+group,
+                                 data: {
+                                     issession: 1,
+                                     selector: selector
+                                 },
+                                 // dataType: "json",
+                                 async: false,
+                                 error: function () {
+                                     alert("Error occured");
+                                 }
+                             });
+                         }
+                        var selector = !0;
+                        var ajaxObj = getReport(selector);
+                        var result= JSON.parse(ajaxObj.responseText);
+                console.log(result);
+               $('#report').html("");
+               $.each(result.group,function(i,x){
+                   var uuid =  uuidv4();
+                   var data_column =[ { "title": "No"},
+                                      { "title": "Category"},
+                                      { "title": "Institution" },
+                                      { "title": "Description" },
+                                      { "title": "Follow up Plan" }];
+                    var divtable = `<div><h3>`+x[1]+`</h3><table id="table`+uuid+`"></table></div>`;
+                    $('#report').append(divtable);
+                    var data = [];
+                    var no = 0;
+                    $.each(result.content,function(ii,xx){
+                        
+                        if(group=='1'){
+                          if(x[0]==xx[0]){
+                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              data.push(data2);
+                          }
+                        }
+                        if(group=='2'){
+                          if(x[0]==xx[1]){
+                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              data.push(data2);
+                          }
+                        }
+                        
+                        if(group=='3'){
+                          if(x[0]==xx[2]){
+                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              data.push(data2);
+                          }
+                        }
+                    });
+                    $('#table'+uuid).DataTable({
+                        responsive: true,
+                        sDom: 'lrtip',
+                        "retrieve": true,
+                        "bLengthChange": false,
+                        "cache": false,
+                        "autoWidth": true,
+                        "responsive":true,
+                        "paging":   false,
+                        "ordering": true,
+                        "info":     false,
+                        "searching": true,
+                        "aaData" : data,
+                        "aoColumns":data_column,
+//                        "data": datarow,
+                        select: true
+                    });
+                    
+               })
            }
            
 //           console.log('hallo');
-       })
+       });
+       
+       function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+            });
+        }
     </script>
 </body>
 <style>
