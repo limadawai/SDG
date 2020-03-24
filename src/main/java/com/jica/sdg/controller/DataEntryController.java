@@ -260,6 +260,18 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-sts-monper-all/{id_prov}")
+    public @ResponseBody Map<String, Object> getGetStsMonperAll(@PathVariable("id_prov") String id_prov) {
+        String sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where (a.status = 'on Going' or a.status = 'completed') and a.id_prov=:id_prov ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-entry-sdg/{id_prov}/{id_role}/{id_monper}/{year}")
     public @ResponseBody Map<String, Object> listEntrySdg(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
     	Query query;
@@ -1457,11 +1469,11 @@ public class DataEntryController {
     	JSONObject jsonObject = new JSONObject(payload);
         JSONObject catatan = jsonObject.getJSONObject("target");
         JSONArray c = catatan.getJSONArray("target");
-        em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and id_role = '"+id_role+"'").executeUpdate();
         for (int i = 0 ; i < c.length(); i++) {
         	JSONObject obj = c.getJSONObject(i);
         	String year = obj.getString("year");
         	String value = obj.getString("nilai");
+        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and id_role = '"+id_role+"' and year = '"+year+"' ").executeUpdate();
         	if(!value.equals("")) {
         		em.createNativeQuery("INSERT INTO sdg_indicator_target (id_sdg_indicator,id_role,year,value) values ('"+id_indicator+"','"+id_role+"','"+year+"','"+value+"')").executeUpdate();
         	}
