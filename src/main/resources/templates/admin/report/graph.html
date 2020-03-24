@@ -116,7 +116,17 @@
                                 }else{
                                     var prog_l = restarget[i][2];
                                 }
-                                isitarget += "<li id='lili"+id+"'>"+prog_l;
+                                var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+                                var dat_goals = id+"##"+restarget[i][0]+"##null";
+                                if(ses_goals == dat_goals){
+                                    isitarget += "<li id='lili"+id+"' ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+id+"' data-idtarget='"+restarget[i][0]+"' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                }else{
+                                    isitarget += "<li id='lili"+id+"' ><a style='color:black;' class='lisdg' data-idgoals='"+id+"' data-idtarget='"+restarget[i][0]+"' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                }
+//                                isitarget += "<li id='lili"+id+"'>"+prog_l;
+//                                isitarget += "<li id='lili"+id+"' style='cursor:pointer; color:black;' onclick='grid_gov_nongov("+id+", "+restarget[i][0]+", null)'>"+prog_l;
+                                
+//                                isiindi += " <a class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a>";
 //        				isitarget += "<li>"+restarget[i][1];
                                 getIndicator(id, restarget[i][0]);
                                 isitarget += "</li>";
@@ -137,20 +147,27 @@
                     dataType: 'json',
                     cache: false,
                     success: function (resindi) {
-                            //console.log(resindi);
+                            
                             var isiindi = "<ul id='ulindi"+idgoals+"'>";
+//                            $("#lili"+idgoals).html("");
                             for (var i=0; i<resindi.length; i++) {
                                 if($('#fs').is(':checked')){
                                     var prog_l = resindi[i][1];
                                 }else{
                                     var prog_l = resindi[i][2];
                                 }
+//                                $("#lili"+idgoals).html("");
                                 var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
                                 var dat_goals = idgoals+"##"+idtarget+"##"+resindi[i][0];
+                                console.log("re "+ses_goals);
                                 if(ses_goals == dat_goals){
-                                    isiindi += "<li id='lisdg' style='cursor:pointer; color:#7F7FFF;' onclick='grid_gov_nongov("+idgoals+", "+idtarget+", "+resindi[i][0]+")'>"+prog_l+"</li>";
+//                                    isiindi += "<li id='lisdg' style='cursor:pointer; color:#7F7FFF;' onclick='grid_gov_nongov("+idgoals+", "+idtarget+", "+resindi[i][0]+")'>"+prog_l+"</li>";
+//                                    isiindi += "<li style='color:#7F7FFF;'> <a class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a> </li>";
+                                    isiindi += " <li ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a></li>";
                                 }else{
-                                    isiindi += "<li id='lisdg' style='cursor:pointer; color:black;' onclick='grid_gov_nongov("+idgoals+", "+idtarget+", "+resindi[i][0]+")'>"+prog_l+"</li>";
+                                    isiindi += " <li ><a style='color:black;' class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a></li>";
+//                                    isiindi += "<li style='color:black;'> <a class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a> </li>";
+//                                    isiindi += "<li id='lisdg' style='cursor:pointer; color:black;' onclick='grid_gov_nongov("+idgoals+", "+idtarget+", "+resindi[i][0]+")'>"+prog_l+"</li>";
                                 }
                                 
                                 
@@ -524,7 +541,15 @@
                             }else{
                                 var prog_l = resgoals[i][2];
                             }
-                            isi += "<li id='li"+resgoals[i][0]+"'>"+prog_l+"</li>";
+                            var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+                            var dat_goals = resgoals[i][0]+"##null##null";
+                            if(ses_goals == dat_goals){
+                                isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                            }else{
+                                isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                            }
+                            
+//                            isi += "<li id='li"+resgoals[i][0]+"'>"+prog_l+"</li>";
                             getTarget(resgoals[i][0]);
                     }
                     isi += "</ol>";
@@ -566,6 +591,48 @@
             //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
             }
         }
+        
+        $('#divkiri').on('click', ".lisdg", function(e){
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+            var idgoals         = $(this).data("idgoals");
+            var idtarget        = $(this).data("idtarget");
+            var idindicator     = $(this).data("idindicator");
+            sessionStorage.graph_idprov  = valda;
+            sessionStorage.graph_idrole  = valrole;
+            sessionStorage.graph_idmonper  = combo_periode;
+            sessionStorage.graph_idgoals  = idgoals;
+            sessionStorage.graph_idtarget  = idtarget;
+            sessionStorage.graph_idindicator  = idindicator;
+//                alert('monper '+combo_periode);
+            $cek = 0;
+            if (valrole == '0'){	
+                if($('#fs').is(':checked')){
+                    swal("Anda harus memilih tipe Role");
+                }else{
+                    swal("You must Choose Role");
+                }
+                $cek += 1;
+            }
+            if (combo_periode == '0'){					
+                if($('#fs').is(':checked')){
+                    swal("Anda harus memilih Periode");
+                }else{
+                    swal("You must Choose Period");
+                }
+                $cek += 1;
+            }
+            if ($cek == 0)
+            {
+                grid_gov_nongov_tampil();
+                show_sdg_goal();
+//                alert("report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+valda+"/"+valrole+"/"+combo_periode);
+                
+//                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+combo_periode+"/"+flag+"/"+valda+"/"+valrole;
+            //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
+            }
+        });
         
         function grid_gov_nongov(idgoals, idtarget, idindicator) {
             //alert(idsdg+" "+idtar+" "+idindi+" "+idmon+" "+flag);
