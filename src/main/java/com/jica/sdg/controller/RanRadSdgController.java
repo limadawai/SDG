@@ -1569,8 +1569,6 @@ public class RanRadSdgController {
 	        	sheet.addMergedRegion(CellRangeAddress.valueOf("A"+(i+3)+":K"+(i+3)));
 	        }
 	        
-	        
-	        
 	        workbook.getSheetAt(0).autoSizeColumn(0);
 	        workbook.getSheetAt(0).autoSizeColumn(1);
 	        workbook.getSheetAt(0).autoSizeColumn(2);

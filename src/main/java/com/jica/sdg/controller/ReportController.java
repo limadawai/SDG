@@ -28,6 +28,7 @@ import com.jica.sdg.service.ISdgGoalsService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.ISdgTargetService;
 import com.jica.sdg.service.ModelCrud;
+import com.jica.sdg.service.NsaProfileService;
 import com.jica.sdg.service.ProvinsiService;
 import com.jica.sdg.service.RanRadService;
 import com.jica.sdg.service.RoleService;
@@ -61,6 +62,8 @@ public class ReportController {
     SdgFundingService sdgFundingService;
     @Autowired
     ISdgTargetService sdgTargetService;
+    @Autowired
+    NsaProfileService nsaProfilrService;
     @Autowired
     ISdgIndicatorService sdgIndicatorService;
     @Autowired
@@ -167,6 +170,57 @@ public class ReportController {
         return hasil;
     }
     
+    @GetMapping("admin/get-sdg-indicator-utama")
+    public @ResponseBody Map<String, Object> getSdgIndicatorUtama(
+    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_goals") int id_goals, 
+    		@RequestParam("id_target") int id_target) {
+    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
+    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+    			+ " d.baseline "
+    			+ " FROM assign_sdg_indicator a "
+    			+ " left join sdg_indicator b on a.id_indicator = b.id "
+    			+ " left join ref_unit c on b.unit = c.id_unit "
+    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
+    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target ";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",listSdg);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-sdg-indicator-slave")
+    public @ResponseBody Map<String, Object> getSdgIndicatorSlave(
+    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_indicator") int id_indicator, 
+    		@RequestParam("year") int year,
+    		@RequestParam("id_monper") int id_monper) {
+    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
+    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+    			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation "
+    			+ " FROM assign_sdg_indicator a "
+    			+ " left join sdg_indicator b on a.id_indicator = b.id "
+    			+ " left join ref_unit c on b.unit = c.id_unit "
+    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
+    			+ " left join sdg_indicator_target e on a.id_indicator = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+    			+ " left join entry_sdg f on a.id_indicator = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+    			+ " WHERE a.id_role = :id_role and a.id_indicator = :id_indicator ";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_indicator", id_indicator);
+        query.setParameter("year", year);
+        query.setParameter("id_monper", id_monper);
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",listSdg);
+        return hasil;
+    }
+    
     @GetMapping("admin/get-sdg-indicator")
     public @ResponseBody Map<String, Object> getSdgIndicator(
     		@RequestParam("id_role") int id_role, 
@@ -226,6 +280,74 @@ public class ReportController {
         query.setParameter("year", year);
         query.setParameter("id_monper", id_monper);
         query.setParameter("id_indicator", id_indicator);
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",listSdg);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-sdg-disaggre-utama")
+    public @ResponseBody Map<String, Object> getSdgDisaggreUtama(
+    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_goals") int id_goals, 
+    		@RequestParam("id_target") int id_target, 
+    		@RequestParam("id_indicator") int id_indicator) {
+    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
+    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+    			+ " d.baseline, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
+    			+ " '' as new_value1, '' as new_value2, '' as new_value3, '' as new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+    			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation, h.id_disaggre, h.id as id_dis_detail "
+    			+ " FROM assign_sdg_indicator a "
+    			+ " left join sdg_indicator b on a.id_indicator = b.id "
+    			+ " left join ref_unit c on b.unit = c.id_unit "
+    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
+    			+ " right join sdg_ranrad_disaggre g on a.id_indicator = g.id_indicator "
+    			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
+    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator ";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
+        query.setParameter("id_indicator", id_indicator);
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",listSdg);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-sdg-disaggre-slave")
+    public @ResponseBody Map<String, Object> getSdgDisaggreSlave(
+    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_goals") int id_goals, 
+    		@RequestParam("id_target") int id_target, 
+    		@RequestParam("year") int year,
+    		@RequestParam("id_monper") int id_monper,
+    		@RequestParam("id_indicator") int id_indicator,
+    		@RequestParam("id_dis") String id_dis,
+    		@RequestParam("id_dis_detail") String id_dis_detail) {
+    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
+    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+    			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+    			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation "
+    			+ " FROM assign_sdg_indicator a "
+    			+ " left join sdg_indicator b on a.id_indicator = b.id "
+    			+ " left join ref_unit c on b.unit = c.id_unit "
+    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
+    			+ " left join sdg_indicator_target e on a.id_indicator = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+    			+ " right join sdg_ranrad_disaggre g on a.id_indicator = g.id_indicator "
+    			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
+    			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and g.id = :id_dis and h.id = :id_dis_detail";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
+        query.setParameter("year", year);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("id_indicator", id_indicator);
+        query.setParameter("id_dis", id_dis);
+        query.setParameter("id_dis_detail", id_dis_detail);
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);
@@ -2062,4 +2184,45 @@ public class ReportController {
              model.addAttribute("name", session.getAttribute("name"));
              return "admin/report/evaluation";
          }
+         
+         @GetMapping("admin/data-report/problem-identify")
+         public String govprogram(Model model, HttpSession session) {
+        model.addAttribute("title", "SDG Indicators Monitoring");
+//        model.addAttribute("listprov", provinsiService.findAllProvinsi());
+//        model.addAttribute("lang", session.getAttribute("bahasa"));
+//        model.addAttribute("name", session.getAttribute("name"));
+        
+        Integer id_role = (Integer) session.getAttribute("id_role");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("id_role", session.getAttribute("id_role"));
+        model.addAttribute("listNsaProfile", nsaProfilrService.findRoleGov());
+    	Optional<Role> list = roleService.findOne(id_role);
+    	String id_prov      = list.get().getId_prov();
+    	String privilege    = list.get().getPrivilege();
+    	if(id_prov.equals("000")) {
+            model.addAttribute("listprov", provinsiService.findAllProvinsi());
+    	}else {
+            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
+            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
+    	}
+        
+         Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text ,'#' AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "	UNION \n" +
+                                                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id) AS id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target) AS id_text ,a.id AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "	UNION \n" +
+                                                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id,'.',c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target,'-',c.id_indicator) AS id_text ,CONCAT(a.id,'.',b.id) AS id_parent2  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "	ORDER BY id_parent");
+        
+        List list3 =  query3.getResultList();
+        Map<String, Object> filtersdg = new HashMap<>();
+        filtersdg.put("data",list3);
+        model.addAttribute("filtersdg",filtersdg);
+        model.addAttribute("id_prov", id_prov);
+        model.addAttribute("privilege", privilege);        
+        model.addAttribute("refcategory",modelCrud.getRefCategory());
+        return "admin/report/problemgoals";
+    }
+         
+         
 }

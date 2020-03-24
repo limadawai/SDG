@@ -55,6 +55,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .logoutSuccessUrl("/login.done")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
+        http.sessionManagement()
+        	.invalidSessionUrl("/login?session-expired=true");
     }
 
     @Override
