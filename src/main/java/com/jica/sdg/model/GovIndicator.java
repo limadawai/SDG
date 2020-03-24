@@ -39,14 +39,14 @@ public class GovIndicator implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date_created;
     
-    @Column(nullable = false, length = 50)
-    private String internal_code;
+    @Column(nullable = true, length = 11)
+    private Integer internal_code;
 
 	public GovIndicator() {
 	}
 
 	public GovIndicator(Integer id, String id_gov_indicator, String id_program, String id_activity, String nm_indicator,
-			String nm_indicator_eng, String unit, Integer created_by, Date date_created, String internal_code) {
+			String nm_indicator_eng, String unit, Integer created_by, Date date_created, Integer internal_code) {
 		super();
 		this.id = id;
 		this.id_gov_indicator = id_gov_indicator;
@@ -132,11 +132,11 @@ public class GovIndicator implements Serializable {
 		this.date_created = date_created;
 	}
 
-	public String getInternal_code() {
+	public Integer getInternal_code() {
 		return internal_code;
 	}
 
-	public void setInternal_code(String internal_code) {
+	public void setInternal_code(Integer internal_code) {
 		this.internal_code = internal_code;
 	}
 

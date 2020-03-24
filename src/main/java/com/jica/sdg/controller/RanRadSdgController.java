@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -457,8 +458,13 @@ public class RanRadSdgController {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	govProgService.saveGovProgram(gov);
-    	if(gov.getInternal_code().equals("")) {
-    		em.createNativeQuery("UPDATE gov_program set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
+    		String sql = "select IFNULL(max(internal_code)+1,1) as no from gov_program where id_monper = :id_monper";
+        	Query query = em.createNativeQuery(sql);
+        	query.setParameter("id_monper", gov.getId_monper());
+        	System.out.print(query.getResultList().get(0).toString()+" "+gov.getId_monper());
+        	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
+    		em.createNativeQuery("UPDATE gov_program set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
 	}
     
@@ -541,15 +547,19 @@ public class RanRadSdgController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-govActivity", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-govActivity/{id_monper}", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	@Transactional
-	public void saveGovActivity(@RequestBody GovActivity gov) {
+	public void saveGovActivity(@RequestBody GovActivity gov,@PathVariable("id_monper") Integer id_monper) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	govActivityService.saveGovActivity(gov);
-    	if(gov.getInternal_code().equals("")) {
-    		em.createNativeQuery("UPDATE gov_activity set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
+    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no from gov_activity a left join gov_program b on a.id_program = b.id where b.id_monper = :id_monper";
+        	Query query = em.createNativeQuery(sql);
+        	query.setParameter("id_monper", id_monper);
+        	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
+    		em.createNativeQuery("UPDATE gov_activity set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
 	}
     
@@ -635,8 +645,12 @@ public class RanRadSdgController {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	govIndicatorService.saveGovIndicator(gov);
-    	if(gov.getInternal_code().equals("")) {
-    		em.createNativeQuery("UPDATE gov_indicator set internal_code = '"+gov.getId()+"' where id ='"+gov.getId()+"'").executeUpdate();
+    	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
+    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no from gov_indicator a left join gov_program b on a.id_program = b.id where b.id_monper = :id_monper";
+        	Query query = em.createNativeQuery(sql);
+        	query.setParameter("id_monper", id_monper);
+        	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
+    		em.createNativeQuery("UPDATE gov_indicator set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
     	if(!sdg_indicator.equals("0")) {
     		govMapService.deleteGovMapByGovInd(gov.getId());

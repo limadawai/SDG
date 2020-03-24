@@ -1080,7 +1080,7 @@ public class DataEntryController {
         					(String)row[5], 
         					Integer.parseInt(row[6].toString()), 
         					(Date)row[7], 
-        					(String)row[8])
+        					(Integer)row[8])
         			);
         }
         hasil.put("content",result);

@@ -36,14 +36,14 @@ public class GovProgram implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date date_created;
     
-    @Column(nullable = true, length = 50)
-    private String internal_code;
+    @Column(nullable = true, length = 11)
+    private Integer internal_code;
 
 	public GovProgram() {
 	}
 
 	public GovProgram(Integer id, String id_program, String nm_program, String nm_program_eng, Integer id_monper,
-			String rel_prog_id, Integer created_by, Date date_created, String internal_code) {
+			String rel_prog_id, Integer created_by, Date date_created, Integer internal_code) {
 		super();
 		this.id = id;
 		this.id_program = id_program;
@@ -120,11 +120,11 @@ public class GovProgram implements Serializable {
 		this.date_created = date_created;
 	}
 
-	public String getInternal_code() {
+	public Integer getInternal_code() {
 		return internal_code;
 	}
 
-	public void setInternal_code(String internal_code) {
+	public void setInternal_code(Integer internal_code) {
 		this.internal_code = internal_code;
 	}
 
