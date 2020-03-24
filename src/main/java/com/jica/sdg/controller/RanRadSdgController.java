@@ -673,6 +673,8 @@ public class RanRadSdgController {
         		map.setId_prov(id_prov);
         		govMapService.saveGovMap(map);
     		}
+    	}else {
+    		govMapService.deleteGovMapByGovInd(gov.getId());
     	}
     	Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",gov.getId());
