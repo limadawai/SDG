@@ -156,6 +156,58 @@ public class ReportController {
         return hasil;
     }
     
+    @GetMapping("admin/get-sdg-goals/{sdg}")
+    public @ResponseBody Map<String, Object> getSdgGoalsEva(@RequestParam("id_role") int id_role, @PathVariable("sdg") String sdg) {
+    	Query query;
+    	if(sdg.equals("0")) {
+    		String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM assign_sdg_indicator a "
+        			+ " left join sdg_goals b on a.id_goals = b.id "
+        			+ " WHERE a.id_role = :id_role";
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+    	}else {
+    		String[] arrOfStr = sdg.split(","); 
+    		StringBuffer goals = new StringBuffer();
+    		if(arrOfStr.length>0) {
+    			for (int i = 0; i < arrOfStr.length; i++) {
+        			String[] arrOfStr1 = arrOfStr[i].split("---");
+        			int cek=1;
+        			for(int j=0;j<arrOfStr1.length;j++) {
+        				cek = (cek==4)?1:cek;
+        				System.out.println(cek);
+        				if(!arrOfStr1[j].equals("0") && cek==1) {
+        					goals.append("'"+arrOfStr1[j]+"',");
+        				}
+        				cek = cek+1;
+        			}
+        		}
+    		}else{
+    			String[] arrOfStr1 = sdg.split("---");
+    			int cek=1;
+    			for(int j=0;j<arrOfStr1.length;j++) {
+    				cek = (cek==4)?1:cek;
+    				System.out.println(cek);
+    				if(!arrOfStr1[j].equals("0") && cek==1) {
+    					goals.append("'"+arrOfStr1[j]+"',");
+    				}
+    				cek = cek+1;
+    			}
+    		}
+    		String hasilgoals = (goals.length()==0)?"":goals.substring(0, goals.length() - 1);
+    		String gol = (hasilgoals.equals(""))?"":" and a.id_goals in("+hasilgoals+") ";
+    		String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM assign_sdg_indicator a "
+        			+ " left join sdg_goals b on a.id_goals = b.id "
+        			+ " WHERE a.id_role = :id_role "+gol;
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+    	}
+    	
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("sdg",listSdg);
+        return hasil;
+    }
+    
     @GetMapping("admin/get-sdg-target")
     public @ResponseBody Map<String, Object> getSdgTarget(@RequestParam("id_role") int id_role, @RequestParam("id_goals") int id_goals) {
     	String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM assign_sdg_indicator a "
@@ -164,6 +216,59 @@ public class ReportController {
         Query query = manager.createNativeQuery(sql);
         query.setParameter("id_role", id_role);
         query.setParameter("id_goals", id_goals);
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",listSdg);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-sdg-target/{sdg}")
+    public @ResponseBody Map<String, Object> getSdgTargetEva(@RequestParam("id_role") int id_role, @RequestParam("id_goals") int id_goals, @PathVariable("sdg") String sdg) {
+    	Query query;
+    	if(sdg.equals("0")) {
+    		String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM assign_sdg_indicator a "
+        			+ " left join sdg_target b on a.id_target = b.id "
+        			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals";
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_goals", id_goals);
+    	}else {
+    		String[] arrOfStr = sdg.split(","); 
+    		StringBuffer target = new StringBuffer();
+    		if(arrOfStr.length>0) {
+    			for (int i = 0; i < arrOfStr.length; i++) {
+        			String[] arrOfStr1 = arrOfStr[i].split("---");
+        			int cek=1;
+        			for(int j=0;j<arrOfStr1.length;j++) {
+        				cek = (cek==4)?1:cek;
+        				if(!arrOfStr1[j].equals("0") && cek==2) {
+        					target.append("'"+arrOfStr1[j]+"',");
+        				}
+        				cek = cek+1;
+        			}
+        		}
+    		}else{
+    			String[] arrOfStr1 = sdg.split("---");
+    			int cek=1;
+    			for(int j=0;j<arrOfStr1.length;j++) {
+    				cek = (cek==4)?1:cek;
+    				if(!arrOfStr1[j].equals("0") && cek==2) {
+    					target.append("'"+arrOfStr1[j]+"',");
+    				}
+    				cek = cek+1;
+    			}
+    		}
+    		String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
+    		
+    		String tar = (hasiltarget.equals(""))?"":" and a.id_target in("+hasiltarget+") ";
+    		String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM assign_sdg_indicator a "
+        			+ " left join sdg_target b on a.id_target = b.id "
+        			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals "+tar;
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_goals", id_goals);
+    	}
+    	
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);
@@ -624,117 +729,421 @@ public class ReportController {
 //                    "inner join gov_indicator as c on a.id = c.id_activity\n" +
 //                    "inner join gov_map as d on c.id = d.id_gov_indicator\n" +
 //                    "WHERE a.id_role = :id_role and d.id_prov = :id_prov and d.id_monper = :id_monper ";
-    	String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
-                    "from gov_map as a\n" +
-                    "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
-                    "left join gov_program as c on b.id_program = c.id\n" +
-                    "left join gov_activity as d on b.id_activity = d.id \n" +
-                    "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and d.id_role = :id_role and c.id IS NOT NULL";
-    	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("id_indicator", id_indicator);
-        query.setParameter("id_prov", idprov);
-        query.setParameter("id_monper", id_monper);
-        query.setParameter("id_role", id_role);
-        List list = query.getResultList();
+        Query query = em.createNativeQuery("");
+//        System.out.println("id "+id_role);
+        if(id_target.equals("null")){
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
+                            "left join gov_program as c on b.id_program = c.id\n" +
+                            "left join gov_activity as d on b.id_activity = d.id \n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and d.id_role = :id_role and c.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+            }else{
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
+                            "left join gov_program as c on b.id_program = c.id\n" +
+                            "left join gov_activity as d on b.id_activity = d.id \n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and d.id_role = :id_role and c.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+            }
+        }else{
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
+                            "left join gov_program as c on b.id_program = c.id\n" +
+                            "left join gov_activity as d on b.id_activity = d.id \n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and d.id_role = :id_role and c.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+            }else{
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
+                            "left join gov_program as c on b.id_program = c.id\n" +
+                            "left join gov_activity as d on b.id_activity = d.id \n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and d.id_role = :id_role and c.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+            }
+        }
+        List list   = query.getResultList();
         return list;
     }
     
     @GetMapping("admin/getallgovactivity")
     public @ResponseBody List<Object> getallgovactivity(@RequestParam("id_goals") String id_goals, @RequestParam("id_target") String id_target, @RequestParam("id_indicator") String id_indicator, @RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("idprog") String idprog) {
-    	String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
-                    "from gov_map as a\n" +
-                    "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
-                    "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                    "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
-    	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("id_indicator", id_indicator);
-        query.setParameter("id_prov", idprov);
-        query.setParameter("id_monper", id_monper);
-        query.setParameter("id_role", id_role);
-        query.setParameter("idprog", idprog);
+    	Query query = em.createNativeQuery("");
+//        System.out.println("id "+id_role);
+        if(id_target.equals("null")){
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
+                            "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+            }else{
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
+                            "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+            }
+        }else{
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
+                            "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+            }else{
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
+                            "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+            }
+        }
         List list = query.getResultList();
         return list;
     }
     
     @GetMapping("admin/getallgovindi")
     public @ResponseBody List<Object> getallgovindi(@RequestParam("id_goals") String id_goals, @RequestParam("id_target") String id_target, @RequestParam("id_indicator") String id_indicator, @RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("idprog") String idprog, @RequestParam("idactivity") int idactivity) {
-    	String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
-                    "from gov_map as a\n" +
-                    "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                    "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
-    	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("id_indicator", id_indicator);
-        query.setParameter("id_prov", idprov);
-        query.setParameter("id_monper", id_monper);
-//        query.setParameter("id_role", id_role);
-        query.setParameter("idprog", idprog);
-        query.setParameter("idactivity", idactivity);
+    	Query query = em.createNativeQuery("");
+//        System.out.println("id "+id_role);
+        if(id_target.equals("null")){
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+        //        query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+                query.setParameter("idactivity", idactivity);
+            }else{
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+        //        query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+                query.setParameter("idactivity", idactivity);
+            }
+        }else{
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+        //        query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+                query.setParameter("idactivity", idactivity);
+            }else{
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
+                            "from gov_map as a\n" +
+                            "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+        //        query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+                query.setParameter("idactivity", idactivity);
+            }
+        }
         List list = query.getResultList();
         return list;
     }
     
     @GetMapping("admin/getallnsaprogram")
     public @ResponseBody List<Object> getallnsaprogram(@RequestParam("id_goals") String id_goals, @RequestParam("id_target") String id_target, @RequestParam("id_indicator") String id_indicator, @RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper) {
-    	String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
-                    "from nsa_map as a\n" +
-                    "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
-                    "left join nsa_program as c on b.id_program = c.id\n" +
-                    "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role and c.id IS NOT NULL ";
-//    	String sql = "SELECT a.id_nsa_indicator, b.id, b.nm_program, b.nm_program_eng FROM nsa_map a LEFT JOIN "
-//    			+ "nsa_program b ON b.id = (SELECT id_program FROM nsa_indicator WHERE id = a.id_nsa_indicator) "
-//    			+ "WHERE a.id_prov = :id_prov";
-    	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("id_indicator", id_indicator);
-        query.setParameter("id_prov", idprov);
-        query.setParameter("id_role", id_role);
-        query.setParameter("id_monper", id_monper);
+    	Query query = em.createNativeQuery("");
+        System.out.println("id indi = "+id_indicator);
+        if(id_target.equals("null")){
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
+                            "left join nsa_program as c on b.id_program = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role and c.id IS NOT NULL ";
+                
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_role", id_role);
+                query.setParameter("id_monper", id_monper);
+            }else{
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
+                            "left join nsa_program as c on b.id_program = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role and c.id IS NOT NULL ";
+                
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_role", id_role);
+                query.setParameter("id_monper", id_monper);
+            }
+        }else{
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
+                            "left join nsa_program as c on b.id_program = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role and c.id IS NOT NULL ";
+                
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_role", id_role);
+                query.setParameter("id_monper", id_monper);
+            }else{
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
+                            "left join nsa_program as c on b.id_program = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role and c.id IS NOT NULL ";
+                
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_role", id_role);
+                query.setParameter("id_monper", id_monper);
+            }
+        }
+        
         List list = query.getResultList();
         return list;
     }
     
     @GetMapping("admin/getallnsaactivity")
     public @ResponseBody List<Object> getallnsaactivity(@RequestParam("id_goals") String id_goals, @RequestParam("id_target") String id_target, @RequestParam("id_indicator") String id_indicator, @RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("idprog") String idprog) {
-    	String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
-                    "from nsa_map as a\n" +
-                    "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
-                    "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                    "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
-    	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("id_indicator", id_indicator);
-        query.setParameter("id_prov", idprov);
-        query.setParameter("id_monper", id_monper);
-        query.setParameter("id_role", id_role);
-        query.setParameter("idprog", idprog);
+    	Query query = em.createNativeQuery("");
+//        System.out.println("id "+id_role);
+        if(id_target.equals("null")){
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
+                            "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+            }else{
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
+                            "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+            }
+        }else{
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
+                            "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+            }else{
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
+                            "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+            }
+        }
+        
         List list = query.getResultList();
         return list;
     }
     
     @GetMapping("admin/getallnsaindi")
     public @ResponseBody List<Object> getallnsaindi(@RequestParam("id_goals") String id_goals, @RequestParam("id_target") String id_target, @RequestParam("id_indicator") String id_indicator, @RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("idprog") String idprog, @RequestParam("idactivity") int idactivity) {
-    	String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
-                    "from nsa_map as a\n" +
-                    "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
-                    "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
-                    "and b.id IS NOT NULL";
-    	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("id_indicator", id_indicator);
-        query.setParameter("id_prov", idprov);
-        query.setParameter("id_monper", id_monper);
-//        query.setParameter("id_role", id_role);
-        query.setParameter("idprog", idprog);
-        query.setParameter("idactivity", idactivity);
+    	Query query = em.createNativeQuery("");
+//        System.out.println("id "+id_role);
+        if(id_target.equals("null")){
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            "and b.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+        //        query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+                query.setParameter("idactivity", idactivity);
+            }else{
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            "and b.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+//                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+        //        query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+                query.setParameter("idactivity", idactivity);
+            }
+        }else{
+            if(id_indicator.equals("null")){
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            "and b.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+//                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+        //        query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+                query.setParameter("idactivity", idactivity);
+            }else{
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng\n" +
+                            "from nsa_map as a\n" +
+                            "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
+                            "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            "and b.id IS NOT NULL";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
+                query.setParameter("id_indicator", id_indicator);
+                query.setParameter("id_prov", idprov);
+                query.setParameter("id_monper", id_monper);
+        //        query.setParameter("id_role", id_role);
+                query.setParameter("idprog", idprog);
+                query.setParameter("idactivity", idactivity);
+            }
+        }
+        
         List list = query.getResultList();
         return list;
     }
@@ -988,7 +1397,7 @@ public class ReportController {
     //====================== Grafik Detail ======================
     
     @GetMapping("admin/report-graph-detail/{idgoals}/{idtarget}/{idindicator}/{idprog}/{idacty}/{idindi}/{idmonper}/{flag}/{valdaerah}/{valrole}")
-    public String grafikdetail(Model model, HttpSession session, @PathVariable("idgoals") int idgoals, @PathVariable("idtarget") int idtarget, @PathVariable("idindicator") int idindicator, @PathVariable("idprog") int idprog, @PathVariable("idacty") int idacty,
+    public String grafikdetail(Model model, HttpSession session, @PathVariable("idgoals") String idgoals, @PathVariable("idtarget") String idtarget, @PathVariable("idindicator") String idindicator, @PathVariable("idprog") int idprog, @PathVariable("idacty") int idacty,
         @PathVariable("idindi") int idindi, @PathVariable("idmonper") int idmonper, 
         @PathVariable("flag") int flag, @PathVariable("valdaerah") String valdaerah, @PathVariable("valrole") String valrole) {
         model.addAttribute("title", "Report Graphic Detail");

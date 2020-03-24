@@ -377,7 +377,8 @@
             			                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
             			                      '</label><br/>';
                                     	$.ajax({
-                                            url: urls + 'list-sdgTarget/'+response.sdg[i][0],
+                                            url: urls + 'get-sdg-target',
+                                            data: {'id_role':idrole,'id_goals':response.sdg[i][0]},
                                             type: 'get',
                                             dataType: 'json',
                                             cache: false,
@@ -385,18 +386,18 @@
                                             success: function (result) {
                                             	for (var j = 0; j < result.content.length; j++) {
                                             		var nm_target;
-                                            		var id_target=result.content[j].id;
+                                            		var id_target=result.content[j][0];
                                                 	if($("#fs").is(':checked')){
-                                                		nm_target = result.content[j].nm_target;
+                                                		nm_target = result.content[j][1];
                             						}else{
-                            							nm_target = result.content[j].nm_target_eng;
+                            							nm_target = result.content[j][2];
                             						}
-                                                	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
+                                                	option += '<optgroup id="" label="'+id_target+' '+nm_target+'">';
                                                 	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-                                                					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.sdg[i][0]+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+                                                					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.sdg[i][0]+'---'+id_target+'---0">&nbsp;&nbsp;&nbsp;'+
             							                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
             							                      '</label><br/>';
-                                                	$.ajax({
+                                                	/* $.ajax({
                                                         url: urls + 'list-sdgIndicator/'+response.sdg[i][0]+'/'+result.content[j].id,
                                                         type: 'get',
                                                         dataType: 'json',
@@ -418,7 +419,7 @@
             								                      '</label><br/>';
                                                         	}
                                                         }
-                                                	});
+                                                	}); */
                                                 	option += '</optgroup>';
                                             	}
                                             }
@@ -434,7 +435,7 @@
         	        $('.accordion-inner').on('click', '.menu-master', function(){
         	        	var id = $(this).data('id');
         	        	if ($(this).is(":checked")) {
-        	                $(".accordion-inner").find('.menu'+id).prop("checked", false);
+        	                $(".accordion-inner").find('.menu'+id).prop("checked", true);
         	            } else {
         	            	 $(".accordion-inner").find('.menu'+id).prop("checked", false);
         	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
@@ -497,7 +498,11 @@
 		}else{
 			sdg_indicator = '0';
 		}
-		loadData(sdg_indicator);
+		if($("#periode").val()=="all"){	
+    		ambilDataAll(sdg_indicator);
+    	}else{
+    		ambilData(sdg_indicator);	
+    	}
     });
     
     function ambilData(sdg_indicator){
@@ -531,12 +536,17 @@
         var text="";
         $.ajax({
             //url: urls + 'list-sdgGoals',
-            url: urls + "get-sdg-goals",
+            url: urls + "get-sdg-goals/"+sdg_indicator,
             data: 'id_role=' + idrole,
             type: 'get',
             dataType: 'json',
-            cache: false,
             async : false,
+            beforeSend : function(xhr){
+            	$('body').addClass("loading"); 
+            },
+           complete: function(){
+            	$('body').removeClass("loading");
+            },
             success: function (response) {
             	for (var i = 0; i < response.sdg.length; i++) {
         			var nm_goals;
@@ -551,7 +561,7 @@
                 	text += "<div style='font-size:90%;width:100%;text-align:left;display:block;border-style:ridge;'>Goal Name : "+kode_goals+". "+nm_goals+"</div>";
                 	
                 	$.ajax({
-                        url: urls + 'get-sdg-target/',
+                        url: urls + 'get-sdg-target/'+sdg_indicator,
                         type: 'get',
                         data: {'id_role':idrole,'id_goals':id_goals},
                         dataType: 'json',
@@ -814,7 +824,6 @@
         });
         $("#indi").html(text);
     }
-    
     function ambilDataAll(sdg_indicator){
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
@@ -836,11 +845,10 @@
         var text="";
         $.ajax({
             //url: urls + 'list-sdgGoals',
-            url: urls + "get-sdg-goals",
+            url: urls + "get-sdg-goals/"+sdg_indicator,
             data: 'id_role=' + idrole,
             type: 'get',
             dataType: 'json',
-            cache: false,
             async : false,
             success: function (response) {
             	for (var i = 0; i < response.sdg.length; i++) {
@@ -856,7 +864,7 @@
                 	text += "<div style='font-size:90%;width:100%;text-align:left;display:block;border-style:ridge;'>Goal Name : "+kode_goals+". "+nm_goals+"</div>";
                 	
                 	$.ajax({
-                        url: urls + 'get-sdg-target/',
+                        url: urls + 'get-sdg-target/'+sdg_indicator,
                         type: 'get',
                         data: {'id_role':idrole,'id_goals':id_goals},
                         dataType: 'json',

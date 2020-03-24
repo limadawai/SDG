@@ -28,6 +28,7 @@
                         
                     	
                         <div class="pull-right" style="width:auto;">
+                            <input type="hidden" id="panjang_aggre" name="panjang_aggre">
                             <select id="pilgrafik">
                                     <option value="0">-- Pilih Jenis Grafik --</option>
                                     <option value="graf1">Grafik Line</option>
@@ -389,7 +390,7 @@
                                                 var real5 = array[i][24];
                                             }
 
-                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1+'</td><td>'+real2+'</td><td>'+real3+'</td><td>'+real4+'</td><td>'+real5+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+array[i][28]+'</td><td id="colsdg13">'+array[i][29]+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -496,6 +497,7 @@
                                 async: false,
                                 success: function (data_sdg_agre) {
                                     var array = data_sdg_agre.content;
+                                    $('#panjang_aggre').val(array.length);
                                     if (array != '') {
                                         for (i in array) {
                                             //target 1
@@ -559,7 +561,7 @@
                                                 var real5 = array[i][24];
                                             }
 
-                                            var tb_sdg_disagre = '<tr> <td><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1+'</td><td>'+real2+'</td><td>'+real3+'</td><td>'+real4+'</td><td>'+real5+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1+'</td><td id="colagg9_'+[i]+'">'+real2+'</td><td id="colagg10_'+[i]+'">'+real3+'</td><td id="colagg11_'+[i]+'">'+real4+'</td><td id="colagg12_'+[i]+'">'+real5+'</td><td id="colagg13_'+[i]+'">'+array[i][28]+'</td><td id="colagg14_'+[i]+'">'+array[i][29]+'</td><td id="colagg15_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -677,7 +679,7 @@
                                                 var real5_2 = array[i][25];
                                             }
 
-                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+array[i][28]+'</td><td id="colsdg18">'+array[i][29]+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -700,6 +702,8 @@
                                 async: false,
                                 success: function (data_sdg) {
                                     var array = data_sdg.content;
+//                                    console.log('jml = '+ data_sdg )
+                                    
                                     if (array != '') {
                                         for (i in array) {
                                             //target 1
@@ -792,8 +796,8 @@
                                             }else{
                                                 var real5_2 = array[i][25];
                                             }
-
-                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+array[i][28]+'</td><td id="colsdg18">'+array[i][29]+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
+//                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -814,6 +818,8 @@
                                 async: false,
                                 success: function (data_sdg) {
                                     var array = data_sdg.content;
+                                    console.log(array.length )
+                                    $('#panjang_aggre').val(array.length);
                                     if (array != '') {
                                         for (i in array) {
                                             //target 1
@@ -907,7 +913,7 @@
                                                 var real5_2 = array[i][25];
                                             }
 
-                                            var tb_sdg_disagre = '<tr> <td><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real2_1+'</td><td id="colagg11_'+[i]+'">'+real2_2+'</td><td id="colagg12_'+[i]+'">'+real3_1+'</td><td id="colagg13_'+[i]+'">'+real3_2+'</td><td id="colagg14_'+[i]+'">'+real4_1+'</td><td id="colagg15_'+[i]+'">'+real4_2+'</td><td id="colagg16_'+[i]+'">'+real5_1+'</td><td id="colagg17_'+[i]+'">'+real5_2+'</td><td id="colagg18_'+[i]+'">'+array[i][28]+'</td><td id="colagg19_'+[i]+'">'+array[i][29]+'</td><td id="colagg20_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -1086,7 +1092,7 @@
                                                 var real5_4 = array[i][27];
                                             }
 
-                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real1_3+'</td><td>'+real1_4+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real2_3+'</td><td>'+real2_4+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real3_3+'</td><td>'+real3_4+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real4_3+'</td><td>'+real4_4+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+real5_3+'</td><td>'+real5_4+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+array[i][28]+'</td><td id="colsdg28">'+array[i][29]+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -1261,8 +1267,9 @@
                                             }else{
                                                 var real5_4 = array[i][27];
                                             }
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+array[i][28]+'</td><td id="colsdg28">'+array[i][29]+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
 
-                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real1_3+'</td><td>'+real1_4+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real2_3+'</td><td>'+real2_4+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real3_3+'</td><td>'+real3_4+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real4_3+'</td><td>'+real4_4+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+real5_3+'</td><td>'+real5_4+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
+//                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real1_3+'</td><td>'+real1_4+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real2_3+'</td><td>'+real2_4+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real3_3+'</td><td>'+real3_4+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real4_3+'</td><td>'+real4_4+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+real5_3+'</td><td>'+real5_4+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -1283,6 +1290,7 @@
                                 async: false,
                                 success: function (data_sdg) {
                                     var array = data_sdg.content;
+                                    $('#panjang_aggre').val(array.length);
                                     if (array != '') {
                                         for (i in array) {
                                             //target 1
@@ -1436,7 +1444,7 @@
                                                 var real5_4 = array[i][27];
                                             }
 
-                                            var tb_sdg_disagre = '<tr> <td><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real1_3+'</td><td>'+real1_4+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real2_3+'</td><td>'+real2_4+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real3_3+'</td><td>'+real3_4+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real4_3+'</td><td>'+real4_4+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+real5_3+'</td><td>'+real5_4+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real1_3+'</td><td id="colagg11_'+[i]+'">'+real1_4+'</td><td id="colagg12_'+[i]+'">'+real2_1+'</td><td id="colagg13_'+[i]+'">'+real2_2+'</td><td id="colagg14_'+[i]+'">'+real2_3+'</td><td id="colagg15_'+[i]+'">'+real2_4+'</td><td id="colagg16_'+[i]+'">'+real3_1+'</td><td id="colagg17_'+[i]+'">'+real3_2+'</td><td id="colagg18_'+[i]+'">'+real3_3+'</td><td id="colagg19_'+[i]+'">'+real3_4+'</td><td id="colagg20_'+[i]+'">'+real4_1+'</td><td id="colagg21_'+[i]+'">'+real4_2+'</td><td id="colagg22_'+[i]+'">'+real4_3+'</td><td id="colagg23_'+[i]+'">'+real4_4+'</td><td id="colagg24_'+[i]+'">'+real5_1+'</td><td id="colagg25_'+[i]+'">'+real5_2+'</td><td id="colagg26_'+[i]+'">'+real5_3+'</td><td id="colagg27_'+[i]+'">'+real5_4+'</td><td id="colagg28_'+[i]+'">'+array[i][28]+'</td><td id="colagg29_'+[i]+'">'+array[i][29]+'</td><td id="colagg30_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -3045,493 +3053,27 @@
             
         }
         
-        //============================== Content Table ==============================
-        //var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
-//        if (flag == "1") {
-//        	$.ajax({
-//                url: urls + "getheaderyear",
-//                type: 'get',
-//                data: {'id_monper':idmonper,'id_prov':valdaerah},
-//                dataType: 'json',
-//                cache: false,
-//                success: function (resheader) {
-//                	//console.log(resheader);
-//                	var a = parseInt(resheader[0], 10);
-//                	$("#tahun1").text(a);$("#tahun2").text(a+1);$("#tahun3").text(a+2);$("#tahun4").text(a+3);$("#tahun5").text(a+4);
-//                    $("#tahun11").text(a);$("#tahun12").text(a+1);$("#tahun13").text(a+2);$("#tahun14").text(a+3);$("#tahun15").text(a+4);
-//                }
-//        	});
-//        	$.ajax({
-//        		url: urls + "getunit",
-//                type: 'get',
-//                data: {'id_sdg_indicator':idsdgindikator},
-//                dataType: 'json',
-//                cache: false,
-//                success: function (resunit) {
-//                	//console.log(resunit);
-//                	$("#col2").text(resunit[0]);
-//                }
-//        	});
-//        	for (var i=0; i<tahun.length; i++) {
-//	        	$.ajax({
-//	        		url: urls + "getentrysdg",
-//	                type: 'get',
-//	                data: {'id_sdg_indicator':idsdgindikator,'id_role':valdaerah,'year':tahun[i]},
-//	                dataType: 'json',
-//	                cache: false,
-//	                success: function (restar) {
-//	                	//console.log(restar);
-//	                	if (restar.length == 0) {
-//		                	for (var j=2; j<tahun.length+2; j++) {
-//		                		$("#col"+j).text(0);
-//		                	}
-//	                	} else {
-//	                		for (var j=2; j<tahun.length+2; j++) {
-//		                		$("#col"+j).text(restar[i]);
-//		                	}
-//	                	}
-//	                }
-//	        	});
-//        	}
-//        	for (var i=0; i<tahun.length; i++) {
-//            	$.ajax({
-//            		url: urls + "getshowrep",
-//                    type: 'get',
-//                    data: {'id_monper':idmonper,'year':tahun[i]},
-//                    dataType: 'json',
-//                    cache: false,
-//                    async: false,
-//                    success: function (resreal) {
-//                    	//console.log(resreal);
-//                    	if (resreal[0] == 1) {
-//                    		if (periode == "yearly") {
-//                    			$.ajax({
-//                        			url: urls + "getrealyear",
-//                                    type: 'get',
-//                                    data: {'id_monper':idmonper,'year':tahun[i]},
-//                                    dataType: 'json',
-//                                    cache: false,
-//                                    async: false,
-//                                    success: function (real) {
-//                                    	//console.log(real);
-//                                    }
-//                        		});
-//                    		} else if (periode == "semesterly") {
-//                    			
-//                    		} else if (periode == "quarterly") {
-//                    			
-//                    		}
-//                    	}
-//                    }
-//            	});
-//        	}
-//        	$.ajax({
-//        		url: urls + "getsdgfunding",
-//                type: 'get',
-//                data: {'id_sdg_indicator':idsdgindikator,'id_monper':idmonper},
-//                dataType: 'json',
-//                cache: false,
-//                success: function (resfund) {
-//                	//console.log(resfund);
-//                	if (periode == "yearly") {
-//                    	$("#col13").text(resfund[0]);
-//                	} else if (periode == "semesterly") {
-//                		$("#col17").text(resfund[0]);
-//                	} else if (periode == "quarterly") {
-//                		$("#col25").text(resfund[0]);
-//                	}
-//                }
-//        	});
-//        } else if (flag == "2") {
-//        	$.ajax({
-//        		url: urls + "getheaderyear",
-//                type: 'get',
-//                data: {'id_monper':idmonper,'id_prov':valdaerah},
-//                dataType: 'json',
-//                cache: false,
-//                success: function (resheader) {
-//                	//console.log(resheader);
-//                	var a = parseInt(resheader[0], 10);
-//                	
-//
-//                	var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
-//                	//========= Isi kolom target ===========
-//                	var valtar = [];
-//                	for (var i=0; i<tahun.length; i++) {
-//        	        	$.ajax({
-//        	        		url: urls + "getgovtarget",
-//        	                type: 'get',
-//        	                data: {'id_gov_indicator':idsdgindikator,'year':tahun[i]},
-//        	                dataType: 'json',
-//        	                cache: false,
-//        	                async: false,
-//        	                success: function (resgovtarget) {
-//        	                	//console.log(resgovtarget);
-//        	                	valtar.push(resgovtarget[0]);
-//        	                }
-//        	        	});
-//                	}
-//                	$("#col2").text(valtar[0]);$("#col3").text(valtar[1]);$("#col4").text(valtar[2]);$("#col5").text(valtar[3]);$("#col6").text(valtar[4]);
-//                	var no = 0;
-//                	var idassign = [];
-//                	$.ajax({
-//       	        		url: urls + "cekshowreport",
-//       	                type: 'get',
-//       	                data: {'id_monper':idmonper,'year':tahun[0]},
-//       	                dataType: 'json',
-//       	                cache: false,
-//       	                success: function (rescek) {
-//       	                	//console.log(rescek);
-//       	                	if (rescek[0] == 1) {
-//       	                		$.ajax({
-//       	                			url: urls + "getidassign",
-//       		       	                type: 'get',
-//       		       	                data: {'id_monper':idmonper,'id_prov':valdaerah},
-//       		       	                dataType: 'json',
-//       		       	                cache: false,
-//       		       	                success: function (resreal) {
-//       		       	                	//console.log(resreal);
-//       		       	                	if (periode == "yearly") {
-//	       		       	                	var val = [];
-//						                	for (var i=0; i<tahun.length; i++) {
-//						                		$.ajax({
-//						                			url: urls + "getgovrealyear",
-//							       	                type: 'get',
-//							       	                data: {'id_monper':idmonper,'year_entry':tahun[i]},
-//							       	                dataType: 'json',
-//							       	                cache: false,
-//							       	                async: false,
-//							       	                success: function (resreal) {
-//							       	                	//console.log(resreal);
-//							       	                	val.push(resreal[0]);
-//							       	                }
-//						                		});
-//						                	}
-//						                	$("#col7").text(val[0][0]);$("#col8").text(val[1][0]);
-//						                	$("#col9").text(val[2][0]);$("#col10").text(val[3][0]);
-//						                	$("#col11").text(val[4][0]);
-//					                	} else if (periode == "semesterly") {
-//					                		var val = [];
-//						                	for (var i=0; i<tahun.length; i++) {
-//						                		$.ajax({
-//						                			url: urls + "getgovrealsemester",
-//							       	                type: 'get',
-//							       	                data: {'id_monper':idmonper,'year_entry':tahun[i]},
-//							       	                dataType: 'json',
-//							       	                cache: false,
-//							       	                async: false,
-//							       	                success: function (resreal) {
-//							       	                	//console.log(resreal);
-//							       	                	val.push(resreal[0]);
-//							       	                }
-//						                		});
-//						                	}
-//						                	$("#col7").text(val[0][0]);$("#col8").text(val[0][1]);
-//						                	$("#col9").text(val[1][0]);$("#col10").text(val[1][1]);
-//						                	$("#col11").text(val[2][0]);$("#col12").text(val[2][1]);
-//						                	$("#col13").text(val[3][0]);$("#col14").text(val[3][1]);
-//						                	$("#col15").text(val[4][0]);$("#col16").text(val[4][1]);
-//					                	} else if (periode == "quarterly") {
-//					                		var val = [];
-//						                	for (var i=0; i<tahun.length; i++) {
-//						                		$.ajax({
-//						                			url: urls + "getgovrealquarter",
-//							       	                type: 'get',
-//							       	                data: {'id_monper':idmonper,'year_entry':tahun[i]},
-//							       	                dataType: 'json',
-//							       	                cache: false,
-//							       	                async: false,
-//							       	                success: function (resreal) {
-//							       	                	//console.log(resreal);
-//							       	                	val.push(resreal[0]);
-//							       	                }
-//						                		});
-//						                	}
-//						                	$("#col7").text(val[0][0]);$("#col8").text(val[0][1]);$("#col9").text(val[0][2]);$("#col10").text(val[0][3]);
-//						                	$("#col11").text(val[1][0]);$("#col12").text(val[1][1]);$("#col13").text(val[1][2]);$("#col14").text(val[1][3]);
-//						                	$("#col15").text(val[2][0]);$("#col16").text(val[2][1]);$("#col17").text(val[2][2]);$("#col18").text(val[2][3]);
-//						                	$("#col19").text(val[3][0]);$("#col20").text(val[3][1]);$("#col21").text(val[3][2]);$("#col22").text(val[3][3]);
-//						                	$("#col23").text(val[3][0]);$("#col24").text(val[3][1]);$("#col25").text(val[3][2]);$("#col26").text(val[3][3]);
-//					                	}
-//       		       	                }
-//       	                		});
-//       	                		$.ajax({
-//       	                			url: urls + "getgovunit",
-//       	        	                type: 'get',
-//       	        	                data: {'id_gov_indicator':idsdgindikator},
-//       	        	                dataType: 'json',
-//       	        	                cache: false,
-//       	        	                success: function (resunit) {
-//       	        	                	//console.log(resunit);
-//       	        	                	$("#col1").text(resunit[0]);
-//       	        	                }
-//       	                		});
-//       	                		$.ajax({
-//       	                			url: urls + "getgovfund",
-//       	        	                type: 'get',
-//       	        	                data: {'id_gov_indicator':idsdgindikator,'id_monper':idmonper},
-//       	        	                dataType: 'json',
-//       	        	                cache: false,
-//       	        	                success: function (resfund) {
-//       	        	                	//console.log(resfund[0]);
-//       	        	                	$("#col17").text(resfund[0][1]);
-//       	        	                	$("#col18").text(resfund[0][0]);
-//       	        	                }
-//       	                		});
-//       	                		$.ajax({
-//       	                			url: urls + "getgovgoals",
-//       	        	                type: 'get',
-//       	        	                data: {'id_prov':valdaerah,'id_monper':idmonper,'id_gov_indicator':idsdgindikator},
-//       	        	                dataType: 'json',
-//       	        	                cache: false,
-//       	        	                success: function (resgoal) {
-//       	        	                	//console.log(resgoal);
-//       	        	                	var gls = "<b><span>Goal : "+resgoal[0][2]+"</span></b><br>";
-//       	        	                	gls += "<b><span>Target : "+resgoal[0][5]+"</span></b><br>";
-//       	        	                	gls += "<b><span>Indikator : "+resgoal[0][8]+"</span></b><br><hr>";
-//       	        	                	$("#divgoals").append(gls);
-//       	        	                }
-//       	                		});
-//        	                	$.ajax({
-//	        	                	url: urls + "cekgovranrad",
-//  	       	        	            type: 'get',
-//  	       	        	            data: {'id_monper':idmonper,'id_prov':valdaerah},
-//  	       	        	            dataType: 'json',
-//  	       	        	            cache: false,
-//  	       	        	            success: function (resranrad) {
-//  	       	        	               	//console.log(resranrad);
-//  	       	        	             	if (resranrad[0] == "yearly") {
-//  	       	        	             		var th = "<tr>";
-//		  	       	        	            th += "<th id='th1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-//		  	       	        	            th += "<th id='th2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-//		  	       	        	            th += "<th id='th3' style='vertical-align:middle;' colspan='5'>Realisasi per Tahun</th>";
-//		  	       	        	            th += "<th id='th4' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-//		  	       	        	            th += "<th id='th5' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-//		  	       	        	            th += "<th id='th6' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr class='trtarget'>";
-//		  	       	        	            th += "<th id='tahun11' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun21' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun31' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun41' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun51' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr class='trreal'>";
-//		  	       	        	            th += "<th id='tahun111' colspan='1'></th>";
-//		  	       	        	            th += "<th id='tahun121' colspan='1'></th>";
-//		  	       	        	            th += "<th id='tahun131' colspan='1'></th>";
-//		  	       	        	            th += "<th id='tahun141' colspan='1'></th>";
-//		  	       	        	            th += "<th id='tahun151' colspan='1'></th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "</tr>";
-//  	       	        	                	$("#tabsdg > thead").append(th);
-//		  	       	        	            var row = "<tr>";
-//		  	       	        	            for (var i=1; i<=14; i++) {
-//		  	       	        	            	row += "<td style='text-align:center;' id='colsdg"+i+"'></td>";
-//		  	       	        	            }
-//		  	       	        	            row += "</tr>";
-//  	       	        	                	$("#tabsdg > tbody").append(row);
-//  	       	        	                	$("#colsdg14").text(name);
-//		  	       	        	            $.ajax({
-//		  	       	        	        		url: urls + "getheaderyear",
-//		  	       	        	                type: 'get',
-//		  	       	        	                data: {'id_monper':idmonper,'id_prov':valdaerah},
-//		  	       	        	                dataType: 'json',
-//		  	       	        	                cache: false,
-//		  	       	        	                success: function (resheader) {
-//		  	       	        	                	//console.log(resheader);
-//		  	       	        	                	var a = parseInt(resheader[0], 10);
-//		  	       	        	                	$("#tahun11").text(a);$("#tahun21").text(a+1);$("#tahun31").text(a+2);$("#tahun41").text(a+3);$("#tahun51").text(a+4);
-//		  	       	        	                    $("#tahun111").text(a);$("#tahun121").text(a+1);$("#tahun131").text(a+2);$("#tahun141").text(a+3);$("#tahun151").text(a+4);
-//		  	       	        	                    var tsdg = [$("#tahun11").text(),$("#tahun21").text(),$("#tahun31").text(),$("#tahun41").text(),$("#tahun51").text()];
-//		  	       	        	                    var psh = [];
-//		  	       	        	                    for (var i=0; i<tsdg.length; i++) {
-//			  	       	        	                    $.ajax({
-//				  	       	        	                   	url: urls + "getsdgtar",
-//					  	       	        	                type: 'get',
-//					  	       	        	                data: {'id_gov_indicator':idsdgindikator,'id_role':valrole,'year':tsdg[i]},
-//					  	       	        	                dataType: 'json',
-//					  	       	        	                cache: false,
-//					  	       	        	                success: function (ressdgtar) {
-//					  	       	        	                	console.log(ressdgtar);
-//					  	       	        	                	psh.push(ressdgtar[0]);
-//					  	       	        	                }
-//			  	       	        	                    });
-//		  	       	        	                    }
-//		  	       	        	                	$("#colsdg2").text(psh[0]);$("#colsdg3").text(psh[1]);$("#colsdg4").text(psh[2]);$("#colsdg5").text(psh[3]);$("#colsdg6").text(psh[4]);
-//		  	       	        	                	var nil = [];
-//			  	       	        	               	for (var i=0; i<tsdg.length; i++) {
-//			  	       	        	                    $.ajax({
-//				  	       	        	                   	url: urls + "getsdgreal",
-//					  	       	        	                type: 'get',
-//					  	       	        	                data: {'id_gov_indicator':idsdgindikator,'id_role':valrole,'year':tsdg[i],'id_monper':idmonper},
-//					  	       	        	                dataType: 'json',
-//					  	       	        	                cache: false,
-//					  	       	        	                success: function (ressdgtar) {
-//					  	       	        	                	//console.log(ressdgtar[0]);
-//					  	       	        	                	nil.push(ressdgtar[0]);
-//					  	       	        	                }
-//			  	       	        	                    });
-//		  	       	        	                     }
-//			  	       	        	                 $("#colsdg7").text(nil[0]);$("#colsdg8").text(nil[1]);$("#colsdg9").text(nil[2]);$("#colsdg10").text(nil[3]);$("#colsdg11").text(nil[4]);
-//			  	       	        	                 $.ajax({
-//				  	       	        	                url: urls + "getsdgfund",
-//				  	       	        	                type: 'get',
-//				  	       	        	                data: {'id_gov_indicator':idsdgindikator,'id_monper':idmonper},
-//				  	       	        	                dataType: 'json',
-//				  	       	        	                cache: false,
-//				  	       	        	                success: function (res) {
-//				  	       	        	                	//console.log(res);
-//				  	       	        	               		$("#colsdg12").text(res[0][1]);$("#colsdg13").text(res[0][0]);
-//				  	       	        	                }
-//			  	       	        	                 });
-//				  	       	        	            $.ajax({
-//				  	       	        	                url: urls + "getsdgunit",
-//				  	       	        	                type: 'get',
-//				  	       	        	                data: {'id_gov_indicator':idsdgindikator},
-//				  	       	        	                dataType: 'json',
-//				  	       	        	                cache: false,
-//				  	       	        	                success: function (hasil) {
-//				  	       	        	                	//console.log(hasil);
-//				  	       	        	               		$("#colsdg1").text(hasil[0]);
-//				  	       	        	                }
-//			  	       	        	                 });
-//		  	       	        	                }
-//		  	       	        	        	});
-//  	       	        	                } else if (resranrad[0] == "semesterly") {
-//  	       	        	                	//alert(resranrad[0]);
-//	  	       	        	               	var th = "<tr>";
-//		  	       	        	            th += "<th id='th1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-//		  	       	        	            th += "<th id='th2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-//		  	       	        	            th += "<th id='th3' style='vertical-align:middle;' colspan='10'>Realisasi per Semester</th>";
-//		  	       	        	            th += "<th id='th4' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-//		  	       	        	            th += "<th id='th5' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-//		  	       	        	            th += "<th id='th6' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr class='trtarget'>";
-//		  	       	        	            th += "<th id='tahun1' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun2' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun3' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun4' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun5' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr class='trreal'>";
-//		  	       	        	            th += "<th id='tahun11' colspan='2'></th>";
-//		  	       	        	            th += "<th id='tahun12' colspan='2'></th>";
-//		  	       	        	            th += "<th id='tahun13' colspan='2'></th>";
-//		  	       	        	            th += "<th id='tahun14' colspan='2'></th>";
-//		  	       	        	            th += "<th id='tahun15' colspan='2'></th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            $("#tabsdg > thead").append(th);
-//		  	       	        	            var row = "<tr>";
-//		  	       	        	            for (var i=1; i<=19; i++) {
-//		  	       	        	            	row += "<td style='text-align:center;' id='colsdg"+i+"'></td>";
-//		  	       	        	            }
-//		  	       	        	            row += "</tr>";
-//  	       	        	                	$("#tabsdg > tbody").append(row);
-//  	       	        	                	$("#colsdg19").text(name);
-//  	       	        	                } else if (resranrad[0] == "quarterly") {
-//	  	       	        	               	var th = "<tr>";
-//		  	       	        	            th += "<th id='th1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-//		  	       	        	            th += "<th id='th2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-//		  	       	        	            th += "<th id='th3' style='vertical-align:middle;' colspan='20'>Realisasi per Semester</th>";
-//		  	       	        	            th += "<th id='th4' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-//		  	       	        	            th += "<th id='th5' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-//		  	       	        	            th += "<th id='th6' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr class='trtarget'>";
-//		  	       	        	            th += "<th id='tahun1' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun2' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun3' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun4' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "<th id='tahun5' style='vertical-align:middle;' rowspan='3'></th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr class='trreal'>";
-//		  	       	        	            th += "<th id='tahun11' colspan='4'></th>";
-//		  	       	        	            th += "<th id='tahun12' colspan='4'></th>";
-//		  	       	        	            th += "<th id='tahun13' colspan='4'></th>";
-//		  	       	        	            th += "<th id='tahun14' colspan='4'></th>";
-//		  	       	        	            th += "<th id='tahun15' colspan='4'></th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            th += "<tr>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>III</th>";
-//		  	       	        	            th += "<th>IV</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>III</th>";
-//		  	       	        	            th += "<th>IV</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>III</th>";
-//		  	       	        	            th += "<th>IV</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>III</th>";
-//		  	       	        	            th += "<th>IV</th>";
-//		  	       	        	            th += "<th>I</th>";
-//		  	       	        	            th += "<th>II</th>";
-//		  	       	        	            th += "<th>III</th>";
-//		  	       	        	            th += "<th>IV</th>";
-//		  	       	        	            th += "</tr>";
-//		  	       	        	            $("#tabsdg > thead").append(th);
-//		  	       	        	            var row = "<tr>";
-//		  	       	        	            for (var i=1; i<=29; i++) {
-//		  	       	        	            	row += "<td style='text-align:center;' id='colsdg"+i+"'></td>";
-//		  	       	        	            }
-//		  	       	        	            row += "</tr>";
-//  	       	        	                	$("#tabsdg > tbody").append(row);
-//  	       	        	                	$("#colsdg29").text(name);
-//  	       	        	                }
-//  	       	        	            }
-//  	        	                });
-//       	                	} else {
-//       	                		swal("Data belum ada di daftar show report");
-//       	                	}
-//       	                }
-//                	});
-//                	
-//                }
-//        	});
-//        	
-//        } else if (flag == "3") {
-//        	$.ajax({
-//        		url: urls + "getheaderyear",
-//                type: 'get',
-//                data: {'id_monper':idmonper,'id_prov':valdaerah},
-//                dataType: 'json',
-//                cache: false,
-//                success: function (resheader) {
-//                	//console.log(resheader);
-//                	var a = parseInt(resheader[0], 10);
-//                	$("#tahun1").text(a);$("#tahun2").text(a+1);$("#tahun3").text(a+2);$("#tahun4").text(a+3);$("#tahun5").text(a+4);
-//                    $("#tahun11").text(a);$("#tahun12").text(a+1);$("#tahun13").text(a+2);$("#tahun14").text(a+3);$("#tahun15").text(a+4);
-//                }
-//        	});
-//        }
-        
       //************************** Grafik / Chart **************************
         $("#pilgrafik").on("change", function() {
-            var periode = "yearly";
+            var periode = '';
+            if(flag == "2"){
+                var uri = urls + "cekgmonper";
+            }else if(flag == "3"){
+                var uri = urls + "ceknongmonper";
+            }
+            
+            $.ajax({
+                url: uri,
+                type: 'get',
+                data: {'id_monper':idmonper, 'id_prov':valdaerah},
+                cache: false,
+                async: false,
+                success: function (monper) {
+//                    percallback(monper[0]);
+                    periode = monper[0];
+                }
+            });
+            
             var chart4;
             $("#pilgrafik").show();
             var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
@@ -3542,26 +3084,101 @@
                 parseInt($("#col5").text(), 10),
                 parseInt($("#col6").text(), 10)
             ];
-            var tahun1 = [ parseInt($("#colsdg2").text(), 10)
-                          ,parseInt($("#colsdg3").text(), 10)
-                          ,parseInt($("#colsdg4").text(), 10)
-                          ,parseInt($("#colsdg5").text(), 10)
-                          ,parseInt($("#colsdg6").text(), 10)
-                        ];
-           var tahun2 =  [ parseInt($("#colsdg7").text(), 10)
-                          ,parseInt($("#colsdg8").text(), 10)
-                          ,parseInt($("#colsdg9").text(), 10)
-                          ,parseInt($("#colsdg10").text(), 10)
-                          ,parseInt($("#colsdg11").text(), 10)
-                        ];
+            
+            //target sdg
+            var tahun1 = [ 
+                parseInt($("#colsdg2").text(), 10)
+                ,parseInt($("#colsdg3").text(), 10)
+                ,parseInt($("#colsdg4").text(), 10)
+                ,parseInt($("#colsdg5").text(), 10)
+                ,parseInt($("#colsdg6").text(), 10)
+            ];
+                        
+                        
             if (periode == "yearly") {
-                valreal1 = [
+                if (flag == "2") {
+                    var nm_gov = "Government";
+                }else if (flag == "3") {
+                    var nm_gov = "Non Government";
+                }
+                var valreal_sdg1 = [
+                    parseInt($("#colsdg7").text(), 10),
+                    parseInt($("#colsdg8").text(), 10),
+                    parseInt($("#colsdg9").text(), 10),
+                    parseInt($("#colsdg10").text(), 10),
+                    parseInt($("#colsdg11").text(), 10)
+                ];
+                var valreal1 = [
                     parseInt($("#col7").text(), 10),
                     parseInt($("#col8").text(), 10),
                     parseInt($("#col9").text(), 10),
                     parseInt($("#col10").text(), 10),
                     parseInt($("#col11").text(), 10)
                 ];
+                
+                var pnjg = $('#panjang_aggre').val();
+                var ser  = [];
+                ser.push({
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi I SDGS',
+                            type: 'spline',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                    );
+                for (var i=0; i<pnjg; i++) {
+                    var valanggre1 = [
+                        parseInt($("#colagg8_"+i).text(), 10),
+                        parseInt($("#colagg9_"+i).text(), 10),
+                        parseInt($("#colagg10_"+i).text(), 10),
+                        parseInt($("#colagg11_"+i).text(), 10),
+                        parseInt($("#colagg12_"+i).text(), 10)
+                    ];
+                    ser.push({
+                            name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                            type: 'spline',
+                            data: valanggre1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        
+                    },);
+//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    
+                }
+                ser.push({
+                            name: 'Target '+nm_gov,
+                            type: 'spline',
+                            yAxis: 1,
+                            data: valtarget,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Semester I '+nm_gov,
+                            type: 'spline',
+
+                            yAxis: 1,
+                            data: valreal1,
+                            tooltip: {
+    //                            valueSuffix: ' %'
+                                }
+                        }
+                    );
+                console.log(pnjg);
                  var options4 ={
                     chart: {
                         zoomType: 'xy',
@@ -3634,43 +3251,7 @@
                             }
                         }
                     },
-                    series: [
-                        {
-                            name: 'Yearly',
-                            type: 'column',
-
-                            yAxis: 1,
-                            data: valreal1,
-                            tooltip: {
-    //                            valueSuffix: ' %'
-                                }
-                        },
-                        {
-                            name: 'Target',
-                            type: 'spline',
-                            data: valtarget,
-                             yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },{
-                            name: 'Target SDGS',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi SDGS',
-                            type: 'spline',
-                            data: tahun2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        }],
+                    series: ser,
                     colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
                             return {
                                 radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
@@ -3680,29 +3261,144 @@
               }
               eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
             } else if (periode == "semesterly") {
-//                if (typeof(chart4)==='object'){
-//                    console.log(typeof(chart4));
-//                    return false;
-////                    chart4.destroy();
-//                }else{
-//                     console.log(typeof(chart4));
-////                     return false;
-//                }
+                if (flag == "2") {
+                    var nm_gov = "Government";
+                }else if (flag == "3") {
+                    var nm_gov = "Non Government";
+                }
+                var valreal_sdg1 = [
+                    parseInt($("#colsdg7").text(), 10),
+                    parseInt($("#colsdg9").text(), 10),
+                    parseInt($("#colsdg11").text(), 10),
+                    parseInt($("#colsdg13").text(), 10),
+                    parseInt($("#colsdg15").text(), 10)
+                ];
+                var valreal_sdg2 = [
+                    parseInt($("#colsdg8").text(), 10),
+                    parseInt($("#colsdg10").text(), 10),
+                    parseInt($("#colsdg12").text(), 10),
+                    parseInt($("#colsdg14").text(), 10),
+                    parseInt($("#colsdg16").text(), 10)
+                ];
                 var valreal1 = [
                     parseInt($("#col7").text(), 10),
-                    parseInt($("#col8").text(), 10),
                     parseInt($("#col9").text(), 10),
-                    parseInt($("#col10").text(), 10),
-                    parseInt($("#col11").text(), 10)
+                    parseInt($("#col11").text(), 10),
+                    parseInt($("#col13").text(), 10),
+                    parseInt($("#col15").text(), 10)
                 ];
                 var valreal2 = [
+                    parseInt($("#col8").text(), 10),
+                    parseInt($("#col10").text(), 10),
                     parseInt($("#col12").text(), 10),
-                    parseInt($("#col13").text(), 10),
                     parseInt($("#col14").text(), 10),
-                    parseInt($("#col15").text(), 10),
                     parseInt($("#col16").text(), 10)
                 ];
-//                console.log(parseInt($("#td11").text(), 10));
+                
+                var pnjg = $('#panjang_aggre').val();
+                var ser  = [];
+                ser.push({
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi I SDGS',
+                            type: 'spline',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi II SDGS',
+                            type: 'spline',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                    );
+                for (var i=0; i<pnjg; i++) {
+                    var valanggre1 = [
+                        parseInt($("#colagg8_"+i).text(), 10),
+                        parseInt($("#colagg10_"+i).text(), 10),
+                        parseInt($("#colagg12_"+i).text(), 10),
+                        parseInt($("#colagg14_"+i).text(), 10),
+                        parseInt($("#colagg16_"+i).text(), 10)
+                    ];
+                    ser.push({
+                            name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                            type: 'spline',
+                            data: valanggre1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        
+                    },);
+//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    
+                }
+                for (var i=0; i<pnjg; i++) {
+                    var valanggre2 = [
+                        parseInt($("#colagg9_"+i).text(), 10),
+                        parseInt($("#colagg11_"+i).text(), 10),
+                        parseInt($("#colagg13_"+i).text(), 10),
+                        parseInt($("#colagg15_"+i).text(), 10),
+                        parseInt($("#colagg17_"+i).text(), 10)
+                    ];
+                    ser.push({
+                            name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                            type: 'spline',
+                            data: valanggre2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        
+                    },);
+//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    
+                }
+                ser.push({
+                            name: 'Target '+nm_gov,
+                            type: 'spline',
+                            yAxis: 1,
+                            data: valtarget,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Semester I '+nm_gov,
+                            type: 'spline',
+
+                            yAxis: 1,
+                            data: valreal1,
+                            tooltip: {
+    //                            valueSuffix: ' %'
+                                }
+                        },
+                        {
+                          name: 'Semester II '+nm_gov,
+                          type: 'spline',
+                          yAxis: 1,
+                          data: valreal2,
+                          tooltip: {
+//                                 valueSuffix: ' %'
+                          },
+//                          data: valreal2
+                        }
+                    );
+//                var seri = "series:[ser]";
+                console.log(ser);
               var options4 ={
                     chart: {
                         zoomType: 'xy',
@@ -3776,52 +3472,7 @@
                             }
                         }
                     },
-                    series: [
-                        {
-                            name: 'Semester I',
-                            type: 'column',
-
-                            yAxis: 1,
-                            data: valreal1,
-                            tooltip: {
-    //                            valueSuffix: ' %'
-                                }
-                        },
-                        {
-                          name: 'Semester II',
-                          yAxis: 1,
-                          type: 'column',
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-                          data: valreal2
-                        },
-                        {
-                            name: 'Target',
-                            type: 'spline',
-                            yAxis: 1,
-                            data: valtarget,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },{
-                            name: 'Target SDGS',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi SDGS',
-                            type: 'spline',
-                            data: tahun2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        }],
+                    series:ser,
                      colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
                             return {
                                 radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
@@ -3833,34 +3484,251 @@
               eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
 //                                            });
             } else if (periode == "quarterly") {
+                if (flag == "2") {
+                    var nm_gov = "Government";
+                }else if (flag == "3") {
+                    var nm_gov = "Non Government";
+                }
+                var valreal_sdg1 = [
+                    parseInt($("#colsdg7").text(), 10),
+                    parseInt($("#colsdg11").text(), 10),
+                    parseInt($("#colsdg15").text(), 10),
+                    parseInt($("#colsdg19").text(), 10),
+                    parseInt($("#colsdg23").text(), 10)
+                ];
+                var valreal_sdg2 = [
+                    parseInt($("#colsdg8").text(), 10),
+                    parseInt($("#colsdg12").text(), 10),
+                    parseInt($("#colsdg16").text(), 10),
+                    parseInt($("#colsdg20").text(), 10),
+                    parseInt($("#colsdg24").text(), 10)
+                ];
+                var valreal_sdg3 = [
+                    parseInt($("#colsdg9").text(), 10),
+                    parseInt($("#colsdg13").text(), 10),
+                    parseInt($("#colsdg17").text(), 10),
+                    parseInt($("#colsdg21").text(), 10),
+                    parseInt($("#colsdg25").text(), 10)
+                ];
+                var valreal_sdg4 = [
+                    parseInt($("#colsdg10").text(), 10),
+                    parseInt($("#colsdg14").text(), 10),
+                    parseInt($("#colsdg18").text(), 10),
+                    parseInt($("#colsdg22").text(), 10),
+                    parseInt($("#colsdg26").text(), 10)
+                ];
+                
                 var valreal1 = [
                     parseInt($("#col7").text(), 10),
-                    parseInt($("#col8").text(), 10),
-                    parseInt($("#col9").text(), 10),
-                    parseInt($("#col10").text(), 10),
-                    parseInt($("#col11").text(), 10)
+                    parseInt($("#col11").text(), 10),
+                    parseInt($("#col15").text(), 10),
+                    parseInt($("#col19").text(), 10),
+                    parseInt($("#col23").text(), 10)
                 ];
                 var valreal2 = [
+                    parseInt($("#col8").text(), 10),
                     parseInt($("#col12").text(), 10),
-                    parseInt($("#col13").text(), 10),
-                    parseInt($("#col14").text(), 10),
-                    parseInt($("#col15").text(), 10),
-                    parseInt($("#col16").text(), 10)
+                    parseInt($("#col16").text(), 10),
+                    parseInt($("#col20").text(), 10),
+                    parseInt($("#col24").text(), 10)
                 ];
                 var valreal3 = [
+                    parseInt($("#col9").text(), 10),
+                    parseInt($("#col13").text(), 10),
                     parseInt($("#col17").text(), 10),
-                    parseInt($("#col18").text(), 10),
-                    parseInt($("#col19").text(), 10),
-                    parseInt($("#col20").text(), 10),
-                    parseInt($("#col21").text(), 10)
+                    parseInt($("#col21").text(), 10),
+                    parseInt($("#col25").text(), 10)
                 ];
                 var valreal4 = [
+                    parseInt($("#col10").text(), 10),
+                    parseInt($("#col14").text(), 10),
+                    parseInt($("#col18").text(), 10),
                     parseInt($("#col22").text(), 10),
-                    parseInt($("#col23").text(), 10),
-                    parseInt($("#col24").text(), 10),
-                    parseInt($("#col25").text(), 10),
                     parseInt($("#col26").text(), 10)
                 ];
+                
+                var pnjg = $('#panjang_aggre').val();
+                var ser  = [];
+                ser.push({
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi I SDGS',
+                            type: 'spline',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi II SDGS',
+                            type: 'spline',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi III SDGS',
+                            type: 'spline',
+                            data: valreal_sdg3,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi IV SDGS',
+                            type: 'spline',
+                            data: valreal_sdg4,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                    );
+                for (var i=0; i<pnjg; i++) {
+                    var valanggre1 = [
+                        parseInt($("#colagg8_"+i).text(), 10),
+                        parseInt($("#colagg12_"+i).text(), 10),
+                        parseInt($("#colagg16_"+i).text(), 10),
+                        parseInt($("#colagg20_"+i).text(), 10),
+                        parseInt($("#colagg24_"+i).text(), 10)
+                    ];
+                    ser.push({
+                            name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                            type: 'spline',
+                            data: valanggre1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        
+                    },);
+//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    
+                }
+                for (var i=0; i<pnjg; i++) {
+                    var valanggre2 = [
+                        parseInt($("#colagg9_"+i).text(), 10),
+                        parseInt($("#colagg13_"+i).text(), 10),
+                        parseInt($("#colagg17_"+i).text(), 10),
+                        parseInt($("#colagg21_"+i).text(), 10),
+                        parseInt($("#colagg25_"+i).text(), 10)
+                    ];
+                    ser.push({
+                            name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                            type: 'spline',
+                            data: valanggre2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        
+                    },);
+//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    
+                }
+                for (var i=0; i<pnjg; i++) {
+                    var valanggre3 = [
+                        parseInt($("#colagg10_"+i).text(), 10),
+                        parseInt($("#colagg14_"+i).text(), 10),
+                        parseInt($("#colagg18_"+i).text(), 10),
+                        parseInt($("#colagg22_"+i).text(), 10),
+                        parseInt($("#colagg26_"+i).text(), 10)
+                    ];
+                    ser.push({
+                            name: 'Realisasi III SDGS Disaggregasi '+(i+1),
+                            type: 'spline',
+                            data: valanggre3,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        
+                    },);
+//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    
+                }
+                for (var i=0; i<pnjg; i++) {
+                    var valanggre4 = [
+                        parseInt($("#colagg11_"+i).text(), 10),
+                        parseInt($("#colagg15_"+i).text(), 10),
+                        parseInt($("#colagg19_"+i).text(), 10),
+                        parseInt($("#colagg23_"+i).text(), 10),
+                        parseInt($("#colagg27_"+i).text(), 10)
+                    ];
+                    ser.push({
+                            name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
+                            type: 'spline',
+                            data: valanggre4,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        
+                    },);
+//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    
+                }
+                ser.push({
+                            name: 'Target '+nm_gov,
+                            type: 'spline',
+                            yAxis: 1,
+                            data: valtarget,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Semester I '+nm_gov,
+                            type: 'spline',
+
+                            yAxis: 1,
+                            data: valreal1,
+                            tooltip: {
+    //                            valueSuffix: ' %'
+                                }
+                        },
+                        {
+                          name: 'Semester II '+nm_gov,
+                          type: 'spline',
+                          yAxis: 1,
+                          data: valreal2,
+                          tooltip: {
+//                                 valueSuffix: ' %'
+                          },
+//                          data: valreal2
+                        },
+                        {
+                          name: 'Semester III '+nm_gov,
+                          type: 'spline',
+                          yAxis: 1,
+                          data: valreal3,
+                          tooltip: {
+//                                 valueSuffix: ' %'
+                          },
+//                          data: valreal2
+                        },
+                        {
+                          name: 'Semester IV '+nm_gov,
+                          type: 'spline',
+                          yAxis: 1,
+                          data: valreal4,
+                          tooltip: {
+//                                 valueSuffix: ' %'
+                          },
+//                          data: valreal2
+                        }
+                    );
                 
                  var options4 ={
                     chart: {
@@ -3934,71 +3802,7 @@
                             }
                         }
                     },
-                    series: [
-                        {
-                            name: 'Triwulan I',
-                            type: 'column',
-
-                            yAxis: 1,
-                            data: valreal1,
-                            tooltip: {
-    //                            valueSuffix: ' %'
-                                }
-                        },
-                        {
-                          name: 'Triwulan II',
-                          yAxis: 1,
-                          type: 'column',
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-                          data: valreal2
-                        },
-                        {
-                          name: 'Triwulan III',
-                          yAxis: 1,
-                          type: 'column',
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-                          data: valreal3
-                        },
-                        {
-                          name: 'Triwulan IV',
-                          yAxis: 1,
-                          type: 'column',
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-                          data: valreal4
-                        },
-                        {
-                            name: 'Target',
-                            type: 'spline',
-                            data: valtarget,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Target SDGS',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi SDGS',
-                            type: 'spline',
-                            data: tahun2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        }],
+                    series: ser,
                     colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
                             return {
                                 radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
