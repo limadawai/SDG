@@ -326,7 +326,7 @@
 							return "<div style='font-size:90%;'>"+row.id_program+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.internal_code+"</div>";
+							return "<div style='font-size:90%;'>"+(row.internal_code?row.internal_code:'')+"</div>";
 					}},
 					{"data": function (row, data, index, display) {
 							var nama;
@@ -442,7 +442,7 @@
         				$('#id_role').val(val.id_role);
         				$('#id_monper').val(val.id_monper);
         				$('#rel_prog_id').val(val.rel_prog_id);
-        				$('#internal_code').val(val.internal_code);
+        				$('#internal_code').val(val.internal_code?val.internal_code:'');
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();
@@ -464,7 +464,7 @@
         				$('#id_role').val(val.id_role).attr("readonly",true);
         				$('#id_monper').val(val.id_monper).attr("readonly",true);
         				$('#rel_prog_id').val(val.rel_prog_id).attr("readonly",true);
-        				$('#internal_code').val(val.internal_code).attr("readonly",true);
+        				$('#internal_code').val(val.internal_code?val.internal_code:'').attr("readonly",true);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();

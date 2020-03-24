@@ -282,7 +282,7 @@
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_activity+"</div>";
+							return "<div style='font-size:90%;'>"+(row.id_activity?row.id_activity:'')+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+(row.internal_code?row.internal_code:'')+"</div>";
@@ -338,6 +338,7 @@
 				var internal_code = $('#internal_code').val();
 				var id_role = $('#id_role').val();
 				var budget_allocation = $('#budget_allocation').val();
+				var id_monper = $('#id_monper').val();
 				/* if(internal_code==""){
 					internal_code = id_activity;
 				} */
@@ -366,7 +367,7 @@
 						'budget_allocation':budget_allocation});
 					$.ajax({
 						type: "POST",
-	                    url: urls+'save-govActivity',
+	                    url: urls+'save-govActivity/'+id_monper,
 	                    beforeSend : function(xhr){
 	                    	xhr.setRequestHeader(header,token);
 	                    },
@@ -391,7 +392,7 @@
                     	$('#id').val(val.id);
         				$('#nm_activity').val(val.nm_activity);
         				$('#nm_activity_eng').val(val.nm_activity_eng);
-        				$('#internal_code').val(val.internal_code);
+        				$('#internal_code').val(val.internal_code?val.internal_code:'');
         				$('#budget_allocation').val(val.budget_allocation);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
@@ -411,7 +412,7 @@
                     	$('#id_activity').val(val.id_activity).attr("readonly",true);
         				$('#nm_activity').val(val.nm_activity).attr("readonly",true);
         				$('#nm_activity_eng').val(val.nm_activity_eng).attr("readonly",true);
-        				$('#internal_code').val(val.internal_code).attr("readonly",true);
+        				$('#internal_code').val(val.internal_code?val.internal_code:'').attr("readonly",true);
         				$('#budget_allocation').val(val.budget_allocation).attr("readonly",true);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
