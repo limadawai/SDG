@@ -204,9 +204,9 @@
 					{"data": function (row, data, index, display) {
 							var nama;
 							if($("#fs").is(':checked')){
-								nama = row.desc_disaggre;
+								nama = (row.desc_disaggre)?row.desc_disaggre:row.desc_disaggre_eng;
 							}else{
-								nama = row.desc_disaggre_eng;
+								nama = (row.desc_disaggre_eng)?row.desc_disaggre_eng:row.desc_disaggre;
 							}
 							return "<div style='font-size:90%;'>"+nama+"</div>";
 						}},
@@ -244,6 +244,12 @@
 				var id = ($('#id').val())?$('#id').val():null;
 				var desc_disaggre = $('#desc_disaggre').val();
 				var desc_disaggre_eng = $('#desc_disaggre_eng').val();
+				if(desc_disaggre==""){
+					desc_disaggre = desc_disaggre_eng;
+				}
+				if(desc_disaggre_eng==""){
+					desc_disaggre_eng = desc_disaggre;
+				}
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;

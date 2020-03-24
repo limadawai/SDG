@@ -331,9 +331,9 @@
 					{"data": function (row, data, index, display) {
 							var nama;
 							if($("#fs").is(':checked')){
-								nama = row.nm_program;
+								nama = row.nm_program?row.nm_program:row.nm_program_eng;
 							}else{
-								nama = row.nm_program_eng;
+								nama = row.nm_program_eng?row.nm_program_eng:row.nm_program;
 							}
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/gov/program/"+row.id+"/activity' class='target'>"+nama+"</div>";
 					}},
@@ -383,6 +383,12 @@
 				var id_monper = $('#id_monper').val();
 				var rel_prog_id = $('#rel_prog_id').val();
 				var internal_code = $('#internal_code').val();
+				if(nm_program==""){
+					nm_program=nm_program_eng;
+				}
+				if(nm_program_eng==""){
+					nm_program_eng=nm_program;
+				}
 				/* if(internal_code==""){
 					internal_code = id_program;
 				} */

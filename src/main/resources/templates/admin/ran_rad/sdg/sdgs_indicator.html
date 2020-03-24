@@ -240,9 +240,9 @@
 					{"data": function (row, data, index, display) {
 							var nama;
 							if($("#fs").is(':checked')){
-								nama = row[4];
+								nama = row[4]?row[4]:row[6];
 							}else{
-								nama = row[6];
+								nama = row[6]?row[6]:row[4];
 							}
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row[2]+"/target/"+row[3]+"/indicator/"+row[0]+"/disaggre' class='target'>"+nama+"</a></div>";
 						}},
@@ -288,6 +288,12 @@
 				var id_indicator = $('#id_indicator').val();
 				var nm_indicator = $('#nm_indicator').val();
 				var nm_indicator_eng = $('#nm_indicator_eng').val();
+				if(nm_indicator==""){
+					nm_indicator = nm_indicator_eng;
+				}
+				if(nm_indicator_eng==""){
+					nm_indicator_eng = nm_indicator;
+				}
 				var unit = $('#unit').val();
 				var increment_decrement = $('#increment_decrement').val();
 				$('.control-group').removeClass('error');

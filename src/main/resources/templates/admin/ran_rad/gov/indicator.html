@@ -462,9 +462,9 @@
 					{"data": function (row, data, index, display) {
 						var nama;
 						if($("#fs").is(':checked')){
-							nama = row[2];
+							nama = row[2]?row[2]:row[5];
 						}else{
-							nama = row[5];
+							nama = row[5]?row[5]:row[2];
 						}
 							return "<div style='font-size:90%;'>"+nama+"</div>";
 						}},
@@ -528,7 +528,12 @@
 				var nm_indicator_eng = $('#nm_indicator_eng').val();
 				var unit = $('#unit').val();
 				var internal_code = $('#internal_code').val();
-				
+				if(nm_indicator==""){
+					nm_indicator=nm_indicator_eng
+				}
+				if(nm_indicator_eng==""){
+					nm_indicator_eng=nm_indicator;
+				}
 				/* if(internal_code==""){
 					internal_code = id_gov_indicator;
 				} */

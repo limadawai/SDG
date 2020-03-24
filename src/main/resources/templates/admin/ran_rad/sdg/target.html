@@ -209,9 +209,9 @@
 					{"data": function (row, data, index, display) {
 							var nama;
 							if($("#fs").is(':checked')){
-								nama = row.nm_target;
+								nama = row.nm_target?row.nm_target:row.nm_target_eng;
 							}else{
-								nama = row.nm_target_eng;
+								nama = row.nm_target_eng?row.nm_target_eng:row.nm_target;
 							}
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+row.id_goals+"/target/"+row.id+"/indicator' class='target'>"+nama+"</a></div>";
 						}},
@@ -251,6 +251,12 @@
 				var id_target = $('#id_target').val();
 				var nm_target = $('#nm_target').val();
 				var nm_target_eng = $('#nm_target_eng').val();
+				if(nm_target==""){
+					nm_target = nm_target_eng;
+				}
+				if(nm_target_eng==""){
+					nm_target_eng = nm_target;
+				}
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;

@@ -248,9 +248,9 @@
 					{"data": function (row, data, index, display) {
 						var nama;
 						if($("#fs").is(':checked')){
-							nama = row.nm_activity;
+							nama = row.nm_activity?row.nm_activity:row.nm_activity_eng;
 						}else{
-							nama = row.nm_activity_eng;
+							nama = row.nm_activity_eng?row.nm_activity_eng:row.nm_activity;
 						}
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/non-gov/program/"+row.id_program+"/activity/"+row.id+"/indicator' class='target'>"+nama+"</a></div>";
 						}},
@@ -297,6 +297,12 @@
 				var internal_code = $('#internal_code').val();
 				var budget_allocation = $('#budget_allocation').val();
 				var id_monper = $("#id_monper").val();
+				if(nm_activity==""){
+					nm_activity=nm_activity_eng
+				}
+				if(nm_activity_eng==""){
+					nm_activity_eng=nm_activity;
+				}
 				/* if(internal_code==""){
 					internal_code = id_activity;
 				} */

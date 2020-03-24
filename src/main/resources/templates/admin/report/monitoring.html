@@ -955,11 +955,10 @@
                     			urlEntry = "getnsaindicator";
                     			urlEntryIsi = "getnsaindicatorisi";
                     		}
-                    			if(cekInd.length>0){
                         			$.ajax({
         	                			url: urlEntry,
         	                            type: 'get',
-        	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":row[i][18], "year":monper_year[0]},
+        	                            data: {"id_prov":idprov, "id_goals":row[i][0], "id_target":row[i][1], "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":row[i][18], "year":monper_year[0]},
         	                            dataType: 'json',
         	                            async: false,
         	                            success: function (result) {
@@ -1104,7 +1103,6 @@
         	                            	}
         	                            }
         	                   });
-                        		}	
                     		textSdg += "</tbody></table>";
                 		}
                 		
