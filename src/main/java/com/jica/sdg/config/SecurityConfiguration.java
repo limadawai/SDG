@@ -52,11 +52,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .defaultSuccessUrl("/admin/dashboard", true)
                 .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/login.done")
+                .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
-        http.sessionManagement()
-        	.invalidSessionUrl("/login?session-expired=true");
+                .deleteCookies("JSESSIONID")
+                .and()
+                .sessionManagement()
+                .maximumSessions(1)
+                .expiredUrl("/login?session-expired=true");
     }
 
     @Override
