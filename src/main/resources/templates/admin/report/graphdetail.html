@@ -1224,6 +1224,14 @@
                     parseInt($("#col26").text(), 10)
                 ];
                 
+                var seri = [
+                    {name: 'Triwulan I', type: 'column', yAxis: 1, data: valreal1, tooltip: {} },
+                    {name: 'Triwulan I', type: 'column', yAxis: 1, data: valreal1, tooltip: {} },
+                    {name: 'Triwulan I', type: 'column', yAxis: 1, data: valreal1, tooltip: {} },
+                    {name: 'Triwulan I', type: 'column', yAxis: 1, data: valreal1, tooltip: {} },
+                    {name: 'Triwulan I', type: 'column', yAxis: 1, data: valreal1, tooltip: {} }
+                ];
+                
                  var options4 ={
                     chart: {
                         zoomType: 'xy',
@@ -1296,7 +1304,8 @@
                             }
                         }
                     },
-                    series: [
+                    series: 
+                            [
                         {
                             name: 'Triwulan I',
                             type: 'column',
@@ -1360,7 +1369,8 @@
                             tooltip: {
 //                          valueSuffix: '%'
                             }
-                        }],
+                        }]
+                    ,
                     colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
                             return {
                                 radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
