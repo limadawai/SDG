@@ -49,6 +49,7 @@
                             </select>
                             <select id="ref_category" name="ref_category" class="form-control">
                                 <option value="0" >-- Pilih --</option>
+                                <option value="*" >ALL</option>
                                 <option th:each="f:${refcategory.content}" th:value="${f.id_cat}" th:text="${f.nm_cat}"></option>
                             </select>
                         </div>
@@ -69,11 +70,13 @@
                                 <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
                             </select>
                             <select id="group" name="group" class="form-control">
-                                <option value="0" >-- Pilih --</option>
                                 <option value="1" selected='true' >Category</option>
                                 <option value="2" >Goals</option>
                                 <option value="3" >Role</option>
                             </select>
+                            <button class="btn btn-primary" type="button" id="show_report" style="margin-top: -10px;">
+                                <i class="icon-search"></i>
+                            </button>
                         </div>
                         <div class="row-fluid" id='report'>
                            
@@ -98,7 +101,7 @@
         }else{
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-role-gov-profil/'+id_prov,
+                url: urls+'list-get-option-role-all-profil/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     var array = result.content;
@@ -141,91 +144,108 @@
         }
 
 
-        $("#id_prov").on('change', function(e){
-            var id_prov = this.value ;
-            $.ajax({
-                type: "GET",
-                url: urls+'list-get-option-role-gov-profil/'+id_prov,
-                success: function (result) {
-                    $("#idrole").html('<option value="0" >-- Pilih --</option>');
-                    var array = result.content;
-                    if (array != '') {
-                        for (i in array) {
-                            $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
-                        }
-                    }
-                }
-            });
-
-            $.ajax({
-                type: "GET",
-                url: urls+'list-get-option-monper/'+id_prov,
-                success: function (result1) {
-                    $("#periode").html('<option value="0" >-- Pilih --</option>');
-                    var array1 = result1.content;
-                    if (array1 != '') {
-                        for (i in array1) {
-                            var selisih     = (array1[i][2] - array1[i][1]);
-//                                console.log(array1[i][2]);
-                            var x;
-                            for(x=0; x<=selisih; x++){
-//                                    console.log((array1[i][1]+x));
-                                $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+        $("#id_prov").on('click', function(e){
+            if(this.selectedIndex == -1) {
+                alert('select one answer');
+            }else{
+                var id_prov = this.value ;
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-role-all-profil/'+id_prov,
+                    success: function (result) {
+                        $("#idrole").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>');
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
-
                         }
                     }
-                }
-            });
+                });
+
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-monper/'+id_prov,
+                    success: function (result1) {
+                        $("#periode").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>');
+                        var array1 = result1.content;
+                        if (array1 != '') {
+                            for (i in array1) {
+                                var selisih     = (array1[i][2] - array1[i][1]);
+    //                                console.log(array1[i][2]);
+                                var x;
+                                for(x=0; x<=selisih; x++){
+    //                                    console.log((array1[i][1]+x));
+                                    $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
+                                }
+
+                            }
+                        }
+                    }
+                });
+            }
+            
         });
 
-        $("#periode").on('change', function(e){
+        $("#periode").on('click', function(e){
             var data_id     = this.value.split("###");
              var id_prov             = $('#id_prov').val();
             var id_monper   = data_id[0];
             var tahun       = data_id[1];
             var id_role     = $('#idrole').val();
-            $.ajax({
-                type: "GET",
-                url: urls+'list-get-option-category/'+id_prov+'/'+id_role+'/'+id_monper,
-                success: function (result1) {
-                    var option = '<option value="0" >-- Pilih --</option>';
-                    console.log(result1.content.length);
-                    if(result1.content.length>0){
-                        $.each(result1.content,function(i,x){
-                            option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
-                        })
+             if(this.selectedIndex == -1) {
+                alert('select one answer');
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-category/'+id_prov+'/'+id_role+'/'+id_monper,
+                    success: function (result1) {
+                        var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
+//                        console.log(result1.content.length);
+                        if(result1.content.length>0){
+                            $.each(result1.content,function(i,x){
+                                option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
+                            })
+                        }
+                        $('#ref_category').html(option);
                     }
-                    $('#ref_category').html(option);
-                }
-            });
+                }); 
+            }
+               
+            
         });
         
         
-        $("#ref_category").on('change', function(e){
+        $("#ref_category").on('click', function(e){
             var data_id             = $("#periode").val().split("###");
             var id_prov             = $('#id_prov').val();
             var id_monper           = data_id[0];
             var tahun               = data_id[1];
             var id_role             = $('#idrole').val();
             var id_refcategory      = $('#ref_category').val();
-            $.ajax({
-                type: "GET",
-                url: urls+'list-get-option-goals/'+id_prov+'/'+id_role+'/'+id_monper+'/'+id_refcategory,
-                success: function (result1) {
-                    var option = '<option value="0" >-- Pilih --</option>';
-                    console.log(result1.content.length);
-                    if(result1.content.length>0){
-                        $.each(result1.content,function(i,x){
-                            option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
-                        })
+            if(this.selectedIndex == -1) {
+                alert('select one answer');
+            }else{
+                $.ajax({
+                    type: "GET",
+                    url: urls+'list-get-option-goals/'+id_prov+'/'+id_role+'/'+id_monper+'/'+id_refcategory,
+                    success: function (result1) {
+                        var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
+//                        console.log(result1.content.length);
+                        if(result1.content.length>0){
+                            $.each(result1.content,function(i,x){
+                                option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
+                            })
+                        }
+                        $('#goals').html(option);
                     }
-                    $('#goals').html(option);
-                }
-            });
+                });
+            }
+                
+            
         });
         
-        $("#goals").on('change', function(e){
+        $("#goals").on('click', function(e){
             var data_id             = $("#periode").val().split("###");
             var id_prov             = $('#id_prov').val();
             var id_monper           = data_id[0];
@@ -233,24 +253,27 @@
             var id_role             = $('#idrole').val();
             var id_refcategory      = $('#ref_category').val();
             var id_goals            = $('#goals').val();
-            $.ajax({
+            if(this.selectedIndex == -1) {
+                alert('select one answer');
+            }else{
+                $.ajax({
                 type: "GET",
                 url: urls+'list-get-option-goals/'+id_prov+'/'+id_role+'/'+id_monper+'/'+id_refcategory+'/'+id_goals,
-                success: function (result1) {
-                    var option = '<option value="0" >-- Pilih --</option>';
-                    console.log(result1.content.length);
-                    if(result1.content.length>0){
-                        $.each(result1.content,function(i,x){
-                            option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
-                        })
+                    success: function (result1) {
+                        var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
+//                        console.log(result1.content.length);
+                        if(result1.content.length>0){
+                            $.each(result1.content,function(i,x){
+                                option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
+                            })
+                        }
+                        $('#target').html(option);
                     }
-                    $('#target').html(option);
+                });
                 }
-            });
-            grid('goals');
         });
         
-        $("#target").on('change', function(e){
+        $("#target").on('click', function(e){
             var data_id             = $("#periode").val().split("###");
             var id_prov             = $('#id_prov').val();
             var id_monper           = data_id[0];
@@ -259,20 +282,25 @@
             var id_refcategory      = $('#ref_category').val();
             var id_goals            = $('#goals').val();
             var id_target           = $('#target').val();
-            $.ajax({
+            if(this.selectedIndex == -1) {
+                alert('select one answer');
+            }else{
+                $.ajax({
                 type: "GET",
                 url: urls+'list-get-option-goals/'+id_prov+'/'+id_role+'/'+id_monper+'/'+id_refcategory+'/'+id_goals+'/'+id_target,
-                success: function (result1) {
-                    var option = '<option value="0" >-- Pilih --</option>';
-                    console.log(result1.content.length);
-                    if(result1.content.length>0){
-                        $.each(result1.content,function(i,x){
-                            option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
-                        })
+                    success: function (result1) {
+                        var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
+//                        console.log(result1.content.length);
+                        if(result1.content.length>0){
+                            $.each(result1.content,function(i,x){
+                                option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
+                            })
+                        }
+                        $('#indicator').html(option);
                     }
-                    $('#indicator').html(option);
-                }
-            });
+                });
+            }
+            
         });
         
         
@@ -360,6 +388,100 @@
                
             }
        
+       
+       $('#show_report').on('click',function(){
+           var id_prov          = $('#id_prov').val();
+           var idrole           = $('#idrole').val();
+           var periode          = $('#periode').val().split("###");
+           periode              = periode[0];
+           var ref_category     = $('#ref_category').val();
+           var goals            = $('#goals').val();
+           var target           = $('#target').val();
+           var indicator        = $('#indicator').val();
+           var group            = $('#group').val();
+           if(id_prov!='0'){
+            function getReport(selected) {
+                             return $.ajax({
+                                 url: urls+'generate-report/problem-identify/'+id_prov+'/'+idrole+'/'+periode+'/'+ref_category+'/'+goals+'/'+target+'/'+indicator+'/'+group,
+                                 data: {
+                                     issession: 1,
+                                     selector: selector
+                                 },
+                                 // dataType: "json",
+                                 async: false,
+                                 error: function () {
+                                     alert("Error occured");
+                                 }
+                             });
+                         }
+                        var selector = !0;
+                        var ajaxObj = getReport(selector);
+                        var result= JSON.parse(ajaxObj.responseText);
+                console.log(result);
+               $('#report').html("");
+               $.each(result.group,function(i,x){
+                   var uuid =  uuidv4();
+                   var data_column =[ { "title": "No"},
+                                      { "title": "Category"},
+                                      { "title": "Institution" },
+                                      { "title": "Description" },
+                                      { "title": "Follow up Plan" }];
+                    var divtable = `<div><h3>`+x[1]+`</h3><table id="table`+uuid+`"></table></div>`;
+                    $('#report').append(divtable);
+                    var data = [];
+                    var no = 0;
+                    $.each(result.content,function(ii,xx){
+                        
+                        if(group=='1'){
+                          if(x[0]==xx[0]){
+                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              data.push(data2);
+                          }
+                        }
+                        if(group=='2'){
+                          if(x[0]==xx[1]){
+                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              data.push(data2);
+                          }
+                        }
+                        
+                        if(group=='3'){
+                          if(x[0]==xx[2]){
+                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              data.push(data2);
+                          }
+                        }
+                    });
+                    $('#table'+uuid).DataTable({
+                        responsive: true,
+                        sDom: 'lrtip',
+                        "retrieve": true,
+                        "bLengthChange": false,
+                        "cache": false,
+                        "autoWidth": true,
+                        "responsive":true,
+                        "paging":   false,
+                        "ordering": true,
+                        "info":     false,
+                        "searching": true,
+                        "aaData" : data,
+                        "aoColumns":data_column,
+//                        "data": datarow,
+                        select: true
+                    });
+                    
+               })
+           }
+           
+//           console.log('hallo');
+       });
+       
+       function uuidv4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+              var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+              return v.toString(16);
+            });
+        }
     </script>
 </body>
 <style>

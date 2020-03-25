@@ -218,9 +218,9 @@
 					{"data": function (row, data, index, display) {
 							var nama;
 							if($("#fs").is(':checked')){
-								nama = row.nm_disaggre;
+								nama = row.nm_disaggre?row.nm_disaggre:row.nm_disaggre_eng;
 							}else{
-								nama = row.nm_disaggre_eng;
+								nama = row.nm_disaggre_eng?row.nm_disaggre_eng:row.nm_disaggre;
 							}
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/sdg/goals/"+id_goals+"/target/"+id_target+"/indicator/"+row.id_indicator+"/disaggre/"+row.id+"' class='target'>"+nama+"</a></div>";
 						}},
@@ -260,6 +260,12 @@
 				var id_disaggre = $('#id_disaggre').val();
 				var nm_disaggre = $('#nm_disaggre').val();
 				var nm_disaggre_eng = $('#nm_disaggre_eng').val();
+				if(nm_disaggre==""){
+					nm_disaggre = nm_disaggre_eng;
+				}
+				if(nm_disaggre_eng==""){
+					nm_disaggre_eng = nm_disaggre;
+				}
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -305,7 +311,7 @@
                     success: function (result) {
                     	var val = result.content;
                     	$('#id').val(val.id);
-                    	$('#id_disaggre').val(val.id_disaggre).attr("readonly",true);
+                    	$('#id_disaggre').val(val.id_disaggre);
                     	$('#nm_disaggre').val(val.nm_disaggre);
                     	$('#nm_disaggre_eng').val(val.nm_disaggre_eng);
 						$('#myModal').modal('show');
