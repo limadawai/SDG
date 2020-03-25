@@ -559,6 +559,8 @@ public class ReportController {
     
     @GetMapping("admin/getnsaindicator")
     public @ResponseBody Map<String, Object> getnsaindicator(@RequestParam("id_prov") String idprov, 
+    		@RequestParam("id_goals") int id_goals,
+    		@RequestParam("id_target") int id_target,
     		@RequestParam("id_sdg_indicator") int idsdgindikator, 
     		@RequestParam("id_monper") int idmonper, 
     		@RequestParam("id_role") int idrole,
@@ -578,9 +580,13 @@ public class ReportController {
     			+ "left join nsa_target h on a.id_nsa_indicator = h.id_nsa_indicator and year = :year "
     			+ "left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper "
     			+ "left join ref_role j on j.id_role = f.id_role "
-    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_nsa_indicator = :id_indicator and f.id_role = :id_role ";
+    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper "
+    			+ "and a.id_goals = :id_goals and (a.id_target = :id_target or a.id_target = '' or a.id_target is null) and (a.id_indicator = :id_indicator or a.id_indicator='' or a.id_indicator is null) "
+    			+ "and f.id_role = :id_role ";
     	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_prov", idprov);
+    	query.setParameter("id_prov", idprov);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
         query.setParameter("id_indicator", idsdgindikator);
         query.setParameter("id_monper", idmonper);
         query.setParameter("id_role", idrole);
@@ -593,6 +599,8 @@ public class ReportController {
     
     @GetMapping("admin/getallindicatorreport")
     public @ResponseBody Map<String, Object> getallindicator(@RequestParam("id_prov") String idprov, 
+    		@RequestParam("id_goals") int id_goals,
+    		@RequestParam("id_target") int id_target,
     		@RequestParam("id_sdg_indicator") int idsdgindikator, 
     		@RequestParam("id_monper") int idmonper, 
     		@RequestParam("id_role") String idrole,
@@ -612,7 +620,9 @@ public class ReportController {
     			+ "left join gov_target h on a.id_gov_indicator = h.id_gov_indicator and year = :year "
     			+ "left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper "
     			+ "left join ref_role j on j.id_role = f.id_role "
-    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator ";
+    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper "
+    			+ "and a.id_goals = :id_goals and (a.id_target = :id_target or a.id_target = '' or a.id_target is null) and (a.id_indicator = :id_indicator or a.id_indicator='' or a.id_indicator is null) "
+    			+ "and f.id_role = :id_role ";
     	sql += " UNION ALL ";
     	sql += "select e.nm_program, e.nm_program_eng, f.nm_activity, f.nm_activity_eng, "
     			+ "d.nm_indicator, d.nm_indicator_eng, g.nm_unit, h.value, b.achievement1, b.achievement2, b.achievement3, "
@@ -629,11 +639,16 @@ public class ReportController {
     			+ "left join nsa_target h on a.id_nsa_indicator = h.id_nsa_indicator and year = :year "
     			+ "left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper "
     			+ "left join ref_role j on j.id_role = f.id_role "
-    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_nsa_indicator = :id_indicator ";
+    			+ "where a.id_prov = :id_prov and a.id_monper = :id_monper "
+    			+ "and a.id_goals = :id_goals and (a.id_target = :id_target or a.id_target = '' or a.id_target is null) and (a.id_indicator = :id_indicator or a.id_indicator='' or a.id_indicator is null) "
+    			+ "and f.id_role = :id_role ";
     	Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_prov", idprov);
+    	query.setParameter("id_prov", idprov);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
         query.setParameter("id_indicator", idsdgindikator);
         query.setParameter("id_monper", idmonper);
+        query.setParameter("id_role", idrole);
         query.setParameter("year", year);
         List list = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
