@@ -317,7 +317,12 @@ public class EntryController {
 "                        ,e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
 "                        ,f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
 "                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
-"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs\n" +
+"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
+                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
+                            "LEFT JOIN sdg_goals b ON g.id_goals = b.id \n" +
+                            "LEFT JOIN sdg_target c ON g.id_target = c.id\n" +
+                            "LEFT JOIN sdg_indicator d ON g.id_indicator = d.id \n" +
+                            "WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs2\n" +
 "                         FROM entry_problem_identify a  \n" +
 "                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
 "                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
