@@ -96,8 +96,8 @@
                                     <thead>
                                         <tr>
                                             <th style="text-align:center;font-size:80%;" >
-                                                <span class="lang_eng" style="display:none">No</span>
-                                                <span class="lang_indo">No</span>
+                                                <span class="lang_eng" style="display:none">Code</span>
+                                                <span class="lang_indo">Kode</span>
                                             </th>
                                             <th style="text-align:center;font-size:80%;" >
                                                 <span class="lang_eng" style="display:none">Sdgs Indicator</span>
@@ -862,13 +862,51 @@
 				"searching": true,
 				"columns": [
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";
-						}},
+						var data   = row[23].split(",");
+                                                var grouphtml = "";
+                                                $.each(data,function(i,x){
+                                                    var dataid          = x.split("###");
+                                                    var lengthdataid    = dataid.length-1;
+                                                    var htmlid = "";
+                                                        $.each(dataid,function(ii,xx){
+                                                            if(ii<lengthdataid){
+                                                               if(ii==0){                                                               
+                                                                    htmlid+= '<label style="display:inline-block;white-space:nowrap;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                }
+                                                               if(ii==1){
+                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                }
+                                                               if(ii==2){
+                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                } 
+                                                            }
+                                                        });
+                                                    grouphtml +=htmlid;
+                                                })
+						return grouphtml;
+					}},
 					{"data": function (row, data, index, display) {
-                                                var html = `<div id="sdg_data`+row[21]+`">
-                                                            </div>`;
-                                                    
-							return html;
+                                                var data   = row[23].split(",");
+                                                var grouphtml = "";
+                                                $.each(data,function(i,x){
+                                                    var dataid          = x.split("###");
+                                                    var lengthdataid    = dataid.length-1;
+                                                    var dataur          = dataid[lengthdataid].split("##|##");
+                                                    var htmlid = "";
+                                                        $.each(dataur,function(ii,xx){
+                                                               if(ii==0){                                                               
+                                                                    htmlid+= '<label style="display:inline-block;white-space:nowrap;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                }
+                                                               if(ii==1){
+                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                }
+                                                               if(ii==2){
+                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                } 
+                                                        });
+                                                    grouphtml +=htmlid;
+                                                })
+						return grouphtml;
 					}},
                                         {"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+row[13]+"</div>";
@@ -885,13 +923,13 @@
 				],
 				select: true,
                                 "initComplete": function( settings, json) {
-                                    $.each(json.content,function(i,x){
-                                            var node_data = x[22].split(",")
-                                            tree(x[21],lisdg2,node_data);
-                                            var id = x[21];
-                                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
-
-                                        })
+//                                    $.each(json.content,function(i,x){
+//                                            var node_data = x[22].split(",")
+//                                            tree(x[21],lisdg2,node_data);
+//                                            var id = x[21];
+//                                            $2('#sdg_data'+id).jstree(true).check_node(node_data);
+//
+//                                        })
                                   }
 			}        
             );
