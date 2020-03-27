@@ -8,6 +8,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -54,14 +56,17 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID")
-                .and()
-                .sessionManagement()
-                .maximumSessions(1)
-                .expiredUrl("/login?session-expired=true");
+                .deleteCookies("JSESSIONID");
+        http.sessionManagement().maximumSessions(1).expiredUrl("/login?session-expired=true");
+    }
+    
+    @Bean
+    public SessionRegistry sessionRegistry() {
+        SessionRegistry sessionRegistry = new SessionRegistryImpl();
+        return sessionRegistry;
     }
 
-    @Override
+	@Override
     public void configure(WebSecurity security) throws Exception {
         security.ignoring().antMatchers("/css/**","/img/**","/js/**","/font/**");
     }
