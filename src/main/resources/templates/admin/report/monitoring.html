@@ -119,6 +119,20 @@
 			    margin-left: 10px;
 			    list-style: none;
 			}
+			.dotOk {
+			  height: 25px;
+			  width: 25px;
+			  background-color: green;
+			  border-radius: 50%;
+			  display: inline-block;
+			}
+			.dotNok {
+			  height: 25px;
+			  width: 25px;
+			  background-color: red;
+			  border-radius: 50%;
+			  display: inline-block;
+			}
 		</style>
 <div th:include="admin/layout :: footer"></div>
 <script th:inline="javascript">
@@ -641,7 +655,7 @@
                         		
                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                         			if(stsGovBud == 'yearly'){
-                            			textSdg += "<td rowspan='1' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
                             		}else if(stsGovBud == 'semesterly'){
                             			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
                             		}else if(stsGovBud == 'quarterly'){
@@ -651,7 +665,7 @@
                         		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                         			if(stsGovBud == 'yearly'){
-                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+                        				textSdg += "";
                                 	}else if(stsGovBud == 'semesterly'){
                             			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
                                 	}else if(stsGovBud == 'quarterly'){
@@ -749,7 +763,7 @@
                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                         			if(stsGovInd == 'yearly'){
                         				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                            			textSdg += "<td style='text-align:center;vertical-align:middle'>Actual</td>";
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
                             		}else if(stsGovInd == 'semesterly'){
                             			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
                             			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
@@ -761,7 +775,7 @@
                         		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                         			if(stsGovInd == 'yearly'){
-                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+                        				textSdg += "";
                                 	}else if(stsGovInd == 'semesterly'){
                             			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
                                 	}else if(stsGovInd == 'quarterly'){
@@ -867,7 +881,7 @@
                         		
                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                         			if(stsNsaBud == 'yearly'){
-                            			textSdg += "<td rowspan='1' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
                             		}else if(stsNsaBud == 'semesterly'){
                             			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
                             		}else if(stsNsaBud == 'quarterly'){
@@ -877,7 +891,7 @@
                         		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                         			if(stsNsaBud == 'yearly'){
-                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+                        				textSdg += "";
                                 	}else if(stsNsaBud == 'semesterly'){
                             			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
                                 	}else if(stsNsaBud == 'quarterly'){
@@ -975,7 +989,7 @@
                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                         			if(stsNsaInd == 'yearly'){
                         				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                            			textSdg += "<td style='text-align:center;vertical-align:middle'>Actual</td>";
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
                             		}else if(stsNsaInd == 'semesterly'){
                             			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
                             			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
@@ -987,7 +1001,7 @@
                         		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                         			if(stsNsaInd == 'yearly'){
-                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+                        				textSdg += "";
                                 	}else if(stsNsaInd == 'semesterly'){
                             			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
                                 	}else if(stsNsaInd == 'quarterly'){
@@ -1121,7 +1135,7 @@
 		                        		
 		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                        			if(stsGovBud == 'yearly'){
-		                            			textSdg += "<td rowspan='1' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
 		                            		}else if(stsGovBud == 'semesterly'){
 		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
 		                            		}else if(stsGovBud == 'quarterly'){
@@ -1131,7 +1145,7 @@
 		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                        			if(stsGovBud == 'yearly'){
-		                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+		                        				textSdg += "";
 		                                	}else if(stsGovBud == 'semesterly'){
 		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
 		                                	}else if(stsGovBud == 'quarterly'){
@@ -1229,7 +1243,7 @@
 		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                        			if(stsGovInd == 'yearly'){
 		                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>Actual</td>";
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
 		                            		}else if(stsGovInd == 'semesterly'){
 		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
 		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
@@ -1241,7 +1255,7 @@
 		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                        			if(stsGovInd == 'yearly'){
-		                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+		                        				textSdg += "";
 		                                	}else if(stsGovInd == 'semesterly'){
 		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
 		                                	}else if(stsGovInd == 'quarterly'){
@@ -1347,7 +1361,7 @@
 		                        		
 		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                        			if(stsNsaBud == 'yearly'){
-		                            			textSdg += "<td rowspan='1' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
 		                            		}else if(stsNsaBud == 'semesterly'){
 		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
 		                            		}else if(stsNsaBud == 'quarterly'){
@@ -1357,7 +1371,7 @@
 		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                        			if(stsNsaBud == 'yearly'){
-		                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+		                        				textSdg += "";
 		                                	}else if(stsNsaBud == 'semesterly'){
 		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
 		                                	}else if(stsNsaBud == 'quarterly'){
@@ -1455,7 +1469,7 @@
 		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                        			if(stsNsaInd == 'yearly'){
 		                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>Actual</td>";
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
 		                            		}else if(stsNsaInd == 'semesterly'){
 		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
 		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
@@ -1467,7 +1481,7 @@
 		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                        			if(stsNsaInd == 'yearly'){
-		                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+		                        				textSdg += "";
 		                                	}else if(stsNsaInd == 'semesterly'){
 		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
 		                                	}else if(stsNsaInd == 'quarterly'){
@@ -1591,11 +1605,12 @@
 		    		        	                			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
 		    		        	                    	}
 		    		        	                	}
-		    		        	                	textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Actor</b></td><td rowspan='3' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr style='font-size:80%;'>";
+		    		        	                	//<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Actor</b></td>
+		    		        	                	textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr style='font-size:80%;'>";
 		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		        	                    	if(sts == 'yearly'){
 		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
-		    		        	                    		textSdg += "<td style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
 		    		        	                    	}else if(sts == 'semesterly'){
 		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
 		    		        	                    		textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
@@ -1608,7 +1623,7 @@
 		    		        	                	textSdg += "</tr><tr>";
 		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		        	                		if(sts == 'yearly'){
-		    		        	                			textSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td>";
+		    		        	                			textSdg += "";
 		    		        	                    	}else if(sts == 'semesterly'){
 		    		        	                    		textSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td>";
 		    		        	                    	}
@@ -1620,11 +1635,14 @@
 		    		        	                	var row = hasil.indSdg;
 		    		        	                	for (var a = 0; a < hasil.indSdg.length; a++) {
 		    		        	                		textSdg += "<tr style='font-size:80%;'>";
-		    		        	                		textSdg += "<td></td>";
+		    		        	                		var role =4+(9*(monper_year[1]-monper_year[0]+1));
+		    		        	                		textSdg += "<td>"+(row[a][role]?row[a][role]:'')+"</td>";
 		    		        	                		textSdg += "<td>"+(row[a][0]?row[a][0]:'')+"</td>";
 		    		        	                		textSdg += "<td>"+(row[a][1]?row[a][1]:'')+"</td>";
 		    		        	                		
-		    		        	                		var dinamis=3;
+		    		        	                		var dinamis=4;
+		    		        	                		var achive=0;
+		    		        	                		var target=0;
 		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        				var nilai1="";
 		    		                                		var nilai2="";
@@ -1656,17 +1674,54 @@
 		    		                                		if(sts == 'yearly'){
 		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		                            				if(row[a][3]=="1"){
+	    		            										achive = achive+nilai1;
+	    		            										target = target+row[a][dinamis];
+	    		            									}else{
+	    		            										achive = nilai1;
+	    		            										target = row[a][dinamis];
+	    		            									}
 		    		                                    	}else if(sts == 'semesterly'){
 		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		                                			if(row[a][3]=="1"){
+																	achive = achive+nilai1+nilai2;
+																	target = target+row[a][dinamis];
+																}else{
+																	achive = nilai2;
+																	target = row[a][dinamis];
+																}
 		    		                                    	}else if(sts == 'quarterly'){
 		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		                                    		if(row[a][3]=="1"){
+																	achive = achive+nilai1+nilai2+nilai3+nilai4;
+																	target = target+row[a][dinamis];
+																}else{
+																	achive = nilai4;
+																	target = row[a][dinamis];
+																}
 		    		                                    	}
 		    		                                		dinamis = dinamis+9;
 		    		                        			}
-		    		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
-		    		                        			textSdg += "<td></td>";
+		    		                        			//textSdg += "<td>"+row[a][dinamis]+"</td>";
+		    		                        			var color_sts="";
+		    		                        			if(achive){
+		                                        			if(row[a][2] == 'Increment'){
+		                                                        if((achive >= target)){
+		                                                            color_sts = '<span class="dotOk"></span>';
+		                                                        }else{
+		                                                            color_sts = '<span class="dotNok"></span>';
+		                                                        }
+		                                                    }else{
+		                                                        if((achive <= target)){
+		                                                            color_sts = '<span class="dotOk"></span>';
+		                                                        }else{
+		                                                            color_sts = '<span class="dotNok"></span>';
+		                                                        }
+		                                                    }
+		                                        		}
+		    		                        			textSdg += "<td style='text-align:center'>"+(color_sts?color_sts:'')+"</td>";
 		    		        	                		textSdg += "</tr>";
 		    		        	                	}
 		    		        	                	textSdg += "</tbody></table></div>";
@@ -1717,11 +1772,12 @@
 		    		    		        	                			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
 		    		    		        	                    	}
 		    		    		        	                	}
-		    		    		        	                	textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Actor</b></td><td rowspan='3' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr style='font-size:80%;'>";
+		    		    		        	                	//<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Actor</b></td>
+		    		    		        	                	textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr style='font-size:80%;'>";
 		    		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		    		        	                    	if(sts == 'yearly'){
 		    		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
-		    		    		        	                    		textSdg += "<td style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		    		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
 		    		    		        	                    	}else if(sts == 'semesterly'){
 		    		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
 		    		    		        	                    		textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
@@ -1734,7 +1790,7 @@
 		    		    		        	                	textSdg += "</tr><tr>";
 		    		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		    		        	                		if(sts == 'yearly'){
-		    		    		        	                			textSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td>";
+		    		    		        	                			textSdg += "";
 		    		    		        	                    	}else if(sts == 'semesterly'){
 		    		    		        	                    		textSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td>";
 		    		    		        	                    	}
@@ -1746,11 +1802,14 @@
 		    		    		        	                	var row = hasil.indSdg;
 		    		    		        	                	for (var a = 0; a < hasil.indSdg.length; a++) {
 		    		    		        	                		textSdg += "<tr style='font-size:80%;'>";
-		    		    		        	                		textSdg += "<td></td>";
+		    		    		        	                		var role = 4+(9*(monper_year[1]-monper_year[0]+1));
+		    		    		        	                		textSdg += "<td>"+(row[a][0]?row[a][role]:'')+"</td>";
 		    		    		        	                		textSdg += "<td>"+(row[a][0]?row[a][0]:'')+"</td>";
 		    		    		        	                		textSdg += "<td>"+(row[a][1]?row[a][1]:'')+"</td>";
 		    		    		        	                		
-		    		    		        	                		var dinamis=3;
+		    		    		        	                		var dinamis=4;
+		    		    		        	                		var achive=0;
+		    		    		        	                		var target=0;
 		    		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		    		                        				var nilai1="";
 		    		    		                                		var nilai2="";
@@ -1782,17 +1841,54 @@
 		    		    		                                		if(sts == 'yearly'){
 		    		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		    		                            				if(row[a][3]=="1"){
+		    	    		            										achive = achive+nilai1;
+		    	    		            										target = target+row[a][dinamis];
+		    	    		            									}else{
+		    	    		            										achive = nilai1;
+		    	    		            										target = row[a][dinamis];
+		    	    		            									}
 		    		    		                                    	}else if(sts == 'semesterly'){
 		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		    		                                			if(row[a][3]=="1"){
+		    																	achive = achive+nilai1+nilai2;
+		    																	target = target+row[a][dinamis];
+		    																}else{
+		    																	achive = nilai2;
+		    																	target = row[a][dinamis];
+		    																}
 		    		    		                                    	}else if(sts == 'quarterly'){
 		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		    		                                    		if(row[a][3]=="1"){
+		    																	achive = achive+nilai1+nilai2+nilai3+nilai4;
+		    																	target = target+row[a][dinamis];
+		    																}else{
+		    																	achive = nilai4;
+		    																	target = row[a][dinamis];
+		    																}
 		    		    		                                    	}
 		    		    		                                		dinamis = dinamis+9;
 		    		    		                        			}
-		    		    		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
-		    		    		                        			textSdg += "<td></td>";
+		    		    		                        			//textSdg += "<td>"+row[a][dinamis]+"</td>";
+		    		    		                        			var color_sts="";
+		    		    		                        			if(achive){
+		    		                                        			if(row[a][2] == 'Increment'){
+		    		                                                        if((achive >= target)){
+		    		                                                            color_sts = '<span class="dotOk"></span>';
+		    		                                                        }else{
+		    		                                                            color_sts = '<span class="dotNok"></span>';
+		    		                                                        }
+		    		                                                    }else{
+		    		                                                        if(achive <= target){
+		    		                                                            color_sts = '<span class="dotOk"></span>';
+		    		                                                        }else{
+		    		                                                            color_sts = '<span class="dotNok"></span>';
+		    		                                                        }
+		    		                                                    }
+		    		                                        		}
+		    		    		                        			textSdg += "<td style='text-align:center'>"+(color_sts?color_sts:'')+"</td>";
 		    		    		        	                		textSdg += "</tr>";
 		    		    		        	                	}
 		    		    		        	                	textSdg += "</tbody></table></div>";
@@ -1836,7 +1932,7 @@
 		    		                        		
 		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        			if(stsGovBud == 'yearly'){
-		    		                            			textSdg += "<td rowspan='1' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
 		    		                            		}else if(stsGovBud == 'semesterly'){
 		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
 		    		                            		}else if(stsGovBud == 'quarterly'){
@@ -1846,7 +1942,7 @@
 		    		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        			if(stsGovBud == 'yearly'){
-		    		                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+		    		                        				textSdg += "";
 		    		                                	}else if(stsGovBud == 'semesterly'){
 		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
 		    		                                	}else if(stsGovBud == 'quarterly'){
@@ -1944,7 +2040,7 @@
 		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        			if(stsGovInd == 'yearly'){
 		    		                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
 		    		                            		}else if(stsGovInd == 'semesterly'){
 		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
 		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
@@ -1956,7 +2052,7 @@
 		    		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        			if(stsGovInd == 'yearly'){
-		    		                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+		    		                        				textSdg += "";
 		    		                                	}else if(stsGovInd == 'semesterly'){
 		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
 		    		                                	}else if(stsGovInd == 'quarterly'){
@@ -2062,7 +2158,7 @@
 		    		                        		
 		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        			if(stsNsaBud == 'yearly'){
-		    		                            			textSdg += "<td rowspan='1' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
 		    		                            		}else if(stsNsaBud == 'semesterly'){
 		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
 		    		                            		}else if(stsNsaBud == 'quarterly'){
@@ -2072,7 +2168,7 @@
 		    		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        			if(stsNsaBud == 'yearly'){
-		    		                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+		    		                        				textSdg += "";
 		    		                                	}else if(stsNsaBud == 'semesterly'){
 		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
 		    		                                	}else if(stsNsaBud == 'quarterly'){
@@ -2170,7 +2266,7 @@
 		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        			if(stsNsaInd == 'yearly'){
 		    		                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
 		    		                            		}else if(stsNsaInd == 'semesterly'){
 		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
 		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
@@ -2182,7 +2278,7 @@
 		    		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        			if(stsNsaInd == 'yearly'){
-		    		                        				textSdg += "<td style='text-align:center;vertical-align:middle'>1</td>";
+		    		                        				textSdg += "";
 		    		                                	}else if(stsNsaInd == 'semesterly'){
 		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
 		    		                                	}else if(stsNsaInd == 'quarterly'){

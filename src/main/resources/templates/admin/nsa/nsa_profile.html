@@ -31,6 +31,7 @@
                         <div class="pull-left" style="width:100%">
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
                                 <option value="0" >-- Pilih --</option>
+                                <option value="00" >ALL</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="nm_nsa_profil" name="idrole" class="form-control">
