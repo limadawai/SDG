@@ -26,6 +26,7 @@ import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.json.JSONArray;
@@ -185,22 +186,28 @@ public class NsaController {
         return hasil;
     }
     
+    @GetMapping("admin/getallinst")
+    public @ResponseBody List<Object> getallinst() {
+    	String sql  = "select a.id_role as idrl, b.* from ref_role a left join "
+    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' order by a.id_role asc ";
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        return list;
+    }
+    
     @GetMapping("admin/list-get-option-role-ins-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionInsProfilList(@PathVariable("id") String id) {
-        
         String sql  = "select * from ref_role as a where a.id_prov = :id and cat_role = 'Institution' ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        
         hasil.put("content",list);
         return hasil;
     }
     
     @GetMapping("admin/list-get-option-role-ins-profil_1/{id}")
     public @ResponseBody Map<String, Object> getOptionInsProfilList_1(@PathVariable("id") String id) {
-        
         String sql  = "select a.id_inst, a.nm_inst from nsa_inst as a\n" +
                     "left join ref_role as b on a.id_role = b.id_role " ;
 //                    "left join ref_role as b on a.id_role = b.id_role\n" +
@@ -209,7 +216,6 @@ public class NsaController {
 //        query.setParameter("id", id);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        
         hasil.put("content",list);
         return hasil;
     }
@@ -563,6 +569,91 @@ public class NsaController {
 		}
     }
     
+    @GetMapping("admin/nsa/dowload_inst_all")
+    @ResponseBody
+    public void dowload_inst_profil(HttpServletResponse response) throws IOException {
+        response.setContentType("application/octet-stream");
+        response.setHeader("Content-Disposition", "attachment; filename=INS_Profile-All.xlsx");
+        ByteArrayInputStream stream = insprofilall();
+        IOUtils.copy(stream, response.getOutputStream());
+    }
+    
+    private ByteArrayInputStream insprofilall() {
+    	try(Workbook workbook = new XSSFWorkbook()) {
+    		Sheet sheet = workbook.createSheet("Profile All");
+    		
+    		Row row = sheet.createRow(0);
+	        CellStyle headerCellStyle = workbook.createCellStyle();
+	        headerCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
+	        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+	        headerCellStyle.setAlignment(HorizontalAlignment.CENTER);
+	        headerCellStyle.setWrapText(true);
+	        // Creating header
+	        Cell cell = row.createCell(0);
+	        cell.setCellValue("No.");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(1);
+	        cell.setCellValue("Nama Institusi");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(2);
+	        cell.setCellValue("Pencapaian");
+	        cell.setCellStyle(headerCellStyle);
+	
+	        cell = row.createCell(3);
+	        cell.setCellValue("Lokasi");
+	        cell.setCellStyle(headerCellStyle);
+	
+	        cell = row.createCell(4);
+	        cell.setCellValue("Penerima Manfaat");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(5);
+	        cell.setCellValue("Tahun Implementasi");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        cell = row.createCell(6);
+	        cell.setCellValue("Partner");
+	        cell.setCellStyle(headerCellStyle);
+	        
+	        String sql  = "select a.id_role as idrl, b.* from ref_role a left join "
+	    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' order by a.id_role asc ";
+	        Query query = em.createNativeQuery(sql);
+	        Map<String, Object> mapDetail = new HashMap<>();
+	        mapDetail.put("mapDetail",query.getResultList());
+	        JSONObject objDetail = new JSONObject(mapDetail);
+	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
+//	        System.out.println(arrayDetail.get(0));
+	        for (int i=0; i<arrayDetail.length(); i++) {
+	        	JSONArray finalDetail = arrayDetail.getJSONArray(i);
+	        	Row dataRow = sheet.createRow(i+1);
+		    	dataRow.createCell(0).setCellValue((i+1)+".");
+		    	dataRow.createCell(1).setCellValue(finalDetail.getString(3));
+		    	dataRow.createCell(2).setCellValue(finalDetail.getString(4));
+		    	dataRow.createCell(3).setCellValue(finalDetail.getString(5));
+		    	dataRow.createCell(4).setCellValue(finalDetail.getString(6));
+		    	dataRow.createCell(5).setCellValue(finalDetail.getInt(7));
+		    	dataRow.createCell(6).setCellValue(finalDetail.getString(8));
+	        }
+	        
+	        sheet.autoSizeColumn(0);
+	        sheet.autoSizeColumn(1);
+	        sheet.autoSizeColumn(2);
+	        sheet.autoSizeColumn(3);
+	        sheet.autoSizeColumn(4);
+	        sheet.autoSizeColumn(5);
+	        sheet.autoSizeColumn(6);
+    		
+    		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+	        workbook.write(outputStream);
+	        return new ByteArrayInputStream(outputStream.toByteArray());
+    	} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+    }
+    
     @GetMapping("admin/nsa/dowload_inst_profil/{id_role}")
     @ResponseBody
     public void dowload_inst_profil(HttpServletResponse response, @PathVariable("id_role") int idrole) throws IOException {
@@ -575,8 +666,11 @@ public class NsaController {
 	private ByteArrayInputStream insprofil(int idrole) {
 		try(Workbook workbook = new XSSFWorkbook()) {
 			Sheet sheet = workbook.createSheet("Profile");
+			
+			Row rownama = sheet.createRow(0);
+			sheet.addMergedRegion(CellRangeAddress.valueOf("A1:F1"));
 	        
-	        Row row = sheet.createRow(0);
+	        Row row = sheet.createRow(1);
 	        CellStyle headerCellStyle = workbook.createCellStyle();
 	        headerCellStyle.setFillForegroundColor(IndexedColors.AQUA.getIndex());
 	        headerCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
@@ -618,7 +712,9 @@ public class NsaController {
 	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
 	        JSONArray  finalDetail = arrayDetail.getJSONArray(0);
 	        
-	    	Row dataRow = sheet.createRow(1);
+	        rownama.createCell(0).setCellValue(finalDetail.getString(2));
+	        
+	    	Row dataRow = sheet.createRow(2);
 	    	dataRow.createCell(0).setCellValue("1.");
 	    	dataRow.createCell(1).setCellValue(finalDetail.getString(3));
 	    	dataRow.createCell(2).setCellValue(finalDetail.getString(4));
