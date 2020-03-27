@@ -294,7 +294,7 @@
                     	detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
                                       '<span class="toogle-sdg-bapak" data-id="'+idGoals+'" style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
                                 '</label></td>'+
-                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+roleGov('')+'</select></td>'+
+                                '<td style="width:50%"><select class="select-bapak-sdg select-bapak-sdg'+idGoals+'" data-id="'+idGoals+'">'+roleAll('')+'</select></td>'+
                                 '<tr/>';
                     	$.ajax({
                             url: urls + 'list-sdgTarget/'+response.content[i].id,
@@ -315,7 +315,7 @@
         			                            	'<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
         			                      			'</label>'+
         			                           '</td>'+
-        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+roleGov('')+'</select></td>'+
+        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+roleAll('')+'</select></td>'+
         			                      	'<tr/>';
 //                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({

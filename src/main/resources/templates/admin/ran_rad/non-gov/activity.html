@@ -248,9 +248,9 @@
 					{"data": function (row, data, index, display) {
 						var nama;
 						if($("#fs").is(':checked')){
-							nama = row.nm_activity;
+							nama = row.nm_activity?row.nm_activity:row.nm_activity_eng;
 						}else{
-							nama = row.nm_activity_eng;
+							nama = row.nm_activity_eng?row.nm_activity_eng:row.nm_activity;
 						}
 							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/non-gov/program/"+row.id_program+"/activity/"+row.id+"/indicator' class='target'>"+nama+"</a></div>";
 						}},
@@ -296,6 +296,13 @@
 				var id_role = $('#id_role').val();
 				var internal_code = $('#internal_code').val();
 				var budget_allocation = $('#budget_allocation').val();
+				var id_monper = $("#id_monper").val();
+				if(nm_activity==""){
+					nm_activity=nm_activity_eng
+				}
+				if(nm_activity_eng==""){
+					nm_activity_eng=nm_activity;
+				}
 				/* if(internal_code==""){
 					internal_code = id_activity;
 				} */
@@ -324,7 +331,7 @@
 						'budget_allocation':budget_allocation});
 					$.ajax({
 						type: "POST",
-	                    url: urls+'save-nsaActivity',
+	                    url: urls+'save-nsaActivity/'+id_monper,
 	                    beforeSend : function(xhr){
 	                    	xhr.setRequestHeader(header,token);
 	                    },
@@ -349,7 +356,7 @@
                     	$('#id_activity').val(val.id_activity).attr("readonly",true);
         				$('#nm_activity').val(val.nm_activity);
         				$('#nm_activity_eng').val(val.nm_activity_eng);
-        				$('#internal_code').val(val.internal_code);
+        				$('#internal_code').val(val.internal_code?val.internal_code:'');
         				$('#budget_allocation').val(val.budget_allocation);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
@@ -369,7 +376,7 @@
                     	$('#id_activity').val(val.id_activity).attr("readonly",true);
         				$('#nm_activity').val(val.nm_activity).attr("readonly",true);
         				$('#nm_activity_eng').val(val.nm_activity_eng).attr("readonly",true);
-        				$('#internal_code').val(val.internal_code).attr("readonly",true);
+        				$('#internal_code').val(val.internal_code?val.internal_code:'').attr("readonly",true);
         				$('#budget_allocation').val(val.budget_allocation).attr("readonly",true);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){

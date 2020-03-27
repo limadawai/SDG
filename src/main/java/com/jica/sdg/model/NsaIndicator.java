@@ -40,13 +40,13 @@ public class NsaIndicator implements Serializable {
     private Date date_created;
     
     @Column(nullable = true, length = 150)
-    private String internal_code;
+    private Integer internal_code;
 
 	public NsaIndicator() {
 	}
 
 	public NsaIndicator(Integer id, String id_nsa_indicator, String id_program, String id_activity, String nm_indicator,
-			String nm_indicator_eng, String unit, Integer created_by, Date date_created, String internal_code) {
+			String nm_indicator_eng, String unit, Integer created_by, Date date_created, Integer internal_code) {
 		super();
 		this.id = id;
 		this.id_nsa_indicator = id_nsa_indicator;
@@ -132,11 +132,11 @@ public class NsaIndicator implements Serializable {
 		this.date_created = date_created;
 	}
 
-	public String getInternal_code() {
+	public Integer getInternal_code() {
 		return internal_code;
 	}
 
-	public void setInternal_code(String internal_code) {
+	public void setInternal_code(Integer internal_code) {
 		this.internal_code = internal_code;
 	}
 

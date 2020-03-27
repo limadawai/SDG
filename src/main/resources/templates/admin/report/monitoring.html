@@ -288,7 +288,7 @@
         	                        	option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
         	                        	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
         	                        				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
-        				                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+        				                            '<span style="vertical-align:middle">'+response.content[i].id_goals+". "+nm_goals+'</span>'+
         				                      '</label><br/>';
         	                        	$.ajax({
         	                                url: urls + 'list-sdgTarget/'+response.content[i].id,
@@ -308,7 +308,7 @@
         	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
         	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
         	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="0---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-        								                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+        								                            '<span style="vertical-align:middle">'+result.content[j].id_target+". "+nm_target+'</span>'+
         								                      '</label><br/>';
         	                                    	$.ajax({
         	                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
@@ -328,7 +328,7 @@
         	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
         	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
         									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="0---0---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-        									                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+        									                            '<span style="vertical-align:middle">'+result1.content[k][1]+". "+nm_indicator+'</span>'+
         									                      '</label><br/>';
         	                                            	}
         	                                            }
@@ -371,7 +371,7 @@
                                     	option += '<optgroup id="" label="'+response.sdg[i][3]+' '+nm_goals+'">';
                                     	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
                                     				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.sdg[i][0]+'---0---0">&nbsp;&nbsp;&nbsp;'+
-            			                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+            			                            '<span style="vertical-align:middle">'+response.sdg[i][3]+'. '+nm_goals+'</span>'+
             			                      '</label><br/>';
                                     	$.ajax({
                                             url: urls + 'list-sdgTarget/'+response.sdg[i][0],
@@ -391,7 +391,7 @@
                                                 	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
                                                 	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
                                                 					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.sdg[i][0]+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-            							                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+            							                            '<span style="vertical-align:middle">'+result.content[j].id_target+". "+nm_target+'</span>'+
             							                      '</label><br/>';
                                                 	$.ajax({
                                                         url: urls + 'list-sdgIndicator/'+response.sdg[i][0]+'/'+result.content[j].id,
@@ -411,7 +411,7 @@
                                                             	option += '<option value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
                                                             	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
             								                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-            								                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+            								                            '<span style="vertical-align:middle">'+result1.content[k][1]+". "+nm_indicator+'</span>'+
             								                      '</label><br/>';
                                                         	}
                                                         }
@@ -955,11 +955,10 @@
                     			urlEntry = "getnsaindicator";
                     			urlEntryIsi = "getnsaindicatorisi";
                     		}
-                    			if(cekInd.length>0){
                         			$.ajax({
         	                			url: urlEntry,
         	                            type: 'get',
-        	                            data: {"id_prov":idprov, "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":row[i][18], "year":monper_year[0]},
+        	                            data: {"id_prov":idprov, "id_goals":row[i][0], "id_target":row[i][1], "id_sdg_indicator":row[i][2], "id_monper":id_monper, "id_role":row[i][18], "year":monper_year[0]},
         	                            dataType: 'json',
         	                            async: false,
         	                            success: function (result) {
@@ -1104,7 +1103,6 @@
         	                            	}
         	                            }
         	                   });
-                        		}	
                     		textSdg += "</tbody></table>";
                 		}
                 		

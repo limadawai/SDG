@@ -29,6 +29,7 @@
                     	
                         <div class="pull-right" style="width:auto;">
                             <input type="hidden" id="panjang_aggre" name="panjang_aggre">
+                            <input type="hidden" id="monper_sdg" name="monper_sdg">
                             <select id="pilgrafik">
                                     <option value="0">-- Pilih Jenis Grafik --</option>
                                     <option value="graf1">Grafik Line</option>
@@ -311,6 +312,7 @@
                 async: false,
                 success: function (monper) {
                     if (monper[0] == "yearly") {
+                        $("#monper_sdg").val(monper[0]);
                         //cek disagre
                         if(monper[1] == '0'){
                             //sdg
@@ -389,8 +391,20 @@
                                             }else{
                                                 var real5 = array[i][24];
                                             }
+                                            
+                                            
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+array[i][28]+'</td><td id="colsdg13">'+array[i][29]+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+ket1+'</td><td id="colsdg13">'+ket2+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -475,8 +489,19 @@
                                             }else{
                                                 var real5 = array[i][24];
                                             }
+                                            
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+array[i][28]+'</td><td id="colsdg13">'+array[i][29]+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+ket1+'</td><td id="colsdg13">'+ket2+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -561,7 +586,18 @@
                                                 var real5 = array[i][24];
                                             }
 
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1+'</td><td id="colagg9_'+[i]+'">'+real2+'</td><td id="colagg10_'+[i]+'">'+real3+'</td><td id="colagg11_'+[i]+'">'+real4+'</td><td id="colagg12_'+[i]+'">'+real5+'</td><td id="colagg13_'+[i]+'">'+array[i][28]+'</td><td id="colagg14_'+[i]+'">'+array[i][29]+'</td><td id="colagg15_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
+                                            
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1+'</td><td id="colagg9_'+[i]+'">'+real2+'</td><td id="colagg10_'+[i]+'">'+real3+'</td><td id="colagg11_'+[i]+'">'+real4+'</td><td id="colagg12_'+[i]+'">'+real5+'</td><td id="colagg13_'+[i]+'">'+ket1+'</td><td id="colagg14_'+[i]+'">'+ket2+'</td><td id="colagg15_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -570,6 +606,7 @@
                         }
                         
                     }else if (monper[0] == "semesterly") {
+                        $("#monper_sdg").val(monper[0]);
                         //cek disagre
                         if(monper[1] == '0'){
                             //sdg
@@ -679,7 +716,17 @@
                                                 var real5_2 = array[i][25];
                                             }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+array[i][28]+'</td><td id="colsdg18">'+array[i][29]+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -796,7 +843,19 @@
                                             }else{
                                                 var real5_2 = array[i][25];
                                             }
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+array[i][28]+'</td><td id="colsdg18">'+array[i][29]+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
+                                            
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
+                                            
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
 //                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
@@ -912,8 +971,19 @@
                                             }else{
                                                 var real5_2 = array[i][25];
                                             }
+                                            
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
 
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real2_1+'</td><td id="colagg11_'+[i]+'">'+real2_2+'</td><td id="colagg12_'+[i]+'">'+real3_1+'</td><td id="colagg13_'+[i]+'">'+real3_2+'</td><td id="colagg14_'+[i]+'">'+real4_1+'</td><td id="colagg15_'+[i]+'">'+real4_2+'</td><td id="colagg16_'+[i]+'">'+real5_1+'</td><td id="colagg17_'+[i]+'">'+real5_2+'</td><td id="colagg18_'+[i]+'">'+array[i][28]+'</td><td id="colagg19_'+[i]+'">'+array[i][29]+'</td><td id="colagg20_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real2_1+'</td><td id="colagg11_'+[i]+'">'+real2_2+'</td><td id="colagg12_'+[i]+'">'+real3_1+'</td><td id="colagg13_'+[i]+'">'+real3_2+'</td><td id="colagg14_'+[i]+'">'+real4_1+'</td><td id="colagg15_'+[i]+'">'+real4_2+'</td><td id="colagg16_'+[i]+'">'+real5_1+'</td><td id="colagg17_'+[i]+'">'+real5_2+'</td><td id="colagg18_'+[i]+'">'+ket1+'</td><td id="colagg19_'+[i]+'">'+ket2+'</td><td id="colagg20_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -923,6 +993,7 @@
                         }
                         
                     }else if (monper[0] == "quarterly") {
+                        $("#monper_sdg").val(monper[0]);
                         //cek disagre
                         if(monper[1] == '0'){
                             //sdg
@@ -1091,8 +1162,19 @@
                                             }else{
                                                 var real5_4 = array[i][27];
                                             }
+                                            
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+array[i][28]+'</td><td id="colsdg28">'+array[i][29]+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -1267,7 +1349,18 @@
                                             }else{
                                                 var real5_4 = array[i][27];
                                             }
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+array[i][28]+'</td><td id="colsdg28">'+array[i][29]+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
+                                            
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
 
 //                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real1_3+'</td><td>'+real1_4+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real2_3+'</td><td>'+real2_4+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real3_3+'</td><td>'+real3_4+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real4_3+'</td><td>'+real4_4+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+real5_3+'</td><td>'+real5_4+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
@@ -1443,8 +1536,19 @@
                                             }else{
                                                 var real5_4 = array[i][27];
                                             }
-
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real1_3+'</td><td id="colagg11_'+[i]+'">'+real1_4+'</td><td id="colagg12_'+[i]+'">'+real2_1+'</td><td id="colagg13_'+[i]+'">'+real2_2+'</td><td id="colagg14_'+[i]+'">'+real2_3+'</td><td id="colagg15_'+[i]+'">'+real2_4+'</td><td id="colagg16_'+[i]+'">'+real3_1+'</td><td id="colagg17_'+[i]+'">'+real3_2+'</td><td id="colagg18_'+[i]+'">'+real3_3+'</td><td id="colagg19_'+[i]+'">'+real3_4+'</td><td id="colagg20_'+[i]+'">'+real4_1+'</td><td id="colagg21_'+[i]+'">'+real4_2+'</td><td id="colagg22_'+[i]+'">'+real4_3+'</td><td id="colagg23_'+[i]+'">'+real4_4+'</td><td id="colagg24_'+[i]+'">'+real5_1+'</td><td id="colagg25_'+[i]+'">'+real5_2+'</td><td id="colagg26_'+[i]+'">'+real5_3+'</td><td id="colagg27_'+[i]+'">'+real5_4+'</td><td id="colagg28_'+[i]+'">'+array[i][28]+'</td><td id="colagg29_'+[i]+'">'+array[i][29]+'</td><td id="colagg30_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            
+                                            if(array[i][28] == null || array[i][28] == '0'){
+                                                var ket1 = '';
+                                            }else{
+                                                var ket1 = array[i][28];
+                                            }
+                                            if(array[i][29] == null || array[i][29] == '0'){
+                                                var ket2 = '';
+                                            }else{
+                                                var ket2 = array[i][29];
+                                            }
+                                            
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real1_3+'</td><td id="colagg11_'+[i]+'">'+real1_4+'</td><td id="colagg12_'+[i]+'">'+real2_1+'</td><td id="colagg13_'+[i]+'">'+real2_2+'</td><td id="colagg14_'+[i]+'">'+real2_3+'</td><td id="colagg15_'+[i]+'">'+real2_4+'</td><td id="colagg16_'+[i]+'">'+real3_1+'</td><td id="colagg17_'+[i]+'">'+real3_2+'</td><td id="colagg18_'+[i]+'">'+real3_3+'</td><td id="colagg19_'+[i]+'">'+real3_4+'</td><td id="colagg20_'+[i]+'">'+real4_1+'</td><td id="colagg21_'+[i]+'">'+real4_2+'</td><td id="colagg22_'+[i]+'">'+real4_3+'</td><td id="colagg23_'+[i]+'">'+real4_4+'</td><td id="colagg24_'+[i]+'">'+real5_1+'</td><td id="colagg25_'+[i]+'">'+real5_2+'</td><td id="colagg26_'+[i]+'">'+real5_3+'</td><td id="colagg27_'+[i]+'">'+real5_4+'</td><td id="colagg28_'+[i]+'">'+ket1+'</td><td id="colagg29_'+[i]+'">'+ket2+'</td><td id="colagg30_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -1892,8 +1996,19 @@
                                         }else{
                                             var real5 = array[i][24];
                                         }
+                                        
+                                        if(array[i][28] == null || array[i][28] == '0'){
+                                            var ket1 = '';
+                                        }else{
+                                            var ket1 = array[i][28];
+                                        }
+                                        if(array[i][29] == null || array[i][29] == '0'){
+                                            var ket2 = '';
+                                        }else{
+                                            var ket2 = array[i][29];
+                                        }
 
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+array[i][28]+'</td><td id="col13">'+array[i][29]+'</td><td id="col4">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+ket1+'</td><td id="col13">'+ket2+'</td><td id="col4">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2008,8 +2123,19 @@
                                         }else{
                                             var real5_2 = array[i][25];
                                         }
+                                        
+                                        if(array[i][28] == null || array[i][28] == '0'){
+                                            var ket1 = '';
+                                        }else{
+                                            var ket1 = array[i][28];
+                                        }
+                                        if(array[i][29] == null || array[i][29] == '0'){
+                                            var ket2 = '';
+                                        }else{
+                                            var ket2 = array[i][29];
+                                        }
 
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+array[i][28]+'</td><td id="col18">'+array[i][29]+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+ket1+'</td><td id="col18">'+ket2+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2185,7 +2311,18 @@
                                             var real5_4 = array[i][27];
                                         }
 
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21>'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+array[i][28]+'</td><td id="col28">'+array[i][29]+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
+                                        if(array[i][28] == null || array[i][28] == '0'){
+                                            var ket1 = '';
+                                        }else{
+                                            var ket1 = array[i][28];
+                                        }
+                                        if(array[i][29] == null || array[i][29] == '0'){
+                                            var ket2 = '';
+                                        }else{
+                                            var ket2 = array[i][29];
+                                        }
+
+                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21>'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+ket1+'</td><td id="col28">'+ket2+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2294,8 +2431,19 @@
                                         }else{
                                             var real5 = array[i][24];
                                         }
+                                        
+                                        if(array[i][28] == null || array[i][28] == '0'){
+                                            var ket1 = '';
+                                        }else{
+                                            var ket1 = array[i][28];
+                                        }
+                                        if(array[i][29] == null || array[i][29] == '0'){
+                                            var ket2 = '';
+                                        }else{
+                                            var ket2 = array[i][29];
+                                        }
 
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+array[i][28]+'</td><td id="col13">'+array[i][29]+'</td><td id="col14">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+ket1+'</td><td id="col13">'+ket2+'</td><td id="col14">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2410,8 +2558,18 @@
                                         }else{
                                             var real5_2 = array[i][25];
                                         }
-
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+array[i][28]+'</td><td id="col18">'+array[i][29]+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
+                                        
+                                        if(array[i][28] == null || array[i][28] == '0'){
+                                            var ket1 = '';
+                                        }else{
+                                            var ket1 = array[i][28];
+                                        }
+                                        if(array[i][29] == null || array[i][29] == '0'){
+                                            var ket2 = '';
+                                        }else{
+                                            var ket2 = array[i][29];
+                                        }
+                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+ket1+'</td><td id="col18">'+ket2+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2586,8 +2744,19 @@
                                         }else{
                                             var real5_4 = array[i][27];
                                         }
+                                        
+                                        if(array[i][28] == null || array[i][28] == '0'){
+                                            var ket1 = '';
+                                        }else{
+                                            var ket1 = array[i][28];
+                                        }
+                                        if(array[i][29] == null || array[i][29] == '0'){
+                                            var ket2 = '';
+                                        }else{
+                                            var ket2 = array[i][29];
+                                        }
 
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21">'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+array[i][28]+'</td><td id="col28">'+array[i][29]+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21">'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+ket1+'</td><td id="col28">'+ket2+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -3074,6 +3243,7 @@
                 }
             });
             
+            
             var chart4;
             $("#pilgrafik").show();
             var tahun = [$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text(),$("#tahun5").text()];
@@ -3093,21 +3263,16 @@
                 ,parseInt($("#colsdg5").text(), 10)
                 ,parseInt($("#colsdg6").text(), 10)
             ];
-                        
-                        
+                     
+            var monper_sdgs = $("#monper_sdg").val();   
+            var pil_graf = $("#pilgrafik").val();
             if (periode == "yearly") {
                 if (flag == "2") {
                     var nm_gov = "Government";
                 }else if (flag == "3") {
                     var nm_gov = "Non Government";
                 }
-                var valreal_sdg1 = [
-                    parseInt($("#colsdg7").text(), 10),
-                    parseInt($("#colsdg8").text(), 10),
-                    parseInt($("#colsdg9").text(), 10),
-                    parseInt($("#colsdg10").text(), 10),
-                    parseInt($("#colsdg11").text(), 10)
-                ];
+                
                 var valreal1 = [
                     parseInt($("#col7").text(), 10),
                     parseInt($("#col8").text(), 10),
@@ -3118,7 +3283,97 @@
                 
                 var pnjg = $('#panjang_aggre').val();
                 var ser  = [];
-                ser.push({
+                if (monper_sdgs == "yearly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg11").text(), 10)
+                    ];
+                    
+                    if(pil_graf == 'graf1'){
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+
+                        );
+                    }else if(pil_graf == 'graf3'){
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'column',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'column',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+
+                        );
+                    }else{}
+                    
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                }else if (monper_sdgs == "semesterly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg11").text(), 10),
+                        parseInt($("#colsdg13").text(), 10),
+                        parseInt($("#colsdg15").text(), 10)
+                    ];
+                    var valreal_sdg2 = [
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg12").text(), 10),
+                        parseInt($("#colsdg14").text(), 10),
+                        parseInt($("#colsdg16").text(), 10)
+                    ];
+                    
+                    ser.push({
                             name: 'Target SDGS',
                             type: 'spline',
                             data: tahun1,
@@ -3136,28 +3391,222 @@
 //                          valueSuffix: '%'
                             }
                         },
-                    );
-                for (var i=0; i<pnjg; i++) {
-                    var valanggre1 = [
-                        parseInt($("#colagg8_"+i).text(), 10),
-                        parseInt($("#colagg9_"+i).text(), 10),
-                        parseInt($("#colagg10_"+i).text(), 10),
-                        parseInt($("#colagg11_"+i).text(), 10),
-                        parseInt($("#colagg12_"+i).text(), 10)
-                    ];
-                    ser.push({
-                            name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                        {
+                            name: 'Realisasi II SDGS',
                             type: 'spline',
-                            data: valanggre1,
+                            data: valreal_sdg2,
                             yAxis: 1,
                             tooltip: {
 //                          valueSuffix: '%'
                             }
-                        
-                    },);
-//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                        },
+                    );
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10),
+                            parseInt($("#colagg14_"+i).text(), 10),
+                            parseInt($("#colagg16_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre2 = [
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg13_"+i).text(), 10),
+                            parseInt($("#colagg15_"+i).text(), 10),
+                            parseInt($("#colagg17_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                }else if (monper_sdgs == "quarterly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg11").text(), 10),
+                        parseInt($("#colsdg15").text(), 10),
+                        parseInt($("#colsdg19").text(), 10),
+                        parseInt($("#colsdg23").text(), 10)
+                    ];
+                    var valreal_sdg2 = [
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg12").text(), 10),
+                        parseInt($("#colsdg16").text(), 10),
+                        parseInt($("#colsdg20").text(), 10),
+                        parseInt($("#colsdg24").text(), 10)
+                    ];
+                    var valreal_sdg3 = [
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg13").text(), 10),
+                        parseInt($("#colsdg17").text(), 10),
+                        parseInt($("#colsdg21").text(), 10),
+                        parseInt($("#colsdg25").text(), 10)
+                    ];
+                    var valreal_sdg4 = [
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg14").text(), 10),
+                        parseInt($("#colsdg18").text(), 10),
+                        parseInt($("#colsdg22").text(), 10),
+                        parseInt($("#colsdg26").text(), 10)
+                    ];
                     
-                }
+                    ser.push({
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi I SDGS',
+                            type: 'spline',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi II SDGS',
+                            type: 'spline',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi III SDGS',
+                            type: 'spline',
+                            data: valreal_sdg3,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi IV SDGS',
+                            type: 'spline',
+                            data: valreal_sdg4,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                    );
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10),
+                            parseInt($("#colagg16_"+i).text(), 10),
+                            parseInt($("#colagg20_"+i).text(), 10),
+                            parseInt($("#colagg24_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre2 = [
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg13_"+i).text(), 10),
+                            parseInt($("#colagg17_"+i).text(), 10),
+                            parseInt($("#colagg21_"+i).text(), 10),
+                            parseInt($("#colagg25_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre3 = [
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg14_"+i).text(), 10),
+                            parseInt($("#colagg18_"+i).text(), 10),
+                            parseInt($("#colagg22_"+i).text(), 10),
+                            parseInt($("#colagg26_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi III SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre3,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre4 = [
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg15_"+i).text(), 10),
+                            parseInt($("#colagg19_"+i).text(), 10),
+                            parseInt($("#colagg23_"+i).text(), 10),
+                            parseInt($("#colagg27_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre4,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    
+                }else{}
+                
+                
                 ser.push({
                             name: 'Target '+nm_gov,
                             type: 'spline',
@@ -3266,20 +3715,7 @@
                 }else if (flag == "3") {
                     var nm_gov = "Non Government";
                 }
-                var valreal_sdg1 = [
-                    parseInt($("#colsdg7").text(), 10),
-                    parseInt($("#colsdg9").text(), 10),
-                    parseInt($("#colsdg11").text(), 10),
-                    parseInt($("#colsdg13").text(), 10),
-                    parseInt($("#colsdg15").text(), 10)
-                ];
-                var valreal_sdg2 = [
-                    parseInt($("#colsdg8").text(), 10),
-                    parseInt($("#colsdg10").text(), 10),
-                    parseInt($("#colsdg12").text(), 10),
-                    parseInt($("#colsdg14").text(), 10),
-                    parseInt($("#colsdg16").text(), 10)
-                ];
+                
                 var valreal1 = [
                     parseInt($("#col7").text(), 10),
                     parseInt($("#col9").text(), 10),
@@ -3297,7 +3733,241 @@
                 
                 var pnjg = $('#panjang_aggre').val();
                 var ser  = [];
-                ser.push({
+                if (monper_sdgs == "yearly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg11").text(), 10)
+                    ];
+                    if(pil_graf == 'graf1'){
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'spline',
+                                type: 'column',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+    //                        {
+    //                            name: 'Realisasi I SDGS',
+    //                            type: 'column',
+    //                            data: valreal_sdg1,
+    //                            yAxis: 1,
+    //                            tooltip: {
+    ////                          valueSuffix: '%'
+    //                            }
+    //                        },
+
+                        );
+                    }else if(pil_graf == 'graf3'){
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'column',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'column',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+
+                        );
+                    }else{}
+                    
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    
+                }else if (monper_sdgs == "semesterly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg11").text(), 10),
+                        parseInt($("#colsdg13").text(), 10),
+                        parseInt($("#colsdg15").text(), 10)
+                    ];
+                    var valreal_sdg2 = [
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg12").text(), 10),
+                        parseInt($("#colsdg14").text(), 10),
+                        parseInt($("#colsdg16").text(), 10)
+                    ];
+                    
+                    if(pil_graf == 'graf1'){
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II SDGS',
+                                type: 'spline',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                        );
+                    }else if(pil_graf == 'graf3'){
+                        console.log("graf3")
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II SDGS',
+                                type: 'column',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                        );
+                    }else{}
+                    
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10),
+                            parseInt($("#colagg14_"+i).text(), 10),
+                            parseInt($("#colagg16_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre2 = [
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg13_"+i).text(), 10),
+                            parseInt($("#colagg15_"+i).text(), 10),
+                            parseInt($("#colagg17_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    
+                }else if (monper_sdgs == "quarterly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg11").text(), 10),
+                        parseInt($("#colsdg15").text(), 10),
+                        parseInt($("#colsdg19").text(), 10),
+                        parseInt($("#colsdg23").text(), 10)
+                    ];
+                    var valreal_sdg2 = [
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg12").text(), 10),
+                        parseInt($("#colsdg16").text(), 10),
+                        parseInt($("#colsdg20").text(), 10),
+                        parseInt($("#colsdg24").text(), 10)
+                    ];
+                    var valreal_sdg3 = [
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg13").text(), 10),
+                        parseInt($("#colsdg17").text(), 10),
+                        parseInt($("#colsdg21").text(), 10),
+                        parseInt($("#colsdg25").text(), 10)
+                    ];
+                    var valreal_sdg4 = [
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg14").text(), 10),
+                        parseInt($("#colsdg18").text(), 10),
+                        parseInt($("#colsdg22").text(), 10),
+                        parseInt($("#colsdg26").text(), 10)
+                    ];
+                    
+                    ser.push({
                             name: 'Target SDGS',
                             type: 'spline',
                             data: tahun1,
@@ -3324,49 +3994,112 @@
 //                          valueSuffix: '%'
                             }
                         },
+                        {
+                            name: 'Realisasi III SDGS',
+                            type: 'spline',
+                            data: valreal_sdg3,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi IV SDGS',
+                            type: 'spline',
+                            data: valreal_sdg4,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
                     );
-                for (var i=0; i<pnjg; i++) {
-                    var valanggre1 = [
-                        parseInt($("#colagg8_"+i).text(), 10),
-                        parseInt($("#colagg10_"+i).text(), 10),
-                        parseInt($("#colagg12_"+i).text(), 10),
-                        parseInt($("#colagg14_"+i).text(), 10),
-                        parseInt($("#colagg16_"+i).text(), 10)
-                    ];
-                    ser.push({
-                            name: 'Realisasi I SDGS Disaggregasi '+(i+1),
-                            type: 'spline',
-                            data: valanggre1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        
-                    },);
-//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10),
+                            parseInt($("#colagg16_"+i).text(), 10),
+                            parseInt($("#colagg20_"+i).text(), 10),
+                            parseInt($("#colagg24_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre2 = [
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg13_"+i).text(), 10),
+                            parseInt($("#colagg17_"+i).text(), 10),
+                            parseInt($("#colagg21_"+i).text(), 10),
+                            parseInt($("#colagg25_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre3 = [
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg14_"+i).text(), 10),
+                            parseInt($("#colagg18_"+i).text(), 10),
+                            parseInt($("#colagg22_"+i).text(), 10),
+                            parseInt($("#colagg26_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi III SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre3,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre4 = [
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg15_"+i).text(), 10),
+                            parseInt($("#colagg19_"+i).text(), 10),
+                            parseInt($("#colagg23_"+i).text(), 10),
+                            parseInt($("#colagg27_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre4,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
                     
-                }
-                for (var i=0; i<pnjg; i++) {
-                    var valanggre2 = [
-                        parseInt($("#colagg9_"+i).text(), 10),
-                        parseInt($("#colagg11_"+i).text(), 10),
-                        parseInt($("#colagg13_"+i).text(), 10),
-                        parseInt($("#colagg15_"+i).text(), 10),
-                        parseInt($("#colagg17_"+i).text(), 10)
-                    ];
-                    ser.push({
-                            name: 'Realisasi II SDGS Disaggregasi '+(i+1),
-                            type: 'spline',
-                            data: valanggre2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        
-                    },);
-//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
-                    
-                }
+                }else{}
+                
                 ser.push({
                             name: 'Target '+nm_gov,
                             type: 'spline',
@@ -3489,34 +4222,7 @@
                 }else if (flag == "3") {
                     var nm_gov = "Non Government";
                 }
-                var valreal_sdg1 = [
-                    parseInt($("#colsdg7").text(), 10),
-                    parseInt($("#colsdg11").text(), 10),
-                    parseInt($("#colsdg15").text(), 10),
-                    parseInt($("#colsdg19").text(), 10),
-                    parseInt($("#colsdg23").text(), 10)
-                ];
-                var valreal_sdg2 = [
-                    parseInt($("#colsdg8").text(), 10),
-                    parseInt($("#colsdg12").text(), 10),
-                    parseInt($("#colsdg16").text(), 10),
-                    parseInt($("#colsdg20").text(), 10),
-                    parseInt($("#colsdg24").text(), 10)
-                ];
-                var valreal_sdg3 = [
-                    parseInt($("#colsdg9").text(), 10),
-                    parseInt($("#colsdg13").text(), 10),
-                    parseInt($("#colsdg17").text(), 10),
-                    parseInt($("#colsdg21").text(), 10),
-                    parseInt($("#colsdg25").text(), 10)
-                ];
-                var valreal_sdg4 = [
-                    parseInt($("#colsdg10").text(), 10),
-                    parseInt($("#colsdg14").text(), 10),
-                    parseInt($("#colsdg18").text(), 10),
-                    parseInt($("#colsdg22").text(), 10),
-                    parseInt($("#colsdg26").text(), 10)
-                ];
+                
                 
                 var valreal1 = [
                     parseInt($("#col7").text(), 10),
@@ -3549,7 +4255,171 @@
                 
                 var pnjg = $('#panjang_aggre').val();
                 var ser  = [];
-                ser.push({
+                if (monper_sdgs == "yearly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg11").text(), 10)
+                    ];
+                    ser.push({
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi I SDGS',
+                            type: 'spline',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                    );
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                }else if (monper_sdgs == "semesterly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg11").text(), 10),
+                        parseInt($("#colsdg13").text(), 10),
+                        parseInt($("#colsdg15").text(), 10)
+                    ];
+                    var valreal_sdg2 = [
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg12").text(), 10),
+                        parseInt($("#colsdg14").text(), 10),
+                        parseInt($("#colsdg16").text(), 10)
+                    ];
+                    
+                    ser.push({
+                            name: 'Target SDGS',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi I SDGS',
+                            type: 'spline',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi II SDGS',
+                            type: 'spline',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                    );
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10),
+                            parseInt($("#colagg14_"+i).text(), 10),
+                            parseInt($("#colagg16_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre2 = [
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg13_"+i).text(), 10),
+                            parseInt($("#colagg15_"+i).text(), 10),
+                            parseInt($("#colagg17_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                }else if (monper_sdgs == "quarterly") {
+                    var valreal_sdg1 = [
+                        parseInt($("#colsdg7").text(), 10),
+                        parseInt($("#colsdg11").text(), 10),
+                        parseInt($("#colsdg15").text(), 10),
+                        parseInt($("#colsdg19").text(), 10),
+                        parseInt($("#colsdg23").text(), 10)
+                    ];
+                    var valreal_sdg2 = [
+                        parseInt($("#colsdg8").text(), 10),
+                        parseInt($("#colsdg12").text(), 10),
+                        parseInt($("#colsdg16").text(), 10),
+                        parseInt($("#colsdg20").text(), 10),
+                        parseInt($("#colsdg24").text(), 10)
+                    ];
+                    var valreal_sdg3 = [
+                        parseInt($("#colsdg9").text(), 10),
+                        parseInt($("#colsdg13").text(), 10),
+                        parseInt($("#colsdg17").text(), 10),
+                        parseInt($("#colsdg21").text(), 10),
+                        parseInt($("#colsdg25").text(), 10)
+                    ];
+                    var valreal_sdg4 = [
+                        parseInt($("#colsdg10").text(), 10),
+                        parseInt($("#colsdg14").text(), 10),
+                        parseInt($("#colsdg18").text(), 10),
+                        parseInt($("#colsdg22").text(), 10),
+                        parseInt($("#colsdg26").text(), 10)
+                    ];
+                    
+                    ser.push({
                             name: 'Target SDGS',
                             type: 'spline',
                             data: tahun1,
@@ -3595,90 +4465,94 @@
                             }
                         },
                     );
-                for (var i=0; i<pnjg; i++) {
-                    var valanggre1 = [
-                        parseInt($("#colagg8_"+i).text(), 10),
-                        parseInt($("#colagg12_"+i).text(), 10),
-                        parseInt($("#colagg16_"+i).text(), 10),
-                        parseInt($("#colagg20_"+i).text(), 10),
-                        parseInt($("#colagg24_"+i).text(), 10)
-                    ];
-                    ser.push({
-                            name: 'Realisasi I SDGS Disaggregasi '+(i+1),
-                            type: 'spline',
-                            data: valanggre1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        
-                    },);
-//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre1 = [
+                            parseInt($("#colagg8_"+i).text(), 10),
+                            parseInt($("#colagg12_"+i).text(), 10),
+                            parseInt($("#colagg16_"+i).text(), 10),
+                            parseInt($("#colagg20_"+i).text(), 10),
+                            parseInt($("#colagg24_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre2 = [
+                            parseInt($("#colagg9_"+i).text(), 10),
+                            parseInt($("#colagg13_"+i).text(), 10),
+                            parseInt($("#colagg17_"+i).text(), 10),
+                            parseInt($("#colagg21_"+i).text(), 10),
+                            parseInt($("#colagg25_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre3 = [
+                            parseInt($("#colagg10_"+i).text(), 10),
+                            parseInt($("#colagg14_"+i).text(), 10),
+                            parseInt($("#colagg18_"+i).text(), 10),
+                            parseInt($("#colagg22_"+i).text(), 10),
+                            parseInt($("#colagg26_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi III SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre3,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
+                    for (var i=0; i<pnjg; i++) {
+                        var valanggre4 = [
+                            parseInt($("#colagg11_"+i).text(), 10),
+                            parseInt($("#colagg15_"+i).text(), 10),
+                            parseInt($("#colagg19_"+i).text(), 10),
+                            parseInt($("#colagg23_"+i).text(), 10),
+                            parseInt($("#colagg27_"+i).text(), 10)
+                        ];
+                        ser.push({
+                                name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
+                                type: 'spline',
+                                data: valanggre4,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+
+                        },);
+    //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                    }
                     
-                }
-                for (var i=0; i<pnjg; i++) {
-                    var valanggre2 = [
-                        parseInt($("#colagg9_"+i).text(), 10),
-                        parseInt($("#colagg13_"+i).text(), 10),
-                        parseInt($("#colagg17_"+i).text(), 10),
-                        parseInt($("#colagg21_"+i).text(), 10),
-                        parseInt($("#colagg25_"+i).text(), 10)
-                    ];
-                    ser.push({
-                            name: 'Realisasi II SDGS Disaggregasi '+(i+1),
-                            type: 'spline',
-                            data: valanggre2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        
-                    },);
-//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
-                    
-                }
-                for (var i=0; i<pnjg; i++) {
-                    var valanggre3 = [
-                        parseInt($("#colagg10_"+i).text(), 10),
-                        parseInt($("#colagg14_"+i).text(), 10),
-                        parseInt($("#colagg18_"+i).text(), 10),
-                        parseInt($("#colagg22_"+i).text(), 10),
-                        parseInt($("#colagg26_"+i).text(), 10)
-                    ];
-                    ser.push({
-                            name: 'Realisasi III SDGS Disaggregasi '+(i+1),
-                            type: 'spline',
-                            data: valanggre3,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        
-                    },);
-//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
-                    
-                }
-                for (var i=0; i<pnjg; i++) {
-                    var valanggre4 = [
-                        parseInt($("#colagg11_"+i).text(), 10),
-                        parseInt($("#colagg15_"+i).text(), 10),
-                        parseInt($("#colagg19_"+i).text(), 10),
-                        parseInt($("#colagg23_"+i).text(), 10),
-                        parseInt($("#colagg27_"+i).text(), 10)
-                    ];
-                    ser.push({
-                            name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
-                            type: 'spline',
-                            data: valanggre4,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        
-                    },);
-//                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
-                    
-                }
+                }else{}
+                
+                
                 ser.push({
                             name: 'Target '+nm_gov,
                             type: 'spline',
@@ -3810,7 +4684,8 @@
                             };
                         })
               }
-              eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
+//              eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('0=1 2.3(4);',5,5,'chart4|new|Highcharts|Chart|options4'.split('|'),0,{}))
+            chart4=new Highcharts.Chart(options4);
             }
              
             
@@ -3821,8 +4696,108 @@
               return v.toString(16);
             });
         }
-        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('$(\'#c\').d(\'e\',f(){9 a=$(g).h();9 b=$("#i").j();8(a==\'k\'){b.3[0].4({5:\'7\'});b.3[1].4({5:\'7\'});b.3[2].4({5:\'7\'})}8(a==\'l\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'6\'})}8(a==\'m\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'7\'})}})',23,23,'|||series|update|type|column|spline|if|var|||pilgrafik|on|change|function|this|val|dualaxes|highcharts|graf1|graf2|graf3'.split('|'),0,{}))
-       
+//        eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('$(\'#c\').d(\'e\',f(){9 a=$(g).h();9 b=$("#i").j();8(a==\'k\'){b.3[0].4({5:\'7\'});b.3[1].4({5:\'7\'});b.3[2].4({5:\'7\'})}8(a==\'l\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'6\'})}8(a==\'m\'){b.3[0].4({5:\'6\'});b.3[1].4({5:\'6\'});b.3[2].4({5:\'7\'})}})',23,23,'|||series|update|type|column|spline|if|var|||pilgrafik|on|change|function|this|val|dualaxes|highcharts|graf1|graf2|graf3'.split('|'),0,{}))
+        $('#pilgrafik').on('change',function(){
+            var monper_sdgs = $("#monper_sdg").val();   
+            
+            var a=$(this).val();
+            var b=$("#dualaxes").highcharts();
+                if(a=='graf1')
+                        {
+                        b.series[0].update(
+                                {
+                                type:'spline'
+                        }
+                        );
+                        b.series[1].update(
+                                {
+                                type:'spline'
+                        }
+                        );
+                        b.series[2].update(
+                                {
+                                type:'spline'
+                        }
+                        )
+                }
+                if(a=='graf2')
+                        {
+                        b.series[0].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[1].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[2].update(
+                                {
+                                type:'column'
+                        }
+                        )
+                }
+                if(a=='graf3'){
+                    if (monper_sdgs == "yearly") {
+                        b.series[0].update(
+                                {
+                                type:'spline'
+                        }
+                        );
+                        b.series[1].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                    }else if (monper_sdgs == "semesterly") {
+                        b.series[0].update(
+                                {
+                                type:'spline'
+                        }
+                        );
+                        b.series[1].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[2].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                    }else if (monper_sdgs == "quarterly") {
+                        b.series[0].update(
+                                {
+                                type:'spline'
+                        }
+                        );
+                        b.series[1].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[2].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[3].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[4].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                    }else{}
+                        
+                }
+        });
+        
+        
     </script>
 </body>
 </html>

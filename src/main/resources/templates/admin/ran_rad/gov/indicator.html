@@ -462,9 +462,9 @@
 					{"data": function (row, data, index, display) {
 						var nama;
 						if($("#fs").is(':checked')){
-							nama = row[2];
+							nama = row[2]?row[2]:row[5];
 						}else{
-							nama = row[5];
+							nama = row[5]?row[5]:row[2];
 						}
 							return "<div style='font-size:90%;'>"+nama+"</div>";
 						}},
@@ -528,6 +528,12 @@
 				var nm_indicator_eng = $('#nm_indicator_eng').val();
 				var unit = $('#unit').val();
 				var internal_code = $('#internal_code').val();
+				if(nm_indicator==""){
+					nm_indicator=nm_indicator_eng
+				}
+				if(nm_indicator_eng==""){
+					nm_indicator_eng=nm_indicator;
+				}
 				/* if(internal_code==""){
 					internal_code = id_gov_indicator;
 				} */
@@ -625,7 +631,7 @@
         				$('#nm_indicator_eng').val(val.nm_indicator_eng);
         				$('#id').val(val.id);
         				$('#unit').val(val.unit);
-        				$('#internal_code').val(val.internal_code);
+        				$('#internal_code').val(val.internal_code?val.internal_code:'');
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();
@@ -691,7 +697,7 @@
         				$('#nm_indicator_eng').val(val.nm_indicator_eng).attr("readonly",true);
         				$('#id').val(val.id);
         				$('#unit').val(val.unit).attr("disabled",true);
-        				$('#internal_code').val(val.internal_code).attr("readonly",true);
+        				$('#internal_code').val(val.internal_code?val.internal_code:'').attr("readonly",true);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();

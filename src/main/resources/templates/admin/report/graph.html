@@ -112,9 +112,9 @@
                             var isitarget = "<ul id='ultar"+id+"'>";
                             for (var i=0; i<restarget.length; i++) {
                                 if($('#fs').is(':checked')){
-                                    var prog_l = restarget[i][1];
+                                    var prog_l = restarget[i][3]+" "+restarget[i][1];
                                 }else{
-                                    var prog_l = restarget[i][2];
+                                    var prog_l = restarget[i][3]+" "+restarget[i][2];
                                 }
                                 var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
                                 var dat_goals = id+"##"+restarget[i][0]+"##null";
@@ -152,9 +152,9 @@
 //                            $("#lili"+idgoals).html("");
                             for (var i=0; i<resindi.length; i++) {
                                 if($('#fs').is(':checked')){
-                                    var prog_l = resindi[i][1];
+                                    var prog_l = resindi[i][3]+" "+resindi[i][1];
                                 }else{
-                                    var prog_l = resindi[i][2];
+                                    var prog_l = resindi[i][3]+" "+resindi[i][2];
                                 }
 //                                $("#lili"+idgoals).html("");
                                 var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
@@ -214,9 +214,9 @@
                             var isiactivity = "<ul id='ulact"+idprogram+"'>";
                             for (var i=0; i<resactivity.length; i++) {
                                 if($('#fs').is(':checked')){
-                                    var prog_l = resactivity[i][1];
+                                    var prog_l = resactivity[i][3]+" "+resactivity[i][1];
                                 }else{
-                                    var prog_l = resactivity[i][2];
+                                    var prog_l = resactivity[i][3]+" "+resactivity[i][2];
                                 }
                                 isiactivity += "<li id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, resactivity[i][0]);
@@ -239,9 +239,9 @@
         			var isiindicator = "<ul id='ulindi"+idprogram+"'>";
         			for (var i=0; i<resgovindicator.length; i++) {
                                     if($('#fs').is(':checked')){
-                                        var prog_l = resgovindicator[i][1];
+                                        var prog_l = resgovindicator[i][3]+" "+resgovindicator[i][1];
                                     }else{
-                                        var prog_l = resgovindicator[i][2];
+                                        var prog_l = resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
                                     isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+$("#periode").val()+","+2+")'>"+prog_l+"</li>";
         			}
@@ -266,9 +266,9 @@
                             var isiactivity = "<ul id='ulactnsa"+idprogram+"'>";
                             for (var i=0; i<resactivity.length; i++) {
                                 if($('#fs').is(':checked')){
-                                    var prog_l = resactivity[i][1];
+                                    var prog_l = resactivity[i][3]+" "+resactivity[i][1];
                                 }else{
-                                    var prog_l = resactivity[i][2];
+                                    var prog_l = resactivity[i][3]+" "+resactivity[i][2];
                                 }
                                 isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getNsaIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, resactivity[i][0]);
@@ -291,9 +291,9 @@
         			var isiindicator = "<ul id='ulindinsa"+idprogram+"'>";
         			for (var i=0; i<resnsaindicator.length; i++) {
                                     if($('#fs').is(':checked')){
-                                        var prog_l = resnsaindicator[i][1];
+                                        var prog_l = resnsaindicator[i][3]+" "+resnsaindicator[i][1];
                                     }else{
-                                        var prog_l = resnsaindicator[i][2];
+                                        var prog_l = resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
                                     isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+$("#periode").val()+","+3+")'>"+prog_l+"</li>";
         			}
@@ -323,10 +323,13 @@
                             var opt = "<option value='"+resrole[i][0]+"'>"+resrole[i][1]+"</option>";
                             $("#selrole").append(opt);
                     }
+                    console.log("prrivilage = "+privilege);
                     if(privilege == 'ADMIN'){
-                        $("#selrole").val('0').trigger("change").attr('disabled',false);
+                        console.log("bener admin = "+privilege);
+                        $("#selrole").val('0').trigger("change");
                     }else{
-                        $("#selrole").val(id_role).trigger("change").attr('disabled',true);
+                        console.log("bukan admin = "+privilege);
+                        $("#selrole").val(id_role).trigger("change").attr('disabled',false);
                     }
                 }
             });
@@ -349,7 +352,22 @@
                 	}
                 }
             });
-            $("#daerah").val(id_prov).trigger("change").attr('disabled',true);
+            if(id_prov == '000'){
+                if(privilege == 'ADMIN'){
+                    $("#daerah").val(id_prov).trigger("change").attr('disabled',false);
+                }else{
+                    console.log('daerah user = '+id_prov);
+                    $("#daerah").val(id_prov).trigger("change").attr('disabled',false);
+                }
+            }else{
+                if(privilege == 'ADMIN'){
+                    $("#daerah").val(id_prov).trigger("change").attr('disabled',false);
+                }else{
+                    console.log('daerah user = '+id_prov);
+                    $("#daerah").val(id_prov).trigger("change").attr('disabled',false);
+                }
+            }
+            
             $.ajax({
             	url: urls + "getallrolebyprov",
                 type: 'get',
@@ -483,9 +501,9 @@
                         var isi = "<ol id='olprog'>";
                         for (var i=0; i<resprog.length; i++) {
                             if($('#fs').is(':checked')){
-                                var prog_l = resprog[i][1];
+                                var prog_l = resprog[i][3]+" "+resprog[i][1];
                             }else{
-                                var prog_l = resprog[i][2];
+                                var prog_l = resprog[i][3]+" "+resprog[i][2];
                             }
                             isi += "<li id='lilili"+resprog[i][0]+"'>"+prog_l+"</li>";
                             getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0]);
@@ -509,9 +527,9 @@
                 	var isi = "<ol id='olprog'>";
                		for (var i=0; i<resprog.length; i++) {
                             if($('#fs').is(':checked')){
-                                var prog_l = resprog[i][1];
+                                var prog_l = resprog[i][3]+" "+resprog[i][1];
                             }else{
-                                var prog_l = resprog[i][2];
+                                var prog_l = resprog[i][3]+" "+resprog[i][2];
                             }
                             isi += "<li id='lilinsa"+resprog[i][0]+"'>"+prog_l+"</li>";
                             getNsaActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0])
@@ -537,9 +555,9 @@
                 	var isi = "<ol id='olgoals'>";
                		for (var i=0; i<resgoals.length; i++) {
                             if($('#fs').is(':checked')){
-                                var prog_l = resgoals[i][1];
+                                var prog_l = resgoals[i][3]+" "+resgoals[i][1];
                             }else{
-                                var prog_l = resgoals[i][2];
+                                var prog_l = resgoals[i][3]+" "+resgoals[i][2];
                             }
                             var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
                             var dat_goals = resgoals[i][0]+"##null##null";
