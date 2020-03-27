@@ -532,37 +532,65 @@ public class DataEntryController {
     	if(id_role.equals("all")) {
 			role = "";
 		}else {
-			role = " and a.id_role = '"+id_role+"' ";
+			role = " and n.id_role = '"+id_role+"' ";
 		}
     	if(sdg.equals("0")) {
     		sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
                     "b.nm_goals_eng, \n" +
                     "c.nm_target_eng, d.nm_indicator_eng, \n" +
                     "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, "
-                    + "l.id_role, l.nm_role, l.cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
-                    "from ran_rad as g \n" +
-                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
+                    + "'' as id_role, '' as nm_role, '' as cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
+                    "from nsa_map as a \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +
                     "left join sdg_indicator as d on a.id_indicator = d.id \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
                     "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
                     "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
-                    "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role+" ";
+                    "left join nsa_indicator m on a.id_nsa_indicator = m.id "+
+                    "left join nsa_activity n on m.id_activity = n.id " +
+                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and (a.id_target is not null and a.id_indicator is not null) "+role+" ";
     		sql  += "union select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
                     "b.nm_goals_eng, \n" +
                     "c.nm_target_eng, d.nm_indicator_eng, \n" +
-                    "'0' as id_disaggre, '0' as nm_disaggre, '0' as nm_disaggre_eng, '0' as desc_disaggre, '0' as desc_disaggre_eng, '0' as iddisaggre, '0' as iddetaildis, "
-                    + "l.id_role, l.nm_role, l.cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
-                    "from ran_rad as g \n" +
-                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
+                    "i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, "
+                    + "'' as id_role, '' as nm_role, '' as cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
+                    "from gov_map as a \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
                     "left join sdg_target as c on a.id_target = c.id \n" +
                     "left join sdg_indicator as d on a.id_indicator = d.id \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where g.id_monper = '"+id_monper+"' and g.id_prov = '"+id_prov+"' "+role+" order by 1,2,3,17,18 ";
+                    "left join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
+                    "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
+                    "left join gov_indicator m on a.id_gov_indicator = m.id "+
+                    "left join gov_activity n on m.id_activity = n.id " +
+                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and (a.id_target is not null and a.id_indicator is not null) "+role+" ";
+    		sql  += "union select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
+                    "b.nm_goals_eng, \n" +
+                    "c.nm_target_eng, d.nm_indicator_eng, \n" +
+                    "'0' as id_disaggre, '0' as nm_disaggre, '0' as nm_disaggre_eng, '0' as desc_disaggre, '0' as desc_disaggre_eng, '0' as iddisaggre, '0' as iddetaildis, "
+                    + "'' as id_role, '' as nm_role, '' as cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
+                    "from nsa_map as a \n" +
+                    "left join sdg_goals as b on a.id_goals = b.id \n" +
+                    "left join sdg_target as c on a.id_target = c.id \n" +
+                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
+                    "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join nsa_indicator m on a.id_nsa_indicator = m.id "+
+                    "left join nsa_activity n on m.id_activity = n.id " +
+                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and (a.id_target is not null and a.id_indicator is not null) "+role+" ";
+    		sql  += "union select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, \n" +
+                    "b.nm_goals_eng, \n" +
+                    "c.nm_target_eng, d.nm_indicator_eng, \n" +
+                    "'0' as id_disaggre, '0' as nm_disaggre, '0' as nm_disaggre_eng, '0' as desc_disaggre, '0' as desc_disaggre_eng, '0' as iddisaggre, '0' as iddetaildis, "
+                    + "'' as id_role, '' as nm_role, '' as cat_role, b.id_goals as idgol, c.id_target as idtarget, d.id_indicator as idindicator "+
+                    "from gov_map as a \n" +
+                    "left join sdg_goals as b on a.id_goals = b.id \n" +
+                    "left join sdg_target as c on a.id_target = c.id \n" +
+                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
+                    "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join gov_indicator m on a.id_gov_indicator = m.id "+
+                    "left join gov_activity n on m.id_activity = n.id " +
+                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and (a.id_target is not null and a.id_indicator is not null) "+role+" order by 1,2,3,17,18 ";
             query = em.createNativeQuery(sql);
     	}else {
     		String[] arrOfStr = sdg.split(","); 
@@ -671,7 +699,8 @@ public class DataEntryController {
     			+ "left join sdg_indicator_target b on b.id_sdg_indicator = d.id_indicator and b.id_role = d.id_role and b.year = '"+year+"' "
     			+ "left join entry_sdg_detail c on c.id_disaggre = '"+id_disaggre+"' and c.id_disaggre_detail = '"+id_disaggre_detail+"' and c.year_entry = '"+year+"' and c.id_role = d.id_role and c.id_monper = d.id_monper "
     			+ "left join ref_role e on d.id_role = e.id_role "
-                + "where d.id_indicator = '"+id_indicator+"' and d.id_role = '"+id_role+"' and d.id_monper = '"+id_monper+"'";
+                //+ "where d.id_indicator = '"+id_indicator+"' and d.id_role = '"+id_role+"' and d.id_monper = '"+id_monper+"'";
+    			+ "where d.id_indicator = '"+id_indicator+"' and d.id_monper = '"+id_monper+"'";
         query = em.createNativeQuery(sql);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
