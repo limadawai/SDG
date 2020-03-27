@@ -119,6 +119,20 @@
 			    margin-left: 10px;
 			    list-style: none;
 			}
+			.dotOk {
+			  height: 25px;
+			  width: 25px;
+			  background-color: green;
+			  border-radius: 50%;
+			  display: inline-block;
+			}
+			.dotNok {
+			  height: 25px;
+			  width: 25px;
+			  background-color: red;
+			  border-radius: 50%;
+			  display: inline-block;
+			}
 		</style>
 <div th:include="admin/layout :: footer"></div>
 <script th:inline="javascript">
@@ -307,7 +321,7 @@
         	                						}
         	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
         	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="0---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
+        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+id_goals+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
         								                            '<span style="vertical-align:middle">'+result.content[j].id_target+". "+nm_target+'</span>'+
         								                      '</label><br/>';
         	                                    	$.ajax({
@@ -327,7 +341,7 @@
         	                            						}
         	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
         	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="0---0---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
+        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+id_goals+'---'+id_target+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
         									                            '<span style="vertical-align:middle">'+result1.content[k][1]+". "+nm_indicator+'</span>'+
         									                      '</label><br/>';
         	                                            	}
@@ -512,8 +526,10 @@
         var urlEntryIsi;
         
         var sts;
-        var stsBud;
-        var stsGov;
+        var stsNsaBud;
+        var stsGovBud;
+        var stsNsaInd;
+        var stsGovInd;
         var periodSdg;
         var cekSdg;
         var cekInd;
@@ -544,16 +560,1817 @@
             	cekNsaBud = result.NsaBud;
             	cekGovInd = result.GovInd;
             	cekGovBud = result.GovBud;
-            	if(cat=="NSA"){
-            		cekInd = result.NsaInd;
-            		cekBud = result.NsaBud;
-            	}else{
-            		cekInd = result.GovInd;
-            		cekBud = result.GovBud;
+            }
+        });
+        $.ajax({
+            type: "GET",
+            url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
+            async:false,
+            success: function (result1) {
+            	stsNsaInd = result1.content;
+            	}
+            });
+    	$.ajax({
+            type: "GET",
+            url: urls+'list-get-sts-monper-nongov/'+id_monper,
+            async:false,
+            success: function (result1) {
+            	stsNsaBud = result1.content;
+            	}
+            });
+    	$.ajax({
+            type: "GET",
+            url: urls+'list-get-sts-monper-gov_act/'+id_monper,
+            async:false,
+            success: function (result1) {
+            	stsGovInd = result1.content;
+            	}
+            });
+    	$.ajax({
+            type: "GET",
+            url: urls+'list-get-sts-monper-gov/'+id_monper,
+            async:false,
+            success: function (result1) {
+            	stsGovBud = result1.content;
+            	}
+            });
+        
+        var tabelSdg = "";
+        var textSdg = "";
+        //GOALS
+        $.ajax({
+            url: urls + "get-sdg-goals-report/"+sdg_indicator,
+            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper},
+            type: 'get',
+            dataType: 'json',
+            async : false,
+            beforeSend : function(xhr){
+            	$('body').addClass("loading"); 
+            },
+           complete: function(){
+            	$('body').removeClass("loading");
+            },
+            success: function (hasilGoal) {
+            	for (var i = 0; i < hasilGoal.sdg.length; i++) {
+        			var nm_goals;
+        			var id_goals=hasilGoal.sdg[i][0];
+        			var kode_goals=hasilGoal.sdg[i][3];
+        			if($("#fs").is(':checked')){
+                		nm_goals = hasilGoal.sdg[i][1];
+					}else{
+						nm_goals = hasilGoal.sdg[i][2];
+					}
+        			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+kode_goals+". "+nm_goals+"</b></div><p/>";
+            		
+        			$.ajax({
+        	            url: urls + "get-mapping-goals",
+        	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1]},
+        	            type: 'get',
+        	            dataType: 'json',
+        	            async : false,
+        	            success: function (hasilGoal1) {
+        	            	//GOV
+        	            	if(hasilGoal1.budgetGov.length>0){
+        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
+                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                            		if(stsGovBud == 'yearly'){
+                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		else if(stsGovBud == 'semesterly'){
+                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		else if(stsGovBud == 'quarterly'){
+                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		
+                            	}
+                        		
+                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                        		
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                        			if(stsGovBud == 'yearly'){
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                            		}else if(stsGovBud == 'semesterly'){
+                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                            		}else if(stsGovBud == 'quarterly'){
+                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                            		}
+                            	}
+                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                        			if(stsGovBud == 'yearly'){
+                        				textSdg += "";
+                                	}else if(stsGovBud == 'semesterly'){
+                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+                                	}else if(stsGovBud == 'quarterly'){
+                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+                                	}
+                        		}
+                        		textSdg += "</tr>";
+                        		textSdg += "</thead><tbody>";
+                        		//isinya
+                        		for (var a = 0; a < hasilGoal1.budgetGov.length; a++) {
+                        			var row = hasilGoal1.budgetGov;
+                        			var nm_program;
+                        			var nm_activity;
+                        			if($('#fs').is(':checked')){
+                        				nm_program = row[a][2];
+                        				nm_activity = row[a][4];
+	                            	}else{
+	                            		nm_program = row[a][3];
+	                            		nm_activity = row[a][5];
+	                            	}
+                        			textSdg += "<tr style='font-size:80%;'>";
+                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+                        			textSdg += "<td>"+(row[a][6]!=null?row[a][6]:'')+"</td>";
+                        			
+                        			var dinamis=7;
+                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+                        				var nilai1="";
+                                		var nilai2="";
+                                		var nilai3="";
+                                		var nilai4="";
+                                		
+                                		//cek new value
+                                		if(row[a][dinamis+4]!=null){
+                                			nilai1 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+                                		}else{
+                                			nilai1 = row[a][dinamis]!=null?row[a][dinamis]:'';
+                                		}
+                                		if(row[a][dinamis+5]!=null){
+                                			nilai2 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+                                		}else{
+                                			nilai2 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+                                		}
+                                		if(row[a][dinamis+6]!=null){
+                                			nilai3 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+                                		}else{
+                                			nilai3 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+                                		}
+                                		if(row[a][dinamis+7]!=null){
+                                			nilai4 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+                                		}else{
+                                			nilai4 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+                                		}
+                                		dinamis = dinamis+8;
+                                		
+                                		if(stsGovBud == 'yearly'){
+                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+                                    	}else if(stsGovBud == 'semesterly'){
+                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+                                    	}else if(stsGovBud == 'quarterly'){
+                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+                                    	}
+                        			}
+                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+                        			textSdg += "</tr>";
+                        		}
+                        		
+                        		textSdg += "</tbody></table></div>";
+        	            	}
+        	            	
+        	            	//Indicaator GOV
+        	            	if(hasilGoal1.indGov.length>0){
+        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Indicator</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                            		if(stsGovInd == 'yearly'){
+                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		else if(stsGovInd == 'semesterly'){
+                            			textSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		else if(stsGovInd == 'quarterly'){
+                            			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		
+                            	}
+                        		
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                        		
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                        			if(stsGovInd == 'yearly'){
+                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                            		}else if(stsGovInd == 'semesterly'){
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                            		}else if(stsGovInd == 'quarterly'){
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+                            		}
+                            	}
+                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                        			if(stsGovInd == 'yearly'){
+                        				textSdg += "";
+                                	}else if(stsGovInd == 'semesterly'){
+                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+                                	}else if(stsGovInd == 'quarterly'){
+                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+                                	}
+                        		}
+                        		textSdg += "</tr>";
+                        		textSdg += "</thead><tbody>";
+                        		//isinya
+                        		for (var a = 0; a < hasilGoal1.indGov.length; a++) {
+                        			var row = hasilGoal1.indGov;
+                        			var nm_program;
+                        			var nm_activity;
+                        			var nm_indicator;
+                        			if($('#fs').is(':checked')){
+                        				nm_program = row[a][3];
+                        				nm_activity = row[a][5];
+                        				nm_indicator = row[a][7];
+	                            	}else{
+	                            		nm_program = row[a][4];
+	                            		nm_activity = row[a][6];
+	                            		nm_indicator = row[a][8];
+	                            	}
+                        			textSdg += "<tr style='font-size:80%;'>";
+                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+                        			textSdg += "<td>"+row[a][2]+". "+nm_indicator+"</td>";
+                        			textSdg += "<td>"+row[a][9]+"</td>";
+                        			
+                        			var dinamis=11;
+                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+                        				var nilai1="";
+                                		var nilai2="";
+                                		var nilai3="";
+                                		var nilai4="";
+                                		
+                                		//cek new value
+                                		if(row[a][dinamis+5]!=null){
+                                			nilai1 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+                                		}else{
+                                			nilai1 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+                                		}
+                                		if(row[a][dinamis+6]!=null){
+                                			nilai2 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+                                		}else{
+                                			nilai2 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+                                		}
+                                		if(row[a][dinamis+7]!=null){
+                                			nilai3 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+                                		}else{
+                                			nilai3 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+                                		}
+                                		if(row[a][dinamis+8]!=null){
+                                			nilai4 = row[a][dinamis+8]!=null?row[a][dinamis+8]:'';
+                                		}else{
+                                			nilai4 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+                                		}
+                                		
+                                		if(stsGovInd == 'yearly'){
+                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+                                    	}else if(stsGovInd == 'semesterly'){
+                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+                                    	}else if(stsGovInd == 'quarterly'){
+                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+                                    	}
+                                		dinamis = dinamis+9;
+                        			}
+                        			textSdg += "<td>"+(row[a][10]?row[a][10]:'')+"</td>";
+                        			textSdg += "<td></td>";
+                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+                        			textSdg += "</tr>";
+                        		}
+                        		
+                        		textSdg += "</tbody></table></div>";
+        	            	}
+        	            	
+        	            	//NSA
+        	            	if(hasilGoal1.budgetNsa.length>0){
+        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-nsa-bud-goal'><thead>";
+                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                            		if(stsNsaBud == 'yearly'){
+                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		else if(stsNsaBud == 'semesterly'){
+                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		else if(stsNsaBud == 'quarterly'){
+                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		
+                            	}
+                        		
+                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                        		
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                        			if(stsNsaBud == 'yearly'){
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                            		}else if(stsNsaBud == 'semesterly'){
+                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                            		}else if(stsNsaBud == 'quarterly'){
+                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                            		}
+                            	}
+                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                        			if(stsNsaBud == 'yearly'){
+                        				textSdg += "";
+                                	}else if(stsNsaBud == 'semesterly'){
+                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+                                	}else if(stsNsaBud == 'quarterly'){
+                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+                                	}
+                        		}
+                        		textSdg += "</tr>";
+                        		textSdg += "</thead><tbody>";
+                        		//isinya
+                        		for (var a = 0; a < hasilGoal1.budgetNsa.length; a++) {
+                        			var row = hasilGoal1.budgetNsa;
+                        			var nm_program;
+                        			var nm_activity;
+                        			if($('#fs').is(':checked')){
+                        				nm_program = row[a][2];
+                        				nm_activity = row[a][4];
+	                            	}else{
+	                            		nm_program = row[a][3];
+	                            		nm_activity = row[a][5];
+	                            	}
+                        			textSdg += "<tr style='font-size:80%;'>";
+                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+                        			textSdg += "<td>"+(row[a][6]!=null?row[a][6]:'')+"</td>";
+                        			
+                        			var dinamis=7;
+                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+                        				var nilai1="";
+                                		var nilai2="";
+                                		var nilai3="";
+                                		var nilai4="";
+                                		
+                                		//cek new value
+                                		if(row[a][dinamis+4]!=null){
+                                			nilai1 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+                                		}else{
+                                			nilai1 = row[a][dinamis]!=null?row[a][dinamis]:'';
+                                		}
+                                		if(row[a][dinamis+5]!=null){
+                                			nilai2 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+                                		}else{
+                                			nilai2 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+                                		}
+                                		if(row[a][dinamis+6]!=null){
+                                			nilai3 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+                                		}else{
+                                			nilai3 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+                                		}
+                                		if(row[a][dinamis+7]!=null){
+                                			nilai4 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+                                		}else{
+                                			nilai4 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+                                		}
+                                		dinamis = dinamis+8;
+                                		
+                                		if(stsNsaBud == 'yearly'){
+                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+                                    	}else if(stsNsaBud == 'semesterly'){
+                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+                                    	}else if(stsNsaBud == 'quarterly'){
+                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+                                    	}
+                        			}
+                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+                        			textSdg += "</tr>";
+                        		}
+                        		
+                        		textSdg += "</tbody></table></div>";
+        	            	}
+        	            	
+        	            	//Indicaator Nsa
+        	            	if(hasilGoal1.indNsa.length>0){
+        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Indicator</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                            		if(stsNsaInd == 'yearly'){
+                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		else if(stsNsaInd == 'semesterly'){
+                            			textSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		else if(stsNsaInd == 'quarterly'){
+                            			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+                                	}
+                            		
+                            	}
+                        		
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                        		
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                        			if(stsNsaInd == 'yearly'){
+                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                            		}else if(stsNsaInd == 'semesterly'){
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                            		}else if(stsNsaInd == 'quarterly'){
+                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+                            		}
+                            	}
+                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+                        			if(stsNsaInd == 'yearly'){
+                        				textSdg += "";
+                                	}else if(stsNsaInd == 'semesterly'){
+                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+                                	}else if(stsNsaInd == 'quarterly'){
+                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+                                	}
+                        		}
+                        		textSdg += "</tr>";
+                        		textSdg += "</thead><tbody>";
+                        		//isinya
+                        		for (var a = 0; a < hasilGoal1.indNsa.length; a++) {
+                        			var row = hasilGoal1.indNsa;
+                        			var nm_program;
+                        			var nm_activity;
+                        			var nm_indicator;
+                        			if($('#fs').is(':checked')){
+                        				nm_program = row[a][3];
+                        				nm_activity = row[a][5];
+                        				nm_indicator = row[a][7];
+	                            	}else{
+	                            		nm_program = row[a][4];
+	                            		nm_activity = row[a][6];
+	                            		nm_indicator = row[a][8];
+	                            	}
+                        			textSdg += "<tr style='font-size:80%;'>";
+                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+                        			textSdg += "<td>"+row[a][2]+". "+nm_indicator+"</td>";
+                        			textSdg += "<td>"+row[a][9]+"</td>";
+                        			
+                        			var dinamis=11;
+                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+                        				var nilai1="";
+                                		var nilai2="";
+                                		var nilai3="";
+                                		var nilai4="";
+                                		
+                                		//cek new value
+                                		if(row[a][dinamis+5]!=null){
+                                			nilai1 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+                                		}else{
+                                			nilai1 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+                                		}
+                                		if(row[a][dinamis+6]!=null){
+                                			nilai2 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+                                		}else{
+                                			nilai2 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+                                		}
+                                		if(row[a][dinamis+7]!=null){
+                                			nilai3 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+                                		}else{
+                                			nilai3 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+                                		}
+                                		if(row[a][dinamis+8]!=null){
+                                			nilai4 = row[a][dinamis+8]!=null?row[a][dinamis+8]:'';
+                                		}else{
+                                			nilai4 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+                                		}
+                                		
+                                		if(stsNsaInd == 'yearly'){
+                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+                                    	}else if(stsNsaInd == 'semesterly'){
+                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+                                    	}else if(stsNsaInd == 'quarterly'){
+                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+                                    	}
+                                		dinamis = dinamis+9;
+                        			}
+                        			textSdg += "<td>"+(row[a][10]?row[a][10]:'')+"</td>";
+                        			textSdg += "<td></td>";
+                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+                        			textSdg += "</tr>";
+                        		}
+                        		
+                        		textSdg += "</tbody></table></div>";
+        	            	}
+        	            }
+        			});
+        			
+        			//Target
+        			$.ajax({
+		            url: urls + "get-sdg-target-report/"+sdg_indicator,
+		            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals},
+		            type: 'get',
+		            dataType: 'json',
+		            async : false,
+		            success: function (hasilTarget) {
+		            	for (var j = 0; j < hasilTarget.sdg.length; j++) {
+		            		var nm_target;
+		        			var id_target=hasilTarget.sdg[j][0];
+		        			var kode_target=hasilTarget.sdg[j][3];
+		        			if($("#fs").is(':checked')){
+		        				nm_target = hasilTarget.sdg[j][1];
+							}else{
+								nm_target = hasilTarget.sdg[j][2];
+							}
+		            		textSdg += "<p style='font-size:90%;'><b>SDG Targets "+kode_target+". "+nm_target+"</b><p/>";
+		            		
+		            		$.ajax({
+		        	            url: urls + "get-mapping-target",
+		        	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_target':id_target,'start_year':monper_year[0],'end_year':monper_year[1]},
+		        	            type: 'get',
+		        	            dataType: 'json',
+		        	            async : false,
+		        	            success: function (hasilGoal1) {
+		        	            	//GOV
+		        	            	if(hasilGoal1.budgetGov.length>0){
+		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
+		                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                            		if(stsGovBud == 'yearly'){
+		                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		else if(stsGovBud == 'semesterly'){
+		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		else if(stsGovBud == 'quarterly'){
+		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		
+		                            	}
+		                        		
+		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                        		
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        			if(stsGovBud == 'yearly'){
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                            		}else if(stsGovBud == 'semesterly'){
+		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                            		}else if(stsGovBud == 'quarterly'){
+		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                            		}
+		                            	}
+		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        			if(stsGovBud == 'yearly'){
+		                        				textSdg += "";
+		                                	}else if(stsGovBud == 'semesterly'){
+		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+		                                	}else if(stsGovBud == 'quarterly'){
+		                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+		                                	}
+		                        		}
+		                        		textSdg += "</tr>";
+		                        		textSdg += "</thead><tbody>";
+		                        		//isinya
+		                        		for (var a = 0; a < hasilGoal1.budgetGov.length; a++) {
+		                        			var row = hasilGoal1.budgetGov;
+		                        			var nm_program;
+		                        			var nm_activity;
+		                        			if($('#fs').is(':checked')){
+		                        				nm_program = row[a][2];
+		                        				nm_activity = row[a][4];
+			                            	}else{
+			                            		nm_program = row[a][3];
+			                            		nm_activity = row[a][5];
+			                            	}
+		                        			textSdg += "<tr style='font-size:80%;'>";
+		                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+		                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+		                        			textSdg += "<td>"+(row[a][6]!=null?row[a][6]:'')+"</td>";
+		                        			
+		                        			var dinamis=7;
+		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        				var nilai1="";
+		                                		var nilai2="";
+		                                		var nilai3="";
+		                                		var nilai4="";
+		                                		
+		                                		//cek new value
+		                                		if(row[a][dinamis+4]!=null){
+		                                			nilai1 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		                                		}else{
+		                                			nilai1 = row[a][dinamis]!=null?row[a][dinamis]:'';
+		                                		}
+		                                		if(row[a][dinamis+5]!=null){
+		                                			nilai2 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		                                		}else{
+		                                			nilai2 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		                                		}
+		                                		if(row[a][dinamis+6]!=null){
+		                                			nilai3 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		                                		}else{
+		                                			nilai3 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		                                		}
+		                                		if(row[a][dinamis+7]!=null){
+		                                			nilai4 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		                                		}else{
+		                                			nilai4 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		                                		}
+		                                		dinamis = dinamis+8;
+		                                		
+		                                		if(stsGovBud == 'yearly'){
+		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		                                    	}else if(stsGovBud == 'semesterly'){
+		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		                                    	}else if(stsGovBud == 'quarterly'){
+		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		                                    	}
+		                        			}
+		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+		                        			textSdg += "</tr>";
+		                        		}
+		                        		
+		                        		textSdg += "</tbody></table></div>";
+		        	            	}
+		        	            	
+		        	            	//Indicaator GOV
+		        	            	if(hasilGoal1.indGov.length>0){
+		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+		                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Indicator</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                            		if(stsGovInd == 'yearly'){
+		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		else if(stsGovInd == 'semesterly'){
+		                            			textSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		else if(stsGovInd == 'quarterly'){
+		                            			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		
+		                            	}
+		                        		
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                        		
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        			if(stsGovInd == 'yearly'){
+		                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                            		}else if(stsGovInd == 'semesterly'){
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                            		}else if(stsGovInd == 'quarterly'){
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                            		}
+		                            	}
+		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        			if(stsGovInd == 'yearly'){
+		                        				textSdg += "";
+		                                	}else if(stsGovInd == 'semesterly'){
+		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+		                                	}else if(stsGovInd == 'quarterly'){
+		                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+		                                	}
+		                        		}
+		                        		textSdg += "</tr>";
+		                        		textSdg += "</thead><tbody>";
+		                        		//isinya
+		                        		for (var a = 0; a < hasilGoal1.indGov.length; a++) {
+		                        			var row = hasilGoal1.indGov;
+		                        			var nm_program;
+		                        			var nm_activity;
+		                        			var nm_indicator;
+		                        			if($('#fs').is(':checked')){
+		                        				nm_program = row[a][3];
+		                        				nm_activity = row[a][5];
+		                        				nm_indicator = row[a][7];
+			                            	}else{
+			                            		nm_program = row[a][4];
+			                            		nm_activity = row[a][6];
+			                            		nm_indicator = row[a][8];
+			                            	}
+		                        			textSdg += "<tr style='font-size:80%;'>";
+		                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+		                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+		                        			textSdg += "<td>"+row[a][2]+". "+nm_indicator+"</td>";
+		                        			textSdg += "<td>"+row[a][9]+"</td>";
+		                        			
+		                        			var dinamis=11;
+		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        				var nilai1="";
+		                                		var nilai2="";
+		                                		var nilai3="";
+		                                		var nilai4="";
+		                                		
+		                                		//cek new value
+		                                		if(row[a][dinamis+5]!=null){
+		                                			nilai1 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		                                		}else{
+		                                			nilai1 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		                                		}
+		                                		if(row[a][dinamis+6]!=null){
+		                                			nilai2 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		                                		}else{
+		                                			nilai2 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		                                		}
+		                                		if(row[a][dinamis+7]!=null){
+		                                			nilai3 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		                                		}else{
+		                                			nilai3 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		                                		}
+		                                		if(row[a][dinamis+8]!=null){
+		                                			nilai4 = row[a][dinamis+8]!=null?row[a][dinamis+8]:'';
+		                                		}else{
+		                                			nilai4 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		                                		}
+		                                		
+		                                		if(stsGovInd == 'yearly'){
+		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		                                    	}else if(stsGovInd == 'semesterly'){
+		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		                                    	}else if(stsGovInd == 'quarterly'){
+		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		                                    	}
+		                                		dinamis = dinamis+9;
+		                        			}
+		                        			textSdg += "<td>"+(row[a][10]?row[a][10]:'')+"</td>";
+		                        			textSdg += "<td></td>";
+		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+		                        			textSdg += "</tr>";
+		                        		}
+		                        		
+		                        		textSdg += "</tbody></table></div>";
+		        	            	}
+		        	            	
+		        	            	//NSA
+		        	            	if(hasilGoal1.budgetNsa.length>0){
+		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-nsa-bud-goal'><thead>";
+		                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                            		if(stsNsaBud == 'yearly'){
+		                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		else if(stsNsaBud == 'semesterly'){
+		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		else if(stsNsaBud == 'quarterly'){
+		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		
+		                            	}
+		                        		
+		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                        		
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        			if(stsNsaBud == 'yearly'){
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                            		}else if(stsNsaBud == 'semesterly'){
+		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                            		}else if(stsNsaBud == 'quarterly'){
+		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                            		}
+		                            	}
+		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        			if(stsNsaBud == 'yearly'){
+		                        				textSdg += "";
+		                                	}else if(stsNsaBud == 'semesterly'){
+		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+		                                	}else if(stsNsaBud == 'quarterly'){
+		                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+		                                	}
+		                        		}
+		                        		textSdg += "</tr>";
+		                        		textSdg += "</thead><tbody>";
+		                        		//isinya
+		                        		for (var a = 0; a < hasilGoal1.budgetNsa.length; a++) {
+		                        			var row = hasilGoal1.budgetNsa;
+		                        			var nm_program;
+		                        			var nm_activity;
+		                        			if($('#fs').is(':checked')){
+		                        				nm_program = row[a][2];
+		                        				nm_activity = row[a][4];
+			                            	}else{
+			                            		nm_program = row[a][3];
+			                            		nm_activity = row[a][5];
+			                            	}
+		                        			textSdg += "<tr style='font-size:80%;'>";
+		                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+		                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+		                        			textSdg += "<td>"+(row[a][6]!=null?row[a][6]:'')+"</td>";
+		                        			
+		                        			var dinamis=7;
+		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        				var nilai1="";
+		                                		var nilai2="";
+		                                		var nilai3="";
+		                                		var nilai4="";
+		                                		
+		                                		//cek new value
+		                                		if(row[a][dinamis+4]!=null){
+		                                			nilai1 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		                                		}else{
+		                                			nilai1 = row[a][dinamis]!=null?row[a][dinamis]:'';
+		                                		}
+		                                		if(row[a][dinamis+5]!=null){
+		                                			nilai2 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		                                		}else{
+		                                			nilai2 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		                                		}
+		                                		if(row[a][dinamis+6]!=null){
+		                                			nilai3 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		                                		}else{
+		                                			nilai3 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		                                		}
+		                                		if(row[a][dinamis+7]!=null){
+		                                			nilai4 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		                                		}else{
+		                                			nilai4 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		                                		}
+		                                		dinamis = dinamis+8;
+		                                		
+		                                		if(stsNsaBud == 'yearly'){
+		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		                                    	}else if(stsNsaBud == 'semesterly'){
+		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		                                    	}else if(stsNsaBud == 'quarterly'){
+		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		                                    	}
+		                        			}
+		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+		                        			textSdg += "</tr>";
+		                        		}
+		                        		
+		                        		textSdg += "</tbody></table></div>";
+		        	            	}
+		        	            	
+		        	            	//Indicaator Nsa
+		        	            	if(hasilGoal1.indNsa.length>0){
+		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+		                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Indicator</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                            		if(stsNsaInd == 'yearly'){
+		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		else if(stsNsaInd == 'semesterly'){
+		                            			textSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		else if(stsNsaInd == 'quarterly'){
+		                            			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		                                	}
+		                            		
+		                            	}
+		                        		
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                        		
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        			if(stsNsaInd == 'yearly'){
+		                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                            		}else if(stsNsaInd == 'semesterly'){
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                            		}else if(stsNsaInd == 'quarterly'){
+		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                            		}
+		                            	}
+		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        			if(stsNsaInd == 'yearly'){
+		                        				textSdg += "";
+		                                	}else if(stsNsaInd == 'semesterly'){
+		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+		                                	}else if(stsNsaInd == 'quarterly'){
+		                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+		                                	}
+		                        		}
+		                        		textSdg += "</tr>";
+		                        		textSdg += "</thead><tbody>";
+		                        		//isinya
+		                        		for (var a = 0; a < hasilGoal1.indNsa.length; a++) {
+		                        			var row = hasilGoal1.indNsa;
+		                        			var nm_program;
+		                        			var nm_activity;
+		                        			var nm_indicator;
+		                        			if($('#fs').is(':checked')){
+		                        				nm_program = row[a][3];
+		                        				nm_activity = row[a][5];
+		                        				nm_indicator = row[a][7];
+			                            	}else{
+			                            		nm_program = row[a][4];
+			                            		nm_activity = row[a][6];
+			                            		nm_indicator = row[a][8];
+			                            	}
+		                        			textSdg += "<tr style='font-size:80%;'>";
+		                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+		                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+		                        			textSdg += "<td>"+row[a][2]+". "+nm_indicator+"</td>";
+		                        			textSdg += "<td>"+row[a][9]+"</td>";
+		                        			
+		                        			var dinamis=11;
+		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		                        				var nilai1="";
+		                                		var nilai2="";
+		                                		var nilai3="";
+		                                		var nilai4="";
+		                                		
+		                                		//cek new value
+		                                		if(row[a][dinamis+5]!=null){
+		                                			nilai1 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		                                		}else{
+		                                			nilai1 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		                                		}
+		                                		if(row[a][dinamis+6]!=null){
+		                                			nilai2 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		                                		}else{
+		                                			nilai2 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		                                		}
+		                                		if(row[a][dinamis+7]!=null){
+		                                			nilai3 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		                                		}else{
+		                                			nilai3 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		                                		}
+		                                		if(row[a][dinamis+8]!=null){
+		                                			nilai4 = row[a][dinamis+8]!=null?row[a][dinamis+8]:'';
+		                                		}else{
+		                                			nilai4 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		                                		}
+		                                		
+		                                		if(stsNsaInd == 'yearly'){
+		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		                                    	}else if(stsNsaInd == 'semesterly'){
+		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		                                    	}else if(stsNsaInd == 'quarterly'){
+		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		                                    	}
+		                                		dinamis = dinamis+9;
+		                        			}
+		                        			textSdg += "<td>"+(row[a][10]?row[a][10]:'')+"</td>";
+		                        			textSdg += "<td></td>";
+		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+		                        			textSdg += "</tr>";
+		                        		}
+		                        		
+		                        		textSdg += "</tbody></table></div>";
+		        	            	}
+		        	            }
+		        			});
+		            		
+		            		$.ajax({
+		    		            url: urls + "get-sdg-indicator-report/"+sdg_indicator,
+		    		            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_target':id_target},
+		    		            type: 'get',
+		    		            dataType: 'json',
+		    		            async : false,
+		    		            success: function (hasilIndicator) {
+		    		            	for (var k = 0; k < hasilIndicator.sdg.length; k++) {
+		    		            		var nm_indicator;
+		    		        			var id_indicator=hasilIndicator.sdg[k][0];
+		    		        			var kode_indicator=hasilIndicator.sdg[k][3];
+		    		        			if($("#fs").is(':checked')){
+		    		        				nm_indicator = hasilIndicator.sdg[k][1];
+		    							}else{
+		    								nm_indicator = hasilIndicator.sdg[k][2];
+		    							}
+		    		            		textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+kode_indicator+". "+nm_indicator+"</b><p/>";
+		    		            		
+		    		            		$.ajax({
+		    		        	            url: urls + "get-entry-sdg",
+		    		        	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_indicator':id_indicator,'start_year':monper_year[0],'end_year':monper_year[1]},
+		    		        	            type: 'get',
+		    		        	            dataType: 'json',
+		    		        	            async : false,
+		    		        	            success: function (hasil) {
+		    		        	            	if(hasil.indSdg.length>0){
+		    		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered'><thead>";
+		    		        	            		textSdg += "<tr style='font-size:80%;'>";
+		    		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Source of Data</b></td>";
+		    		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Unit</b></td>";
+		    		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Baseline</b></td>";
+		    		        	                	
+		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		        	                		if(sts == 'yearly'){
+		    		        	                			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		        	                    	}else if(sts == 'semesterly'){
+		    		        	                    		textSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		        	                    	}
+		    		        	                		else if(sts == 'quarterly'){
+		    		        	                			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		        	                    	}
+		    		        	                	}
+		    		        	                	//<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Actor</b></td>
+		    		        	                	textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr style='font-size:80%;'>";
+		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		        	                    	if(sts == 'yearly'){
+		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		    		        	                    	}else if(sts == 'semesterly'){
+		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+		    		        	                    		textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		    		        	                    	}
+		    		        	                		else if(sts == 'quarterly'){
+		    		        	                			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+		    		        	                			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		    		        	                    	}
+		    		        	                	}
+		    		        	                	textSdg += "</tr><tr>";
+		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		        	                		if(sts == 'yearly'){
+		    		        	                			textSdg += "";
+		    		        	                    	}else if(sts == 'semesterly'){
+		    		        	                    		textSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td>";
+		    		        	                    	}
+		    		        	                		else if(sts == 'quarterly'){
+		    		        	                			textSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td><td style='text-align:center;vertical-align:middle'><b>3</b></td><td style='text-align:center;vertical-align:middle'><b>4</b></td>";
+		    		        	                    	}
+		    		        	                	}
+		    		        	                	textSdg += "</tr></thead><tbody>";
+		    		        	                	var row = hasil.indSdg;
+		    		        	                	for (var a = 0; a < hasil.indSdg.length; a++) {
+		    		        	                		textSdg += "<tr style='font-size:80%;'>";
+		    		        	                		var role =4+(9*(monper_year[1]-monper_year[0]+1));
+		    		        	                		textSdg += "<td>"+(row[a][role]?row[a][role]:'')+"</td>";
+		    		        	                		textSdg += "<td>"+(row[a][0]?row[a][0]:'')+"</td>";
+		    		        	                		textSdg += "<td>"+(row[a][1]?row[a][1]:'')+"</td>";
+		    		        	                		
+		    		        	                		var dinamis=4;
+		    		        	                		var achive=0;
+		    		        	                		var target=0;
+		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        				var nilai1="";
+		    		                                		var nilai2="";
+		    		                                		var nilai3="";
+		    		                                		var nilai4="";
+		    		                                		
+		    		                                		//cek new value
+		    		                                		if(row[a][dinamis+5]!=null){
+		    		                                			nilai1 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		    		                                		}else{
+		    		                                			nilai1 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+6]!=null){
+		    		                                			nilai2 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		    		                                		}else{
+		    		                                			nilai2 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+7]!=null){
+		    		                                			nilai3 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		    		                                		}else{
+		    		                                			nilai3 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+8]!=null){
+		    		                                			nilai4 = row[a][dinamis+8]!=null?row[a][dinamis+8]:'';
+		    		                                		}else{
+		    		                                			nilai4 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		    		                                		}
+		    		                                		
+		    		                                		if(sts == 'yearly'){
+		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		                            				if(row[a][3]=="1"){
+	    		            										achive = achive+nilai1;
+	    		            										target = target+row[a][dinamis];
+	    		            									}else{
+	    		            										achive = nilai1;
+	    		            										target = row[a][dinamis];
+	    		            									}
+		    		                                    	}else if(sts == 'semesterly'){
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		                                			if(row[a][3]=="1"){
+																	achive = achive+nilai1+nilai2;
+																	target = target+row[a][dinamis];
+																}else{
+																	achive = nilai2;
+																	target = row[a][dinamis];
+																}
+		    		                                    	}else if(sts == 'quarterly'){
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		                                    		if(row[a][3]=="1"){
+																	achive = achive+nilai1+nilai2+nilai3+nilai4;
+																	target = target+row[a][dinamis];
+																}else{
+																	achive = nilai4;
+																	target = row[a][dinamis];
+																}
+		    		                                    	}
+		    		                                		dinamis = dinamis+9;
+		    		                        			}
+		    		                        			//textSdg += "<td>"+row[a][dinamis]+"</td>";
+		    		                        			var color_sts="";
+		    		                        			if(achive){
+		                                        			if(row[a][2] == 'Increment'){
+		                                                        if((achive >= target)){
+		                                                            color_sts = '<span class="dotOk"></span>';
+		                                                        }else{
+		                                                            color_sts = '<span class="dotNok"></span>';
+		                                                        }
+		                                                    }else{
+		                                                        if((achive <= target)){
+		                                                            color_sts = '<span class="dotOk"></span>';
+		                                                        }else{
+		                                                            color_sts = '<span class="dotNok"></span>';
+		                                                        }
+		                                                    }
+		                                        		}
+		    		                        			textSdg += "<td style='text-align:center'>"+(color_sts?color_sts:'')+"</td>";
+		    		        	                		textSdg += "</tr>";
+		    		        	                	}
+		    		        	                	textSdg += "</tbody></table></div>";
+		    		        	            	}
+		    		        	            }
+		    		            		});
+		    		            		
+		    		            		$.ajax({
+		    		    		            url: urls + "get-disaggre-report",
+		    		    		            data: {'id_indicator':id_indicator},
+		    		    		            type: 'get',
+		    		    		            dataType: 'json',
+		    		    		            async : false,
+		    		    		            success: function (hasilDis) {
+		    		    		            	for (var l = 0; l < hasilDis.dis.length; l++) {
+		    		    		            		var nm_disagre;
+		    		    		        			var id_dis=hasilDis.dis[l][0];
+		    		    		        			var id_dis_detail=hasilDis.dis[l][1];
+		    		    		        			var kode_dis=hasilDis.dis[l][2];
+		    		    		        			if($("#fs").is(':checked')){
+		    		    		        				nm_disagre = hasilDis.dis[l][3]+" "+hasilDis.dis[l][5];
+		    		    							}else{
+		    		    								nm_disagre = hasilDis.dis[l][4]+" "+hasilDis.dis[l][6];
+		    		    							}
+		    		    		            		textSdg += "<p style='font-size:90%;'><b>Disaggregation "+kode_dis+". "+nm_disagre+"</b><p/>";
+		    		    		            	
+		    		    		            		$.ajax({
+		    		    		        	            url: urls + "get-entry-sdg-detail",
+		    		    		        	            data: {'id_disaggre_detail':id_dis_detail,'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_indicator':id_indicator,'start_year':monper_year[0],'end_year':monper_year[1]},
+		    		    		        	            type: 'get',
+		    		    		        	            dataType: 'json',
+		    		    		        	            async : false,
+		    		    		        	            success: function (hasil) {
+		    		    		        	            	if(hasil.indSdg.length>0){
+		    		    		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered'><thead>";
+		    		    		        	            		textSdg += "<tr style='font-size:80%;'>";
+		    		    		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Source of Data</b></td>";
+		    		    		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Unit</b></td>";
+		    		    		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Baseline</b></td>";
+		    		    		        	                	
+		    		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		    		        	                		if(sts == 'yearly'){
+		    		    		        	                			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		    		        	                    	}else if(sts == 'semesterly'){
+		    		    		        	                    		textSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		    		        	                    	}
+		    		    		        	                		else if(sts == 'quarterly'){
+		    		    		        	                			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		    		        	                    	}
+		    		    		        	                	}
+		    		    		        	                	//<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Actor</b></td>
+		    		    		        	                	textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Status</b></td></tr><tr style='font-size:80%;'>";
+		    		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		    		        	                    	if(sts == 'yearly'){
+		    		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+		    		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		    		    		        	                    	}else if(sts == 'semesterly'){
+		    		    		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+		    		    		        	                    		textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		    		    		        	                    	}
+		    		    		        	                		else if(sts == 'quarterly'){
+		    		    		        	                			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
+		    		    		        	                			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		    		    		        	                    	}
+		    		    		        	                	}
+		    		    		        	                	textSdg += "</tr><tr>";
+		    		    		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		    		        	                		if(sts == 'yearly'){
+		    		    		        	                			textSdg += "";
+		    		    		        	                    	}else if(sts == 'semesterly'){
+		    		    		        	                    		textSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td>";
+		    		    		        	                    	}
+		    		    		        	                		else if(sts == 'quarterly'){
+		    		    		        	                			textSdg += "<td style='text-align:center;vertical-align:middle'><b>1</b></td><td style='text-align:center;vertical-align:middle'><b>2</b></td><td style='text-align:center;vertical-align:middle'><b>3</b></td><td style='text-align:center;vertical-align:middle'><b>4</b></td>";
+		    		    		        	                    	}
+		    		    		        	                	}
+		    		    		        	                	textSdg += "</tr></thead><tbody>";
+		    		    		        	                	var row = hasil.indSdg;
+		    		    		        	                	for (var a = 0; a < hasil.indSdg.length; a++) {
+		    		    		        	                		textSdg += "<tr style='font-size:80%;'>";
+		    		    		        	                		var role = 4+(9*(monper_year[1]-monper_year[0]+1));
+		    		    		        	                		textSdg += "<td>"+(row[a][0]?row[a][role]:'')+"</td>";
+		    		    		        	                		textSdg += "<td>"+(row[a][0]?row[a][0]:'')+"</td>";
+		    		    		        	                		textSdg += "<td>"+(row[a][1]?row[a][1]:'')+"</td>";
+		    		    		        	                		
+		    		    		        	                		var dinamis=4;
+		    		    		        	                		var achive=0;
+		    		    		        	                		var target=0;
+		    		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		    		                        				var nilai1="";
+		    		    		                                		var nilai2="";
+		    		    		                                		var nilai3="";
+		    		    		                                		var nilai4="";
+		    		    		                                		
+		    		    		                                		//cek new value
+		    		    		                                		if(row[a][dinamis+5]!=null){
+		    		    		                                			nilai1 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		    		    		                                		}else{
+		    		    		                                			nilai1 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		    		    		                                		}
+		    		    		                                		if(row[a][dinamis+6]!=null){
+		    		    		                                			nilai2 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		    		    		                                		}else{
+		    		    		                                			nilai2 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		    		    		                                		}
+		    		    		                                		if(row[a][dinamis+7]!=null){
+		    		    		                                			nilai3 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		    		    		                                		}else{
+		    		    		                                			nilai3 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		    		    		                                		}
+		    		    		                                		if(row[a][dinamis+8]!=null){
+		    		    		                                			nilai4 = row[a][dinamis+8]!=null?row[a][dinamis+8]:'';
+		    		    		                                		}else{
+		    		    		                                			nilai4 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		    		    		                                		}
+		    		    		                                		
+		    		    		                                		if(sts == 'yearly'){
+		    		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		    		                            				if(row[a][3]=="1"){
+		    	    		            										achive = achive+nilai1;
+		    	    		            										target = target+row[a][dinamis];
+		    	    		            									}else{
+		    	    		            										achive = nilai1;
+		    	    		            										target = row[a][dinamis];
+		    	    		            									}
+		    		    		                                    	}else if(sts == 'semesterly'){
+		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		    		                                			if(row[a][3]=="1"){
+		    																	achive = achive+nilai1+nilai2;
+		    																	target = target+row[a][dinamis];
+		    																}else{
+		    																	achive = nilai2;
+		    																	target = row[a][dinamis];
+		    																}
+		    		    		                                    	}else if(sts == 'quarterly'){
+		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		    		                                    		if(row[a][3]=="1"){
+		    																	achive = achive+nilai1+nilai2+nilai3+nilai4;
+		    																	target = target+row[a][dinamis];
+		    																}else{
+		    																	achive = nilai4;
+		    																	target = row[a][dinamis];
+		    																}
+		    		    		                                    	}
+		    		    		                                		dinamis = dinamis+9;
+		    		    		                        			}
+		    		    		                        			//textSdg += "<td>"+row[a][dinamis]+"</td>";
+		    		    		                        			var color_sts="";
+		    		    		                        			if(achive){
+		    		                                        			if(row[a][2] == 'Increment'){
+		    		                                                        if((achive >= target)){
+		    		                                                            color_sts = '<span class="dotOk"></span>';
+		    		                                                        }else{
+		    		                                                            color_sts = '<span class="dotNok"></span>';
+		    		                                                        }
+		    		                                                    }else{
+		    		                                                        if(achive <= target){
+		    		                                                            color_sts = '<span class="dotOk"></span>';
+		    		                                                        }else{
+		    		                                                            color_sts = '<span class="dotNok"></span>';
+		    		                                                        }
+		    		                                                    }
+		    		                                        		}
+		    		    		                        			textSdg += "<td style='text-align:center'>"+(color_sts?color_sts:'')+"</td>";
+		    		    		        	                		textSdg += "</tr>";
+		    		    		        	                	}
+		    		    		        	                	textSdg += "</tbody></table></div>";
+		    		    		        	            	}
+		    		    		        	            }
+		    		    		            		});
+		    		    		            	}
+		    		    		            }
+		    		            		});
+		    		            		
+		    		            		$.ajax({
+		    		        	            url: urls + "get-mapping-indicator",
+		    		        	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_target':id_target,'id_indicator':id_indicator,'start_year':monper_year[0],'end_year':monper_year[1]},
+		    		        	            type: 'get',
+		    		        	            dataType: 'json',
+		    		        	            async : false,
+		    		        	            success: function (hasilGoal1) {
+		    		        	            	//GOV
+		    		        	            	if(hasilGoal1.budgetGov.length>0){
+		    		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
+		    		                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+		    		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                            		if(stsGovBud == 'yearly'){
+		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		else if(stsGovBud == 'semesterly'){
+		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		else if(stsGovBud == 'quarterly'){
+		    		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		
+		    		                            	}
+		    		                        		
+		    		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		    		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                        		
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        			if(stsGovBud == 'yearly'){
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                            		}else if(stsGovBud == 'semesterly'){
+		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                            		}else if(stsGovBud == 'quarterly'){
+		    		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                            		}
+		    		                            	}
+		    		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        			if(stsGovBud == 'yearly'){
+		    		                        				textSdg += "";
+		    		                                	}else if(stsGovBud == 'semesterly'){
+		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+		    		                                	}else if(stsGovBud == 'quarterly'){
+		    		                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+		    		                                	}
+		    		                        		}
+		    		                        		textSdg += "</tr>";
+		    		                        		textSdg += "</thead><tbody>";
+		    		                        		//isinya
+		    		                        		for (var a = 0; a < hasilGoal1.budgetGov.length; a++) {
+		    		                        			var row = hasilGoal1.budgetGov;
+		    		                        			var nm_program;
+		    		                        			var nm_activity;
+		    		                        			if($('#fs').is(':checked')){
+		    		                        				nm_program = row[a][2];
+		    		                        				nm_activity = row[a][4];
+		    			                            	}else{
+		    			                            		nm_program = row[a][3];
+		    			                            		nm_activity = row[a][5];
+		    			                            	}
+		    		                        			textSdg += "<tr style='font-size:80%;'>";
+		    		                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+		    		                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+		    		                        			textSdg += "<td>"+(row[a][6]!=null?row[a][6]:'')+"</td>";
+		    		                        			
+		    		                        			var dinamis=7;
+		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        				var nilai1="";
+		    		                                		var nilai2="";
+		    		                                		var nilai3="";
+		    		                                		var nilai4="";
+		    		                                		
+		    		                                		//cek new value
+		    		                                		if(row[a][dinamis+4]!=null){
+		    		                                			nilai1 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		    		                                		}else{
+		    		                                			nilai1 = row[a][dinamis]!=null?row[a][dinamis]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+5]!=null){
+		    		                                			nilai2 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		    		                                		}else{
+		    		                                			nilai2 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+6]!=null){
+		    		                                			nilai3 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		    		                                		}else{
+		    		                                			nilai3 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+7]!=null){
+		    		                                			nilai4 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		    		                                		}else{
+		    		                                			nilai4 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		    		                                		}
+		    		                                		dinamis = dinamis+8;
+		    		                                		
+		    		                                		if(stsGovBud == 'yearly'){
+		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		                                    	}else if(stsGovBud == 'semesterly'){
+		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		                                    	}else if(stsGovBud == 'quarterly'){
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		                                    	}
+		    		                        			}
+		    		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+		    		                        			textSdg += "</tr>";
+		    		                        		}
+		    		                        		
+		    		                        		textSdg += "</tbody></table></div>";
+		    		        	            	}
+		    		        	            	
+		    		        	            	//Indicaator GOV
+		    		        	            	if(hasilGoal1.indGov.length>0){
+		    		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+		    		                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Indicator</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                            		if(stsGovInd == 'yearly'){
+		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		else if(stsGovInd == 'semesterly'){
+		    		                            			textSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		else if(stsGovInd == 'quarterly'){
+		    		                            			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		
+		    		                            	}
+		    		                        		
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                        		
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        			if(stsGovInd == 'yearly'){
+		    		                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                            		}else if(stsGovInd == 'semesterly'){
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                            		}else if(stsGovInd == 'quarterly'){
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		    		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                            		}
+		    		                            	}
+		    		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        			if(stsGovInd == 'yearly'){
+		    		                        				textSdg += "";
+		    		                                	}else if(stsGovInd == 'semesterly'){
+		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+		    		                                	}else if(stsGovInd == 'quarterly'){
+		    		                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+		    		                                	}
+		    		                        		}
+		    		                        		textSdg += "</tr>";
+		    		                        		textSdg += "</thead><tbody>";
+		    		                        		//isinya
+		    		                        		for (var a = 0; a < hasilGoal1.indGov.length; a++) {
+		    		                        			var row = hasilGoal1.indGov;
+		    		                        			var nm_program;
+		    		                        			var nm_activity;
+		    		                        			var nm_indicator;
+		    		                        			if($('#fs').is(':checked')){
+		    		                        				nm_program = row[a][3];
+		    		                        				nm_activity = row[a][5];
+		    		                        				nm_indicator = row[a][7];
+		    			                            	}else{
+		    			                            		nm_program = row[a][4];
+		    			                            		nm_activity = row[a][6];
+		    			                            		nm_indicator = row[a][8];
+		    			                            	}
+		    		                        			textSdg += "<tr style='font-size:80%;'>";
+		    		                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+		    		                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+		    		                        			textSdg += "<td>"+row[a][2]+". "+nm_indicator+"</td>";
+		    		                        			textSdg += "<td>"+row[a][9]+"</td>";
+		    		                        			
+		    		                        			var dinamis=11;
+		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        				var nilai1="";
+		    		                                		var nilai2="";
+		    		                                		var nilai3="";
+		    		                                		var nilai4="";
+		    		                                		
+		    		                                		//cek new value
+		    		                                		if(row[a][dinamis+5]!=null){
+		    		                                			nilai1 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		    		                                		}else{
+		    		                                			nilai1 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+6]!=null){
+		    		                                			nilai2 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		    		                                		}else{
+		    		                                			nilai2 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+7]!=null){
+		    		                                			nilai3 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		    		                                		}else{
+		    		                                			nilai3 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+8]!=null){
+		    		                                			nilai4 = row[a][dinamis+8]!=null?row[a][dinamis+8]:'';
+		    		                                		}else{
+		    		                                			nilai4 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		    		                                		}
+		    		                                		
+		    		                                		if(stsGovInd == 'yearly'){
+		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		                                    	}else if(stsGovInd == 'semesterly'){
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		                                    	}else if(stsGovInd == 'quarterly'){
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		                                    	}
+		    		                                		dinamis = dinamis+9;
+		    		                        			}
+		    		                        			textSdg += "<td>"+(row[a][10]?row[a][10]:'')+"</td>";
+		    		                        			textSdg += "<td></td>";
+		    		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+		    		                        			textSdg += "</tr>";
+		    		                        		}
+		    		                        		
+		    		                        		textSdg += "</tbody></table></div>";
+		    		        	            	}
+		    		        	            	
+		    		        	            	//NSA
+		    		        	            	if(hasilGoal1.budgetNsa.length>0){
+		    		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-nsa-bud-goal'><thead>";
+		    		                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+		    		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                            		if(stsNsaBud == 'yearly'){
+		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		else if(stsNsaBud == 'semesterly'){
+		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		else if(stsNsaBud == 'quarterly'){
+		    		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		
+		    		                            	}
+		    		                        		
+		    		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		    		                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                        		
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        			if(stsNsaBud == 'yearly'){
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                            		}else if(stsNsaBud == 'semesterly'){
+		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                            		}else if(stsNsaBud == 'quarterly'){
+		    		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                            		}
+		    		                            	}
+		    		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        			if(stsNsaBud == 'yearly'){
+		    		                        				textSdg += "";
+		    		                                	}else if(stsNsaBud == 'semesterly'){
+		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+		    		                                	}else if(stsNsaBud == 'quarterly'){
+		    		                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+		    		                                	}
+		    		                        		}
+		    		                        		textSdg += "</tr>";
+		    		                        		textSdg += "</thead><tbody>";
+		    		                        		//isinya
+		    		                        		for (var a = 0; a < hasilGoal1.budgetNsa.length; a++) {
+		    		                        			var row = hasilGoal1.budgetNsa;
+		    		                        			var nm_program;
+		    		                        			var nm_activity;
+		    		                        			if($('#fs').is(':checked')){
+		    		                        				nm_program = row[a][2];
+		    		                        				nm_activity = row[a][4];
+		    			                            	}else{
+		    			                            		nm_program = row[a][3];
+		    			                            		nm_activity = row[a][5];
+		    			                            	}
+		    		                        			textSdg += "<tr style='font-size:80%;'>";
+		    		                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+		    		                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+		    		                        			textSdg += "<td>"+(row[a][6]!=null?row[a][6]:'')+"</td>";
+		    		                        			
+		    		                        			var dinamis=7;
+		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        				var nilai1="";
+		    		                                		var nilai2="";
+		    		                                		var nilai3="";
+		    		                                		var nilai4="";
+		    		                                		
+		    		                                		//cek new value
+		    		                                		if(row[a][dinamis+4]!=null){
+		    		                                			nilai1 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		    		                                		}else{
+		    		                                			nilai1 = row[a][dinamis]!=null?row[a][dinamis]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+5]!=null){
+		    		                                			nilai2 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		    		                                		}else{
+		    		                                			nilai2 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+6]!=null){
+		    		                                			nilai3 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		    		                                		}else{
+		    		                                			nilai3 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+7]!=null){
+		    		                                			nilai4 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		    		                                		}else{
+		    		                                			nilai4 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		    		                                		}
+		    		                                		dinamis = dinamis+8;
+		    		                                		
+		    		                                		if(stsNsaBud == 'yearly'){
+		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		                                    	}else if(stsNsaBud == 'semesterly'){
+		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		                                    	}else if(stsNsaBud == 'quarterly'){
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		                                    	}
+		    		                        			}
+		    		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+		    		                        			textSdg += "</tr>";
+		    		                        		}
+		    		                        		
+		    		                        		textSdg += "</tbody></table></div>";
+		    		        	            	}
+		    		        	            	
+		    		        	            	//Indicaator Nsa
+		    		        	            	if(hasilGoal1.indNsa.length>0){
+		    		        	            		textSdg += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+		    		                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'><td rowspan='3' style='text-align:center;vertical-align:middle'>Program Name</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Activity</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Indicator</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                            		if(stsNsaInd == 'yearly'){
+		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		else if(stsNsaInd == 'semesterly'){
+		    		                            			textSdg += "<td colspan='3' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		else if(stsNsaInd == 'quarterly'){
+		    		                            			textSdg += "<td colspan='5' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
+		    		                                	}
+		    		                            		
+		    		                            	}
+		    		                        		
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
+		    		                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                        		
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        			if(stsNsaInd == 'yearly'){
+		    		                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                            		}else if(stsNsaInd == 'semesterly'){
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		    		                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                            		}else if(stsNsaInd == 'quarterly'){
+		    		                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
+		    		                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                            		}
+		    		                            	}
+		    		                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                        		for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        			if(stsNsaInd == 'yearly'){
+		    		                        				textSdg += "";
+		    		                                	}else if(stsNsaInd == 'semesterly'){
+		    		                            			textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td>";
+		    		                                	}else if(stsNsaInd == 'quarterly'){
+		    		                                		textSdg += "<td style='text-align:center;vertical-align:middle'>1</td><td style='text-align:center;vertical-align:middle'>2</td><td style='text-align:center;vertical-align:middle'>3</td><td style='text-align:center;vertical-align:middle'>4</td>";
+		    		                                	}
+		    		                        		}
+		    		                        		textSdg += "</tr>";
+		    		                        		textSdg += "</thead><tbody>";
+		    		                        		//isinya
+		    		                        		for (var a = 0; a < hasilGoal1.indNsa.length; a++) {
+		    		                        			var row = hasilGoal1.indNsa;
+		    		                        			var nm_program;
+		    		                        			var nm_activity;
+		    		                        			var nm_indicator;
+		    		                        			if($('#fs').is(':checked')){
+		    		                        				nm_program = row[a][3];
+		    		                        				nm_activity = row[a][5];
+		    		                        				nm_indicator = row[a][7];
+		    			                            	}else{
+		    			                            		nm_program = row[a][4];
+		    			                            		nm_activity = row[a][6];
+		    			                            		nm_indicator = row[a][8];
+		    			                            	}
+		    		                        			textSdg += "<tr style='font-size:80%;'>";
+		    		                        			textSdg += "<td>"+row[a][0]+". "+nm_program+"</td>";
+		    		                        			textSdg += "<td>"+row[a][1]+". "+nm_activity+"</td>";
+		    		                        			textSdg += "<td>"+row[a][2]+". "+nm_indicator+"</td>";
+		    		                        			textSdg += "<td>"+row[a][9]+"</td>";
+		    		                        			
+		    		                        			var dinamis=11;
+		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
+		    		                        				var nilai1="";
+		    		                                		var nilai2="";
+		    		                                		var nilai3="";
+		    		                                		var nilai4="";
+		    		                                		
+		    		                                		//cek new value
+		    		                                		if(row[a][dinamis+5]!=null){
+		    		                                			nilai1 = row[a][dinamis+5]!=null?row[a][dinamis+5]:'';
+		    		                                		}else{
+		    		                                			nilai1 = row[a][dinamis+1]!=null?row[a][dinamis+1]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+6]!=null){
+		    		                                			nilai2 = row[a][dinamis+6]!=null?row[a][dinamis+6]:'';
+		    		                                		}else{
+		    		                                			nilai2 = row[a][dinamis+2]!=null?row[a][dinamis+2]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+7]!=null){
+		    		                                			nilai3 = row[a][dinamis+7]!=null?row[a][dinamis+7]:'';
+		    		                                		}else{
+		    		                                			nilai3 = row[a][dinamis+3]!=null?row[a][dinamis+3]:'';
+		    		                                		}
+		    		                                		if(row[a][dinamis+8]!=null){
+		    		                                			nilai4 = row[a][dinamis+8]!=null?row[a][dinamis+8]:'';
+		    		                                		}else{
+		    		                                			nilai4 = row[a][dinamis+4]!=null?row[a][dinamis+4]:'';
+		    		                                		}
+		    		                                		
+		    		                                		if(stsNsaInd == 'yearly'){
+		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		                                    	}else if(stsNsaInd == 'semesterly'){
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		                                    	}else if(stsNsaInd == 'quarterly'){
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
+		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		                                    	}
+		    		                                		dinamis = dinamis+9;
+		    		                        			}
+		    		                        			textSdg += "<td>"+(row[a][10]?row[a][10]:'')+"</td>";
+		    		                        			textSdg += "<td></td>";
+		    		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
+		    		                        			textSdg += "</tr>";
+		    		                        		}
+		    		                        		
+		    		                        		textSdg += "</tbody></table></div>";
+		    		        	            	}
+		    		        	            }
+		    		        			});
+		    		            	}
+		    		            }
+		            		});
+		            	}
+		            }
+        			});
             	}
             }
         });
-        if(cat=="NSA"){
+        
+        
+        /* if(cat=="NSA"){
         	urlEntry = urls + "getnsaindicator";
         	urlEntryIsi = urls + "getnsaindicatorisi";
         	$.ajax({
@@ -593,14 +2410,14 @@
                 });
         }
         
-        /* if($("#role").val()=="all"){
-        	urlEntry = urls + "getallindicatorreport";
-        } */
+        //if($("#role").val()=="all"){
+        	//urlEntry = urls + "getallindicatorreport";
+        //}
         
         var tabelSdg = "";
         var textSdg = "";
         
-        /* if(cekSdg.length>0){ */
+        // if(cekSdg.length>0){
         	var spansdg;
         	if(sts == 'yearly'){
         		spansdg = 2;
@@ -666,6 +2483,7 @@
                 },
                 success: function (res) {
                 	var row = res.content;
+                	console.log(row);
                 	var noGoals = 1;
                 	for(var i=0;i<row.length;i++){
                 		//JUDUL BESAR SDG
@@ -747,10 +2565,11 @@
                        	}
                 		//if((row[i][16]!="0" && row[i][16]) || disaggre == ""){
                 			if(row[i][16]){
-                			textSdg += tabelSdg+"<tbody>";
+                			textSdg += row[i][19]+tabelSdg+"<tbody>";
                     		var cek=0;
                     		textSdg += "<tr style='font-size:80%;'><td></td><td>"+row[i][6]+"</td><td></td>";
                     		//console.log(cekSdg);
+                    		var role = "";
                     		for(var y=monper_year[0];y<=monper_year[1];y++){
                     			$.ajax({
                                 	url: urls + "list-entry-sdg-isi/"+row[i][2]+"/"+y+"/"+row[i][18]+"/"+row[i][16]+'/'+row[i][17]+'/'+id_monper,
@@ -760,7 +2579,7 @@
                                     async:false,
                                     success: function (res) {
                                     	var rowi = res.content;
-                                    	//console.log(res.query);
+                                    	//console.log(rowi);
                                     	if(rowi.length>0){	
                                         	for(var ii=0; ii<rowi.length;ii++){
                                         		var nilai1 = "";
@@ -768,6 +2587,7 @@
                                         		var nilai3 = "";
                                         		var nilai4 = "";
                                         		var tahun = "";
+                                        		role = rowi[ii][19]
                                         		if(row[i][16]!="0" && row[i][16]){
                                         			if(rowi[ii][13]){
                                         				nilai1 = (rowi[ii][13])?rowi[ii][13]:'';
@@ -837,12 +2657,26 @@
                                             	}
                                         		//textSdg += "<td>"+rowi[ii][19]+"</td>";
                                         	}
+                                    	}else{
+                                    		textSdg += "<td></td>";
+                                    		if(sts == 'yearly'){
+                                    			textSdg += "<td></td>";	
+                                    		}else if(sts == 'semesterly'){
+                                    			textSdg += "<td></td>";
+                                    			textSdg += "<td></td>";
+                                        	}
+                                    		else if(sts == 'quarterly'){
+                                    			textSdg += "<td></td>";
+                                    			textSdg += "<td></td>";
+                                    			textSdg += "<td></td>";
+                                    			textSdg += "<td></td>";
+                                        	}
                                     	}
                                     }
                     			});
                     		}
                     		textSdg += "<td></td>";
-                    		textSdg += "<td>"+row[i][19]+"</td></tr>";
+                    		textSdg += "<td>"+role+"</td></tr>";
                     		textSdg += "</tbody></table>";
                 		}
                 		
@@ -1106,8 +2940,22 @@
                     		textSdg += "</tbody></table>";
                 		}
                 		
-                	}
+                	} */
                 	$("#indi").append(textSdg);
+                	/* $('#indi').find(".tabel-gov-bud-goal").DataTable({
+                		"scrollX": true,
+                		"searching": false,
+                		"paging": false,
+                		"ordering": false,
+                        "info":     false
+               		}); 
+                	$('#indi').find(".tabel-nsa-bud-goal").DataTable({
+                		"scrollX": true,
+                		"searching": false,
+                		"paging": false,
+                		"ordering": false,
+                        "info":     false
+               		}); */
                 	/* $('#indi').find(".tabel-sdg").DataTable({
                 		"scrollX": true,
                 		"searching": false,
@@ -1115,15 +2963,15 @@
                 		"ordering": false,
                         "info":     false
                		}); */
-                	$('#indi').find(".tabel-gov").DataTable({
+                	/* $('#indi').find(".tabel-gov").DataTable({
                 		"scrollX": true,
                 		"searching": false,
                 		"paging": false,
                 		"ordering": false,
                         "info":     false
-               		});
-                }
-            });
+               		}); */
+               // }
+            //});
        /*  }else{
         	textSdg = "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Not Showing Report yet</b></div><p/>";
         	$("#indi").append(textSdg);
