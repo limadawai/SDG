@@ -119,6 +119,20 @@
 			    margin-left: 10px;
 			    list-style: none;
 			}
+			.dotOk {
+			  height: 25px;
+			  width: 25px;
+			  background-color: green;
+			  border-radius: 50%;
+			  display: inline-block;
+			}
+			.dotNok {
+			  height: 25px;
+			  width: 25px;
+			  background-color: red;
+			  border-radius: 50%;
+			  display: inline-block;
+			}
 		</style>
 <div th:include="admin/layout :: footer"></div>
 <script th:inline="javascript">
@@ -1624,7 +1638,9 @@
 		    		        	                		textSdg += "<td>"+(row[a][0]?row[a][0]:'')+"</td>";
 		    		        	                		textSdg += "<td>"+(row[a][1]?row[a][1]:'')+"</td>";
 		    		        	                		
-		    		        	                		var dinamis=3;
+		    		        	                		var dinamis=4;
+		    		        	                		var achive=0;
+		    		        	                		var target=0;
 		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                        				var nilai1="";
 		    		                                		var nilai2="";
@@ -1656,17 +1672,54 @@
 		    		                                		if(sts == 'yearly'){
 		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		                            				if(row[a][3]=="1"){
+	    		            										achive = achive+nilai1;
+	    		            										target = target+row[a][dinamis];
+	    		            									}else{
+	    		            										achive = nilai1;
+	    		            										target = row[a][dinamis];
+	    		            									}
 		    		                                    	}else if(sts == 'semesterly'){
 		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		                                			if(row[a][3]=="1"){
+																	achive = achive+nilai1+nilai2;
+																	target = target+row[a][dinamis];
+																}else{
+																	achive = nilai2;
+																	target = row[a][dinamis];
+																}
 		    		                                    	}else if(sts == 'quarterly'){
 		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		                                    		if(row[a][3]=="1"){
+																	achive = achive+nilai1+nilai2+nilai3+nilai4;
+																	target = target+row[a][dinamis];
+																}else{
+																	achive = nilai4;
+																	target = row[a][dinamis];
+																}
 		    		                                    	}
 		    		                                		dinamis = dinamis+9;
 		    		                        			}
 		    		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
-		    		                        			textSdg += "<td></td>";
+		    		                        			var color_sts="";
+		    		                        			if(achive){
+		                                        			if(row[a][2] == 'Increment'){
+		                                                        if((achive >= target)){
+		                                                            color_sts = '<span class="dotOk"></span>';
+		                                                        }else{
+		                                                            color_sts = '<span class="dotNok"></span>';
+		                                                        }
+		                                                    }else{
+		                                                        if((achive <= target)){
+		                                                            color_sts = '<span class="dotOk"></span>';
+		                                                        }else{
+		                                                            color_sts = '<span class="dotNok"></span>';
+		                                                        }
+		                                                    }
+		                                        		}
+		    		                        			textSdg += "<td style='text-align:center'>"+(color_sts?color_sts:'')+"</td>";
 		    		        	                		textSdg += "</tr>";
 		    		        	                	}
 		    		        	                	textSdg += "</tbody></table></div>";
@@ -1750,7 +1803,9 @@
 		    		    		        	                		textSdg += "<td>"+(row[a][0]?row[a][0]:'')+"</td>";
 		    		    		        	                		textSdg += "<td>"+(row[a][1]?row[a][1]:'')+"</td>";
 		    		    		        	                		
-		    		    		        	                		var dinamis=3;
+		    		    		        	                		var dinamis=4;
+		    		    		        	                		var achive=0;
+		    		    		        	                		var target=0;
 		    		    		                        			for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		    		                        				var nilai1="";
 		    		    		                                		var nilai2="";
@@ -1782,17 +1837,54 @@
 		    		    		                                		if(sts == 'yearly'){
 		    		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		    		                            				textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td>";
+		    		    		                            				if(row[a][3]=="1"){
+		    	    		            										achive = achive+nilai1;
+		    	    		            										target = target+row[a][dinamis];
+		    	    		            									}else{
+		    	    		            										achive = nilai1;
+		    	    		            										target = row[a][dinamis];
+		    	    		            									}
 		    		    		                                    	}else if(sts == 'semesterly'){
 		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		    		                                			textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td>";
+		    		    		                                			if(row[a][3]=="1"){
+		    																	achive = achive+nilai1+nilai2;
+		    																	target = target+row[a][dinamis];
+		    																}else{
+		    																	achive = nilai2;
+		    																	target = row[a][dinamis];
+		    																}
 		    		    		                                    	}else if(sts == 'quarterly'){
 		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[a][dinamis]!=null?row[a][dinamis]:'')+"</td>";
 		    		    		                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+nilai1+"</td><td style='text-align:center;vertical-align:middle'>"+nilai2+"</td><td style='text-align:center;vertical-align:middle'>"+nilai3+"</td><td style='text-align:center;vertical-align:middle'>"+nilai4+"</td>";
+		    		    		                                    		if(row[a][3]=="1"){
+		    																	achive = achive+nilai1+nilai2+nilai3+nilai4;
+		    																	target = target+row[a][dinamis];
+		    																}else{
+		    																	achive = nilai4;
+		    																	target = row[a][dinamis];
+		    																}
 		    		    		                                    	}
 		    		    		                                		dinamis = dinamis+9;
 		    		    		                        			}
 		    		    		                        			textSdg += "<td>"+row[a][dinamis]+"</td>";
-		    		    		                        			textSdg += "<td></td>";
+		    		    		                        			var color_sts="";
+		    		    		                        			if(achive){
+		    		                                        			if(row[a][2] == 'Increment'){
+		    		                                                        if((achive >= target)){
+		    		                                                            color_sts = '<span class="dotOk"></span>';
+		    		                                                        }else{
+		    		                                                            color_sts = '<span class="dotNok"></span>';
+		    		                                                        }
+		    		                                                    }else{
+		    		                                                        if(achive <= target){
+		    		                                                            color_sts = '<span class="dotOk"></span>';
+		    		                                                        }else{
+		    		                                                            color_sts = '<span class="dotNok"></span>';
+		    		                                                        }
+		    		                                                    }
+		    		                                        		}
+		    		    		                        			textSdg += "<td style='text-align:center'>"+(color_sts?color_sts:'')+"</td>";
 		    		    		        	                		textSdg += "</tr>";
 		    		    		        	                	}
 		    		    		        	                	textSdg += "</tbody></table></div>";

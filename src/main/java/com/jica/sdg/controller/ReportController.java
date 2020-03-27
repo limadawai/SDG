@@ -1051,7 +1051,7 @@ public class ReportController {
     		@RequestParam("end_year") Integer end_year) {
 
         StringBuilder sqlInd = new StringBuilder();
-        sqlInd.append("SELECT DISTINCT c.nm_unit,d.baseline,b.increment_decrement,\r\n");
+        sqlInd.append("SELECT DISTINCT c.nm_unit,d.baseline,b.increment_decrement,c.calculation,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
     		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = a.id_indicator and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
@@ -1105,7 +1105,7 @@ public class ReportController {
     		@RequestParam("end_year") Integer end_year) {
 
         StringBuilder sqlInd = new StringBuilder();
-        sqlInd.append("SELECT DISTINCT c.nm_unit,d.baseline,b.increment_decrement,\r\n");
+        sqlInd.append("SELECT DISTINCT c.nm_unit,d.baseline,b.increment_decrement,c.calculation,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
     		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = a.id_indicator and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
