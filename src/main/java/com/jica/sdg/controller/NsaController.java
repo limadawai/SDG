@@ -186,6 +186,15 @@ public class NsaController {
         return hasil;
     }
     
+    @GetMapping("admin/getallnsa")
+    public @ResponseBody List<Object> getallnsa() {
+    	String sql  = "select a.id_role as idrl, b.* from ref_role a left join "
+    			+ "nsa_profile b on b.id_role = a.id_role where a.cat_role = 'NSA' order by a.id_role asc";
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        return list;
+    }
+    
     @GetMapping("admin/getallinst")
     public @ResponseBody List<Object> getallinst() {
     	String sql  = "select a.id_role as idrl, b.* from ref_role a left join "
