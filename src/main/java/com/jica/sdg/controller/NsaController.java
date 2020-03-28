@@ -195,11 +195,12 @@ public class NsaController {
         return list;
     }
     
-    @GetMapping("admin/getallinst")
-    public @ResponseBody List<Object> getallinst() {
+    @GetMapping("admin/getallinst/{id_prov}")
+    public @ResponseBody List<Object> getallinst(@PathVariable("id_prov") String idprov) {
     	String sql  = "select a.id_role as idrl, b.* from ref_role a left join "
-    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' order by a.id_role asc ";
+    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' and id_prov = :id_prov order by a.id_role asc ";
         Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
         List list   = query.getResultList();
         return list;
     }

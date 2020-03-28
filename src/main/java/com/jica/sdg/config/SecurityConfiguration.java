@@ -57,7 +57,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID");
-        http.sessionManagement().maximumSessions(1).expiredUrl("/login?session-expired=true");
+//        http.sessionManagement().maximumSessions(1).expiredUrl("/login?session-expired=true");
     }
     
     @Bean

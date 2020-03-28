@@ -31,7 +31,6 @@
                         <div class="pull-left" style="width:100%">
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
                                 <option value="0" >-- Pilih Daerah --</option>
-                                <option value="00" >ALL</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="nm_ins_profil" name="nm_ins_profil" class="form-control">
@@ -322,7 +321,33 @@
             $("#id_prov").on('change', function(e){
                 var id_prov = this.value ;
                 $("#nm_ins_profil").html('');
-                if (id_prov == "00") {
+                $.ajax({
+            		type: "get",
+            		url: urls+"getallinst/"+id_prov,
+            		cache: false,
+            		success: function(resinst) {
+            			//console.log(resinst[0]);
+            			$("#nm_ins_profil").html('<option value="0" >-- Pilih Institusi --</option>');
+            			$("#tbody_ins_profile").empty();
+            			for (var i=0; i<resinst.length; i++) {
+            				$("#nm_ins_profil").append("<option value='"+resinst[i][0]+"' >"+resinst[i][3]+"</option>")
+                			var row = "<tr>";
+                			row += "<td style='text-align:center'>"+(i+1)+"."+"</td>";
+                			row += "<td>"+resinst[i][4]+"</td>";
+                			row += "<td>"+resinst[i][5]+"</td>";
+                			row += "<td>"+resinst[i][6]+"</td>";
+                			row += "<td>"+resinst[i][7]+"</td>";
+                			row += "<td>"+resinst[i][8]+"</td>";
+                			row += "<td><div style='text-align:center;'>"
+                			+ "<button data-id='"+resinst[i][1]+"' type='button' title='Update' class='btn btn-success btn-mini update'><i class='icon-save'></i></button>"
+                			+ "<button data-id='"+resinst[i][1]+"' type='button' title='Delete' class='btn btn-danger btn-mini delete'><i class='icon-trash'></i></button>"
+                			+ "</div></td>";
+                			row += "</tr>";
+                			$("#tbody_ins_profile").append(row);
+            			}
+            		}
+            	});
+                /* if (id_prov == "00") {
                 	$.ajax({
                 		type: "get",
                 		url: urls+"getallinst",
@@ -406,7 +431,7 @@
 	                    ],
 	                    select: true
 	                });
-                }
+                }*/
             });
             
             
