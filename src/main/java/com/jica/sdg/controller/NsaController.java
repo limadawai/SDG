@@ -257,6 +257,20 @@ public class NsaController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-option-role-all-profil-notojk/{id}")
+    public @ResponseBody Map<String, Object> getOptionAllProfilListNotOjk(@PathVariable("id") String id) {
+        
+        String sql  = "select * from ref_role as a where a.id_prov = :id and id_role!=1 and cat_role != 'gri_ojk' ";
+//        String sql  = "select * from ref_role as a where a.id_prov = :id and id_role!=1";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-get-option-role-gov-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionGovProfilList(@PathVariable("id") String id) {
         
