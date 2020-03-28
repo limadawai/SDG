@@ -525,6 +525,37 @@ public class EntryController {
     	best.setDate_created(new Date());
     	enbestService.saveEntryBestPractice(best);
     }
+        
+//    @GetMapping(path = "admin/delete-best-practice/{id}/{id_prov}/{id_monper}")
+//    @ResponseBody
+//    @Transactional
+//    @ResponseBody
+    @DeleteMapping("admin/delete-best-practice/{id}/{id_prov}/{id_monper}")
+    @ResponseBody
+    @Transactional
+    public void delete_best_practice(@PathVariable("id") Integer id, @PathVariable("id_prov") Integer id_prov, @PathVariable("id_monper") Integer id_monper) {
+        System.out.println("delete ya ");
+        em.createNativeQuery("delete from best_practice where id = '"+id+"' ").executeUpdate();
+//        em.createNativeQuery("delete from best_map where id_best_practice = '"+id+"' and id_prov = '"+id_prov+"' and id_monper = '"+id_monper+"' ").executeUpdate();
+//        em.createQuery(
+//          "DELETE FROM Transaction e WHERE e IN (:transactions)").
+//          setParameter("transactions", new ArrayList<Transaction>(
+//          transactions)).executeUpdate();
+        
+    }
+    
+    @DeleteMapping("admin/delete-best-map/{id}/{id_prov}/{id_monper}")
+    @ResponseBody
+    @Transactional
+    public void delete_best_map(@PathVariable("id") Integer id, @PathVariable("id_prov") String id_prov, @PathVariable("id_monper") String id_monper) {
+        
+        em.createNativeQuery("delete from best_map where id_best_practice = '"+id+"' and id_prov = '"+id_prov+"' and id_monper = '"+id_monper+"' ").executeUpdate();
+//        em.createQuery(
+//          "DELETE FROM Transaction e WHERE e IN (:transactions)").
+//          setParameter("transactions", new ArrayList<Transaction>(
+//          transactions)).executeUpdate();
+        
+    }
     
     @GetMapping("admin/get-best/{id}")
     public @ResponseBody Map<String, Object> getBest(@PathVariable("id") Integer id){
