@@ -9,6 +9,10 @@ import java.util.Optional;
 public interface IEntryApprovalService {
 
     List<EntryApproval> findAll();
+    
+    List<EntryApproval> getAllMessage();
+    
+    List<EntryApproval> getMessageByRole(Integer id_role);
 
     void save(EntryApproval app);
     
