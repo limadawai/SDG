@@ -341,6 +341,7 @@
 				$('#ident_problem').val("yearly").removeAttr("readonly");
 				$('#best_pract').val("a").removeAttr("readonly");
 				$('#status').val("").removeAttr("readonly");
+				$("#copy").prop("checked",false).removeAttr("disabled");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -362,6 +363,13 @@
 				var best_pract = $('#best_pract').val();
 				var status = $('#status').val();
 				var id_prov = $('#id_prov').val();
+				var isCopy;
+				if($("#copy").prop("checked") == true){
+					isCopy = 1;
+					alert(isCopy);
+	            }else {
+	            	isCopy = 0;
+	            }
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -433,6 +441,7 @@
 						'best_pract':best_pract,
 						'status':status,
 						'id_prov':id_prov,
+						'iscopy':isCopy
 						});
 					$.ajax({
 						type: "POST",
@@ -468,6 +477,12 @@
         				$('#ident_problem').val(val.ident_problem);
         				$('#best_pract').val(val.best_pract);
         				$('#status').val(val.status);
+        				if(val.iscopy=='1'){
+        					$("#copy").prop("checked",true);
+        				}else{
+        					$("#copy").prop("checked",false);
+        				}
+        				
 						$('#myModal').modal('show');
                     },
                 })
@@ -489,6 +504,11 @@
         				$('#ident_problem').val(val.ident_problem).attr("readonly",true);
         				$('#best_pract').val(val.best_pract).attr("readonly",true);
         				$('#status').val(val.status).attr("readonly",true);
+        				if(val.iscopy=='1'){
+        					$("#copy").prop("checked",true).attr("disabled",true);
+        				}else{
+        					$("#copy").prop("checked",false).attr("disabled",true);
+        				}
 						$('#myModal').modal('show');
                     },
                 })

@@ -45,13 +45,19 @@ public class RanRad implements Serializable {
     
     @Column(nullable = false, length = 3)
     private String id_prov;
+    
+    @Column(nullable = true, length = 1)
+    private Integer iscopy;
+    
+    @Column(nullable = true, length = 11)
+    private Integer copied_from;
 
 	public RanRad() {
 	}
 
 	public RanRad(Integer id_monper, Integer start_year, Integer end_year, String sdg_indicator, String gov_prog,
 			String nsa_prog, String gov_prog_bud, String nsa_prog_bud, String ident_problem, String best_pract,
-			String status, String id_prov) {
+			String status, String id_prov, Integer iscopy, Integer copied_from) {
 		super();
 		this.id_monper = id_monper;
 		this.start_year = start_year;
@@ -65,6 +71,24 @@ public class RanRad implements Serializable {
 		this.best_pract = best_pract;
 		this.status = status;
 		this.id_prov = id_prov;
+		this.iscopy = iscopy;
+		this.copied_from = copied_from;
+	}
+
+	public Integer getIscopy() {
+		return iscopy;
+	}
+
+	public void setIscopy(Integer iscopy) {
+		this.iscopy = iscopy;
+	}
+
+	public Integer getCopied_from() {
+		return copied_from;
+	}
+
+	public void setCopied_from(Integer copied_from) {
+		this.copied_from = copied_from;
 	}
 
 	public Integer getId_monper() {

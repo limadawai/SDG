@@ -119,15 +119,26 @@
                 type: 'get',
                 success: function(result) {
 	                    var jml = result.content[0];
-	                    console.log(jml);
 	                    if(jml){
-	                    	
 	                    	$("#badge").addClass("badge").text(jml);
 	                    }else{
 	                    	$("#badge").removeClass("badge").text("");
 	                    }
 	                }
 	            });
+                
+                //Copy RANRAN next periode
+                var today = new Date();
+				var dd = String(today.getDate()).padStart(2, '0');
+				var mm = String(today.getMonth() + 1).padStart(2, '0');
+				if(dd=="29" && mm=="03"){
+			    	$.ajax({
+		                url: urls + "copy-period",
+		                type: 'get',
+		                success: function(result) {
+		                }
+			            });
+			    }
                 
                 $.ajaxSetup({
                     error: function (x, status, error){

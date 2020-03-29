@@ -1093,6 +1093,16 @@ public class RanRadSdgController {
         return hasil;
     }
     
+    @GetMapping("admin/copy-period")
+    @Transactional
+    @ResponseBody
+    public void copyPeriod() {
+    	//COPY PERIOD
+    	em.createNativeQuery("INSERT INTO ran_rad(start_year,end_year,sdg_indicator,gov_prog,nsa_prog,gov_prog_bud,nsa_prog_bud,ident_problem,best_pract,status,id_prov,mapping_type,copied_from) "
+    			+ " select (end_year+1) as start_year,(end_year+6) as end_year,sdg_indicator,gov_prog,nsa_prog,gov_prog_bud,nsa_prog_bud,ident_problem,best_pract,'created' as status,id_prov,mapping_type,id_monper from ran_rad where iscopy = '1' ").executeUpdate();
+    	em.createNativeQuery("UPDATE ran_rad set iscopy = '0' where iscopy = '1'").executeUpdate();
+    }
+    
     @DeleteMapping("admin/delete-monPer/{id}")
 	@ResponseBody
 	public void deleteMonPer(@PathVariable("id") Integer id) {
