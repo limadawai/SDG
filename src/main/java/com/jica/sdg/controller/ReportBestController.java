@@ -255,6 +255,115 @@ public class ReportBestController {
         return hasil;
     }
     
+    @GetMapping("admin/getbest_level2_sum/{sdg}")
+    public @ResponseBody Map<String, Object> getbest_level2_sum(@RequestParam("id_monper") String id_monper, @RequestParam("year") String year, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @PathVariable("sdg") String sdg) {
+    	Query query;
+        System.out.println("id_monper = "+id_monper+" year = "+year+" id_prov = "+id_prov+" id_role = "+id_role);
+//        131313
+        if(sdg.equals("0")) {
+            if(id_role.equals("131313")){
+                String sql  = "select distinct z.id_goals, y.id_goals as kode_goals, y.nm_goals, y.nm_goals_eng from\n" +
+                            "(\n" +
+                            "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                            "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                            "b.challenges_learning\n" +
+                            "from best_map a\n" +
+                            "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            ")as z\n" +
+                            "left join sdg_goals y on z.id_goals = y.id";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+                query.setParameter("id_prov", id_prov);
+            }else{
+                String sql  = "select distinct z.id_goals, y.id_goals as kode_goals, y.nm_goals, y.nm_goals_eng from\n" +
+                            "(\n" +
+                            "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                            "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                            "b.challenges_learning\n" +
+                            "from best_map a\n" +
+                            "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            ")as z\n" +
+                            "left join sdg_goals y on z.id_goals = y.id";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+//                query.setParameter("id_role", id_role);
+                query.setParameter("id_prov", id_prov);
+    //            System.out.println("sql nya = "+sql);
+            }
+        }else{
+            String[] arrOfStr = sdg.split(","); 
+            StringBuffer target = new StringBuffer();
+            if(arrOfStr.length>0) {
+                for (int i = 0; i < arrOfStr.length; i++) {
+                    String[] arrOfStr1 = arrOfStr[i].split("---");
+                    int cek=1;
+                    for(int j=0;j<arrOfStr1.length;j++) {
+                        cek = (cek==4)?1:cek;
+                        if(!arrOfStr1[j].equals("0") && cek==1) {
+                            target.append("'"+arrOfStr1[j]+"',");
+                        }
+                        cek = cek+1;
+                    }
+                }
+            }else{
+                String[] arrOfStr1 = sdg.split("---");
+                int cek=1;
+                for(int j=0;j<arrOfStr1.length;j++) {
+                    cek = (cek==4)?1:cek;
+                    if(!arrOfStr1[j].equals("0") && cek==1) {
+                        target.append("'"+arrOfStr1[j]+"',");
+                    }
+                    cek = cek+1;
+                }
+            }
+            String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
+
+            String tar = (hasiltarget.equals(""))?"":" and a.id_goals in("+hasiltarget+") ";
+            if(id_role.equals("131313")){
+                String sql  = "select distinct z.id_goals, y.id_goals as kode_goals, y.nm_goals, y.nm_goals_eng from\n" +
+                            "(\n" +
+                            "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                            "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                            "b.challenges_learning\n" +
+                            "from best_map a\n" +
+                            "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+tar+"\n" +
+                            ")as z\n" +
+                            "left join sdg_goals y on z.id_goals = y.id";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+                query.setParameter("id_prov", id_prov);
+            }else{
+                String sql  = "select distinct z.id_goals, y.id_goals as kode_goals, y.nm_goals, y.nm_goals_eng from\n" +
+                            "(\n" +
+                            "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                            "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                            "b.challenges_learning\n" +
+                            "from best_map a\n" +
+                            "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+tar+"\n" +
+                            ")as z\n" +
+                            "left join sdg_goals y on z.id_goals = y.id";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+//                query.setParameter("id_role", id_role);
+                query.setParameter("id_prov", id_prov);
+    //            System.out.println("sql nya = "+sql);
+            }
+        }
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/getbest_level3/{sdg}")
     public @ResponseBody Map<String, Object> getbest_level3(@RequestParam("id_monper") String id_monper, @RequestParam("year") String year, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @RequestParam("id_goals") String id_goals, @PathVariable("sdg") String sdg) {
     	Query query;
@@ -364,6 +473,128 @@ public class ReportBestController {
                 query.setParameter("id_monper", id_monper);
                 query.setParameter("year", year);
                 query.setParameter("id_role", id_role);
+                query.setParameter("id_prov", id_prov);
+                query.setParameter("id_goals", id_goals);
+    //            System.out.println("sql nya = "+sql);
+            }
+        }
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/getbest_level3_sum/{sdg}")
+    public @ResponseBody Map<String, Object> getbest_level3_sum(@RequestParam("id_monper") String id_monper, @RequestParam("year") String year, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @RequestParam("id_goals") String id_goals, @PathVariable("sdg") String sdg) {
+    	Query query;
+        System.out.println("id_monper = "+id_monper+" year = "+year+" id_prov = "+id_prov+" id_role = "+id_role);
+//        131313
+        if(sdg.equals("0")) {
+            if(id_role.equals("131313")){
+                String sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                            "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                            "b.challenges_learning, c.nm_role,\n" +
+                            "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "from best_map a\n" +
+                            "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                            "left join ref_role c on b.id_role = c.id_role\n" +
+                            "left join sdg_target d on a.id_target = d.id\n" +
+                            "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
+                            "and a.id_goals = :id_goals ";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+                query.setParameter("id_prov", id_prov);
+                query.setParameter("id_goals", id_goals);
+            }else{
+                String sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                            "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                            "b.challenges_learning, c.nm_role,\n" +
+                            "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "from best_map a\n" +
+                            "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                            "left join ref_role c on b.id_role = c.id_role\n" +
+                            "left join sdg_target d on a.id_target = d.id\n" +
+                            "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
+                            "and a.id_goals = :id_goals ";
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+//                query.setParameter("id_role", id_role);
+                query.setParameter("id_prov", id_prov);
+                query.setParameter("id_goals", id_goals);
+    //            System.out.println("sql nya = "+sql);
+            }
+    	}else {
+            String[] arrOfStr = sdg.split(","); 
+            StringBuffer target = new StringBuffer();
+            if(arrOfStr.length>0) {
+                for (int i = 0; i < arrOfStr.length; i++) {
+                    String[] arrOfStr1 = arrOfStr[i].split("---");
+                    int cek=1;
+                    for(int j=0;j<arrOfStr1.length;j++) {
+                        cek = (cek==4)?1:cek;
+                        if(!arrOfStr1[j].equals("0") && cek==2) {
+                            target.append("'"+arrOfStr1[j]+"',");
+                        }
+                        cek = cek+1;
+                    }
+                }
+            }else{
+                String[] arrOfStr1 = sdg.split("---");
+                int cek=1;
+                for(int j=0;j<arrOfStr1.length;j++) {
+                    cek = (cek==4)?1:cek;
+                    if(!arrOfStr1[j].equals("0") && cek==2) {
+                        target.append("'"+arrOfStr1[j]+"',");
+                    }
+                    cek = cek+1;
+                }
+            }
+            String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
+
+            String tar = (hasiltarget.equals(""))?"":" and a.id_target in("+hasiltarget+") ";
+            if(id_role.equals("131313")){
+                String sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                            "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                            "b.challenges_learning, c.nm_role,\n" +
+                            "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "from best_map a\n" +
+                            "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                            "left join ref_role c on b.id_role = c.id_role\n" +
+                            "left join sdg_target d on a.id_target = d.id\n" +
+                            "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
+                            "and a.id_goals = :id_goals "+tar;
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+                query.setParameter("id_prov", id_prov);
+                query.setParameter("id_goals", id_goals);
+            }else{
+                String sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                            "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                            "b.challenges_learning, c.nm_role,\n" +
+                            "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "from best_map a\n" +
+                            "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                            "left join ref_role c on b.id_role = c.id_role\n" +
+                            "left join sdg_target d on a.id_target = d.id\n" +
+                            "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
+                            "and a.id_goals = :id_goals "+tar;
+                query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+//                query.setParameter("id_role", id_role);
                 query.setParameter("id_prov", id_prov);
                 query.setParameter("id_goals", id_goals);
     //            System.out.println("sql nya = "+sql);
