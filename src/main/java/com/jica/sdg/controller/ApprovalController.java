@@ -438,7 +438,14 @@ public class ApprovalController {
     @GetMapping("admin/count-pesan")
     public @ResponseBody Map<String, Object> getPesan(HttpSession session) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
-        String sql  = "select count(id) from entry_approval where id_role ='"+id_role+"' and approval = '3' and (read_date is null or read_date='') ";
+    	Optional<Role> role = roleService.findOne(id_role);
+    	String privilege = role.get().getPrivilege();
+    	String sql;
+    	if(privilege.equals("SUPER")) {
+    		sql  = "select count(id) from entry_approval where approval = '3' and (read_date is null or read_date='') ";
+    	}else {
+    		sql  = "select count(id) from entry_approval where id_role ='"+id_role+"' and approval = '3' and (read_date is null or read_date='') ";
+    	}
         Query query = em.createNativeQuery(sql);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();

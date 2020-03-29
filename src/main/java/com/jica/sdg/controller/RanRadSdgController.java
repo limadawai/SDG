@@ -1056,8 +1056,33 @@ public class RanRadSdgController {
     
     @PostMapping(path = "admin/save-monPer", consumes = "application/json", produces = "application/json")
 	@ResponseBody
+	@Transactional
 	public void saveMonPer(@RequestBody RanRad sdg) {
     	monPerService.saveMonPeriod(sdg);
+    	Integer id_monper = sdg.getId_monper();
+    	if(sdg.getStatus().equals("completed")) {
+    		//COPY GOALS
+        	em.createNativeQuery("DELETE FROM history_sdg_goals where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_goals(id_old,id_goals,id_monper,nm_goals,nm_goals_eng) "
+        			+ " select id,id_goals,'"+id_monper+"' as id_monper,nm_goals,nm_goals_eng from sdg_goals").executeUpdate();
+        	//COPY TARGET
+        	em.createNativeQuery("DELETE FROM history_sdg_target where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_target(id_old,id_target,id_goals,id_monper,nm_target,nm_target_eng) "
+        			+ " select id,id_target,id_goals,'"+id_monper+"' as id_monper,nm_target,nm_target_eng from sdg_target").executeUpdate();
+        	//COPY INDICATOR
+        	em.createNativeQuery("DELETE FROM history_sdg_indicator where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_indicator(id_old,id_indicator,id_target,id_goals,id_monper,nm_indicator,nm_indicator_eng,unit,increment_decrement) "
+        			+ " select id,id_indicator,id_target,id_goals,'"+id_monper+"' as id_monper,nm_indicator,nm_indicator_eng,unit,increment_decrement from sdg_indicator").executeUpdate();
+        	//COPY DISAGGREGATION
+        	em.createNativeQuery("DELETE FROM history_sdg_ranrad_disaggre where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_ranrad_disaggre(id_old,id_disaggre,id_indicator,id_monper,nm_disaggre,nm_disaggre_eng) "
+        			+ " select id,id_disaggre,id_indicator,'"+id_monper+"' as id_monper,nm_disaggre,nm_disaggre_eng from sdg_ranrad_disaggre").executeUpdate();
+        	//COPY DISAGGREGATION DETAIL
+        	em.createNativeQuery("DELETE FROM history_sdg_ranrad_disaggre_detail where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_ranrad_disaggre_detail(id_old,id_disaggre,id_monper,desc_disaggre,desc_disaggre_eng) "
+        			+ " select id,id_disaggre,'"+id_monper+"' as id_monper,desc_disaggre,desc_disaggre_eng from sdg_ranrad_disaggre_detail").executeUpdate();
+        }
+    	
 	}
     
     @GetMapping("admin/get-monPer/{id}")
