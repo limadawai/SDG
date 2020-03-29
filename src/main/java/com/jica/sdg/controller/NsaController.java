@@ -186,11 +186,21 @@ public class NsaController {
         return hasil;
     }
     
-    @GetMapping("admin/getallinst")
-    public @ResponseBody List<Object> getallinst() {
+    @GetMapping("admin/getallnsa")
+    public @ResponseBody List<Object> getallnsa() {
     	String sql  = "select a.id_role as idrl, b.* from ref_role a left join "
-    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' order by a.id_role asc ";
+    			+ "nsa_profile b on b.id_role = a.id_role where a.cat_role = 'NSA' order by a.id_role asc";
         Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallinst/{id_prov}")
+    public @ResponseBody List<Object> getallinst(@PathVariable("id_prov") String idprov) {
+    	String sql  = "select a.id_role as idrl, b.* from ref_role a left join "
+    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' and id_prov = :id_prov order by a.id_role asc ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", idprov);
         List list   = query.getResultList();
         return list;
     }
