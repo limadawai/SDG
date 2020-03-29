@@ -2,6 +2,8 @@ package com.jica.sdg.repository;
 
 import com.jica.sdg.model.EntryApproval;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -28,5 +30,11 @@ public interface EntryApprovalRepository extends CrudRepository<EntryApproval, I
     @Modifying(clearAutomatically = true)
     @Query(value = "update entry_approval set approval='2' WHERE id_monper = :id_monper and year = :year and type = :type and periode = :periode and approval = '4' ",nativeQuery = true)
     void updateUNdoneApproval(@Param("id_monper") Integer id_monper, @Param("year") Integer year, @Param("type") String type, @Param("periode") String periode);
+
+    @Query(value = "select * from entry_approval where approval = '3' order by id_monper, year, periode ",nativeQuery = true)
+    public List<EntryApproval> getAllMessage();
+    
+    @Query(value = "select * from entry_approval where id_role =:id_role and approval = '3' order by id_monper, year, periode ",nativeQuery = true)
+    public List<EntryApproval> getMessageByRole(@Param("id_role") Integer id_role);
 
 }

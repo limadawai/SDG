@@ -435,4 +435,37 @@ public class ApprovalController {
         return "admin/approval/problem_identify";
     }
     
+    @GetMapping("admin/count-pesan")
+    public @ResponseBody Map<String, Object> getPesan(HttpSession session) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+        String sql  = "select count(id) from entry_approval where id_role ='"+id_role+"' and approval = '3' and (read_date is null or read_date='') ";
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/read-message")
+    @Transactional
+    public String readPesan(HttpSession session,Model model) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> role = roleService.findOne(id_role);
+    	String privilege = role.get().getPrivilege();
+    	if(privilege.equals("SUPER")) {
+    		model.addAttribute("data", approvalService.getAllMessage());
+    	}else {
+    		model.addAttribute("data", approvalService.getMessageByRole(id_role));
+    		String sql  = "select count(id) from entry_approval where id_role ='"+id_role+"' and approval = '3' and (read_date is null or read_date='') ";
+            Query query = em.createNativeQuery(sql);
+            List list   = query.getResultList();
+            if(!list.get(0).toString().equals("0")) {
+            	em.createNativeQuery("UPDATE entry_approval set read_date = NOW() where id_role ='"+id_role+"' and approval = '3' and (read_date is null or read_date='') ").executeUpdate();
+            }
+    	}        
+    	model.addAttribute("name", session.getAttribute("name"));
+    	model.addAttribute("lang", session.getAttribute("bahasa"));
+        return "admin/role_manajemen/message";
+    }
+    
 }
