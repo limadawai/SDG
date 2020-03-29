@@ -73,5 +73,15 @@ public class EntryApprovalService implements IEntryApprovalService{
 	public void deleteshow(Integer year, Integer id_monper, String type, String periode) {
 		repo_report.deleteShowreport(year, id_monper, type, periode);
 	}
+
+	@Override
+	public List<EntryApproval> getAllMessage() {
+		return repo.getAllMessage();
+	}
+
+	@Override
+	public List<EntryApproval> getMessageByRole(Integer id_role) {
+		return repo.getMessageByRole(id_role);
+	}
 	
 }

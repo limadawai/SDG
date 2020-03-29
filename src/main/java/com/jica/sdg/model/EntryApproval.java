@@ -47,12 +47,16 @@ public class EntryApproval implements Serializable {
     
     @Column(nullable = true,name = "description")
     private String description;
+    
+    @Column(nullable = true,name = "read_date")
+    @Temporal(TemporalType.DATE)
+    private Date read_date;
 
     public EntryApproval() {
     }
 
-	public EntryApproval(Integer id, Integer id_form_type, Integer id_role, Integer id_monper, Integer year,
-			String approval, Date approval_date, String type, String periode, String description) {
+    public EntryApproval(Integer id, Integer id_form_type, Integer id_role, Integer id_monper, Integer year,
+			String approval, Date approval_date, String type, String periode, String description, Date read_date) {
 		super();
 		this.id = id;
 		this.id_form_type = id_form_type;
@@ -64,9 +68,11 @@ public class EntryApproval implements Serializable {
 		this.type = type;
 		this.periode = periode;
 		this.description = description;
+		this.read_date = read_date;
 	}
 
-    public String getPeriode() {
+
+	public String getPeriode() {
         return periode;
     }
 
@@ -146,5 +152,13 @@ public class EntryApproval implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Date getRead_date() {
+		return read_date;
+	}
+
+	public void setRead_date(Date read_date) {
+		this.read_date = read_date;
 	}    
 }

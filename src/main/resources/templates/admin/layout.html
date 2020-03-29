@@ -81,6 +81,13 @@
                 <li class="" style="margin-top:10px;background:none;padding:10px;">
                     <span id="welcome" style="color:white;">Welcome Super</span>
                 </li>
+                <li class="" style="margin-top:12px;background:none;padding:10px 30px;">
+                    <form >
+                        <a th:href="@{/admin/read-message}">
+                            <i style="color:white;" class="icon icon-envelope icon-white"> <span id="badge" class=""> </span></i>
+                        </a>
+                    </form>
+                </li>
                 <li class="" style="margin-top:7px;background:none;padding:10px;">
                     <div class="flipswitch">
                         <input id="fs" type="checkbox" name="flipswitch" class="flipswitch-cb" checked>
@@ -105,6 +112,22 @@
                 var lang = [[${lang}]];
                 var name = [[${name}]];
                 $("#welcome").html("Welcome, "+name);
+                
+                //Get Jml Pesan Reject
+                $.ajax({
+                url: urls + "count-pesan",
+                type: 'get',
+                success: function(result) {
+	                    var jml = result.content[0];
+	                    console.log(jml);
+	                    if(jml){
+	                    	
+	                    	$("#badge").addClass("badge").text(jml);
+	                    }else{
+	                    	$("#badge").removeClass("badge").text("");
+	                    }
+	                }
+	            });
                 
                 $.ajaxSetup({
                     error: function (x, status, error){
