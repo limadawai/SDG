@@ -18,6 +18,24 @@
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
+                <div class="pull-left" style="width:100%">
+                    <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                        <option value="0" >-- Pilih --</option>
+                        <option value="00" >ALL</option>
+                        <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+                    </select>
+                    <select id="nm_nsa_profil" name="idrole" class="form-control">
+                        <option value="0" >-- Pilih --</option>
+                        <!--<option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
+                    </select>
+                    <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none;">
+                        <span class="lang_indo">Tambah</span>
+                        <span class="lang_eng" style="display: none">Add</span>
+                    </button>
+                    <button type="button" id="export" class="btn btn-primary pull-right" style="display: none;margin-right:5px;">
+                        <span class="lang_indo">Export Excel</span>
+                    </button>
+                </div>
                 <div class="widget-box">
                     <div class="widget-title lang_eng" id="judul-eng" style="display: none">
                         <span class="icon"><i class="icon-tasks"></i></span>
@@ -28,23 +46,6 @@
                         <h5>Tabel Profil NSA</h5>
                     </div>
                     <div class="widget-content">
-                        <div class="pull-left" style="width:100%">
-                            <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
-                                <option value="0" >-- Pilih --</option>
-                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
-                            </select>
-                            <select id="nm_nsa_profil" name="idrole" class="form-control">
-                                <option value="0" >-- Pilih --</option>
-                                <!--<option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>-->
-                            </select>
-                            <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none;">
-                                <span class="lang_indo">Tambah</span>
-                                <span class="lang_eng" style="display: none">Add</span>
-                            </button>
-                            <button type="button" id="export" class="btn btn-primary pull-right" style="display: none;margin-right:5px;">
-                                <span class="lang_indo">Export to Excel</span>
-                            </button>
-                        </div>
 <!--                        <div class="row-fluid">
                             <div class="span6">
                             </div>
@@ -709,20 +710,46 @@
             
             $("#id_prov").on('change', function(e){
                 var id_prov = this.value ;
-                $.ajax({
-                    type: "GET",
-                    url: urls+'list-get-option-role-nsa-profil/'+id_prov,
-                    success: function (result) {
-                        $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
-                        var array = result.content;
-                        if (array != '') {
-                            for (i in array) {
-                                $("#nm_nsa_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
-                            }
-                        }
-                        
-                    }
-                });
+                if (id_prov == "00") {
+                	$.ajax({
+	                    type: "GET",
+	                    url: urls+'getallnsa',
+	                    success: function (result) {
+	                        //console.log(result[0]);
+	                        $("#export").show();
+	                        for (var i=0; i<result.length; i++) {
+	                        	var row = "<tr>";
+	                        	row += "<td style='text-align:center;'>"+(i+1)+"."+"</td>";
+	                        	row += "<td>"+result[i][4]+"</td>";
+	                        	row += "<td>"+result[i][5]+"</td>";
+	                        	row += "<td>"+result[i][6]+"</td>";
+	                        	row += "<td>"+result[i][7]+"</td>";
+	                        	row += "<td>"+result[i][8]+"</td>";
+	                        	row += "<td><div style='text-align:center;'>"
+	                        	+ "<button data-id='"+result[i][0]+"' type='button' title='Update' class='btn btn-success btn-mini update'><i class='icon-save'></i></button>"
+	                        	+ "<button data-id='"+result[i][1]+"' type='button' title='Delete' class='btn btn-danger btn-mini delete'><i class='icon-trash'></i></button>"
+	                        	+ "</div></td>";
+	                        	row += "</tr>";
+	                        	$("#tbody_ins_profile").append(row);
+	                        }
+	                    }
+	                });
+                } else {
+	                $.ajax({
+	                    type: "GET",
+	                    url: urls+'list-get-option-role-nsa-profil/'+id_prov,
+	                    success: function (result) {
+	                        $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
+	                        var array = result.content;
+	                        if (array != '') {
+	                            for (i in array) {
+	                                $("#nm_nsa_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+	                            }
+	                        }
+	                        
+	                    }
+	                });
+                }
             });
             
             $("#nm_nsa_profil").on('change', function(e){
