@@ -322,242 +322,198 @@
                 var id_prov = this.value ;
                 $("#nm_ins_profil").html('');
                 $.ajax({
-            		type: "get",
-            		url: urls+"getallinst/"+id_prov,
-            		cache: false,
-            		success: function(resinst) {
-            			//console.log(resinst[0]);
-            			$("#nm_ins_profil").html('<option value="0" >-- Pilih Institusi --</option>');
-            			$("#tbody_ins_profile").empty();
-            			for (var i=0; i<resinst.length; i++) {
-            				$("#nm_ins_profil").append("<option value='"+resinst[i][0]+"' >"+resinst[i][3]+"</option>")
-                			var row = "<tr>";
-                			row += "<td style='text-align:center'>"+(i+1)+"."+"</td>";
-                			row += "<td>"+resinst[i][4]+"</td>";
-                			row += "<td>"+resinst[i][5]+"</td>";
-                			row += "<td>"+resinst[i][6]+"</td>";
-                			row += "<td>"+resinst[i][7]+"</td>";
-                			row += "<td>"+resinst[i][8]+"</td>";
-                			row += "<td><div style='text-align:center;'>"
-                			+ "<button data-id='"+resinst[i][1]+"' type='button' title='Update' class='btn btn-success btn-mini update'><i class='icon-save'></i></button>"
-                			+ "<button data-id='"+resinst[i][1]+"' type='button' title='Delete' class='btn btn-danger btn-mini delete'><i class='icon-trash'></i></button>"
-                			+ "</div></td>";
-                			row += "</tr>";
-                			$("#tbody_ins_profile").append(row);
-            			}
-            		}
-            	});
-                /* if (id_prov == "00") {
+                    type: "GET",
+                    url: urls+'list-get-option-role-ins-profil/'+id_prov,
+                    success: function (result) {
+                        $("#nm_ins_profil").html('<option value="0" >-- Pilih Institusi --</option>');
+                        $("#nm_ins_profil").append("<option value='00'>-- ALL --</option>");
+                        var array = result.content;
+                        if (array != '') {
+                            for (i in array) {
+                                $("#nm_ins_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+                            }
+                        }
+                    }
+                });
+                //grid
+                $('#tabel-ins-profile').DataTable({
+                    responsive: true,
+                    sDom: 'lrtip',
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "bDestroy": true,
+                    "ajax": {
+                        "url": urls+'list-getid-ins-profil/'+$("#nm_ins_profil").val(),
+                        dataSrc: 'content',
+                    },
+                    "searching": false,
+                    "columns": [
+                        {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                            '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                        }}
+                    ],
+                    "columnDefs": [
+                    ],
+                    select: true
+                });
+            });
+            
+            
+            $("#nm_ins_profil").on('change', function(e){
+                var id = this.value ;
+                var idprov = $("#id_prov").val();
+                if (id == "00") {
                 	$.ajax({
-                		type: "get",
-                		url: urls+"getallinst",
-                		cache: false,
-                		success: function(resinst) {
-                			//console.log(resinst[0]);
-                			$("#nm_ins_profil").html('<option value="0" >-- Pilih Institusi --</option>');
+                		type: "GET",
+                		url: urls+"getallinst/"+idprov,
+                		success: function(res) {
+                			//console.log(res);
                 			$("#tbody_ins_profile").empty();
-                			for (var i=0; i<resinst.length; i++) {
-                				$("#nm_ins_profil").append("<option value='"+resinst[i][0]+"' >"+resinst[i][3]+"</option>")
-                    			var row = "<tr>";
-                    			row += "<td style='text-align:center'>"+(i+1)+"."+"</td>";
-                    			row += "<td>"+resinst[i][4]+"</td>";
-                    			row += "<td>"+resinst[i][5]+"</td>";
-                    			row += "<td>"+resinst[i][6]+"</td>";
-                    			row += "<td>"+resinst[i][7]+"</td>";
-                    			row += "<td>"+resinst[i][8]+"</td>";
-                    			row += "<td><div style='text-align:center;'>"
-                    			+ "<button data-id='"+resinst[i][1]+"' type='button' title='Update' class='btn btn-success btn-mini update'><i class='icon-save'></i></button>"
-                    			+ "<button data-id='"+resinst[i][1]+"' type='button' title='Delete' class='btn btn-danger btn-mini delete'><i class='icon-trash'></i></button>"
-                    			+ "</div></td>";
-                    			row += "</tr>";
-                    			$("#tbody_ins_profile").append(row);
+                			for (var i=0; i<res.length; i++) {
+                				var row = "<tr>";
+                				row += "<td style='text-align:center;'>"+(i+1)+"</td>";
+                				row += "<td>"+res[i][4]+"</td>"
+                				row += "<td>"+res[i][5]+"</td>"
+                				row += "<td>"+res[i][6]+"</td>"
+                				row += "<td style='text-align:center;'>"+res[i][7]+"</td>"
+                				row += "<td>"+res[i][8]+"</td>"
+                				row += "<td><div style='text-align:center;'>"
+                				+ "<button data-id='"+res[i][0]+"' type='button' title='Update' class='btn btn-success btn-mini update'><i class='icon-save'></i></button>"
+                				+ "<button data-id='"+res[i][1]+"' type='button' title='Delete' class='btn btn-danger btn-mini update'><i class='icon-trash'></i></button>"
+                				+ "</div></td>"
+                				row += "</tr>";
+                				$("#tbody_ins_profile").append(row);
                 			}
                 		}
                 	});
                 } else {
 	                $.ajax({
 	                    type: "GET",
-	                    url: urls+'list-get-option-role-ins-profil/'+id_prov,
-	                    success: function (result) {
-	                        $("#nm_ins_profil").html('<option value="0" >-- Pilih --</option>');
-	                        var array = result.content;
-	                        if (array != '') {
-	                            for (i in array) {
-	                                $("#nm_ins_profil").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
+	                    url: urls+'list-getid-ins-profil/'+id,
+	                    success: function (result1) {
+	                        if(result1.content[0] ==  null){
+	                            if($("#nm_ins_profil").val()=="0"){
+	                            	$("#tambah").hide();
+	                            }else if(id_role == id_role){
+	                                $("#tambah").show();
+	                            }else if(id_role == '1'){
+	                                $("#tambah").show();
+	                            }else{
+	                                $("#tambah").hide();
 	                            }
+	                            //grid
+	                            $('#tabel-ins-profile').DataTable({
+	                                responsive: true,
+	                                sDom: 'lrtip',
+	                                "bLengthChange": false,
+	                                "cache": false,
+	                                "autoWidth": true,
+	                                "responsive":true,
+	                                "bDestroy": true,
+	                                "ajax": {
+	                                    "url": urls+'list-getid-ins-profil/'+id,
+	                                    dataSrc: 'content',
+	                                },
+	                                "searching": false,
+	                                "columns": [
+	                                    {"data": function (row, data, index, display) {
+	                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+	                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+	                                        '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+	                                    }}
+	                                ],
+	                                "columnDefs": [
+	                                ],
+	                                select: true
+	                            });
+	                            //tutup kosong
+	                        }else{
+	                            $('#tabel-ins-profile').DataTable({
+	                                responsive: true,
+	                                sDom: 'lrtip',
+	                                "bLengthChange": false,
+	                                "cache": false,
+	                                "autoWidth": true,
+	                                "responsive":true,
+	                                "bDestroy": true,
+	                                "ajax": {
+	                                    "url": urls+'list-getid-ins-profil/'+id,
+	                                    dataSrc: 'content',
+	                                },
+	                                "searching": false,
+	                                "columns": [
+	                                    {"data": function (row, data, index, display) {
+	                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+	                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+	                                        '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+	                                    }}
+	                                ],
+	                                "columnDefs": [
+	                                ],
+	                                select: true
+	                            });	
 	                        }
 	                    }
 	                });
-	                //grid
-	                $('#tabel-ins-profile').DataTable({
-	                    responsive: true,
-	                    sDom: 'lrtip',
-	                    "bLengthChange": false,
-	                    "cache": false,
-	                    "autoWidth": true,
-	                    "responsive":true,
-	                    "bDestroy": true,
-	                    "ajax": {
-	                        "url": urls+'list-getid-ins-profil/'+$("#nm_ins_profil").val(),
-	                        dataSrc: 'content',
-	                    },
-	                    "searching": false,
-	                    "columns": [
-	                        {"data": function (row, data, index, display) {
-	                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-	                        }},
-	                        {"data": function (row, data, index, display) {
-	                            return "<div style='font-size:90%;'>"+row.achievement+"</div>";
-	                        }},
-	                        {"data": function (row, data, index, display) {
-	                            return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
-	                        }},
-	                        {"data": function (row, data, index, display) {
-	                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-	                        }},
-	                        {"data": function (row, data, index, display) {
-	                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-	                        }},
-	                        {"data": function (row, data, index, display) {
-	                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-	                        }},
-	                        {"data": function (row, data, index, display) {
-	                            var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-	                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
-	                            '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-	                        }}
-	                    ],
-	                    "columnDefs": [
-	                    ],
-	                    select: true
-	                });
-                }*/
-            });
-            
-            
-            $("#nm_ins_profil").on('change', function(e){
-                var id = this.value ;
-                
-                $.ajax({
-                    type: "GET",
-                    url: urls+'list-getid-ins-profil/'+id,
-                    success: function (result1) {
-                        if(result1.content[0] ==  null){
-//                            jika kosong
-//                            $('#id_inst').val('');
-//                            $('#id_role').val(id);
-//                            $('#nm_inst').val('');
-//                            $('#achievement').val('');
-//                            $('#loc_inst').val('');
-//                            $('#beneficiaries').val('');
-//                            $('#year_impl').val('');
-//                            $('#major_part').val('');
-//
-//                            $('.addModal').modal("show");
-//                            $('#simpan_').show();
-//                            $('#update_').hide();
-                            if($("#nm_ins_profil").val()=="0"){
-                            	$("#tambah").hide();
-                            }else if(id_role == id_role){
-                                $("#tambah").show();
-                            }else if(id_role == '1'){
-                                $("#tambah").show();
-                            }else{
-                                $("#tambah").hide();
-                            }
-                            
-                            //grid
-                            $('#tabel-ins-profile').DataTable({
-                                responsive: true,
-                                sDom: 'lrtip',
-                                "bLengthChange": false,
-                                "cache": false,
-                                "autoWidth": true,
-                                "responsive":true,
-                                "bDestroy": true,
-                                "ajax": {
-                                    "url": urls+'list-getid-ins-profil/'+id,
-                                    dataSrc: 'content',
-                                },
-                                "searching": false,
-                                "columns": [
-                                    {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
-                                        '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                    }}
-                                ],
-                                "columnDefs": [
-                                ],
-                                select: true
-                            });
-                            //tutup kosong
-                        }else{
-                            $('#tabel-ins-profile').DataTable({
-                                responsive: true,
-                                sDom: 'lrtip',
-                                "bLengthChange": false,
-                                "cache": false,
-                                "autoWidth": true,
-                                "responsive":true,
-                                "bDestroy": true,
-                                "ajax": {
-                                    "url": urls+'list-getid-ins-profil/'+id,
-                                    dataSrc: 'content',
-                                },
-                                "searching": false,
-                                "columns": [
-                                    {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.loc_inst+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        var dataid = row.id_inst+'###'+row.nm_inst+'###'+row.achievement+'###'+row.loc_inst+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
-                                        '<button data-id="'+row.id_inst+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                    }}
-                                ],
-                                "columnDefs": [
-                                ],
-                                select: true
-                            });	
-                        }
-                    }
-                });
-                
-                
+                }
             });
             
             $('#tambah').on('click', function(e){
@@ -936,10 +892,10 @@
     $("#export").on("click", function(){
     	var idprov = $("#id_prov").val();
     	var idrole = $("#nm_ins_profil").val();
-    	if (idprov == "0" && idrole == "0") {
+    	if (idrole == "0") {
     		swal("Anda harus memilih institusi");
-    	} else if(idprov == "00" && idrole == "0") {
-    		window.open(urls+"nsa/dowload_inst_all", "_blank");
+    	} else if(idrole == "00") {
+    		window.open(urls+"nsa/dowload_inst_all/"+idprov, "_blank");
     	} else {
     		window.open(urls+"nsa/dowload_inst_profil/"+idrole, "_blank");
     	}

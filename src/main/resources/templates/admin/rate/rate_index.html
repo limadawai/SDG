@@ -49,6 +49,10 @@
                             <select id="period" name="period" class="form-control">
                                 <option value="0" ><span class=""> -- Pilih -- </span> </option>
                             </select>
+                            <select id="pil_prog" name="pil_prog" class="form-control">
+                                <option value="budget" ><span class=""> Budget </span> </option>
+                                <option value="indicator" ><span class=""> Indicator </span> </option>
+                            </select>
                             <div id="datetimepicker1" class="input-append date">
                                 <input id="time_activity" class="input-small" name="time_activity" data-format="yyyy/MM/dd" type="text"></input>
                                 <span class="add-on">
@@ -437,33 +441,33 @@
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
 	        function bhs(cek){
-				if(cek){
-					$(".lang_indo").show();
-	        		$(".lang_eng").hide();
-	        		titleDel = "Anda Yakin";
-	        		messDel = "Menghapus Data?";
-	        		buttDel = 'Ya, Hapus data ini!';
-	        		titleOk	= "Hapus";
+                    if(cek){
+                        $(".lang_indo").show();
+                        $(".lang_eng").hide();
+                        titleDel = "Anda Yakin";
+                        messDel = "Menghapus Data?";
+                        buttDel = 'Ya, Hapus data ini!';
+                        titleOk	= "Hapus";
 	    	        messOk = "Data berhasil dihapus";
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
 	    	        titleApp = "Anda Yakin";
 	    	        messApp = "Apply Data ini?";
 	    	        buttApp = 'Ya, Apply data ini!';
-	        	}else{	    	        
-	    	        $(".lang_indo").hide();
-	        		$(".lang_eng").show();
-	        		titleDel = "Are you sure";
-	        		messDel = "Delete this data?";
-	        		buttDel = 'Yes, Delete this data!';
-	        		titleOk	= "Delete";
+                    }else{	    	        
+                        $(".lang_indo").hide();
+                        $(".lang_eng").show();
+                        titleDel = "Are you sure";
+                        messDel = "Delete this data?";
+                        buttDel = 'Yes, Delete this data!';
+                        titleOk	= "Delete";
 	    	        messOk = "Delete successful";
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
 	    	        titleApp = "Are you sure";
 	    	        messApp = "Apply this data?";
 	    	        buttApp = 'Ya, Apply this data!';
-	        	}
+                    }
 	        }
             if(lang){
                     bhs(lang=="0");
@@ -475,8 +479,9 @@
 
             $('#fs').on('change', function(e){
                 grid_modal();
-                grid();
+//                grid();
                 bhs($(this).is(':checked'));
+                
             });
 
             var v_idprov    = $("#id_prov").val();

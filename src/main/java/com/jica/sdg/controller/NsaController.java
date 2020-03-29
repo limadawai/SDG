@@ -16,6 +16,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.websocket.server.PathParam;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -593,16 +594,16 @@ public class NsaController {
 		}
     }
     
-    @GetMapping("admin/nsa/dowload_inst_all")
+    @GetMapping("admin/nsa/dowload_inst_all/{id_prov}")
     @ResponseBody
-    public void dowload_inst_profil(HttpServletResponse response) throws IOException {
+    public void dowload_inst_profil(HttpServletResponse response, @PathVariable("id_prov") String idprov) throws IOException {
         response.setContentType("application/octet-stream");
         response.setHeader("Content-Disposition", "attachment; filename=INS_Profile-All.xlsx");
-        ByteArrayInputStream stream = insprofilall();
+        ByteArrayInputStream stream = insprofilall(idprov);
         IOUtils.copy(stream, response.getOutputStream());
     }
     
-    private ByteArrayInputStream insprofilall() {
+    private ByteArrayInputStream insprofilall(String idprov) {
     	try(Workbook workbook = new XSSFWorkbook()) {
     		Sheet sheet = workbook.createSheet("Profile All");
     		
@@ -642,13 +643,15 @@ public class NsaController {
 	        cell.setCellStyle(headerCellStyle);
 	        
 	        String sql  = "select a.id_role as idrl, b.* from ref_role a left join "
-	    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' order by a.id_role asc ";
+	    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' and a.id_prov = :id_prov order by a.id_role asc ";
 	        Query query = em.createNativeQuery(sql);
+	        query.setParameter("id_prov", idprov);
+	        List list   = query.getResultList();
 	        Map<String, Object> mapDetail = new HashMap<>();
-	        mapDetail.put("mapDetail",query.getResultList());
+	        mapDetail.put("mapDetail", list);
 	        JSONObject objDetail = new JSONObject(mapDetail);
 	        JSONArray  arrayDetail = objDetail.getJSONArray("mapDetail");
-//	        System.out.println(arrayDetail.get(0));
+	        System.out.println(arrayDetail);
 	        for (int i=0; i<arrayDetail.length(); i++) {
 	        	JSONArray finalDetail = arrayDetail.getJSONArray(i);
 	        	Row dataRow = sheet.createRow(i+1);

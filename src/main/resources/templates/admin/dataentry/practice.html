@@ -885,13 +885,15 @@
 
                                             }else{
                                                 var detail = "";
+                                                var view = "";
 						var cat = $("#idrole").find(":selected").data("cat");
 						if(cat=="NSA"){
                                                     detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
 						}
+                                                view = '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 detail = '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button>';
 						text1 += "<div style='text-align:center;'>"+
-						'<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-warning btn-mini update"><i class="icon-save"></i></button>'+detail+"</div>";
+						'<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-primary btn-mini update"><i class="icon-pencil"></i></button>'+view+detail+"</div>";
 
                                             }
                                         }
@@ -1216,6 +1218,7 @@
                 success: function (result) {
                 	var val = result.content;
                 	$('#showModal').trigger('click');
+                        $('#submit').show();
                 	$('#id').val(val.id);
                 	$('#id_program').val(val.program);
                     $('#location').val(val.location);
@@ -1234,6 +1237,39 @@
                         			$(".accordion-inner").find('.sdg-indikator[value="'+selectedValues[i]+'"]').prop("checked", true);
                         		}
                         	}
+                    });
+                },
+            })
+         });
+        
+        $('#tbody-best').on('click', '.view', function(){
+            var id = $(this).attr('data-id');
+            program();
+            $.ajax({
+                type: "GET",
+                url: urls+'get-best/'+id,
+                success: function (result) {
+                    var val = result.content;
+                    $('#showModal').trigger('click');
+                    $('#submit').hide();
+                    $('#id').val(val.id);
+                    $('#id_program').val(val.program);
+                    $('#location').val(val.location);
+                    $('#time_activity').val(val.time_activity);
+                    $('#background').val(val.background);
+                    $('#implementation_process').val(val.implementation_process);
+                    $('#challenges_learning').val(val.challenges_learning);
+                    $.ajax({
+                        type: "GET",
+                        url: urls+'list-getBestMapByGovInd/'+val.id,
+                        success: function (hasil) {
+                            var val = hasil.content;
+                            var selectedValues = new Array();
+                            for(var i=0;i<val.length;i++){
+                                selectedValues[i] = val[i].id_goals+'---'+(val[i].id_target?val[i].id_target:0)+'---'+(val[i].id_indicator?val[i].id_indicator:0);
+                                $(".accordion-inner").find('.sdg-indikator[value="'+selectedValues[i]+'"]').prop("checked", true);
+                            }
+                        }
                     });
                 },
             })
