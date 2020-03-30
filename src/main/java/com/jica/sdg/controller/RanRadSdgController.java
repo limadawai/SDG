@@ -1127,10 +1127,17 @@ public class RanRadSdgController {
     }
     
     @GetMapping("admin/get-mapping/{id_prov}/{id_monper}")
-    public @ResponseBody Map<String, Object> getMapping(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
+    public @ResponseBody Map<String, Object> getMapping(HttpSession session,@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String role = "";
+    	if(privilege.equals("USER")) {
+    		role = " and f.id_role = '"+id_role+"' ";
+    	}
         String sql  = "Select b.id as idgol, c.id as idtar, d.id as idindi,\r\n" + 
         		"b.id_goals, c.id_target, d.id_indicator, b.nm_goals, b.nm_goals_eng,\r\n" + 
-        		"c.nm_target,c.nm_target_eng,d.nm_indicator,d.nm_indicator_eng,\r\n" + 
+        		"c.nm_target,c.nm_target_eng,d.nm_indicator as sdg_indicator,d.nm_indicator_eng as sdg_indicator_eng,\r\n" + 
         		"g.id_program, f.id_activity, e.id_gov_indicator, g.nm_program, g.nm_program_eng,\r\n" + 
         		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role\r\n" + 
         		"from gov_map a \r\n" + 
@@ -1141,11 +1148,11 @@ public class RanRadSdgController {
         		"left join gov_activity f on e.id_activity = f.id\r\n" + 
         		"left join gov_program g on f.id_program = g.id\r\n" + 
         		"left join ref_role h on f.id_role = h.id_role\r\n" + 
-        		"where a.id_prov = :id_prov and a.id_monper = :id_monper\r\n" + 
+        		"where a.id_prov = :id_prov and a.id_monper = :id_monper "+role + 
         		"union\r\n" + 
         		"Select b.id as idgol, c.id as idtar, d.id as idindi,\r\n" + 
         		"b.id_goals, c.id_target, d.id_indicator, b.nm_goals, b.nm_goals_eng,\r\n" + 
-        		"c.nm_target,c.nm_target_eng,d.nm_indicator,d.nm_indicator_eng,\r\n" + 
+        		"c.nm_target,c.nm_target_eng,d.nm_indicator as sdg_indicator,d.nm_indicator_eng as sdg_indicator_eng,\r\n" + 
         		"g.id_program, f.id_activity, e.id_nsa_indicator, g.nm_program, g.nm_program_eng,\r\n" + 
         		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role\r\n" + 
         		"from nsa_map a \r\n" + 
@@ -1156,7 +1163,7 @@ public class RanRadSdgController {
         		"left join nsa_activity f on e.id_activity = f.id\r\n" + 
         		"left join nsa_program g on f.id_program = g.id\r\n" + 
         		"left join ref_role h on f.id_role = h.id_role\r\n" + 
-        		"where a.id_prov = id_prov and a.id_monper = id_monper";
+        		"where a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         query.setParameter("id_monper", id_monper);

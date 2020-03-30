@@ -60,13 +60,17 @@
 													<span class="lang_eng" style="display:none">No</span>
 													<span class="lang_indo">No</span>
 												</th>
-												<th style="text-align:center;font-size:80%;" width="10%">
+												<th style="text-align:center;font-size:80%;">
 													<span class="lang_eng" style="display:none">SDGs</span>
 													<span class="lang_indo">SDGs</span>
 												</th>
-												<th style="text-align:center;font-size:80%;" width="75%">
+												<th style="text-align:center;font-size:80%;">
 													<span class="lang_eng" style="display:none">Program</span>
 													<span class="lang_indo">Program</span>
+												</th>
+												<th style="text-align:center;font-size:80%;">
+													<span class="lang_eng" style="display:none">Actor</span>
+													<span class="lang_indo">Actor</span>
 												</th>
 											</tr>
 										</thead>
@@ -168,11 +172,36 @@
 	        	bhs($(this).is(':checked'));
 	        });
 			var table = $('#tabel-goals').DataTable({
-				sDom: 'lrtip',
+				sDom: 'Brtip',
 				"bLengthChange": false,
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+		        buttons: [
+		        	{
+		        	    extend: 'print',
+		        	    text: 'Print',
+		        	    exportOptions: {
+		        	        stripHtml: false
+		        	    }
+		        	},
+		        	{
+		        		extend: 'excelHtml5',
+		        		filename: 'Mapping Program',
+		        		text: 'Save as Excel',
+		        		exportOptions: {
+		        		    format: {
+		        		        body: function(data, column, row) {
+		        		            if (typeof data === 'string' || data instanceof String) {
+		        		                
+		        		            }
+		        		            data = data.replace(/<br\s*\/?>/ig, '\n');
+		        		            return data;
+		        		        }
+		        		    }
+		        		}
+		        	},
+		        ],
 				"ajax": {
 					"url": urls+'get-mapping/'+$("#id_prov").val()+"/"+$("#id_monper").val(),
 					dataSrc: 'content',
@@ -184,34 +213,37 @@
 						}},
 					{"data": function (row, data, index, display) {
 							if($("#fs").is(':checked')){
-								return "<div style='font-size:90%;'>"
-								+"<div>"+row[3]+" "+row[6]+"</div>"+
-								+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[8]?row[8]:'')+"</div>"+
-								+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[10]?row[10]:'')+"</div>"+
-								"</div>";
+								return ""
+								+""+row[3]+" "+row[6]+"<br/>"
+								+""+(row[4]?row[4]:'')+" "+(row[8]?row[8]:'')+"<br/>"
+								+""+(row[5]?row[5]:'')+" "+(row[10]?row[10]:'')+"<br/>"
+								+"";
 							}else{
 								return "<div style='font-size:90%;'>"
-								+"<div>"+row[3]+" "+row[7]+"</div>"+
-								+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[9]?row[9]:'')+"</div>"+
-								+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[11]?row[11]:'')+"</div>"+
+								+"<div>"+row[3]+" "+row[7]+"\n</div>"
+								+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[9]?row[9]:'')+"\n</div>"
+								+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[11]?row[11]:'')+"\n</div>"+
 								"</div>";
 							}
 						}},
 					{"data": function (row, data, index, display) {
 						if($("#fs").is(':checked')){
 							return "<div style='font-size:90%;'>"
-							+"<div>"+row[3]+" "+row[6]+"</div>"+
-							+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[8]?row[8]:'')+"</div>"+
-							+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[10]?row[10]:'')+"</div>"+
+							+"<div>"+row[12]+" "+row[15]+"\n</div>"
+							+"<div style='margin-left:15px'>"+(row[13]?row[13]:'')+" "+(row[8]?row[17]:'')+"\n</div>"
+							+"<div style='margin-left:30px'>"+(row[14]?row[14]:'')+" "+(row[10]?row[19]:'')+"\n</div>"+
 							"</div>";
 						}else{
 							return "<div style='font-size:90%;'>"
-							+"<div>"+row[3]+" "+row[7]+"</div>"+
-							+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[9]?row[9]:'')+"</div>"+
-							+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[11]?row[11]:'')+"</div>"+
+							+"<div>"+row[12]+" "+row[16]+"\n</div>"
+							+"<div style='margin-left:15px'>"+(row[13]?row[13]:'')+" "+(row[8]?row[18]:'')+"\n</div>"
+							+"<div style='margin-left:30px'>"+(row[14]?row[14]:'')+" "+(row[10]?row[20]:'')+"\n</div>"+
 							"</div>";
 						}
 						}},
+						{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row[21]+"</div>";
+							}},
 				],
 				"columnDefs": [
 				],
