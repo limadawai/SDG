@@ -41,13 +41,13 @@
 								  <span class="add-on"><i class="icon-search"></i></span>
 								</div>
                     		</div>
-                    		<div class="span6" align="right">
+                    		<!-- <div class="span6" align="right">
                                  <button id="export" class="btn btn-warning" data="/sdg/export-excell">
                     				<i class="icon-download"></i> 
                     					<span class="lang_eng" style="display:none">Export</span>
                     					<span class="lang_indo">Ekspor</span>
                     			</button>
-                    		</div>
+                    		</div> -->
                     	</div>
                     	<br/>
                         <div class="row-fluid">
@@ -60,13 +60,17 @@
 													<span class="lang_eng" style="display:none">No</span>
 													<span class="lang_indo">No</span>
 												</th>
-												<th style="text-align:center;font-size:80%;" width="10%">
-													<span class="lang_eng" style="display:none">Code</span>
-													<span class="lang_indo">Kode</span>
+												<th style="text-align:center;font-size:80%;">
+													<span class="lang_eng" style="display:none">SDGs</span>
+													<span class="lang_indo">SDGs</span>
 												</th>
-												<th style="text-align:center;font-size:80%;" width="75%">
-													<span class="lang_eng" style="display:none">Goals</span>
-													<span class="lang_indo">Sasaran</span>
+												<th style="text-align:center;font-size:80%;">
+													<span class="lang_eng" style="display:none">Program</span>
+													<span class="lang_indo">Program</span>
+												</th>
+												<th style="text-align:center;font-size:80%;">
+													<span class="lang_eng" style="display:none">Actor</span>
+													<span class="lang_indo">Actor</span>
 												</th>
 											</tr>
 										</thead>
@@ -168,13 +172,39 @@
 	        	bhs($(this).is(':checked'));
 	        });
 			var table = $('#tabel-goals').DataTable({
-				sDom: 'lrtip',
+				sDom: 'Brtip',
 				"bLengthChange": false,
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+		        buttons: [
+		        	{
+		        	    extend: 'print',
+		        	    text: 'Print',
+		        	    exportOptions: {
+		        	        stripHtml: false
+		        	    }
+		        	},
+		        	{
+		        		extend: 'excelHtml5',
+		        		filename: 'Mapping Program',
+		        		text: 'Save as Excel',
+		        		exportOptions: {
+		        		    format: {
+		        		        body: function(data, column, row) {
+		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+		        		            data = data.replace(/<.*?>/g, "");
+		        		            data = data.replace("&amp;", "&");
+		        		            data = data.replace("&nbsp;", "");
+		        		            data = data.replace("&nbsp;", "");
+		        		            return data;
+		        		        }
+		        		    }
+		        		}
+		        	},
+		        ],
 				"ajax": {
-					"url": urls+'list-sdgGoals',
+					"url": urls+'get-mapping/'+$("#id_prov").val()+"/"+$("#id_monper").val(),
 					dataSrc: 'content',
 				},
 				"searching": true,
@@ -183,11 +213,30 @@
 							return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
+							if($("#fs").is(':checked')){
+								return row[3]+" "+row[6]+"<br/>"
+								+(row[4]?row[4]:'')+" "+(row[8]?row[8]:'')+"<br/>"
+								+(row[5]?row[5]:'')+" "+(row[10]?row[10]:'')+"<br/>";
+							}else{
+								return row[3]+" "+row[7]+"<br/>"
+								+(row[4]?row[4]:'')+" "+(row[9]?row[9]:'')+"<br/>"
+								+(row[5]?row[5]:'')+" "+(row[11]?row[11]:'')+"<br/>";
+							}
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/map/goals/"+$('#id_monper').val()+"/"+row.id+"/target' class='target' data-id='"+row.id_goals+"'>"+row.nm_goals+"</a></div>";
+						if($("#fs").is(':checked')){
+							return row[12]+" "+row[15]+"<br/>"
+							+(row[13]?row[13]:'')+" "+(row[17]?row[17]:'')+"<br/>"
+							+(row[14]?row[14]:'')+" "+(row[19]?row[19]:'')+"<br/>";
+						}else{
+							return row[12]+" "+row[16]+"<br/>"
+							+(row[13]?row[13]:'')+" "+(row[18]?row[18]:'')+"<br/>"
+							+(row[14]?row[14]:'')+" "+(row[20]?row[20]:'')+"<br/>";
+						}
 						}},
+						{"data": function (row, data, index, display) {
+							return "<div style='font-size:90%;'>"+row[21]+"</div>";
+							}},
 				],
 				"columnDefs": [
 				],

@@ -5,7 +5,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <head th:include="admin/layout :: header">
-    <title th:text="Institution Profile">Institution Profile</title>
+    <title th:text="Community Organization/Philantrophy Profile">Community Organization/Philantrophy Profile</title>
 </head>
 <body>
     <div th:include="admin/layout :: menu"></div>
@@ -13,19 +13,19 @@
 <!--  Content  -->
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>NSA / Institution Profile</a></div>
-            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>NSA / Profil Institusi</a></div>
+            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>NSA / Community Organization/Philantrophy Profile</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>NSA / Profil Lembaga/Filantropi</a></div>
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title lang_eng" id="judul-eng" style="display: none">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Table Institution Profile</h5>
+                        <h5>Table Community Organization/Philantrophy Profile</h5>
                     </div>
                     <div class="widget-title lang_indo" id="judul-indo">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Tabel Profil Institusi</h5>
+                        <h5>Tabel Profil Lembaga/Filantropi</h5>
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
@@ -34,10 +34,12 @@
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="nm_ins_profil" name="nm_ins_profil" class="form-control">
-                                <option value="0" >-- Pilih Institusi --</option>
+                                <option value="0" >-- Pilih Lembaga/Filantropi --</option>
                                 <option th:each="f:${listInsProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
+
                             <button id="export" class="btn btn-warning pull-right" style="margin-left: 3px">Export Excel</button> 
+
                             <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none">
                                 <span class="lang_indo">Tambah</span>
                                 <span class="lang_eng" style="display: none">Add</span>
@@ -58,29 +60,20 @@
                                 <table  id="tabel-ins-profile" class="table table-striped table-bordered">
                                     <thead >
                                         <tr>
-                                            <th style="text-align:center;font-size:80%;">
-                                                <span class="lang_eng" style="display:none">No.</span>
-                                                <span class="lang_indo">No.</span>
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel">
+                                                No.
                                             </th>
-                                            <th style="text-align:center;font-size:80%;">
-                                                <span class="lang_eng" style="display:none">Achievement</span>
-                                                <span class="lang_indo">Pencapaian</span>
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Community Organization/Philantrophy Profile Name" data-lang_indo="Nama Profil Lembaga/Filantropi">
+                                             </th>
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Achievement" data-lang_indo="Pencapaian">
                                             </th>
-                                            <th style="text-align:center;font-size:80%;">
-                                                <span class="lang_eng" style="display:none">Location</span>
-                                                <span class="lang_indo">Lokasi</span>
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Location" data-lang_indo="Lokasi">
                                             </th>
-                                            <th style="text-align:center;font-size:80%;">
-                                                <span class="lang_eng" style="display:none">Beneficiaries</span>
-                                                <span class="lang_indo">Penerima Manfaat</span>
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Beneficiaries" data-lang_indo="Penerima Manfaat">
                                             </th>
-                                            <th style="text-align:center;font-size:80%;">
-                                                <span class="lang_eng" style="display:none">Year of Implementation</span>
-                                                <span class="lang_indo">Tahun Implementasi</span>
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Year of Implementation" data-lang_indo="Tahun Implementasi">
                                             </th>
-                                            <th style="text-align:center;font-size:80%;">
-                                                <span class="lang_eng" style="display:none">Major Partners</span>
-                                                <span class="lang_indo">Partner</span>
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Major Partners" data-lang_indo="Partner">
                                             </th>
                                             <th style="text-align:center;font-size:80%;">
                                                 <span class="lang_eng" style="display:none">Action</span>
@@ -104,20 +97,20 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h3 class="modal-title lang_indo" id="exampleModalLabel">Profil Institusi</h3>
-                        <h3 class="modal-title lang_eng" id="exampleModalLabel" style="display: none">Institution Profile</h3>
+                        <h3 class="modal-title lang_indo" id="exampleModalLabel">Profil Lembaga/Filantropi</h3>
+                        <h3 class="modal-title lang_eng" id="exampleModalLabel" style="display: none">Community Organization/Philantrophy Profile</h3>
                     </div>
                     <form class="form-horizontal">
                         <div class="modal-body">
                             <div class="control-group" style="display: none">
-                                <label for="nm_inst" class="lang_indo">ID Institusi :</label>
-                                <label for="nm_inst" class="lang_eng" style="display: none">Institution ID :</label>
+                                <label for="nm_inst" class="lang_indo">ID Lembaga/Filantropi :</label>
+                                <label for="nm_inst" class="lang_eng" style="display: none">Community Organization/Philantrophy ID :</label>
                                 <input name="id_inst" id="id_inst" type="hidden" class="input-block-level" readonly>
                                 <input name="id_role" id="id_role" type="hidden" class="input-block-level" readonly>
                             </div>
                             <div class="control-group">
-                                <label for="nm_inst" class="lang_indo">Nama Profil Institusi :</label>
-                                <label for="nm_inst" class="lang_eng" style="display: none">Institution Profile Name :</label>
+                                <label for="nm_inst" class="lang_indo">Nama Profil Lembaga/Filantropi :</label>
+                                <label for="nm_inst" class="lang_eng" style="display: none">Community Organization/Philantrophy Profile Name :</label>
                                 <input name="nm_inst" id="nm_inst" type="text" class="input-block-level" required>
                             </div>
                             <div class="control-group">
@@ -231,12 +224,39 @@
                         }else{
                             $('#tabel-ins-profile').DataTable({
                                 responsive: true,
-                                sDom: 'lrtip',
+                                sDom: 'Brtip',
                                 "bLengthChange": false,
                                 "cache": false,
                                 "autoWidth": true,
                                 "responsive":true,
                                 "bDestroy": true,
+                                buttons: [
+                		        	{
+                		        	    extend: 'print',
+                		        	    text: 'Print',
+                		        	    exportOptions: {
+                		        	        stripHtml: false
+                		        	    }
+                		        	},
+                		        	{
+                		        		extend: 'excelHtml5',
+                		        		filename: 'Profil Lembaga/Filantropi',
+                		        		text: 'Save as Excel',
+                		        		exportOptions: {
+                		        		    format: {
+                		        		        body: function(data, column, row) {
+                		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+                		        		            data = data.replace(/<.*?>/g, "");
+                		        		            data = data.replace("&amp;", "&");
+                		        		            data = data.replace("&nbsp;", "");
+                		        		            data = data.replace("&nbsp;", "");
+                		        		            return data;
+                		        		        }
+                		        		    },
+                		        		    columns: [ 0,1,2,3,4,5 ]
+                		        		}
+                		        	},
+                		        ],
                                 "ajax": {
                                     "url": urls+'list-getid-ins-profil/'+$("#nm_ins_profil").val(),
                                     dataSrc: 'content',
@@ -314,8 +334,22 @@
 	        	bhs($('#fs').is(':checked'));
 	        }
 	        
+	        function headtabel(){
+	        	var text;
+	        	if($("#fs").is(':checked')){
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_indo'));
+        			});
+	        	}else{
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_eng'));
+        			});
+	        	}
+	        }
+	        headtabel();
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
+	        	headtabel();
 	        });
             
             $("#id_prov").on('change', function(e){
@@ -325,7 +359,7 @@
                     type: "GET",
                     url: urls+'list-get-option-role-ins-profil/'+id_prov,
                     success: function (result) {
-                        $("#nm_ins_profil").html('<option value="0" >-- Pilih Institusi --</option>');
+                        $("#nm_ins_profil").html('<option value="0" >-- Pilih Lembaga/Filantropi --</option>');
                         $("#nm_ins_profil").append("<option value='00'>-- ALL --</option>");
                         var array = result.content;
                         if (array != '') {
@@ -338,20 +372,51 @@
                 //grid
                 $('#tabel-ins-profile').DataTable({
                     responsive: true,
-                    sDom: 'lrtip',
+                    sDom: 'Brtip',
                     "bLengthChange": false,
                     "cache": false,
                     "autoWidth": true,
                     "responsive":true,
                     "bDestroy": true,
+                    buttons: [
+    		        	{
+    		        	    extend: 'print',
+    		        	    text: 'Print',
+    		        	    exportOptions: {
+    		        	        stripHtml: false
+    		        	    }
+    		        	},
+    		        	{
+    		        		extend: 'excelHtml5',
+    		        		filename: 'Profil Lembaga/Filantropi',
+    		        		text: 'Save as Excel',
+    		        		exportOptions: {
+    		        		    format: {
+    		        		        body: function(data, column, row) {
+    		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+    		        		            data = data.replace(/<.*?>/g, "");
+    		        		            data = data.replace("&amp;", "&");
+    		        		            data = data.replace("&nbsp;", "");
+    		        		            data = data.replace("&nbsp;", "");
+    		        		            return data;
+    		        		        }
+    		        		    }
+    		        	,
+	        		    columns: [ 0,1,2,3,4,5 ]
+    		        		}
+    		        	},
+    		        ],
                     "ajax": {
-                        "url": urls+'list-getid-ins-profil/'+$("#nm_ins_profil").val(),
+                        "url": urls+'list-getid-ins-profil/0',
                         dataSrc: 'content',
                     },
                     "searching": false,
                     "columns": [
                         {"data": function (row, data, index, display) {
                         return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.nm_inst+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
                             return "<div style='font-size:90%;'>"+row.achievement+"</div>";
@@ -394,6 +459,7 @@
                 			for (var i=0; i<res.length; i++) {
                 				var row = "<tr>";
                 				row += "<td style='text-align:center;'>"+(i+1)+"</td>";
+                				row += "<td>"+res[i][3]+"</td>"
                 				row += "<td>"+res[i][4]+"</td>"
                 				row += "<td>"+res[i][5]+"</td>"
                 				row += "<td>"+res[i][6]+"</td>"
@@ -426,12 +492,40 @@
 	                            //grid
 	                            $('#tabel-ins-profile').DataTable({
 	                                responsive: true,
-	                                sDom: 'lrtip',
+	                                sDom: 'Brtip',
 	                                "bLengthChange": false,
 	                                "cache": false,
 	                                "autoWidth": true,
 	                                "responsive":true,
 	                                "bDestroy": true,
+	                                buttons: [
+	                		        	{
+	                		        	    extend: 'print',
+	                		        	    text: 'Print',
+	                		        	    exportOptions: {
+	                		        	        stripHtml: false
+	                		        	    }
+	                		        	},
+	                		        	{
+	                		        		extend: 'excelHtml5',
+	                		        		filename: 'Profil Lembaga/Filantropi',
+	                		        		text: 'Save as Excel',
+	                		        		exportOptions: {
+	                		        		    format: {
+	                		        		        body: function(data, column, row) {
+	                		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+	                		        		            data = data.replace(/<.*?>/g, "");
+	                		        		            data = data.replace("&amp;", "&");
+	                		        		            data = data.replace("&nbsp;", "");
+	                		        		            data = data.replace("&nbsp;", "");
+	                		        		            return data;
+	                		        		        }
+	                		        		    }
+	                		        	,
+            		        		    columns: [ 0,1,2,3,4,5 ]
+	                		        		}
+	                		        	},
+	                		        ],
 	                                "ajax": {
 	                                    "url": urls+'list-getid-ins-profil/'+id,
 	                                    dataSrc: 'content',
@@ -440,6 +534,9 @@
 	                                "columns": [
 	                                    {"data": function (row, data, index, display) {
 	                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.nm_inst+"</div>";
 	                                    }},
 	                                    {"data": function (row, data, index, display) {
 	                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
@@ -470,12 +567,39 @@
 	                        }else{
 	                            $('#tabel-ins-profile').DataTable({
 	                                responsive: true,
-	                                sDom: 'lrtip',
+	                                sDom: 'Brtip',
 	                                "bLengthChange": false,
 	                                "cache": false,
 	                                "autoWidth": true,
 	                                "responsive":true,
 	                                "bDestroy": true,
+	                                buttons: [
+	                		        	{
+	                		        	    extend: 'print',
+	                		        	    text: 'Print',
+	                		        	    exportOptions: {
+	                		        	        stripHtml: false
+	                		        	    }
+	                		        	},
+	                		        	{
+	                		        		extend: 'excelHtml5',
+	                		        		filename: 'Profil Lembaga/Filantropi',
+	                		        		text: 'Save as Excel',
+	                		        		exportOptions: {
+	                		        		    format: {
+	                		        		        body: function(data, column, row) {
+	                		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+	                		        		            data = data.replace(/<.*?>/g, "");
+	                		        		            data = data.replace("&amp;", "&");
+	                		        		            data = data.replace("&nbsp;", "");
+	                		        		            data = data.replace("&nbsp;", "");
+	                		        		            return data;
+	                		        		        }
+	                		        		    },
+	                		        		    columns: [ 0,1,2,3,4,5 ]
+	                		        		}
+	                		        	},
+	                		        ],
 	                                "ajax": {
 	                                    "url": urls+'list-getid-ins-profil/'+id,
 	                                    dataSrc: 'content',
@@ -484,6 +608,9 @@
 	                                "columns": [
 	                                    {"data": function (row, data, index, display) {
 	                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+	                                    }},
+	                                    {"data": function (row, data, index, display) {
+	                                        return "<div style='font-size:90%;'>"+row.nm_inst+"</div>";
 	                                    }},
 	                                    {"data": function (row, data, index, display) {
 	                                        return "<div style='font-size:90%;'>"+row.achievement+"</div>";
@@ -616,12 +743,39 @@
 //                        window.location = urls+"nsa/inst-profile";
                     	$('#tabel-ins-profile').DataTable({
                             responsive: true,
-                            sDom: 'lrtip',
+                            sDom: 'Brtip',
                             "bLengthChange": false,
                             "cache": false,
                             "autoWidth": true,
                             "responsive":true,
                             "bDestroy": true,
+                            buttons: [
+            		        	{
+            		        	    extend: 'print',
+            		        	    text: 'Print',
+            		        	    exportOptions: {
+            		        	        stripHtml: false
+            		        	    }
+            		        	},
+            		        	{
+            		        		extend: 'excelHtml5',
+            		        		filename: 'Profil Lembaga/Filantropi',
+            		        		text: 'Save as Excel',
+            		        		exportOptions: {
+            		        		    format: {
+            		        		        body: function(data, column, row) {
+            		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+            		        		            data = data.replace(/<.*?>/g, "");
+            		        		            data = data.replace("&amp;", "&");
+            		        		            data = data.replace("&nbsp;", "");
+            		        		            data = data.replace("&nbsp;", "");
+            		        		            return data;
+            		        		        }
+            		        		    },
+            		        		    columns: [ 0,1,2,3,4,5 ]
+            		        		}
+            		        	},
+            		        ],
                             "ajax": {
                                 "url": urls+'list-getid-ins-profil/'+id_role,
                                 dataSrc: 'content',
@@ -696,12 +850,39 @@
                         $('#tambah').hide();
                         $('#tabel-ins-profile').DataTable({
                             responsive: true,
-                            sDom: 'lrtip',
+                            sDom: 'Brtip',
                             "bLengthChange": false,
                             "cache": false,
                             "autoWidth": true,
                             "responsive":true,
                             "bDestroy": true,
+                            buttons: [
+            		        	{
+            		        	    extend: 'print',
+            		        	    text: 'Print',
+            		        	    exportOptions: {
+            		        	        stripHtml: false
+            		        	    }
+            		        	},
+            		        	{
+            		        		extend: 'excelHtml5',
+            		        		filename: 'Profil Lembaga/Filantropi',
+            		        		text: 'Save as Excel',
+            		        		exportOptions: {
+            		        		    format: {
+            		        		        body: function(data, column, row) {
+            		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+            		        		            data = data.replace(/<.*?>/g, "");
+            		        		            data = data.replace("&amp;", "&");
+            		        		            data = data.replace("&nbsp;", "");
+            		        		            data = data.replace("&nbsp;", "");
+            		        		            return data;
+            		        		        }
+            		        		    },
+            		        		    columns: [ 0,1,2,3,4,5 ]
+            		        		}
+            		        	},
+            		        ],
                             "ajax": {
                                 "url": urls+'list-getid-ins-profil/'+id_role,
                                 dataSrc: 'content',
@@ -835,12 +1016,40 @@
                             
                             $('#tabel-ins-profile').DataTable({
                                 responsive: true,
-                                sDom: 'lrtip',
+                                sDom: 'Brtip',
                                 "bLengthChange": false,
                                 "cache": false,
                                 "autoWidth": true,
                                 "responsive":true,
                                 "bDestroy": true,
+                                buttons: [
+                		        	{
+                		        	    extend: 'print',
+                		        	    text: 'Print',
+                		        	    exportOptions: {
+                		        	        stripHtml: false
+                		        	    }
+                		        	},
+                		        	{
+                		        		extend: 'excelHtml5',
+                		        		filename: 'Profil Lembaga/Filantropi',
+                		        		text: 'Save as Excel',
+                		        		exportOptions: {
+                		        		    format: {
+                		        		        body: function(data, column, row) {
+                		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+                		        		            data = data.replace(/<.*?>/g, "");
+                		        		            data = data.replace("&amp;", "&");
+                		        		            data = data.replace("&nbsp;", "");
+                		        		            data = data.replace("&nbsp;", "");
+                		        		            return data;
+                		        		        }
+                		        		    }
+                		        	,
+        		        		    columns: [ 0,1,2,3,4,5 ]
+                		        		}
+                		        	},
+                		        ],
                                 "ajax": {
                                     "url": urls+'list-getid-ins-profil/'+id_role,
                                     dataSrc: 'content',
@@ -893,7 +1102,7 @@
     	var idprov = $("#id_prov").val();
     	var idrole = $("#nm_ins_profil").val();
     	if (idrole == "0") {
-    		swal("Anda harus memilih institusi");
+    		swal("Anda harus memilih Lembaga/Filantropi");
     	} else if(idrole == "00") {
     		window.open(urls+"nsa/dowload_inst_all/"+idprov, "_blank");
     	} else {

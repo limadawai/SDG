@@ -16,7 +16,7 @@
     <link rel="stylesheet" th:href="@{/css/maruti-media.css}" class="skin-color"/>
     <link rel="stylesheet" th:href="@{/css/font-awesome.css}" />
     <link rel="stylesheet" th:href="@{/css/switch-bahasa.css}" />
-    <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}" />
+    <!-- <link rel="stylesheet" th:href="@{/css/jquery.dataTables.min.css}" /> -->
     <link rel="stylesheet" th:href="@{/css/sweetalert2.min.css}" />
     <link rel="stylesheet" th:href="@{/css/select2.min.css}" />
     <link rel="stylesheet" th:href="@{/css/multiple-select.css}" />
@@ -24,7 +24,8 @@
     <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.min.css}" />
     <!--<link rel="stylesheet" th:href="@{/js/jstree/themes/default/style.min.css}" />-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
-    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.6.1/css/buttons.dataTables.min.css" />
     
 
     <script th:src="@{/js/excanvas.min.js}"></script>
@@ -41,12 +42,20 @@
     <script th:src="@{/js/maruti.js}"></script>
     <script th:src="@{/js/maruti.dashboard.js}"></script>
     <script th:src="@{/js/maruti.chat.js}"></script>
-    <script th:src="@{/js/jquery.dataTables.min.js}"></script>
+    <!-- <script th:src="@{/js/jquery.dataTables.min.js}"></script> -->
     <script th:src="@{/js/sweetalert2.min.js}"></script>
     <script th:src="@{/js/jquery.serialize-object.js}"></script>
     <script th:src="@{/js/select2.full.min.js}"></script>
     <script th:src="@{/js/multiple-select.js}"></script>
     <script th:src="@{/js/bootstrap-datepicker.min.js}"></script>
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" ></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js" ></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.flash.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" ></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" ></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.html5.min.js" ></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.1/js/buttons.print.min.js" ></script>
 
     <!--<script th:src="@{/js/highchart/highmaps.js}"></script>-->
     <script th:src="@{/js/jquery2.min.js}"></script>
@@ -119,15 +128,26 @@
                 type: 'get',
                 success: function(result) {
 	                    var jml = result.content[0];
-	                    console.log(jml);
 	                    if(jml){
-	                    	
 	                    	$("#badge").addClass("badge").text(jml);
 	                    }else{
 	                    	$("#badge").removeClass("badge").text("");
 	                    }
 	                }
 	            });
+                
+                //Copy RANRAN next periode
+                var today = new Date();
+				var dd = String(today.getDate()).padStart(2, '0');
+				var mm = String(today.getMonth() + 1).padStart(2, '0');
+				if(dd=="30" && mm=="03"){
+			    	$.ajax({
+		                url: urls + "copy-period",
+		                type: 'get',
+		                success: function(result) {
+		                }
+			            });
+			    }
                 
                 $.ajaxSetup({
                     error: function (x, status, error){

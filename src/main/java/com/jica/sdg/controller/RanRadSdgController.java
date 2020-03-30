@@ -1056,8 +1056,33 @@ public class RanRadSdgController {
     
     @PostMapping(path = "admin/save-monPer", consumes = "application/json", produces = "application/json")
 	@ResponseBody
+	@Transactional
 	public void saveMonPer(@RequestBody RanRad sdg) {
     	monPerService.saveMonPeriod(sdg);
+    	Integer id_monper = sdg.getId_monper();
+    	if(sdg.getStatus().equals("completed")) {
+    		//COPY GOALS
+        	em.createNativeQuery("DELETE FROM history_sdg_goals where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_goals(id_old,id_goals,id_monper,nm_goals,nm_goals_eng) "
+        			+ " select id,id_goals,'"+id_monper+"' as id_monper,nm_goals,nm_goals_eng from sdg_goals").executeUpdate();
+        	//COPY TARGET
+        	em.createNativeQuery("DELETE FROM history_sdg_target where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_target(id_old,id_target,id_goals,id_monper,nm_target,nm_target_eng) "
+        			+ " select id,id_target,id_goals,'"+id_monper+"' as id_monper,nm_target,nm_target_eng from sdg_target").executeUpdate();
+        	//COPY INDICATOR
+        	em.createNativeQuery("DELETE FROM history_sdg_indicator where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_indicator(id_old,id_indicator,id_target,id_goals,id_monper,nm_indicator,nm_indicator_eng,unit,increment_decrement) "
+        			+ " select id,id_indicator,id_target,id_goals,'"+id_monper+"' as id_monper,nm_indicator,nm_indicator_eng,unit,increment_decrement from sdg_indicator").executeUpdate();
+        	//COPY DISAGGREGATION
+        	em.createNativeQuery("DELETE FROM history_sdg_ranrad_disaggre where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_ranrad_disaggre(id_old,id_disaggre,id_indicator,id_monper,nm_disaggre,nm_disaggre_eng) "
+        			+ " select id,id_disaggre,id_indicator,'"+id_monper+"' as id_monper,nm_disaggre,nm_disaggre_eng from sdg_ranrad_disaggre").executeUpdate();
+        	//COPY DISAGGREGATION DETAIL
+        	em.createNativeQuery("DELETE FROM history_sdg_ranrad_disaggre_detail where id_monper = '"+id_monper+"'").executeUpdate();
+        	em.createNativeQuery("INSERT INTO history_sdg_ranrad_disaggre_detail(id_old,id_disaggre,id_monper,desc_disaggre,desc_disaggre_eng) "
+        			+ " select id,id_disaggre,'"+id_monper+"' as id_monper,desc_disaggre,desc_disaggre_eng from sdg_ranrad_disaggre_detail").executeUpdate();
+        }
+    	
 	}
     
     @GetMapping("admin/get-monPer/{id}")
@@ -1066,6 +1091,16 @@ public class RanRadSdgController {
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
+    }
+    
+    @GetMapping("admin/copy-period")
+    @Transactional
+    @ResponseBody
+    public void copyPeriod() {
+    	//COPY PERIOD
+    	em.createNativeQuery("INSERT INTO ran_rad(start_year,end_year,sdg_indicator,gov_prog,nsa_prog,gov_prog_bud,nsa_prog_bud,ident_problem,best_pract,status,id_prov,mapping_type,copied_from) "
+    			+ " select (end_year+1) as start_year,(end_year+6) as end_year,sdg_indicator,gov_prog,nsa_prog,gov_prog_bud,nsa_prog_bud,ident_problem,best_pract,'created' as status,id_prov,mapping_type,id_monper from ran_rad where iscopy = '1' ").executeUpdate();
+    	em.createNativeQuery("UPDATE ran_rad set iscopy = '0' where iscopy = '1'").executeUpdate();
     }
     
     @DeleteMapping("admin/delete-monPer/{id}")
@@ -1089,6 +1124,54 @@ public class RanRadSdgController {
         exportExcell(id_monper,id_role);
         String a = System.getProperty("user.dir"); 
         return "admin/ran_rad/map/goals";
+    }
+    
+    @GetMapping("admin/get-mapping/{id_prov}/{id_monper}")
+    public @ResponseBody Map<String, Object> getMapping(HttpSession session,@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String role = "";
+    	if(privilege.equals("USER")) {
+    		role = " and f.id_role = '"+id_role+"' ";
+    	}
+        String sql  = "Select b.id as idgol, c.id as idtar, d.id as idindi,\r\n" + 
+        		"b.id_goals, c.id_target, d.id_indicator, b.nm_goals, b.nm_goals_eng,\r\n" + 
+        		"c.nm_target,c.nm_target_eng,d.nm_indicator as sdg_indicator,d.nm_indicator_eng as sdg_indicator_eng,\r\n" + 
+        		"g.id_program, f.id_activity, e.id_gov_indicator, g.nm_program, g.nm_program_eng,\r\n" + 
+        		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role\r\n" + 
+        		"from gov_map a \r\n" + 
+        		"left join sdg_goals b on a.id_goals = b.id\r\n" + 
+        		"left join sdg_target c on a.id_target = c.id\r\n" + 
+        		"left join sdg_indicator d on a.id_indicator = d.id\r\n" + 
+        		"left join gov_indicator e on a.id_gov_indicator = e.id\r\n" + 
+        		"left join gov_activity f on e.id_activity = f.id\r\n" + 
+        		"left join gov_program g on f.id_program = g.id\r\n" + 
+        		"left join ref_role h on f.id_role = h.id_role\r\n" + 
+        		"where a.id_prov = :id_prov and a.id_monper = :id_monper "+role + 
+        		"union\r\n" + 
+        		"Select b.id as idgol, c.id as idtar, d.id as idindi,\r\n" + 
+        		"b.id_goals, c.id_target, d.id_indicator, b.nm_goals, b.nm_goals_eng,\r\n" + 
+        		"c.nm_target,c.nm_target_eng,d.nm_indicator as sdg_indicator,d.nm_indicator_eng as sdg_indicator_eng,\r\n" + 
+        		"g.id_program, f.id_activity, e.id_nsa_indicator, g.nm_program, g.nm_program_eng,\r\n" + 
+        		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role\r\n" + 
+        		"from nsa_map a \r\n" + 
+        		"left join sdg_goals b on a.id_goals = b.id\r\n" + 
+        		"left join sdg_target c on a.id_target = c.id\r\n" + 
+        		"left join sdg_indicator d on a.id_indicator = d.id\r\n" + 
+        		"left join nsa_indicator e on a.id_nsa_indicator = e.id\r\n" + 
+        		"left join nsa_activity f on e.id_activity = f.id\r\n" + 
+        		"left join nsa_program g on f.id_program = g.id\r\n" + 
+        		"left join ref_role h on f.id_role = h.id_role\r\n" + 
+        		"where a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
     }
     
     public String getStringByColumn(String sql,Integer column){
