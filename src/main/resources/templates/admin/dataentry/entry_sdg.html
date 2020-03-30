@@ -220,7 +220,7 @@
                     type: "GET",
                     url: urls+'list-get-option-role-all-profil/'+id_prov,
                     success: function (result) {
-                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        $("#idrole").html('<option value="100000" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
                         	if(privilege == 'ADMIN' || privilege == 'SUPER'){

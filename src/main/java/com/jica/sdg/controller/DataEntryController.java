@@ -428,6 +428,7 @@ public class DataEntryController {
     
     @GetMapping("admin/list-entry-gov/{id_prov}/{id_role}/{id_monper}/{year}")
     public @ResponseBody Map<String, Object> listEntryGov(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+    	String role = (id_role.equals("0"))?"":" and a.id_role = '"+id_role+"' ";
     	Query query;
     	String sql = "select b.id_program, a.id_activity, c.id_gov_indicator, b.nm_program, "
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng, "
@@ -443,11 +444,10 @@ public class DataEntryController {
     			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
     			+ "left join entry_gov_indicator h on h.id_assign = c.id and h.year_entry = :year and h.id_monper = g.id_monper "
     			+ "left join entry_gov_budget i on i.id_gov_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
-    			+ "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov "
-    			+ "order by b.id, c.id, a.id ";
+    			+ "where g.id_monper = :id_monper and g.id_prov = :id_prov "+role
+    			+ "order by a.id_role, b.id, c.id, a.id ";
         query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
-        query.setParameter("id_role", id_role);
         query.setParameter("id_monper", id_monper);
         query.setParameter("year", year);
     	
@@ -490,6 +490,7 @@ public class DataEntryController {
     
     @GetMapping("admin/list-entry-gov-bud/{id_prov}/{id_role}/{id_monper}/{year}")
     public @ResponseBody Map<String, Object> listEntryGovBud(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+    	String role = (id_role.equals("0"))?"":" and a.id_role = '"+id_role+"' ";
     	Query query;
     	String sql = "select b.id_program, a.id_activity, '' as id_gov_indicator, b.nm_program, "
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, '' as nm_indicator, '' as nm_indicator_eng, "
@@ -501,11 +502,10 @@ public class DataEntryController {
     			+ "left join ref_role f on a.id_role = f.id_role "
     			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
     			+ "left join entry_gov_budget i on i.id_gov_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
-    			+ "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov "
-    			+ "order by b.id, a.id ";
+    			+ "where g.id_monper = :id_monper and g.id_prov = :id_prov "+role
+    			+ "order by a.id_role, b.id, a.id ";
         query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
-        query.setParameter("id_role", id_role);
         query.setParameter("id_monper", id_monper);
         query.setParameter("year", year);
     	
