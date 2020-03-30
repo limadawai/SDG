@@ -329,13 +329,13 @@ public class DataEntryController {
     @GetMapping("admin/list-entry-sdg/{id_prov}/{id_role}/{id_monper}/{year}")
     public @ResponseBody Map<String, Object> listEntrySdg(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
     	Query query;
-    	if(id_role.equals("all")) {
+    	if(id_role.equals("0")) {
     		String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
                     "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
                     "f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, "+
                     "'' as achi1, '' as achi2, '' as achi3, '' as achi4, \n" +
-                    "'' as new1, '' as new2, '' as new3, '' as new4, l.nm_role \n" +
+                    "'' as new1, '' as new2, '' as new3, '' as new4, l.nm_role, l.id_role \n" +
                     "from ran_rad as g \n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -353,7 +353,7 @@ public class DataEntryController {
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
                     "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
                     "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
-                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role \n" +
+                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role, l.id_role \n" +
                     "from ran_rad as g \n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -379,7 +379,7 @@ public class DataEntryController {
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
                     "f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, "+
                     "'' as achi1, '' as achi2, '' as achi3, '' as achi4, \n" +
-                    "'' as new1, '' as new2, '' as new3, '' as new4, l.nm_role \n" +
+                    "'' as new1, '' as new2, '' as new3, '' as new4, l.nm_role, l.id_role \n" +
                     "from ran_rad as g \n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -397,7 +397,7 @@ public class DataEntryController {
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
                     "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
                     "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
-                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role \n" +
+                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role, l.id_role \n" +
                     "from ran_rad as g \n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
