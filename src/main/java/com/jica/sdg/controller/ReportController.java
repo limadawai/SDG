@@ -3296,8 +3296,8 @@ public class ReportController {
          
          
     
-    @GetMapping("admin/generate-report/problem-identify/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}/{id_target}/{id_indicator}/{group}")
-    public @ResponseBody Map<String, Object> getOptionIndicatorList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals,@PathVariable("id_target") String id_target,@PathVariable("id_indicator") String id_indicator,@PathVariable("group") String group) {
+    @GetMapping("admin/generate-report/problem-identify/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}/{id_target}/{id_indicator}/{group}/{year}")
+    public @ResponseBody Map<String, Object> getOptionIndicatorList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals,@PathVariable("id_target") String id_target,@PathVariable("id_indicator") String id_indicator,@PathVariable("group") String group,@PathVariable("year") String year) {
         String whereidrole ="";
         String wheremonper = "";
         String whereidcategory ="";
@@ -3306,7 +3306,7 @@ public class ReportController {
         String whereidindicator ="";
         /*WHERE a.id_prov = '000' AND d.id_role = '5' AND a.id_monper = '1' AND c.id_cat = '01' AND a.id_goals = '1'  AND a.id_target = '2' AND a.id_indicator = '1'*/
         if(!id_monper.equals("*")&&!id_monper.equals("0")){
-          wheremonper = " AND  a.id_monper = '"+id_monper+"'";  
+          wheremonper = " AND  a.id_monper = '"+id_monper+"' AND b.year = '"+year+"'";  
         }
 
         if(!id_role.equals("*")&&!id_role.equals("0")){
@@ -3333,7 +3333,8 @@ public class ReportController {
                         "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
                         "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
                         "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
-                        "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
+                        "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
+                +       "       JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' where a.id_prov = :id_prov  "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
         
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
@@ -3358,7 +3359,8 @@ public class ReportController {
                          "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
                          "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
                          "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
-                         "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
+                         "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
+                +        "      JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
         
         Query query2 = em.createNativeQuery(sql2);
               query2.setParameter("id_prov", id_prov);
