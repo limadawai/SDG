@@ -1126,6 +1126,47 @@ public class RanRadSdgController {
         return "admin/ran_rad/map/goals";
     }
     
+    @GetMapping("admin/get-mapping/{id_prov}/{id_monper}")
+    public @ResponseBody Map<String, Object> getMapping(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
+        String sql  = "Select b.id as idgol, c.id as idtar, d.id as idindi,\r\n" + 
+        		"b.id_goals, c.id_target, d.id_indicator, b.nm_goals, b.nm_goals_eng,\r\n" + 
+        		"c.nm_target,c.nm_target_eng,d.nm_indicator,d.nm_indicator_eng,\r\n" + 
+        		"g.id_program, f.id_activity, e.id_gov_indicator, g.nm_program, g.nm_program_eng,\r\n" + 
+        		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role\r\n" + 
+        		"from gov_map a \r\n" + 
+        		"left join sdg_goals b on a.id_goals = b.id\r\n" + 
+        		"left join sdg_target c on a.id_target = c.id\r\n" + 
+        		"left join sdg_indicator d on a.id_indicator = d.id\r\n" + 
+        		"left join gov_indicator e on a.id_gov_indicator = e.id\r\n" + 
+        		"left join gov_activity f on e.id_activity = f.id\r\n" + 
+        		"left join gov_program g on f.id_program = g.id\r\n" + 
+        		"left join ref_role h on f.id_role = h.id_role\r\n" + 
+        		"where a.id_prov = :id_prov and a.id_monper = :id_monper\r\n" + 
+        		"union\r\n" + 
+        		"Select b.id as idgol, c.id as idtar, d.id as idindi,\r\n" + 
+        		"b.id_goals, c.id_target, d.id_indicator, b.nm_goals, b.nm_goals_eng,\r\n" + 
+        		"c.nm_target,c.nm_target_eng,d.nm_indicator,d.nm_indicator_eng,\r\n" + 
+        		"g.id_program, f.id_activity, e.id_nsa_indicator, g.nm_program, g.nm_program_eng,\r\n" + 
+        		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role\r\n" + 
+        		"from nsa_map a \r\n" + 
+        		"left join sdg_goals b on a.id_goals = b.id\r\n" + 
+        		"left join sdg_target c on a.id_target = c.id\r\n" + 
+        		"left join sdg_indicator d on a.id_indicator = d.id\r\n" + 
+        		"left join nsa_indicator e on a.id_nsa_indicator = e.id\r\n" + 
+        		"left join nsa_activity f on e.id_activity = f.id\r\n" + 
+        		"left join nsa_program g on f.id_program = g.id\r\n" + 
+        		"left join ref_role h on f.id_role = h.id_role\r\n" + 
+        		"where a.id_prov = id_prov and a.id_monper = id_monper";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", id_prov);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     public String getStringByColumn(String sql,Integer column){
       Query list = em.createNativeQuery(sql);
       Map<String, Object> map = new HashMap<>();

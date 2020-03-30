@@ -61,12 +61,12 @@
 													<span class="lang_indo">No</span>
 												</th>
 												<th style="text-align:center;font-size:80%;" width="10%">
-													<span class="lang_eng" style="display:none">Code</span>
-													<span class="lang_indo">Kode</span>
+													<span class="lang_eng" style="display:none">SDGs</span>
+													<span class="lang_indo">SDGs</span>
 												</th>
 												<th style="text-align:center;font-size:80%;" width="75%">
-													<span class="lang_eng" style="display:none">Goals</span>
-													<span class="lang_indo">Sasaran</span>
+													<span class="lang_eng" style="display:none">Program</span>
+													<span class="lang_indo">Program</span>
 												</th>
 											</tr>
 										</thead>
@@ -174,7 +174,7 @@
 				"autoWidth": true,
 				"responsive":true,
 				"ajax": {
-					"url": urls+'list-sdgGoals',
+					"url": urls+'get-mapping/'+$("#id_prov").val()+"/"+$("#id_monper").val(),
 					dataSrc: 'content',
 				},
 				"searching": true,
@@ -183,10 +183,34 @@
 							return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_goals+"</div>";
+							if($("#fs").is(':checked')){
+								return "<div style='font-size:90%;'>"
+								+"<div>"+row[3]+" "+row[6]+"</div>"+
+								+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[8]?row[8]:'')+"</div>"+
+								+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[10]?row[10]:'')+"</div>"+
+								"</div>";
+							}else{
+								return "<div style='font-size:90%;'>"
+								+"<div>"+row[3]+" "+row[7]+"</div>"+
+								+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[9]?row[9]:'')+"</div>"+
+								+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[11]?row[11]:'')+"</div>"+
+								"</div>";
+							}
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'><a href='"+urls+"ran_rad/map/goals/"+$('#id_monper').val()+"/"+row.id+"/target' class='target' data-id='"+row.id_goals+"'>"+row.nm_goals+"</a></div>";
+						if($("#fs").is(':checked')){
+							return "<div style='font-size:90%;'>"
+							+"<div>"+row[3]+" "+row[6]+"</div>"+
+							+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[8]?row[8]:'')+"</div>"+
+							+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[10]?row[10]:'')+"</div>"+
+							"</div>";
+						}else{
+							return "<div style='font-size:90%;'>"
+							+"<div>"+row[3]+" "+row[7]+"</div>"+
+							+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[9]?row[9]:'')+"</div>"+
+							+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[11]?row[11]:'')+"</div>"+
+							"</div>";
+						}
 						}},
 				],
 				"columnDefs": [

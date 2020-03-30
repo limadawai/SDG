@@ -467,7 +467,7 @@ public class ApprovalController {
             Query query = em.createNativeQuery(sql);
             List list   = query.getResultList();
             if(!list.get(0).toString().equals("0")) {
-            	em.createNativeQuery("UPDATE entry_approval set read_date = NOW() where id_role ='"+id_role+"' and approval = '3' and (read_date is null or read_date='') ").executeUpdate();
+            	em.createNativeQuery("UPDATE entry_approval set read_date = NOW() where id_role ='"+id_role+"' and approval = '3' and (read_date is null) ").executeUpdate();
             }
     	}        
     	model.addAttribute("name", session.getAttribute("name"));
