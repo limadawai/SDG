@@ -37,7 +37,9 @@
                                 <option value="0" >-- Pilih Lembaga/Filantropi --</option>
                                 <option th:each="f:${listInsProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
-                            <!-- <button id="export" class="btn btn-warning pull-right">Export Excel</button> -->
+
+                            <button id="export" class="btn btn-warning pull-right" style="margin-left: 3px">Export Excel</button> 
+
                             <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none">
                                 <span class="lang_indo">Tambah</span>
                                 <span class="lang_eng" style="display: none">Add</span>
