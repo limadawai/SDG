@@ -41,13 +41,13 @@
 								  <span class="add-on"><i class="icon-search"></i></span>
 								</div>
                     		</div>
-                    		<div class="span6" align="right">
+                    		<!-- <div class="span6" align="right">
                                  <button id="export" class="btn btn-warning" data="/sdg/export-excell">
                     				<i class="icon-download"></i> 
                     					<span class="lang_eng" style="display:none">Export</span>
                     					<span class="lang_indo">Ekspor</span>
                     			</button>
-                    		</div>
+                    		</div> -->
                     	</div>
                     	<br/>
                         <div class="row-fluid">
@@ -192,10 +192,11 @@
 		        		exportOptions: {
 		        		    format: {
 		        		        body: function(data, column, row) {
-		        		            if (typeof data === 'string' || data instanceof String) {
-		        		                
-		        		            }
-		        		            data = data.replace(/<br\s*\/?>/ig, '\n');
+		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+		        		            data = data.replace(/<.*?>/g, "");
+		        		            data = data.replace("&amp;", "&");
+		        		            data = data.replace("&nbsp;", "");
+		        		            data = data.replace("&nbsp;", "");
 		        		            return data;
 		        		        }
 		        		    }
@@ -213,32 +214,24 @@
 						}},
 					{"data": function (row, data, index, display) {
 							if($("#fs").is(':checked')){
-								return ""
-								+""+row[3]+" "+row[6]+"<br/>"
-								+""+(row[4]?row[4]:'')+" "+(row[8]?row[8]:'')+"<br/>"
-								+""+(row[5]?row[5]:'')+" "+(row[10]?row[10]:'')+"<br/>"
-								+"";
+								return row[3]+" "+row[6]+"<br/>"
+								+(row[4]?row[4]:'')+" "+(row[8]?row[8]:'')+"<br/>"
+								+(row[5]?row[5]:'')+" "+(row[10]?row[10]:'')+"<br/>";
 							}else{
-								return "<div style='font-size:90%;'>"
-								+"<div>"+row[3]+" "+row[7]+"\n</div>"
-								+"<div style='margin-left:15px'>"+(row[4]?row[4]:'')+" "+(row[9]?row[9]:'')+"\n</div>"
-								+"<div style='margin-left:30px'>"+(row[5]?row[5]:'')+" "+(row[11]?row[11]:'')+"\n</div>"+
-								"</div>";
+								return row[3]+" "+row[7]+"<br/>"
+								+(row[4]?row[4]:'')+" "+(row[9]?row[9]:'')+"<br/>"
+								+(row[5]?row[5]:'')+" "+(row[11]?row[11]:'')+"<br/>";
 							}
 						}},
 					{"data": function (row, data, index, display) {
 						if($("#fs").is(':checked')){
-							return "<div style='font-size:90%;'>"
-							+"<div>"+row[12]+" "+row[15]+"\n</div>"
-							+"<div style='margin-left:15px'>"+(row[13]?row[13]:'')+" "+(row[8]?row[17]:'')+"\n</div>"
-							+"<div style='margin-left:30px'>"+(row[14]?row[14]:'')+" "+(row[10]?row[19]:'')+"\n</div>"+
-							"</div>";
+							return row[12]+" "+row[15]+"<br/>"
+							+(row[13]?row[13]:'')+" "+(row[17]?row[17]:'')+"<br/>"
+							+(row[14]?row[14]:'')+" "+(row[19]?row[19]:'')+"<br/>";
 						}else{
-							return "<div style='font-size:90%;'>"
-							+"<div>"+row[12]+" "+row[16]+"\n</div>"
-							+"<div style='margin-left:15px'>"+(row[13]?row[13]:'')+" "+(row[8]?row[18]:'')+"\n</div>"
-							+"<div style='margin-left:30px'>"+(row[14]?row[14]:'')+" "+(row[10]?row[20]:'')+"\n</div>"+
-							"</div>";
+							return row[12]+" "+row[16]+"<br/>"
+							+(row[13]?row[13]:'')+" "+(row[18]?row[18]:'')+"<br/>"
+							+(row[14]?row[14]:'')+" "+(row[20]?row[20]:'')+"<br/>";
 						}
 						}},
 						{"data": function (row, data, index, display) {
