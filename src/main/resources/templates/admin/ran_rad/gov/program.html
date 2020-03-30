@@ -45,11 +45,11 @@
 								</div>
                     		</div>
                     		<div class="span6" align="right">
-                    			<button id="export" class="btn btn-warning" data="/sdg/export-excell">
+                    			<!-- <button id="export" class="btn btn-warning" data="/sdg/export-excell">
                     				<i class="icon-download"></i> 
                     					<span class="lang_eng" style="display:none">Export</span>
                     					<span class="lang_indo">Ekspor</span>
-                    			</button>
+                    			</button> -->
                     			<!-- <button data-toggle="modal" data-target="#myModal" class="btn btn-primary"> -->
                     			<button id="showModal" class="btn btn-primary">
                     				<i class="icon-plus"></i> 
@@ -66,13 +66,9 @@
                                     <thead>
                                     	<tr>
                                             <th style="text-align:center;font-size:80%;">No.</th>
-                                            <th style="text-align:center;font-size:80%;">
-                                            	<span class="lang_eng" style="display:none">Code</span>
-                                            	<span class="lang_indo">Kode</span>
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Code" data-lang_indo="Kode">
                                             </th>
-                                            <th style="text-align:center;font-size:80%;">
-                                            	<span class="lang_eng" style="display:none">SDG E-Monev Code</span>
-                                            	<span class="lang_indo">Kode SDG E-Monev</span>
+                                            <th style="text-align:center;font-size:80%;"  class="head-tabel" data-lang_eng="SDG E-Monev Code" data-lang_indo="Kode SDG E-Monev">
                                             </th>
                                             <th style="text-align:center;font-size:80%;">
                                             	Program
@@ -255,8 +251,22 @@
 	        }else{
 	        	bhs($('#fs').is(':checked'));
 	        }
+	        function headtabel(){
+	        	var text;
+	        	if($("#fs").is(':checked')){
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_indo'));
+        			});
+	        	}else{
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_eng'));
+        			});
+	        	}
+	        }
+	        headtabel();
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
+	        	 headtabel();
 	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
 	        });
 	        
@@ -307,11 +317,39 @@
 			
 			var table = $('#tabel-goals').DataTable({
 				responsive: true,
-				sDom: 'lrtip',
+				sDom: 'Brtip',
 				"bLengthChange": false,
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				buttons: [
+		        	{
+		        	    extend: 'print',
+		        	    text: 'Print',
+		        	    exportOptions: {
+		        	        columns: [ 0,1,2,3 ]
+		        	    }
+		        	},
+		        	{
+		        		extend: 'excelHtml5',
+		        		filename: 'Gov Program',
+		        		text: 'Save as Excel',
+		        		exportOptions: {
+		        		    format: {
+		        		        body: function(data, column, row) {
+		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+		        		            data = data.replace(/<.*?>/g, "");
+		        		            data = data.replace("&amp;", "&");
+		        		            data = data.replace("&nbsp;", "");
+		        		            data = data.replace("&nbsp;", "");
+		        		            return data;
+		        		        }
+		        		    }
+		        	,
+        		    columns: [ 0,1,2,3 ]
+		        		}
+		        	},
+		        ],
 				"ajax": {
 					//"url": urls+'list-govProg/'+id_role+'/'+id_monper,
 					"url": urls+'list-govProg/'+id_monper,

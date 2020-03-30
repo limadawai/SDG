@@ -5,7 +5,7 @@
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     <head th:include="admin/layout :: header">
-    <title th:text="Institution Profile">Institution Profile</title>
+    <title th:text="Community Organization/Philantrophy Profile">Community Organization/Philantrophy Profile</title>
 </head>
 <body>
     <div th:include="admin/layout :: menu"></div>
@@ -13,19 +13,19 @@
 <!--  Content  -->
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>NSA / Institution Profile</a></div>
-            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>NSA / Profil Institusi</a></div>
+            <div id="breadcrumb" class="lang_eng" style="display: none"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>NSA / Community Organization/Philantrophy Profile</a></div>
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>NSA / Profil Lembaga/Filantropi</a></div>
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title lang_eng" id="judul-eng" style="display: none">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Table Institution Profile</h5>
+                        <h5>Table Community Organization/Philantrophy Profile</h5>
                     </div>
                     <div class="widget-title lang_indo" id="judul-indo">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Tabel Profil Institusi</h5>
+                        <h5>Tabel Profil Lembaga/Filantropi</h5>
                     </div>
                     <div class="widget-content">
                         <div class="pull-left" style="width:100%">
@@ -34,10 +34,10 @@
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="nm_ins_profil" name="nm_ins_profil" class="form-control">
-                                <option value="0" >-- Pilih Institusi --</option>
+                                <option value="0" >-- Pilih Lembaga/Filantropi --</option>
                                 <option th:each="f:${listInsProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
-                            <button id="export" class="btn btn-warning pull-right">Export Excel</button>
+                            <!-- <button id="export" class="btn btn-warning pull-right">Export Excel</button> -->
                             <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none">
                                 <span class="lang_indo">Tambah</span>
                                 <span class="lang_eng" style="display: none">Add</span>
@@ -61,7 +61,7 @@
                                             <th style="text-align:center;font-size:80%;" class="head-tabel">
                                                 No.
                                             </th>
-                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Institution Profile Name" data-lang_indo="Nama Profil Institusi">
+                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Community Organization/Philantrophy Profile Name" data-lang_indo="Nama Profil Lembaga/Filantropi">
                                              </th>
                                             <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Achievement" data-lang_indo="Pencapaian">
                                             </th>
@@ -95,20 +95,20 @@
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h3 class="modal-title lang_indo" id="exampleModalLabel">Profil Institusi</h3>
-                        <h3 class="modal-title lang_eng" id="exampleModalLabel" style="display: none">Institution Profile</h3>
+                        <h3 class="modal-title lang_indo" id="exampleModalLabel">Profil Lembaga/Filantropi</h3>
+                        <h3 class="modal-title lang_eng" id="exampleModalLabel" style="display: none">Community Organization/Philantrophy Profile</h3>
                     </div>
                     <form class="form-horizontal">
                         <div class="modal-body">
                             <div class="control-group" style="display: none">
-                                <label for="nm_inst" class="lang_indo">ID Institusi :</label>
-                                <label for="nm_inst" class="lang_eng" style="display: none">Institution ID :</label>
+                                <label for="nm_inst" class="lang_indo">ID Lembaga/Filantropi :</label>
+                                <label for="nm_inst" class="lang_eng" style="display: none">Community Organization/Philantrophy ID :</label>
                                 <input name="id_inst" id="id_inst" type="hidden" class="input-block-level" readonly>
                                 <input name="id_role" id="id_role" type="hidden" class="input-block-level" readonly>
                             </div>
                             <div class="control-group">
-                                <label for="nm_inst" class="lang_indo">Nama Profil Institusi :</label>
-                                <label for="nm_inst" class="lang_eng" style="display: none">Institution Profile Name :</label>
+                                <label for="nm_inst" class="lang_indo">Nama Profil Lembaga/Filantropi :</label>
+                                <label for="nm_inst" class="lang_eng" style="display: none">Community Organization/Philantrophy Profile Name :</label>
                                 <input name="nm_inst" id="nm_inst" type="text" class="input-block-level" required>
                             </div>
                             <div class="control-group">
@@ -238,7 +238,7 @@
                 		        	},
                 		        	{
                 		        		extend: 'excelHtml5',
-                		        		filename: 'Profil Institusi',
+                		        		filename: 'Profil Lembaga/Filantropi',
                 		        		text: 'Save as Excel',
                 		        		exportOptions: {
                 		        		    format: {
@@ -357,7 +357,7 @@
                     type: "GET",
                     url: urls+'list-get-option-role-ins-profil/'+id_prov,
                     success: function (result) {
-                        $("#nm_ins_profil").html('<option value="0" >-- Pilih Institusi --</option>');
+                        $("#nm_ins_profil").html('<option value="0" >-- Pilih Lembaga/Filantropi --</option>');
                         $("#nm_ins_profil").append("<option value='00'>-- ALL --</option>");
                         var array = result.content;
                         if (array != '') {
@@ -386,7 +386,7 @@
     		        	},
     		        	{
     		        		extend: 'excelHtml5',
-    		        		filename: 'Profil Institusi',
+    		        		filename: 'Profil Lembaga/Filantropi',
     		        		text: 'Save as Excel',
     		        		exportOptions: {
     		        		    format: {
@@ -506,7 +506,7 @@
 	                		        	},
 	                		        	{
 	                		        		extend: 'excelHtml5',
-	                		        		filename: 'Profil Institusi',
+	                		        		filename: 'Profil Lembaga/Filantropi',
 	                		        		text: 'Save as Excel',
 	                		        		exportOptions: {
 	                		        		    format: {
@@ -581,7 +581,7 @@
 	                		        	},
 	                		        	{
 	                		        		extend: 'excelHtml5',
-	                		        		filename: 'Profil Institusi',
+	                		        		filename: 'Profil Lembaga/Filantropi',
 	                		        		text: 'Save as Excel',
 	                		        		exportOptions: {
 	                		        		    format: {
@@ -757,7 +757,7 @@
             		        	},
             		        	{
             		        		extend: 'excelHtml5',
-            		        		filename: 'Profil Institusi',
+            		        		filename: 'Profil Lembaga/Filantropi',
             		        		text: 'Save as Excel',
             		        		exportOptions: {
             		        		    format: {
@@ -864,7 +864,7 @@
             		        	},
             		        	{
             		        		extend: 'excelHtml5',
-            		        		filename: 'Profil Institusi',
+            		        		filename: 'Profil Lembaga/Filantropi',
             		        		text: 'Save as Excel',
             		        		exportOptions: {
             		        		    format: {
@@ -1030,7 +1030,7 @@
                 		        	},
                 		        	{
                 		        		extend: 'excelHtml5',
-                		        		filename: 'Profil Institusi',
+                		        		filename: 'Profil Lembaga/Filantropi',
                 		        		text: 'Save as Excel',
                 		        		exportOptions: {
                 		        		    format: {
@@ -1100,7 +1100,7 @@
     	var idprov = $("#id_prov").val();
     	var idrole = $("#nm_ins_profil").val();
     	if (idrole == "0") {
-    		swal("Anda harus memilih institusi");
+    		swal("Anda harus memilih Lembaga/Filantropi");
     	} else if(idrole == "00") {
     		window.open(urls+"nsa/dowload_inst_all/"+idprov, "_blank");
     	} else {

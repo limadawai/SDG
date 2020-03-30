@@ -72,17 +72,13 @@
 	                                    <thead>
 	                                        <tr>
 	                                            <th style="text-align:center;font-size:80%;">No.</th>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	<span class="lang_eng" style="display:none">Code</span>
-	                                            	<span class="lang_indo">Kode</span>
+	                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Code" data-lang_indo="Kode">
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	<span class="lang_eng" style="display:none">SDG E-Monev Code</span>
-	                                            	<span class="lang_indo">Kode SDG E-Monev</span>
+	                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="SDG E-Monev Code" data-lang_indo="Kode SDG E-Monev">
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	<span class="lang_eng" style="display:none">Activity</span>
-	                                            	<span class="lang_indo">Kegiatan</span>
+	                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Activity" data-lang_indo="Kegiatan">
+	                                            	<span class="lang_eng" style="display:none"></span>
+	                                            	<span class="lang_indo"></span>
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">Action</span>
@@ -184,6 +180,7 @@
 			var id_program = $('#id_program').val();
 			var privilege = [[${privilege}]];
 			var id_role = [[${id_role}]];
+			
 			$('#id_role').val(id_role).trigger('change');
 			if(privilege=="USER"){
 				$('#id_role').attr('disabled',true);
@@ -233,9 +230,26 @@
 	        }else{
 	        	bhs($('#fs').is(':checked'));
 	        }
+	        var program_name;
+	        function headtabel(){
+	        	var text;
+	        	if($("#fs").is(':checked')){
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_indo'));
+        			});
+	        		program_name = [[${govProg.nm_program}]];
+	        	}else{
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_eng'));
+        			});
+	        		program_name = [[${govProg.nm_program_eng}]];
+	        	}
+	        }
+	        headtabel();
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
+	        	headtabel();
 	        });
 	        
 	        $('#id_role').on('change', function(){
@@ -267,11 +281,41 @@
 	        
 			var table = $('#tabel-target').DataTable({
 				responsive: true,
-				sDom: 'lrtip',
+				sDom: 'Brtip',
 				"bLengthChange": false,
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				buttons: [
+		        	{
+		        	    extend: 'print',
+		        	    text: 'Print',
+		        	    messageTop: 'Program Name '+[[${govProg.id_program}]]+'. '+program_name,
+		        	    exportOptions: {
+		        	        columns: [ 0,1,2,3 ]
+		        	    }
+		        	},
+		        	{
+		        		extend: 'excelHtml5',
+		        		filename: 'Gov Activity',
+		        		text: 'Save as Excel',
+		        		messageTop: 'Program Name '+[[${govProg.id_program}]]+'. '+program_name,
+		        		exportOptions: {
+		        		    format: {
+		        		        body: function(data, column, row) {
+		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+		        		            data = data.replace(/<.*?>/g, "");
+		        		            data = data.replace("&amp;", "&");
+		        		            data = data.replace("&nbsp;", "");
+		        		            data = data.replace("&nbsp;", "");
+		        		            return data;
+		        		        }
+		        		    }
+		        	,
+        		    columns: [ 0,1,2,3 ]
+		        		}
+		        	},
+		        ],
 				"ajax": {
 					"url": urls+'list-govActivity/'+id_program+'/'+$('#id_role').val(),
 					dataSrc: 'content',
