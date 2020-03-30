@@ -222,9 +222,9 @@
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
-                        	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
+                        	if(privilege == 'ADMIN' || privilege == 'SUPER'){
                         		$("#idrole").append('<option value="all" >-- ALL --</option>');
-                        	} */
+                        	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
