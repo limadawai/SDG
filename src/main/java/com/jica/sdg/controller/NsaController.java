@@ -415,14 +415,43 @@ public class NsaController {
     
     @GetMapping("admin/list-getid-nsa-collaboration/{id}")
     public @ResponseBody Map<String, Object> listNsaCollaboration(@PathVariable("id") String id) {
-        String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id_program, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy, d.id_prov, a.nm_program_eng, e.id_inst, e.nm_inst, e.id_role from nsa_program as a \n" +
+        String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id_program, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy, d.id_prov, a.nm_program_eng from nsa_program as a \n" +
                     "left join nsa_collaboration as b on a.id_program = b.id_program\n" +
                     "left join philanthropy_collaboration as c on b.id_philanthropy = c.id_philanthropy\n" +
                     "left join ref_role as d on a.id_role = d.id_role\n " +
-                    "left join nsa_inst as e on c.id_inst = e.id_inst\n " +
+//                    "left join nsa_inst as e on c.id_inst = e.id_inst\n " +
                     "where a.id_role = :id ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/jumlah_role_philan/{id}")
+    public @ResponseBody Map<String, Object> jumlah_role_philan(@PathVariable("id") String id) {
+        String sql  = "select count(*) as tot from philanthropy_collaboration a\n" +
+                    "left join nsa_inst b on a.id_inst = b.id_inst\n" +
+                    "where b.id_role = :id ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list_add_support_philan/{id}")
+    public @ResponseBody Map<String, Object> list_add_support_philan(@PathVariable("id") String id_collaboration) {
+        String sql  = "select a.id_philanthropy, a.type_support, a.nm_philanthropy, a.nm_pillar, a.loc_philanthropy,\n" +
+                    "b.id_inst, b.nm_inst, b.id_role, c.sector, c.location\n" +
+                    "from philanthropy_collaboration a\n" +
+                    "left join nsa_collaboration c on a.nm_philanthropy = c.id\n" +
+                    "left join nsa_inst b on a.id_inst = b.id_inst\n" +
+                    "where a.nm_philanthropy = :id_collaboration ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_collaboration", id_collaboration);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
