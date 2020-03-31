@@ -103,7 +103,7 @@
                 type: "GET",
                 url: urls+'list-get-option-role-all-profil-notojk/'+id_prov,
                 success: function (result) {
-                    $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                    $("#idrole").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>');
                     var array = result.content;
                     console.log(array);
                     if (array != '') {
