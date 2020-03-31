@@ -73,7 +73,15 @@ public class ApprovalController {
 			String sql;
 			if(app.getType().equals("entry_sdg")) {
 				sql  = "select DISTINCT id_role from assign_sdg_indicator as a where a.id_monper = '"+app.getId_monper()+"'";
-			}else {
+			}else if(app.getType().equals("entry_gov_budget")) {
+				sql = "select DISTINCT a.id_role "
+		    			+ "from gov_activity as a "
+		    			+ "left join gov_program b on a.id_program = b.id "
+		    			+ "left join ref_role f on a.id_role = f.id_role "
+		    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+		    			+ "where g.id_monper = '"+app.getId_monper()+"' "
+		    			+ "order by a.id_role";
+			}else{
 				sql  = "select id_role from assign_sdg_indicator as a where a.id_monper = :id_monper and a.id_prov = :id_prov";
 			}
 	        Query query1 = em.createNativeQuery(sql);
@@ -543,9 +551,12 @@ public class ApprovalController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> role = roleService.findOne(id_role);
     	String privilege = role.get().getPrivilege();
+    	String id_prov = role.get().getId_prov();
     	if(privilege.equals("SUPER")) {
     		model.addAttribute("data", approvalService.getAllMessage());
-    	}else {
+    	}else if(privilege.equals("ADMIN")) {
+    		model.addAttribute("data", approvalService.getMessageByProv(Integer.parseInt(id_prov)));
+    	}else{
     		model.addAttribute("data", approvalService.getMessageByRole(id_role));
     		String sql  = "select count(id) from entry_approval where id_role ='"+id_role+"' and approval = '3' and (read_date is null or read_date='') ";
             Query query = em.createNativeQuery(sql);

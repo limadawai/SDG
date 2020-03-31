@@ -83,5 +83,10 @@ public class EntryApprovalService implements IEntryApprovalService{
 	public List<EntryApproval> getMessageByRole(Integer id_role) {
 		return repo.getMessageByRole(id_role);
 	}
+
+	@Override
+	public List<EntryApproval> getMessageByProv(Integer id_prov) {
+		return repo.getMessageByProv(id_prov);
+	}
 	
 }
