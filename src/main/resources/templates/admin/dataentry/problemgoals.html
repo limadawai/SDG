@@ -480,7 +480,7 @@
                                         {"data": function (row, data, index, display) {
                                                 var data =  JSON.stringify(row).replace(/'/g, "&#39");
                                                 var id = row[16];
-							if(row[17]==1){
+							if(row[17]==1||row[17]==3){
                                                             $('#unapply_btn').show();
                                                             $('#add_problem').hide();
                                                             $('#apply_btn').hide();

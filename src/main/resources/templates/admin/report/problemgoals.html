@@ -105,16 +105,17 @@
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     var array = result.content;
+                    console.log(array);
                     if (array != '') {
                         for (i in array) {
                             $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                         }
                     }
-//                    if(privilege == 'ADMIN'){
-//                        $("#idrole").val('0').trigger("change").attr('disabled',false);
-//                    }else{
-//                        $("#idrole").val(id_role).trigger("change").attr('disabled',true);
-//                    }
+                    if(privilege == 'ADMIN'){
+                        $("#idrole").val('0').trigger("change").attr('disabled',false);
+                    }else{
+                        $("#idrole").val(id_role).trigger("change").attr('disabled',true);
+                    }
                 }
             });
 
@@ -140,7 +141,7 @@
                 }
             });
 
-            $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
+            $("#id_prov").val(id_prov).trigger("change");
         }
 
 
@@ -154,6 +155,7 @@
                     url: urls+'list-get-option-role-all-profil-notojk/'+id_prov,
                     success: function (result) {
                         $("#idrole").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>');
+                        
                         var array = result.content;
                         if (array != '') {
                             for (i in array) {
@@ -167,7 +169,12 @@
                     type: "GET",
                     url: urls+'list-get-option-monper/'+id_prov,
                     success: function (result1) {
-                        $("#periode").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>');
+                        if(id_role == '1'){
+                            $("#periode").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>'); 
+                         }else{
+                             $("#periode").html('<option value="0" >-- Pilih --</option>');
+                         }
+//                        $("#periode").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>');
                         var array1 = result1.content;
                         if (array1 != '') {
                             for (i in array1) {
@@ -188,11 +195,13 @@
         });
 
         $("#periode").on('click', function(e){
-            var data_id     = this.value.split("###");
-             var id_prov             = $('#id_prov').val();
-            var id_monper   = data_id[0];
-            var tahun       = data_id[1];
+            var data_id         = this.value.split("###");
+            var id_prov         = $('#id_prov').val();
+            var id_monper       = data_id[0];
+            var tahun           = data_id[1];
+            var id_role_login   = id_role;
             var id_role     = $('#idrole').val();
+            console.log(id_role_login);
              if(this.selectedIndex == -1) {
                 alert('select one answer');
             }else{
@@ -201,6 +210,8 @@
                     url: urls+'list-get-option-category/'+id_prov+'/'+id_role+'/'+id_monper,
                     success: function (result1) {
                         var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
+                        
+                        
 //                        console.log(result1.content.length);
                         if(result1.content.length>0){
                             $.each(result1.content,function(i,x){
@@ -221,6 +232,7 @@
             var id_prov             = $('#id_prov').val();
             var id_monper           = data_id[0];
             var tahun               = data_id[1];
+            var id_role_login       = id_role;
             var id_role             = $('#idrole').val();
             var id_refcategory      = $('#ref_category').val();
             if(this.selectedIndex == -1) {
@@ -231,7 +243,7 @@
                     url: urls+'list-get-option-goals/'+id_prov+'/'+id_role+'/'+id_monper+'/'+id_refcategory,
                     success: function (result1) {
                         var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
-//                        console.log(result1.content.length);
+                        
                         if(result1.content.length>0){
                             $.each(result1.content,function(i,x){
                                 option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
@@ -250,6 +262,7 @@
             var id_prov             = $('#id_prov').val();
             var id_monper           = data_id[0];
             var tahun               = data_id[1];
+            var id_role_login       = id_role;
             var id_role             = $('#idrole').val();
             var id_refcategory      = $('#ref_category').val();
             var id_goals            = $('#goals').val();
@@ -261,7 +274,7 @@
                 url: urls+'list-get-option-goals/'+id_prov+'/'+id_role+'/'+id_monper+'/'+id_refcategory+'/'+id_goals,
                     success: function (result1) {
                         var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
-//                        console.log(result1.content.length);
+                        
                         if(result1.content.length>0){
                             $.each(result1.content,function(i,x){
                                 option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
@@ -278,6 +291,7 @@
             var id_prov             = $('#id_prov').val();
             var id_monper           = data_id[0];
             var tahun               = data_id[1];
+            var id_role_login       = id_role;
             var id_role             = $('#idrole').val();
             var id_refcategory      = $('#ref_category').val();
             var id_goals            = $('#goals').val();
@@ -289,8 +303,8 @@
                 type: "GET",
                 url: urls+'list-get-option-goals/'+id_prov+'/'+id_role+'/'+id_monper+'/'+id_refcategory+'/'+id_goals+'/'+id_target,
                     success: function (result1) {
-                        var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
-//                        console.log(result1.content.length);
+                       var option = '<option value="0" >-- Pilih --</option><option value="*" >ALL</option>';
+                       
                         if(result1.content.length>0){
                             $.each(result1.content,function(i,x){
                                 option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
