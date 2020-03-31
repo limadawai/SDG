@@ -190,7 +190,7 @@ public class EntryController {
             if(id.equals("")){
                 Query query = em.createNativeQuery("INSERT INTO entry_problem_identify \n" +
                                                     "(id_cat,problem,follow_up,id_prov,id_role,`year`,year_entry,created_by,date_created,summary,id_monper,id_relation) \n" +
-                                                    "VALUES(:id_cat,:problem,:follow_up,:id_prov,:id_role,:year,DATE_FORMAT(NOW(), '%Y'),'1',DATE_FORMAT(NOW(), '%Y-%m-%d '),'1',:id_monper,:id_relation)");
+                                                    "VALUES(:id_cat,:problem,:follow_up,:id_prov,:id_role,:year,DATE_FORMAT(NOW(), '%Y'),'1',DATE_FORMAT(NOW(), '%Y-%m-%d'),'1',:id_monper,:id_relation)");
                 query.setParameter("id_cat", id_cat)
                      .setParameter("problem", problem)
                      .setParameter("follow_up", follow_up)
@@ -283,10 +283,11 @@ public class EntryController {
         String id_monper         = jsonObunit.get("id_monper").toString();  
         String tahun             = jsonObunit.get("tahun").toString();
         String id_role           = jsonObunit.get("id_role").toString();
+            em.createNativeQuery("delete from entry_approval  where id_monper = '"+id_monper+"' AND year = '"+tahun+"' AND id_role = '"+id_role+"' AND type = 'entry_problem_identify'").executeUpdate();
             Query query = em.createNativeQuery("INSERT INTO entry_approval (id_role,id_monper,YEAR,TYPE,approval,approval_date,periode)\n" +
                                                 "SELECT DISTINCT a.id_role,a.id_monper,a.year,'entry_problem_identify' AS TYPE,'1' AS approval, CURDATE() AS approval_date ,'0' as periode FROM entry_problem_identify a \n" +
                                                 "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
-                                                "WHERE a.id_monper = '"+id_monper+"' AND a.year = '"+tahun+"' AND a.id_role = '"+id_role+"'  ");
+                                                "WHERE a.id_monper = '"+id_monper+"' AND a.year = '"+tahun+"' AND a.id_role = '"+id_role+"'  ;");
             query.executeUpdate();
 	}    
     @PostMapping(path = "admin/problem-identification/un-aply", consumes = "application/json", produces = "application/json")
