@@ -262,8 +262,7 @@ public class NsaController {
     @GetMapping("admin/list-get-option-role-all-profil-notojk/{id}")
     public @ResponseBody Map<String, Object> getOptionAllProfilListNotOjk(@PathVariable("id") String id) {
         
-        String sql  = "select * from ref_role as a where a.id_prov = :id and id_role!=1 and cat_role != 'gri_ojk' ";
-//        String sql  = "select * from ref_role as a where a.id_prov = :id and id_role!=1";
+        String sql  = "select * from ref_role as a where a.id_prov = :id and id_role!=1 and cat_role != 'gri_ojk' and cat_role != 'Institution' ";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();

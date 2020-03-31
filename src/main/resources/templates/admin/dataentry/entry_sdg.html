@@ -144,6 +144,7 @@
                                 <input name="id_sdg_indicator" id="id_sdg_indicator" type="hidden" class="input-block-level"/>
                                 <input name="id_disaggre" id="id_disaggre" type="hidden" class="input-block-level"/>
                                 <input name="id_disaggre_detail" id="id_disaggre_detail" type="hidden" class="input-block-level"/>
+                                <input name="role" id="role" type="hidden" class="input-block-level"/>
                             </div>
                         </div>
                         <div class="modal-footer" id="simpan_">
@@ -219,11 +220,11 @@
                     type: "GET",
                     url: urls+'list-get-option-role-all-profil/'+id_prov,
                     success: function (result) {
-                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        $("#idrole").html('<option value="100000" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
                         	if(privilege == 'ADMIN' || privilege == 'SUPER'){
-                        		$("#idrole").append('<option value="all" >-- ALL --</option>');
+                        		$("#idrole").append('<option value="0" >-- ALL --</option>');
                         	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
@@ -578,7 +579,7 @@
                                     	}
                                     	$.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+row[42],
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
@@ -600,7 +601,7 @@
                                             	}
                                             },
                                         });
-                                    	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
+                                    	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'###'+row[42]+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                     }},
                                 ],
                                 "columnDefs": [
@@ -847,7 +848,7 @@
                                     	}
                                     	$.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+row[42],
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
@@ -869,7 +870,7 @@
                                             	}
                                             },
                                         });
-                                    	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
+                                    	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'###'+row[42]+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                     }},
                                     {"data": function (row, data, index, display) {
                                     	var color_sts = "";
@@ -938,7 +939,7 @@
                                     	}
                                     	$.ajax({
                         					type: "GET",
-                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
+                                            url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2'+'/'+row[42],
                                             async:false,
                                             success: function (result) {
                                             	apply = result.content;
@@ -960,7 +961,7 @@
                                             	}
                                             },
                                         });
-                                    	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###2'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
+                                    	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###2'+'###'+id+'###'+row[42]+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                     }},
                                 ],
                                 "columnDefs": [
@@ -1344,7 +1345,7 @@
                                         	}
                                         	$.ajax({
                             					type: "GET",
-                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/1'+'/'+row[42],
                                                 async:false,
                                                 success: function (result) {
                                                 	apply = result.content;
@@ -1366,7 +1367,7 @@
                                                 	}
                                                 },
                                             });
-                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
+                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'###'+row[42]+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                         }
                                         }},
                                     {"data": function (row, data, index, display) {
@@ -1466,7 +1467,7 @@
                                         	}
                                         	$.ajax({
                             					type: "GET",
-                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/2'+'/'+row[42],
                                                 async:false,
                                                 success: function (result) {
                                                 	apply = result.content;
@@ -1488,7 +1489,7 @@
                                                 	}
                                                 },
                                             });
-                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###2'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
+                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###2'+'###'+id+'###'+row[42]+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                         }
                                         }},
                                     {"data": function (row, data, index, display) {
@@ -1575,7 +1576,7 @@
                                         	}
                                         	$.ajax({
                             					type: "GET",
-                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/3'+'/'+row[42],
                                                 async:false,
                                                 success: function (result) {
                                                 	apply = result.content;
@@ -1597,7 +1598,7 @@
                                                 	}
                                                 },
                                             });
-                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###3'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
+                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###3'+'###'+id+'###'+row[42]+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                         }
                                         }},
                                     {"data": function (row, data, index, display) {
@@ -1689,7 +1690,7 @@
                                         	}
                                         	$.ajax({
                             					type: "GET",
-                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
+                                                url: urls+'get-approve/entry_sdg/'+tahun+'/'+id_monper+'/4'+'/'+row[42],
                                                 async:false,
                                                 success: function (result) {
                                                 	apply = result.content;
@@ -1711,7 +1712,7 @@
                                                 	}
                                                 },
                                             });
-                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###4'+'###'+id+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
+                                        	return '<a data-id="'+row[2]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###4'+'###'+id+'###'+row[42]+'" data-dis="'+row[30]+'###'+row[31]+'" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                                         }
                                         }},
                                 ],
@@ -1750,7 +1751,7 @@
                 var achievement2        = $('#achievement2').val();
                 var achievement3        = $('#achievement3').val();
                 var achievement4        = $('#achievement4').val();
-                var v_idrole            = $("#idrole").val();
+                var v_idrole            = $("#role").val();
                 var v_dataid            = $("#periode").val();
                 var v_data_id           = v_dataid.split("###");;
                 var id_monper           = v_data_id[0];
@@ -1823,6 +1824,7 @@
                 var value4          = data[4];
                 var kode            = data[5];
                 var id              = data[6];
+                var role            = data[7];
                 
                 var datadis 		= $(this).data('dis');
                 var datadisnya		= datadis.split("###");
@@ -1876,6 +1878,7 @@
                 $('#id_disaggre').val(id_disaggre);
                 $('#id_disaggre_detail').val(id_disaggre_detail);
                 $('#id').val(id).hide();
+                $('#role').val(role).hide();
                 $('.addModal').modal("show");
                 $('#simpan_').show();
             });

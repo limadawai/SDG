@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jica.sdg.model.Problemlist;
 import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.service.ISdgGoalsService;
 import com.jica.sdg.service.ISdgIndicatorService;
@@ -213,19 +214,35 @@ public class ReportController {
     		@RequestParam("id_monper") String id_monper,
     		@PathVariable("sdg") String sdg) {
     	Query query;
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = monper.get().getStatus();
+    	
     	if(sdg.equals("0")) {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
-    		
-    		String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
-        			+ " left join sdg_goals b on a.id_goals = b.id "
-        			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-        			+ " right join gov_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
-    			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
-        			+ " left join sdg_goals b on a.id_goals = b.id "
-        			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-        			+ " right join nsa_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+    		String sql;
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
+            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+        			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
+            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+    		}else {
+    			sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
+            			+ " left join sdg_goals b on a.id_goals = b.id "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+        			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
+            			+ " left join sdg_goals b on a.id_goals = b.id "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+    		}
             query = manager.createNativeQuery(sql);
             query.setParameter("id_prov", id_prov);
             query.setParameter("id_monper", id_monper);
@@ -258,16 +275,30 @@ public class ReportController {
     		String hasilgoals = (goals.length()==0)?"":goals.substring(0, goals.length() - 1);
     		String gol = (hasilgoals.equals(""))?"":" and a.id_goals in("+hasilgoals+") ";
             String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
-    		String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
-        			+ " left join sdg_goals b on a.id_goals = b.id "
-        			+ " left join gov_indicator c on a.id_gov_indicator = c.id "
-        			+ " left join gov_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+            String sql;
+            if(status.equals("completed")) {
+            	sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
+            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
+            			+ " left join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " left join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
     			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
-        			+ " left join sdg_goals b on a.id_goals = b.id "
-        			+ " left join nsa_indicator c on a.id_nsa_indicator = c.id "
-        			+ " left join nsa_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
+            			+ " left join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " left join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+            }else {
+            	sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
+            			+ " left join sdg_goals b on a.id_goals = b.id "
+            			+ " left join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " left join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+    			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
+            			+ " left join sdg_goals b on a.id_goals = b.id "
+            			+ " left join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " left join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+            } 
             query = manager.createNativeQuery(sql);
             query.setParameter("id_prov", id_prov);
             query.setParameter("id_monper", id_monper);
@@ -287,19 +318,36 @@ public class ReportController {
     		@RequestParam("id_goals") String id_goals,
     		@PathVariable("sdg") String sdg) {
     	Query query;
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = monper.get().getStatus();
+    	
     	if(sdg.equals("0")) {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
-    		
-    		String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
-        			+ " left join sdg_target b on a.id_target = b.id "
-        			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-        			+ " right join gov_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role;
+    		String sql;
+            if(status.equals("completed")) {
+            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
+            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role;
+        			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
+            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role;
+            }else {
+            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
+            			+ " left join sdg_target b on a.id_target = b.id "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role;
     			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
-        			+ " left join sdg_target b on a.id_target = b.id "
-        			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-        			+ " right join nsa_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role;
+            			+ " left join sdg_target b on a.id_target = b.id "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role;
+            }
+    			
             query = manager.createNativeQuery(sql);
             query.setParameter("id_prov", id_prov);
             query.setParameter("id_monper", id_monper);
@@ -334,16 +382,30 @@ public class ReportController {
     		
     		String tar = (hasiltarget.equals(""))?"":" and a.id_target in("+hasiltarget+") ";
             String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
-            String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
-        			+ " left join sdg_target b on a.id_target = b.id "
-        			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-        			+ " right join gov_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role+" "+tar;
+            String sql;
+            if(status.equals("completed")) {
+            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
+            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role+" "+tar;
     			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
-        			+ " left join sdg_target b on a.id_target = b.id "
-        			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-        			+ " right join nsa_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role+" "+tar;
+            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role+" "+tar;
+            }else {
+            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
+            			+ " left join sdg_target b on a.id_target = b.id "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role+" "+tar;
+    			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
+            			+ " left join sdg_target b on a.id_target = b.id "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role+" "+tar;
+            }
             query = manager.createNativeQuery(sql);
             query.setParameter("id_prov", id_prov);
             query.setParameter("id_monper", id_monper);
@@ -365,19 +427,36 @@ public class ReportController {
     		@RequestParam("id_target") String id_target,
     		@PathVariable("sdg") String sdg) {
     	Query query;
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = monper.get().getStatus();
+    	
     	if(sdg.equals("0")) {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
-    		
-    		String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
-        			+ " left join sdg_indicator b on a.id_indicator = b.id "
-        			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-        			+ " right join gov_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role;
-    			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
-        			+ " left join sdg_indicator b on a.id_indicator = b.id "
-        			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-        			+ " right join nsa_activity d on c.id_activity = d.id "
-        			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role;
+    		String sql;
+            if(status.equals("completed")) {
+            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
+            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role;
+        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
+            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role;
+            }else {
+            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
+            			+ " left join sdg_indicator b on a.id_indicator = b.id "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role;
+        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
+            			+ " left join sdg_indicator b on a.id_indicator = b.id "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role;
+            }
+    		 
             query = manager.createNativeQuery(sql);
             query.setParameter("id_prov", id_prov);
             query.setParameter("id_monper", id_monper);
@@ -412,7 +491,20 @@ public class ReportController {
     		String hasilindicator = (indicator.length()==0)?"":indicator.substring(0, indicator.length() - 1);
     		String ind = (hasilindicator.equals(""))?"":" and a.id_indicator in("+hasilindicator+") ";
             String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
-            String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
+            String sql;
+            if(status.equals("completed")) {
+            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
+            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+            			+ " right join gov_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role+" "+ind;
+        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
+            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
+            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+            			+ " right join nsa_activity d on c.id_activity = d.id "
+            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role+" "+ind;
+            }else {
+            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
             			+ " left join sdg_indicator b on a.id_indicator = b.id "
             			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
             			+ " right join gov_activity d on c.id_activity = d.id "
@@ -422,6 +514,8 @@ public class ReportController {
             			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
             			+ " right join nsa_activity d on c.id_activity = d.id "
             			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role+" "+ind;
+            }
+             
             query = manager.createNativeQuery(sql);
             query.setParameter("id_prov", id_prov);
             query.setParameter("id_monper", id_monper);
@@ -436,10 +530,20 @@ public class ReportController {
     }
     
     @GetMapping("admin/get-disaggre-report")
-    public @ResponseBody Map<String, Object> getdisaggre(@RequestParam("id_indicator") int idindi) {
-    	String sql = "SELECT a.id, b.id as id_det, a.id_disaggre, a.nm_disaggre, a.nm_disaggre_eng, b.desc_disaggre, b.desc_disaggre_eng "
-    			+ "FROM sdg_ranrad_disaggre a LEFT JOIN sdg_ranrad_disaggre_detail b ON b.id_disaggre = a.id "
-    			+ "WHERE a.id_indicator = :id_indicator ORDER BY b.id ASC";
+    public @ResponseBody Map<String, Object> getdisaggre(@RequestParam("id_indicator") int idindi,@RequestParam("id_monper") String id_monper) {
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = monper.get().getStatus();
+    	String sql;
+        if(status.equals("completed")) {
+        	sql = "SELECT a.id_old, b.id_old as id_det, a.id_disaggre, a.nm_disaggre, a.nm_disaggre_eng, b.desc_disaggre, b.desc_disaggre_eng "
+        			+ "FROM history_sdg_ranrad_disaggre a LEFT JOIN history_sdg_ranrad_disaggre_detail b ON b.id_disaggre = a.id_old and b.id_monper = a.id_monper "
+        			+ "WHERE a.id_indicator = :id_indicator and a.id_monper = '"+id_monper+"' ORDER BY b.id ASC";
+        }else {
+        	sql = "SELECT a.id, b.id as id_det, a.id_disaggre, a.nm_disaggre, a.nm_disaggre_eng, b.desc_disaggre, b.desc_disaggre_eng "
+        			+ "FROM sdg_ranrad_disaggre a LEFT JOIN sdg_ranrad_disaggre_detail b ON b.id_disaggre = a.id "
+        			+ "WHERE a.id_indicator = :id_indicator ORDER BY b.id ASC";
+        }
+    	 
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_indicator", idindi);
         List list = query.getResultList();
@@ -3296,8 +3400,8 @@ public class ReportController {
          
          
     
-    @GetMapping("admin/generate-report/problem-identify/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}/{id_target}/{id_indicator}/{group}")
-    public @ResponseBody Map<String, Object> getOptionIndicatorList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals,@PathVariable("id_target") String id_target,@PathVariable("id_indicator") String id_indicator,@PathVariable("group") String group) {
+    @GetMapping("admin/generate-report/problem-identify/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}/{id_target}/{id_indicator}/{group}/{year}")
+    public @ResponseBody Map<String, Object> getOptionIndicatorList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals,@PathVariable("id_target") String id_target,@PathVariable("id_indicator") String id_indicator,@PathVariable("group") String group,@PathVariable("year") String year) {
         String whereidrole ="";
         String wheremonper = "";
         String whereidcategory ="";
@@ -3306,7 +3410,7 @@ public class ReportController {
         String whereidindicator ="";
         /*WHERE a.id_prov = '000' AND d.id_role = '5' AND a.id_monper = '1' AND c.id_cat = '01' AND a.id_goals = '1'  AND a.id_target = '2' AND a.id_indicator = '1'*/
         if(!id_monper.equals("*")&&!id_monper.equals("0")){
-          wheremonper = " AND  a.id_monper = '"+id_monper+"'";  
+          wheremonper = " AND  a.id_monper = '"+id_monper+"' AND b.year = '"+year+"'";  
         }
 
         if(!id_role.equals("*")&&!id_role.equals("0")){
@@ -3333,7 +3437,8 @@ public class ReportController {
                         "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
                         "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
                         "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
-                        "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
+                        "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
+                +       "       JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' where a.id_prov = :id_prov  "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
         
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
@@ -3358,7 +3463,8 @@ public class ReportController {
                          "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
                          "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
                          "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
-                         "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
+                         "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
+                +        "      JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
         
         Query query2 = em.createNativeQuery(sql2);
               query2.setParameter("id_prov", id_prov);

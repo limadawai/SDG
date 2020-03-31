@@ -108,6 +108,7 @@
 				    <label class="lang_indo control-label">Kode</label>
 				    <div class="controls">
 				    	<input type="text" id="id_indicator" name="id_indicator" class="input-medium input-block-level"/>
+				    	<input type="hidden" id="id_indicator_lama" name="id_indicator_lama" class="input-medium input-block-level"/>
 				    	<input type="hidden" id="id" name="id" class="input-medium input-block-level"/>
 				    	<span class="help-block" id="error_id_indicator"></span>
 				    </div>
@@ -182,6 +183,7 @@
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
 	        var messDelBiasa = "Menghapus Data?";
+	        var messCode = "Kode sudah ada!";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -194,6 +196,7 @@
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
 	    	        messDelBiasa = "Menghapus Data?";
+	    	        messCode = "Kode sudah ada!";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -205,6 +208,7 @@
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
 	    	        messDelBiasa = "Delete this data?";
+	    	        messCode = "Code already exist!";
 	        	}
 	        }
 	        if(lang){
@@ -269,6 +273,7 @@
 			function clearForm(){
 				$('#id').val("");
 				$('#id_indicator').val("").removeAttr("readonly");
+				$('#id_indicator_lama').val("").removeAttr("readonly");
 				$('#nm_indicator').val("").removeAttr("readonly");
 				$('#nm_indicator_eng').val("").removeAttr("readonly");
 				$('#unit').val("").removeAttr("disabled");
@@ -286,6 +291,7 @@
 				var id_target = $('#id_target').val();
 				var id = $('#id').val();
 				var id_indicator = $('#id_indicator').val();
+				var id_indicator_lama = $('#id_indicator_lama').val();
 				var nm_indicator = $('#nm_indicator').val();
 				var nm_indicator_eng = $('#nm_indicator_eng').val();
 				if(nm_indicator==""){
@@ -319,6 +325,21 @@
                     $("#error_increment_decrement").text(required);
                     cek += 1;
                 }
+				if(id_indicator!=id_indicator_lama){
+					$.ajax({
+						type: "GET",
+	                    url: urls+'cek-id_indicator/'+id_indicator,
+	                    async:false,
+	                    success: function (result) {
+	                    	var val = result.content;
+							if(val[0]>0){
+								$('#myModal').modal('hide');
+								swal("Code",messCode,'error');
+								cek += 1;
+							}
+	                    },
+	                })
+				}
 				if(cek==0){
 					var data = JSON.stringify({
 						'id_goals':id_goals,
@@ -357,6 +378,7 @@
                     	$('#id').val(val.id);
                     	$('#id_target').val(val.id_target);
                     	$('#id_indicator').val(val.id_indicator);
+                    	$('#id_indicator_lama').val(val.id_indicator);
         				$('#nm_indicator').val(val.nm_indicator);
         				$('#nm_indicator_eng').val(val.nm_indicator_eng);
         				$('#unit').val(val.unit);
@@ -375,6 +397,7 @@
                     	$('#id').val(val.id);
                     	$('#id_target').val(val.id_target).attr("readonly",true);
                     	$('#id_indicator').val(val.id_indicator).attr("readonly",true);
+                    	$('#id_indicator_lama').val(val.id_indicator);
         				$('#nm_indicator').val(val.nm_indicator).attr("readonly",true);
         				$('#nm_indicator_eng').val(val.nm_indicator_eng).attr("readonly",true);
         				$('#unit').val(val.unit).attr("disabled",true);

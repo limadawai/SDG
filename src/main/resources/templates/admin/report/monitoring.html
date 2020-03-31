@@ -233,7 +233,7 @@
             }); */
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-monper/'+valdaerah,
+                url: urls+'list-get-option-monper-report/'+valdaerah,
                 success: function (result1) {
                 	$("#periode").empty();
                     $("#periode").html('<option value="0" >-- Pilih Periode --</option>');
@@ -1731,7 +1731,7 @@
 		    		            		
 		    		            		$.ajax({
 		    		    		            url: urls + "get-disaggre-report",
-		    		    		            data: {'id_indicator':id_indicator},
+		    		    		            data: {'id_indicator':id_indicator,'id_monper':id_monper},
 		    		    		            type: 'get',
 		    		    		            dataType: 'json',
 		    		    		            async : false,

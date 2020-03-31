@@ -36,5 +36,8 @@ public interface EntryApprovalRepository extends CrudRepository<EntryApproval, I
     
     @Query(value = "select * from entry_approval where id_role =:id_role and approval = '3' order by id_monper, year, periode ",nativeQuery = true)
     public List<EntryApproval> getMessageByRole(@Param("id_role") Integer id_role);
+    
+    @Query(value = "select * from entry_approval a left join ref_role b on a.id_role=b.id_role where b.id_prov =:id_prov and a.approval = '3' order by a.id_monper, a.year, a.periode ",nativeQuery = true)
+    public List<EntryApproval> getMessageByProv(@Param("id_prov") Integer id_prov);
 
 }

@@ -2,6 +2,7 @@ package com.jica.sdg.controller;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -68,56 +69,145 @@ public class ApprovalController {
 		if(app.getId()==null) {
 			app.setApproval_date(new Date());
 		}
-
-		Query query;
-		if(app.getType().equals("entry_sdg")) {
-			query = em.createNativeQuery("update entry_sdg set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
-			query.setParameter("year", app.getYear());
-	        query.setParameter("id_monper", app.getId_monper());
-	        query.setParameter("id_role", app.getId_role());
-	        query.executeUpdate();
-	        
-	        query = em.createNativeQuery("update entry_sdg_detail set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
-			query.setParameter("year", app.getYear());
-	        query.setParameter("id_monper", app.getId_monper());
-	        query.setParameter("id_role", app.getId_role());
-	        query.executeUpdate();
-		}else if(app.getType().equals("entry_gov_budget")) {
-			query = em.createNativeQuery("update entry_gov_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
-			query.setParameter("year", app.getYear());
-	        query.setParameter("id_monper", app.getId_monper());
-	        query.executeUpdate();
-		}else if(app.getType().equals("entry_gov_indicator")) {
-			query = em.createNativeQuery("update entry_gov_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
-			query.setParameter("year", app.getYear());
-	        query.setParameter("id_monper", app.getId_monper());
-	        query.executeUpdate();
-		}else if(app.getType().equals("entry_nsa_budget")) {
-			query = em.createNativeQuery("update entry_nsa_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
-			query.setParameter("year", app.getYear());
-	        query.setParameter("id_monper", app.getId_monper());
-	        query.executeUpdate();
-		}else if(app.getType().equals("entry_nsa_indicator")) {
-			query = em.createNativeQuery("update entry_nsa_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
-			query.setParameter("year", app.getYear());
-	        query.setParameter("id_monper", app.getId_monper());
-	        query.executeUpdate();
+		if(app.getId_role()==0) {
+			String sql;
+			if(app.getType().equals("entry_sdg")) {
+				sql  = "select DISTINCT id_role from assign_sdg_indicator as a where a.id_monper = '"+app.getId_monper()+"'";
+			}else if(app.getType().equals("entry_gov_budget") || app.getType().equals("entry_gov_indicator")) {
+				sql = "select DISTINCT a.id_role "
+		    			+ "from gov_activity as a "
+		    			+ "left join gov_program b on a.id_program = b.id "
+		    			+ "left join ref_role f on a.id_role = f.id_role "
+		    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+		    			+ "where g.id_monper = '"+app.getId_monper()+"' "
+		    			+ "order by a.id_role";
+			}else if(app.getType().equals("entry_nsa_budget") || app.getType().equals("entry_nsa_indicator")) {
+				sql = "select DISTINCT a.id_role "
+		    			+ "from nsa_activity as a "
+		    			+ "left join nsa_program b on a.id_program = b.id "
+		    			+ "left join ref_role f on a.id_role = f.id_role "
+		    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+		    			+ "where g.id_monper = '"+app.getId_monper()+"' "
+		    			+ "order by a.id_role";
+			}else{
+				sql  = "select id_role from assign_sdg_indicator as a where a.id_monper = :id_monper and a.id_prov = :id_prov";
+			}
+	        Query query1 = em.createNativeQuery(sql);
+	        List list   = query1.getResultList();
+			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+				Object object = (Object) iterator.next();
+				EntryApproval apptemp = new EntryApproval();
+				apptemp.setId_form_type(app.getId_form_type());
+				apptemp.setId_role(Integer.parseInt(object.toString()));
+				apptemp.setId_monper(app.getId_monper());
+				apptemp.setYear(app.getYear());
+				apptemp.setApproval(app.getApproval());
+				apptemp.setType(app.getType());
+				apptemp.setPeriode(app.getPeriode());
+				apptemp.setApproval_date(new Date());
+				
+				Query query;
+				if(app.getType().equals("entry_sdg")) {
+					query = em.createNativeQuery("update entry_sdg set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
+					query.setParameter("year", app.getYear());
+			        query.setParameter("id_monper", app.getId_monper());
+			        query.setParameter("id_role", apptemp.getId_role());
+			        query.executeUpdate();
+			        
+			        query = em.createNativeQuery("update entry_sdg_detail set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
+					query.setParameter("year", app.getYear());
+			        query.setParameter("id_monper", app.getId_monper());
+			        query.setParameter("id_role", apptemp.getId_role());
+			        query.executeUpdate();
+				}else if(app.getType().equals("entry_gov_budget")) {
+					query = em.createNativeQuery("update entry_gov_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
+					query.setParameter("year", app.getYear());
+			        query.setParameter("id_monper", app.getId_monper());
+			        query.executeUpdate();
+				}else if(app.getType().equals("entry_gov_indicator")) {
+					query = em.createNativeQuery("update entry_gov_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
+					query.setParameter("year", app.getYear());
+			        query.setParameter("id_monper", app.getId_monper());
+			        query.executeUpdate();
+				}else if(app.getType().equals("entry_nsa_budget")) {
+					query = em.createNativeQuery("update entry_nsa_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
+					query.setParameter("year", app.getYear());
+			        query.setParameter("id_monper", app.getId_monper());
+			        query.executeUpdate();
+				}else if(app.getType().equals("entry_nsa_indicator")) {
+					query = em.createNativeQuery("update entry_nsa_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
+					query.setParameter("year", app.getYear());
+			        query.setParameter("id_monper", app.getId_monper());
+			        query.executeUpdate();
+				}
+				approvalService.deleteApproveGovBudget(apptemp.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
+				approvalService.save(apptemp);
+			}
+			
+		}else {
+			Query query;
+			if(app.getType().equals("entry_sdg")) {
+				query = em.createNativeQuery("update entry_sdg set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
+				query.setParameter("year", app.getYear());
+		        query.setParameter("id_monper", app.getId_monper());
+		        query.setParameter("id_role", app.getId_role());
+		        query.executeUpdate();
+		        
+		        query = em.createNativeQuery("update entry_sdg_detail set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper and id_role = :id_role");
+				query.setParameter("year", app.getYear());
+		        query.setParameter("id_monper", app.getId_monper());
+		        query.setParameter("id_role", app.getId_role());
+		        query.executeUpdate();
+			}else if(app.getType().equals("entry_gov_budget")) {
+				query = em.createNativeQuery("update entry_gov_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
+				query.setParameter("year", app.getYear());
+		        query.setParameter("id_monper", app.getId_monper());
+		        query.executeUpdate();
+			}else if(app.getType().equals("entry_gov_indicator")) {
+				query = em.createNativeQuery("update entry_gov_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
+				query.setParameter("year", app.getYear());
+		        query.setParameter("id_monper", app.getId_monper());
+		        query.executeUpdate();
+			}else if(app.getType().equals("entry_nsa_budget")) {
+				query = em.createNativeQuery("update entry_nsa_budget set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
+				query.setParameter("year", app.getYear());
+		        query.setParameter("id_monper", app.getId_monper());
+		        query.executeUpdate();
+			}else if(app.getType().equals("entry_nsa_indicator")) {
+				query = em.createNativeQuery("update entry_nsa_indicator set new_value1 = null, new_value2 = null, new_value3 = null, new_value4 = null where year_entry=:year and id_monper=:id_monper");
+				query.setParameter("year", app.getYear());
+		        query.setParameter("id_monper", app.getId_monper());
+		        query.executeUpdate();
+			}
+			
+			approvalService.deleteApproveGovBudget(app.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
+			approvalService.save(app);
 		}
 		
-		approvalService.deleteApproveGovBudget(app.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
-		approvalService.save(app);
 	}
 	
     @GetMapping("admin/get-approve/{type}/{year}/{id_monper}/{periode}/{id_role}")
     public @ResponseBody Map<String, Object> getApprove(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode, @PathVariable("id_role") Integer id_role) {
-        String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and id_role = :id_role";
-        Query query = em.createNativeQuery(sql);
-        query.setParameter("year", year);
-        query.setParameter("id_monper", id_monper);
-        query.setParameter("type", type);
-        query.setParameter("periode", periode);
-        query.setParameter("id_role", id_role);
-        List list   = query.getResultList();
+    	List list;
+    	Query query;
+    	if(id_role == 0) {
+    		String sql = "select DISTINCT '' as id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode";
+            query = em.createNativeQuery(sql);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("type", type);
+            query.setParameter("periode", periode);
+        }else {
+        	String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and id_role = :id_role";
+            query = em.createNativeQuery(sql);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("type", type);
+            query.setParameter("periode", periode);
+            query.setParameter("id_role", id_role);
+        }
+    	
+        list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
@@ -127,13 +217,23 @@ public class ApprovalController {
     @ResponseBody    
     @Transactional
     public void deleteUnit(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode, @PathVariable("id_role") Integer id_role) {
-    	Query query = em.createNativeQuery("delete from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and id_role = :id_role");
-    	query.setParameter("year", year);
-        query.setParameter("id_monper", id_monper);
-        query.setParameter("type", type);
-        query.setParameter("periode", periode);
-        query.setParameter("id_role", id_role);
-        query.executeUpdate();
+    	Query query;
+    	if(id_role == 0) {
+    		query = em.createNativeQuery("delete from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode");
+        	query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("type", type);
+            query.setParameter("periode", periode);
+            query.executeUpdate();
+        }else {
+        	query = em.createNativeQuery("delete from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and id_role = :id_role");
+        	query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("type", type);
+            query.setParameter("periode", periode);
+            query.setParameter("id_role", id_role);
+            query.executeUpdate();
+        } 
     } 
 	
 	@GetMapping("admin/data-approval/sdg-indicator-monitoring")
@@ -459,9 +559,12 @@ public class ApprovalController {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	Optional<Role> role = roleService.findOne(id_role);
     	String privilege = role.get().getPrivilege();
+    	String id_prov = role.get().getId_prov();
     	if(privilege.equals("SUPER")) {
     		model.addAttribute("data", approvalService.getAllMessage());
-    	}else {
+    	}else if(privilege.equals("ADMIN")) {
+    		model.addAttribute("data", approvalService.getMessageByProv(Integer.parseInt(id_prov)));
+    	}else{
     		model.addAttribute("data", approvalService.getMessageByRole(id_role));
     		String sql  = "select count(id) from entry_approval where id_role ='"+id_role+"' and approval = '3' and (read_date is null or read_date='') ";
             Query query = em.createNativeQuery(sql);

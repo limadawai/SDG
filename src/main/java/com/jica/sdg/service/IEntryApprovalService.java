@@ -13,6 +13,8 @@ public interface IEntryApprovalService {
     List<EntryApproval> getAllMessage();
     
     List<EntryApproval> getMessageByRole(Integer id_role);
+    
+    List<EntryApproval> getMessageByProv(Integer id_prov);
 
     void save(EntryApproval app);
     
