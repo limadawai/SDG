@@ -73,10 +73,18 @@ public class ApprovalController {
 			String sql;
 			if(app.getType().equals("entry_sdg")) {
 				sql  = "select DISTINCT id_role from assign_sdg_indicator as a where a.id_monper = '"+app.getId_monper()+"'";
-			}else if(app.getType().equals("entry_gov_budget")) {
+			}else if(app.getType().equals("entry_gov_budget") || app.getType().equals("entry_gov_indicator")) {
 				sql = "select DISTINCT a.id_role "
 		    			+ "from gov_activity as a "
 		    			+ "left join gov_program b on a.id_program = b.id "
+		    			+ "left join ref_role f on a.id_role = f.id_role "
+		    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
+		    			+ "where g.id_monper = '"+app.getId_monper()+"' "
+		    			+ "order by a.id_role";
+			}else if(app.getType().equals("entry_nsa_budget") || app.getType().equals("entry_nsa_indicator")) {
+				sql = "select DISTINCT a.id_role "
+		    			+ "from nsa_activity as a "
+		    			+ "left join nsa_program b on a.id_program = b.id "
 		    			+ "left join ref_role f on a.id_role = f.id_role "
 		    			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
 		    			+ "where g.id_monper = '"+app.getId_monper()+"' "

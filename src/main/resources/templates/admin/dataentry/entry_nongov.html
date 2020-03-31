@@ -37,7 +37,7 @@
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="idrole" name="idrole" class="form-control">
-                                <option value="0" >-- Pilih --</option>
+                                <option value="10000" >-- Pilih --</option>
                                 <!-- <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option> -->
                             </select>
 <!--                            <div class="lang_indo"><span> Periode</span></div>
@@ -178,12 +178,12 @@
                     type: "GET",
                     url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                     success: function (result) {
-                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        $("#idrole").html('<option value="10000" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
-                        	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
-                        		$("#idrole").append('<option value="all" >-- ALL --</option>');
-                        	} */
+                        	if(privilege == 'ADMIN' || privilege == 'SUPER'){
+                        		$("#idrole").append('<option value="0" >-- ALL --</option>');
+                        	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
@@ -222,12 +222,12 @@
                     type: "GET",
                     url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                     success: function (result) {
-                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        $("#idrole").html('<option value="10000" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
-                        	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
-                        		$("#idrole").append('<option value="all" >-- ALL --</option>');
-                        	} */
+                        	if(privilege == 'ADMIN' || privilege == 'SUPER'){
+                        		$("#idrole").append('<option value="0" >-- ALL --</option>');
+                        	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
