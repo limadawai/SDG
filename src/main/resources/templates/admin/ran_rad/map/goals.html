@@ -57,20 +57,22 @@
 										<thead>
 											<tr>
 												<th style="text-align:center;font-size:80%;" width="5%">
-													<span class="lang_eng" style="display:none">No</span>
-													<span class="lang_indo">No</span>
+													No
 												</th>
 												<th style="text-align:center;font-size:80%;">
-													<span class="lang_eng" style="display:none">SDGs</span>
-													<span class="lang_indo">SDGs</span>
+													SDGs
 												</th>
 												<th style="text-align:center;font-size:80%;">
-													<span class="lang_eng" style="display:none">Program</span>
-													<span class="lang_indo">Program</span>
+													Program
 												</th>
 												<th style="text-align:center;font-size:80%;">
-													<span class="lang_eng" style="display:none">Actor</span>
-													<span class="lang_indo">Actor</span>
+													Funding Source
+												</th>
+												<th style="text-align:center;font-size:80%;">
+													Target
+												</th>
+												<th style="text-align:center;font-size:80%;">
+													Actor
 												</th>
 											</tr>
 										</thead>
@@ -235,8 +237,26 @@
 						}
 						}},
 						{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row[21]+"</div>";
+							return "<div style='font-size:90%;'>"+(row[22]?row[22]:'')+"</div>";
 							}},
+							{"data": function (row, data, index, display) {
+								var text = "";
+								if(row[23]){
+									var utama = row[23].split(',');
+									if(utama.length>0){
+										text = "";
+										for(var i=0;i<utama.length;i++){
+											utama2 = utama[i].split('---');
+											text += 'Year:'+utama2[1]+',Target:'+utama2[0]+"<br/>";
+										}
+									}
+								}
+								
+								return "<div style='font-size:90%;'>"+text+"</div>";
+								}},
+						{"data": function (row, data, index, display) {
+						return "<div style='font-size:90%;'>"+row[21]+"</div>";
+						}},
 				],
 				"columnDefs": [
 				],

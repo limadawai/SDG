@@ -1183,7 +1183,8 @@ public class RanRadSdgController {
         		"b.id_goals, c.id_target, d.id_indicator, b.nm_goals, b.nm_goals_eng,\r\n" + 
         		"c.nm_target,c.nm_target_eng,d.nm_indicator as sdg_indicator,d.nm_indicator_eng as sdg_indicator_eng,\r\n" + 
         		"g.id_program, f.id_activity, e.id_gov_indicator, g.nm_program, g.nm_program_eng,\r\n" + 
-        		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role\r\n" + 
+        		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role,i.funding_source, \r\n"
+        		+ "(select group_concat(concat(value,'---',year)) from gov_target where id_gov_indicator = a.id_gov_indicator) as target " + 
         		"from gov_map a \r\n" + 
         		"left join sdg_goals b on a.id_goals = b.id\r\n" + 
         		"left join sdg_target c on a.id_target = c.id\r\n" + 
@@ -1191,14 +1192,16 @@ public class RanRadSdgController {
         		"left join gov_indicator e on a.id_gov_indicator = e.id\r\n" + 
         		"left join gov_activity f on e.id_activity = f.id\r\n" + 
         		"left join gov_program g on f.id_program = g.id\r\n" + 
-        		"left join ref_role h on f.id_role = h.id_role\r\n" + 
+        		"left join ref_role h on f.id_role = h.id_role\r\n" +
+        		"left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper=i.id_monper\r\n" +
         		"where a.id_prov = :id_prov and a.id_monper = :id_monper "+role + 
         		"union\r\n" + 
         		"Select b.id as idgol, c.id as idtar, d.id as idindi,\r\n" + 
         		"b.id_goals, c.id_target, d.id_indicator, b.nm_goals, b.nm_goals_eng,\r\n" + 
         		"c.nm_target,c.nm_target_eng,d.nm_indicator as sdg_indicator,d.nm_indicator_eng as sdg_indicator_eng,\r\n" + 
         		"g.id_program, f.id_activity, e.id_nsa_indicator, g.nm_program, g.nm_program_eng,\r\n" + 
-        		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role\r\n" + 
+        		"f.nm_activity, f.nm_activity_eng, e.nm_indicator, e.nm_indicator_eng, h.nm_role,i.funding_source,\r\n" 
+        		+ "(select group_concat(concat(value,'---',year)) from nsa_target where id_nsa_indicator = a.id_nsa_indicator) as target " +
         		"from nsa_map a \r\n" + 
         		"left join sdg_goals b on a.id_goals = b.id\r\n" + 
         		"left join sdg_target c on a.id_target = c.id\r\n" + 
@@ -1207,7 +1210,8 @@ public class RanRadSdgController {
         		"left join nsa_activity f on e.id_activity = f.id\r\n" + 
         		"left join nsa_program g on f.id_program = g.id\r\n" + 
         		"left join ref_role h on f.id_role = h.id_role\r\n" + 
-        		"where a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+        		"left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper=i.id_monper\r\n" +
+        		"where a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" order by 1,2,3";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         query.setParameter("id_monper", id_monper);
