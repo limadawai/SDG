@@ -176,6 +176,18 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-option-monper-report/{id}")
+    public @ResponseBody Map<String, Object> getOptionMonperReportList(@PathVariable("id") String id) {
+        String sql  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'completed')";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-get-option-category/{id_prov}/{id_role}/{id_monper}")
     public @ResponseBody Map<String, Object> getOptionCategoryList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper) {
         String wheremonper = "";
