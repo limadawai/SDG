@@ -1,6 +1,8 @@
 package com.jica.sdg.controller;
 
+import com.jica.sdg.model.EntryGovBudget;
 import com.jica.sdg.model.EntryGovIndicator;
+import com.jica.sdg.model.EntryNsaBudget;
 import com.jica.sdg.model.EntryNsaIndicator;
 import java.util.HashMap;
 import java.util.List;
@@ -139,7 +141,7 @@ public class RateController {
                         "where a.cat_role = 'Government' and a.id_role <> '1' and a.id_prov = :id_prov \n" +
                         "union all\n" +
                         "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
-                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_nsa_indicator' and period = :period) as show_report \n" +
                         "union all\n" +
                         "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
                         "from ref_role a\n" +
@@ -158,7 +160,58 @@ public class RateController {
                         "where a.cat_role = 'Government' and a.id_prov = :id_prov and a.id_role = :id_role \n" +
                         "union all\n" +
                         "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
-                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_nsa_indicator' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
+                        "from ref_role a\n" +
+                        "where a.cat_role = 'NSA' and a.id_prov = :id_prov and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("period", period);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+            query.setParameter("id_role", id_role);
+        }
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }  
+    
+    @GetMapping("admin/x/val_budget/{id_prov}/{period}/{id_monper}/{year}/{id_role}")
+    public @ResponseBody Map<String, Object>  val_rate_sdg_budget(@PathVariable("id_prov") String id_prov, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year, @PathVariable("id_role") String id_role) {
+        Query query = em.createNativeQuery("");
+//        System.out.println("id "+id_role);
+        if(id_role.equals("999999")){
+            String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_budget' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
+                        "from ref_role a\n" +
+                        "where a.cat_role = 'Government' and a.id_role <> '1' and a.id_prov = :id_prov \n" +
+                        "union all\n" +
+                        "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_nsa_budget' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
+                        "from ref_role a\n" +
+                        "where a.cat_role = 'NSA' and a.id_role <> '1' and a.id_prov = :id_prov ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("period", period);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+        }else{
+            String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_budget' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
+                        "from ref_role a\n" +
+                        "where a.cat_role = 'Government' and a.id_prov = :id_prov and a.id_role = :id_role \n" +
+                        "union all\n" +
+                        "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_nsa_budget' and period = :period) as show_report \n" +
                         "union all\n" +
                         "select a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
                         "from ref_role a\n" +
@@ -180,6 +233,51 @@ public class RateController {
     @GetMapping("admin/get-cek-app/{id_role}/{id_monper}/{year}/{period}")
     public @ResponseBody Map<String, Object>  cek_app(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year, @PathVariable("period") String period) {
         String sql  = "select count(*) as cek from entry_approval where (type = 'entry_gov_indicator' or type = 'entry_nsa_indicator') and id_role = :id_role and id_monper = :id_monper and year = :year and periode = :period ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get-cek-app-budget/{id_role}/{id_monper}/{year}/{period}")
+    public @ResponseBody Map<String, Object>  cek_app_budget(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year, @PathVariable("period") String period) {
+        String sql  = "select count(*) as cek from entry_approval where (type = 'entry_gov_budget' or type = 'entry_nsa_budget') and id_role = :id_role and id_monper = :id_monper and year = :year and periode = :period ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get-cek-app-approve/{id_role}/{id_monper}/{year}/{period}")
+    public @ResponseBody Map<String, Object>  cek_app_approve(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year, @PathVariable("period") String period) {
+        String sql  = "select count(*) as cek from entry_approval where (type = 'entry_gov_indicator' or type = 'entry_nsa_indicator') and id_role = :id_role and id_monper = :id_monper and year = :year and periode = :period and (approval = '2' or approval = '4')";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get-cek-app-approve-budget/{id_role}/{id_monper}/{year}/{period}")
+    public @ResponseBody Map<String, Object>  cek_app_approve_budget(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year, @PathVariable("period") String period) {
+        String sql  = "select count(*) as cek from entry_approval where (type = 'entry_gov_budget' or type = 'entry_nsa_budget') and id_role = :id_role and id_monper = :id_monper and year = :year and periode = :period and (approval = '2' or approval = '4')";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_role", id_role);
         query.setParameter("period", period);
@@ -254,6 +352,71 @@ public class RateController {
                     "left join "+tb+" c on b.id_activity = c.id\n" +
                     "left join (select * from "+type+" where year_entry = :year "+tg_date+") d on b.id = d.id_assign\n" +
                     "where c.id_role = :id_role\n" +
+                    ") as a\n" +
+                    ") as semua";
+        Query query = em.createNativeQuery(sql);
+//        query.setParameter("period", period);
+        query.setParameter("id_role", id_role);
+        query.setParameter("year", year);
+//        query.setParameter("type", type);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }  
+    @GetMapping("admin/get-cek-data-all-budget/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}")
+    public @ResponseBody Map<String, Object>  cek_data_all_budget(@PathVariable("id_role") String id_role,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time) {
+        String tg_date = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
+        
+        String id_activity_1 = "";
+        if(type.equals("entry_gov_budget")){
+            id_activity_1 = "d.id_gov_activity";
+        }else{
+            id_activity_1 = "d.id_nsa_activity";
+        }
+        String sql  = "select \n" +
+                    "(\n" +
+                    "select count(*) as total_all from\n" +
+                    "(\n" +
+                    "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
+                    "from "+tb+" b\n" +
+                    "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" ) d on b.id = "+id_activity_1+"\n" +
+                    "where b.id_role = :id_role \n" +
+                    ") as a\n" +
+                    ") as isi,\n" +
+                    "(\n" +
+                    "select count(*) as total_all from\n" +
+                    "(\n" +
+                    "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
+                    "from "+tb+" b\n" +
+                    "left join (select * from "+type+" where year_entry = :year "+tg_date+") d on b.id = "+id_activity_1+"\n" +
+                    "where b.id_role = :id_role\n" +
                     ") as a\n" +
                     ") as semua";
         Query query = em.createNativeQuery(sql);
@@ -353,6 +516,96 @@ public class RateController {
         return hasil;
     }    
     
+    @GetMapping("admin/get-cek-data-all-deadline-budget/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{sts}/{isi_time}")
+    public @ResponseBody Map<String, Object>  cek_data_all_deadline_budget(@PathVariable("id_role") String id_role,@PathVariable("year") int year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("sts") String sts_monper, @PathVariable("isi_time") String isi_time) {
+        String tg_date = "";
+        if(sts_monper.equals("yearly")){
+            if(period.equals("1")){
+                tg_date = "and date_created <= '"+(year+1)+"-01-15' ";
+            }else{}
+        }else if(sts_monper.equals("semesterly")){
+            if(period.equals("1")){
+                tg_date = "and date_created <= '"+year+"-07-15' ";
+            }else if(period.equals("2")){
+                tg_date = "and date_created2 <= '"+(year+1)+"-01-15' ";
+            }else {}
+        }else if(sts_monper.equals("quarterly")){
+            if(period.equals("1")){
+                tg_date = "and date_created <= '"+year+"-04-15' ";
+            }else if(period.equals("2")){
+                tg_date = "and date_created2 <= '"+year+"-07-15' ";
+            }else if(period.equals("3")){
+                tg_date = "and date_created3 <= '"+year+"-10-15' ";
+            }else if(period.equals("4")){
+                tg_date = "and date_created4 <= '"+(year+1)+"-01-15' ";
+            }else{}
+        }else{}
+        
+        String tg_date_1 = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
+        
+        String id_activity_1 = "";
+        if(type.equals("entry_gov_budget")){
+            id_activity_1 = "d.id_gov_activity";
+        }else{
+            id_activity_1 = "d.id_nsa_activity";
+        }
+        System.out.println("tgdate = "+tg_date);
+        String sql  = "select \n" +
+                    "(\n" +
+                    "select count(*) as total_all from\n" +
+                    "(\n" +
+                    "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
+                    "from "+tb+" b\n" +
+                    "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" "+tg_date_1+" ) d on b.id = "+id_activity_1+"\n" +
+                    "where b.id_role = :id_role \n" +
+                    ") as a\n" +
+                    ") as isi,\n" +
+                    "(\n" +
+                    "select count(*) as total_all from\n" +
+                    "(\n" +
+                    "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
+                    "from "+tb+" b\n" +
+                    "left join (select * from "+type+" where year_entry = :year "+tg_date_1+") d on b.id = "+id_activity_1+"\n" +
+                    "where b.id_role = :id_role\n" +
+                    ") as a\n" +
+                    ") as semua";
+        Query query = em.createNativeQuery(sql);
+//        query.setParameter("period", period);
+        query.setParameter("id_role", id_role);
+        query.setParameter("year", year);
+//        query.setParameter("type", type);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
     @GetMapping("admin/get_sub_prog_level1/{id_monper}/{id_role}/{catrole}")
     public @ResponseBody Map<String, Object>  get_sub_prog_level1(@PathVariable("id_monper") String id_monper,@PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole) {
         System.out.println("catrole = "+catrole+", id_monper = "+id_monper);
@@ -396,6 +649,72 @@ public class RateController {
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
             query.setParameter("id_program", id_program);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get_sub_prog_level2_budget/{id_program}/{id_role}/{catrole}/{period}/{id_monper}/{year}/{isi_time}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level2_budget(@PathVariable("id_program") String id_program, @PathVariable("id_role") String id_role, @PathVariable("catrole") String catrole, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("isi_time") String isi_time) {
+        String tg_date_1 = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
+        
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, "
+                        + "'' as nama_unit,"
+                        + "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end,"
+                        + "c.date_created, c.date_created2, c.date_created3, c.date_created4 "
+                        + "from gov_activity a \n"
+                        + "inner join (select * from entry_gov_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_gov_activity " +
+                        "where a.id_program = :id_program and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, "
+                        + "'' as nama_unit,"
+                        + "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end,"
+                        + "c.date_created, c.date_created2, c.date_created3, c.date_created4 "
+                        + "from nsa_activity a \n"
+                        + "inner join (select * from entry_nsa_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_nsa_activity " +
+                        "where a.id_program = :id_program and a.id_role = :id_role ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_program", id_program);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
         }else{}
         
         
@@ -609,6 +928,149 @@ public class RateController {
                             entryNsaIndicator.setDate_created(new Date());
                             entryNsaIndicator.setId_monper(id_monper);
                             entrySdgService.saveEntryNsaIndicator(entryNsaIndicator);
+                        }else{
+                            System.out.println("ke gak ada");
+                        };
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    @PostMapping(path = "admin/save-submission-budget/{dat_id_indicator}/{dat_achievement}/{dat_entry}/{period}/{catrole}/{id_monper}/{tahun}", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    @Transactional
+    public void saveBestbudget(
+                        @PathVariable("dat_id_indicator") String dat_id_indicator,
+			@PathVariable("dat_achievement") String dat_achievement,
+			@PathVariable("dat_entry") String dat_entry,
+                        @PathVariable("period") String period,
+                        @PathVariable("catrole") String catrole,
+                        @PathVariable("id_monper") int id_monper,
+                        @PathVariable("tahun") int tahun) {
+        System.out.println("data "+dat_id_indicator+" - "+dat_achievement+" - "+dat_entry);
+        Query query;
+        Query query_d;
+        if(catrole.equals("Government")){
+            if(!dat_id_indicator.equals("0")) {
+                String[] data_indicator      = dat_id_indicator.split(",");
+                String[] data_achievement    = dat_achievement.split(",");
+                String[] data_entry          = dat_entry.split(",");
+                for(int i=0;i<data_entry.length;i++) {
+                    System.out.println("coba : "+data_entry[i]);
+                    if(!data_entry[i].equals("null")) {
+                        System.out.println("tidak null : "+data_entry[i]);
+                        query = em.createNativeQuery("update entry_gov_budget set achievement"+period+" = :achievement where id=:id");
+//                            query.setParameter("created_by", data_indicator[i]);  
+                        query.setParameter("achievement", data_achievement[i]);
+                        query.setParameter("id", data_entry[i]);
+                        query.executeUpdate();
+                    }else {
+                        System.out.println("null : "+data_entry[i]);
+                        if(period.equals("1")) {
+                            System.out.println("ke 1");
+                            EntryGovBudget entryGovBudget = new EntryGovBudget();
+//                            entryGovIndicator.setId(null);
+                            entryGovBudget.setId_gov_activity(Integer.parseInt(data_indicator[i]));
+                            entryGovBudget.setAchievement1(Integer.parseInt(data_achievement[i]));
+                            entryGovBudget.setYear_entry(tahun);
+                            entryGovBudget.setDate_created(new Date());
+                            entryGovBudget.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovBudget(entryGovBudget);
+                        }else if(period.equals("2")) {
+                            System.out.println("ke 2");
+                            EntryGovBudget entryGovBudget = new EntryGovBudget();
+//                            entryGovIndicator.setId(null);
+                            entryGovBudget.setId_gov_activity(Integer.parseInt(data_indicator[i]));
+                            entryGovBudget.setAchievement2(Integer.parseInt(data_achievement[i]));
+                            entryGovBudget.setYear_entry(tahun);
+                            entryGovBudget.setDate_created(new Date());
+                            entryGovBudget.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovBudget(entryGovBudget);
+                        }else if(period.equals("3")) {
+                            System.out.println("ke 3");
+                            EntryGovBudget entryGovBudget = new EntryGovBudget();
+//                            entryGovIndicator.setId(null);
+                            entryGovBudget.setId_gov_activity(Integer.parseInt(data_indicator[i]));
+                            entryGovBudget.setAchievement3(Integer.parseInt(data_achievement[i]));
+                            entryGovBudget.setYear_entry(tahun);
+                            entryGovBudget.setDate_created(new Date());
+                            entryGovBudget.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovBudget(entryGovBudget);
+                        }else if(period.equals("4")) {
+                            System.out.println("ke 4");
+                            EntryGovBudget entryGovBudget = new EntryGovBudget();
+//                            entryGovIndicator.setId(null);
+                            entryGovBudget.setId_gov_activity(Integer.parseInt(data_indicator[i]));
+                            entryGovBudget.setAchievement4(Integer.parseInt(data_achievement[i]));
+                            entryGovBudget.setYear_entry(tahun);
+                            entryGovBudget.setDate_created(new Date());
+                            entryGovBudget.setId_monper(id_monper);
+                            entrySdgService.saveEntryGovBudget(entryGovBudget);
+                        }else{
+                            System.out.println("ke gak ada");
+                        };
+                    }
+                }
+            }
+            
+        }else if(catrole.equals("NSA")){
+            if(!dat_id_indicator.equals("0")) {
+                String[] data_indicator      = dat_id_indicator.split(",");
+                String[] data_achievement    = dat_achievement.split(",");
+                String[] data_entry          = dat_entry.split(",");
+                for(int i=0;i<data_entry.length;i++) {
+                    System.out.println("coba : "+data_entry[i]);
+                    if(!data_entry[i].equals("null")) {
+                        System.out.println("tidak null : "+data_entry[i]);
+                        query = em.createNativeQuery("update entry_nsa_budget set achievement"+period+" = :achievement where id=:id");
+//                            query.setParameter("created_by", data_indicator[i]);  
+                        query.setParameter("achievement", data_achievement[i]);
+                        query.setParameter("id", data_entry[i]);
+                        query.executeUpdate();
+                    }else {
+                        System.out.println("null : "+data_entry[i]);
+                        if(period.equals("1")) {
+                            System.out.println("ke 1");
+                            EntryNsaBudget entryNsaBudget = new EntryNsaBudget();
+//                            entryGovIndicator.setId(null);
+                            entryNsaBudget.setId_nsa_activity(Integer.parseInt(data_indicator[i]));
+                            entryNsaBudget.setAchievement1(Integer.parseInt(data_achievement[i]));
+                            entryNsaBudget.setYear_entry(tahun);
+                            entryNsaBudget.setDate_created(new Date());
+                            entryNsaBudget.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaBudget(entryNsaBudget);
+                        }else if(period.equals("2")) {
+                            System.out.println("ke 2");
+                            EntryNsaBudget entryNsaBudget = new EntryNsaBudget();
+//                            entryGovIndicator.setId(null);
+                            entryNsaBudget.setId_nsa_activity(Integer.parseInt(data_indicator[i]));
+                            entryNsaBudget.setAchievement2(Integer.parseInt(data_achievement[i]));
+                            entryNsaBudget.setYear_entry(tahun);
+                            entryNsaBudget.setDate_created(new Date());
+                            entryNsaBudget.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaBudget(entryNsaBudget);
+                        }else if(period.equals("3")) {
+                            System.out.println("ke 3");
+                            EntryNsaBudget entryNsaBudget = new EntryNsaBudget();
+//                            entryGovIndicator.setId(null);
+                            entryNsaBudget.setId_nsa_activity(Integer.parseInt(data_indicator[i]));
+                            entryNsaBudget.setAchievement3(Integer.parseInt(data_achievement[i]));
+                            entryNsaBudget.setYear_entry(tahun);
+                            entryNsaBudget.setDate_created(new Date());
+                            entryNsaBudget.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaBudget(entryNsaBudget);
+                        }else if(period.equals("4")) {
+                            System.out.println("ke 4");
+                            EntryNsaBudget entryNsaBudget = new EntryNsaBudget();
+//                            entryGovIndicator.setId(null);
+                            entryNsaBudget.setId_nsa_activity(Integer.parseInt(data_indicator[i]));
+                            entryNsaBudget.setAchievement4(Integer.parseInt(data_achievement[i]));
+                            entryNsaBudget.setYear_entry(tahun);
+                            entryNsaBudget.setDate_created(new Date());
+                            entryNsaBudget.setId_monper(id_monper);
+                            entrySdgService.saveEntryNsaBudget(entryNsaBudget);
                         }else{
                             System.out.println("ke gak ada");
                         };
