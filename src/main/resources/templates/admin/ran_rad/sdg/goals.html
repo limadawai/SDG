@@ -85,6 +85,7 @@
 				    <label class="lang_indo control-label">Kode</label>
 				    <div class="controls">
 				    	<input id="id_goals" name="id_goals" class="input-medium input-block-level" type="text"/>
+				    	<input id="id_goals_lama" name="id_goals_lama" class="input-medium input-block-level" type="hidden"/>
 				    	<input id="id" name="id" class="input-medium input-block-level" type="hidden"/>
 				    	<span class="help-block" id="error_id_goals"></span>
 				    </div>
@@ -140,6 +141,7 @@
 	        var messOk = "Data berhasil dihapus";
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
+	        var messCode = "Kode sudah ada!";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -152,6 +154,7 @@
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
 	    	        messDelBiasa = "Menghapus Data?";
+	    	        messCode = "Kode sudah ada!";
 				}else{
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -163,6 +166,7 @@
 	    	        messOk = "Delete successful";
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
+	    	        messCode = "Code already exist!";
 				}
 	        }
 			if(lang){
@@ -221,6 +225,7 @@
 			function clearForm(){
 				$('#id').val("").removeAttr("readonly");
 				$('#id_goals').val("").removeAttr("readonly");
+				$('#id_goals_lama').val("").removeAttr("readonly");
 				$('#nm_goals').val("").removeAttr("readonly");
 				$('#nm_goals_eng').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
@@ -234,6 +239,7 @@
 			$('#submit').on('click', function(){
 				var id = $('#id').val();
 				var id_goals = $('#id_goals').val();
+				var id_goals_lama = $('#id_goals_lama').val();
 				var nm_goals = $('#nm_goals').val();
 				var nm_goals_eng = $('#nm_goals_eng').val();
 				if(nm_goals == ""){
@@ -251,6 +257,22 @@
                     $("#error_id_goals").text(required);
                     cek += 1;
                 }
+				
+				if(id_goals!=id_goals_lama){
+					$.ajax({
+						type: "GET",
+	                    url: urls+'cek-id_goals/'+id_goals,
+	                    async:false,
+	                    success: function (result) {
+	                    	var val = result.content;
+							if(val[0]>0){
+								$('#myModal').modal('hide');
+								swal("Code",messCode,'error');
+								cek += 1;
+							}
+	                    },
+	                })
+				}
 				/* if (nm_goals == ""){
                     $("#error_nm_goals").parents(".control-group").first().addClass("error");
                     $("#error_nm_goals").text(required);
@@ -289,6 +311,7 @@
                     	var val = result.content;
                     	$('#id').val(val.id);
                     	$('#id_goals').val(val.id_goals);
+                    	$('#id_goals_lama').val(val.id_goals);
         				$('#nm_goals').val(val.nm_goals);
         				$('#nm_goals_eng').val(val.nm_goals_eng);
 						$('#myModal').modal('show');
@@ -303,6 +326,7 @@
                     	var val = result.content;
                     	$('#id').val(val.id);
                     	$('#id_goals').val(val.id_goals).attr("readonly",true);
+                    	$('#id_goals_lama').val(val.id_goals);
         				$('#nm_goals').val(val.nm_goals).attr("readonly",true);
         				$('#nm_goals_eng').val(val.nm_goals_eng).attr("readonly",true);
 						$('#myModal').modal('show');

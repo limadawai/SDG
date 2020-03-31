@@ -102,6 +102,7 @@
 				    <label class="lang_indo control-label">Kode</label>
 				    <div class="controls">
 				    	<input type="text" id="id_target" name="id_target" class="input-medium input-block-level"/>
+				    	<input type="hidden" id="id_target_lama" name="id_target_lama" class="input-medium input-block-level"/>
 				    	<input type="hidden" id="id" name="id" class="input-medium input-block-level"/>
 				    	<span class="help-block" id="error_id_target"></span>
 				    </div>
@@ -153,6 +154,7 @@
 	        var messNOk = "Data tidak dapat dihapus";
 	        var required = "Harus diisi";
 	        var messDelBiasa = "Menghapus Data?";
+	        var messCode = "Kode sudah ada!";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -165,6 +167,7 @@
 	    	        messNOk = "Data tidak dapat dihapus";
 	    	        required = "Harus diisi";
 	    	        messDelBiasa = "Menghapus Data?";
+	    	        messCode = "Kode sudah ada!";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -176,6 +179,7 @@
 	    	        messNOk = "Can't delete data";
 	    	        required = "Required";
 	    	        messDelBiasa = "Delete this data?";
+	    	        messCode = "Code already exist!";
 	        	}
 	        }
 	        if(lang){
@@ -235,6 +239,7 @@
 			function clearForm(){
 				$('#id').val("").removeAttr("readonly");
 				$('#id_target').val("").removeAttr("readonly");
+				$('#id_target_lama').val("").removeAttr("readonly");
 				$('#nm_target').val("").removeAttr("readonly");
 				$('#nm_target_eng').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
@@ -249,6 +254,7 @@
 				var id_goals = $('#id_goals').val();
 				var id = $('#id').val();
 				var id_target = $('#id_target').val();
+				var id_target_lama = $('#id_target_lama').val();
 				var nm_target = $('#nm_target').val();
 				var nm_target_eng = $('#nm_target_eng').val();
 				if(nm_target==""){
@@ -257,6 +263,7 @@
 				if(nm_target_eng==""){
 					nm_target_eng = nm_target;
 				}
+				
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -265,6 +272,21 @@
                     $("#error_id_target").text(required);
                     cek += 1;
                 }
+				if(id_target!=id_target_lama){
+					$.ajax({
+						type: "GET",
+	                    url: urls+'cek-id_target/'+id_target,
+	                    async:false,
+	                    success: function (result) {
+	                    	var val = result.content;
+							if(val[0]>0){
+								$('#myModal').modal('hide');
+								swal("Code",messCode,'error');
+								cek += 1;
+							}
+	                    },
+	                })
+				}
 				/* if (nm_target == ""){
                     $("#error_nm_target").parents(".control-group").first().addClass("error");
                     $("#error_nm_target").text(required);
@@ -303,6 +325,7 @@
                     	$('#id_goals').val(val.id_goals);
                     	$('#id').val(val.id);
                     	$('#id_target').val(val.id_target);
+                    	$('#id_target_lama').val(val.id_target);
         				$('#nm_target').val(val.nm_target);
         				$('#nm_target_eng').val(val.nm_target_eng);
 						$('#myModal').modal('show');
@@ -319,6 +342,7 @@
                     	$('#id').val(val.id);
                     	$('#id_target').val(val.id_target).attr("readonly",true);
         				$('#nm_target').val(val.nm_target).attr("readonly",true);
+        				$('#id_target_lama').val(val.id_target);
         				$('#nm_target_eng').val(val.nm_target_eng).attr("readonly",true);
 						$('#myModal').modal('show');
                     },

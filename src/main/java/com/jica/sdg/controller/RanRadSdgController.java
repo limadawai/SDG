@@ -229,6 +229,17 @@ public class RanRadSdgController {
         return "admin/ran_rad/sdg/target";
     }
 	
+	@GetMapping("admin/cek-id_goals/{id_goals}")
+    public @ResponseBody Map<String, Object> cekGoals(@PathVariable("id_goals") String id_goals) {
+        String sql = "select count(id_goals) from sdg_goals where id_goals=:id_goals";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_goals", id_goals);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+	
 	@GetMapping("admin/list-sdgTarget/{id}")
 //    public @ResponseBody Map<String, Object> sdgtargetList(@PathVariable("id") int id) {
     public @ResponseBody Map<String, Object> sdgtargetList(@PathVariable("id") Integer id) {
@@ -249,6 +260,17 @@ public class RanRadSdgController {
     public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id") Integer id) {
         Optional<SdgTarget> list = sdgTargetService.findOne(id);
 		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+	
+	@GetMapping("admin/cek-id_target/{id_target}")
+    public @ResponseBody Map<String, Object> cektarget(@PathVariable("id_target") String id_target) {
+        String sql = "select count(id_target) from sdg_target where id_target=:id_target";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_target", id_target);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
@@ -315,6 +337,17 @@ public class RanRadSdgController {
         return hasil;
     }
     
+    @GetMapping("admin/cek-id_indicator/{id_indicator}")
+    public @ResponseBody Map<String, Object> cekindicator(@PathVariable("id_indicator") String id_indicator) {
+        String sql = "select count(id_indicator) from sdg_indicator where id_indicator=:id_indicator";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_indicator", id_indicator);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @PostMapping(path = "admin/save-sdgIndicator", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public void saveSdgIndicator(@RequestBody SdgIndicator sdg) {
@@ -376,6 +409,17 @@ public class RanRadSdgController {
     public @ResponseBody Map<String, Object> getSdgDisaggre(@PathVariable("id") Integer id) {
         Optional<SdgDisaggre> list = sdgDisaggreService.findOne(id);
 		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/cek-id_disaggre/{id_disaggre}")
+    public @ResponseBody Map<String, Object> cekDis(@PathVariable("id_disaggre") String id_disaggre) {
+        String sql = "select count(id_disaggre) from sdg_ranrad_disaggre where id_disaggre=:id_disaggre";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_disaggre", id_disaggre);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
