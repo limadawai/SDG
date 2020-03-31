@@ -158,10 +158,20 @@ public class EntrySdgService implements IEntrySdgService{
 	public Optional<EntryGovIndicator> findOneGovInd(Integer id) {
 		return entryGovIndicatorRepo.findById(id);
 	}
+
+	@Override
+	public Optional<EntryGovBudget> findOneGovBud(Integer id) {
+            return entryGovBudgetRepo.findById(id);
+	}
 	
 	@Override
 	public Optional<EntryNsaIndicator> findOneNsaInd(Integer id) {
 		return entryNsaIndicatorRepo.findById(id);
+	}
+	
+	@Override
+	public Optional<EntryNsaBudget> findOneNsaBud(Integer id) {
+            return entryNsaBudgetRepo.findById(id);
 	}
         
 }

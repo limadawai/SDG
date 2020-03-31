@@ -9,7 +9,7 @@ import javax.transaction.Transactional;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.repository.query.Param;
 
-public interface EntryGovBudgetRepository extends CrudRepository<EntryGovBudget, Long> {
+public interface EntryGovBudgetRepository extends CrudRepository<EntryGovBudget, Integer> {
 
     
 }
