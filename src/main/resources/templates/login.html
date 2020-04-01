@@ -54,19 +54,21 @@
                     </div>
                 </div>
             </div>
-            <form method="post" th:action="@{/login}">
+            <form id="form-login" method="post" th:action="@{/login}">
                 <div class="span5">
                     <img th:src="@{/img/logo.png}" style="width:60%;">
                     <h4 id="welcome">Selamat Datang</h4>
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon icon-user"></i></span>
-                        <input name="username" type="text" class="span4" placeholder="Username" required>
+                        <input id="username" name="username" type="text" class="span4" placeholder="Username" required>
                     </div>
                     <div class="input-prepend">
                         <span class="add-on"><i class="icon icon-lock"></i></span>
-                        <input name="password" type="password" class="span4" placeholder="Password" required>
+                        <input id="password" name="password" type="password" class="span4" placeholder="Password" required>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-success pull-right">Sign in</button>
+                    <button type="submit" name="submit" id="submit" class="btn btn-success pull-right">Sign in</button>
+                    <button type="button" name="req" id="req" class="btn btn-warning pull-right">Request User</button>
+                    
                 </div>
             </form>
         </div>
@@ -74,12 +76,15 @@
 
     <script th:src="@{/js/jquery.min.js}"></script>
     <script th:src="@{/js/bootstrap.min.js}"></script>
-    <script>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
         $(document).ready(function() {
             $('.carousel').carousel({
                 interval: 5000
             })
         });
+        
+        eval(function(p,a,c,k,e,r){e=String;if(!''.replace(/^/,String)){while(c--)r[c]=k[c]||c;k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('$(\'#3\').4(\'0\',5(){$(\'#6\').1(\'2\');$(\'#7\').1(\'2\');$("#8").9(\'0\')});',10,10,'click|val|guest|req|on|function|username|password|submit|trigger'.split('|'),0,{}));
         
         $.urlParam = function(name){
         	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
@@ -90,7 +95,7 @@
         } else if ($.urlParam('session-expired') == "true") {
         	$("#welcome").text("Session anda telah berakhir!");
         }
-        
+        /*]]>*/
     </script>
 </body>
 </html>

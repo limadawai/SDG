@@ -87,10 +87,10 @@
         </div>
         <div id="user-nav" class="navbar navbar-inverse">
             <ul class="nav">
-                <li class="" style="margin-top:10px;background:none;padding:10px;">
+                <li class="notif" style="margin-top:10px;background:none;padding:10px;">
                     <span id="welcome" style="color:white;">Welcome Super</span>
                 </li>
-                <li class="" style="margin-top:12px;background:none;padding:10px 30px;">
+                <li class="notif" style="margin-top:12px;background:none;padding:10px 30px;">
                     <form >
                         <a th:href="@{/admin/read-message}">
                             <i style="color:white;" class="icon icon-envelope icon-white"> <span id="badge" class=""> </span></i>
@@ -121,6 +121,10 @@
                 var lang = [[${lang}]];
                 var name = [[${name}]];
                 $("#welcome").html("Welcome, "+name);
+                
+                if(name=="Guest"){
+                	$(".notif").hide();
+                }
                 
                 //Get Jml Pesan Reject
                 $.ajax({

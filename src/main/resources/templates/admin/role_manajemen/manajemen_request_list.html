@@ -30,7 +30,6 @@
                                                 <th style="text-align:center;font-size:80%;">Tgl. Request</th>
                                                 <th style="text-align:center;font-size:80%;">Level</th>
                                                 <th style="text-align:center;font-size:80%;">Tipe</th>
-                                                <th style="text-align:center;font-size:80%;">Tipe Permintaan</th>
                                                 <th style="text-align:center;font-size:80%;">Institusi</th>
                                                 <th style="text-align:center;font-size:80%;">Nama</th>
                                                 <th style="text-align:center;font-size:80%;">Kontak</th>
@@ -102,7 +101,7 @@
         "autoWidth": true,
         "responsive":true,
         "ajax": {
-            "url": '/sdg/admin/manajemen/list-request/1',
+            "url": '/sdg/admin/manajemen/list-request/10',
             dataSrc: 'content',
         },
         "searching": true,
@@ -114,22 +113,19 @@
                 return "<div style='font-size:90%;'>"+(row.date)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+row.level+"</div>";}
+                return "<div style='font-size:90%;'>"+(row.level?row.level:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+row.type+"</div>";}
+                return "<div style='font-size:90%;'>"+(row.type?row.type:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+row.req_type+"</div>";}
+                return "<div style='font-size:90%;'>"+(row.institution?row.institution:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+row.institution+"</div>";}
+                return "<div style='font-size:90%;'>"+(row.name?row.name:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+row.nm_inst+"</div>";}
-            },
-            {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+row.contact+"</div>";}
+                return "<div style='font-size:90%;'>"+(row.contact?row.contact:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
                 return "<div style='font-size:90%;'>"+row.status+"</div>";}
