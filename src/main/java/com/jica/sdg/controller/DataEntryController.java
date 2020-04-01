@@ -1961,7 +1961,7 @@ public class DataEntryController {
             if(id.equals("")){
                  UUID uuid1 = UUID.randomUUID();
                  UUID uuid2 = UUID.randomUUID();
-                 String file1 =  company_name+"-"+year+".xls";
+                 String file1 =  company_name.toLowerCase()+"-"+year+".xls";
                  String file2 =  uuid2.toString() + ".xls";
                 em.createNativeQuery("INSERT INTO entry_gri_ojk (company_name,year,file1,file2) values ('"+company_name+"','"+year+"','"+file1+"','"+file2+"')").executeUpdate();
                 String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
@@ -1997,10 +1997,20 @@ public class DataEntryController {
                     }else if(i==2){
                             rename = file2;
                     }
-    //                System.out.println(uploadpath);
+                    
+                    File uploadhome = new File(System.getProperty("user.home")+"/upload");
+                    if (!uploadhome.exists()) {
+                        if (uploadhome.mkdir()) {
+                            System.out.println("Directory is created!");
+                        } else {
+                            System.out.println("Failed to create directory!");
+                        }
+                    }
+                    System.out.println(uploadpath);
+                    System.out.println(uploadhome);
                     String fileExtension=file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
                     String fileName = StringUtils.cleanPath(rename).toLowerCase();
-                    Path path = Paths.get(uploadpath +"/"+ fileName);
+                    Path path = Paths.get(uploadhome +"/"+ fileName);
                     Files.write(path, bytes);
                     
                     String vImportExcell = uploadpath +"/"+ fileName;
@@ -2023,7 +2033,7 @@ public class DataEntryController {
                 String Kode = formatter.formatCellValue(wb.getSheetAt(0).getRow(i).getCell(CellReference.convertColStringToIndex("B")));
                 String value = formatter.formatCellValue(wb.getSheetAt(0).getRow(i).getCell(CellReference.convertColStringToIndex("I")));
                 if(!value.equals("VALUE")&&!value.equals("")){
-                    String filename= company+"-"+year+".xls";
+                    String filename= company.toLowerCase()+"-"+year+".xls";
                    em.createNativeQuery("INSERT INTO trx_excell (year,kode,company_name,value,name_file) values ('"+year+"','"+Kode+"','"+company+"','"+value+"','"+filename+"')").executeUpdate(); 
 //                   System.out.println(year+"=>"+company+"=>"+Kode+"=>"+value); 
                 }
@@ -2043,7 +2053,7 @@ public class DataEntryController {
         @RequestMapping(path = "/admin/export-entry/gri-ojk/{name}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getFile(@PathVariable("name") String name, HttpServletResponse response,HttpSession session) throws FileNotFoundException {
     
-        String path = System.getProperty("user.home");
+        String path = System.getProperty("user.home")+"/upload";
         File f = new File (path+"/"+name);
         InputStreamResource resource = new InputStreamResource(new FileInputStream(f));
         HttpHeaders headers = new HttpHeaders();
