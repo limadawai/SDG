@@ -12,6 +12,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,6 +57,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.jica.sdg.model.BestMap;
@@ -495,12 +497,31 @@ public class RanRadSdgController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-govProg", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-govProg")
 	@ResponseBody
 	@Transactional
-	public void savGovProg(@RequestBody GovProgram gov) {
-    	gov.setCreated_by(1);
+	public void savGovProg(HttpSession session,
+			@RequestParam("id") Integer id,
+			@RequestParam("id_program") String id_program,
+			@RequestParam("nm_program") String nm_program,
+			@RequestParam("nm_program_eng") String nm_program_eng,
+			@RequestParam("id_monper") Integer id_monper,
+			@RequestParam("rel_prog_id") String rel_prog_id,
+			@RequestParam("internal_code") Integer internal_code,
+			@RequestParam("rel_prov") String rel_prov,
+			@RequestParam("id_ministry") Integer id_ministry) {
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	GovProgram gov = new GovProgram();
+    	gov.setId(id);
+    	gov.setId_program(id_program);
+    	gov.setNm_program(nm_program);
+    	gov.setNm_program_eng(nm_program_eng);
+    	gov.setId_monper(id_monper);
+    	gov.setRel_prog_id(rel_prog_id);
+    	gov.setInternal_code(internal_code);
+    	gov.setCreated_by(id_role);
     	gov.setDate_created(new Date());
+    	gov.setId_ministry(id_ministry);
     	govProgService.saveGovProgram(gov);
     	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
     		String sql = "select IFNULL(max(internal_code)+1,1) as no from gov_program where id_monper = :id_monper";
@@ -509,11 +530,61 @@ public class RanRadSdgController {
         	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
     		em.createNativeQuery("UPDATE gov_program set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
+    	em.createNativeQuery("delete from assign_related_program where id_program = '"+gov.getId()+"'").executeUpdate();
+    	if(!rel_prov.equals("")) {
+    		String[] prov = rel_prov.split(",");
+    		for(int i=0;i<prov.length;i++) {
+    			String sql = "select id_monper from ran_rad where id_prov = '"+prov[i]+"' and status = 'on Going' ";
+    			Query query = em.createNativeQuery(sql);
+    			List list = query.getResultList();
+    			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
+					Object object = (Object) iterator.next();
+					em.createNativeQuery("INSERT IGNORE INTO assign_related_program(id_program,id_monper,id_prov)VALUES('"+gov.getId()+"','"+object.toString()+"','"+prov[i]+"')").executeUpdate();
+				}
+    		}
+    	}
 	}
     
     @GetMapping("admin/get-govProg/{id}")
     public @ResponseBody Map<String, Object> getGovProg(@PathVariable("id") Integer id) {
         Optional<GovProgram> list = govProgService.findOne(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-relProv/{id}")
+    public @ResponseBody Map<String, Object> getrelProv(@PathVariable("id") Integer id) {
+    	String sql = "select DISTINCT id_prov from assign_related_program where id_program = '"+id+"' ";
+		Query query = em.createNativeQuery(sql);
+		List list = query.getResultList();
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-ministry/{id_prov}/{id_monper}")
+    public @ResponseBody Map<String, Object> getministry(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
+    	String sql = "select DISTINCT c.id_role, c.nm_role from assign_related_program a\r\n" + 
+    			"left join gov_activity b on a.id_program = b.id_program\r\n" + 
+    			"left join ref_role c on b.id_role = c.id_role\r\n" + 
+    			"where a.id_prov = '"+id_prov+"' and a.id_monper = '"+id_monper+"'";
+		Query query = em.createNativeQuery(sql);
+		List list = query.getResultList();
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-relProg/{id_prov}/{id_monper}/{id_role}")
+    public @ResponseBody Map<String, Object> getministry(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper,@PathVariable("id_role") String id_role) {
+    	String sql = "select DISTINCT d.id, d.id_program, d.nm_program, d.nm_program_eng from assign_related_program a\r\n" + 
+    			"left join gov_activity b on a.id_program = b.id_program\r\n" + 
+    			"left join ref_role c on b.id_role = c.id_role\r\n" +
+    			"left join gov_program d on a.id_program = d.id\r\n" +
+    			"where a.id_prov = '"+id_prov+"' and a.id_monper = '"+id_monper+"' and b.id_role = '"+id_role+"' ";
+		Query query = em.createNativeQuery(sql);
+		List list = query.getResultList();
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;

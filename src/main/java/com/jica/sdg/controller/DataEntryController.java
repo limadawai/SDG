@@ -1253,7 +1253,8 @@ public class DataEntryController {
         					(String)row[5], 
         					Integer.parseInt(row[6].toString()), 
         					(Date)row[7], 
-        					(Integer)row[8])
+        					(Integer)row[8],
+        					(Integer)row[9])
         			);
         }
         hasil.put("content",result);
