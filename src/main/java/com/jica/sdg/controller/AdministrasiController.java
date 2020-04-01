@@ -486,6 +486,16 @@ public class AdministrasiController {
         return hasil;
     }
     
+    @PostMapping(path = "admin/ubah-status-req", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+    @Transactional
+	public void change(@RequestBody Map<String, Object> payload) {
+        JSONObject jsonObapproval = new JSONObject(payload);
+        String status = jsonObapproval.get("status").toString();  
+        String id     = jsonObapproval.get("id").toString();
+        em.createNativeQuery("UPDATE user_request_list set status = '"+status+"' where id ='"+id+"'").executeUpdate();
+    }
+    
     @PostMapping(path = "save-user-req", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	public void saveUserReqRole(@RequestBody UserRequestList rol) {
