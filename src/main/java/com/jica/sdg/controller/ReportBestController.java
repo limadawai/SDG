@@ -382,7 +382,7 @@ public class ReportBestController {
                             "left join sdg_target d on a.id_target = d.id\n" +
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals ";
+                            "and a.id_goals = :id_goals order by c.nm_role";
                 query = manager.createNativeQuery(sql);
                 query.setParameter("id_monper", id_monper);
                 query.setParameter("year", year);

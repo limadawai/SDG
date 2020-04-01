@@ -84,14 +84,16 @@
                 </div>
                 <div class="widget-content">
                     <div class="table-responsive">
-                        <b>Summary</b>
+                        <b>Summary</b><br/>
+                        <span id="total_summary">Total : 0</span>
                     	<div id="indi_sum">
 	                	<!-- <div id="divgoals" style="width:100%"></div>
 	                	<div id="divtarget" style="width:100%"></div>
                     	<table id="tabatas" class='table table-striped table-bordered'></table><br><br> -->
                     	</div>
                         <hr/>
-                        <b>Detail</b>
+                        <b>Detail</b><br/>
+                        <span id="total_detail">Total : 0</span>
                     	<div id="indi">
 	                	<!-- <div id="divgoals" style="width:100%"></div>
 	                	<div id="divtarget" style="width:100%"></div>
@@ -221,7 +223,7 @@
                 success: function(result) {
                     $("#role").empty();
                     $("#role").append("<option value='0'>-- Pilih Role --</option>");
-//                    $("#role").append("<option value='131313'>-- All --</option>");
+                    $("#role").append("<option value='131313'>-- All --</option>");
                     /* $("#role").append("<option data-cat='all' value='all'>-- ALL --</option>"); */
                     for (var i=0; i<result.length; i++) {
                         $("#role").append("<option data-cat='"+result[i]['cat_role']+"' value='" + result[i]['id_role'] + "'>" + result[i]['nm_role'] + "</option>");
@@ -234,7 +236,7 @@
                 success: function (result1) {
                 	$("#periode").empty();
                     $("#periode").html('<option value="0" >-- Pilih Tahun --</option>');
-                    $("#periode").append('<option value="999999###111111" >-- All --</option>');
+//                    $("#periode").append('<option value="999999###111111" >-- All --</option>');
                     var array1 = result1.content;
                     if (array1 != '') {
                         for (i in array1) {
@@ -301,7 +303,7 @@
         	                        	option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
         	                        	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
         	                        				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
-        				                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+        				                            '<span style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
         				                      '</label><br/>';
         	                        	$.ajax({
         	                                url: urls + 'list-sdgTarget/'+response.content[i].id,
@@ -321,31 +323,31 @@
         	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
         	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
         	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="0---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-        								                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+        								                            '<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
         								                      '</label><br/>';
-        	                                    	$.ajax({
-        	                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
-        	                                            type: 'get',
-        	                                            dataType: 'json',
-        	                                            cache: false,
-        	                                            async : false,
-        	                                            success: function (result1) {
-        	                                            	for (var k = 0; k < result1.content.length; k++) {
-        	                                            		var nm_indicator;
-        	                                            		var id_indicator=result1.content[k][0];
-        	                                                	if($("#fs").is(':checked')){
-        	                                                		nm_indicator = result1.content[k][4];
-        	                            						}else{
-        	                            							nm_indicator = result1.content[k][6];
-        	                            						}
-        	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
-        	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="0---0---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-        									                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
-        									                      '</label><br/>';
-        	                                            	}
-        	                                            }
-        	                                    	});
+//        	                                    	$.ajax({
+//        	                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
+//        	                                            type: 'get',
+//        	                                            dataType: 'json',
+//        	                                            cache: false,
+//        	                                            async : false,
+//        	                                            success: function (result1) {
+//        	                                            	for (var k = 0; k < result1.content.length; k++) {
+//        	                                            		var nm_indicator;
+//        	                                            		var id_indicator=result1.content[k][0];
+//        	                                                	if($("#fs").is(':checked')){
+//        	                                                		nm_indicator = result1.content[k][4];
+//        	                            						}else{
+//        	                            							nm_indicator = result1.content[k][6];
+//        	                            						}
+//        	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
+//        	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+//        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="0---0---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
+//        									                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+//        									                      '</label><br/>';
+//        	                                            	}
+//        	                                            }
+//        	                                    	});
         	                                    	option += '</optgroup>';
         	                                	}
         	                                }
@@ -384,7 +386,7 @@
                                     	option += '<optgroup id="" label="'+response.sdg[i][3]+' '+nm_goals+'">';
                                     	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
                                     				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.sdg[i][0]+'---0---0">&nbsp;&nbsp;&nbsp;'+
-            			                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+            			                            '<span style="vertical-align:middle">'+response.sdg[i][3]+' '+nm_goals+'</span>'+
             			                      '</label><br/>';
                                     	$.ajax({
                                             url: urls + 'get-sdg-target',
@@ -405,7 +407,7 @@
                                                 	option += '<optgroup id="" label="'+id_target+' '+nm_target+'">';
                                                 	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
                                                 					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.sdg[i][0]+'---'+id_target+'---0">&nbsp;&nbsp;&nbsp;'+
-            							                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+            							                            '<span style="vertical-align:middle">'+id_target+' '+nm_target+'</span>'+
             							                      '</label><br/>';
                                                 	/* $.ajax({
                                                         url: urls + 'list-sdgIndicator/'+response.sdg[i][0]+'/'+result.content[j].id,
@@ -520,6 +522,7 @@
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
         var cat = $("#role").find(":selected").data("cat");
+        var jml = 0;
         $("#indi").html("");
         var text="";
         $.ajax({
@@ -594,17 +597,48 @@
                                             async:false,
                                             success: function (result3) {
                                                 var array_level3 = result3.content;
-                                                console.log(result3);
+                                                jml += parseInt(result3.content.length);
+                                                console.log('jumlah = '+result3.content.length);
                                                 
                                                 if (array_level3 != '') {
                                                     for (p in array_level3) {
+                                                        if(array_level3[p][15] == null || array_level3[p][15] == '0'){
+                                                            var no_target = '';
+                                                        }else{
+                                                            var no_target = array_level3[p][15];
+                                                        }
+                                                        if(array_level3[p][16] == null || array_level3[p][16] == '0'){
+                                                            var isi_target = '';
+                                                        }else{
+                                                            var isi_target = array_level3[p][16];
+                                                        }
+                                                        if(array_level3[p][17] == null || array_level3[p][17] == '0'){
+                                                            var isi_target1 = '';
+                                                        }else{
+                                                            var isi_target1 = array_level3[p][16];
+                                                        }
+                                                        if(array_level3[p][18] == null || array_level3[p][18] == '0'){
+                                                            var no_indicator = '';
+                                                        }else{
+                                                            var no_indicator = array_level3[p][18];
+                                                        }
+                                                        if(array_level3[p][19] == null || array_level3[p][19] == '0'){
+                                                            var isi_indicator = '';
+                                                        }else{
+                                                            var isi_indicator = array_level3[p][19];
+                                                        }
+                                                        if(array_level3[p][20] == null || array_level3[p][20] == '0'){
+                                                            var isi_indicator1 = '';
+                                                        }else{
+                                                            var isi_indicator1 = array_level3[p][20];
+                                                        }
                                                         //level2
                                                         if($('#fs').is(':checked')){
-                                                            var target      = array_level3[p][15]+" "+array_level3[p][16];
-                                                            var indicator   = array_level3[p][18]+" "+array_level3[p][19];
+                                                            var target      = no_target+" "+isi_target;
+                                                            var indicator   = no_indicator+" "+isi_indicator;
                                                         }else{
-                                                            var target      = array_level3[p][15]+" "+array_level3[p][17];
-                                                            var indicator   = array_level3[p][18]+" "+array_level3[p][20];
+                                                            var target      = no_target+" "+isi_target1;
+                                                            var indicator   = no_indicator+" "+isi_indicator1;
                                                         }
                                                         
                                                         text += "<tr style='font-size:80%;'>";
@@ -630,6 +664,8 @@
                         
                     }
                 }
+                $("#total_detail").html("Total : "+jml)
+                console.log("jml = "+jml)
             }
         });
         $("#indi").html(text);
@@ -643,6 +679,7 @@
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
         var cat = $("#role").find(":selected").data("cat");
+        var jml = 0;
         $("#indi_sum").html("");
         var text="";
         $.ajax({
@@ -717,6 +754,7 @@
                                             async:false,
                                             success: function (result3) {
                                                 var array_level3 = result3.content;
+                                                jml += parseInt(result3.content.length);
                                                 console.log(result3);
                                                 
                                                 if (array_level3 != '') {
@@ -753,6 +791,7 @@
                         
                     }
                 }
+                $("#total_summary").html("Total : "+jml)
             }
         });
         $("#indi_sum").html(text);

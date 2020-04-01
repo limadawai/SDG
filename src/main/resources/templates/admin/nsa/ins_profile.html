@@ -4,8 +4,8 @@
       xmlns:th="http://www.thymeleaf.org">
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-    <head th:include="admin/layout :: header">
-    <title th:text="Community Organization/Philantrophy Profile">Community Organization/Philantrophy Profile</title>
+<head th:include="admin/layout :: header">
+	<title></title>
 </head>
 <body>
     <div th:include="admin/layout :: menu"></div>
@@ -38,7 +38,7 @@
                                 <option th:each="f:${listInsProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
 
-                            <button id="export" class="btn btn-warning pull-right" style="margin-left: 3px">Export Excel</button> 
+                            <!-- <button id="export" class="btn btn-warning pull-right" style="margin-left: 3px">Export Excel</button>  -->
 
                             <button type="button" id="tambah" class="btn btn-success pull-right" style="display: none">
                                 <span class="lang_indo">Tambah</span>
@@ -167,6 +167,8 @@
             var id_prov     = [[${id_prov}]];
             var privilege   = [[${privilege}]];
             
+            $(document).attr("title","Community Organization/Philantrophy Profile");
+            
             if(id_role == '1'){
 //                alert('admin');
             }else{
@@ -223,6 +225,7 @@
                             //tutup kosong
                         }else{
                             $('#tabel-ins-profile').DataTable({
+                            	"serverSide": true,
                                 responsive: true,
                                 sDom: 'Brtip',
                                 "bLengthChange": false,
@@ -235,7 +238,12 @@
                 		        	    extend: 'print',
                 		        	    text: 'Print',
                 		        	    exportOptions: {
-                		        	        stripHtml: false
+                		        	        stripHtml: false,
+                		        	        columns: [ 0,1,2,3,4,5,6 ],
+                		        	        modifier: {
+                		                        search: 'applied',
+                		                        order: 'applied'
+                		                    }
                 		        	    }
                 		        	},
                 		        	{
@@ -253,7 +261,11 @@
                 		        		            return data;
                 		        		        }
                 		        		    },
-                		        		    columns: [ 0,1,2,3,4,5 ]
+                		        		    columns: [ 0,1,2,3,4,5,6 ],
+                		        	        modifier: {
+                		                        search: 'applied',
+                		                        order: 'applied'
+                		                    }
                 		        		}
                 		        	},
                 		        ],
@@ -290,7 +302,7 @@
                                 "columnDefs": [
                                 ],
                                 select: true
-                            });	
+                            });
                         }
                     }
                 });
@@ -452,25 +464,93 @@
                 if (id == "00") {
                 	$.ajax({
                 		type: "GET",
-                		url: urls+"getallinst/"+idprov,
-                		success: function(res) {
-                			//console.log(res);
-                			$("#tbody_ins_profile").empty();
-                			for (var i=0; i<res.length; i++) {
-                				var row = "<tr>";
-                				row += "<td style='text-align:center;'>"+(i+1)+"</td>";
-                				row += "<td>"+res[i][3]+"</td>"
-                				row += "<td>"+res[i][4]+"</td>"
-                				row += "<td>"+res[i][5]+"</td>"
-                				row += "<td>"+res[i][6]+"</td>"
-                				row += "<td style='text-align:center;'>"+res[i][7]+"</td>"
-                				row += "<td>"+res[i][8]+"</td>"
-                				row += "<td><div style='text-align:center;'>"
-                				+ "<button data-id='"+res[i][0]+"' type='button' title='Update' class='btn btn-success btn-mini update'><i class='icon-save'></i></button>"
-                				+ "<button data-id='"+res[i][1]+"' type='button' title='Delete' class='btn btn-danger btn-mini update'><i class='icon-trash'></i></button>"
-                				+ "</div></td>"
-                				row += "</tr>";
-                				$("#tbody_ins_profile").append(row);
+                		url: urls+"listins/"+idprov,
+                		success: function (result) {
+                			console.log(result);
+                			if(result.content[0] ==  null){
+	                            if($("#nm_ins_profil").val()=="0"){
+	                            	$("#tambah").hide();
+	                            }else if(id_role == id_role){
+	                                $("#tambah").show();
+	                            }else if(id_role == '1'){
+	                                $("#tambah").show();
+	                            }else{
+	                                $("#tambah").hide();
+	                            }
+                			} else {
+                            	var table = $('#tabel-ins-profile').DataTable({
+                            		responsive: true,
+                            		sDom: 'Brtip',
+                                    "bLengthChange": false,
+                                    "cache": false,
+                                    "autoWidth": true,
+                                    "responsive":true,
+                                    "bDestroy": true,
+                                    buttons: [
+                    		        	{
+                    		        	    extend: 'print',
+                    		        	    text: 'Print',
+                    		        	    exportOptions: {
+                    		        	        stripHtml: false,
+                    		        		    columns: [ 0,1,2,3,4,5,6 ]
+                    		        	    }
+                    		        	},
+                    		        	{
+                    		        		extend: 'excelHtml5',
+                    		        		filename: 'Profil Lembaga/Filantropi',
+                    		        		text: 'Save as Excel',
+                    		        		exportOptions: {
+                    		        		    columns: [ 0,1,2,3,4,5,6 ],
+                    		        		    format: {
+                    		        		        body: function(data, column, row) {
+                    		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+                    		        		            data = data.replace(/<.*?>/g, "");
+                    		        		            data = data.replace("&amp;", "&");
+                    		        		            data = data.replace("&nbsp;", "");
+                    		        		            data = data.replace("&nbsp;", "");
+                    		        		            return data;
+                    		        		        }
+                    		        		    }
+                    		        		}
+                    		        	},
+                    		        ],
+                                    "ajax": {
+                                        "url": urls+'listins/'+idprov,
+                                        dataSrc: 'content',
+                                    },
+                                    "searching": false,
+                                    "columns": [
+                                        {"data": function (row, data, index, display) {
+                                        	return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            var dataid = row[1]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[2];
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                            '<button data-id="'+row[1]+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                                        }}
+                                    ],
+                                    "columnDefs": [
+                                    ],
+                                    select: true
+                            	});
                 			}
                 		}
                 	});
@@ -503,7 +583,8 @@
 	                		        	    extend: 'print',
 	                		        	    text: 'Print',
 	                		        	    exportOptions: {
-	                		        	        stripHtml: false
+	                		        	        stripHtml: false,
+	                		        		    columns: [ 0,1,2,3,4,5,6 ]
 	                		        	    }
 	                		        	},
 	                		        	{
@@ -511,6 +592,7 @@
 	                		        		filename: 'Profil Lembaga/Filantropi',
 	                		        		text: 'Save as Excel',
 	                		        		exportOptions: {
+	                		        		    columns: [ 0,1,2,3,4,5,6 ],
 	                		        		    format: {
 	                		        		        body: function(data, column, row) {
 	                		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
@@ -521,8 +603,6 @@
 	                		        		            return data;
 	                		        		        }
 	                		        		    }
-	                		        	,
-            		        		    columns: [ 0,1,2,3,4,5 ]
 	                		        		}
 	                		        	},
 	                		        ],

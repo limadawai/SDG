@@ -175,7 +175,7 @@
                         <div class="controls">
                             <textarea id="id_program" name="id_program" class="input-xlarge input-block-level"></textarea>
                             <input id="id" name="id" class="input-medium input-block-level" type="hidden"/>
-                            <span class="help-block" id="error_background"></span>
+                            <span class="help-block" id="error_program"></span>
                         </div>
                     </div>
 				  
@@ -187,61 +187,61 @@
                             <span class="help-block" id="error_location"></span>
                         </div>
                     </div>
-				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Date and Time</label>
-				    <label class="lang_indo control-label">Tanggal dan Waktu</label>
-				    <div class="controls">
-				    	<div id="datetimepicker1" class="input-append date">
-						    <input id="time_activity" class="input-small" name="time_activity" data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
-						    <span class="add-on">
-						      <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar">
-						      </i>
-						    </span>
-					  	</div>
-					  	<select id="jam" class="input-small">
-					  	</select>:
-					  	<select id="menit" class="input-small">
-					  	</select>
-				    	<span class="help-block" id="error_time_activity"></span>
-				    </div>
-				  </div>
-				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Background</label>
-				    <label class="lang_indo control-label">Latar Belakang</label>
-				    <div class="controls">
-				    	<textarea id="background" name="background" class="input-xlarge input-block-level"></textarea>
-				    	<span class="help-block" id="error_background"></span>
-				    </div>
-				  </div>
-				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Implementation Process</label>
-				    <label class="lang_indo control-label">Proses Implementasi</label>
-				    <div class="controls">
-				    	<textarea id="implementation_process" name="implementation_process" class="input-xlarge input-block-level"></textarea>
-				    	<span class="help-block" id="error_implementation_process"></span>
-				    </div>
-				  </div>
-				  <div class="control-group">
-				    <label class="lang_eng control-label" style="display:none">Challenges and Learning</label>
-				    <label class="lang_indo control-label">Tantangan dan Pembelajaran</label>
-				    <div class="controls">
-				    	<textarea id="challenges_learning" name="challenges_learning" class="input-xlarge input-block-level"></textarea>
-				    	<span class="help-block" id="error_challenges_learning"></span>
-				    </div>
-				  </div>
-				</form>
-			</div>
-			<div class="modal-footer">
-		    	<button class="btn tutup" data-dismiss="modal" aria-hidden="true">
-		    		<span class="lang_eng" style="display:none">Close</span>
-		    		<span class="lang_indo">Tutup</span>
-		    	</button>
-		    	<button class="btn btn-primary" id="submit">
-		    		<span class="lang_eng" style="display:none">Submit</span>
-		    		<span class="lang_indo">Simpan</span>
-		    	</button>
-		  	</div>
-		</div>
+                    <div class="control-group">
+                        <label class="lang_eng control-label" style="display:none">Date and Time</label>
+                        <label class="lang_indo control-label">Tanggal dan Waktu</label>
+                        <div class="controls">
+                            <div id="datetimepicker1" class="input-append date">
+                                <input id="time_activity" class="input-small" name="time_activity" data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
+                                <span class="add-on">
+                                    <i data-time-icon="icon-time" data-date-icon="icon-calendar" class="icon-calendar">
+                                    </i>
+                                </span>
+                            </div>
+                            <select id="jam" class="input-small">
+                            </select>:
+                            <select id="menit" class="input-small">
+                            </select>
+                            <span class="help-block" id="error_time_activity"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="lang_eng control-label" style="display:none">Background</label>
+                        <label class="lang_indo control-label">Latar Belakang</label>
+                        <div class="controls">
+                            <textarea id="background" name="background" class="input-xlarge input-block-level"></textarea>
+                            <span class="help-block" id="error_background"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="lang_eng control-label" style="display:none">Implementation Process</label>
+                        <label class="lang_indo control-label">Proses Implementasi</label>
+                        <div class="controls">
+                            <textarea id="implementation_process" name="implementation_process" class="input-xlarge input-block-level"></textarea>
+                            <span class="help-block" id="error_implementation_process"></span>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="lang_eng control-label" style="display:none">Challenges and Learning</label>
+                        <label class="lang_indo control-label">Tantangan dan Pembelajaran</label>
+                        <div class="controls">
+                            <textarea id="challenges_learning" name="challenges_learning" class="input-xlarge input-block-level"></textarea>
+                            <span class="help-block" id="error_challenges_learning"></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn tutup" data-dismiss="modal" aria-hidden="true">
+                    <span class="lang_eng" style="display:none">Close</span>
+                    <span class="lang_indo">Tutup</span>
+                </button>
+                <button class="btn btn-primary" id="submit">
+                    <span class="lang_eng" style="display:none">Submit</span>
+                    <span class="lang_indo">Simpan</span>
+                </button>
+            </div>
+        </div>
     </div>
 
     <div th:include="admin/layout :: footer"></div>
@@ -484,7 +484,7 @@
                     var periode             = "1";
                     var id_role             = $('#idrole').val();
                     var v_dataid            = $("#periode").val();
-                    var v_data_id           = v_dataid.split("###");;
+                    var v_data_id           = v_dataid.split("###");
                     var id_monper           = v_data_id[0];
                     var year                = v_data_id[1];
 //                    var id_monper           = monper_1;
@@ -938,7 +938,7 @@
                         option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
                         cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
                                                 '<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
-                                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+                                            '<span style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
                                       '</label><br/>';
                         $.ajax({
                         url: urls + 'list-sdgTarget/'+response.content[i].id,
@@ -958,7 +958,7 @@
                                 option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
                                 cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
                                                                 '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-                                                                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+                                                                            '<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
                                                                       '</label><br/>';
                                 $.ajax({
                                     url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
@@ -978,7 +978,7 @@
                                                 option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
                                                 cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
                                                                                     '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-                                                                                    '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+                                                                                    '<span style="vertical-align:middle">'+result1.content[k][1]+' '+nm_indicator+'</span>'+
                                                                               '</label><br/>';
                                         }
                                     }
@@ -1049,69 +1049,94 @@
         });
         
         $('#submit').on('click', function(){
-			var id = $('#id').val();
-			var id_prog = $('#id_program').val();
+            var id = $('#id').val();
+            var id_prog = $('#id_program').val();
 //			var id_prog = $('#id_program').val().split("###");
-			var id_program = id_prog[0];
-			var id_activity = id_prog[1];
-			var id_indicator = id_prog[2];
-			var id_role = $('#idrole').val();
-			var location = $('#location').val();
-			var time_activity = $('#time_activity').val()+" "+$('#jam').val()+":"+$('#menit').val()+":00";
-			var background = $('#background').val();
-			var implementation_process = $('#implementation_process').val();
-			var challenges_learning = $('#challenges_learning').val();
-			var periode = $('#periode').val().split("###");
-			var id_monper = periode[0];
+            var id_program = id_prog[0];
+            var id_activity = id_prog[1];
+            var id_indicator = id_prog[2];
+            var id_role = $('#idrole').val();
+            var location = $('#location').val();
+            var time_activity = $('#time_activity').val()+" "+$('#jam').val()+":"+$('#menit').val()+":00";
+            var background = $('#background').val();
+            var implementation_process = $('#implementation_process').val();
+            var challenges_learning = $('#challenges_learning').val();
+            var periode = $('#periode').val().split("###");
+            var id_monper = periode[0];
             var year = periode[1];
             
-			var sdg_indicator;
+            var sdg_indicator;
             var sdg_indicator_val = [];
-	        $.each($("input[name='sdg_indicator']:checked"), function(){
-                 sdg_indicator_val.push($(this).val());
-	        });
+            $.each($("input[name='sdg_indicator']:checked"), function(){
+                sdg_indicator_val.push($(this).val());
+            });
             if(sdg_indicator_val.length>0){
-                    sdg_indicator = sdg_indicator_val.toString();
+                sdg_indicator = sdg_indicator_val.toString();
             }else{
-                    sdg_indicator = '0';
+                sdg_indicator = '0';
             }
             console.log(sdg_indicator);
             
-			$('.control-group').removeClass('error');
-			$('.help-block').text("");
-			var cek = 0;
+            $('.control-group').removeClass('error');
+            $('.help-block').text("");
+            var cek = 0;
                         
 //                        if (id_gov_indicator == ""){
 //                            $("#error_id_gov_indicator").parents(".control-group").first().addClass("error");
 //                            $("#error_id_gov_indicator").text(required);
 //                            cek += 1;
 //                        }
-			/* if (id_gov_indicator == ""){
-                $("#error_id_gov_indicator").parents(".control-group").first().addClass("error");
-                $("#error_id_gov_indicator").text(required);
+//			/* if (id_gov_indicator == ""){
+//                $("#error_id_gov_indicator").parents(".control-group").first().addClass("error");
+//                $("#error_id_gov_indicator").text(required);
+//                cek += 1;
+//            }
+            if (id_prog == ""){
+                $("#error_program").parents(".control-group").first().addClass("error");
+                $("#error_program").text(required);
                 cek += 1;
-            }
-			if (unit == ""){
-                $("#error_unit").parents(".control-group").first().addClass("error");
-                $("#error_unit").text(required);
+            } 
+            if (location == ""){
+                $("#error_location").parents(".control-group").first().addClass("error");
+                $("#error_location").text(required);
                 cek += 1;
-            } */
-                if(cek==0){
-                    var data = JSON.stringify({
-                            'id':id,
-                            'id_program':'',
-                            'id_activity':'',
-                            'id_indicator':'',
-                            'id_role':id_role,
-                            'location':location,
-                            'program':id_prog,
-                            'time_activity':time_activity,
-                            'background':background,
-                            'implementation_process':implementation_process,
-                            'challenges_learning':challenges_learning,
-                            'id_monper':id_monper,
-                            'year':year
-                            });
+            } 
+            if (time_activity == ""){
+                $("#error_time_activity").parents(".control-group").first().addClass("error");
+                $("#error_time_activity").text(required);
+                cek += 1;
+            } 
+            if (background == ""){
+                $("#error_background").parents(".control-group").first().addClass("error");
+                $("#error_background").text(required);
+                cek += 1;
+            } 
+            if (implementation_process == ""){
+                $("#error_implementation_process").parents(".control-group").first().addClass("error");
+                $("#error_implementation_process").text(required);
+                cek += 1;
+            } 
+            if (challenges_learning == ""){
+                $("#error_challenges_learning").parents(".control-group").first().addClass("error");
+                $("#error_challenges_learning").text(required);
+                cek += 1;
+            } 
+            if(cek==0){
+                var data = JSON.stringify({
+                        'id':id,
+                        'id_program':'',
+                        'id_activity':'',
+                        'id_indicator':'',
+                        'id_role':id_role,
+                        'location':location,
+                        'program':id_prog,
+                        'time_activity':time_activity,
+                        'background':background,
+                        'implementation_process':implementation_process,
+                        'challenges_learning':challenges_learning,
+                        'id_monper':id_monper,
+                        'year':year
+                        });
                 $.ajax({
                     type: "POST",
                     url: urls+'save-best/'+sdg_indicator+'/'+id_monper+'/'+$('#id_prov').val(),
@@ -1138,8 +1163,8 @@
                     	$('#myModal').modal('hide');
                     },
                 });
-			}
-		});
+            }
+        });
         
         function clearForm(){
 			$('#id').val("");
