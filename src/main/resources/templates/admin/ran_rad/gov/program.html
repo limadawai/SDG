@@ -160,6 +160,7 @@
 				  <div class="control-group provinsi">
 				    <div class="controls">
                         <select name="ministry" id="ministry" class="input-block-level" disabled="true">
+                        	<option value=''>-- Choose Ministry --</option>
 	        			</select>
 				    </div>
 				  </div>
@@ -530,6 +531,7 @@
 						'rel_prov':rel_prov,
 						'id_ministry':ministry,
 						};
+					console.log(data)
 					$.ajax({
 						type: "POST",
 	                    url: urls+'save-govProg',
