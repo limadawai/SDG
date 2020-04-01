@@ -139,13 +139,13 @@
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Add Province Location</label>
 				    <label class="lang_indo control-label" style="text-align:left">Provinsi</label>
 				    <div class="controls">
-				    	<input type="checkbox" id="copy" name="copy"/>
+				    	<input type="checkbox" id="cek_prov" name="cek_prov"/>
 				    </div>
 				  </div>
 				  <div class="control-group nasional">
 				    <div class="controls">
-                         <select id="prov" name="prov" class="input-block-level">
-				    		<option></option>
+                         <select id="rel_prov" name="rel_prov" multiple="multiple" style="width: 100%" class="input-block-level">
+				    		<option value="all">all</option>
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
 				    </div>
@@ -194,6 +194,29 @@
 		//$(document).ready(function (e) {
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
+	        $("#rel_prov").select2({
+	        	dropdownParent: $('#myModal')
+	        }).attr('disabled', true);
+	        
+	        $('#cek_prov').on('change', function(){
+	        	if($(this).is(':checked')){
+	        		 $("#rel_prov").removeAttr('disabled');
+	        	}else{
+	        		$("#rel_prov").attr('disabled', true);
+	        	}
+	        });
+	        
+	        $('#rel_prov').on("select2:select", function (e) { 
+	            var data = e.params.data.text;
+	            if(data=='all'){
+	             $("#rel_prov > option").prop("selected","selected");
+	             $("#rel_prov").trigger("change");
+	            }
+	       }).on('change',function(){
+	    	   console.log($(this).val());
+	       });
+	        
+	        
 	        
 	        var id_prov = $('#id_prov').val();
 	        var id_role = $('#id_role').val();
@@ -421,6 +444,7 @@
 				var id_monper = $('#id_monper').val();
 				var rel_prog_id = $('#rel_prog_id').val();
 				var internal_code = $('#internal_code').val();
+				var rel_prov = $('#rel_prov').val().toString();
 				if(nm_program==""){
 					nm_program=nm_program_eng;
 				}

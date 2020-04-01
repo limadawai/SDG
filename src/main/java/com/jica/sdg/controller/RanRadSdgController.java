@@ -506,7 +506,6 @@ public class RanRadSdgController {
     		String sql = "select IFNULL(max(internal_code)+1,1) as no from gov_program where id_monper = :id_monper";
         	Query query = em.createNativeQuery(sql);
         	query.setParameter("id_monper", gov.getId_monper());
-        	System.out.print(query.getResultList().get(0).toString()+" "+gov.getId_monper());
         	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
     		em.createNativeQuery("UPDATE gov_program set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
