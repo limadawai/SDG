@@ -472,6 +472,24 @@ public class EntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-best-summary/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> listBestsummary(@PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
+        String sql  = "select a.id, b.nm_program, b.nm_program_eng, a.location, DATE_FORMAT(a.time_activity, \"%M, %d %Y %H:%i\"), a.background, a.implementation_process, "
+        		+ "a.challenges_learning, a.id_indicator, c.nm_program as nsa_prog, c.nm_program_eng as nsa_prog_eng, a.program "
+        		+ "from best_practice as a "
+        		+ "left join gov_program b on a.id_program = b.id "
+        		+ "left join nsa_program c on a.id_program = c.id "
+        		+ "where a.id_role = '999999' and a.id_monper = :id_monper and a.year = :year";
+        Query query = em.createNativeQuery(sql);
+//        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-best-entry/{id_best}")
     public @ResponseBody Map<String, Object> listBest(@PathVariable("id_best") String id_best) {
         String sql  = "select a.*, c.nm_program as nsa_prog, c.nm_program_eng as nsa_prog_eng, b.id_indicator "
