@@ -175,12 +175,12 @@
                     type: "GET",
                     url: urls+'list-get-option-role-all-profil/'+id_prov,
                     success: function (result) {
-                        $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        $("#idrole").html('<option value="10000" >-- Pilih --</option>');
                         var array = result.content;
                         if (array != '') {
-                        	/* if(privilege == 'ADMIN' || privilege == 'SUPER'){
-                        		$("#idrole").append('<option value="all" >-- ALL --</option>');
-                        	} */
+                        	if(privilege == 'ADMIN' || privilege == 'SUPER'){
+                        		$("#idrole").append('<option value="0" >-- ALL --</option>');
+                        	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                             }
