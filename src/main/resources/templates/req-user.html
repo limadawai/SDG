@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/layout :: header">
+    <title th:text="Manajemen Role"></title>
+</head>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Request User</a></div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-user"></i></span>
+                        <h5>
+                        	<span class="lang_eng" style="display:none">Request User</span>
+                        	<span class="lang_indo">Permintaan Pengguna</span>
+                        </h5>
+                    </div>
+                    <div class="widget-content">
+                        <form >
+	                    	<div class="control-group">
+	                            <label class="control-label" for="nama_role">
+	                            	<span class="lang_eng" style="display:none">Level</span>
+	                            	<span class="lang_indo">Level</span>
+	                            </label>
+	                            <div class="controls">
+	                            	<select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+	                            		<option value="" >--Pilih--</option>
+		                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+		                            </select>
+		                            <select class="span3" id="level" name="level">
+		                            	<option value="" >--Pilih--</option>
+		                                <option value="government" >Government</option>
+		                                <option value="non_government" >Non Government</option>
+		                                <option value="gri_ojk" >GRI/OJK</option>
+		                            </select>
+	                            	<span class="help-block" id="error_nm_role"></span>
+	                            </div>
+	                        </div>
+	                        <div class="control-group">
+	                            <label class="control-label" for="nama_role">
+	                            	<span class="lang_eng" style="display:none">Type</span>
+	                            	<span class="lang_indo">Tipe</span>
+	                            </label>
+	                            <div class="controls">
+	                            	<select class="span3" id="type" name="type">
+		                            	<option value="" >--Pilih--</option>
+		                                <option value="user" >New User</option>
+		                                <option value="nsa" >New NSA</option>
+		                            </select>
+	                            	<span class="help-block" id="error_nm_role"></span>
+	                            </div>
+	                        </div>
+	                        <div class="control-group">
+	                            <label class="control-label" for="deskripsi_role">
+	                            	<span class="lang_eng" style="display:none">Institusion Name</span>
+	                            	<span class="lang_indo">Nama Institusi</span>
+	                            </label>
+	                            <div class="controls">
+	                            	<input name="institution" id="institution" type="text" class="span6" required>
+	                            	<span class="help-block" id="error_desc_role"></span>
+	                            </div>
+	                        </div>
+	                        <div class="control-group">
+	                            <label class="control-label" for="deskripsi_role">
+	                            	<span class="lang_eng" style="display:none">Name</span>
+	                            	<span class="lang_indo">Nama</span>
+	                            </label>
+	                            <div class="controls">
+	                            	<input name="name" id="name" type="text" class="span6" required/>
+	                            	<span class="help-block" id="error_desc_role"></span>
+	                            </div>
+	                        </div>
+	                        <div class="control-group">
+	                            <label class="control-label" for="deskripsi_role">
+	                            	<span class="lang_eng" style="display:none">Contact</span>
+	                            	<span class="lang_indo">Kontak</span>
+	                            </label>
+	                            <div class="controls">
+	                            	<input name="contact" id="contact" type="text" class="span6" required/>
+	                            	<span class="help-block" id="error_desc_role"></span>
+	                            </div>
+	                        </div>
+	                        <div class="control-group">
+	                            <label class="control-label" for="deskripsi_role">
+									Detail
+	                            </label>
+	                            <div class="controls">
+	                            	<textarea name="detail" id="detail" class="span6" required></textarea>
+	                            	<span class="help-block" id="error_desc_role"></span>
+	                            </div>
+	                        </div>
+		                    <div class="control-group">
+			                    <div class="controls">
+			                    	<button type="button" class="btn btn-primary" id="submit">
+							    		<span class="lang_eng" style="display:none">Submit</span>
+							    		<span class="lang_indo">Simpan</span>
+							    	</button>
+			                    </div>
+		                    </div>
+	                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <div th:include="admin/layout :: footer"></div>
+</body>
+<script th:inline="javascript">
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+  //Bahasa
+    var titleDel = "Anda Yakin";
+    var messDel = "Menghapus Data?";
+    var buttDel = 'Ya, Hapus data ini!';
+    var titleOk	= "Hapus";
+    var messOk = "Data berhasil dihapus";
+    var messNOk = "Data tidak dapat dihapus";
+    var required = "Harus diisi";
+    var messRole = "Nama Role Sudah ada";
+    var mess1Role = "Role Sudah ada";
+    function bhs(cek){
+		if(cek){
+			$(".lang_indo").show();
+    		$(".lang_eng").hide();
+    		titleDel = "Anda Yakin";
+    		messDel = "Menghapus Data?";
+    		buttDel = 'Ya, Hapus data ini!';
+    		titleOk	= "Hapus";
+	        messOk = "Data berhasil dihapus";
+	        messNOk = "Data tidak dapat dihapus";
+	        required = "Harus diisi";
+	        messRole = "Nama Role Sudah ada";
+	        mess1Role = "Role Sudah ada";
+    	}else{	    	        
+	        $(".lang_indo").hide();
+    		$(".lang_eng").show();
+    		titleDel = "Are you sure";
+    		messDel = "Delete this data?";
+    		buttDel = 'Yes, Delete this data!';
+    		titleOk	= "Delete";
+	        messOk = "Delete successful";
+	        messNOk = "Can't delete data";
+	        required = "Required";
+	        messRole = "The name Role already exists";
+	        mess1Role = "Role already exists";
+    	}
+    }
+    if(lang){
+    	bhs(lang=="0");
+    }else{
+    	bhs($('#fs').is(':checked'));
+    }
+    
+    $('#fs').on('change', function(e){
+    	bhs($(this).is(':checked'));
+    	loadMenuSelect();
+    });
+    
+    var privilege = [[${privilege}]];
+    var id_prov = [[${id_prov}]]
+    
+    if(privilege=="guest"){
+    	$(".notif").hide();
+    }
+    
+    function clearForm(){
+		$('#id_prov').val("");
+		$('#level').val("");
+		$('#type').val("");
+		$('#institution');
+		$('#name').val("");
+		$('#contact').val("");
+		$('#detail').text("");
+		$('.control-group').removeClass('error');
+		$('.help-block').text("");
+	}
+	
+	$('#submit').on('click', function(){
+		var id_prov = $('#id_prov').val();
+		var level = $('#level').val();
+		var type = $('#type').val();
+		var institution = $('#institution').val();
+		var name = $('#name').val();
+		var contact = $('#contact').val();
+		var detail = $('#detail').text();
+		
+		$('.control-group').removeClass('error');
+		$('.help-block').text("");
+		var cek = 0;
+		
+		/* if (nm_role == ""){
+            $("#error_nm_role").parents(".control-group").first().addClass("error");
+            $("#error_nm_role").text(required);
+            cek += 1;
+        }
+		if (desc_role == ""){
+            $("#error_desc_role").parents(".control-group").first().addClass("error");
+            $("#error_desc_role").text(required);
+            cek += 1;
+        }
+		if (cat_role == ""){
+            $("#error_cat_role").parents(".control-group").first().addClass("error");
+            $("#error_cat_role").text(required);
+            cek += 1;
+        }
+		if (privilege == ""){
+            $("#error_privilege").parents(".control-group").first().addClass("error");
+            $("#error_privilege").text(required);
+            cek += 1;
+        } */
+		if(cek==0){
+			var data = JSON.stringify({
+				'id_prov':id_prov,
+				'level':level,
+				'type':type,
+				'institution':institution,
+				'name':name,
+				'contact':contact,
+				'detail':detail,
+				'status':'new'
+				});
+			$.ajax({
+				type: "POST",
+                url: '/sdg/save-user-req',
+                beforeSend : function(xhr){
+                	xhr.setRequestHeader(header,token);
+                },
+                headers:{'Accept':'application/json','Content-Type':'application/json'},
+				data: data,
+                success: function (result) {
+                	swal('Request User','Request User Successful','success');
+                	clearForm();
+                },
+            });
+		}
+	});
+	
+	$('#tbody-role').on('click', '.update', function(){
+		var id = $(this).attr('data-id');
+		$.ajax({
+			type: "GET",
+            url: urls+'manajemen/get-role/'+id,
+            success: function (result) {
+            	var val = result.content;
+            	$('#id_role').val(val.id_role);
+				$('#nm_role').val(val.nm_role);
+				$('#desc_role').val(val.desc_role);
+				$('#cat_role').val(val.cat_role);
+				$('#privilege').val(val.privilege);
+				$('#prov').val(val.id_prov);
+				var menu = val.menu.split(',');
+				for(i=0;i<menu.length;i++){
+					$('#menu'+menu[i]).prop('checked', true);
+				}
+				var submenu = val.submenu.split(',');
+				for(i=0;i<submenu.length;i++){
+					$('#submenu'+submenu[i]).prop('checked', true);
+				}
+				$('#myModal').modal('show');
+            },
+        })
+     }).on('click', '.detail', function(){
+		var id = $(this).attr('data-id');
+		$.ajax({
+			type: "GET",
+            url: urls+'manajemen/get-role/'+id,
+            success: function (result) {
+            	var val = result.content;
+            	$('#id_role').val(val.id_role);
+				$('#nm_role').val(val.nm_role).attr("readonly",true);
+				$('#desc_role').val(val.desc_role).attr("readonly",true);
+				$('#cat_role').val(val.cat_role).attr("disabled",true);
+				$('#privilege').val(val.privilege).attr("disabled",true);
+				$('#prov').val(val.id_prov).attr("disabled",true);
+				var menu = val.menu.split(',');
+				for(i=0;i<menu.length;i++){
+					$('#menu'+menu[i]).prop('checked', true);
+				}
+				var submenu = val.submenu.split(',');
+				for(i=0;i<submenu.length;i++){
+					$('#submenu'+submenu[i]).prop('checked', true);
+				}
+				$("input[name='menu']").attr("disabled",true);
+				$("input[name='submenu']").attr("disabled",true);
+				$('#myModal').modal('show');
+            },
+        })
+     }).on('click', '.delete', function(){
+		var id = $(this).attr('data-id');
+		swal({
+            title: titleDel,
+            text: messDel,
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: buttDel
+        }).then(function () {
+        	$.ajax({
+				type: "DELETE",
+                url: urls+'manajemen/delete-role/'+id,
+                beforeSend : function(xhr){
+                	xhr.setRequestHeader(header,token);
+                },
+                success: function (result) {
+                	swal(titleOk,messOk,'success');
+                	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()+'/'+$('#cat_role_filter').val()).load();
+                },
+                error:function (result) {
+                	swal(titleOk,messNOk,'error');
+                },
+            })
+            
+        }, function (dismiss) {
+            if (dismiss === 'cancel') {
+            }
+        })
+     });
+</script>
+</html>

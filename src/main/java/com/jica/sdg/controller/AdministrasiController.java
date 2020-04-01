@@ -1,6 +1,7 @@
 package com.jica.sdg.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,7 @@ import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.Unit;
 import com.jica.sdg.model.User;
+import com.jica.sdg.model.UserRequestList;
 import com.jica.sdg.service.IAssignGovIndicatorService;
 import com.jica.sdg.service.IAssignNsaIndicatorService;
 import com.jica.sdg.service.IAssignSdgIndicatorService;
@@ -483,6 +485,23 @@ public class AdministrasiController {
         hasil.put("content", list);
         return hasil;
     }
+    
+    @PostMapping(path = "admin/ubah-status-req", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+    @Transactional
+	public void change(@RequestBody Map<String, Object> payload) {
+        JSONObject jsonObapproval = new JSONObject(payload);
+        String status = jsonObapproval.get("status").toString();  
+        String id     = jsonObapproval.get("id").toString();
+        em.createNativeQuery("UPDATE user_request_list set status = '"+status+"' where id ='"+id+"'").executeUpdate();
+    }
+    
+    @PostMapping(path = "save-user-req", consumes = "application/json", produces = "application/json")
+	@ResponseBody
+	public void saveUserReqRole(@RequestBody UserRequestList rol) {
+    	rol.setDate(new Date());
+    	userReqService.saveUserRequestList(rol);
+	}
 
     @GetMapping("admin/role/provinsi")
     public @ResponseBody List<Provinsi> provinsi() {

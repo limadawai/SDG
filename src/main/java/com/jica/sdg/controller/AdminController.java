@@ -88,6 +88,25 @@ public class AdminController {
     }
 
     //*********************** Dashboard ***********************
+    
+    @RequestMapping("default")
+    public String defaultAfterLogin(HttpServletRequest request) {
+    	Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    	System.out.print(auth.getName());
+        if (auth.getName().equals("guest")) {
+            return "redirect:/request-user";
+        }
+        return "redirect:/admin/dashboard";
+    }
+    
+    @GetMapping("request-user")
+    public String ReqUser(Model model, HttpSession session) {
+    	model.addAttribute("listprov", prov.findAllProvinsi());
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+		model.addAttribute("name", session.getAttribute("name"));
+		model.addAttribute("privilege", "guest");
+        return "req-user";
+    }
 
     @GetMapping("admin/dashboard")
     public String dashboard(Model model, Authentication auth, HttpServletRequest request, HttpSession session) {
