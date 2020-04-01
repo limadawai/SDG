@@ -503,8 +503,16 @@
                 var catrole     = $(this).data("catrole");
                 $("#catrole").val(catrole);
                 $("#id_role").val(id_role);
-                grid_modal();
-                apply_btn();
+                var v_pil_prog  = $("#pil_prog").val();
+                //budget indicator
+                if(v_pil_prog == 'indicator'){
+                    grid_modal();
+                    apply_btn();
+                }else{
+                    grid_modal_budget();
+                    apply_btn_budget();
+                }
+                
                 $('.addModal').modal("show");
             });
             
@@ -521,6 +529,39 @@
                     var type = 'entry_gov_indicator';
                 }else if(catrole == 'NSA'){
                     var type = 'entry_nsa_indicator';
+                }
+                console.log('get-status-approve/'+id_role+'/'+id_monper+'/'+tahun+'/'+type+'/'+v_period);
+                $.ajax({
+                    type: "GET",
+                    url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+tahun+'/'+type+'/'+v_period,
+                    success: function (result1) {
+                        if(result1.content == "1"){
+                            $('#simpan').hide();
+                        }else if(result1.content == "2"){
+                            $('#simpan').hide();
+                        }else if(result1.content == "3"){
+                            $('#simpan').hide();
+                        }else if(result1.content == "4"){
+                            $('#simpan').hide();
+                        }else{
+                            $('#simpan').show();
+                        }
+                    }
+                });
+            } 
+            
+            function apply_btn_budget(){
+                var id_role     = $("#id_role").val();
+                var catrole     = $("#catrole").val();
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                var v_period    = $("#period").val();
+                if(catrole == 'Government'){
+                    var type = 'entry_gov_budget';
+                }else if(catrole == 'NSA'){
+                    var type = 'entry_nsa_budget';
                 }
                 console.log('get-status-approve/'+id_role+'/'+id_monper+'/'+tahun+'/'+type+'/'+v_period);
                 $.ajax({
@@ -648,6 +689,78 @@
                 });
             }
             
+            function grid_modal_budget(){
+                var id_role     = $("#id_role").val();
+                var catrole     = $("#catrole").val();
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                var v_period    = $("#period").val();
+                var d_time      = $("#time_activity").val();
+                if(d_time == ''){
+                    var isi_time = '777777';
+//                                console.log('kosong')
+                }else{
+                    var isi_time = d_time;
+//                                console.log('isi '+d_time)
+                }
+                $("#tbl_program > tbody").html("");
+                $.ajax({
+                    type: "GET",
+                    async:false,
+                    url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
+                    success: function (data_level1) {
+                        console.log(data_level1.content);
+                        var level1 = data_level1.content;
+                        if (level1 != '') {
+                            for (i in level1) {
+                                if($("#fs").is(':checked')){
+                                    var prog_1 = level1[i][1];
+                                }else{
+                                    var prog_1 = level1[i][2];
+                                }
+                                var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
+                                $("#tbl_program > tbody").append(tb_prog);
+                                
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls + "get_sub_prog_level2_budget/"+level1[i][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
+                                    success: function (data_level2) {
+//                                        console.log(data_level2.content);
+                                        var level2 = data_level2.content;
+                                        if (level2 != '') {
+                                            for (o in level2) {
+                                                if($("#fs").is(':checked')){
+                                                    var prog_2 = level2[o][1];
+                                                }else{
+                                                    var prog_2 = level2[o][2];
+                                                }
+                                                if(v_period == '1'){
+                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="text" value="'+level2[o][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level">';
+                                                }else if(v_period == '2'){
+                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="text" value="'+level2[o][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level">';
+                                                }else if(v_period == '3'){
+                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="text" value="'+level2[o][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level">';
+                                                }else if(v_period == '4'){
+                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="text" value="'+level2[o][8]+'" class="input-block-level">';
+                                                }else{}
+                                                var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"><input name="id_indicator" id="id_indicator" type="hidden" value="'+level2[o][0]+'" class="input-block-level"><input name="id_entry" id="id_entry" type="hidden" value="'+level2[o][4]+'" class="input-block-level">'+ket_input+' '+level2[o][3]+'</td> </tr>';
+                                                $("#tbl_program > tbody").append(tb_prog2);
+
+
+                                            }
+                                        }
+                                    }
+                                });
+                                
+                            }
+                        }
+                    }
+                });
+            }
+            
             //modal nilai
             //modal
             $('#tabel-entri-sdg').on('click', ".id_role_nilai", function(e){
@@ -655,7 +768,14 @@
                 var catrole     = $(this).data("catrole");
                 $("#catrole1").val(catrole);
                 $("#id_role1").val(id_role);
-                grid_modal_nilai();
+                var v_pil_prog  = $("#pil_prog").val();
+                //budget indicator
+                if(v_pil_prog == 'indicator'){
+                    grid_modal_nilai();
+                }else{
+                    grid_modal_nilai_budget();
+                }
+                
                 $('.addModal_nilai').modal("show");
             });
             
@@ -785,6 +905,98 @@
                 });
             }
             
+            function grid_modal_nilai_budget(){
+                var id_role     = $("#id_role1").val();
+                var catrole     = $("#catrole1").val();
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                var v_period    = $("#period").val();
+                var d_time      = $("#time_activity").val();
+                if(d_time == ''){
+                    var isi_time = '777777';
+//                                console.log('kosong')
+                }else{
+                    var isi_time = d_time;
+//                                console.log('isi '+d_time)
+                }
+                $("#tbl_program_nilai > tbody").html("");
+                $.ajax({
+                    type: "GET",
+                    async:false,
+                    url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
+                    success: function (data_level1) {
+                        console.log(data_level1.content);
+                        var level1 = data_level1.content;
+                        if (level1 != '') {
+                            for (i in level1) {
+                                if($("#fs").is(':checked')){
+                                    var prog_1 = level1[i][1];
+                                }else{
+                                    var prog_1 = level1[i][2];
+                                }
+                                var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
+                                $("#tbl_program_nilai > tbody").append(tb_prog);
+                                
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls + "get_sub_prog_level2_budget/"+level1[i][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
+                                    success: function (data_level2) {
+//                                        console.log(data_level2.content);
+                                        var level2 = data_level2.content;
+                                        if (level2 != '') {
+                                            for (o in level2) {
+                                                if($("#fs").is(':checked')){
+                                                    var prog_2 = level2[o][1];
+                                                }else{
+                                                    var prog_2 = level2[o][2];
+                                                }
+                                                if(v_period == '1'){
+                                                    if(level2[o][5] == '0'){
+                                                        var warna = 'style="background-color: #ffa5a5"';
+                                                    }else{
+                                                        var warna = '';
+                                                    }
+                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="text" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
+                                                }else if(v_period == '2'){
+                                                    if(level2[o][5] == '0'){
+                                                        var warna = 'style="background-color: #ffa5a5"';
+                                                    }else{
+                                                        var warna = '';
+                                                    }
+                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="text" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
+                                                }else if(v_period == '3'){
+                                                    if(level2[o][5] == '0'){
+                                                        var warna = 'style="background-color: #ffa5a5"';
+                                                    }else{
+                                                        var warna = '';
+                                                    }
+                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="text" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
+                                                }else if(v_period == '4'){
+                                                    if(level2[o][5] == '0'){
+                                                        var warna = 'style="background-color: #ffa5a5"';
+                                                    }else{
+                                                        var warna = '';
+                                                    }
+                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="text" value="'+level2[o][8]+'" class="input-block-level" readonly>';
+                                                }else{}
+                                                var tb_prog2 = '<tr '+warna+'> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"><input name="id_indicator" id="id_indicator" type="hidden" value="'+level2[o][0]+'" class="input-block-level"><input name="id_entry" id="id_entry" type="hidden" value="'+level2[o][4]+'" class="input-block-level">'+ket_input+' '+level2[o][3]+'</td> </tr>';
+                                                $("#tbl_program_nilai > tbody").append(tb_prog2);
+
+
+                                            }
+                                        }
+                                    }
+                                });
+                                
+                            }
+                        }
+                    }
+                });
+            }
+            
             //modal date
             //modal
             $('#tabel-entri-sdg').on('click', ".id_role_date", function(e){
@@ -792,7 +1004,14 @@
                 var catrole     = $(this).data("catrole");
                 $("#catrole2").val(catrole);
                 $("#id_role2").val(id_role);
-                grid_modal_date();
+                var v_pil_prog  = $("#pil_prog").val();
+                //budget indicator
+                if(v_pil_prog == 'indicator'){
+                    grid_modal_date();
+                }else{
+                    grid_modal_date_budget();
+                }
+                
                 $('.addModal_date').modal("show");
             });
             
@@ -1021,6 +1240,209 @@
                 });
             }
             
+            function grid_modal_date_budget(){
+                var id_role     = $("#id_role2").val();
+                var catrole     = $("#catrole2").val();
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
+                var v_period    = $("#period").val();
+                var d_time      = $("#time_activity").val();
+                if(d_time == ''){
+                    var isi_time = '777777';
+//                                console.log('kosong')
+                }else{
+                    var isi_time = d_time;
+//                                console.log('isi '+d_time)
+                }
+                $("#tbl_program_date > tbody").html("");
+                $.ajax({
+                    type: "GET",
+                    async:false,
+                    url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
+                    success: function (data_level1) {
+                        console.log(data_level1.content);
+                        var level1 = data_level1.content;
+                        if (level1 != '') {
+                            for (i in level1) {
+                                if($("#fs").is(':checked')){
+                                    var prog_1 = level1[i][1];
+                                }else{
+                                    var prog_1 = level1[i][2];
+                                }
+                                var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
+                                $("#tbl_program_date > tbody").append(tb_prog);
+                                
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: urls + "get_sub_prog_level2_budget/"+level1[i][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
+                                    success: function (data_level2) {
+//                                        console.log(data_level2.content);
+                                        var level3 = data_level2.content;
+                                        var sts;
+                                        if (level3 != '') {
+                                            for (p in level3) {
+                                                if($("#fs").is(':checked')){
+                                                    var prog_3 = level3[p][1];
+                                                }else{
+                                                    var prog_3 = level3[p][2];
+                                                }
+                                                if(catrole == 'Government'){
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        async:false,
+                                                        url: urls+'list-get-sts-monper-gov_act/'+id_monper,
+                                                        success: function (resultmonper) {
+                                                            sts = resultmonper.content;
+                                                        }
+                                                    });
+                                                    if(sts == 'yearly'){
+                                                        if(v_period == '1'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][9] <= (tahun+1)+'-01-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else{}
+                                                    }else if(sts == 'semesterly'){
+                                                        if(v_period == '1'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][9] <= tahun+'-07-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else if(v_period == '2'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][10] <= (tahun+1)+'-01-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else{}
+
+                                                    }else if(sts == 'quarterly'){
+                                                        if(v_period == '1'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][9] <= tahun+'-04-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else if(v_period == '2'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][10] <= tahun+'-07-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else if(v_period == '3'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][11] <= tahun+'-10-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else if(v_period == '4'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][12] <= (tahun+1)+'-01-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else{}
+                                                    }else{}
+
+                                                }else if(catrole == 'NSA'){
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        async:false,
+                                                        url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
+                                                        success: function (resultmonper) {
+                                                            sts = resultmonper.content;
+                                                        }
+                                                    });
+                                                    if(sts == 'yearly'){
+                                                        if(v_period == '1'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][9] <= (tahun+1)+'-01-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else{}
+                                                    }else if(sts == 'semesterly'){
+                                                        if(v_period == '1'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][9] <= tahun+'-07-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else if(v_period == '2'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][10] <= (tahun+1)+'-01-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else{}
+
+                                                    }else if(sts == 'quarterly'){
+                                                        if(v_period == '1'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][9] <= tahun+'-04-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else if(v_period == '2'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][10] <= tahun+'-07-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else if(v_period == '3'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][11] <= tahun+'-10-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else if(v_period == '4'){
+                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                            if(level3[p][12] <= (tahun+1)+'-01-15'){
+                                                                var warna = '';
+                                                            }else{
+                                                                var warna = 'style="background-color: #ffa5a5"';
+                                                            }
+                                                        }else{}
+                                                    }else{}
+
+                                                }else{}
+
+
+                                                var tb_prog3 = '<tr '+warna+'> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator11" id="id_indicator11" type="hidden" value="'+level3[p][0]+'" class="input-block-level"><input name="id_entry11" id="id_entry11" type="hidden" value="'+level3[p][4]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
+                                                $("#tbl_program_date > tbody").append(tb_prog3);
+
+
+
+                                            }
+                                        }
+
+                                    }
+                                });
+                                
+                            }
+                        }
+                    }
+                });
+            }
+            
             
             //memanggil tb spp
             function grid()
@@ -1032,32 +1454,39 @@
                 var tahun       = v_data_id[1];
                 var v_period    = $("#period").val();
                 var v_id_role   = $("#idrole").val();
-                
+                var v_pil_prog  = $("#pil_prog").val();
+                //budget indicator
 
                 var header = '';
-                header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 25%"> <span class="lang_eng" style="display:none">Actor</span> <span class="lang_indo">Aktor</span> </th>';
-                header += '<th style="text-align:center;font-size:80%;width: 25%"><span class="lang_eng" style="display:none">Submitted / Expected Government / Non Government Program Indicator</span> <span class="lang_indo">Indikator Program Pemerintah/Non Pemerintah Yang Di Harapkan</span> </th>';
-                header += '<th style="text-align:center;font-size:80%;width: 25%"> <span class="lang_eng" style="display:none">Percent</span><span class="lang_indo">Persentase</span> </th>';
-                header += '<th style="text-align:center;font-size:80%;width: 25%"> <span class="lang_eng" style="display:none">On Time</span> <span class="lang_indo">Tepat Waktu</span> </th>';
-                header +=   '<th style="text-align:center;font-size:80%;width: 25%"> <span class="lang_eng" style="display:none">Percent On Time</span> <span class="lang_indo">Persentase Tepat Waktu</span> </th> ';
-                header +=   '<th style="text-align:center;font-size:80%;width: 25%"> <span class="lang_eng" style="display:none">Approved</span> <span class="lang_indo">Di Setujui</span> </th> ';
-                header +=   '<th style="text-align:center;font-size:80%;width: 25%"> <span class="lang_eng" style="display:none">Show Report</span> <span class="lang_indo">Lihat Laporan</span> </th> ';                            
+                header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Actor</span> <span class="lang_indo">Aktor</span> </th>';
+                header += '<th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Saved / Expected Government / Non Government Program Indicator</span> <span class="lang_indo">Simpan / Program Pemerintah/Non Pemerintah Yang Di Harapkan</span> </th>';
+                header += '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Percent</span><span class="lang_indo">Persentase</span> </th>';
+                header += '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">On Time</span> <span class="lang_indo">Tepat Waktu</span> </th>';
+                header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Percent On Time</span> <span class="lang_indo">Persentase Tepat Waktu</span> </th> ';
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Applied</span> <span class="lang_indo">Di Ajukan</span> </th> ';
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Approved</span> <span class="lang_indo">Di Setujui</span> </th> ';
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Show Report</span> <span class="lang_indo">Lihat Laporan</span> </th> ';                            
                 header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
 
                 $('#tabel-entri-sdg').html(header);
 
+                if(v_pil_prog == 'indicator'){
+                    var link1 = urls+'x/val/'+v_idprov+'/'+v_period+'/'+id_monper+'/'+tahun+'/'+v_id_role;
+                }else{
+                    var link1 = urls+'x/val_budget/'+v_idprov+'/'+v_period+'/'+id_monper+'/'+tahun+'/'+v_id_role;
+                }
                 $('#tabel-entri-sdg').DataTable({
 //                        var table1 = $('#tabel-entri-sdg').DataTable({
                     responsive: true,
                     sDom: 'lrtip',
                     "bLengthChange": false,
                     "cache": false,
-                    "autoWidth": true,
+                    "autoWidth": false,
                     "responsive":true,
                     "bDestroy": true,
                     "ordering": false,
                     "ajax": {
-                        "url": urls+'x/val/'+v_idprov+'/'+v_period+'/'+id_monper+'/'+tahun+'/'+v_id_role,
+                        "url": link1,
                         dataSrc: 'content',
                         beforeSend : function(xhr){
                             $('body').addClass("loading"); 
@@ -1097,18 +1526,24 @@
                             }
                             if(row[2] == 'Government'){
                                 var type    = 'entry_gov_indicator';
+                                var type_b  = 'entry_gov_budget';
                                 var tb      = 'gov_activity';
                                 var tb2     = 'gov_indicator';
                             }else if(row[2] == 'NSA'){
                                 var type    = 'entry_nsa_indicator';
+                                var type_b  = 'entry_nsa_budget';
                                 var tb      = 'nsa_activity';
                                 var tb2     = 'nsa_indicator';
                             }else{}
-                            
+                            if(v_pil_prog == 'indicator'){
+                                var link2 = urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time;
+                            }else{
+                                var link2 = urls+'get-cek-data-all-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time;
+                            }
                             $.ajax({
                                 type: "GET",
                                 async:false,
-                                url: urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time,
+                                url: link2,
                                 success: function (result3) {
                                     dt = result3.content[0];
                                 }
@@ -1148,18 +1583,24 @@
                             }
                             if(row[2] == 'Government'){
                                 var type    = 'entry_gov_indicator';
+                                var type_b  = 'entry_gov_budget';
                                 var tb      = 'gov_activity';
                                 var tb2     = 'gov_indicator';
                             }else if(row[2] == 'NSA'){
                                 var type    = 'entry_nsa_indicator';
+                                var type_b  = 'entry_nsa_budget';
                                 var tb      = 'nsa_activity';
                                 var tb2     = 'nsa_indicator';
                             }else{}
-                            
+                            if(v_pil_prog == 'indicator'){
+                                var link2 = urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time;
+                            }else{
+                                var link2 = urls+'get-cek-data-all-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time;
+                            }
                             $.ajax({
                                 type: "GET",
                                 async:false,
-                                url: urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time,
+                                url: link2,
                                 success: function (result3) {
                                     dt = result3.content[0];
                                 }
@@ -1208,13 +1649,17 @@
                             }
                             if(row[2] == 'Government'){
                                 var type    = 'entry_gov_indicator';
+                                var type_b  = 'entry_gov_budget';
                                 var tb      = 'gov_activity';
                                 var tb2     = 'gov_indicator';
                             }else if(row[2] == 'NSA'){
                                 var type    = 'entry_nsa_indicator';
+                                var type_b  = 'entry_nsa_budget';
                                 var tb      = 'nsa_activity';
                                 var tb2     = 'nsa_indicator';
                             }else{}
+                            
+                            
                             if(row[2] == 'Government'){
                                 $.ajax({
                                     type: "GET",
@@ -1224,34 +1669,17 @@
                                         sts = resultmonper.content;
                                     }
                                 });
-//                                if(sts == 'yearly'){
-//                                    
-//                                    if(v_period == '1'){
-//                                        
-//                                        
-//                                    }else{}
-//                                }else if(sts == 'semesterly'){
-//                                    if(v_period == '1'){
-//                                        
-//                                    }else if(v_period == '2'){
-//                                        
-//                                    }else{}
-//                                }else if(sts == 'quarterly'){
-//                                    if(v_period == '1'){
-//                                        
-//                                    }else if(v_period == '2'){
-//                                        
-//                                    }else if(v_period == '3'){
-//                                        
-//                                    }else if(v_period == '4'){
-//                                        
-//                                    }else{}
-//                                }else{}
+                                
+                                if(v_pil_prog == 'indicator'){
+                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                }else{
+                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                }
                                 
                                 $.ajax({
                                     type: "GET",
                                     async:false,
-                                    url: urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time,
+                                    url: link3,
                                     success: function (result3) {
                                         dt = result3.content[0];
                                     }
@@ -1282,10 +1710,17 @@
                                         sts = resultmonper.content;
                                     }
                                 });
+                                
+                                if(v_pil_prog == 'indicator'){
+                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                }else{
+                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                }
+                                
                                 $.ajax({
                                     type: "GET",
                                     async:false,
-                                    url: urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time,
+                                    url: link3,
                                     success: function (result3) {
                                         dt = result3.content[0];
                                     }
@@ -1328,10 +1763,12 @@
                             }
                             if(row[2] == 'Government'){
                                 var type    = 'entry_gov_indicator';
+                                var type_b  = 'entry_gov_budget';
                                 var tb      = 'gov_activity';
                                 var tb2     = 'gov_indicator';
                             }else if(row[2] == 'NSA'){
                                 var type    = 'entry_nsa_indicator';
+                                var type_b  = 'entry_nsa_budget';
                                 var tb      = 'nsa_activity';
                                 var tb2     = 'nsa_indicator';
                             }else{}
@@ -1344,34 +1781,16 @@
                                         sts = resultmonper.content;
                                     }
                                 });
-//                                if(sts == 'yearly'){
-//                                    
-//                                    if(v_period == '1'){
-//                                        
-//                                        
-//                                    }else{}
-//                                }else if(sts == 'semesterly'){
-//                                    if(v_period == '1'){
-//                                        
-//                                    }else if(v_period == '2'){
-//                                        
-//                                    }else{}
-//                                }else if(sts == 'quarterly'){
-//                                    if(v_period == '1'){
-//                                        
-//                                    }else if(v_period == '2'){
-//                                        
-//                                    }else if(v_period == '3'){
-//                                        
-//                                    }else if(v_period == '4'){
-//                                        
-//                                    }else{}
-//                                }else{}
                                 
+                                if(v_pil_prog == 'indicator'){
+                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                }else{
+                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                }
                                 $.ajax({
                                     type: "GET",
                                     async:false,
-                                    url: urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time,
+                                    url: link3,
                                     success: function (result3) {
                                         dt = result3.content[0];
                                     }
@@ -1409,10 +1828,17 @@
                                         sts = resultmonper.content;
                                     }
                                 });
+                                
+                                if(v_pil_prog == 'indicator'){
+                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                }else{
+                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                }
+                                
                                 $.ajax({
                                     type: "GET",
                                     async:false,
-                                    url: urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time,
+                                    url: link3,
                                     success: function (result3) {
                                         dt = result3.content[0];
                                     }
@@ -1444,7 +1870,7 @@
                                 
                             }
                         }},
-                        {"data": function (row, data, index, display) {
+                        {"data": function (row, data, index, display){
                             var a_id_role    = row[0];
                             var a_dataid    = $("#periode").val();
                             var a_data_id   = a_dataid.split("###");;
@@ -1452,10 +1878,47 @@
                             var a_tahun     = a_data_id[1];
                             var a_period    = $("#period").val();
                             var app         = "";
+                            if(v_pil_prog == 'indicator'){
+                                var link3 = urls+'get-cek-app/'+a_id_role+'/'+a_id_monper+'/'+a_tahun+'/'+a_period;
+                            }else{
+                                var link3 = urls+'get-cek-app-budget/'+a_id_role+'/'+a_id_monper+'/'+a_tahun+'/'+a_period;
+                            }
                             $.ajax({
                                 type: "GET",
                                 async:false,
-                                url: urls+'get-cek-app/'+a_id_role+'/'+a_id_monper+'/'+a_tahun+'/'+a_period,
+                                url: link3,
+                                success: function (result1) {
+                                    app = result1.content;
+                                }
+                            });
+                            if(app == '0'){
+                                var hsl_app = 'NO';
+                            }else{
+                                var hsl_app = 'YES';
+                            }
+                            if(row[3] == '1'){
+                                return "<div style='font-size:90%;'></div>";
+                            }else{
+                                return "<div style='font-size:90%;'>"+hsl_app+"</div>";
+                            }
+                        }},
+                        {"data": function (row, data, index, display){
+                            var a_id_role    = row[0];
+                            var a_dataid    = $("#periode").val();
+                            var a_data_id   = a_dataid.split("###");;
+                            var a_id_monper = a_data_id[0];
+                            var a_tahun     = a_data_id[1];
+                            var a_period    = $("#period").val();
+                            var app         = "";
+                            if(v_pil_prog == 'indicator'){
+                                var link3 = urls+'get-cek-app-approve/'+a_id_role+'/'+a_id_monper+'/'+a_tahun+'/'+a_period;
+                            }else{
+                                var link3 = urls+'get-cek-app-approve-budget/'+a_id_role+'/'+a_id_monper+'/'+a_tahun+'/'+a_period;
+                            }
+                            $.ajax({
+                                type: "GET",
+                                async:false,
+                                url: link3,
                                 success: function (result1) {
                                     app = result1.content;
                                 }
@@ -1480,9 +1943,18 @@
                             var s_period    = $("#period").val();
                             var sho         = "";
                             if(row[2] == 'Government'){
-                                var type    = 'entry_gov_indicator';
+                                if(v_pil_prog == 'indicator'){
+                                    var type    = 'entry_gov_indicator';
+                                }else{
+                                    var type    = 'entry_gov_budget';
+                                }
+                                
                             }else if(row[2] == 'NSA'){
-                                var type    = 'entry_nsa_indicator';
+                                if(v_pil_prog == 'indicator'){
+                                    var type    = 'entry_nsa_indicator';
+                                }else{
+                                    var type    = 'entry_nsa_budget';
+                                }
                             }else{}
                             
                             $.ajax({
@@ -1562,6 +2034,13 @@
                     dat_id_entry = '0';
                 }
                 console.log(dat_id_entry);
+                var v_pil_prog  = $("#pil_prog").val();
+                //budget indicator
+                if(v_pil_prog == 'indicator'){
+                    var linkaja = urls+'save-submission/'+dat_id_indicator+'/'+dat_achievement+'/'+dat_id_entry+'/'+v_period+'/'+catrole+'/'+id_monper+'/'+tahun;
+                }else{
+                    var linkaja = urls+'save-submission-budget/'+dat_id_indicator+'/'+dat_achievement+'/'+dat_id_entry+'/'+v_period+'/'+catrole+'/'+id_monper+'/'+tahun;
+                }
                 
 //                var data    = JSON.stringify({
 //                                'id': id,
@@ -1581,7 +2060,7 @@
 //                            });
                 $.ajax({
                     type: "POST",
-                    url: urls+'save-submission/'+dat_id_indicator+'/'+dat_achievement+'/'+dat_id_entry+'/'+v_period+'/'+catrole+'/'+id_monper+'/'+tahun,
+                    url: linkaja,
                     beforeSend : function(xhr){
                     	xhr.setRequestHeader(header,token);
 //                        $('body').addClass("loading"); 

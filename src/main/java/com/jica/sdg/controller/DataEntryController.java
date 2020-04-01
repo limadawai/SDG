@@ -1027,6 +1027,66 @@ public class DataEntryController {
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
     
+    @PostMapping(path = "admin/save-entry-gov_prog_budget/{achiev}", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    @Transactional
+    public void saveEntryGovProgBudget(@RequestBody EntryGovBudget entryGovBudget,@PathVariable("achiev") String achiev, HttpSession session) {
+//        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
+//        int achievement1        = entrySdg.getAchievement1();
+//        int achievement2        = entrySdg.getAchievement2();
+//        int achievement3        = entrySdg.getAchievement3();
+//        int achievement4        = entrySdg.getAchievement4();
+//        int year_entry          = entrySdg.getYear_entry();
+//        int id_role             = entrySdg.getId_role();
+//        int id_monper           = entrySdg.getId_monper();
+    	if(entryGovBudget.getId()!=null) {
+    		Optional<EntryGovBudget> list = entrySdgService.findOneGovBud((entryGovBudget.getId()));
+        	if(list.isPresent()) {
+                list.get().setId(entryGovBudget.getId());
+            	list.get().setId_gov_activity(entryGovBudget.getId_gov_activity());
+            	list.get().setAchievement1(entryGovBudget.getAchievement1());
+            	list.get().setAchievement2(entryGovBudget.getAchievement2());
+            	list.get().setAchievement3(entryGovBudget.getAchievement3());
+            	list.get().setAchievement4(entryGovBudget.getAchievement4());
+            	list.get().setYear_entry(entryGovBudget.getYear_entry());
+            	list.get().setId_monper(entryGovBudget.getId_monper());
+                list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryGovBudget(foundUpdateObject));
+        	}else {
+                entrySdgService.saveEntryGovBudget(entryGovBudget);
+        	}
+    	}else {
+    		entrySdgService.saveEntryGovBudget(entryGovBudget);
+    	}
+    	   System.out.println("achie = "+achiev);
+        Query query;
+        if(achiev.equals("1")) {
+        	query = em.createNativeQuery("update entry_gov_budget set created_by = :created_by, date_created = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryGovBudget.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("2")) {
+    		query = em.createNativeQuery("update entry_gov_budget set created_by2 = :created_by, date_created2 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryGovBudget.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("3")) {
+    		query = em.createNativeQuery("update entry_gov_budget set created_by3 = :created_by, date_created3 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryGovBudget.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("4")) {
+    		query = em.createNativeQuery("update entry_gov_budget set created_by4 = :created_by, date_created4 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryGovBudget.getId());
+	        query.executeUpdate();
+    	}
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
     @GetMapping("admin/list-get-sts-monper-gov/{id_monper}")
     public @ResponseBody Map<String, Object> getGetStsMonperGov(@PathVariable("id_monper") String id_monper) {
         String sql  = "select gov_prog_bud from ran_rad as a where a.id_monper = :id_monper ";
@@ -1380,6 +1440,67 @@ public class DataEntryController {
 			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
 	        query.setParameter("date_created", new Date());
 	        query.setParameter("id", entryNsaIndicator.getId());
+	        query.executeUpdate();
+    	}
+        
+//        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
+    }
+    
+    @PostMapping(path = "admin/save-entry-non-gov_prog_budget/{achiev}", consumes = "application/json", produces = "application/json")
+    @ResponseBody
+    @Transactional
+    public void saveEntryNonGovProgBudget(@RequestBody EntryNsaBudget entryNsaBudget,@PathVariable("achiev") String achiev, HttpSession session) {
+//        String id_sdg_indicator = entrySdg.getId_sdg_indicator();
+//        int achievement1        = entrySdg.getAchievement1();
+//        int achievement2        = entrySdg.getAchievement2();
+//        int achievement3        = entrySdg.getAchievement3();
+//        int achievement4        = entrySdg.getAchievement4();
+//        int year_entry          = entrySdg.getYear_entry();
+//        int id_role             = entrySdg.getId_role();
+//        int id_monper           = entrySdg.getId_monper();
+    	if(entryNsaBudget.getId()!=null) {
+    		Optional<EntryNsaBudget> list = entrySdgService.findOneNsaBud((entryNsaBudget.getId()));
+        	if(list.isPresent()) {
+                    list.get().setId(entryNsaBudget.getId());
+                    list.get().setId_nsa_activity(entryNsaBudget.getId_nsa_activity());
+                    list.get().setAchievement1(entryNsaBudget.getAchievement1());
+                    list.get().setAchievement2(entryNsaBudget.getAchievement2());
+                    list.get().setAchievement3(entryNsaBudget.getAchievement3());
+                    list.get().setAchievement4(entryNsaBudget.getAchievement4());
+                    list.get().setYear_entry(entryNsaBudget.getYear_entry());
+                    list.get().setId_monper(entryNsaBudget.getId_monper());
+                    list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryNsaBudget(foundUpdateObject));
+        	}else {
+        		entrySdgService.saveEntryNsaBudget(entryNsaBudget);
+        	}
+    	}else {
+    		entrySdgService.saveEntryNsaBudget(entryNsaBudget);
+    	}
+    	
+    	Query query;
+        if(achiev.equals("1")) {
+        	query = em.createNativeQuery("update entry_nsa_budget set created_by = :created_by, date_created = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryNsaBudget.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("2")) {
+    		query = em.createNativeQuery("update entry_nsa_budget set created_by2 = :created_by, date_created2 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryNsaBudget.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("3")) {
+    		query = em.createNativeQuery("update entry_nsa_budget set created_by3 = :created_by, date_created3 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryNsaBudget.getId());
+	        query.executeUpdate();
+    	}else if(achiev.equals("4")) {
+    		query = em.createNativeQuery("update entry_nsa_budget set created_by4 = :created_by, date_created4 = :date_created where id=:id");
+			query.setParameter("created_by", (Integer) session.getAttribute("id_role"));
+	        query.setParameter("date_created", new Date());
+	        query.setParameter("id", entryNsaBudget.getId());
 	        query.executeUpdate();
     	}
         

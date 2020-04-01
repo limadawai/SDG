@@ -1299,7 +1299,7 @@
                 var achievement2        = $('#achievement2').val();
                 var achievement3        = $('#achievement3').val();
                 var achievement4        = $('#achievement4').val();
-                var achiev        		= $('#achiev').val();
+                var achiev        	= $('#achiev').val();
                 var v_idrole            = $("#idrole").val();
                 var v_dataid            = $("#periode").val();
                 var v_data_id           = v_dataid.split("###");
@@ -1351,7 +1351,7 @@
                     });
     		        $.ajax({
     		            type: "POST",
-    		            url: urls+'save-entry-gov_prog',
+    		            url: urls+'save-entry-gov_prog_budget/'+achiev,
     		            beforeSend : function(xhr){
     		            	xhr.setRequestHeader(header,token);
     		            },

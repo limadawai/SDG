@@ -18,8 +18,10 @@ public interface IEntrySdgService {
     Optional<EntrySdg> findOne(Long id);
     
     Optional<EntryGovIndicator> findOneGovInd(Integer id);
+    Optional<EntryGovBudget> findOneGovBud(Integer id);
     
     Optional<EntryNsaIndicator> findOneNsaInd(Integer id);
+    Optional<EntryNsaBudget> findOneNsaBud(Integer id);
     
 //    List<Nsadetail> findId(String id);
 //

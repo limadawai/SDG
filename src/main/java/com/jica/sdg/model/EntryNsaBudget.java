@@ -53,9 +53,30 @@ public class EntryNsaBudget implements Serializable {
     @Column(name = "created_by")
     private Integer created_by;
     
+    @Column(name = "created_by2")
+    private Integer created_by2;
+    
+    @Column(name = "created_by3")
+    private Integer created_by3;
+    
+    @Column(name = "created_by4")
+    private Integer created_by4;
+    
     @Column(nullable = false)
     @Temporal(TemporalType.DATE)
     private Date date_created;
+    
+    @Column(name = "date_created2")
+    @Temporal(TemporalType.DATE)
+    private Date date_created2;
+    
+    @Column(name = "date_created3")
+    @Temporal(TemporalType.DATE)
+    private Date date_created3;
+    
+    @Column(name = "date_created4")
+    @Temporal(TemporalType.DATE)
+    private Date date_created4;
     
     @Column(name = "id_monper")
     private Integer id_monper;
@@ -63,7 +84,7 @@ public class EntryNsaBudget implements Serializable {
     public EntryNsaBudget() {
     }
 
-    public EntryNsaBudget(Integer id, Integer id_nsa_activity, Integer achievement1, Integer achievement2, Integer achievement3, Integer achievement4, Integer new_value1, Integer new_value2, Integer new_value3, Integer new_value4, Integer year_entry, Integer id_role, Integer created_by, Date date_created, Integer id_monper) {
+    public EntryNsaBudget(Integer id, Integer id_nsa_activity, Integer achievement1, Integer achievement2, Integer achievement3, Integer achievement4, Integer new_value1, Integer new_value2, Integer new_value3, Integer new_value4, Integer year_entry, Integer id_role, Integer created_by, Integer created_by2, Integer created_by3, Integer created_by4, Date date_created, Date date_created2, Date date_created3, Date date_created4, Integer id_monper) {
         this.id                 = id;
         this.id_nsa_activity    = id_nsa_activity;
         this.achievement1       = achievement1;
@@ -77,10 +98,66 @@ public class EntryNsaBudget implements Serializable {
 //        this.show_report_date   = show_report_date;
         this.year_entry         = year_entry;
         this.created_by         = created_by;
+        this.created_by2        = created_by2;
+        this.created_by3        = created_by3;
+        this.created_by4        = created_by4;
         this.date_created       = date_created;
+        this.date_created2      = date_created2;
+        this.date_created3      = date_created3;
+        this.date_created4      = date_created4;
         this.id_monper          = id_monper;
     }
 
+    public Integer getCreated_by2() {
+        return created_by2;
+    }
+
+    public void setCreated_by2(Integer created_by2) {
+        this.created_by2 = created_by2;
+    }
+
+    public Integer getCreated_by3() {
+        return created_by3;
+    }
+
+    public void setCreated_by3(Integer created_by3) {
+        this.created_by3 = created_by3;
+    }
+
+    public Integer getCreated_by4() {
+        return created_by4;
+    }
+
+    public void setCreated_by4(Integer created_by4) {
+        this.created_by4 = created_by4;
+    }
+
+    public Date getDate_created2() {
+        return date_created2;
+    }
+
+    public void setDate_created2(Date date_created2) {
+        this.date_created2 = date_created2;
+    }
+
+    public Date getDate_created3() {
+        return date_created3;
+    }
+
+    public void setDate_created3(Date date_created3) {
+        this.date_created3 = date_created3;
+    }
+
+    public Date getDate_created4() {
+        return date_created4;
+    }
+
+    public void setDate_created4(Date date_created4) {
+        this.date_created4 = date_created4;
+    }
+
+    
+    
     public Integer getId() {
         return id;
     }
