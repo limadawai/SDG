@@ -64,7 +64,7 @@
                                                 No.
                                             </th>
                                             <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Community Organization/Philantrophy Profile Name" data-lang_indo="Nama Profil Lembaga/Filantropi">
-                                             </th>
+                                            </th>
                                             <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Achievement" data-lang_indo="Pencapaian">
                                             </th>
                                             <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Location" data-lang_indo="Lokasi">
@@ -467,7 +467,7 @@
                 		url: urls+"listins/"+idprov,
                 		success: function (result) {
                 			console.log(result);
-                			if(result.content[0] ==  null){
+                			if(result.content ==  null){
 	                            if($("#nm_ins_profil").val()=="0"){
 	                            	$("#tambah").hide();
 	                            }else if(id_role == id_role){
