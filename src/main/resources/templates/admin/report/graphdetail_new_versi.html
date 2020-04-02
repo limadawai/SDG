@@ -221,15 +221,15 @@
                         if($('#fs').is(':checked')){
                             //indo
                             var isihead1 = "<b><span class=''>Pemerintah</span></b><span class='lang_eng' style='display: none'>Government</span></b><br>";
-                            isihead1 += "<b><span>Program : "+goal[0][4]+"</span></b><br>";
-                            isihead1 += "<b><span>Kegiatan : "+goal[0][7]+"</span></b><br>";
-                            isihead1 += "<b><span>Indikator : "+goal[0][1]+"</span></b><br>";
+                            isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
+                            isihead1 += "<b><span>Kegiatan : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                            isihead1 += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
                         }else{
                             //eng
                             var isihead1 = "<b><span class=''>Government</span></b><span class='lang_eng' style='display: none'>Government</span></b><br>";
-                            isihead1 += "<b><span>Program : "+goal[0][5]+"</span></b><br>";
-                            isihead1 += "<b><span>Activity : "+goal[0][8]+"</span></b><br>";
-                            isihead1 += "<b><span>Indicator : "+goal[0][2]+"</span></b><br>";
+                            isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
+                            isihead1 += "<b><span>Activity : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                            isihead1 += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
                         }
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divgoals").html(isihead1); 
@@ -248,14 +248,14 @@
                 	//console.log(goal);
                         if($('#fs').is(':checked')){
                             //indo
-                            var isihead = "<b><span>Goal : "+goal[0][4]+"</span></b><br>";
-                            isihead += "<b><span>Target : "+goal[0][7]+"</span></b><br>";
-                            isihead += "<b><span>Indikator : "+goal[0][1]+"</span></b><br>";
+                            var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
+                            isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                            isihead += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
                         }else{
                             //eng
-                            var isihead = "<b><span>Goal : "+goal[0][5]+"</span></b><br>";
-                            isihead += "<b><span>Target : "+goal[0][8]+"</span></b><br>";
-                            isihead += "<b><span>Indicator : "+goal[0][2]+"</span></b><br>";
+                            var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
+                            isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                            isihead += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
                         }
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divdaerah").html(isihead); 
@@ -276,9 +276,9 @@
                 success: function (goal) {
                 	//console.log(goal);
                 	var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
-                	isihead1 += "<b><span>Program : "+goal[0][4]+"</span></b><br>";
-                	isihead1 += "<b><span>Kegiatan : "+goal[0][7]+"</span></b><br>";
-                	isihead1 += "<b><span>Indikator : "+goal[0][1]+"</span></b><br>";
+                	isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
+                	isihead1 += "<b><span>Kegiatan : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                	isihead1 += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divgoals").html(isihead1); 
                 }
@@ -294,9 +294,9 @@
                 async: false,
                 success: function (goal) {
                 	//console.log(goal);
-                	var isihead = "<b><span>Goal : "+goal[0][4]+"</span></b><br>";
-                	isihead += "<b><span>Target : "+goal[0][7]+"</span></b><br>";
-                	isihead += "<b><span>Indikator : "+goal[0][1]+"</span></b><br>";
+                	var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
+                            isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                            isihead += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divdaerah").html(isihead); 
                 }
@@ -403,8 +403,13 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+ket1+'</td><td id="colsdg13">'+ket2+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+ket1+'</td><td id="colsdg13">'+ket2+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -500,8 +505,13 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+ket1+'</td><td id="colsdg13">'+ket2+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+ket1+'</td><td id="colsdg13">'+ket2+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -596,8 +606,13 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
                                             
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1+'</td><td id="colagg9_'+[i]+'">'+real2+'</td><td id="colagg10_'+[i]+'">'+real3+'</td><td id="colagg11_'+[i]+'">'+real4+'</td><td id="colagg12_'+[i]+'">'+real5+'</td><td id="colagg13_'+[i]+'">'+ket1+'</td><td id="colagg14_'+[i]+'">'+ket2+'</td><td id="colagg15_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+unit+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1+'</td><td id="colagg9_'+[i]+'">'+real2+'</td><td id="colagg10_'+[i]+'">'+real3+'</td><td id="colagg11_'+[i]+'">'+real4+'</td><td id="colagg12_'+[i]+'">'+real5+'</td><td id="colagg13_'+[i]+'">'+ket1+'</td><td id="colagg14_'+[i]+'">'+ket2+'</td><td id="colagg15_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -726,7 +741,13 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
+                                            
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -854,8 +875,13 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
                                             
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
 //                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
@@ -982,8 +1008,12 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
-
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real2_1+'</td><td id="colagg11_'+[i]+'">'+real2_2+'</td><td id="colagg12_'+[i]+'">'+real3_1+'</td><td id="colagg13_'+[i]+'">'+real3_2+'</td><td id="colagg14_'+[i]+'">'+real4_1+'</td><td id="colagg15_'+[i]+'">'+real4_2+'</td><td id="colagg16_'+[i]+'">'+real5_1+'</td><td id="colagg17_'+[i]+'">'+real5_2+'</td><td id="colagg18_'+[i]+'">'+ket1+'</td><td id="colagg19_'+[i]+'">'+ket2+'</td><td id="colagg20_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+unit+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real2_1+'</td><td id="colagg11_'+[i]+'">'+real2_2+'</td><td id="colagg12_'+[i]+'">'+real3_1+'</td><td id="colagg13_'+[i]+'">'+real3_2+'</td><td id="colagg14_'+[i]+'">'+real4_1+'</td><td id="colagg15_'+[i]+'">'+real4_2+'</td><td id="colagg16_'+[i]+'">'+real5_1+'</td><td id="colagg17_'+[i]+'">'+real5_2+'</td><td id="colagg18_'+[i]+'">'+ket1+'</td><td id="colagg19_'+[i]+'">'+ket2+'</td><td id="colagg20_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -1173,8 +1203,13 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -1360,7 +1395,12 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+array[i][2]+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
+                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
 
 //                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real1_3+'</td><td>'+real1_4+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real2_3+'</td><td>'+real2_4+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real3_3+'</td><td>'+real3_4+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real4_3+'</td><td>'+real4_4+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+real5_3+'</td><td>'+real5_4+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
@@ -1547,8 +1587,12 @@
                                             }else{
                                                 var ket2 = array[i][29];
                                             }
-                                            
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+array[i][2]+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real1_3+'</td><td id="colagg11_'+[i]+'">'+real1_4+'</td><td id="colagg12_'+[i]+'">'+real2_1+'</td><td id="colagg13_'+[i]+'">'+real2_2+'</td><td id="colagg14_'+[i]+'">'+real2_3+'</td><td id="colagg15_'+[i]+'">'+real2_4+'</td><td id="colagg16_'+[i]+'">'+real3_1+'</td><td id="colagg17_'+[i]+'">'+real3_2+'</td><td id="colagg18_'+[i]+'">'+real3_3+'</td><td id="colagg19_'+[i]+'">'+real3_4+'</td><td id="colagg20_'+[i]+'">'+real4_1+'</td><td id="colagg21_'+[i]+'">'+real4_2+'</td><td id="colagg22_'+[i]+'">'+real4_3+'</td><td id="colagg23_'+[i]+'">'+real4_4+'</td><td id="colagg24_'+[i]+'">'+real5_1+'</td><td id="colagg25_'+[i]+'">'+real5_2+'</td><td id="colagg26_'+[i]+'">'+real5_3+'</td><td id="colagg27_'+[i]+'">'+real5_4+'</td><td id="colagg28_'+[i]+'">'+ket1+'</td><td id="colagg29_'+[i]+'">'+ket2+'</td><td id="colagg30_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            if(array[i][2] == null || array[i][2] == '0'){
+                                                var unit = '';
+                                            }else{
+                                                var unit = array[i][2];
+                                            }
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+unit+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real1_3+'</td><td id="colagg11_'+[i]+'">'+real1_4+'</td><td id="colagg12_'+[i]+'">'+real2_1+'</td><td id="colagg13_'+[i]+'">'+real2_2+'</td><td id="colagg14_'+[i]+'">'+real2_3+'</td><td id="colagg15_'+[i]+'">'+real2_4+'</td><td id="colagg16_'+[i]+'">'+real3_1+'</td><td id="colagg17_'+[i]+'">'+real3_2+'</td><td id="colagg18_'+[i]+'">'+real3_3+'</td><td id="colagg19_'+[i]+'">'+real3_4+'</td><td id="colagg20_'+[i]+'">'+real4_1+'</td><td id="colagg21_'+[i]+'">'+real4_2+'</td><td id="colagg22_'+[i]+'">'+real4_3+'</td><td id="colagg23_'+[i]+'">'+real4_4+'</td><td id="colagg24_'+[i]+'">'+real5_1+'</td><td id="colagg25_'+[i]+'">'+real5_2+'</td><td id="colagg26_'+[i]+'">'+real5_3+'</td><td id="colagg27_'+[i]+'">'+real5_4+'</td><td id="colagg28_'+[i]+'">'+ket1+'</td><td id="colagg29_'+[i]+'">'+ket2+'</td><td id="colagg30_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -2007,8 +2051,13 @@
                                         }else{
                                             var ket2 = array[i][29];
                                         }
+                                        if(array[i][2] == null || array[i][2] == '0'){
+                                            var unit = '';
+                                        }else{
+                                            var unit = array[i][2];
+                                        }
 
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+ket1+'</td><td id="col13">'+ket2+'</td><td id="col4">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+ket1+'</td><td id="col13">'+ket2+'</td><td id="col4">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2134,8 +2183,12 @@
                                         }else{
                                             var ket2 = array[i][29];
                                         }
-
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+ket1+'</td><td id="col18">'+ket2+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
+                                        if(array[i][2] == null || array[i][2] == '0'){
+                                            var unit = '';
+                                        }else{
+                                            var unit = array[i][2];
+                                        }
+                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+ket1+'</td><td id="col18">'+ket2+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2321,8 +2374,12 @@
                                         }else{
                                             var ket2 = array[i][29];
                                         }
-
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21>'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+ket1+'</td><td id="col28">'+ket2+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
+                                        if(array[i][2] == null || array[i][2] == '0'){
+                                            var unit = '';
+                                        }else{
+                                            var unit = array[i][2];
+                                        }
+                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21>'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+ket1+'</td><td id="col28">'+ket2+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2442,8 +2499,12 @@
                                         }else{
                                             var ket2 = array[i][29];
                                         }
-
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+ket1+'</td><td id="col13">'+ket2+'</td><td id="col14">'+array[i][1]+'</td> </tr>';
+                                        if(array[i][2] == null || array[i][2] == '0'){
+                                            var unit = '';
+                                        }else{
+                                            var unit = array[i][2];
+                                        }
+                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+ket1+'</td><td id="col13">'+ket2+'</td><td id="col14">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2569,7 +2630,12 @@
                                         }else{
                                             var ket2 = array[i][29];
                                         }
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+ket1+'</td><td id="col18">'+ket2+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
+                                        if(array[i][2] == null || array[i][2] == '0'){
+                                            var unit = '';
+                                        }else{
+                                            var unit = array[i][2];
+                                        }
+                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+ket1+'</td><td id="col18">'+ket2+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2755,8 +2821,12 @@
                                         }else{
                                             var ket2 = array[i][29];
                                         }
-
-                                        var tb_gov = '<tr> <td id="col1">'+array[i][2]+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21">'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+ket1+'</td><td id="col28">'+ket2+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
+                                        if(array[i][2] == null || array[i][2] == '0'){
+                                            var unit = '';
+                                        }else{
+                                            var unit = array[i][2];
+                                        }
+                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21">'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+ket1+'</td><td id="col28">'+ket2+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
