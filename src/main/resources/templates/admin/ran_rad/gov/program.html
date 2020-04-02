@@ -156,13 +156,13 @@
 				    	<input type="checkbox" id="cek_prog" name="cek_prog" />
 				    </div>
 				  </div>
-				  <div class="control-group provinsi">
+				  <!-- <div class="control-group provinsi">
 				    <div class="controls">
                         <select name="ministry" id="ministry" class="input-block-level" disabled="true">
                         	<option value=''>-- Choose Ministry --</option>
 	        			</select>
 				    </div>
-				  </div>
+				  </div> -->
 				  <div class="control-group provinsi">
 				    <div class="controls">
                         <select name="rel_prog_id" id="rel_prog_id" class="input-block-level" disabled="true">
@@ -302,7 +302,7 @@
 	    	        }else{
 	    	        	$('.nasional').hide();
 	    	        	$('.provinsi').show();
-	    	        	$.ajax({
+	    	        	/* $.ajax({
 	    					type: "GET",
 	                        url: urls+'get-ministry/'+id_prov+'/'+id_monper,
 	                        async:false,
@@ -314,6 +314,26 @@
 	    							$('#ministry').append('<option value="'+array[i][0]+'">' +array[i][1]+'</option>');
 	    						}
 	                        },
+	                    }); */
+	    	        	$.ajax({
+	    					type: "GET",
+	                        url: urls+'get-relProg/'+id_prov+'/'+id_monper,
+	                        async:false,
+	                        success: function (result) {
+	    						$('#rel_prog_id').html("");
+	    						$('#rel_prog_id').append('<option value="0">-- Choose National Program --</option>');
+	    						var array = result.content;
+	    						console.log(result.content);
+	    						for(i=0; i<array.length;i++){
+	    							var nm_program;
+	    							if($("#fs").is(':checked')){
+	    								nm_program = array[i][2];
+	    							}else{
+	    								nm_program = array[i][3];
+	    							}
+	    							$('#rel_prog_id').append('<option value="'+array[i][0]+'">' +array[i][1]+'. '+nm_program+'</option>');
+	    						}
+	                        },
 	                    });
 	    	        }
 	        		$("#myModal").modal("show");
@@ -322,7 +342,7 @@
 	        	}
 	        });
 	        
-	        $('#ministry').on('change', function(){
+	        /* $('#ministry').on('change', function(){
 	        	$.ajax({
 					type: "GET",
                     url: urls+'get-relProg/'+id_prov+'/'+id_monper+'/'+$(this).val(),
@@ -343,7 +363,7 @@
 						}
                     },
                 });
-	        });
+	        }); */
 	        
 	        $('#id_prov').on('change', function(){
 	        	var id = $(this).val();
@@ -493,7 +513,7 @@
 				var rel_prog_id = $('#rel_prog_id').val();
 				var internal_code = $('#internal_code').val();
 				var rel_prov = $('#rel_prov').val()?$('#rel_prov').val().toString():'';
-				var ministry = $('#ministry').val();
+				/* var ministry = $('#ministry').val(); */
 				if(nm_program==""){
 					nm_program=nm_program_eng;
 				}
@@ -528,7 +548,7 @@
 						'rel_prog_id':rel_prog_id,
 						'internal_code':internal_code,
 						'rel_prov':rel_prov,
-						'id_ministry':ministry,
+						/* 'id_ministry':ministry, */
 						};
 					console.log(data)
 					$.ajax({
@@ -576,7 +596,7 @@
                             }
         				});
         				if(id_prov != '000'){
-							$.ajax({
+							/* $.ajax({
 		    					type: "GET",
 		                        url: urls+'get-ministry/'+id_prov+'/'+id_monper,
 		                        async:false,
@@ -589,7 +609,27 @@
 		    						}
 		                        },
 		                    });
-							$('#ministry').val(val.id_ministry).trigger('change');
+							$('#ministry').val(val.id_ministry).trigger('change'); */
+							$.ajax({
+		    					type: "GET",
+		                        url: urls+'get-relProg/'+id_prov+'/'+id_monper,
+		                        async:false,
+		                        success: function (result) {
+		    						$('#rel_prog_id').html("");
+		    						$('#rel_prog_id').append('<option value="0">-- Choose National Program --</option>');
+		    						var array = result.content;
+		    						console.log(result.content);
+		    						for(i=0; i<array.length;i++){
+		    							var nm_program;
+		    							if($("#fs").is(':checked')){
+		    								nm_program = array[i][2];
+		    							}else{
+		    								nm_program = array[i][3];
+		    							}
+		    							$('#rel_prog_id').append('<option value="'+array[i][0]+'">' +array[i][1]+'. '+nm_program+'</option>');
+		    						}
+		                        },
+		                    });
 							$('#rel_prog_id').val(val.rel_prog_id).trigger('change');
 						}
 						$('#myModal').modal('show');
@@ -620,7 +660,7 @@
                             }
         				});
         				if(id_prov != '000'){
-							$.ajax({
+							/* $.ajax({
 		    					type: "GET",
 		                        url: urls+'get-ministry/'+id_prov+'/'+id_monper,
 		                        async:false,
@@ -633,7 +673,27 @@
 		    						}
 		                        },
 		                    });
-							$('#ministry').val(val.id_ministry).trigger('change');
+							$('#ministry').val(val.id_ministry).trigger('change'); */
+							$.ajax({
+		    					type: "GET",
+		                        url: urls+'get-relProg/'+id_prov+'/'+id_monper,
+		                        async:false,
+		                        success: function (result) {
+		    						$('#rel_prog_id').html("");
+		    						$('#rel_prog_id').append('<option value="0">-- Choose National Program --</option>');
+		    						var array = result.content;
+		    						console.log(result.content);
+		    						for(i=0; i<array.length;i++){
+		    							var nm_program;
+		    							if($("#fs").is(':checked')){
+		    								nm_program = array[i][2];
+		    							}else{
+		    								nm_program = array[i][3];
+		    							}
+		    							$('#rel_prog_id').append('<option value="'+array[i][0]+'">' +array[i][1]+'. '+nm_program+'</option>');
+		    						}
+		                        },
+		                    });
 							$('#rel_prog_id').val(val.rel_prog_id).trigger('change');
 						}
         				$('#cek_prov,#rel_prov,#ministry,#cek_prog,#rel_prog_id').attr('disabled',true);

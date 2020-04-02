@@ -39,14 +39,15 @@ public class GovProgram implements Serializable {
     @Column(nullable = true, length = 11)
     private Integer internal_code;
     
-    @Column(nullable = true, length = 11)
-    private Integer id_ministry;
+	/*
+	 * @Column(nullable = true, length = 11) private Integer id_ministry;
+	 */
 
 	public GovProgram() {
 	}
 
 	public GovProgram(Integer id, String id_program, String nm_program, String nm_program_eng, Integer id_monper,
-			String rel_prog_id, Integer created_by, Date date_created, Integer internal_code, Integer id_ministry) {
+			String rel_prog_id, Integer created_by, Date date_created, Integer internal_code) {
 		super();
 		this.id = id;
 		this.id_program = id_program;
@@ -57,7 +58,6 @@ public class GovProgram implements Serializable {
 		this.created_by = created_by;
 		this.date_created = date_created;
 		this.internal_code = internal_code;
-		this.id_ministry = id_ministry;
 	}
 
 	public Integer getId() {
@@ -136,11 +136,10 @@ public class GovProgram implements Serializable {
 		return serialVersionUID;
 	}
 
-	public Integer getId_ministry() {
-		return id_ministry;
-	}
-
-	public void setId_ministry(Integer id_ministry) {
-		this.id_ministry = id_ministry;
-	}
+	/*
+	 * public Integer getId_ministry() { return id_ministry; }
+	 * 
+	 * public void setId_ministry(Integer id_ministry) { this.id_ministry =
+	 * id_ministry; }
+	 */
 }
