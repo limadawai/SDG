@@ -508,8 +508,8 @@ public class RanRadSdgController {
 			@RequestParam("id_monper") Integer id_monper,
 			@RequestParam("rel_prog_id") String rel_prog_id,
 			@RequestParam("internal_code") Integer internal_code,
-			@RequestParam("rel_prov") String rel_prov,
-			@RequestParam("id_ministry") Integer id_ministry) {
+			@RequestParam("rel_prov") String rel_prov
+			/*@RequestParam("id_ministry") Integer id_ministry*/) {
     	Integer id_role = (Integer) session.getAttribute("id_role");
     	GovProgram gov = new GovProgram();
     	gov.setId(id);
@@ -521,7 +521,7 @@ public class RanRadSdgController {
     	gov.setInternal_code(internal_code);
     	gov.setCreated_by(id_role);
     	gov.setDate_created(new Date());
-    	gov.setId_ministry(id_ministry);
+		/* gov.setId_ministry(id_ministry); */
     	govProgService.saveGovProgram(gov);
     	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
     		String sql = "select IFNULL(max(internal_code)+1,1) as no from gov_program where id_monper = :id_monper";
@@ -576,13 +576,13 @@ public class RanRadSdgController {
         return hasil;
     }
     
-    @GetMapping("admin/get-relProg/{id_prov}/{id_monper}/{id_role}")
-    public @ResponseBody Map<String, Object> getministry(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper,@PathVariable("id_role") String id_role) {
+    @GetMapping("admin/get-relProg/{id_prov}/{id_monper}")
+    public @ResponseBody Map<String, Object> getRel(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
     	String sql = "select DISTINCT d.id, d.id_program, d.nm_program, d.nm_program_eng from assign_related_program a\r\n" + 
     			"left join gov_activity b on a.id_program = b.id_program\r\n" + 
     			"left join ref_role c on b.id_role = c.id_role\r\n" +
     			"left join gov_program d on a.id_program = d.id\r\n" +
-    			"where a.id_prov = '"+id_prov+"' and a.id_monper = '"+id_monper+"' and b.id_role = '"+id_role+"' ";
+    			"where a.id_prov = '"+id_prov+"' and a.id_monper = '"+id_monper+"'";
 		Query query = em.createNativeQuery(sql);
 		List list = query.getResultList();
 		Map<String, Object> hasil = new HashMap<>();
