@@ -76,13 +76,16 @@
                 <select id="indikator" name="indikator" class="form-control">
                     <option value="0" >-- Pilih Indikator --</option>
                 </select> -->
-            <div class="widget-box">
+           <!--<button id="export" class="btn btn-warning pull-right">Excel</button><br/>-->
+           <a class="btn btn-warning pull-right" href="#" onclick="tableToExcel('best_prac', 'Report Best Practice')">Excel</a><br/>
+            
+           <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon"><i class="icon-tasks"></i></span>
                     <h5 class="lang_indo">Laporan Praktik Terbaik</h5>
                     <h5 class="lang_eng" style="display:none">Best Practice Report</h5>
                 </div>
-                <div class="widget-content">
+                <div class="widget-content" id="best_prac">
                     <div class="table-responsive">
                         <b>Summary</b><br/>
                         <span id="total_summary">Total : 0</span>
@@ -541,7 +544,7 @@
                         }else{
                             var prog_l_1 = "Year : "+array_level1[i][2];
                         }
-                        text += "<div style='font-size:90%;width:100%;text-align:left;display:block;border-style:ridge;'>"+prog_l_1+"</div>";
+                        text += "<div >"+prog_l_1+"</div>";
                         
                         
                         $.ajax({
@@ -561,7 +564,7 @@
                                         }else{
                                             var prog_l = "Goals : "+array_level2[o][1]+" "+array_level2[o][3];
                                         }
-                                        text += "<div style='font-size:90%;width:100%;text-align:left;display:block;border-style:ridge;'>"+prog_l+"</div>";
+                                        text += "<div >"+prog_l+"</div>";
                                         
                                         if($('#fs').is(':checked')){
                                             var head1       = "Indikator";
@@ -581,13 +584,13 @@
 
                                         text += "<table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
                                         text += "<tr style='font-size:80%;'>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head1+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head2+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>Program</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head3+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head4+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head5+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head6+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span>"+head1+"</span></b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head2+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Program</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head3+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head4+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head5+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head6+"</b></th>";
                                         text += "</tr></thead>";
                                         $.ajax({
                                             url: urls + "getbest_level3/"+sdg_indicator,
@@ -615,7 +618,7 @@
                                                         if(array_level3[p][17] == null || array_level3[p][17] == '0'){
                                                             var isi_target1 = '';
                                                         }else{
-                                                            var isi_target1 = array_level3[p][16];
+                                                            var isi_target1 = array_level3[p][17];
                                                         }
                                                         if(array_level3[p][18] == null || array_level3[p][18] == '0'){
                                                             var no_indicator = '';
@@ -641,14 +644,14 @@
                                                             var indicator   = no_indicator+" "+isi_indicator1;
                                                         }
                                                         
-                                                        text += "<tr style='font-size:80%;'>";
-                                                        text += "<td>"+target+"<br/>"+indicator+"</td>";
-                                                        text += "<td>"+array_level3[p][14]+"</td>";
-                                                        text += "<td>"+array_level3[p][8]+"</td>";
-                                                        text += "<td>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
-                                                        text += "<td>"+array_level3[p][11]+"</td>";
-                                                        text += "<td>"+array_level3[p][12]+"</td>";
-                                                        text += "<td>"+array_level3[p][13]+"</td>";
+                                                        text += "<tr style='font-size:80%;border-style:ridge;'>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+target+"<br/>"+indicator+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][14]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][8]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][11]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][12]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][13]+"</td>";
                                                         text += "</tr>";
                                                         
 
@@ -698,7 +701,7 @@
                         }else{
                             var prog_l_1 = "Year : "+array_level1[i][2];
                         }
-                        text += "<div style='font-size:90%;width:100%;text-align:left;display:block;border-style:ridge;'>"+prog_l_1+"</div>";
+                        text += "<div >"+prog_l_1+"</div>";
                         
                         
                         $.ajax({
@@ -718,7 +721,7 @@
                                         }else{
                                             var prog_l = "Goals : "+array_level2[o][1]+" "+array_level2[o][3];
                                         }
-                                        text += "<div style='font-size:90%;width:100%;text-align:left;display:block;border-style:ridge;'>"+prog_l+"</div>";
+                                        text += "<div >"+prog_l+"</div>";
                                         
                                         if($('#fs').is(':checked')){
                                             var head1       = "Indikator";
@@ -736,15 +739,15 @@
                                             var head6       = "Challenge and Learning";
                                         }
 
-                                        text += "<table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
-                                        text += "<tr style='font-size:80%;'>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head1+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head2+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>Program</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head3+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head4+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head5+"</b></th>";
-                                        text += "<th style='text-align:center;vertical-align:middle'><b>"+head6+"</b></th>";
+                                        text += "<table class='table table-striped table-bordered tabel-sdg' width='100%' style='border-style:ridge;'><thead>";
+                                        text += "<tr style='font-size:80%;border-style:ridge;'>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head1+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head2+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Program</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head3+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head4+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head5+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head6+"</b></th>";
                                         text += "</tr></thead>";
                                         $.ajax({
                                             url: urls + "getbest_level3_sum/"+sdg_indicator,
@@ -768,14 +771,14 @@
                                                             var indicator   = array_level3[p][18]+" "+array_level3[p][20];
                                                         }
                                                         
-                                                        text += "<tr style='font-size:80%;'>";
-                                                        text += "<td>"+target+"<br/>"+indicator+"</td>";
-                                                        text += "<td></td>";
-                                                        text += "<td>"+array_level3[p][8]+"</td>";
-                                                        text += "<td>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
-                                                        text += "<td>"+array_level3[p][11]+"</td>";
-                                                        text += "<td>"+array_level3[p][12]+"</td>";
-                                                        text += "<td>"+array_level3[p][13]+"</td>";
+                                                        text += "<tr style='font-size:80%;border-style:ridge;'>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+target+"<br/>"+indicator+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][8]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][11]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][12]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][13]+"</td>";
                                                         text += "</tr>";
                                                         
 
@@ -796,6 +799,81 @@
         });
         $("#indi_sum").html(text);
     }
+    
+    
+    $("#export").on("click", function(){
+        var sdg_indicator;
+        var sdg_indicator_val = [];
+        $.each($("input[name='sdg_indicator']:checked"), function(){
+            sdg_indicator_val.push($(this).val());
+        });
+        if(sdg_indicator_val.length>0){
+            sdg_indicator = sdg_indicator_val.toString();
+        }else{
+            sdg_indicator = '0';
+        }
+        
+        var monper      = $("#periode").val().split("###");
+    	var id_monper   = monper[0];
+    	var year        = monper[1];
+        var idrole      = $("#role").val();
+        var idprov      = $("#daerah").val();
+        if($('#fs').is(':checked')){
+            var subtitle = "indo";
+        }else{
+            var subtitle = "eng";
+        }
+        
+        $cek = 0;
+        if (idrole == '0'){	
+            if($('#fs').is(':checked')){
+                swal("Anda harus memilih Role");
+            }else{
+                swal("You must Choose Role");
+            }
+            $cek += 1;
+        }
+        if (monper == '0'){					
+            if($('#fs').is(':checked')){
+                swal("Anda harus memilih Periode");
+            }else{
+                swal("You must Choose Period");
+            }
+            $cek += 1;
+        }
+        if (idprov == '0'){					
+            if($('#fs').is(':checked')){
+                swal("Anda harus memilih Provinsi");
+            }else{
+                swal("You must Choose Province");
+            }
+            $cek += 1;
+        }
+        if (sdg_indicator == '0'){					
+            if($('#fs').is(':checked')){
+                swal("Anda harus memilih Goal/target");
+            }else{
+                swal("You must Choose Goal/target");
+            }
+            $cek += 1;
+        }
+        if ($cek == 0){
+            window.open(urls+"best/download_report-best/"+idprov+"/"+idrole+"/"+id_monper+"/"+year+"/"+sdg_indicator+"/"+subtitle , "_blank");
+        }
+
+    });
+    
+    var tableToExcel = (function() {
+    var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+    return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+    }
+    })()
     
     
 </script>
