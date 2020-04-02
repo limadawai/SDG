@@ -76,13 +76,16 @@
                 <select id="indikator" name="indikator" class="form-control">
                     <option value="0" >-- Pilih Indikator --</option>
                 </select> -->
-            <div class="widget-box">
+           <!--<button id="export" class="btn btn-warning pull-right">Excel</button><br/>-->
+           <a class="btn btn-success" href="#" onclick="tableToExcel('best_prac', 'Report Best Practice')">Excel</a>
+            
+           <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon"><i class="icon-tasks"></i></span>
                     <h5 class="lang_indo">Laporan Praktik Terbaik</h5>
                     <h5 class="lang_eng" style="display:none">Best Practice Report</h5>
                 </div>
-                <div class="widget-content">
+                <div class="widget-content" id="best_prac">
                     <div class="table-responsive">
                         <b>Summary</b><br/>
                         <span id="total_summary">Total : 0</span>
@@ -796,6 +799,81 @@
         });
         $("#indi_sum").html(text);
     }
+    
+    
+    $("#export").on("click", function(){
+        var sdg_indicator;
+        var sdg_indicator_val = [];
+        $.each($("input[name='sdg_indicator']:checked"), function(){
+            sdg_indicator_val.push($(this).val());
+        });
+        if(sdg_indicator_val.length>0){
+            sdg_indicator = sdg_indicator_val.toString();
+        }else{
+            sdg_indicator = '0';
+        }
+        
+        var monper      = $("#periode").val().split("###");
+    	var id_monper   = monper[0];
+    	var year        = monper[1];
+        var idrole      = $("#role").val();
+        var idprov      = $("#daerah").val();
+        if($('#fs').is(':checked')){
+            var subtitle = "indo";
+        }else{
+            var subtitle = "eng";
+        }
+        
+        $cek = 0;
+        if (idrole == '0'){	
+            if($('#fs').is(':checked')){
+                swal("Anda harus memilih Role");
+            }else{
+                swal("You must Choose Role");
+            }
+            $cek += 1;
+        }
+        if (monper == '0'){					
+            if($('#fs').is(':checked')){
+                swal("Anda harus memilih Periode");
+            }else{
+                swal("You must Choose Period");
+            }
+            $cek += 1;
+        }
+        if (idprov == '0'){					
+            if($('#fs').is(':checked')){
+                swal("Anda harus memilih Provinsi");
+            }else{
+                swal("You must Choose Province");
+            }
+            $cek += 1;
+        }
+        if (sdg_indicator == '0'){					
+            if($('#fs').is(':checked')){
+                swal("Anda harus memilih Goal/target");
+            }else{
+                swal("You must Choose Goal/target");
+            }
+            $cek += 1;
+        }
+        if ($cek == 0){
+            window.open(urls+"best/download_report-best/"+idprov+"/"+idrole+"/"+id_monper+"/"+year+"/"+sdg_indicator+"/"+subtitle , "_blank");
+        }
+
+    });
+    
+    var tableToExcel = (function() {
+    var uri = 'data:application/vnd.ms-excel;base64,'
+    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+    return function(table, name) {
+    if (!table.nodeType) table = document.getElementById(table)
+    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    window.location.href = uri + base64(format(template, ctx))
+    }
+    })()
     
     
 </script>
