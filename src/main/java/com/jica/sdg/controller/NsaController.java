@@ -174,6 +174,19 @@ public class NsaController {
         return hasil;
     }
     
+    @GetMapping("admin/listnsa/{id_prov}")
+    public @ResponseBody Map<String, Object> listnsa(@PathVariable("id_prov") String idprov) {
+    	String sql  = "select a.id_role as idrole, b.* from ref_role a left join "
+    			+ "nsa_profile b on b.id_role = a.id_role where a.cat_role = 'NSA' and a.id_prov = :id_prov "
+    			+ "order by a.id_role asc";
+	    Query query = em.createNativeQuery(sql);
+	    query.setParameter("id_prov", idprov);
+	    List list   = query.getResultList();
+	    Map<String, Object> hasil = new HashMap<>();
+	    hasil.put("content",list);
+	    return hasil;
+	}
+    
     @GetMapping("admin/list-get-option-role-nsa-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionNsaProfilList(@PathVariable("id") String id) {
         
@@ -372,6 +385,19 @@ public class NsaController {
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
+    }
+    
+    @GetMapping("admin/listins/{id_prov}")
+	    public @ResponseBody Map<String, Object> listins(@PathVariable("id_prov") String idprov) {
+	    	String sql  = "select a.id_role as idrole, b.* from ref_role a left join "
+	    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' and a.id_prov = :id_prov "
+	    			+ "order by a.id_role asc";
+	    Query query = em.createNativeQuery(sql);
+	    query.setParameter("id_prov", idprov);
+	    List list   = query.getResultList();
+	    Map<String, Object> hasil = new HashMap<>();
+	    hasil.put("content",list);
+	    return hasil;
     }
     
     @PostMapping(path = "admin/save-ins-profil", consumes = "application/json", produces = "application/json")

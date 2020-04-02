@@ -3,9 +3,8 @@
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/layout :: header">
-	
-    <title th:text="Define RAN/RAD/SDGs Indicator"></title>
 </head>
+<title>Define RAN/RAD/Government Program</title>
 <body>
     <div th:include="admin/layout :: menu"></div>
     <div id="content">
@@ -145,7 +144,7 @@
 				  <div class="control-group nasional">
 				    <div class="controls">
                          <select id="rel_prov" name="rel_prov" multiple="multiple" style="width: 100%" class="input-block-level">
-				    		<option value="all">all</option>
+				    		<option value="all">ALL</option>
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
 				    </div>
@@ -154,22 +153,20 @@
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Add National Program</label>
 				    <label class="lang_indo control-label" style="text-align:left">Tambah Program Nasional</label>
 				    <div class="controls">
-				    	<input type="checkbox" id="copy" name="copy" />
+				    	<input type="checkbox" id="cek_prog" name="cek_prog" />
 				    </div>
 				  </div>
 				  <div class="control-group provinsi">
 				    <div class="controls">
-                        <select name="role" id="role" class="input-block-level">
-				    		<option></option>
-	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
+                        <select name="ministry" id="ministry" class="input-block-level" disabled="true">
+                        	<option value=''>-- Choose Ministry --</option>
 	        			</select>
 				    </div>
 				  </div>
 				  <div class="control-group provinsi">
 				    <div class="controls">
-                        <select name="rel_prog_id" id="rel_prog_id" class="input-block-level">
-				    		<option></option>
-	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
+                        <select name="rel_prog_id" id="rel_prog_id" class="input-block-level" disabled="true">
+				    		<option value=''>-- Choose National Program --</option>
 	        			</select>
 				    </div>
 				  </div>
@@ -198,6 +195,14 @@
 	        	dropdownParent: $('#myModal')
 	        }).attr('disabled', true);
 	        
+	        $('#cek_prog').on('change', function(){
+	        	if($(this).is(':checked')){
+	        		 $("#ministry,#rel_prog_id").removeAttr('disabled');
+	        	}else{
+	        		$("#ministry,#rel_prog_id").attr('disabled', true);
+	        	}
+	        });
+	        
 	        $('#cek_prov').on('change', function(){
 	        	if($(this).is(':checked')){
 	        		 $("#rel_prov").removeAttr('disabled');
@@ -212,11 +217,7 @@
 	             $("#rel_prov > option").prop("selected","selected");
 	             $("#rel_prov").trigger("change");
 	            }
-	       }).on('change',function(){
-	    	   console.log($(this).val());
 	       });
-	        
-	        
 	        
 	        var id_prov = $('#id_prov').val();
 	        var id_role = $('#id_role').val();
@@ -295,10 +296,53 @@
 	        
 	        $('#showModal').on('click', function(){
 	        	if($('#id_prov').val() && $('#id_monper').val()){
+	        		if(id_prov == '000'){
+	    	        	$('.nasional').show();
+	    	        	$('.provinsi').hide();
+	    	        }else{
+	    	        	$('.nasional').hide();
+	    	        	$('.provinsi').show();
+	    	        	$.ajax({
+	    					type: "GET",
+	                        url: urls+'get-ministry/'+id_prov+'/'+id_monper,
+	                        async:false,
+	                        success: function (result) {
+	    						$('#ministry').html("");
+	    						$('#ministry').append('<option value="0">-- Choose Ministry --</option>');
+	    						var array = result.content;
+	    						for(i=0; i<array.length;i++){
+	    							$('#ministry').append('<option value="'+array[i][0]+'">' +array[i][1]+'</option>');
+	    						}
+	                        },
+	                    });
+	    	        }
 	        		$("#myModal").modal("show");
 	        	}else{
 	        		swal(titleMod,messMod,'error');
 	        	}
+	        });
+	        
+	        $('#ministry').on('change', function(){
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-relProg/'+id_prov+'/'+id_monper+'/'+$(this).val(),
+                    async:false,
+                    success: function (result) {
+						$('#rel_prog_id').html("");
+						$('#rel_prog_id').append('<option value="0">-- Choose National Program --</option>');
+						var array = result.content;
+						console.log(result.content);
+						for(i=0; i<array.length;i++){
+							var nm_program;
+							if($("#fs").is(':checked')){
+								nm_program = array[i][2];
+							}else{
+								nm_program = array[i][3];
+							}
+							$('#rel_prog_id').append('<option value="'+array[i][0]+'">' +array[i][1]+'. '+nm_program+'</option>');
+						}
+                    },
+                });
 	        });
 	        
 	        $('#id_prov').on('change', function(){
@@ -420,12 +464,16 @@
 				$('#id_program').val("").removeAttr("readonly");
 				$('#nm_program').val("").removeAttr("readonly");
 				$('#nm_program_eng').val("").removeAttr("readonly");
-				$('#rel_prog_id').val("").removeAttr("readonly");
+				$('#rel_prog_id').val("").trigger('change').attr('disabled',true);
 				$('#created_by').val("").removeAttr("readonly");
 				$('#date_created').val("").removeAttr("readonly");
 				$('#internal_code').val("").removeAttr("readonly");
 				$('#prov').val("").removeAttr("readonly");
 				$('#role').val("").removeAttr("readonly");
+				$('#rel_prov').val("").trigger('change').attr('disabled',true);
+				$('#ministry').val("").trigger('change').attr('disabled',true);
+				$('#cek_prov').removeAttr("disabled").attr('checked',false);
+				$('#cek_prog').removeAttr("disabled").attr('checked',false);
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -444,7 +492,8 @@
 				var id_monper = $('#id_monper').val();
 				var rel_prog_id = $('#rel_prog_id').val();
 				var internal_code = $('#internal_code').val();
-				var rel_prov = $('#rel_prov').val().toString();
+				var rel_prov = $('#rel_prov').val()?$('#rel_prov').val().toString():'';
+				var ministry = $('#ministry').val();
 				if(nm_program==""){
 					nm_program=nm_program_eng;
 				}
@@ -469,7 +518,7 @@
                     cek += 1;
                 } */
 				if(cek==0){
-					var data = JSON.stringify({
+					var data = {
 						'id':id,
 						'id_program':id_program,
 						'nm_program':nm_program,
@@ -477,15 +526,19 @@
 						/* 'id_role':id_role, */
 						'id_monper':id_monper,
 						'rel_prog_id':rel_prog_id,
-						'internal_code':internal_code
-						});
+						'internal_code':internal_code,
+						'rel_prov':rel_prov,
+						'id_ministry':ministry,
+						};
+					console.log(data)
 					$.ajax({
 						type: "POST",
 	                    url: urls+'save-govProg',
 	                    beforeSend : function(xhr){
 	                    	xhr.setRequestHeader(header,token);
 	                    },
-	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+	                    dataType: 'json',
+	                    /* headers:{'Accept':'application/json','Content-Type':'application/json'}, */
 						data: data,
 	                    success: function (result) {
                             //table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
@@ -509,13 +562,37 @@
         				$('#nm_program_eng').val(val.nm_program_eng);
         				$('#id_role').val(val.id_role);
         				$('#id_monper').val(val.id_monper);
-        				$('#rel_prog_id').val(val.rel_prog_id);
         				$('#internal_code').val(val.internal_code?val.internal_code:'');
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();
         	             }
-					$('#myModal').modal('show');
+        				$.ajax({
+        					type: "GET",
+                            url: urls+'get-relProv/'+id,
+                            success: function (hasil) {
+                            	$('#rel_prov').val(hasil.content).trigger('change');
+                            	console.log(hasil.content);
+                            }
+        				});
+        				if(id_prov != '000'){
+							$.ajax({
+		    					type: "GET",
+		                        url: urls+'get-ministry/'+id_prov+'/'+id_monper,
+		                        async:false,
+		                        success: function (result) {
+		    						$('#ministry').html("");
+		    						$('#ministry').append('<option value="0">-- Choose Ministry --</option>');
+		    						var array = result.content;
+		    						for(i=0; i<array.length;i++){
+		    							$('#ministry').append('<option value="'+array[i][0]+'">' +array[i][1]+'</option>');
+		    						}
+		                        },
+		                    });
+							$('#ministry').val(val.id_ministry).trigger('change');
+							$('#rel_prog_id').val(val.rel_prog_id).trigger('change');
+						}
+						$('#myModal').modal('show');
                     },
                 })
              }).on('click', '.detail', function(){
@@ -530,13 +607,36 @@
         				$('#nm_program').val(val.nm_program).attr("readonly",true);
         				$('#nm_program_eng').val(val.nm_program_eng).attr("readonly",true);
         				$('#id_role').val(val.id_role).attr("readonly",true);
-        				$('#id_monper').val(val.id_monper).attr("readonly",true);
-        				$('#rel_prog_id').val(val.rel_prog_id).attr("readonly",true);
         				$('#internal_code').val(val.internal_code?val.internal_code:'').attr("readonly",true);
         				var privilege = [[${privilege}]];
         				if(privilege=='ADMIN' || privilege=='SUPER'){
         	                 $('#hide_kode_internal').show();
         	             }
+        				$.ajax({
+        					type: "GET",
+                            url: urls+'get-relProv/'+id,
+                            success: function (hasil) {
+                            	$('#rel_prov').val(hasil.content).trigger('change').attr('disabled',true);
+                            }
+        				});
+        				if(id_prov != '000'){
+							$.ajax({
+		    					type: "GET",
+		                        url: urls+'get-ministry/'+id_prov+'/'+id_monper,
+		                        async:false,
+		                        success: function (result) {
+		    						$('#ministry').html("");
+		    						$('#ministry').append('<option value="0">-- Choose Ministry --</option>');
+		    						var array = result.content;
+		    						for(i=0; i<array.length;i++){
+		    							$('#ministry').append('<option value="'+array[i][0]+'">' +array[i][1]+'</option>');
+		    						}
+		                        },
+		                    });
+							$('#ministry').val(val.id_ministry).trigger('change');
+							$('#rel_prog_id').val(val.rel_prog_id).trigger('change');
+						}
+        				$('#cek_prov,#rel_prov,#ministry,#cek_prog,#rel_prog_id').attr('disabled',true);
 						$('#myModal').modal('show');
                     },
                 })
