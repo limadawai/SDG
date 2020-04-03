@@ -290,12 +290,18 @@
                             <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal" style="display: none">Close</button>
                             <button type="button" id="simpan_detail_" class="btn btn-success lang_indo">Simpan</button>
                             <button type="button" id="simpan_detail_" class="btn btn-success lang_eng" style="display: none">Submit</button>
+                            <button type="button" id="kembali" class="btn btn-warning lang_indo">Kembali</button>
+                            <button type="button" id="kembali" class="btn btn-warning lang_eng" style="display: none">back</button>
+                            
                         </div>
                         <div class="modal-footer" id="update_detail" style="display: none">
                             <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
                             <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal" style="display: none">Close</button>
                             <button type="button" id="update_detail_" class="btn btn-success lang_indo">Simpan</button>
                             <button type="button" id="update_detail_" class="btn btn-success lang_eng" style="display: none">Submit</button>
+                            <button type="button" id="kembali" class="btn btn-warning lang_indo">Kembali</button>
+                            <button type="button" id="kembali" class="btn btn-warning lang_eng" style="display: none">Back</button>
+                            
                         </div>
                     </form>
                 </div>
@@ -429,7 +435,7 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
                                         '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                                     }}
                                 ],
@@ -504,10 +510,10 @@
                                     {"data": function (row, data, index, display) {
                                         var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
                                         if(id_role == row.id_role){
-                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
                                             '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                                         }else if(id_role == '1'){
-                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
                                             '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                                         }else{
                                             return '';
@@ -792,7 +798,7 @@
 	                                    }},
 	                                    {"data": function (row, data, index, display) {
 	                                        var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-	                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+	                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
 	                                        '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 	                                    }}
 	                                ],
@@ -866,10 +872,10 @@
 	                                    {"data": function (row, data, index, display) {
 	                                        var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
 	                                        if(id_role == row.id_role||id_prov==row.id_prov){
-	                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+	                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
 	                                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 	                                        }else if(id_role == '1'){
-	                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+	                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
 	                                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 	                                        }else{
 	                                            return '';
@@ -905,6 +911,289 @@
             
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
+            
+            $('#simpan_detail').on('click', '#kembali', function(e){
+                $('#tabel-nsa-profile').DataTable({
+                    "serverSide": true,
+                    responsive: true,
+                    sDom: 'Brtip',
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "bDestroy": true,
+                    buttons: [
+                                    {
+                                        extend: 'print',
+                                        text: 'Print',
+                                        exportOptions: {
+                                            stripHtml: false,
+                                            columns: [ 0,1,2,3,4,5,6 ]
+                                        }
+                                    },
+                                    {
+                                            extend: 'excelHtml5',
+                                            filename: 'Profil Non-State Actor',
+                                            text: 'Save as Excel',
+                                            exportOptions: {
+                                                format: {
+                                                    body: function(data, column, row) {
+                                                            data = data.replace(/<br\s*\/?>/ig, '\r\n');
+                                                        data = data.replace(/<.*?>/g, "");
+                                                        data = data.replace("&amp;", "&");
+                                                        data = data.replace("&nbsp;", "");
+                                                        data = data.replace("&nbsp;", "");
+                                                        return data;
+                                                    }
+                                                },
+                                                columns: [ 0,1,2,3,4,5,6 ]
+                                            }
+                                    },
+                            ],
+                    "ajax": {
+                        "url": urls+'list-getid-nsa-profil/'+$("#nm_nsa_profil").val(),
+                        dataSrc: 'content',
+                    },
+                    "searching": false,
+                    "columns": [
+                        {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
+                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                        }}
+                    ],
+                    "columnDefs": [
+                    ],
+                    select: true
+                });
+
+
+                $('#tabel-nsa-profile-detail').DataTable({
+                    "serverSide": true,
+                    responsive: true,
+                    sDom: 'Brtip',
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "bDestroy": true,
+                    "ajax": {
+                        "url": urls+'list-nsa-profil-detail/'+$("#nm_nsa_profil").val(),
+                        dataSrc: 'content',
+                    },
+                    "searching": false,
+                    "columns": [
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.nm_org+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            if(row.nsa_type == '1'){
+                                var tipe = 'Civil Society Organization/Organisasi Kepemudaan/Komunitas';
+                            }else if(row.nsa_type == '2'){
+                                var tipe = 'Organisasi Non-Pemerintah/LSM';
+                            }else if(row.nsa_type == '3'){
+                                var tipe = 'Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)';
+                            }else if(row.nsa_type == '4'){
+                                var tipe = 'Sektor bisnis';
+                            }else if(row.nsa_type == '5'){
+                                var tipe = 'Institusi akademis';
+                            }else if(row.nsa_type == '6'){
+                                var tipe = 'Media dan asosiasi media';
+                            }else if(row.nsa_type == '7'){
+                                var tipe = 'Organisasi multilateral atau bilateral';
+                            }else if(row.nsa_type == '8'){
+                                var tipe = 'Organisasi filantropi';
+                            }else if(row.nsa_type == '9'){
+                                var tipe = 'Lainnya';
+                            }else{
+
+                            }
+                            return "<div style='font-size:90%;'>"+tipe+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.file_logo+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.web_url+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.head_office+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.name_pic+"<br/>"+row.pos_pic+"<br/>"+row.email_pic+"<br/>"+row.hp_pic+"</div>";
+                        }}
+                    ],
+                    "columnDefs": [
+                    ],
+                    select: true
+                });	
+                $('.addModalDetail').modal("hide");
+                $('.addModal').modal("show");
+                $('#simpan_').hide();
+                $('#update_').show();
+            });
+            $('#update_detail').on('click', '#kembali', function(e){
+                $('#tabel-nsa-profile').DataTable({
+                    "serverSide": true,
+                    responsive: true,
+                    sDom: 'Brtip',
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "bDestroy": true,
+                    buttons: [
+                                    {
+                                        extend: 'print',
+                                        text: 'Print',
+                                        exportOptions: {
+                                            stripHtml: false,
+                                            columns: [ 0,1,2,3,4,5,6 ]
+                                        }
+                                    },
+                                    {
+                                            extend: 'excelHtml5',
+                                            filename: 'Profil Non-State Actor',
+                                            text: 'Save as Excel',
+                                            exportOptions: {
+                                                format: {
+                                                    body: function(data, column, row) {
+                                                            data = data.replace(/<br\s*\/?>/ig, '\r\n');
+                                                        data = data.replace(/<.*?>/g, "");
+                                                        data = data.replace("&amp;", "&");
+                                                        data = data.replace("&nbsp;", "");
+                                                        data = data.replace("&nbsp;", "");
+                                                        return data;
+                                                    }
+                                                },
+                                                columns: [ 0,1,2,3,4,5,6 ]
+                                            }
+                                    },
+                            ],
+                    "ajax": {
+                        "url": urls+'list-getid-nsa-profil/'+$("#nm_nsa_profil").val(),
+                        dataSrc: 'content',
+                    },
+                    "searching": false,
+                    "columns": [
+                        {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
+                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                        }}
+                    ],
+                    "columnDefs": [
+                    ],
+                    select: true
+                });
+
+
+                $('#tabel-nsa-profile-detail').DataTable({
+                    "serverSide": true,
+                    responsive: true,
+                    sDom: 'Brtip',
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "bDestroy": true,
+                    "ajax": {
+                        "url": urls+'list-nsa-profil-detail/'+$("#nm_nsa_profil").val(),
+                        dataSrc: 'content',
+                    },
+                    "searching": false,
+                    "columns": [
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.nm_org+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            if(row.nsa_type == '1'){
+                                var tipe = 'Civil Society Organization/Organisasi Kepemudaan/Komunitas';
+                            }else if(row.nsa_type == '2'){
+                                var tipe = 'Organisasi Non-Pemerintah/LSM';
+                            }else if(row.nsa_type == '3'){
+                                var tipe = 'Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)';
+                            }else if(row.nsa_type == '4'){
+                                var tipe = 'Sektor bisnis';
+                            }else if(row.nsa_type == '5'){
+                                var tipe = 'Institusi akademis';
+                            }else if(row.nsa_type == '6'){
+                                var tipe = 'Media dan asosiasi media';
+                            }else if(row.nsa_type == '7'){
+                                var tipe = 'Organisasi multilateral atau bilateral';
+                            }else if(row.nsa_type == '8'){
+                                var tipe = 'Organisasi filantropi';
+                            }else if(row.nsa_type == '9'){
+                                var tipe = 'Lainnya';
+                            }else{
+
+                            }
+                            return "<div style='font-size:90%;'>"+tipe+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.file_logo+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.web_url+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.head_office+"</div>";
+                        }},
+                        {"data": function (row, data, index, display) {
+                            return "<div style='font-size:90%;'>"+row.name_pic+"<br/>"+row.pos_pic+"<br/>"+row.email_pic+"<br/>"+row.hp_pic+"</div>";
+                        }}
+                    ],
+                    "columnDefs": [
+                    ],
+                    select: true
+                });	
+                $('.addModalDetail').modal("hide");
+                $('.addModal').modal("show");
+                $('#simpan_').hide();
+                $('#update_').show();
+            });
             
             $('#update_').on('click', '#update', function(e){
                 var id_nsa          = $('#id_nsa').val();
@@ -969,7 +1258,7 @@
                                 }},
                                 {"data": function (row, data, index, display) {
                                     var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
                                     '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                                 }}
                             ],
@@ -1033,6 +1322,8 @@
                                     $('#hp_pic').val("");
                                     $('#simpan_detail').hide();
                                     $('#update_detail').show();
+//                                    $('#kembali').html('');
+//                                    $('#kembali').html('');
                                     $('.addModalDetail').modal('show');
                                 }else{
                                     $('.addModal').modal('hide');
@@ -1050,6 +1341,9 @@
                                     $('#hp_pic').val(result1.content[0].hp_pic);
                                     $('#simpan_detail').hide();
                                     $('#update_detail').show();
+//                                    document.getElementById("kembali").innerHTML = "New text!";
+//                                    $('#kembali').html('haloo');
+//                                    $('#kembali').html('<button data-id="'+result.v_id_nsa+'" type="button" title="Update" class="btn btn-success btn-mini update"><span id="lang_indo">Kembali</span><span id="lang_eng" style="display:none">Back</span></button>');
                                     $('.addModalDetail').modal('show');
                                 }
                                 
@@ -1126,7 +1420,7 @@
                                 }},
                                 {"data": function (row, data, index, display) {
                                     var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
                                     '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                                 }}
                             ],
@@ -1187,6 +1481,8 @@
                         $('#simpan_detail').show();
                         $('#update_detail').hide();
                         
+//                        $('#kembali').html('');
+//                        $('#kembali').html('<button data-id="'+result.v_id_nsa+'" type="button" title="Update" class="btn btn-success btn-mini update"><span id="lang_indo">Kembali</span><span id="lang_eng" style="display:none">Back</span></button>');
                     	$('.addModalDetail').modal('show');
                     },
                 });
@@ -1273,7 +1569,7 @@
                                 }},
                                 {"data": function (row, data, index, display) {
                                     var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
                                     '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                                 }}
                             ],
@@ -1359,7 +1655,7 @@
                                 }},
                                 {"data": function (row, data, index, display) {
                                     var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
                                     '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
                                 }}
                             ],
@@ -1418,6 +1714,26 @@
                 $('.addModal').modal("show");
                 $('#simpan_').hide();
                 $('#update_').show();
+            });
+            
+            $('#tabel-nsa-profile').on('click', '.detail_data', function(){
+                var dataid  = $(this).data('id');
+                var data    = dataid.split('###');
+                
+                $('#id_nsa').val(data[0]);
+                $('#nm_nsa').val(data[1]);
+                $('#achieve_nsa').val(data[2]);
+                $('#loc_nsa').val(data[3]);
+                $('#beneficiaries').val(data[4]);
+                $('#year_impl').val(data[5]);
+                $('#major_part').val(data[6]);
+                $('#id_role').val(data[7]);
+                
+                $('.addModal').modal("show");
+                $('#simpan_').hide();
+                $('#update_').show();
+                $( "#detail_update" ).trigger( "click" );
+                $('#kembali').hide();
             });
             
             
