@@ -580,7 +580,7 @@
                     url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                     success: function (result) {
                     	//console.log(result);
-                    	$("#nm_nsa_profil").clear();
+                    	$("#nm_nsa_profil").empty();
                     	$("#nm_nsa_profil").append('<option value="0" >-- Pilih NSA --</option>');
                         $("#nm_nsa_profil").append('<option value="00" >-- ALL --</option>');
                         var array = result.content;
