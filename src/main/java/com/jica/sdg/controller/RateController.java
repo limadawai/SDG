@@ -407,6 +407,7 @@ public class RateController {
                     "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
                     "from "+tb+" b\n" +
                     "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" ) d on b.id = "+id_activity_1+"\n" +
+                    " \n" +
                     "where b.id_role = :id_role \n" +
                     ") as a\n" +
                     ") as isi,\n" +
@@ -416,6 +417,7 @@ public class RateController {
                     "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
                     "from "+tb+" b\n" +
                     "left join (select * from "+type+" where year_entry = :year "+tg_date+") d on b.id = "+id_activity_1+"\n" +
+                    " \n" +
                     "where b.id_role = :id_role\n" +
                     ") as a\n" +
                     ") as semua";
