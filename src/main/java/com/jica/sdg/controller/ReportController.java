@@ -3435,7 +3435,7 @@ public class ReportController {
     public @ResponseBody List<Object> getgoals(@RequestParam("id_goals") int idgoals, @RequestParam("id_target") int idtarget, 
     		@RequestParam("id_indicator") int id_indicator) {
     	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, "
-    			+ "c.id AS idtarget, c.nm_target, c.nm_target_eng "
+    			+ "c.id AS idtarget, c.nm_target, c.nm_target_eng, a.id_indicator, b.id_goals, c.id_target "
     			+ "FROM sdg_indicator a LEFT JOIN "
     			+ "sdg_goals b ON b.id = a.id_goals LEFT JOIN "
     			+ "sdg_target c ON c.id = a.id_target "
@@ -3452,7 +3452,7 @@ public class ReportController {
     public @ResponseBody List<Object> getprogov(@RequestParam("id_program") int idgoals, @RequestParam("id_activity") int idtarget, 
     		@RequestParam("id_indicator") int idindikator) {
     	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idprog, b.nm_program, b.nm_program_eng, "
-    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng FROM gov_indicator a LEFT JOIN "
+    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.id_gov_indicator, b.id_program, c.id_activity FROM gov_indicator a LEFT JOIN "
     			+ "gov_program b ON b.id = a.id_program LEFT JOIN "
     			+ "gov_activity c ON c.id = a.id_activity "
     			+ "WHERE a.id = :id_indicator";
@@ -3468,7 +3468,7 @@ public class ReportController {
     public @ResponseBody List<Object> getpronsa(@RequestParam("id_program") int idgoals, @RequestParam("id_activity") int idtarget, 
     		@RequestParam("id_indicator") int idindikator) {
     	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idprog, b.nm_program, b.nm_program_eng, "
-    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng FROM nsa_indicator a LEFT JOIN "
+    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.id_nsa_indicator, b.id_program, c.id_activity FROM nsa_indicator a LEFT JOIN "
     			+ "nsa_program b ON b.id = a.id_program LEFT JOIN "
     			+ "nsa_activity c ON c.id = a.id_activity  "
     			+ "WHERE a.id = :id_indicator";

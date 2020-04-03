@@ -121,7 +121,7 @@
         var data_map =[];
         $.each(map.content,function(i,x){
             var total = (x[2]/x[1])*100;
-            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total})
+            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11]})
 //            console.log(x[1]);
         });
         
@@ -193,7 +193,7 @@
                         var subtitle ;
                         $.each(result.content,function(i,x){
                             var total = (x[2]/x[1])*100;
-                            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total})
+                            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11]})
                             goal        = x[7];
                             target      = x[8];
                             indicator   = x[9];
@@ -255,7 +255,9 @@
                //                    '<span style="font-size:30px">{point.value}/km²</span>',
                                pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
                                                <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
-                                               <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value:.2f}</td></tr></table></div>',
+                                               <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value:.2f}%</td></tr>\n\
+                                               <tr><td colspan="2">Program Pemerintah</td><td>{point.gov}<td></td></tr>\n\
+                                               <tr><td colspan="2">Program Non Pemerintah</td><td>{point.non_gov}<td></td></tr></table></div>',
                //                positioner: function () {
                //                    return { x: 0, y: 250 };
                //                }
@@ -365,8 +367,10 @@
 //                    '</span></span> {point.name}<br>' +
 //                    '<span style="font-size:30px">{point.value}/km²</span>',
                 pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
-                                <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
-                                <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value:.2f}</td></tr></table></div>',
+                                               <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
+                                               <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.value:.2f} %</td></tr>\n\
+                                               <tr><td colspan="2">Program Pemerintah</td><td>{point.gov}<td></td></tr>\n\
+                                               <tr><td colspan="2">Program Non Pemerintah</td><td>{point.non_gov}<td></td></tr></table></div>',
 //                positioner: function () {
 //                    return { x: 0, y: 250 };
 //                }

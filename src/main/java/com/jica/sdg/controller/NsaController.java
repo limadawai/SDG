@@ -176,8 +176,11 @@ public class NsaController {
     
     @GetMapping("admin/listnsa/{id_prov}")
     public @ResponseBody Map<String, Object> listnsa(@PathVariable("id_prov") String idprov) {
-    	String sql  = "select a.id_role as idrole, b.* from ref_role a left join "
-    			+ "nsa_profile b on b.id_role = a.id_role where a.cat_role = 'NSA' and a.id_prov = :id_prov "
+    	String sql  = "select a.id_role as idrole, b.*, c.nm_org, c.nsa_type, c.web_url, c.head_office, "
+    			+ "c.name_pic, c.pos_pic, c.email_pic, c.hp_pic from ref_role a left join "
+    			+ "nsa_profile b on b.id_role = a.id_role left join "
+    			+ "nsa_detail c on c.id_role = a.id_role "
+    			+ "where a.cat_role = 'NSA' and a.id_prov = :id_prov  and b.nm_nsa is not null  and c.nm_org is not null "
     			+ "order by a.id_role asc";
 	    Query query = em.createNativeQuery(sql);
 	    query.setParameter("id_prov", idprov);

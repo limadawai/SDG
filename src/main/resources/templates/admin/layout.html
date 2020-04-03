@@ -23,8 +23,8 @@
     <link rel="stylesheet" th:href="@{/css/treeview.css}" />
     <link rel="stylesheet" th:href="@{/css/bootstrap-datepicker.min.css}" />
     <!--<link rel="stylesheet" th:href="@{/js/jstree/themes/default/style.min.css}" />-->
-    <link rel="stylesheet" th:href="@{/css/jstree.style.min.css}" />
-    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" /> -->
+    <link rel="stylesheet" th:href="@{/images/jstree/style.css}" />
+     <!--<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />--> 
     <link rel="stylesheet" th:href="@{/css/jquery.dataTables10.min.css}" />
     <link rel="stylesheet" th:href="@{/css/buttons.dataTables.min.css}" />
     
@@ -128,18 +128,18 @@
                 }
                 
                 //Get Jml Pesan Reject
-                $.ajax({
-                url: urls + "count-pesan",
-                type: 'get',
-                success: function(result) {
-	                    var jml = result.content[0];
-	                    if(jml){
-	                    	$("#badge").addClass("badge").text(jml);
-	                    }else{
-	                    	$("#badge").removeClass("badge").text("");
-	                    }
-	                }
-	            });
+//                $.ajax({
+//                url: urls + "count-pesan",
+//                type: 'get',
+//                success: function(result) {
+//	                    var jml = result.content[0];
+//	                    if(jml){
+//	                    	$("#badge").addClass("badge").text(jml);
+//	                    }else{
+//	                    	$("#badge").removeClass("badge").text("");
+//	                    }
+//	                }
+//	            });
                 
                 //Copy RANRAN next periode
                 var today = new Date();
