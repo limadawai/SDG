@@ -221,31 +221,35 @@ public class ReportController {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
     		String sql;
     		if(status.equals("completed")) {
-    			sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
-            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
-        			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
-            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+//    			sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
+//            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+//        			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
+//            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+    			sql = "SELECT distinct a.id_old, a.nm_goals, a.nm_goals_eng, a.id_goals FROM history_sdg_goals a order by a.id_old";
+    			query = manager.createNativeQuery(sql);
+//                query.setParameter("id_prov", id_prov);
+//                query.setParameter("id_monper", id_monper);
     		}else {
-    			sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
-            			+ " left join sdg_goals b on a.id_goals = b.id "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
-        			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
-            			+ " left join sdg_goals b on a.id_goals = b.id "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+//    			sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
+//            			+ " left join sdg_goals b on a.id_goals = b.id "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+//        			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
+//            			+ " left join sdg_goals b on a.id_goals = b.id "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
+    			sql = "SELECT distinct a.id, a.nm_goals, a.nm_goals_eng, a.id_goals FROM sdg_goals a order by a.id";
+    			query = manager.createNativeQuery(sql);
     		}
-            query = manager.createNativeQuery(sql);
-            query.setParameter("id_prov", id_prov);
-            query.setParameter("id_monper", id_monper);
+            
     	}else {
     		String[] arrOfStr = sdg.split(","); 
     		StringBuffer goals = new StringBuffer();
@@ -273,35 +277,41 @@ public class ReportController {
     			}
     		}
     		String hasilgoals = (goals.length()==0)?"":goals.substring(0, goals.length() - 1);
-    		String gol = (hasilgoals.equals(""))?"":" and a.id_goals in("+hasilgoals+") ";
+    		//String gol = (hasilgoals.equals(""))?"":" and a.id_goals in("+hasilgoals+") ";
+    		String golOld = (hasilgoals.equals(""))?"":" where a.id_old in("+hasilgoals+") ";
+    		String gol = (hasilgoals.equals(""))?"":" where a.id in("+hasilgoals+") ";
             String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
             String sql;
             if(status.equals("completed")) {
-            	sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
-            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
-            			+ " left join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " left join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
-    			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
-            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
-            			+ " left join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " left join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+//            	sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
+//            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
+//            			+ " left join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " left join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+//    			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
+//            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
+//            			+ " left join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " left join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+    			sql = "SELECT distinct a.id_old, a.nm_goals, a.nm_goals_eng, a.id_goals FROM history_sdg_goals a "+golOld+" order by a.id_old";
+    			query = manager.createNativeQuery(sql);
             }else {
-            	sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
-            			+ " left join sdg_goals b on a.id_goals = b.id "
-            			+ " left join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " left join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
-    			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
-            			+ " left join sdg_goals b on a.id_goals = b.id "
-            			+ " left join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " left join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+//            	sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
+//            			+ " left join sdg_goals b on a.id_goals = b.id "
+//            			+ " left join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " left join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+//    			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
+//            			+ " left join sdg_goals b on a.id_goals = b.id "
+//            			+ " left join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " left join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role+" "+gol;
+    			sql = "SELECT distinct a.id, a.nm_goals, a.nm_goals_eng, a.id_goals FROM sdg_goals a "+gol+" order by a.id";
+    			query = manager.createNativeQuery(sql);
             } 
-            query = manager.createNativeQuery(sql);
-            query.setParameter("id_prov", id_prov);
-            query.setParameter("id_monper", id_monper);
+//            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", id_prov);
+//            query.setParameter("id_monper", id_monper);
     	}
     	
         List listSdg = query.getResultList();
@@ -325,33 +335,39 @@ public class ReportController {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
     		String sql;
             if(status.equals("completed")) {
-            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
-            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role;
-        			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
-            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role;
+//            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
+//            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role;
+//        			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
+//            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role;
+            	sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals order by a.id_old";
+    			query = manager.createNativeQuery(sql);
+    			query.setParameter("id_goals", id_goals);
             }else {
-            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
-            			+ " left join sdg_target b on a.id_target = b.id "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role;
-    			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
-            			+ " left join sdg_target b on a.id_target = b.id "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role;
+//            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
+//            			+ " left join sdg_target b on a.id_target = b.id "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role;
+//    			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
+//            			+ " left join sdg_target b on a.id_target = b.id "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role;
+    			sql = "SELECT distinct a.id, a.nm_target, a.nm_target_eng, a.id_target FROM sdg_target a where a.id_goals = :id_goals order by a.id";
+    			query = manager.createNativeQuery(sql);
+    			query.setParameter("id_goals", id_goals);
             }
     			
-            query = manager.createNativeQuery(sql);
-            query.setParameter("id_prov", id_prov);
-            query.setParameter("id_monper", id_monper);
-            query.setParameter("id_goals", id_goals);
+//            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", id_prov);
+//            query.setParameter("id_monper", id_monper);
+//            query.setParameter("id_goals", id_goals);
     	}else {
     		String[] arrOfStr = sdg.split(","); 
     		StringBuffer target = new StringBuffer();
@@ -379,37 +395,44 @@ public class ReportController {
     			}
     		}
     		String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
-    		
-    		String tar = (hasiltarget.equals(""))?"":" and a.id_target in("+hasiltarget+") ";
+    		//String tar = (hasiltarget.equals(""))?"":" and a.id_target in("+hasiltarget+") ";
+    		String tarOld = (hasiltarget.equals(""))?"":" and a.id_old in("+hasiltarget+") ";
+    		String tar = (hasiltarget.equals(""))?"":" and a.id in("+hasiltarget+") ";
             String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
             String sql;
             if(status.equals("completed")) {
-            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
-            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role+" "+tar;
-    			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
-            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role+" "+tar;
+//            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
+//            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role+" "+tar;
+//    			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
+//            			+ " left join history_sdg_target b on a.id_target = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role+" "+tar;
+            	sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals "+tarOld+" order by a.id_old";
+    			query = manager.createNativeQuery(sql);
+    			query.setParameter("id_goals", id_goals);
             }else {
-            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
-            			+ " left join sdg_target b on a.id_target = b.id "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role+" "+tar;
-    			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
-            			+ " left join sdg_target b on a.id_target = b.id "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role+" "+tar;
+//            	sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM gov_map a "
+//            			+ " left join sdg_target b on a.id_target = b.id "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '') "+role+" "+tar;
+//    			sql += "union SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM nsa_map a "
+//            			+ " left join sdg_target b on a.id_target = b.id "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and (a.id_target is not null or a.id_target != '')  "+role+" "+tar;
+            	sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM sdg_target a where a.id_goals = :id_goals "+tar+" order by a.id";
+            	query = manager.createNativeQuery(sql);
+            	query.setParameter("id_goals", id_goals);
             }
-            query = manager.createNativeQuery(sql);
-            query.setParameter("id_prov", id_prov);
-            query.setParameter("id_monper", id_monper);
-            query.setParameter("id_goals", id_goals);
+//            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", id_prov);
+//            query.setParameter("id_monper", id_monper);
+//            query.setParameter("id_goals", id_goals);
     	}
     	
         List listSdg = query.getResultList();
@@ -434,34 +457,42 @@ public class ReportController {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
     		String sql;
             if(status.equals("completed")) {
-            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
-            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role;
-        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
-            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role;
+//            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
+//            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role;
+//        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
+//            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role;
+        			sql = "SELECT distinct a.id_old, a.nm_indicator, a.nm_indicator_eng, a.id_indicator FROM history_sdg_indicator a WHERE a.id_goals = :id_goals and a.id_target = :id_target order by a.id_old";
+        			query = manager.createNativeQuery(sql);
+        			query.setParameter("id_goals", id_goals);
+                    query.setParameter("id_target", id_target);
             }else {
-            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
-            			+ " left join sdg_indicator b on a.id_indicator = b.id "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role;
-        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
-            			+ " left join sdg_indicator b on a.id_indicator = b.id "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role;
+//            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
+//            			+ " left join sdg_indicator b on a.id_indicator = b.id "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role;
+//        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
+//            			+ " left join sdg_indicator b on a.id_indicator = b.id "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role;
+        			sql = "SELECT distinct a.id, a.nm_indicator, a.nm_indicator_eng, a.id_indicator FROM sdg_indicator a  WHERE a.id_goals = :id_goals and a.id_target = :id_target order by a.id";
+        			query = manager.createNativeQuery(sql);
+        			query.setParameter("id_goals", id_goals);
+                    query.setParameter("id_target", id_target);
             }
     		 
-            query = manager.createNativeQuery(sql);
-            query.setParameter("id_prov", id_prov);
-            query.setParameter("id_monper", id_monper);
-            query.setParameter("id_goals", id_goals);
-            query.setParameter("id_target", id_target);
+//            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", id_prov);
+//            query.setParameter("id_monper", id_monper);
+//            query.setParameter("id_goals", id_goals);
+//            query.setParameter("id_target", id_target);
     	}else {
     		String[] arrOfStr = sdg.split(","); 
     		StringBuffer indicator = new StringBuffer();
@@ -489,38 +520,47 @@ public class ReportController {
     			}
     		}
     		String hasilindicator = (indicator.length()==0)?"":indicator.substring(0, indicator.length() - 1);
-    		String ind = (hasilindicator.equals(""))?"":" and a.id_indicator in("+hasilindicator+") ";
+    		String indOld = (hasilindicator.equals(""))?"":" and a.id_old in("+hasilindicator+") ";
+    		String ind = (hasilindicator.equals(""))?"":" and a.id in("+hasilindicator+") ";
             String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
             String sql;
             if(status.equals("completed")) {
-            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
-            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role+" "+ind;
-        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
-            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role+" "+ind;
+//            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
+//            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role+" "+ind;
+//        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
+//            			+ " left join history_sdg_indicator b on a.id_indicator = b.id_old and a.id_monper = b.id_monper "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role+" "+ind;
+        			sql = "SELECT distinct a.id_old, a.nm_indicator, a.nm_indicator_eng, a.id_indicator FROM history_sdg_indicator a WHERE a.id_goals = :id_goals and a.id_target = :id_target "+indOld+" order by a.id_old";
+        			query = manager.createNativeQuery(sql);
+                    query.setParameter("id_goals", id_goals);
+                    query.setParameter("id_target", id_target);
             }else {
-            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
-            			+ " left join sdg_indicator b on a.id_indicator = b.id "
-            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-            			+ " right join gov_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role+" "+ind;
-        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
-            			+ " left join sdg_indicator b on a.id_indicator = b.id "
-            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-            			+ " right join nsa_activity d on c.id_activity = d.id "
-            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role+" "+ind;
+//            	sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM gov_map a "
+//            			+ " left join sdg_indicator b on a.id_indicator = b.id "
+//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
+//            			+ " right join gov_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '') "+role+" "+ind;
+//        			sql += "union SELECT distinct a.id_indicator as id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator FROM nsa_map a "
+//            			+ " left join sdg_indicator b on a.id_indicator = b.id "
+//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
+//            			+ " right join nsa_activity d on c.id_activity = d.id "
+//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals and a.id_target = :id_target and (a.id_indicator is not null or a.id_indicator != '')  "+role+" "+ind;
+            	sql = "SELECT distinct a.id, a.nm_indicator, a.nm_indicator_eng, a.id_indicator FROM sdg_indicator a  WHERE a.id_goals = :id_goals and a.id_target = :id_target "+ind+" order by a.id";
+            	query = manager.createNativeQuery(sql);
+                query.setParameter("id_goals", id_goals);
+                query.setParameter("id_target", id_target);
             }
              
-            query = manager.createNativeQuery(sql);
-            query.setParameter("id_prov", id_prov);
-            query.setParameter("id_monper", id_monper);
-            query.setParameter("id_goals", id_goals);
-            query.setParameter("id_target", id_target);
+//            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", id_prov);
+//            query.setParameter("id_monper", id_monper);
+//            query.setParameter("id_goals", id_goals);
+//            query.setParameter("id_target", id_target);
     	}
     	
         List listSdg = query.getResultList();
@@ -537,11 +577,11 @@ public class ReportController {
         if(status.equals("completed")) {
         	sql = "SELECT a.id_old, b.id_old as id_det, a.id_disaggre, a.nm_disaggre, a.nm_disaggre_eng, b.desc_disaggre, b.desc_disaggre_eng "
         			+ "FROM history_sdg_ranrad_disaggre a LEFT JOIN history_sdg_ranrad_disaggre_detail b ON b.id_disaggre = a.id_old and b.id_monper = a.id_monper "
-        			+ "WHERE a.id_indicator = :id_indicator and a.id_monper = '"+id_monper+"' ORDER BY b.id ASC";
+        			+ "WHERE a.id_indicator = :id_indicator and a.id_monper = '"+id_monper+"' ORDER BY a.id_old,b.id_old ASC";
         }else {
         	sql = "SELECT a.id, b.id as id_det, a.id_disaggre, a.nm_disaggre, a.nm_disaggre_eng, b.desc_disaggre, b.desc_disaggre_eng "
         			+ "FROM sdg_ranrad_disaggre a LEFT JOIN sdg_ranrad_disaggre_detail b ON b.id_disaggre = a.id "
-        			+ "WHERE a.id_indicator = :id_indicator ORDER BY b.id ASC";
+        			+ "WHERE a.id_indicator = :id_indicator ORDER BY a.id,b.id ASC";
         }
     	 
     	Query query = manager.createNativeQuery(sql);
@@ -552,14 +592,667 @@ public class ReportController {
         return hasil;
     }
     
-    @GetMapping("admin/get-mapping-goals")
-    public @ResponseBody Map<String, Object> getMappingGoals(
+    @GetMapping("admin/get-mapping-goals-govProg")
+    public @ResponseBody Map<String, Object> getMappingGoalsGovProg(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id, f.id_program, f.nm_program, f.nm_program_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY f.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-related-nasProg")
+    public @ResponseBody Map<String, Object> getMappingRelGovProg(
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_monper") String id_monper) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT b.id, b.id_program, b.nm_program, b.nm_program_eng, b.id_monper,d.nm_prov FROM gov_program a\r\n" + 
+    			"RIGHT JOIN gov_program b on a.id = b.rel_prog_id\r\n" + 
+    			"LEFT JOIN ran_rad c on b.id_monper = c.id_monper\r\n" + 
+    			"LEFT JOIN ref_province d on c.id_prov = d.id_prov\r\n" + 
+    			"WHERE a.id_monper = :id_monper and a.id = :id_program\r\n" + 
+    			"ORDER BY d.nm_prov,b.id");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_monper", id_monper);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-related-provProg")
+    public @ResponseBody Map<String, Object> getMappingRelProvProg(
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_monper") String id_monper) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT a.id, a.id_program, a.nm_program, a.nm_program_eng, a.id_monper FROM gov_program a\r\n" + 
+    			"LEFT JOIN gov_program b on a.id = b.rel_prog_id\r\n" + 
+    			"LEFT JOIN ran_rad c on b.id_monper = c.id_monper\r\n" + 
+    			"LEFT JOIN ref_province d on c.id_prov = d.id_prov\r\n" + 
+    			"WHERE b.id_monper = :id_monper and b.id = :id_program\r\n" + 
+    			"ORDER BY a.id");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_monper", id_monper);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-govProg")
+    public @ResponseBody Map<String, Object> getMappingTargetGovProg(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_target") String id_target) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id, f.id_program, f.nm_program, f.nm_program_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY f.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_target", id_target);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-govProg")
+    public @ResponseBody Map<String, Object> getMappingIndGovProg(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id, f.id_program, f.nm_program, f.nm_program_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY f.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_target", id_target);
+        queryBudGov.setParameter("id_indicator", id_indicator);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-nsaProg")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaProg(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id, f.id_program, f.nm_program, f.nm_program_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY f.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-nsaProg")
+    public @ResponseBody Map<String, Object> getMappingTargetNsaProg(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_target") String id_target) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id, f.id_program, f.nm_program, f.nm_program_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY f.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_target", id_target);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-nsaProg")
+    public @ResponseBody Map<String, Object> getMappingIndNsaProg(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id, f.id_program, f.nm_program, f.nm_program_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY f.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_target", id_target);
+        queryBudGov.setParameter("id_indicator", id_indicator);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-govActivity")
+    public @ResponseBody Map<String, Object> getMappingGoalsgovActivity(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') AND c.id_program = :id_program ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY d.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-related-nasActivity")
+    public @ResponseBody Map<String, Object> getMappingGoalsgovActivity(
+    		@RequestParam("id_program") String id_program) {
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT a.id, a.id_activity, a.nm_activity, a.nm_activity_eng ");
+    	sqlBud.append(" FROM gov_activity a\r\n" + 
+    			" WHERE a.id_program = :id_program ");
+    	sqlBud.append(" ORDER BY a.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_program", id_program);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-related-nasIndicator")
+    public @ResponseBody Map<String, Object> getMappingGoalsgovInd(
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_activity") String id_activity) {
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT a.id, a.id_gov_indicator, a.nm_indicator, a.nm_indicator_eng ");
+    	sqlBud.append(" FROM gov_indicator a\r\n" + 
+    			" WHERE a.id_program = :id_program and a.id_activity = :id_activity");
+    	sqlBud.append(" ORDER BY a.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_activity", id_activity);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-govActivity")
+    public @ResponseBody Map<String, Object> getMappingTargetgovActivity(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_target") String id_target) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target  = :id_target and (a.id_indicator is null or a.id_indicator = '') AND c.id_program = :id_program ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY d.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_target", id_target);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-govActivity")
+    public @ResponseBody Map<String, Object> getMappingIndgovActivity(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target  = :id_target and a.id_indicator = :id_indicator AND c.id_program = :id_program ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY d.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_target", id_target);
+        queryBudGov.setParameter("id_indicator", id_indicator);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-nsaActivity")
+    public @ResponseBody Map<String, Object> getMappingGoalsnsaActivity(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') AND c.id_program = :id_program ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY d.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-nsaActivity")
+    public @ResponseBody Map<String, Object> getMappingTargetnsaActivity(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_target") String id_target) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') AND c.id_program = :id_program ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY d.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_target", id_target);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-nsaActivity")
+    public @ResponseBody Map<String, Object> getMappingIndnsaActivity(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator AND c.id_program = :id_program ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY d.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_target", id_target);
+        queryBudGov.setParameter("id_indicator", id_indicator);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-govIndicator")
+    public @ResponseBody Map<String, Object> getMappingGoalsGovIndy(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_activity") String id_activity) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT c.id, c.id_gov_indicator, c.nm_indicator, c.nm_indicator_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') AND c.id_program = :id_program and c.id_activity = :id_activity ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY c.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_activity", id_activity);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-govIndicator")
+    public @ResponseBody Map<String, Object> getMappingGoalsGovIndy(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_activity") String id_activity,
+    		@RequestParam("id_target") String id_target) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT c.id, c.id_gov_indicator, c.nm_indicator, c.nm_indicator_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') AND c.id_program = :id_program and c.id_activity = :id_activity ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY c.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_activity", id_activity);
+        queryBudGov.setParameter("id_target", id_target);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-govIndicator")
+    public @ResponseBody Map<String, Object> getMappingGoalsGovIndy(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_activity") String id_activity,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT c.id, c.id_gov_indicator, c.nm_indicator, c.nm_indicator_eng ");
+    	sqlBud.append(" FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator AND c.id_program = :id_program and c.id_activity = :id_activity ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY c.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_activity", id_activity);
+        queryBudGov.setParameter("id_target", id_target);
+        queryBudGov.setParameter("id_indicator", id_indicator);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-nsaIndicator")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaIndy(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_activity") String id_activity) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT c.id, c.id_nsa_indicator, c.nm_indicator, c.nm_indicator_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') AND c.id_program = :id_program and c.id_activity = :id_activity ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY c.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_activity", id_activity);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-nsaIndicator")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaIndy(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_activity") String id_activity,
+    		@RequestParam("id_target") String id_target) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT c.id, c.id_nsa_indicator, c.nm_indicator, c.nm_indicator_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') AND c.id_program = :id_program and c.id_activity = :id_activity ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY c.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_activity", id_activity);
+        queryBudGov.setParameter("id_target", id_target);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-nsaIndicator")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaIndy(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_program") String id_program,
+    		@RequestParam("id_activity") String id_activity,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+    		
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT c.id, c.id_nsa_indicator, c.nm_indicator, c.nm_indicator_eng ");
+    	sqlBud.append(" FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator AND c.id_program = :id_program and c.id_activity = :id_activity ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY c.id ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_program", id_program);
+        queryBudGov.setParameter("id_activity", id_activity);
+        queryBudGov.setParameter("id_target", id_target);
+        queryBudGov.setParameter("id_indicator", id_indicator);
+        List listProgGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("progGov",listProgGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-govBudget")
+    public @ResponseBody Map<String, Object> getMappingGoalsGovBudget(
     		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_goals") String id_goals,
     		@RequestParam("id_prov") String id_prov,
     		@RequestParam("id_monper") String id_monper,
     		@RequestParam("start_year") Integer start_year,
-    		@RequestParam("end_year") Integer end_year) {
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_activity") String id_activity) {
     	
     	//gov
     	StringBuilder sqlBud = new StringBuilder();
@@ -593,7 +1286,7 @@ public class ReportController {
     			" left join gov_program f on f.id = c.id_program\r\n" + 
     			" left join ref_role g on d.id_role = g.id_role\r\n" + 
     			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '')\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') and d.id = :id_activity\r\n" + 
     			" ");
     	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
     	sqlBud.append(" ORDER BY 1,2,3 ");
@@ -601,54 +1294,195 @@ public class ReportController {
         queryBudGov.setParameter("id_prov", id_prov);
         queryBudGov.setParameter("id_monper", id_monper);
         queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_activity", id_activity);
         List listBudGov = queryBudGov.getResultList();
         
-        //Indicator GOV
-        StringBuilder sqlInd = new StringBuilder();
-        sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+        
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("budgetGov",listBudGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-related-nasBudget")
+    public @ResponseBody Map<String, Object> getMappingRelNasBudget(
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_activity") String id_activity) {
+    	
+    	//gov
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng,\r\n" + 
+    			"d.budget_allocation,");
     	for(int i = start_year; i<=end_year;i++) {
-    		//target
-    		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
-    		
     		//achievement
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_gov_budget where id_gov_activity = d.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_gov_budget where id_gov_activity = d.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_gov_budget where id_gov_activity = d.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_gov_budget where id_gov_activity = d.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_gov_budget where id_gov_activity = d.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_gov_budget where id_gov_activity = d.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_gov_budget where id_gov_activity = d.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_gov_budget where id_gov_activity = d.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
-    	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
+    	sqlBud.append(" g.nm_role FROM gov_activity d\r\n" + 
+    			" left join gov_program f on f.id = d.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE f.id_monper = :id_monper and d.id = :id_activity\r\n" + 
+    			" ");
+    	sqlBud.append(" ORDER BY 1,2,3 ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_activity", id_activity);
+        List listBudGov = queryBudGov.getResultList();
+        
+        
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("budgetGov",listBudGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-govBudget")
+    public @ResponseBody Map<String, Object> getMappingGoalsGovBudget(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_activity") String id_activity,
+    		@RequestParam("id_target") String id_target) {
+    	
+    	//gov
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng,\r\n" + 
+    			"d.budget_allocation,");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//achievement
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    	
+    		//new value
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    	}
+    	sqlBud.append(" g.nm_role FROM gov_map a\r\n" + 
     			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
     			" left join gov_activity d on c.id_activity = d.id\r\n" + 
     			" left join gov_program f on f.id = c.id_program\r\n" + 
     			" left join ref_role g on d.id_role = g.id_role\r\n" + 
-    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
-    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
     			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '')\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') and d.id = :id_activity\r\n" + 
     			" ");
-    	if(!id_role.equals("all")) {sqlInd.append(" and d.id_role = '"+id_role+"' ");}
-    	sqlInd.append(" ORDER BY 1,2,3 ");
-    	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
-    	queryIndGov.setParameter("id_prov", id_prov);
-    	queryIndGov.setParameter("id_monper", id_monper);
-    	queryIndGov.setParameter("id_goals", id_goals);
-        List listIndGov = queryIndGov.getResultList();
-        
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY 1,2,3 ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_activity", id_activity);
+        queryBudGov.setParameter("id_target", id_target);
+        List listBudGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("budgetGov",listBudGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-govBudget")
+    public @ResponseBody Map<String, Object> getMappingGoalsGovBudget(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_activity") String id_activity,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+    	
+    	//gov
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng,\r\n" + 
+    			"d.budget_allocation,");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//achievement
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    	
+    		//new value
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    	}
+    	sqlBud.append(" g.nm_role FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator and d.id = :id_activity\r\n" + 
+    			" ");
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlBud.append(" ORDER BY 1,2,3 ");
+    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
+        queryBudGov.setParameter("id_prov", id_prov);
+        queryBudGov.setParameter("id_monper", id_monper);
+        queryBudGov.setParameter("id_goals", id_goals);
+        queryBudGov.setParameter("id_activity", id_activity);
+        queryBudGov.setParameter("id_target", id_target);
+        queryBudGov.setParameter("id_indicator", id_indicator);
+        List listBudGov = queryBudGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("budgetGov",listBudGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-nsaBudget")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaBudget(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_activity") String id_activity) {
+    	
     	//nsa
     	StringBuilder sqlBudNsa = new StringBuilder();
     	sqlBudNsa.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
@@ -691,160 +1525,23 @@ public class ReportController {
     	queryBudNsa.setParameter("id_goals", id_goals);
         List listBudNsa = queryBudNsa.getResultList();
         
-      //Indicator GOV
-        StringBuilder sqlNsaInd = new StringBuilder();
-        sqlNsaInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
-    	for(int i = start_year; i<=end_year;i++) {
-    		//target
-    		sqlNsaInd.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
-    		
-    		//achievement
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_nsa_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_nsa_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_nsa_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_nsa_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
-    	
-    		//new value
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_nsa_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_nsa_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_nsa_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_nsa_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
-    	}
-    	sqlNsaInd.append(" g.nm_role FROM nsa_map a\r\n" + 
-    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
-    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
-    			" left join nsa_program f on f.id = c.id_program\r\n" + 
-    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
-    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
-    			" left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '')\r\n" + 
-    			" ");
-    	if(!id_role.equals("all")) {sqlNsaInd.append(" and d.id_role = '"+id_role+"' ");}
-    	sqlNsaInd.append(" ORDER BY 1,2,3 ");
-    	Query queryIndNsa = manager.createNativeQuery(sqlNsaInd.toString());
-    	queryIndNsa.setParameter("id_prov", id_prov);
-    	queryIndNsa.setParameter("id_monper", id_monper);
-    	queryIndNsa.setParameter("id_goals", id_goals);
-        List listIndNsa = queryIndNsa.getResultList();
         
         Map<String, Object> hasil = new HashMap<>();
-        hasil.put("budgetGov",listBudGov);
-        hasil.put("indGov",listIndGov);
-        hasil.put("budgetNsa",listBudNsa);
-        hasil.put("indNsa",listIndNsa);
+        hasil.put("budgetGov",listBudNsa);
         return hasil;
     }
     
-    @GetMapping("admin/get-mapping-target")
-    public @ResponseBody Map<String, Object> getMappingTarget(
+    @GetMapping("admin/get-mapping-target-nsaBudget")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaBudget(
     		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_goals") String id_goals,
-    		@RequestParam("id_target") String id_target,
     		@RequestParam("id_prov") String id_prov,
     		@RequestParam("id_monper") String id_monper,
     		@RequestParam("start_year") Integer start_year,
-    		@RequestParam("end_year") Integer end_year) {
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_activity") String id_activity,
+    		@RequestParam("id_target") String id_target) {
     	
-    	//gov
-    	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng,\r\n" + 
-    			"d.budget_allocation,");
-    	for(int i = start_year; i<=end_year;i++) {
-    		//achievement
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
-    	
-    		//new value
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
-    	}
-    	sqlBud.append(" g.nm_role FROM gov_map a\r\n" + 
-    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
-    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
-    			" left join gov_program f on f.id = c.id_program\r\n" + 
-    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '')\r\n" + 
-    			" ");
-    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
-    	sqlBud.append(" ORDER BY 1,2,3 ");
-    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
-        queryBudGov.setParameter("id_prov", id_prov);
-        queryBudGov.setParameter("id_monper", id_monper);
-        queryBudGov.setParameter("id_goals", id_goals);
-        queryBudGov.setParameter("id_target", id_target);
-        List listBudGov = queryBudGov.getResultList();
-        
-        //Indicator GOV
-        StringBuilder sqlInd = new StringBuilder();
-        sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
-    	for(int i = start_year; i<=end_year;i++) {
-    		//target
-    		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
-    		
-    		//achievement
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
-    	
-    		//new value
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
-    	}
-    	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
-    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
-    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
-    			" left join gov_program f on f.id = c.id_program\r\n" + 
-    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
-    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
-    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '')\r\n" + 
-    			" ");
-    	if(!id_role.equals("all")) {sqlInd.append(" and d.id_role = '"+id_role+"' ");}
-    	sqlInd.append(" ORDER BY 1,2,3 ");
-    	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
-    	queryIndGov.setParameter("id_prov", id_prov);
-    	queryIndGov.setParameter("id_monper", id_monper);
-    	queryIndGov.setParameter("id_goals", id_goals);
-    	queryIndGov.setParameter("id_target", id_target);
-        List listIndGov = queryIndGov.getResultList();
-        
     	//nsa
     	StringBuilder sqlBudNsa = new StringBuilder();
     	sqlBudNsa.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
@@ -887,165 +1584,23 @@ public class ReportController {
     	queryBudNsa.setParameter("id_goals", id_goals);
     	queryBudNsa.setParameter("id_target", id_target);
         List listBudNsa = queryBudNsa.getResultList();
-        
-      //Indicator GOV
-        StringBuilder sqlNsaInd = new StringBuilder();
-        sqlNsaInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
-    	for(int i = start_year; i<=end_year;i++) {
-    		//target
-    		sqlNsaInd.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
-    		
-    		//achievement
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_nsa_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_nsa_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_nsa_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_nsa_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
-    	
-    		//new value
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_nsa_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_nsa_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_nsa_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_nsa_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
-    	}
-    	sqlNsaInd.append(" g.nm_role FROM nsa_map a\r\n" + 
-    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
-    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
-    			" left join nsa_program f on f.id = c.id_program\r\n" + 
-    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
-    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
-    			" left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '')\r\n" + 
-    			" ");
-    	if(!id_role.equals("all")) {sqlNsaInd.append(" and d.id_role = '"+id_role+"' ");}
-    	sqlNsaInd.append(" ORDER BY 1,2,3 ");
-    	Query queryIndNsa = manager.createNativeQuery(sqlNsaInd.toString());
-    	queryIndNsa.setParameter("id_prov", id_prov);
-    	queryIndNsa.setParameter("id_monper", id_monper);
-    	queryIndNsa.setParameter("id_goals", id_goals);
-    	queryIndNsa.setParameter("id_target", id_target);
-        List listIndNsa = queryIndNsa.getResultList();
-        
         Map<String, Object> hasil = new HashMap<>();
-        hasil.put("budgetGov",listBudGov);
-        hasil.put("indGov",listIndGov);
-        hasil.put("budgetNsa",listBudNsa);
-        hasil.put("indNsa",listIndNsa);
+        hasil.put("budgetGov",listBudNsa);
         return hasil;
     }
     
-    @GetMapping("admin/get-mapping-indicator")
-    public @ResponseBody Map<String, Object> getMappingIndicator(
+    @GetMapping("admin/get-mapping-indicator-nsaBudget")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaBudget(
     		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_goals") String id_goals,
-    		@RequestParam("id_target") String id_target,
-    		@RequestParam("id_indicator") String id_indicator,
     		@RequestParam("id_prov") String id_prov,
     		@RequestParam("id_monper") String id_monper,
     		@RequestParam("start_year") Integer start_year,
-    		@RequestParam("end_year") Integer end_year) {
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_activity") String id_activity,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
     	
-    	//gov
-    	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng,\r\n" + 
-    			"d.budget_allocation,");
-    	for(int i = start_year; i<=end_year;i++) {
-    		//achievement
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
-    	
-    		//new value
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
-    	}
-    	sqlBud.append(" g.nm_role FROM gov_map a\r\n" + 
-    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
-    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
-    			" left join gov_program f on f.id = c.id_program\r\n" + 
-    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and a.id_target = :id_target and a.id_indicator = :id_indicator\r\n" + 
-    			" ");
-    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"' ");}
-    	sqlBud.append(" ORDER BY 1,2,3 ");
-    	Query queryBudGov = manager.createNativeQuery(sqlBud.toString());
-        queryBudGov.setParameter("id_prov", id_prov);
-        queryBudGov.setParameter("id_monper", id_monper);
-        queryBudGov.setParameter("id_goals", id_goals);
-        queryBudGov.setParameter("id_target", id_target);
-        queryBudGov.setParameter("id_indicator", id_indicator);
-        List listBudGov = queryBudGov.getResultList();
-        
-        //Indicator GOV
-        StringBuilder sqlInd = new StringBuilder();
-        sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
-    	for(int i = start_year; i<=end_year;i++) {
-    		//target
-    		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
-    		
-    		//achievement
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
-    	
-    		//new value
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
-    	}
-    	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
-    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
-    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
-    			" left join gov_program f on f.id = c.id_program\r\n" + 
-    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
-    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
-    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and a.id_target = :id_target and a.id_indicator = :id_indicator\r\n" + 
-    			" ");
-    	if(!id_role.equals("all")) {sqlInd.append(" and d.id_role = '"+id_role+"' ");}
-    	sqlInd.append(" ORDER BY 1,2,3 ");
-    	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
-    	queryIndGov.setParameter("id_prov", id_prov);
-    	queryIndGov.setParameter("id_monper", id_monper);
-    	queryIndGov.setParameter("id_goals", id_goals);
-    	queryIndGov.setParameter("id_target", id_target);
-    	queryIndGov.setParameter("id_indicator", id_indicator);
-        List listIndGov = queryIndGov.getResultList();
-        
     	//nsa
     	StringBuilder sqlBudNsa = new StringBuilder();
     	sqlBudNsa.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
@@ -1089,9 +1644,267 @@ public class ReportController {
     	queryBudNsa.setParameter("id_target", id_target);
     	queryBudNsa.setParameter("id_indicator", id_indicator);
         List listBudNsa = queryBudNsa.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("budgetGov",listBudNsa);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-relisasi")
+    public @ResponseBody Map<String, Object> getMappingGoalsReal(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_gov_indicator") Integer id_gov_indicator) {
         
-      //Indicator GOV
-        StringBuilder sqlNsaInd = new StringBuilder();
+        //Indicator GOV
+        StringBuilder sqlInd = new StringBuilder();
+        sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
+    		
+    		//achievement
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    	
+    		//new value
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    	}
+    	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') and a.id_gov_indicator = :id_gov_indicator \r\n" + 
+    			" ");
+    	if(!id_role.equals("all")) {sqlInd.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlInd.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
+    	queryIndGov.setParameter("id_prov", id_prov);
+    	queryIndGov.setParameter("id_monper", id_monper);
+    	queryIndGov.setParameter("id_goals", id_goals);
+    	queryIndGov.setParameter("id_gov_indicator", id_gov_indicator);
+        List listIndGov = queryIndGov.getResultList();
+
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("indGov",listIndGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-related-relisasi")
+    public @ResponseBody Map<String, Object> getMappingRelReal(
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_gov_indicator") Integer id_gov_indicator) {
+        
+        //Indicator GOV
+        StringBuilder sqlInd = new StringBuilder();
+        sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = c.id and year = "+i+") as target_"+i+", ");
+    		
+    		//achievement
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = c.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = c.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = c.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = c.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    	
+    		//new value
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = c.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = c.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = c.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = c.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    	}
+    	sqlInd.append(" g.nm_role FROM gov_indicator c \r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join gov_funding i on c.id = i.id_gov_indicator and f.id_monper = i.id_monper\r\n" + 
+    			" WHERE f.id_monper = :id_monper and c.id = :id_gov_indicator \r\n" + 
+    			" ");
+    	sqlInd.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
+    	queryIndGov.setParameter("id_monper", id_monper);
+    	queryIndGov.setParameter("id_gov_indicator", id_gov_indicator);
+        List listIndGov = queryIndGov.getResultList();
+
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("indGov",listIndGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-relisasi")
+    public @ResponseBody Map<String, Object> getMappingGoalsReal(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_gov_indicator") Integer id_gov_indicator,
+    		@RequestParam("id_target") String id_target) {
+        
+        //Indicator GOV
+        StringBuilder sqlInd = new StringBuilder();
+        sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
+    		
+    		//achievement
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    	
+    		//new value
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    	}
+    	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') and a.id_gov_indicator = :id_gov_indicator \r\n" + 
+    			" ");
+    	if(!id_role.equals("all")) {sqlInd.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlInd.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
+    	queryIndGov.setParameter("id_prov", id_prov);
+    	queryIndGov.setParameter("id_monper", id_monper);
+    	queryIndGov.setParameter("id_goals", id_goals);
+    	queryIndGov.setParameter("id_target", id_target);
+    	queryIndGov.setParameter("id_gov_indicator", id_gov_indicator);
+        List listIndGov = queryIndGov.getResultList();
+
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("indGov",listIndGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-relisasi")
+    public @ResponseBody Map<String, Object> getMappingGoalsReal(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_gov_indicator") Integer id_gov_indicator,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+        
+        //Indicator GOV
+        StringBuilder sqlInd = new StringBuilder();
+        sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
+    		
+    		//achievement
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    	
+    		//new value
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    	}
+    	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_gov_indicator = :id_gov_indicator \r\n" + 
+    			" ");
+    	if(!id_role.equals("all")) {sqlInd.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlInd.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
+    	queryIndGov.setParameter("id_prov", id_prov);
+    	queryIndGov.setParameter("id_monper", id_monper);
+    	queryIndGov.setParameter("id_goals", id_goals);
+    	queryIndGov.setParameter("id_target", id_target);
+    	queryIndGov.setParameter("id_gov_indicator", id_gov_indicator);
+    	queryIndGov.setParameter("id_indicator", id_indicator);
+        List listIndGov = queryIndGov.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("indGov",listIndGov);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-goals-nsarelisasi")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaReal(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_nsa_indicator") Integer id_nsa_indicator) {
+        
+    	StringBuilder sqlNsaInd = new StringBuilder();
         sqlNsaInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
     			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
@@ -1126,7 +1939,7 @@ public class ReportController {
     			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
     			" left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper\r\n" + 
     			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and a.id_target = :id_target and a.id_indicator = :id_indicator\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') and a.id_nsa_indicator = :id_nsa_indicator\r\n" + 
     			" ");
     	if(!id_role.equals("all")) {sqlNsaInd.append(" and d.id_role = '"+id_role+"' ");}
     	sqlNsaInd.append(" ORDER BY 1,2,3 ");
@@ -1134,15 +1947,139 @@ public class ReportController {
     	queryIndNsa.setParameter("id_prov", id_prov);
     	queryIndNsa.setParameter("id_monper", id_monper);
     	queryIndNsa.setParameter("id_goals", id_goals);
+    	queryIndNsa.setParameter("id_nsa_indicator", id_nsa_indicator);
+        List listIndNsa = queryIndNsa.getResultList();
+
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("indGov",listIndNsa);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-target-nsarelisasi")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaReal(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_nsa_indicator") Integer id_nsa_indicator,
+    		@RequestParam("id_target") String id_target) {
+        
+    	StringBuilder sqlNsaInd = new StringBuilder();
+        sqlNsaInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlNsaInd.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
+    		
+    		//achievement
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_nsa_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_nsa_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_nsa_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_nsa_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    	
+    		//new value
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_nsa_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_nsa_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_nsa_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_nsa_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    	}
+    	sqlNsaInd.append(" g.nm_role FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') and a.id_nsa_indicator = :id_nsa_indicator\r\n" + 
+    			" ");
+    	if(!id_role.equals("all")) {sqlNsaInd.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlNsaInd.append(" ORDER BY 1,2,3 ");
+    	Query queryIndNsa = manager.createNativeQuery(sqlNsaInd.toString());
+    	queryIndNsa.setParameter("id_prov", id_prov);
+    	queryIndNsa.setParameter("id_monper", id_monper);
+    	queryIndNsa.setParameter("id_goals", id_goals);
+    	queryIndNsa.setParameter("id_nsa_indicator", id_nsa_indicator);
+    	queryIndNsa.setParameter("id_target", id_target);
+        List listIndNsa = queryIndNsa.getResultList();
+
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("indGov",listIndNsa);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-mapping-indicator-nsarelisasi")
+    public @ResponseBody Map<String, Object> getMappingGoalsNsaReal(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_goals") String id_goals,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("start_year") Integer start_year,
+    		@RequestParam("end_year") Integer end_year,
+    		@RequestParam("id_nsa_indicator") Integer id_nsa_indicator,
+    		@RequestParam("id_target") String id_target,
+    		@RequestParam("id_indicator") String id_indicator) {
+        
+    	StringBuilder sqlNsaInd = new StringBuilder();
+        sqlNsaInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlNsaInd.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
+    		
+    		//achievement
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_nsa_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_nsa_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_nsa_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_nsa_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
+    	
+    		//new value
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_nsa_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_nsa_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_nsa_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_nsa_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
+    	}
+    	sqlNsaInd.append(" g.nm_role FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_nsa_indicator = :id_nsa_indicator\r\n" + 
+    			" ");
+    	if(!id_role.equals("all")) {sqlNsaInd.append(" and d.id_role = '"+id_role+"' ");}
+    	sqlNsaInd.append(" ORDER BY 1,2,3 ");
+    	Query queryIndNsa = manager.createNativeQuery(sqlNsaInd.toString());
+    	queryIndNsa.setParameter("id_prov", id_prov);
+    	queryIndNsa.setParameter("id_monper", id_monper);
+    	queryIndNsa.setParameter("id_goals", id_goals);
+    	queryIndNsa.setParameter("id_nsa_indicator", id_nsa_indicator);
     	queryIndNsa.setParameter("id_target", id_target);
     	queryIndNsa.setParameter("id_indicator", id_indicator);
         List listIndNsa = queryIndNsa.getResultList();
-        
+
         Map<String, Object> hasil = new HashMap<>();
-        hasil.put("budgetGov",listBudGov);
-        hasil.put("indGov",listIndGov);
-        hasil.put("budgetNsa",listBudNsa);
-        hasil.put("indNsa",listIndNsa);
+        hasil.put("indGov",listIndNsa);
         return hasil;
     }
     

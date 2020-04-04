@@ -422,50 +422,56 @@
 				"searching": false,
 				"columns": [
 					{"data": function (row, data, index, display) {
-						var data   = row[23].split(",");
                                                 var grouphtml = "";
-                                                $.each(data,function(i,x){
-                                                    var dataid          = x.split("###");
-                                                    var lengthdataid    = dataid.length-1;
-                                                    var htmlid = "";
-                                                        $.each(dataid,function(ii,xx){
-                                                            if(ii<lengthdataid){
-                                                               if(ii==0){                                                               
-                                                                    htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                }
-                                                               if(ii==1){
-                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                }
-                                                               if(ii==2){
-                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                } 
-                                                            }
-                                                        });
-                                                    grouphtml +=htmlid;
-                                                })
+                                                if(row[23]!=null){
+                                                    var data   = row[23].split(",");
+                                                        $.each(data,function(i,x){
+                                                            var dataid          = x.split("###");
+                                                            var lengthdataid    = dataid.length-1;
+                                                            var htmlid = "";
+                                                                $.each(dataid,function(ii,xx){
+                                                                    if(ii<lengthdataid){
+                                                                       if(ii==0){                                                               
+                                                                            htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                        }
+                                                                       if(ii==1){
+                                                                           htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                        }
+                                                                       if(ii==2){
+                                                                           htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                        } 
+                                                                    }
+                                                                });
+                                                            grouphtml +=htmlid;
+                                                        })
+                                                }
+						
 						return grouphtml;
 						}},
 					{"data": function (row, data, index, display) {
-                                                var data   = row[23].split(",");
                                                 var grouphtml = "";
-                                                $.each(data,function(i,x){
-                                                    var dataid          = x.split("###");
-                                                    var lengthdataid    = dataid.length-1;
-                                                    var dataur          = dataid[lengthdataid].split("##*##");
-                                                    var htmlid = "";
-                                                        $.each(dataur,function(ii,xx){
-                                                               if(ii==0){                                                               
-                                                                    htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                }
-                                                               if(ii==1){
-                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                }
-                                                               if(ii==2){
-                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                } 
-                                                        });
-                                                    grouphtml +=htmlid;
-                                                })
+                                                if(row[23]!=null){
+                                                    var data   = row[23].split(",");
+                                                    $.each(data,function(i,x){
+                                                        var dataid          = x.split("###");
+                                                        var lengthdataid    = dataid.length-1;
+                                                        var dataur          = dataid[lengthdataid].split("##*##");
+                                                        var htmlid = "";
+                                                            $.each(dataur,function(ii,xx){
+                                                                   if(ii==0){                                                               
+                                                                        htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                    }
+                                                                   if(ii==1){
+                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                    }
+                                                                   if(ii==2){
+                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                    } 
+                                                            });
+                                                        grouphtml +=htmlid;
+                                                    })
+                                                }
+                                                
 						return grouphtml;
 					}},
                                         {"data": function (row, data, index, display) {
@@ -864,8 +870,10 @@
                         });
         });
         
-        
-       
+//       $2(document).ready(function(){
+//          alert("hallo"); 
+//       });
+//       
     </script>
 </body>
 <style>

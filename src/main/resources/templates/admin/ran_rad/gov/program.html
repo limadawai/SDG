@@ -296,7 +296,7 @@
 	        
 	        $('#showModal').on('click', function(){
 	        	if($('#id_prov').val() && $('#id_monper').val()){
-	        		if(id_prov == '000'){
+	        		if($('#id_prov').val() == '000'){
 	    	        	$('.nasional').show();
 	    	        	$('.provinsi').hide();
 	    	        }else{
@@ -317,7 +317,7 @@
 	                    }); */
 	    	        	$.ajax({
 	    					type: "GET",
-	                        url: urls+'get-relProg/'+id_prov+'/'+id_monper,
+	                        url: urls+'get-relProg/'+$('#id_prov').val()+'/'+$('#id_monper').val(),
 	                        async:false,
 	                        success: function (result) {
 	    						$('#rel_prog_id').html("");
@@ -595,7 +595,7 @@
                             	console.log(hasil.content);
                             }
         				});
-        				if(id_prov != '000'){
+        				if($('#id_prov').val() != '000'){
 							/* $.ajax({
 		    					type: "GET",
 		                        url: urls+'get-ministry/'+id_prov+'/'+id_monper,
@@ -612,7 +612,7 @@
 							$('#ministry').val(val.id_ministry).trigger('change'); */
 							$.ajax({
 		    					type: "GET",
-		                        url: urls+'get-relProg/'+id_prov+'/'+id_monper,
+		                        url: urls+'get-relProg/'+$('#id_prov').val()+'/'+$('#id_monper').val(),
 		                        async:false,
 		                        success: function (result) {
 		    						$('#rel_prog_id').html("");
@@ -659,7 +659,7 @@
                             	$('#rel_prov').val(hasil.content).trigger('change').attr('disabled',true);
                             }
         				});
-        				if(id_prov != '000'){
+        				if($('#id_prov').val() != '000'){
 							/* $.ajax({
 		    					type: "GET",
 		                        url: urls+'get-ministry/'+id_prov+'/'+id_monper,
@@ -676,7 +676,7 @@
 							$('#ministry').val(val.id_ministry).trigger('change'); */
 							$.ajax({
 		    					type: "GET",
-		                        url: urls+'get-relProg/'+id_prov+'/'+id_monper,
+		                        url: urls+'get-relProg/'+$('#id_prov').val()+'/'+$('#id_monper').val(),
 		                        async:false,
 		                        success: function (result) {
 		    						$('#rel_prog_id').html("");
