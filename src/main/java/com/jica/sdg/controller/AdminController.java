@@ -224,6 +224,7 @@ public class AdminController {
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov = list.get().getId_prov();
     	String privilege = list.get().getPrivilege();
+    	model.addAttribute("provMap", prov.findAllProvinsi());
     	if(privilege.equals("SUPER")) {
     		model.addAttribute("prov", prov.findAllProvinsi());
     	}else {
