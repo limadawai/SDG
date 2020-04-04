@@ -35,9 +35,10 @@
                                     <option value="graf1">Grafik Line</option>
                                     <option value="graf3">Grafik Combination</option>
                             </select>
-                            <button id="btnexport" class="btn btn-success" style="margin-right:4px; margin-top: -10px"><span class="lang_eng" style="display: none">Export Excel</span><span class="lang_indo">Ekspor Excel</span></button>
+                            <!--<button id="btnexport" class="btn btn-success" style="margin-right:4px; margin-top: -10px"><span class="lang_eng" style="display: none">Export Excel</span><span class="lang_indo">Ekspor Excel</span></button>-->
+                            <a class="btn btn-warning pull-right" style="margin-left:4px;" href="#" onclick="tableToExcel('hasil', 'Report Graph')">Excel</a><br/>
                         </div><br><br><hr>
-                        
+                        <div id="hasil">
                        	<div id="divtabgoals" style="width:100%;">
                             <!--<b><span>SDG </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b><br>-->
                             <b><span>SDG : </span>&nbsp;&nbsp;&nbsp;<span id="daerah"></span></b><br>
@@ -48,6 +49,7 @@
                                 <thead></thead>
                                 <tbody></tbody>
                             </table>
+                            <br/>
                             <table id="tabsdg_disagre" class='table table-striped table-bordered' style="display: none">
                                 <thead></thead>
                                 <tbody></tbody>
@@ -70,6 +72,7 @@
                             <div class="span12">
                                 <div id="dualaxes"></div>
                             </div>
+                        </div>
                         </div>
                     </div>
                 </div>
@@ -220,13 +223,13 @@
                 	//console.log(goal);
                         if($('#fs').is(':checked')){
                             //indo
-                            var isihead1 = "<b><span class=''>Pemerintah</span></b><span class='lang_eng' style='display: none'>Government</span></b><br>";
+                            var isihead1 = "<b><span class=''>Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
                             isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
                             isihead1 += "<b><span>Kegiatan : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
                             isihead1 += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
                         }else{
                             //eng
-                            var isihead1 = "<b><span class=''>Government</span></b><span class='lang_eng' style='display: none'>Government</span></b><br>";
+                            var isihead1 = "<b><span class=''>Government</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
                             isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
                             isihead1 += "<b><span>Activity : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
                             isihead1 += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
@@ -274,11 +277,19 @@
                 cache: false,
                 async: false,
                 success: function (goal) {
-                	//console.log(goal);
-                	var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
-                	isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
-                	isihead1 += "<b><span>Kegiatan : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
-                	isihead1 += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
+                    if($('#fs').is(':checked')){
+                        //indo
+                        var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
+                        isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
+                        isihead1 += "<b><span>Kegiatan : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                        isihead1 += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
+                    }else{
+                        //eng
+                        var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
+                        isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
+                        isihead1 += "<b><span>Activity : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                        isihead1 += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
+                    }
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divgoals").html(isihead1); 
                 }
@@ -409,7 +420,7 @@
                                                 var unit = array[i][2];
                                             }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+ket1+'</td><td id="colsdg13">'+ket2+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="colsdg2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="colsdg3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="colsdg4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="colsdg5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="colsdg6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="colsdg7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="colsdg8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="colsdg9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="colsdg10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="colsdg11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="colsdg12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="colsdg13" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="colsdg14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -511,13 +522,12 @@
                                                 var unit = array[i][2];
                                             }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1+'</td><td id="colsdg8">'+real2+'</td><td id="colsdg9">'+real3+'</td><td id="colsdg10">'+real4+'</td><td id="colsdg11">'+real5+'</td><td id="colsdg12">'+ket1+'</td><td id="colsdg13">'+ket2+'</td><td id="colsdg14">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="colsdg2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="colsdg3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="colsdg4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="colsdg5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="colsdg6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="colsdg7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="colsdg8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="colsdg9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="colsdg10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="colsdg11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="colsdg12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="colsdg13" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="colsdg14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
                                 }
                             });
-                            
                             
                             //disagre
                             $("#tabsdg_disagre").show();
@@ -612,7 +622,7 @@
                                                 var unit = array[i][2];
                                             }
                                             
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+unit+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1+'</td><td id="colagg9_'+[i]+'">'+real2+'</td><td id="colagg10_'+[i]+'">'+real3+'</td><td id="colagg11_'+[i]+'">'+real4+'</td><td id="colagg12_'+[i]+'">'+real5+'</td><td id="colagg13_'+[i]+'">'+ket1+'</td><td id="colagg14_'+[i]+'">'+ket2+'</td><td id="colagg15_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'" style="font-size:80%;border-style:ridge;"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'" style="font-size:80%;border-style:ridge;">'+unit+'</td><td style="font-size:80%;border-style:ridge;" id="colagg3_'+[i]+'">'+target1+'</td><td style="font-size:80%;border-style:ridge;" id="colagg4_'+[i]+'">'+target2+'</td><td style="font-size:80%;border-style:ridge;" id="colagg5_'+[i]+'">'+target3+'</td><td style="font-size:80%;border-style:ridge;" id="colagg6_'+[i]+'">'+target4+'</td><td style="font-size:80%;border-style:ridge;" id="colagg7_'+[i]+'">'+target5+'</td><td style="font-size:80%;border-style:ridge;" id="colagg8_'+[i]+'">'+real1+'</td><td style="font-size:80%;border-style:ridge;" id="colagg9_'+[i]+'">'+real2+'</td><td style="font-size:80%;border-style:ridge;" id="colagg10_'+[i]+'">'+real3+'</td><td style="font-size:80%;border-style:ridge;" id="colagg11_'+[i]+'">'+real4+'</td><td style="font-size:80%;border-style:ridge;" id="colagg12_'+[i]+'">'+real5+'</td><td style="font-size:80%;border-style:ridge;" id="colagg13_'+[i]+'">'+ket1+'</td><td style="font-size:80%;border-style:ridge;" id="colagg14_'+[i]+'">'+ket2+'</td><td style="font-size:80%;border-style:ridge;" id="colagg15_'+[i]+'">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -747,7 +757,7 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="colsdg2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="colsdg3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="colsdg4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="colsdg5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="colsdg6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="colsdg7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="colsdg8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="colsdg9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="colsdg10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="colsdg11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="colsdg12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="colsdg13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="colsdg14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="colsdg15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="colsdg16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="colsdg17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="colsdg18" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="colsdg19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -880,8 +890,8 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="colsdg2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="colsdg3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="colsdg4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="colsdg5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="colsdg6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="colsdg7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="colsdg8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="colsdg9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="colsdg10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="colsdg11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="colsdg12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="colsdg13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="colsdg14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="colsdg15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="colsdg16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="colsdg17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="colsdg18" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="colsdg19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+//                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real2_1+'</td><td id="colsdg10">'+real2_2+'</td><td id="colsdg11">'+real3_1+'</td><td id="colsdg12">'+real3_2+'</td><td id="colsdg13">'+real4_1+'</td><td id="colsdg14">'+real4_2+'</td><td id="colsdg15">'+real5_1+'</td><td id="colsdg16">'+real5_2+'</td><td id="colsdg17">'+ket1+'</td><td id="colsdg18">'+ket2+'</td><td id="colsdg19">'+array[i][1]+'</td> </tr>';
 //                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
@@ -889,6 +899,7 @@
                                 }
                             });
                             
+//                            $("#tabsdg > tbody").append("<br/>");
                             
                             //disagre
                             $("#tabsdg_disagre").show();
@@ -1013,7 +1024,7 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+unit+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real2_1+'</td><td id="colagg11_'+[i]+'">'+real2_2+'</td><td id="colagg12_'+[i]+'">'+real3_1+'</td><td id="colagg13_'+[i]+'">'+real3_2+'</td><td id="colagg14_'+[i]+'">'+real4_1+'</td><td id="colagg15_'+[i]+'">'+real4_2+'</td><td id="colagg16_'+[i]+'">'+real5_1+'</td><td id="colagg17_'+[i]+'">'+real5_2+'</td><td id="colagg18_'+[i]+'">'+ket1+'</td><td id="colagg19_'+[i]+'">'+ket2+'</td><td id="colagg20_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'" style="font-size:80%;border-style:ridge;"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="colagg3_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="colagg4_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="colagg5_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="colagg6_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="colagg7_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="colagg8_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="colagg9_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="colagg10_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="colagg11_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="colagg12_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="colagg13_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="colagg14_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="colagg15_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="colagg16_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="colagg17_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="colagg18_'+[i]+'" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="colagg19_'+[i]+'" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="colagg20_'+[i]+'" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -1209,7 +1220,7 @@
                                                 var unit = array[i][2];
                                             }
 
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="colsdg2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="colsdg3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="colsdg4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="colsdg5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="colsdg6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="colsdg7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="colsdg8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="colsdg9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="colsdg10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="colsdg11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="colsdg12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="colsdg13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="colsdg14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="colsdg15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="colsdg16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="colsdg17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="colsdg18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="colsdg19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="colsdg20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="colsdg21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="colsdg22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="colsdg23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="colsdg24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="colsdg25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="colsdg26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="colsdg27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="colsdg28" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="colsdg29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
                                         }
                                     }
@@ -1400,7 +1411,8 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg = '<tr> <td id="colsdg1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="colsdg2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="colsdg3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="colsdg4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="colsdg5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="colsdg6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="colsdg7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="colsdg8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="colsdg9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="colsdg10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="colsdg11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="colsdg12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="colsdg13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="colsdg14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="colsdg15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="colsdg16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="colsdg17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="colsdg18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="colsdg19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="colsdg20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="colsdg21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="colsdg22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="colsdg23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="colsdg24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="colsdg25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="colsdg26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="colsdg27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="colsdg28" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="colsdg29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+//                                            var tb_sdg = '<tr> <td id="colsdg1">'+unit+'</td><td id="colsdg2">'+target1+'</td><td id="colsdg3">'+target2+'</td><td id="colsdg4">'+target3+'</td><td id="colsdg5">'+target4+'</td><td id="colsdg6">'+target5+'</td><td id="colsdg7">'+real1_1+'</td><td id="colsdg8">'+real1_2+'</td><td id="colsdg9">'+real1_3+'</td><td id="colsdg10">'+real1_4+'</td><td id="colsdg11">'+real2_1+'</td><td id="colsdg12">'+real2_2+'</td><td id="colsdg13">'+real2_3+'</td><td id="colsdg14">'+real2_4+'</td><td id="colsdg15">'+real3_1+'</td><td id="colsdg16">'+real3_2+'</td><td id="colsdg17">'+real3_3+'</td><td id="colsdg18">'+real3_4+'</td><td id="colsdg19">'+real4_1+'</td><td id="colsdg20">'+real4_2+'</td><td id="colsdg21">'+real4_3+'</td><td id="colsdg22">'+real4_4+'</td><td id="colsdg23">'+real5_1+'</td><td id="colsdg24">'+real5_2+'</td><td id="colsdg25">'+real5_3+'</td><td id="colsdg26">'+real5_4+'</td><td id="colsdg27">'+ket1+'</td><td id="colsdg28">'+ket2+'</td><td id="colsdg29">'+array[i][1]+'</td> </tr>';
 
 //                                            var tb_sdg = '<tr> <td>'+array[i][2]+'</td><td>'+target1+'</td><td>'+target2+'</td><td>'+target3+'</td><td>'+target4+'</td><td>'+target5+'</td><td>'+real1_1+'</td><td>'+real1_2+'</td><td>'+real1_3+'</td><td>'+real1_4+'</td><td>'+real2_1+'</td><td>'+real2_2+'</td><td>'+real2_3+'</td><td>'+real2_4+'</td><td>'+real3_1+'</td><td>'+real3_2+'</td><td>'+real3_3+'</td><td>'+real3_4+'</td><td>'+real4_1+'</td><td>'+real4_2+'</td><td>'+real4_3+'</td><td>'+real4_4+'</td><td>'+real5_1+'</td><td>'+real5_2+'</td><td>'+real5_3+'</td><td>'+real5_4+'</td><td>'+array[i][28]+'</td><td>'+array[i][29]+'</td><td>'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg > tbody").append(tb_sdg);
@@ -1592,7 +1604,7 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'">'+unit+'</td><td id="colagg3_'+[i]+'">'+target1+'</td><td id="colagg4_'+[i]+'">'+target2+'</td><td id="colagg5_'+[i]+'">'+target3+'</td><td id="colagg6_'+[i]+'">'+target4+'</td><td id="colagg7_'+[i]+'">'+target5+'</td><td id="colagg8_'+[i]+'">'+real1_1+'</td><td id="colagg9_'+[i]+'">'+real1_2+'</td><td id="colagg10_'+[i]+'">'+real1_3+'</td><td id="colagg11_'+[i]+'">'+real1_4+'</td><td id="colagg12_'+[i]+'">'+real2_1+'</td><td id="colagg13_'+[i]+'">'+real2_2+'</td><td id="colagg14_'+[i]+'">'+real2_3+'</td><td id="colagg15_'+[i]+'">'+real2_4+'</td><td id="colagg16_'+[i]+'">'+real3_1+'</td><td id="colagg17_'+[i]+'">'+real3_2+'</td><td id="colagg18_'+[i]+'">'+real3_3+'</td><td id="colagg19_'+[i]+'">'+real3_4+'</td><td id="colagg20_'+[i]+'">'+real4_1+'</td><td id="colagg21_'+[i]+'">'+real4_2+'</td><td id="colagg22_'+[i]+'">'+real4_3+'</td><td id="colagg23_'+[i]+'">'+real4_4+'</td><td id="colagg24_'+[i]+'">'+real5_1+'</td><td id="colagg25_'+[i]+'">'+real5_2+'</td><td id="colagg26_'+[i]+'">'+real5_3+'</td><td id="colagg27_'+[i]+'">'+real5_4+'</td><td id="colagg28_'+[i]+'">'+ket1+'</td><td id="colagg29_'+[i]+'">'+ket2+'</td><td id="colagg30_'+[i]+'">'+array[i][1]+'</td> </tr>';
+                                            var tb_sdg_disagre = '<tr> <td id="colagg1_'+[i]+'" style="font-size:80%;border-style:ridge;"><span class="lang_indo">'+array[i][30]+' - '+array[i][32]+'</span><span class="lang_eng" style="display:none">'+array[i][31]+' - '+array[i][33]+'</span></td><td id="colagg2_'+[i]+'" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="colagg3_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="colagg4_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="colagg5_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="colagg6_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="colagg7_'+[i]+'" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="colagg8_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="colagg9_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="colagg10_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="colagg11_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="colagg12_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="colagg13_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="colagg14_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="colagg15_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="colagg16_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="colagg17_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="colagg18_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="colagg19_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="colagg20_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="colagg21_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="colagg22_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="colagg23_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="colagg24_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="colagg25_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="colagg26_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="colagg27_'+[i]+'" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="colagg28_'+[i]+'" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="colagg29_'+[i]+'" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="colagg30_'+[i]+'" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabsdg_disagre > tbody").append(tb_sdg_disagre);
                                         }
                                     }
@@ -2057,7 +2069,7 @@
                                             var unit = array[i][2];
                                         }
 
-                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+ket1+'</td><td id="col13">'+ket2+'</td><td id="col4">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2188,7 +2200,7 @@
                                         }else{
                                             var unit = array[i][2];
                                         }
-                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+ket1+'</td><td id="col18">'+ket2+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2379,7 +2391,7 @@
                                         }else{
                                             var unit = array[i][2];
                                         }
-                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21>'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+ket1+'</td><td id="col28">'+ket2+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col28" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2504,7 +2516,7 @@
                                         }else{
                                             var unit = array[i][2];
                                         }
-                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1+'</td><td id="col8">'+real2+'</td><td id="col9">'+real3+'</td><td id="col10">'+real4+'</td><td id="col11">'+real5+'</td><td id="col12">'+ket1+'</td><td id="col13">'+ket2+'</td><td id="col14">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2635,7 +2647,7 @@
                                         }else{
                                             var unit = array[i][2];
                                         }
-                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real2_1+'</td><td id="col10">'+real2_2+'</td><td id="col11">'+real3_1+'</td><td id="col12">'+real3_2+'</td><td id="col13">'+real4_1+'</td><td id="col14">'+real4_2+'</td><td id="col15">'+real5_1+'</td><td id="col16">'+real5_2+'</td><td id="col17">'+ket1+'</td><td id="col18">'+ket2+'</td><td id="col19">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2826,7 +2838,7 @@
                                         }else{
                                             var unit = array[i][2];
                                         }
-                                        var tb_gov = '<tr> <td id="col1">'+unit+'</td><td id="col2">'+target1+'</td><td id="col3">'+target2+'</td><td id="col4">'+target3+'</td><td id="col5">'+target4+'</td><td id="col6">'+target5+'</td><td id="col7">'+real1_1+'</td><td id="col8">'+real1_2+'</td><td id="col9">'+real1_3+'</td><td id="col10">'+real1_4+'</td><td id="col11">'+real2_1+'</td><td id="col12">'+real2_2+'</td><td id="col13">'+real2_3+'</td><td id="col14">'+real2_4+'</td><td id="col15">'+real3_1+'</td><td id="col16">'+real3_2+'</td><td id="col17">'+real3_3+'</td><td id="col18">'+real3_4+'</td><td id="col19">'+real4_1+'</td><td id="col20">'+real4_2+'</td><td id="col21">'+real4_3+'</td><td id="col22">'+real4_4+'</td><td id="col23">'+real5_1+'</td><td id="col24">'+real5_2+'</td><td id="col25">'+real5_3+'</td><td id="col26">'+real5_4+'</td><td id="col27">'+ket1+'</td><td id="col28">'+ket2+'</td><td id="col29">'+array[i][1]+'</td> </tr>';
+                                        var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col28" style="font-size:80%;border-style:ridge;">'+ket2+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                         $("#tabgrafik > tbody").append(tb_gov);
                                     }
                                 }
@@ -2859,34 +2871,34 @@
 
         function headyearly_sdg_disagre() {
             var th = "<tr>";
-            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target1' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun1' style='vertical-align:middle;' colspan='5'> <span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span> </th>";
-            th += "<th id='th_realisasi_anggaran1' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber1' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku1' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Disaggregasi</th>";
+            th += "<th id='th_satuan1' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target1' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun1' style='vertical-align:middle;border-style:ridge;' colspan='5'> <span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span> </th>";
+            th += "<th id='th_realisasi_anggaran1' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber1' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku1' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5_a' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11_a' colspan='1'></th>";
-            th += "<th id='tahun12_a' colspan='1'></th>";
-            th += "<th id='tahun13_a' colspan='1'></th>";
-            th += "<th id='tahun14_a' colspan='1'></th>";
-            th += "<th id='tahun15_a' colspan='1'></th>";
+            th += "<th id='tahun11_a' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12_a' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13_a' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14_a' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15_a' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "</tr>";
             $("#tabsdg_disagre > thead").append(th);
 //            var row = "<tr>";
@@ -2901,33 +2913,33 @@
         function headyearly_sdg() {
             var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan2' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun2' style='vertical-align:middle;' colspan='5'><span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran2' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber2' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku2' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_satuan2' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target2' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun2' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span></th>";
+            th += "<th id='th_realisasi_anggaran2' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber2' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku2' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5_' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11_' colspan='1'></th>";
-            th += "<th id='tahun12_' colspan='1'></th>";
-            th += "<th id='tahun13_' colspan='1'></th>";
-            th += "<th id='tahun14_' colspan='1'></th>";
-            th += "<th id='tahun15_' colspan='1'></th>";
+            th += "<th id='tahun11_' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12_' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13_' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14_' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15_' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "</tr>";
             $("#tabsdg > thead").append(th);
 //            var row = "<tr>";
@@ -2942,33 +2954,33 @@
         function headyearly() {
             var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target3' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;' colspan='5'><span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber3' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku3' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span></th>";
+            th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11' colspan='1'></th>";
-            th += "<th id='tahun12' colspan='1'></th>";
-            th += "<th id='tahun13' colspan='1'></th>";
-            th += "<th id='tahun14' colspan='1'></th>";
-            th += "<th id='tahun15' colspan='1'></th>";
+            th += "<th id='tahun11' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
-            th += "<th>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
 //            var row = "<tr>";
@@ -2982,39 +2994,39 @@
 
         function headsemesterly_sdg_disagre() {
             var th = "<tr>";
-            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target1' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun1' style='vertical-align:middle;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran1' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber1' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku1' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Disaggregasi</th>";
+            th += "<th id='th_satuan1' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target1' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun1' style='vertical-align:middle;border-style:ridge;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
+            th += "<th id='th_realisasi_anggaran1' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber1' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku1' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5_a' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11_a' colspan='2'></th>";
-            th += "<th id='tahun12_a' colspan='2'></th>";
-            th += "<th id='tahun13_a' colspan='2'></th>";
-            th += "<th id='tahun14_a' colspan='2'></th>";
-            th += "<th id='tahun15_a' colspan='2'></th>";
+            th += "<th id='tahun11_a' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12_a' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13_a' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14_a' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15_a' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "</tr>";
             $("#tabsdg_disagre > thead").append(th);
 //            var row = "<tr>";
@@ -3028,38 +3040,38 @@
         function headsemesterly_sdg() {
             var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan2' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun2' style='vertical-align:middle;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran2' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber2' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku2' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_satuan2' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target2' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun2' style='vertical-align:middle;border-style:ridge;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
+            th += "<th id='th_realisasi_anggaran2' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber2' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku2' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5_' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11_' colspan='2'></th>";
-            th += "<th id='tahun12_' colspan='2'></th>";
-            th += "<th id='tahun13_' colspan='2'></th>";
-            th += "<th id='tahun14_' colspan='2'></th>";
-            th += "<th id='tahun15_' colspan='2'></th>";
+            th += "<th id='tahun11_' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12_' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13_' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14_' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15_' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "</tr>";
             $("#tabsdg > thead").append(th);
 //            var row = "<tr>";
@@ -3073,38 +3085,38 @@
         function headsemesterly() {
             var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target3' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber3' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku3' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
+            th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11' colspan='2'></th>";
-            th += "<th id='tahun12' colspan='2'></th>";
-            th += "<th id='tahun13' colspan='2'></th>";
-            th += "<th id='tahun14' colspan='2'></th>";
-            th += "<th id='tahun15' colspan='2'></th>";
+            th += "<th id='tahun11' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
 //            var row = "<tr>";
@@ -3118,49 +3130,49 @@
 
         function headquarterly_sdg_disagre() {
             var th = "<tr>";
-            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan1' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target1' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun1' style='vertical-align:middle;' colspan='20'><span class='lang_indo'>Realisasi Per Quarter</span><span class='lang_eng' style='display:none'>Quarterly Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran1' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber1' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku1' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Disaggregasi</th>";
+            th += "<th id='th_satuan1' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target1' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun1' style='vertical-align:middle;border-style:ridge;' colspan='20'><span class='lang_indo'>Realisasi Per Quarter</span><span class='lang_eng' style='display:none'>Quarterly Realization</span></th>";
+            th += "<th id='th_realisasi_anggaran1' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber1' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku1' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4_a' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5_a' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5_a' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11_a' colspan='4'></th>";
-            th += "<th id='tahun12_a' colspan='4'></th>";
-            th += "<th id='tahun13_a' colspan='4'></th>";
-            th += "<th id='tahun14_a' colspan='4'></th>";
-            th += "<th id='tahun15_a' colspan='4'></th>";
+            th += "<th id='tahun11_a' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12_a' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13_a' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14_a' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15_a' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
             th += "</tr>";
             $("#tabsdg_disagre > thead").append(th);
 //            var row = "<tr>";
@@ -3174,48 +3186,48 @@
         function headquarterly_sdg() {
             var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan2' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target2' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun2' style='vertical-align:middle;' colspan='20'><span class='lang_indo'>Realisasi Per Quarter</span><span class='lang_eng' style='display:none'>Quarterly Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran2' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber2' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku2' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_satuan2' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target2' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun2' style='vertical-align:middle;border-style:ridge;' colspan='20'><span class='lang_indo'>Realisasi Per Quarter</span><span class='lang_eng' style='display:none'>Quarterly Realization</span></th>";
+            th += "<th id='th_realisasi_anggaran2' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber2' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku2' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4_' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5_' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5_' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11_' colspan='4'></th>";
-            th += "<th id='tahun12_' colspan='4'></th>";
-            th += "<th id='tahun13_' colspan='4'></th>";
-            th += "<th id='tahun14_' colspan='4'></th>";
-            th += "<th id='tahun15_' colspan='4'></th>";
+            th += "<th id='tahun11_' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12_' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13_' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14_' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15_' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
             th += "</tr>";
             $("#tabsdg > thead").append(th);
 //            var row = "<tr>";
@@ -3229,48 +3241,48 @@
         function headquarterly() {
             var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target3' style='vertical-align:middle;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;' colspan='20'><span class='lang_indo'>Realisasi Per Quarter</span><span class='lang_eng' style='display:none'>Quarterly Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-            th += "<th id='th_sumber3' style='vertical-align:middle;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku3' style='vertical-align:middle;' rowspan='4'>Pelaku</th>";
+            th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='20'><span class='lang_indo'>Realisasi Per Quarter</span><span class='lang_eng' style='display:none'>Quarterly Realization</span></th>";
+            th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
             th += "</tr>";
             th += "<tr class='trtarget'>";
-            th += "<th id='tahun1' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun2' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun3' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun4' style='vertical-align:middle;' rowspan='3'></th>";
-            th += "<th id='tahun5' style='vertical-align:middle;' rowspan='3'></th>";
+            th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun2' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun3' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun4' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+            th += "<th id='tahun5' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
             th += "</tr>";
             th += "<tr class='trreal'>";
-            th += "<th id='tahun11' colspan='4'></th>";
-            th += "<th id='tahun12' colspan='4'></th>";
-            th += "<th id='tahun13' colspan='4'></th>";
-            th += "<th id='tahun14' colspan='4'></th>";
-            th += "<th id='tahun15' colspan='4'></th>";
+            th += "<th id='tahun11' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
             th += "</tr>";
             th += "<tr>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
-            th += "<th>I</th>";
-            th += "<th>II</th>";
-            th += "<th>III</th>";
-            th += "<th>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
 //            var row = "<tr>";
@@ -4866,6 +4878,19 @@
                         
                 }
         });
+        
+        
+        var tableToExcel = (function() {
+        var uri = 'data:application/vnd.ms-excel;base64,'
+        , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+        , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+        , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+        return function(table, name) {
+        if (!table.nodeType) table = document.getElementById(table)
+        var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+        window.location.href = uri + base64(format(template, ctx))
+        }
+        })()
         
         
     </script>

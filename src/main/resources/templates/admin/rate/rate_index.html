@@ -1459,14 +1459,14 @@
                 //budget indicator
 
                 var header = '';
-                header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Actor</span> <span class="lang_indo">Aktor</span> </th>';
-                header += '<th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Saved / Expected Government / Non Government Program Indicator</span> <span class="lang_indo">Simpan / Program Pemerintah/Non Pemerintah Yang Di Harapkan</span> </th>';
-                header += '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Percent</span><span class="lang_indo">Persentase</span> </th>';
-                header += '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">On Time</span> <span class="lang_indo">Tepat Waktu</span> </th>';
-                header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Percent On Time</span> <span class="lang_indo">Persentase Tepat Waktu</span> </th> ';
-                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Applied</span> <span class="lang_indo">Di Ajukan</span> </th> ';
-                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Approved</span> <span class="lang_indo">Di Setujui</span> </th> ';
-                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Show Report</span> <span class="lang_indo">Lihat Laporan</span> </th> ';                            
+                header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Actor</span> <span style="display:none">/</span> <span class="lang_indo">Aktor</span> </th>';
+                header += '<th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Saved / Expected Government / Non Government Program Indicator</span> <span style="display:none">/</span> <span class="lang_indo">Simpan / Program Pemerintah/Non Pemerintah Yang Di Harapkan</span> </th>';
+                header += '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Percent</span> <span style="display:none">/</span> <span class="lang_indo">Persentase</span> </th>';
+                header += '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">On Time</span> <span style="display:none">/</span> <span class="lang_indo">Tepat Waktu</span> </th>';
+                header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Percent On Time</span> <span style="display:none">/</span> <span class="lang_indo">Persentase Tepat Waktu</span> </th> ';
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Applied</span> <span style="display:none">/</span> <span class="lang_indo">Di Ajukan</span> </th> ';
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Approved</span> <span style="display:none">/</span> <span class="lang_indo">Di Setujui</span> </th> ';
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Show Report</span> <span style="display:none">/</span> <span class="lang_indo">Lihat Laporan</span> </th> ';                            
                 header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
 
                 $('#tabel-entri-sdg').html(header);
@@ -1486,6 +1486,7 @@
                     "responsive":true,
                     "bDestroy": true,
                     "ordering": false,
+                    "paging": false,
                     "ajax": {
                         "url": link1,
                         dataSrc: 'content',
@@ -1503,6 +1504,7 @@
                             if(row[3] == '1'){
                                 var ps = "style='font-size:90%;'";
                                 return "<div "+ps+" ><b>"+row[1]+"</b></div>";
+//                                return "<div "+ps+" ><b>"+row[1]+"</b> <a class='data_all_role' data-catrole='"+row[2]+"' href='#'> - "+row[2]+"00</a></div>";
                             }else{
                                 var ps = "style='font-size:90%; margin-left: 30px'";
 //                                return "<div "+ps+" >"+row[1]+"</div>";
@@ -1563,7 +1565,7 @@
                                 }else{
                                     var ketdt1 = dt[1];
                                 }
-                                return "<div style='font-size:90%;'><a class='id_role_nilai' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt+"</a> / <a class='id_role_nilai' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt1+"</a></div>";
+                                return "<div style='font-size:90%;'><span style='display:none'>'</span><a class='id_role_nilai' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt+"</a> / <a class='id_role_nilai' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt1+"</a></div>";
                             }
                         }},
                         {"data": function (row, data, index, display) {
@@ -1699,7 +1701,7 @@
                                     }else{
                                         var ketdt1 = dt[1];
                                     }
-                                    return "<div style='font-size:90%;'><a class='id_role_date' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt+"</a> / <a class='id_role_date' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt1+"</a></div>";
+                                    return "<div style='font-size:90%;'><span style='display:none'>'</span><a class='id_role_date' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt+"</a> / <a class='id_role_date' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt1+"</a></div>";
                                 }
                                 
                             }else if(row[2] == 'NSA'){
@@ -1739,7 +1741,7 @@
                                     }else{
                                         var ketdt1 = dt[1];
                                     }
-                                    return "<div style='font-size:90%;'><a class='id_role_date' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt+"</a> / <a class='id_role_date' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt1+"</a></div>";
+                                    return "<div style='font-size:90%;'><span style='display:none'>'</span><a class='id_role_date' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt+"</a> / <a class='id_role_date' data-id_role='"+row[0]+"' data-catrole='"+row[2]+"' href='#'>"+ketdt1+"</a></div>";
                                 }
                             }else{
                                 
