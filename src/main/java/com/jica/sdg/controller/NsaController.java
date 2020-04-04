@@ -190,6 +190,19 @@ public class NsaController {
 	    return hasil;
 	}
     
+    @GetMapping("admin/listnsabyid/{id_role}")
+    public @ResponseBody Map<String, Object> listnsabyid(@PathVariable("id_role") int idrole) {
+    	String sql  = "select a.*, b.nm_org, b.nsa_type, b.web_url, b.head_office, b.name_pic, b.pos_pic, b.email_pic, b.hp_pic "
+    			+ "from nsa_profile a left join nsa_detail b on b.id_role = a.id_role "
+    			+ "where a.id_role = :id_role and a.nm_nsa is not null and b.nm_org is not null";
+	    Query query = em.createNativeQuery(sql);
+	    query.setParameter("id_role", idrole);
+	    List list   = query.getResultList();
+	    Map<String, Object> hasil = new HashMap<>();
+	    hasil.put("content",list);
+	    return hasil;
+	}
+    
     @GetMapping("admin/list-get-option-role-nsa-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionNsaProfilList(@PathVariable("id") String id) {
         
