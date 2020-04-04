@@ -602,7 +602,7 @@
                 		type: "GET",
                 		url: urls+"listnsa/"+idprov,
                 		success: function (result) {
-                			console.log(result);
+                			//console.log(result);
                 			if(result.content ==  null){
 	                            if($("#nm_ins_profil").val()=="0"){
 	                            	$("#tambah").hide();
@@ -717,27 +717,24 @@
                 		}
                 	});
                 } else {
-	                $.ajax({
-	                    type: "GET",
-	                    url: urls+'list-getid-nsa-profil/'+id,
-	                    success: function (result1) {
-	                        if(result1.content[0] ==  null){
-	                            if(id_role == id){
+                	$.ajax({
+                		type: "GET",
+                		url: urls+"listnsabyid/"+id,
+                		success: function (result) {
+                			console.log(result);
+                			if(result.content ==  null){
+	                            if($("#nm_ins_profil").val()=="0"){
+	                            	$("#tambah").hide();
+	                            }else if(id_role == id_role){
 	                                $("#tambah").show();
-	                            	$("#export").show();
-	                            }else if(id == '0'){
-	                            	$("#tambah").show();
-	                            	$("#export").show();
-	                            }else if((privilege == 'ADMIN' || privilege == 'SUPER') && id != '0'){
+	                            }else if(id_role == '1'){
 	                                $("#tambah").show();
-	                            	$("#export").show();
 	                            }else{
-	                                $("#tambah").show();
-	                            	$("#export").show();
+	                                $("#tambah").hide();
 	                            }
-	                            
-	                            $('#tabel-nsa-profile').DataTable({
-	                            	responsive: true,
+                			} else {
+                            	var table = $('#tabel-nsa-profile').DataTable({
+                            		responsive: true,
                             		sDom: 'Brtip',
                                     "bLengthChange": false,
                                     "cache": false,
@@ -747,83 +744,12 @@
                                     buttons: [
                     		        	{
                     		        	    extend: 'print',
+                    		                orientation: 'landscape',
+                    		                pageSize: 'A4',
                     		        	    text: 'Print',
                     		        	    exportOptions: {
                     		        	        stripHtml: false,
-                    		        		    columns: [ 0,1,2,3,4,5,6 ]
-                    		        	    }
-                    		        	},
-                    		        	{
-                    		        		extend: 'excelHtml5',
-                    		        		filename: 'Profil Lembaga/Filantropi',
-                    		        		text: 'Save as Excel',
-                    		        		exportOptions: {
-                    		        		    columns: [ 0,1,2,3,4,5,6 ],
-                    		        		    format: {
-                    		        		        body: function(data, column, row) {
-                    		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
-                    		        		            data = data.replace(/<.*?>/g, "");
-                    		        		            data = data.replace("&amp;", "&");
-                    		        		            data = data.replace("&nbsp;", "");
-                    		        		            data = data.replace("&nbsp;", "");
-                    		        		            return data;
-                    		        		        }
-                    		        		    }
-                    		        		}
-                    		        	},
-                    		        ],
-	                                "ajax": {
-	                                    "url": urls+'list-getid-nsa-profil/'+id,
-	                                    dataSrc: 'content',
-	                                },
-	                                "searching": false,
-	                                "columns": [
-	                                    {"data": function (row, data, index, display) {
-	                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-	                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-	                                        '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-	                                    }}
-	                                ],
-	                                "columnDefs": [
-	                                ],
-	                                select: true
-	                            });
-	                        }else{
-	                            $("#tambah").show();
-	                            $("#export").show();
-	                            $('#tabel-nsa-profile').DataTable({
-	                            	responsive: true,
-                            		sDom: 'Brtip',
-                                    "bLengthChange": false,
-                                    "cache": false,
-                                    "autoWidth": true,
-                                    "responsive":true,
-                                    "bDestroy": true,
-                                    buttons: [
-                    		        	{
-                    		        	    extend: 'print',
-                    		        	    text: 'Print',
-                    		        	    exportOptions: {
-                    		        	        stripHtml: false,
-                    		        		    columns: [ 0,1,2,3,4,5,6 ]
+                    		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 ]
                     		        	    }
                     		        	},
                     		        	{
@@ -831,7 +757,7 @@
                     		        		filename: 'Profil Non-State Actor',
                     		        		text: 'Save as Excel',
                     		        		exportOptions: {
-                    		        		    columns: [ 0,1,2,3,4,5,6 ],
+                    		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 ],
                     		        		    format: {
                     		        		        body: function(data, column, row) {
                     		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
@@ -845,51 +771,70 @@
                     		        		}
                     		        	},
                     		        ],
-	                                "ajax": {
-	                                    "url": urls+'list-getid-nsa-profil/'+id,
-	                                    dataSrc: 'content',
-	                                },
-	                                "searching": false,
-	                                "columns": [
-	                                    {"data": function (row, data, index, display) {
-	                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-	                                    }},
-	                                    {"data": function (row, data, index, display) {
-	                                        var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-	                                        if(id_role == row.id_role||id_prov==row.id_prov){
-	                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-	                                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-	                                        }else if(id_role == '1'){
-	                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-	                                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-	                                        }else{
-	                                            return '';
-	                                        }
-	                                        
-	                                    }}
-	                                ],
-	                                "columnDefs": [
-	                                ],
-	                                select: true
-	                            });
-	                        }
-	                    },
-	                });
+                                    "ajax": {
+                                        "url": urls+'listnsabyid/'+id,
+                                        dataSrc: 'content',
+                                    },
+                                    "searching": false,
+                                    "columns": [
+                                        {"data": function (row, data, index, display) {
+                                        	return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+(tipensa[row[9]-1])+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'></div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[10]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[11]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[12]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            return "<div style='font-size:90%;'>"+row[15]+"</div>";
+                                        }},
+                                        {"data": function (row, data, index, display) {
+                                            var dataid = row[1]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[2];
+                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                            '<button data-id="'+row[1]+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                                        }}
+                                    ],
+                                    "columnDefs": [
+                                    ],
+                                    select: true
+                            	});
+                			}
+                		}
+                	});
                 }
             });
             
