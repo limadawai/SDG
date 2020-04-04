@@ -156,6 +156,14 @@
                             	<span class="lang_indo">Simpan</span>
                             	<span class="lang_eng" style="display: none">Submit</span>
                             </button>
+                            <button type="button" id="apply" class="btn btn-primary">
+                            	<span class="lang_indo">Apply</span>
+                            	<span class="lang_eng" style="display: none">Apply</span>
+                            </button>
+                            <button type="button" id="unapply" class="btn btn-danger" style="display: none">
+                            	<span class="lang_indo">UnApply</span>
+                            	<span class="lang_eng" style="display: none">UnApply</span>
+                            </button>
                         </div>
                     </form>
                 </div>
@@ -437,9 +445,11 @@
 	        var titleApp = "Anda Yakin";
 	        var messApp = "Apply Data ini?";
 	        var buttApp = 'Ya, Apply data ini!';
+	        var buttUnApp = 'Ya, Batal Apply data ini!';
 	        var titleOk	= "Hapus";
 	        var messOk = "Data berhasil dihapus";
 	        var messNOk = "Data tidak dapat dihapus";
+                var messUnApp = "Batal Terapkan data ini?";
 	        var required = "Harus diisi";
 	        function bhs(cek){
                     if(cek){
@@ -455,6 +465,8 @@
 	    	        titleApp = "Anda Yakin";
 	    	        messApp = "Apply Data ini?";
 	    	        buttApp = 'Ya, Apply data ini!';
+                        buttUnApp = 'Ya, Batal Apply data ini!';
+                        messUnApp = "UnApply data ini?";
                     }else{	    	        
                         $(".lang_indo").hide();
                         $(".lang_eng").show();
@@ -468,6 +480,8 @@
 	    	        titleApp = "Are you sure";
 	    	        messApp = "Apply this data?";
 	    	        buttApp = 'Ya, Apply this data!';
+                        buttUnApp = 'Ya, UnApply this data!';
+                        messUnApp = "Unapply this data?";
                     }
 	        }
             if(lang){
@@ -538,14 +552,24 @@
                     success: function (result1) {
                         if(result1.content == "1"){
                             $('#simpan').hide();
+                            $('#apply').hide();
+                            $('#unapply').show();
                         }else if(result1.content == "2"){
                             $('#simpan').hide();
+                            $('#apply').hide();
+                            $('#unapply').hide();
                         }else if(result1.content == "3"){
                             $('#simpan').hide();
+                            $('#apply').hide();
+                            $('#unapply').show();
                         }else if(result1.content == "4"){
                             $('#simpan').hide();
+                            $('#apply').hide();
+                            $('#unapply').hide();
                         }else{
                             $('#simpan').show();
+                            $('#apply').show();
+                            $('#unapply').hide();
                         }
                     }
                 });
@@ -571,14 +595,24 @@
                     success: function (result1) {
                         if(result1.content == "1"){
                             $('#simpan').hide();
+                            $('#apply').hide();
+                            $('#unapply').show();
                         }else if(result1.content == "2"){
                             $('#simpan').hide();
+                            $('#apply').hide();
+                            $('#unapply').hide();
                         }else if(result1.content == "3"){
                             $('#simpan').hide();
+                            $('#apply').hide();
+                            $('#unapply').show();
                         }else if(result1.content == "4"){
                             $('#simpan').hide();
+                            $('#apply').hide();
+                            $('#unapply').hide();
                         }else{
                             $('#simpan').show();
+                            $('#apply').show();
+                            $('#unapply').hide();
                         }
                     }
                 });
@@ -2204,6 +2238,126 @@
                     // $(this).html("RAN "+teks);
                     alert("teks");
                 }
+            });
+            
+            
+            //apply
+            $("#simpan_").on('click', '#apply', function () {
+                var id_form_type    = '0';
+                var id_role         = $("#id_role").val();
+                var v_dataid        = $("#periode").val();
+                var v_data_id       = v_dataid.split("###");
+                
+                var id_monper       = v_data_id[0];
+                var year            = v_data_id[1];
+                var cat_role        = $("#catrole").val();
+                var pil_prog        = $("#pil_prog").val();
+                if(cat_role == "Government"){
+                    if(pil_prog == "budget"){
+                        var tipe_approve = "entry_gov_budget";
+                    }else if(pil_prog == "indicator"){
+                        var tipe_approve = "entry_gov_indicator";
+                    }else{}
+                }else if(cat_role == "NSA"){
+                    if(pil_prog == "budget"){
+                        var tipe_approve = "entry_nsa_budget";
+                    }else if(pil_prog == "indicator"){
+                        var tipe_approve = "entry_nsa_indicator";
+                    }else{}
+                }else{}
+                var approval    = "1";
+                var type        = tipe_approve;
+                var period      = $("#period").val();
+                var dataPost    = JSON.stringify({
+                    'id_form_type': id_form_type,
+                    'id_role': id_role,
+                    'id_monper': id_monper,
+                    'year': year,
+                    'approval': approval,
+                    'type': type,
+                    'periode': period,
+                });
+                $('.addModal').modal('hide');
+                swal({
+                    title: titleApp,
+                    text: messApp,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttApp
+                }).then(function () {
+                    $.ajax({
+                    type: "POST",
+                    url: urls+'save-approval',
+                    beforeSend : function(xhr){
+                            xhr.setRequestHeader(header,token);
+                    },
+                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                    data: dataPost,
+                    success: function (result) {
+                        grid();
+                        $('.addModal').modal('hide');
+                    },
+                });
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                        $('.addModal').modal('show');
+                    }
+                });
+            }).on('click', '#unapply', function () {
+            	var id_form_type    = '0';
+                var id_role         = $("#id_role").val();
+                var v_dataid        = $("#periode").val();
+                var v_data_id       = v_dataid.split("###");
+                
+                var id_monper       = v_data_id[0];
+                var year            = v_data_id[1];
+                var cat_role        = $("#catrole").val();
+                var pil_prog        = $("#pil_prog").val();
+                if(cat_role == "Government"){
+                    if(pil_prog == "budget"){
+                        var tipe_approve = "entry_gov_budget";
+                    }else if(pil_prog == "indicator"){
+                        var tipe_approve = "entry_gov_indicator";
+                    }else{}
+                }else if(cat_role == "NSA"){
+                    if(pil_prog == "budget"){
+                        var tipe_approve = "entry_nsa_budget";
+                    }else if(pil_prog == "indicator"){
+                        var tipe_approve = "entry_nsa_indicator";
+                    }else{}
+                }else{}
+                var approval    = "1";
+                var type        = tipe_approve;
+                var period      = $("#period").val();    
+                $('.addModal').modal('hide');
+                swal({
+                    title: titleApp,
+                    text: messUnApp,
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: buttUnApp
+                }).then(function () {
+                	$.ajax({
+                        type: "DELETE",
+                        url: urls+'unapply/'+type+'/'+year+'/'+id_monper+'/'+period+'/'+id_role,
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        headers:{'Accept':'application/json','Content-Type':'application/json'},
+                        success: function (result) {
+                            grid();
+                            $('.addModal').modal('hide');
+                        },
+                    });
+                }, function (dismiss) {
+                    if (dismiss === 'cancel') {
+                        $('.addModal').modal('show');
+                    }
+                });
             });
             
             var tableToExcel = (function() {
