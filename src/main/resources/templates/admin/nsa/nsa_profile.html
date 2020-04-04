@@ -602,9 +602,10 @@
                 		type: "GET",
                 		url: urls+"listnsa/"+idprov,
                 		success: function (result) {
-                			//console.log(result);
-                			if(result.content ==  null){
-	                            if($("#nm_ins_profil").val()=="0"){
+                			//console.log(result.content.length);
+                			if(result.content.length == 0){
+                				$("#tambah").show();
+	                            /* if($("#nm_ins_profil").val()=="0"){
 	                            	$("#tambah").hide();
 	                            }else if(id_role == id_role){
 	                                $("#tambah").show();
@@ -612,7 +613,7 @@
 	                                $("#tambah").show();
 	                            }else{
 	                                $("#tambah").hide();
-	                            }
+	                            } */
                 			} else {
                             	var table = $('#tabel-nsa-profile').DataTable({
                             		responsive: true,
@@ -723,7 +724,7 @@
                 		success: function (result) {
                 			console.log(result);
                 			if(result.content ==  null){
-	                            if($("#nm_ins_profil").val()=="0"){
+	                            /* if($("#nm_ins_profil").val()=="0"){
 	                            	$("#tambah").hide();
 	                            }else if(id_role == id_role){
 	                                $("#tambah").show();
@@ -731,7 +732,7 @@
 	                                $("#tambah").show();
 	                            }else{
 	                                $("#tambah").hide();
-	                            }
+	                            } */
                 			} else {
                             	var table = $('#tabel-nsa-profile').DataTable({
                             		responsive: true,
