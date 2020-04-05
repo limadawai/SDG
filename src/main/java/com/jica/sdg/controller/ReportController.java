@@ -1705,9 +1705,36 @@ public class ReportController {
     	queryIndGov.setParameter("id_goals", id_goals);
     	queryIndGov.setParameter("id_gov_indicator", id_gov_indicator);
         List listIndGov = queryIndGov.getResultList();
+        
+      //Indicator GOV
+        StringBuilder sqlIndRan = new StringBuilder();
+        sqlIndRan.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,d.budget_allocation,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlIndRan.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
+    	}
+    	sqlIndRan.append(" g.nm_role FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') and a.id_gov_indicator = :id_gov_indicator \r\n" + 
+    			" ");
+    	sqlIndRan.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGovRan = manager.createNativeQuery(sqlIndRan.toString());
+    	queryIndGovRan.setParameter("id_prov", id_prov);
+    	queryIndGovRan.setParameter("id_monper", id_monper);
+    	queryIndGovRan.setParameter("id_goals", id_goals);
+    	queryIndGovRan.setParameter("id_gov_indicator", id_gov_indicator);
+        List listIndGovRan = queryIndGovRan.getResultList();
 
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("indGov",listIndGov);
+        hasil.put("ranradGov",listIndGovRan);
         return hasil;
     }
     
@@ -1823,9 +1850,37 @@ public class ReportController {
     	queryIndGov.setParameter("id_target", id_target);
     	queryIndGov.setParameter("id_gov_indicator", id_gov_indicator);
         List listIndGov = queryIndGov.getResultList();
+        
+      //Indicator GOV
+        StringBuilder sqlIndRan = new StringBuilder();
+        sqlIndRan.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,d.budget_allocation,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlIndRan.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
+    	}
+    	sqlIndRan.append(" g.nm_role FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') and a.id_gov_indicator = :id_gov_indicator \r\n" + 
+    			" ");
+    	sqlIndRan.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGovRan = manager.createNativeQuery(sqlIndRan.toString());
+    	queryIndGovRan.setParameter("id_prov", id_prov);
+    	queryIndGovRan.setParameter("id_monper", id_monper);
+    	queryIndGovRan.setParameter("id_goals", id_goals);
+    	queryIndGovRan.setParameter("id_target", id_target);
+    	queryIndGovRan.setParameter("id_gov_indicator", id_gov_indicator);
+        List listIndGovRan = queryIndGovRan.getResultList();
 
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("indGov",listIndGov);
+        hasil.put("ranradGov",listIndGovRan);
         return hasil;
     }
     
@@ -1889,8 +1944,37 @@ public class ReportController {
     	queryIndGov.setParameter("id_gov_indicator", id_gov_indicator);
     	queryIndGov.setParameter("id_indicator", id_indicator);
         List listIndGov = queryIndGov.getResultList();
+        
+      //Indicator GOV
+        StringBuilder sqlIndRan = new StringBuilder();
+        sqlIndRan.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,d.budget_allocation,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlIndRan.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
+    	}
+    	sqlIndRan.append(" g.nm_role FROM gov_map a\r\n" + 
+    			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
+    			" left join gov_activity d on c.id_activity = d.id\r\n" + 
+    			" left join gov_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join gov_funding i on a.id_gov_indicator = i.id_gov_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_gov_indicator = :id_gov_indicator \r\n" + 
+    			" ");
+    	sqlIndRan.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGovRan = manager.createNativeQuery(sqlIndRan.toString());
+    	queryIndGovRan.setParameter("id_prov", id_prov);
+    	queryIndGovRan.setParameter("id_monper", id_monper);
+    	queryIndGovRan.setParameter("id_goals", id_goals);
+    	queryIndGovRan.setParameter("id_target", id_target);
+    	queryIndGovRan.setParameter("id_gov_indicator", id_gov_indicator);
+    	queryIndGovRan.setParameter("id_indicator", id_indicator);
+        List listIndGovRan = queryIndGovRan.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("indGov",listIndGov);
+        hasil.put("ranradGov",listIndGovRan);
         return hasil;
     }
     
@@ -1949,9 +2033,36 @@ public class ReportController {
     	queryIndNsa.setParameter("id_goals", id_goals);
     	queryIndNsa.setParameter("id_nsa_indicator", id_nsa_indicator);
         List listIndNsa = queryIndNsa.getResultList();
+        
+        //Indicator GOV
+        StringBuilder sqlIndRan = new StringBuilder();
+        sqlIndRan.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,d.budget_allocation,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlIndRan.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
+    	}
+    	sqlIndRan.append(" g.nm_role FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') and a.id_nsa_indicator = :id_nsa_indicator \r\n" + 
+    			" ");
+    	sqlIndRan.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGovRan = manager.createNativeQuery(sqlIndRan.toString());
+    	queryIndGovRan.setParameter("id_prov", id_prov);
+    	queryIndGovRan.setParameter("id_monper", id_monper);
+    	queryIndGovRan.setParameter("id_goals", id_goals);
+    	queryIndGovRan.setParameter("id_nsa_indicator", id_nsa_indicator);
+        List listIndGovRan = queryIndGovRan.getResultList();
 
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("indGov",listIndNsa);
+        hasil.put("ranradGov",listIndGovRan);
         return hasil;
     }
     
@@ -2012,9 +2123,37 @@ public class ReportController {
     	queryIndNsa.setParameter("id_nsa_indicator", id_nsa_indicator);
     	queryIndNsa.setParameter("id_target", id_target);
         List listIndNsa = queryIndNsa.getResultList();
+        
+      //Indicator GOV
+        StringBuilder sqlIndRan = new StringBuilder();
+        sqlIndRan.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,d.budget_allocation,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlIndRan.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
+    	}
+    	sqlIndRan.append(" g.nm_role FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') and a.id_nsa_indicator = :id_nsa_indicator \r\n" + 
+    			" ");
+    	sqlIndRan.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGovRan = manager.createNativeQuery(sqlIndRan.toString());
+    	queryIndGovRan.setParameter("id_prov", id_prov);
+    	queryIndGovRan.setParameter("id_monper", id_monper);
+    	queryIndGovRan.setParameter("id_goals", id_goals);
+    	queryIndGovRan.setParameter("id_nsa_indicator", id_nsa_indicator);
+    	queryIndGovRan.setParameter("id_target", id_target);
+        List listIndGovRan = queryIndGovRan.getResultList();
 
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("indGov",listIndNsa);
+        hasil.put("ranradGov",listIndGovRan);
         return hasil;
     }
     
@@ -2077,9 +2216,38 @@ public class ReportController {
     	queryIndNsa.setParameter("id_target", id_target);
     	queryIndNsa.setParameter("id_indicator", id_indicator);
         List listIndNsa = queryIndNsa.getResultList();
+        
+      //Indicator GOV
+        StringBuilder sqlIndRan = new StringBuilder();
+        sqlIndRan.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,d.budget_allocation,\r\n");
+    	for(int i = start_year; i<=end_year;i++) {
+    		//target
+    		sqlIndRan.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
+    	}
+    	sqlIndRan.append(" g.nm_role FROM nsa_map a\r\n" + 
+    			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
+    			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
+    			" left join nsa_program f on f.id = c.id_program\r\n" + 
+    			" left join ref_role g on d.id_role = g.id_role\r\n" + 
+    			" left join ref_unit h on c.unit = h.id_unit\r\n" + 
+    			" left join nsa_funding i on a.id_nsa_indicator = i.id_nsa_indicator and a.id_monper = i.id_monper\r\n" + 
+    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_nsa_indicator = :id_nsa_indicator \r\n" + 
+    			" ");
+    	sqlIndRan.append(" ORDER BY 1,2,3 ");
+    	Query queryIndGovRan = manager.createNativeQuery(sqlIndRan.toString());
+    	queryIndGovRan.setParameter("id_prov", id_prov);
+    	queryIndGovRan.setParameter("id_monper", id_monper);
+    	queryIndGovRan.setParameter("id_goals", id_goals);
+    	queryIndGovRan.setParameter("id_nsa_indicator", id_nsa_indicator);
+    	queryIndGovRan.setParameter("id_target", id_target);
+    	queryIndGovRan.setParameter("id_indicator", id_indicator);
+        List listIndGovRan = queryIndGovRan.getResultList();
 
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("indGov",listIndNsa);
+        hasil.put("ranradGov",listIndGovRan);
         return hasil;
     }
     

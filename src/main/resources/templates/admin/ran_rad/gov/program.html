@@ -145,7 +145,7 @@
 				    <div class="controls">
                          <select id="rel_prov" name="rel_prov" multiple="multiple" style="width: 100%" class="input-block-level">
 				    		<option value="all">ALL</option>
-	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
+	        				<option th:each="f:${provMap}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
 				    </div>
 				  </div>
