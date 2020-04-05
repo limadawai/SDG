@@ -45,58 +45,85 @@
                         <h5>Tabel Profil NSA</h5>
                     </div>
                     <div class="widget-content">
+<!--                        <div class="row-fluid">
+                            <div class="span6">
+                            </div>
+                            <div class="span6" align="right">
+                                <div class="input-append">
+                                    <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
+                                    <span class="add-on"><i class="icon-search"></i></span>
+                                </div>
+                            </div>
+                    	</div>-->
+                    	<div class="row-fluid">
+                    		<div class="span6">
+                    			<div class="input-append">
+								  <input placeholder="Search..." class="span12" id="text-cari" type="text"/>
+								  <span class="add-on"><i class="icon-search"></i></span>
+								</div>
+                    		</div>
                         <div class="row-fluid">
-                            <div class="span12" style="overflow-x:scroll;">
+                            <div class="span12">
                                 <table  id="tabel-nsa-profile" class="table table-striped table-bordered">
-                                    <thead>
+                                    <thead >
                                         <tr>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                No.
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span>No</span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Nama Profil NSA
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="head-tabel" data-lang_eng="NSA Profile Name" data-lang_indo="Nama Profil NSA"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Pencapaian
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">Achievement</span> -->
+                                                <span class="head-tabel" data-lang_eng="Achievement" data-lang_indo="Pencapaian"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Lokasi
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">Location</span> -->
+                                                <span class="head-tabel" data-lang_eng="Location" data-lang_indo="Lokasi"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Penerima Manfaat
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">Beneficiaries</span> -->
+                                                <span class="head-tabel" data-lang_eng="Beneficiaries" data-lang_indo="Penerima Manfaat"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Tahun Implementasi
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">Year of Implementation</span> -->
+                                                <span class="head-tabel" data-lang_eng="Year of Implementation" data-lang_indo="Tahun Implementasi"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Partner
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">Major Partners</span> -->
+                                                <span>Partner</span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Institusi
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">Institution Type</span> -->
+                                                <span class="head-tabel" data-lang_eng="Institution Type" data-lang_indo="Tipe Institusi"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Atribut
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">Website</span> -->
+                                                <span>Website</span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Situs
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">HQ Location</span> -->
+                                                <span class="head-tabel" data-lang_eng="HQ Location" data-lang_indo="Lokasi"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Lokasi
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">HQ Location</span> -->
+                                                <span class="head-tabel" data-lang_eng="Organization Representative" data-lang_indo="Perwakilan Organisasi"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Perwakilan Organisasi
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">HQ Location</span> -->
+                                                <span class="head-tabel" data-lang_eng="Organization Representative Position" data-lang_indo="Posisi Perwakilan Organisasi"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Posisi Perwakilan Organisasi
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">HQ Location</span> -->
+                                                <span class="head-tabel" data-lang_eng="Organization Representative Email" data-lang_indo="Email Perwakilan Organisasi"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Email Perwakilan Organisasi
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">HQ Location</span> -->
+                                                <span class="head-tabel" data-lang_eng="Organization Representative Contact" data-lang_indo="Kontak Perwakilan Organisasi"></span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Kontak Perwakilan Organisasi
-                                            </th>
-                                            <th style="text-align:center;font-size:80%;vertical-align:middle;">
-                                                Aksi
+                                            <th style="text-align:center;font-size:80%;">
+                                                <!-- <span class="lang_eng" style="display:none">Action</span> -->
+                                                <span>Action</span>
                                             </th>
                                         </tr>
                                     </thead>
@@ -320,14 +347,149 @@
             var id_prov     = [[${id_prov}]];
             var privilege   = [[${privilege}]];
 			
+            function headtabel(){
+	        	var text;
+	        	if($("#fs").is(':checked')){
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_indo'));
+        			});
+	        	}else{
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_eng'));
+        			});
+	        	}
+	        }
+	        headtabel();
+	        $('#fs').on('change', function(e){
+	        	 headtabel();
+	        });
             $(document).attr("title","Non-State Actor Profile");
             
-            var tipensa = [
-            	"Civil Society Organization/Organisasi Kepemudaan/Komunitas","Organisasi Non-Pemerintah/LSM",
-            	"Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)","Sektor bisnis",
-            	"Institusi akademis","Media dan asosiasi media",
-            	"Organisasi multilateral atau bilateral","Organisasi filantropi","Lainnya"
-            ];
+            var tabel = $('#tabel-nsa-profile').DataTable({
+            	responsive: true,
+				sDom: 'Brtip',
+				"bLengthChange": false,
+				"cache": false,
+				"autoWidth": true,
+				"responsive":true,
+				"scrollX": true,
+                buttons: [
+		        	{
+		        	    extend: 'print',
+		        	    text: 'Print',
+		        	    exportOptions: {
+		        	        stripHtml: false,
+		        	        columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13 ]
+		        	    }
+		        	},
+		        	{
+		        		extend: 'excelHtml5',
+		        		filename: 'Profil Non-State Actor',
+		        		text: 'Save as Excel',
+		        		exportOptions: {
+		        		    format: {
+		        		        body: function(data, column, row) {
+		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+		        		            data = data.replace(/<.*?>/g, "");
+		        		            data = data.replace("&amp;", "&");
+		        		            data = data.replace("&nbsp;", "");
+		        		            data = data.replace("&nbsp;", "");
+		        		            return data;
+		        		        }
+		        		    },
+		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13 ]
+		        		}
+		        	},
+		        ],
+                "ajax": {
+                    "url": urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val(),
+                    dataSrc: 'content',
+                },
+                "searching": false,
+                "columns": [
+                    {"data": function (row, data, index, display) {
+                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[1]?row[1]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[2]?row[2]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[3]?row[3]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[4]?row[4]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[5]?row[5]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[6]?row[6]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                    	var tipe;
+                    	if(row[7] == '1'){
+                             tipe = 'Civil Society Organization/Organisasi Kepemudaan/Komunitas';
+                        }else if(row[7] == '2'){
+                             tipe = 'Organisasi Non-Pemerintah/LSM';
+                        }else if(row[7] == '3'){
+                             tipe = 'Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)';
+                        }else if(row[7] == '4'){
+                             tipe = 'Sektor bisnis';
+                        }else if(row[7] == '5'){
+                             tipe = 'Institusi akademis';
+                        }else if(row[7] == '6'){
+                             tipe = 'Media dan asosiasi media';
+                        }else if(row[7] == '7'){
+                             tipe = 'Organisasi multilateral atau bilateral';
+                        }else if(row[7] == '8'){
+                             tipe = 'Organisasi filantropi';
+                        }else if(row[7] == '9'){
+                             tipe = 'Lainnya';
+                        }else{
+							tipe='';
+                        }
+                        return "<div style='font-size:90%;'>"+(tipe?tipe:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[8]?row[8]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[9]?row[9]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[10]?row[10]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[11]?row[11]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[12]?row[12]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[13]?row[13]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        var dataid = row[0]+'###'+row[1]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[14];
+                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
+                        '<button data-id="'+row[0]+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                    }}
+                ],
+                "columnDefs": [
+                ],
+                select: true
+            });
+            
+            $('#text-cari').on( 'keyup', function () {
+				var val=$(this).val();
+				tabel.search(val).draw();
+			});
+            
+            $('#nm_nsa_profil').on('change', function(){
+            	tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$(this).val()+'/'+$('#id_prov').val()).load();
+            });
             
             if(id_role == '1'){
                 
@@ -347,6 +509,7 @@
                         if(privilege == 'ADMIN'){
                     
                         }else{
+        //                    alert(id_role);
                             $("#nm_nsa_profil").val(id_role).trigger("change").attr('disabled',true);
                         }
                     }
@@ -357,8 +520,25 @@
                     type: "GET",
                     url: urls+'list-getid-nsa-profil/'+id_role,
                     success: function (result1) {
+//                        console.log(result1.content[0].id_nsa)
                         if(result1.content[0] ==  null){
+//                            jika kosong
+//                            $('#id_nsa').val('');
+//                            $('#id_role').val(id);
+//                            $('#nm_nsa').val('');
+//                            $('#achieve_nsa').val('');
+//                            $('#loc_nsa').val('');
+//                            $('#beneficiaries').val('');
+//                            $('#year_impl').val('');
+//                            $('#major_part').val('');
+//
+//                            $('.addModal').modal("show");
+//                            $('#simpan_').show();
+//                            $('#update_').hide();
+                            
+//                            alert('kosong');
                             if($("#nm_nsa_profil").val()=="0"){
+//                            	$("#tambah").hide();
                             	$("#tambah").show();
                             	$("#export").show();
                             }else if(id_role == id_role){
@@ -368,163 +548,22 @@
                                 $("#tambah").show();
                             	$("#export").show();
                             }else{
+//                                $("#tambah").hide();
                                 $("#tambah").show();
                             	$("#export").show();
                             }
                             
-                            $('#tabel-nsa-profile').DataTable({
-                            	"serverSide": true,
-                                responsive: true,
-                                sDom: 'Brtip',
-                                "bLengthChange": false,
-                                "cache": false,
-                                "autoWidth": true,
-                                "responsive":true,
-                                "bDestroy": true,
-                                buttons: [
-                		        	{
-                		        	    extend: 'print',
-                		        	    text: 'Print',
-                		        	    exportOptions: {
-                		        	        stripHtml: false,
-                		        	        columns: [ 0,1,2,3,4,5,6 ]
-                		        	    }
-                		        	},
-                		        	{
-                		        		extend: 'excelHtml5',
-                		        		filename: 'Profil Non-State Actor',
-                		        		text: 'Save as Excel',
-                		        		exportOptions: {
-                		        		    format: {
-                		        		        body: function(data, column, row) {
-                		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
-                		        		            data = data.replace(/<.*?>/g, "");
-                		        		            data = data.replace("&amp;", "&");
-                		        		            data = data.replace("&nbsp;", "");
-                		        		            data = data.replace("&nbsp;", "");
-                		        		            return data;
-                		        		        }
-                		        		    },
-                		        		    columns: [ 0,1,2,3,4,5,6 ]
-                		        		}
-                		        	},
-                		        ],
-                                "ajax": {
-                                    "url": urls+'list-getid-nsa-profil/'+id_role,
-                                    dataSrc: 'content',
-                                },
-                                "searching": false,
-                                "columns": [
-                                    {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                                        '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                    }}
-                                ],
-                                "columnDefs": [
-                                ],
-                                select: true
-                            });
+                            tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
+                            
+                            //tutup kosong
                         }else{
+//                            alert('isi');
+//                            jika isi
                             $("#tambah").hide();
                             $('#export').hide();
-                            $('#tabel-nsa-profile').DataTable({
-                            	"serverSide": true,
-                                responsive: true,
-                                sDom: 'Brtip',
-                                "bLengthChange": false,
-                                "cache": false,
-                                "autoWidth": true,
-                                "responsive":true,
-                                "bDestroy": true,
-                                buttons: [
-                		        	{
-                		        	    extend: 'print',
-                		        	    text: 'Print',
-                		        	    exportOptions: {
-                		        	        stripHtml: false,
-                		        	        columns: [ 0,1,2,3,4,5,6 ]
-                		        	    }
-                		        	},
-                		        	{
-                		        		extend: 'excelHtml5',
-                		        		filename: 'Profil Non-State Actor',
-                		        		text: 'Save as Excel',
-                		        		exportOptions: {
-                		        		    format: {
-                		        		        body: function(data, column, row) {
-                		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
-                		        		            data = data.replace(/<.*?>/g, "");
-                		        		            data = data.replace("&amp;", "&");
-                		        		            data = data.replace("&nbsp;", "");
-                		        		            data = data.replace("&nbsp;", "");
-                		        		            return data;
-                		        		        }
-                		        		    },
-                		        		    columns: [ 0,1,2,3,4,5,6 ]
-                		        		}
-                		        	},
-                		        ],
-                                "ajax": {
-                                    "url": urls+'list-getid-nsa-profil/'+id_role,
-                                    dataSrc: 'content',
-                                },
-                                "searching": false,
-                                "columns": [
-                                    {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                                    }},
-                                    {"data": function (row, data, index, display) {
-                                        var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                        if(id_role == row.id_role){
-                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                        }else if(id_role == '1'){
-                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                        }else{
-                                            return '';
-                                        }
-                                        
-                                    }}
-                                ],
-                                "columnDefs": [
-                                ],
-                                select: true
-                            });
+                            tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
+                            
+                            //tutup isi
                         }
                     },
                 });
@@ -532,6 +571,7 @@
                 
             }
             
+//            alert(id_role);
             var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
 	        var buttDel = 'Ya, Hapus data ini!';
@@ -579,9 +619,6 @@
                     type: "GET",
                     url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                     success: function (result) {
-                    	//console.log(result);
-                    	$("#nm_nsa_profil").empty();
-                    	$("#nm_nsa_profil").append('<option value="0" >-- Pilih NSA --</option>');
                         $("#nm_nsa_profil").append('<option value="00" >-- ALL --</option>');
                         var array = result.content;
                         if (array != '') {
@@ -597,236 +634,13 @@
             $("#nm_nsa_profil").on('change', function(e){
                 var id = this.value;
                 var idprov = $("#id_prov").val();
-                if (id == "0") {
-                	swal("Anda harus memilih NSA");
-                	$("#tambah").hide();
-                } else if (id == "00") {
+                if (id == "00") {
                 	$.ajax({
                 		type: "GET",
                 		url: urls+"listnsa/"+idprov,
                 		success: function (result) {
-                			//console.log(result.content.length);
-                			if(result.content.length == 0){
-                				$("#tambah").show();
-	                            /* if($("#nm_ins_profil").val()=="0"){
-	                            	$("#tambah").hide();
-	                            }else if(id_role == id_role){
-	                                $("#tambah").show();
-	                            }else if(id_role == '1'){
-	                                $("#tambah").show();
-	                            }else{
-	                                $("#tambah").hide();
-	                            } */
-                				var table = $('#tabel-nsa-profile').DataTable({
-                            		responsive: true,
-                            		sDom: 'Brtip',
-                                    "bLengthChange": false,
-                                    "cache": false,
-                                    "autoWidth": true,
-                                    "responsive":true,
-                                    "bDestroy": true,
-                                    buttons: [
-                    		        	{
-                    		        	    extend: 'print',
-                    		                orientation: 'landscape',
-                    		                pageSize: 'A4',
-                    		        	    text: 'Print',
-                    		        	    exportOptions: {
-                    		        	        stripHtml: false,
-                    		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 ]
-                    		        	    }
-                    		        	},
-                    		        	{
-                    		        		extend: 'excelHtml5',
-                    		        		filename: 'Profil Non-State Actor',
-                    		        		text: 'Save as Excel',
-                    		        		exportOptions: {
-                    		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 ],
-                    		        		    format: {
-                    		        		        body: function(data, column, row) {
-                    		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
-                    		        		            data = data.replace(/<.*?>/g, "");
-                    		        		            data = data.replace("&amp;", "&");
-                    		        		            data = data.replace("&nbsp;", "");
-                    		        		            data = data.replace("&nbsp;", "");
-                    		        		            return data;
-                    		        		        }
-                    		        		    }
-                    		        		}
-                    		        	},
-                    		        ],
-                                    "ajax": {
-                                        "url": urls+'listnsa/'+idprov,
-                                        dataSrc: 'content',
-                                    },
-                                    "searching": false,
-                                    "columns": [
-                                        {"data": function (row, data, index, display) {
-                                        	return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+(tipensa[row[10]-1])+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'></div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[11]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[12]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[15]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[16]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            var dataid = row[1]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[2];
-                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
-                                            '<button data-id="'+row[1]+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                        }}
-                                    ],
-                                    "columnDefs": [
-                                    ],
-                                    select: true
-                            	});
-                			} else {
-                				$("#tambah").hide();
-                            	var table = $('#tabel-nsa-profile').DataTable({
-                            		responsive: true,
-                            		sDom: 'Brtip',
-                                    "bLengthChange": false,
-                                    "cache": false,
-                                    "autoWidth": true,
-                                    "responsive":true,
-                                    "bDestroy": true,
-                                    buttons: [
-                    		        	{
-                    		        	    extend: 'print',
-                    		                orientation: 'landscape',
-                    		                pageSize: 'A4',
-                    		        	    text: 'Print',
-                    		        	    exportOptions: {
-                    		        	        stripHtml: false,
-                    		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 ]
-                    		        	    }
-                    		        	},
-                    		        	{
-                    		        		extend: 'excelHtml5',
-                    		        		filename: 'Profil Non-State Actor',
-                    		        		text: 'Save as Excel',
-                    		        		exportOptions: {
-                    		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 ],
-                    		        		    format: {
-                    		        		        body: function(data, column, row) {
-                    		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
-                    		        		            data = data.replace(/<.*?>/g, "");
-                    		        		            data = data.replace("&amp;", "&");
-                    		        		            data = data.replace("&nbsp;", "");
-                    		        		            data = data.replace("&nbsp;", "");
-                    		        		            return data;
-                    		        		        }
-                    		        		    }
-                    		        		}
-                    		        	},
-                    		        ],
-                                    "ajax": {
-                                        "url": urls+'listnsa/'+idprov,
-                                        dataSrc: 'content',
-                                    },
-                                    "searching": false,
-                                    "columns": [
-                                        {"data": function (row, data, index, display) {
-                                        	return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+(tipensa[row[10]-1])+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'></div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[11]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[12]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[15]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[16]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            var dataid = row[1]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[2];
-                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
-                                            '<button data-id="'+row[1]+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                        }}
-                                    ],
-                                    "columnDefs": [
-                                    ],
-                                    select: true
-                            	});
-                			}
-                		}
-                	});
-                } else {
-                	$.ajax({
-                		type: "GET",
-                		url: urls+"listnsabyid/"+id,
-                		success: function (result) {
                 			console.log(result);
-                			if(result.content.length ==  0){
+                			if(result.content ==  null){
 	                            if($("#nm_ins_profil").val()=="0"){
 	                            	$("#tambah").hide();
 	                            }else if(id_role == id_role){
@@ -837,108 +651,45 @@
 	                                $("#tambah").hide();
 	                            }
                 			} else {
-                            	var table = $('#tabel-nsa-profile').DataTable({
-                            		responsive: true,
-                            		sDom: 'Brtip',
-                                    "bLengthChange": false,
-                                    "cache": false,
-                                    "autoWidth": true,
-                                    "responsive":true,
-                                    "bDestroy": true,
-                                    buttons: [
-                    		        	{
-                    		        	    extend: 'print',
-                    		                orientation: 'landscape',
-                    		                pageSize: 'A4',
-                    		        	    text: 'Print',
-                    		        	    exportOptions: {
-                    		        	        stripHtml: false,
-                    		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 ]
-                    		        	    }
-                    		        	},
-                    		        	{
-                    		        		extend: 'excelHtml5',
-                    		        		filename: 'Profil Non-State Actor',
-                    		        		text: 'Save as Excel',
-                    		        		exportOptions: {
-                    		        		    columns: [ 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14 ],
-                    		        		    format: {
-                    		        		        body: function(data, column, row) {
-                    		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
-                    		        		            data = data.replace(/<.*?>/g, "");
-                    		        		            data = data.replace("&amp;", "&");
-                    		        		            data = data.replace("&nbsp;", "");
-                    		        		            data = data.replace("&nbsp;", "");
-                    		        		            return data;
-                    		        		        }
-                    		        		    }
-                    		        		}
-                    		        	},
-                    		        ],
-                                    "ajax": {
-                                        "url": urls+'listnsabyid/'+id,
-                                        dataSrc: 'content',
-                                    },
-                                    "searching": false,
-                                    "columns": [
-                                        {"data": function (row, data, index, display) {
-                                        	return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[5]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[6]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+(tipensa[row[9]-1])+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'></div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[10]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[11]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[12]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            return "<div style='font-size:90%;'>"+row[15]+"</div>";
-                                        }},
-                                        {"data": function (row, data, index, display) {
-                                            var dataid = row[1]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[2];
-                                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
-                                            '<button data-id="'+row[1]+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                        }}
-                                    ],
-                                    "columnDefs": [
-                                    ],
-                                    select: true
-                            	});
+                				tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
                 			}
                 		}
                 	});
+                } else {
+	                $.ajax({
+	                    type: "GET",
+	                    url: urls+'list-getid-nsa-profil/'+id,
+	                    success: function (result1) {
+	                        if(result1.content[0] ==  null){
+	                            if(id_role == id){
+	                                $("#tambah").show();
+	                            	$("#export").show();
+	                            }else if(id == '0'){
+	                            	$("#tambah").show();
+	                            	$("#export").show();
+	                            }else if((privilege == 'ADMIN' || privilege == 'SUPER') && id != '0'){
+	                                $("#tambah").show();
+	                            	$("#export").show();
+	                            }else{
+	                                $("#tambah").show();
+	                            	$("#export").show();
+	                            }
+	                            
+	                            tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
+	                            
+	                            //tutup kosong
+	                        }else{
+	//                            alert('isi');
+	//                            jika isi
+	                            $("#tambah").show();
+	                            $("#export").show();
+	//                            $("#tambah").hide();
+	                            tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
+	                            
+	                            //tutup isi
+	                        }
+	                    },
+	                });
                 }
             });
             
@@ -962,282 +713,14 @@
             var header = $("meta[name='_csrf_header']").attr("content");
             
             $('#simpan_detail').on('click', '#kembali', function(e){
-                $('#tabel-nsa-profile').DataTable({
-                    "serverSide": true,
-                    responsive: true,
-                    sDom: 'Brtip',
-                    "bLengthChange": false,
-                    "cache": false,
-                    "autoWidth": true,
-                    "responsive":true,
-                    "bDestroy": true,
-                    buttons: [
-                                    {
-                                        extend: 'print',
-                                        text: 'Print',
-                                        exportOptions: {
-                                            stripHtml: false,
-                                            columns: [ 0,1,2,3,4,5,6 ]
-                                        }
-                                    },
-                                    {
-                                            extend: 'excelHtml5',
-                                            filename: 'Profil Non-State Actor',
-                                            text: 'Save as Excel',
-                                            exportOptions: {
-                                                format: {
-                                                    body: function(data, column, row) {
-                                                            data = data.replace(/<br\s*\/?>/ig, '\r\n');
-                                                        data = data.replace(/<.*?>/g, "");
-                                                        data = data.replace("&amp;", "&");
-                                                        data = data.replace("&nbsp;", "");
-                                                        data = data.replace("&nbsp;", "");
-                                                        return data;
-                                                    }
-                                                },
-                                                columns: [ 0,1,2,3,4,5,6 ]
-                                            }
-                                    },
-                            ],
-                    "ajax": {
-                        "url": urls+'list-getid-nsa-profil/'+$("#nm_nsa_profil").val(),
-                        dataSrc: 'content',
-                    },
-                    "searching": false,
-                    "columns": [
-                        {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                        }}
-                    ],
-                    "columnDefs": [
-                    ],
-                    select: true
-                });
-
-
-                $('#tabel-nsa-profile-detail').DataTable({
-                    "serverSide": true,
-                    responsive: true,
-                    sDom: 'Brtip',
-                    "bLengthChange": false,
-                    "cache": false,
-                    "autoWidth": true,
-                    "responsive":true,
-                    "bDestroy": true,
-                    "ajax": {
-                        "url": urls+'list-nsa-profil-detail/'+$("#nm_nsa_profil").val(),
-                        dataSrc: 'content',
-                    },
-                    "searching": false,
-                    "columns": [
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.nm_org+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            if(row.nsa_type == '1'){
-                                var tipe = 'Civil Society Organization/Organisasi Kepemudaan/Komunitas';
-                            }else if(row.nsa_type == '2'){
-                                var tipe = 'Organisasi Non-Pemerintah/LSM';
-                            }else if(row.nsa_type == '3'){
-                                var tipe = 'Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)';
-                            }else if(row.nsa_type == '4'){
-                                var tipe = 'Sektor bisnis';
-                            }else if(row.nsa_type == '5'){
-                                var tipe = 'Institusi akademis';
-                            }else if(row.nsa_type == '6'){
-                                var tipe = 'Media dan asosiasi media';
-                            }else if(row.nsa_type == '7'){
-                                var tipe = 'Organisasi multilateral atau bilateral';
-                            }else if(row.nsa_type == '8'){
-                                var tipe = 'Organisasi filantropi';
-                            }else if(row.nsa_type == '9'){
-                                var tipe = 'Lainnya';
-                            }else{
-
-                            }
-                            return "<div style='font-size:90%;'>"+tipe+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.file_logo+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.web_url+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.head_office+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.name_pic+"<br/>"+row.pos_pic+"<br/>"+row.email_pic+"<br/>"+row.hp_pic+"</div>";
-                        }}
-                    ],
-                    "columnDefs": [
-                    ],
-                    select: true
-                });	
+            	tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
                 $('.addModalDetail').modal("hide");
                 $('.addModal').modal("show");
                 $('#simpan_').hide();
                 $('#update_').show();
             });
             $('#update_detail').on('click', '#kembali', function(e){
-                $('#tabel-nsa-profile').DataTable({
-                    "serverSide": true,
-                    responsive: true,
-                    sDom: 'Brtip',
-                    "bLengthChange": false,
-                    "cache": false,
-                    "autoWidth": true,
-                    "responsive":true,
-                    "bDestroy": true,
-                    buttons: [
-                                    {
-                                        extend: 'print',
-                                        text: 'Print',
-                                        exportOptions: {
-                                            stripHtml: false,
-                                            columns: [ 0,1,2,3,4,5,6 ]
-                                        }
-                                    },
-                                    {
-                                            extend: 'excelHtml5',
-                                            filename: 'Profil Non-State Actor',
-                                            text: 'Save as Excel',
-                                            exportOptions: {
-                                                format: {
-                                                    body: function(data, column, row) {
-                                                            data = data.replace(/<br\s*\/?>/ig, '\r\n');
-                                                        data = data.replace(/<.*?>/g, "");
-                                                        data = data.replace("&amp;", "&");
-                                                        data = data.replace("&nbsp;", "");
-                                                        data = data.replace("&nbsp;", "");
-                                                        return data;
-                                                    }
-                                                },
-                                                columns: [ 0,1,2,3,4,5,6 ]
-                                            }
-                                    },
-                            ],
-                    "ajax": {
-                        "url": urls+'list-getid-nsa-profil/'+$("#nm_nsa_profil").val(),
-                        dataSrc: 'content',
-                    },
-                    "searching": false,
-                    "columns": [
-                        {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                            return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                            '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                        }}
-                    ],
-                    "columnDefs": [
-                    ],
-                    select: true
-                });
-
-
-                $('#tabel-nsa-profile-detail').DataTable({
-                    "serverSide": true,
-                    responsive: true,
-                    sDom: 'Brtip',
-                    "bLengthChange": false,
-                    "cache": false,
-                    "autoWidth": true,
-                    "responsive":true,
-                    "bDestroy": true,
-                    "ajax": {
-                        "url": urls+'list-nsa-profil-detail/'+$("#nm_nsa_profil").val(),
-                        dataSrc: 'content',
-                    },
-                    "searching": false,
-                    "columns": [
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.nm_org+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            if(row.nsa_type == '1'){
-                                var tipe = 'Civil Society Organization/Organisasi Kepemudaan/Komunitas';
-                            }else if(row.nsa_type == '2'){
-                                var tipe = 'Organisasi Non-Pemerintah/LSM';
-                            }else if(row.nsa_type == '3'){
-                                var tipe = 'Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)';
-                            }else if(row.nsa_type == '4'){
-                                var tipe = 'Sektor bisnis';
-                            }else if(row.nsa_type == '5'){
-                                var tipe = 'Institusi akademis';
-                            }else if(row.nsa_type == '6'){
-                                var tipe = 'Media dan asosiasi media';
-                            }else if(row.nsa_type == '7'){
-                                var tipe = 'Organisasi multilateral atau bilateral';
-                            }else if(row.nsa_type == '8'){
-                                var tipe = 'Organisasi filantropi';
-                            }else if(row.nsa_type == '9'){
-                                var tipe = 'Lainnya';
-                            }else{
-
-                            }
-                            return "<div style='font-size:90%;'>"+tipe+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.file_logo+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.web_url+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.head_office+"</div>";
-                        }},
-                        {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row.name_pic+"<br/>"+row.pos_pic+"<br/>"+row.email_pic+"<br/>"+row.hp_pic+"</div>";
-                        }}
-                    ],
-                    "columnDefs": [
-                    ],
-                    select: true
-                });	
+            	tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
                 $('.addModalDetail').modal("hide");
                 $('.addModal').modal("show");
                 $('#simpan_').hide();
@@ -1273,54 +756,15 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        $('#tabel-nsa-profile').DataTable({
-                            responsive: true,
-                            sDom: 'lrtip',
-                            "bLengthChange": false,
-                            "cache": false,
-                            "autoWidth": true,
-                            "responsive":true,
-                            "bDestroy": true,
-                            "ajax": {
-                                "url": urls+'list-getid-nsa-profil/'+id_role,
-                                dataSrc: 'content',
-                            },
-                            "searching": false,
-                            "columns": [
-                                {"data": function (row, data, index, display) {
-                                return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                                    '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                }}
-                            ],
-                            "columnDefs": [
-                            ],
-                            select: true
-                        });
+//                        window.location = urls+"nsa/profile";
+                        tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
                     	$('.addModal').modal('hide');
                     },
                 });
             });
             
             $('#update_').on('click', '#detail_update', function(e){
+//                var id_nsa          = $('#id_nsa').val();
                 var id              = ($('#id_nsa').val())?$('#id_nsa').val():null;
                 var id_role         = $('#id_role').val();
                 var nm_nsa          = $('#nm_nsa').val();
@@ -1403,6 +847,7 @@
             });
             
             $('#simpan_').on('click', '#simpan', function(e){
+//                var id_nsa          = $('#id_nsa').val();
                 var id_role         = $('#id_role').val();
                 var nm_nsa          = $('#nm_nsa').val();
                 var achieve_nsa     = $('#achieve_nsa').val();
@@ -1435,54 +880,16 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
-                        $('#tabel-nsa-profile').DataTable({
-                            responsive: true,
-                            sDom: 'lrtip',
-                            "bLengthChange": false,
-                            "cache": false,
-                            "autoWidth": true,
-                            "responsive":true,
-                            "bDestroy": true,
-                            "ajax": {
-                                "url": urls+'list-getid-nsa-profil/'+id_role,
-                                dataSrc: 'content',
-                            },
-                            "searching": false,
-                            "columns": [
-                                {"data": function (row, data, index, display) {
-                                return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                                    '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                }}
-                            ],
-                            "columnDefs": [
-                            ],
-                            select: true
-                        });
+//                        swal(titlesimpan,messsimpan,'success');
+//                        window.location = urls+"nsa/profile";
+                        tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
                     	$('.addModal').modal('hide');
                     },
                 });
             });
             
             $('#simpan_').on('click', '#detail', function(e){
+//                var id_nsa          = $('#id_nsa').val();
                 var id_role         = $('#id_role').val();
                 var nm_nsa          = $('#nm_nsa').val();
                 var achieve_nsa     = $('#achieve_nsa').val();
@@ -1574,6 +981,8 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
                     success: function (result) {
+//                        swal(titlesimpan,messsimpan,'success');
+//                        window.location = urls+"nsa/profile";
                         $('#tambah').show();
                         $('#export').show();
                         $('#file_logo').val('');
@@ -1584,48 +993,7 @@
                         $('#email_pic').val('');
                         $('#hp_pic').val('');
                         
-                        $('#tabel-nsa-profile').DataTable({
-                            responsive: true,
-                            sDom: 'lrtip',
-                            "bLengthChange": false,
-                            "cache": false,
-                            "autoWidth": true,
-                            "responsive":true,
-                            "bDestroy": true,
-                            "ajax": {
-                                "url": urls+'list-getid-nsa-profil/'+id_role,
-                                dataSrc: 'content',
-                            },
-                            "searching": false,
-                            "columns": [
-                                {"data": function (row, data, index, display) {
-                                return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                                    '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                }}
-                            ],
-                            "columnDefs": [
-                            ],
-                            select: true
-                        });
+                        tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
                     	$('.addModalDetail').modal('hide');
                     },
                 });
@@ -1670,48 +1038,7 @@
                     success: function (result) {
 //                        swal(titlesimpan,messsimpan,'success');
 //                        window.location = urls+"nsa/profile";
-                        $('#tabel-nsa-profile').DataTable({
-                            responsive: true,
-                            sDom: 'lrtip',
-                            "bLengthChange": false,
-                            "cache": false,
-                            "autoWidth": true,
-                            "responsive":true,
-                            "bDestroy": true,
-                            "ajax": {
-                                "url": urls+'list-getid-nsa-profil/'+id_role,
-                                dataSrc: 'content',
-                            },
-                            "searching": false,
-                            "columns": [
-                                {"data": function (row, data, index, display) {
-                                return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    return "<div style='font-size:90%;'>"+row.major_part+"</div>";
-                                }},
-                                {"data": function (row, data, index, display) {
-                                    var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+'<button data-id="'+dataid+'" type="button" title="Detail" class="btn btn-warning btn-mini detail_data"><i class="icon-pencil"></i></button>'+
-                                    '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
-                                }}
-                            ],
-                            "columnDefs": [
-                            ],
-                            select: true
-                        });
+                        tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
                     	$('.addModalDetail').modal('hide');
                     },
                 });
@@ -1823,10 +1150,119 @@
                             xhr.setRequestHeader(header,token);
                         },
                         success: function (result) {
+//                            swal(titleOk,messOk,'success');
+//                            window.location = urls+"nsa/profile";
+                            /* $('#tabel-nsa-profile').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-getid-nsa-profil/'+id_role,
+                                    dataSrc: 'content',
+                                },
+                                "searching": false,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.achieve_nsa+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.loc_nsa+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.beneficiaries+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.year_impl+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.major_part+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        var dataid = row.id_nsa+'###'+row.nm_nsa+'###'+row.achieve_nsa+'###'+row.loc_nsa+'###'+row.beneficiaries+'###'+row.year_impl+'###'+row.major_part+'###'+row.id_role;
+                                        return "<div style='text-align:center;'>"+'<button data-id="'+dataid+'" type="button" title="Update" class="btn btn-success btn-mini update"><i class="icon-save"></i></button>'+
+                                        '<button data-id="'+row.id_nsa+'" type="button" title="Delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                                    }}
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            });
+
+
+                            $('#tabel-nsa-profile-detail').DataTable({
+                                responsive: true,
+                                sDom: 'lrtip',
+                                "bLengthChange": false,
+                                "cache": false,
+                                "autoWidth": true,
+                                "responsive":true,
+                                "bDestroy": true,
+                                "ajax": {
+                                    "url": urls+'list-nsa-profil-detail/'+id_role,
+                                    dataSrc: 'content',
+                                },
+                                "searching": false,
+                                "columns": [
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.nm_org+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        if(row.nsa_type == '1'){
+                                            var tipe = 'Civil Society Organization/Organisasi Kepemudaan/Komunitas';
+                                        }else if(row.nsa_type == '2'){
+                                            var tipe = 'Organisasi Non-Pemerintah/LSM';
+                                        }else if(row.nsa_type == '3'){
+                                            var tipe = 'Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)';
+                                        }else if(row.nsa_type == '4'){
+                                            var tipe = 'Sektor bisnis';
+                                        }else if(row.nsa_type == '5'){
+                                            var tipe = 'Institusi akademis';
+                                        }else if(row.nsa_type == '6'){
+                                            var tipe = 'Media dan asosiasi media';
+                                        }else if(row.nsa_type == '7'){
+                                            var tipe = 'Organisasi multilateral atau bilateral';
+                                        }else if(row.nsa_type == '8'){
+                                            var tipe = 'Organisasi filantropi';
+                                        }else if(row.nsa_type == '9'){
+                                            var tipe = 'Lainnya';
+                                        }else{
+
+                                        }
+                                        return "<div style='font-size:90%;'>"+tipe+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.file_logo+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.web_url+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.head_office+"</div>";
+                                    }},
+                                    {"data": function (row, data, index, display) {
+                                        return "<div style='font-size:90%;'>"+row.name_pic+"<br/>"+row.pos_pic+"<br/>"+row.email_pic+"<br/>"+row.hp_pic+"</div>";
+                                    }}
+                                ],
+                                "columnDefs": [
+                                ],
+                                select: true
+                            }); */
                             $("#nm_nsa_profil").trigger('change');
                         },
                         error:function (result) {
-                        	
+//                            swal(titleOk,messNOk,'error');
+//                            window.location = urls+"nsa/profile";
+                            
                         },
                     })
                 }, function (dismiss) {
@@ -1835,7 +1271,15 @@
                 })
 
             });
+            
+
         //});
     // ]]>
+    
+    $("#export").on("click", function(){
+    	var idprov = $("#id_prov").val();
+    	var idrole = $("#nm_nsa_profil").val();
+    	window.open(urls+"nsa/download_profil/"+idprov+"/"+idrole, "_blank");
+    });
 </script>
 </html>

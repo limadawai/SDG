@@ -159,8 +159,24 @@ public class NsaController {
     }
     
     @GetMapping("admin/list-nsa-profil-detail/{id}")
-    public @ResponseBody Map<String, Object> nsaProfilListiddetail(@PathVariable("id") String id) {
+    public @ResponseBody Map<String, Object> nsaProfilListiddetailjadi(@PathVariable("id") String id) {
         List<Nsadetail> list = nsaDetailService.findId(id);
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-nsa-profil-detail-jadi/{id}/{id_prov}")
+    public @ResponseBody Map<String, Object> nsaProfilListiddetail(@PathVariable("id") String id,@PathVariable("id_prov") String id_prov) {
+    	String role = "";
+    	if(!id.equals("00")) {role=" and a.id_role = '"+id+"' ";}
+    	String sql = "select a.id_nsa,a.nm_nsa,a.achieve_nsa,a.loc_nsa,a.beneficiaries,a.year_impl,a.major_part, "
+    			+ "c.nsa_type,c.web_url,c.head_office,c.name_pic,c.pos_pic,c.email_pic,c.hp_pic,a.id_role "
+    			+ "from nsa_profile a "
+    			+ "left join nsa_detail c on a.id_nsa=c.id_nsa "
+                + "left join ref_role b on b.id_role = a.id_role where b.id_prov='"+id_prov+"' "+role;
+    	Query query = em.createNativeQuery(sql);
+    	List list = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
