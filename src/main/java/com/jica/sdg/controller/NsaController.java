@@ -169,12 +169,14 @@ public class NsaController {
     @GetMapping("admin/list-nsa-profil-detail-jadi/{id}/{id_prov}")
     public @ResponseBody Map<String, Object> nsaProfilListiddetail(@PathVariable("id") String id,@PathVariable("id_prov") String id_prov) {
     	String role = "";
+    	String prov = "";
     	if(!id.equals("00")) {role=" and a.id_role = '"+id+"' ";}
+    	if(!id_prov.equals("all")) {prov=" and b.id_prov = '"+id+"' ";}
     	String sql = "select a.id_nsa,a.nm_nsa,a.achieve_nsa,a.loc_nsa,a.beneficiaries,a.year_impl,a.major_part, "
     			+ "c.nsa_type,c.web_url,c.head_office,c.name_pic,c.pos_pic,c.email_pic,c.hp_pic,a.id_role "
     			+ "from nsa_profile a "
     			+ "left join nsa_detail c on a.id_nsa=c.id_nsa "
-                + "left join ref_role b on b.id_role = a.id_role where b.id_prov='"+id_prov+"' "+role;
+                + "left join ref_role b on b.id_role = a.id_role where 1=1 "+prov+" "+role;
     	Query query = em.createNativeQuery(sql);
     	List list = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
@@ -221,10 +223,10 @@ public class NsaController {
     
     @GetMapping("admin/list-get-option-role-nsa-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionNsaProfilList(@PathVariable("id") String id) {
+        String id_prov = id.equals("all")?"":" and a.id_prov = '"+id+"' ";
         
-        String sql  = "select * from ref_role as a where a.id_prov = :id and cat_role = 'NSA' ";
+        String sql  = "select * from ref_role as a where cat_role = 'NSA' "+id_prov;
         Query query = em.createNativeQuery(sql);
-        query.setParameter("id", id);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         
