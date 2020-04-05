@@ -255,9 +255,9 @@ public class NsaController {
     
     @GetMapping("admin/list-get-option-role-ins-profil/{id}")
     public @ResponseBody Map<String, Object> getOptionInsProfilList(@PathVariable("id") String id) {
-        String sql  = "select * from ref_role as a where a.id_prov = :id and cat_role = 'Institution' ";
+    	 String id_prov = id.equals("all")?"":" and a.id_prov = '"+id+"' ";
+        String sql  = "select * from ref_role as a where cat_role = 'Institution' "+id_prov;
         Query query = em.createNativeQuery(sql);
-        query.setParameter("id", id);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -423,11 +423,11 @@ public class NsaController {
     
     @GetMapping("admin/listins/{id_prov}")
 	    public @ResponseBody Map<String, Object> listins(@PathVariable("id_prov") String idprov) {
+    	String id_prov = idprov.equals("all")?"":" and a.id_prov = '"+idprov+"' ";
 	    	String sql  = "select a.id_role as idrole, b.* from ref_role a left join "
-	    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' and a.id_prov = :id_prov "
+	    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' "+id_prov
 	    			+ "order by a.id_role asc";
 	    Query query = em.createNativeQuery(sql);
-	    query.setParameter("id_prov", idprov);
 	    List list   = query.getResultList();
 	    Map<String, Object> hasil = new HashMap<>();
 	    hasil.put("content",list);
