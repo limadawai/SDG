@@ -31,13 +31,15 @@
                         <div class="pull-left adddetail" style="width:100%">
                             <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
                                 <option value="0" >-- Pilih Daerah --</option>
+                                <option value="all" >-- ALL --</option>
                                 <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="nm_nsa_profil" name="nm_nsa_profil" class="form-control">
                                 <option value="0" >-- Pilih Institusi --</option>
+                                <option value="all" >-- ALL --</option>
                                 <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
-                            <button id="export" class="btn btn-warning pull-right">Export Excel</button>
+                            <!-- <button id="export" class="btn btn-warning pull-right">Export Excel</button> -->
 <!--                            <div class="btn-toolbar" style="float:right">
                                 <button class="btn btn-success detail">Add Detail</button>
                             </div>-->
@@ -295,6 +297,7 @@
                 url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                 success: function (result10) {
                     $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
+                    $("#nm_nsa_profil").html('<option value="all" >-- ALL --</option>');
                     var array = result10.content;
                     if (array != '') {
                         for (i in array) {
@@ -315,7 +318,7 @@
                         }
 
                         //grid
-                        grid_collaboration();
+                        tabel.ajax.url(urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val()).load();
 
                     }
                 }
@@ -346,6 +349,184 @@
 //                });
                 
         }
+        
+        var tabel = $('#tabel-nsa-collaboration').DataTable({
+        	responsive: true,
+			sDom: 'Brtip',
+			"bLengthChange": false,
+			"cache": false,
+			"autoWidth": true,
+			"responsive":true,
+            buttons: [
+	        	{
+	        	    extend: 'print',
+	        	    text: 'Print',
+	        	    exportOptions: {
+	        	        stripHtml: false,
+	        	    }
+	        	},
+	        	{
+	        		extend: 'excelHtml5',
+	        		filename: 'Profil Non-State Actor',
+	        		text: 'Save as Excel',
+	        		exportOptions: {
+	        		    format: {
+	        		        body: function(data, column, row) {
+	        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+	        		            data = data.replace(/<.*?>/g, "");
+	        		            data = data.replace("&amp;", "&");
+	        		            data = data.replace("&nbsp;", "");
+	        		            data = data.replace("&nbsp;", "");
+	        		            return data;
+	        		        }
+	        		    },
+	        		   
+	        		}
+	        	},
+	        ],
+            "ajax": {
+                "url": urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val(),
+                dataSrc: 'content',
+            },
+            "searching": true,
+            "columns": [
+                {"data": function (row, data, index, display) {
+                    if(row[0] == null || row[0] == ""){
+                        return "<div style='font-size:90%;'>-</div>";
+                    }else{
+                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
+                    }
+                }},
+                {"data": function (row, data, index, display) {
+                    if($('#fs').is(':checked')){
+//                                        return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[1]+"</div>";
+                    }else{
+//                                        return "<div style='font-size:90%;'>"+row[13]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[14]+"</div>";
+                    }
+                }},
+                {"data": function (row, data, index, display) {
+                    if(row[2] == null || row[2] == ""){
+                        return "<div style='font-size:90%;'>-</div>";
+                    }else{
+                        return "<div style='font-size:90%;'>"+row[2]+"</div>";
+                    }
+                }},
+                {"data": function (row, data, index, display) {
+                    if(row[3] == null || row[3] == ""){
+                        return "<div style='font-size:90%;'>-</div>";
+                    }else{
+                        return "<div style='font-size:90%;'>"+row[3]+"</div>";
+                    }
+                }},
+                {"data": function (row, data, index, display) {
+                    if(row[4] == null || row[4] == ""){
+                        return "<div style='font-size:90%;'>-</div>";
+                    }else{
+                        return "<div style='font-size:90%;'>"+row[4]+"</div>";
+                    }
+                }},
+                {"data": function (row, data, index, display) {
+                    if(privilege=="SUPER" || privilege=="ADMIN"){
+                        if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
+                            //NSA bisa edit
+                            if(row[7] == null || row[7] == ""){
+                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                            }else{
+                                if(row[5] == null || row[5] == ""){
+                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                }else{
+                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                }
+                            }
+                        }else{
+                            //selain NSA gak bisa edit
+                            if(row[5] == null || row[5] == ""){
+                                return "<div style='text-align:center;'>-</div>";
+                            }else{
+                                return "<div style='text-align:center;'>"+row[5]+"</div>";
+                            }
+                        }
+                    }else if(privilege=="USER"){
+                        //user yg catrole nya nsa bisa edit
+                        if(cat_role == 'NSA'){
+                            //NSA bisa edit
+                            if(row[7] == null || row[7] == ""){
+                                return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                            }else{
+                                if(row[5] == null || row[5] == ""){
+                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                }else{
+                                    var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                    return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                }
+                            }
+                        }else{
+                            //selain NSA gak bisa edit
+                            if(row[5] == null || row[5] == ""){
+                                return "<div style='text-align:center;'>-</div>";
+                            }else{
+                                return "<div style='text-align:center;'>"+row[5]+"</div>";
+                            }
+                        }
+                    }else{
+                        return "";
+                    }
+
+                }},
+                {"data": function (row, data, index, display) {
+
+                    if(privilege=="SUPER" || privilege=="ADMIN"){
+                        if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
+                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                            return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                        }else if(cat_role == 'NSA'){
+                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                            return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                        }else{
+                            return "";
+                        }
+                    }else if(privilege=="USER"){
+                        //user yg catrole nya INST bisa edit
+                        if(cat_role == 'Institution'){
+                            //INST bisa edit
+                            var jumlah;
+                            $.ajax({
+                                type: "GET",
+                                async:false,
+                                url: urls+'jumlah_role_philan/'+id_role,
+                                success: function (result) {
+                                    jumlah = result.content[0];
+                                }
+                            });
+                            
+                            if(jumlah == '0'){
+                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                                return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                            }else{
+                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                            }
+                            
+                        }else{
+                            //selain INST gak bisa edit
+                            var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                            return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                        }
+                    }else{
+                        return "";
+                    }
+
+                }}
+            ],
+            "columnDefs": [
+            ],
+            select: true
+        });
             
         $("#id_prov").on('change', function(e){
             var id_prov = this.value ;
@@ -355,6 +536,7 @@
                 url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                 success: function (result) {
                     $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
+                    $("#nm_nsa_profil").append('<option value="all" >-- ALL --</option>');
                     var array = result.content;
                     if (array != '') {
                         for (i in array) {
@@ -379,7 +561,7 @@
                 }
             });
             //grid
-            grid_collaboration();
+            //tabel.ajax.url(urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val()).load();
                             
         });
             
@@ -409,11 +591,11 @@
                     if(result1.content[0] ==  null){
 
                         //grid
-                        grid_collaboration();
+                        tabel.ajax.url(urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val()).load();
                         //tutup kosong
                     }else{
                         //grid
-                        grid_collaboration();
+                        tabel.ajax.url(urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val()).load();
                     }
                 }
             });
@@ -464,163 +646,11 @@
             
             
         $("#nm_ins_profil").on('change', function(e){
-            var id = this.value ;
-            grid_collaboration();	
+            var id = this.value ;	
+            tabel.ajax.url(urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val()).load();
         });
             
-        function grid_collaboration(){
-            $('#tabel-nsa-collaboration').DataTable({
-                responsive: true,
-                sDom: 'lrtip',
-                "bLengthChange": false,
-                "cache": false,
-                "autoWidth": true,
-                "responsive":true,
-                "bDestroy": true,
-                "ajax": {
-                    "url": urls+'list-getid-nsa-collaboration/'+$("#nm_nsa_profil").val(),
-                    dataSrc: 'content',
-                },
-                "searching": true,
-                "columns": [
-                    {"data": function (row, data, index, display) {
-                        if(row[0] == null || row[0] == ""){
-                            return "<div style='font-size:90%;'>-</div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[0]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if($('#fs').is(':checked')){
-//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                            return "<div style='font-size:90%;'>"+row[1]+"</div>";
-                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[2] == null || row[2] == ""){
-                            return "<div style='font-size:90%;'>-</div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[2]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[3] == null || row[3] == ""){
-                            return "<div style='font-size:90%;'>-</div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[3]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(row[4] == null || row[4] == ""){
-                            return "<div style='font-size:90%;'>-</div>";
-                        }else{
-                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        if(privilege=="SUPER" || privilege=="ADMIN"){
-                            if(privilege == 'SUPER' || privilege=="ADMIN" || cat_role != 'Institution'){
-                                //NSA bisa edit
-                                if(row[7] == null || row[7] == ""){
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
-                                }else{
-                                    if(row[5] == null || row[5] == ""){
-                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
-                                    }else{
-                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
-                                    }
-                                }
-                            }else{
-                                //selain NSA gak bisa edit
-                                if(row[5] == null || row[5] == ""){
-                                    return "<div style='text-align:center;'>-</div>";
-                                }else{
-                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
-                                }
-                            }
-                        }else if(privilege=="USER"){
-                            //user yg catrole nya nsa bisa edit
-                            if(cat_role == 'NSA'){
-                                //NSA bisa edit
-                                if(row[7] == null || row[7] == ""){
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
-                                }else{
-                                    if(row[5] == null || row[5] == ""){
-                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
-                                    }else{
-                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
-                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
-                                    }
-                                }
-                            }else{
-                                //selain NSA gak bisa edit
-                                if(row[5] == null || row[5] == ""){
-                                    return "<div style='text-align:center;'>-</div>";
-                                }else{
-                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
-                                }
-                            }
-                        }else{
-                            return "";
-                        }
-
-                    }},
-                    {"data": function (row, data, index, display) {
-
-                        if(privilege=="SUPER" || privilege=="ADMIN"){
-                            if(privilege == 'SUPER' || privilege == 'ADMIN' || cat_role == 'Institution'){
-                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
-                            }else if(cat_role == 'NSA'){
-                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
-                            }else{
-                                return "";
-                            }
-                        }else if(privilege=="USER"){
-                            //user yg catrole nya INST bisa edit
-                            if(cat_role == 'Institution'){
-                                //INST bisa edit
-                                var jumlah;
-                                $.ajax({
-                                    type: "GET",
-                                    async:false,
-                                    url: urls+'jumlah_role_philan/'+id_role,
-                                    success: function (result) {
-                                        jumlah = result.content[0];
-                                    }
-                                });
-                                
-                                if(jumlah == '0'){
-                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
-                                }else{
-                                    var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
-                                }
-                                
-                            }else{
-                                //selain INST gak bisa edit
-                                var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
-                            }
-                        }else{
-                            return "";
-                        }
-
-                    }}
-                ],
-                "columnDefs": [
-                ],
-                select: true
-            });
-        }
+        
 
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -656,7 +686,7 @@
                 data: data,
                 success: function (result) {
                     //grid
-                    grid_collaboration();
+                    tabel.ajax.url(urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val()).load();
                     $('.addDetail').modal("hide");
 //                        window.location = urls+"nsa/nsa-collaboration";
                 },
@@ -710,7 +740,7 @@
 ////                                window.location = urls+"nsa/nsa-collaboration";
 //                        },
 //                    });  
-                    grid_collaboration();
+                    tabel.ajax.url(urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val()).load();
                     $('.addSupport').modal("hide");
                 },
             });
@@ -746,7 +776,7 @@
                 data: data,
                 success: function (result) {
                     //grid
-                    grid_collaboration();
+                    tabel.ajax.url(urls+'list-getid-nsa-collaboration-all/'+$("#nm_nsa_profil").val()+'/'+$("#id_prov").val()).load();
 //                        window.location = urls+"nsa/inst-profile";
                     $('.addModal').modal('hide');
                 },
