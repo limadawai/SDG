@@ -305,8 +305,8 @@ public class RateController {
         return hasil;
     }    
     
-    @GetMapping("admin/get-cek-data-all/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}")
-    public @ResponseBody Map<String, Object>  cek_data_all(@PathVariable("id_role") String id_role,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time) {
+    @GetMapping("admin/get-cek-data-all/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}/{id_monper}")
+    public @ResponseBody Map<String, Object>  cek_data_all(@PathVariable("id_role") String id_role,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time, @PathVariable("id_monper") String id_monper) {
         String tg_date = "";
         if(period.equals("1")){
             if(isi_time.equals("777777")){
@@ -333,6 +333,12 @@ public class RateController {
                 tg_date = "and date_created4 <= '"+isi_time+"' ";
             }
         }else{}
+        String prog = "";
+        if(type.equals("entry_gov_indicator")){
+            prog = "gov_program";
+        }else{
+            prog = "nsa_program";
+        }
         String sql  = "select \n" +
                     "(\n" +
                     "select count(*) as total_all from\n" +
@@ -340,7 +346,8 @@ public class RateController {
                     "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
                     "from "+tb2+" b\n" +
                     "left join "+tb+" c on b.id_activity = c.id\n" +
-                    "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" ) d on b.id = d.id_assign\n" +
+                    "inner join (select * from "+type+" where id_monper = :id_monper and year_entry = :year and achievement"+period+" != 0 "+tg_date+" ) d on b.id = d.id_assign\n" +
+                    "inner join (select * from "+prog+" where id_monper = :id_monper) e on c.id_program = e.id \n" +
                     "where c.id_role = :id_role \n" +
                     ") as a\n" +
                     ") as isi,\n" +
@@ -350,12 +357,14 @@ public class RateController {
                     "select b. id, b.id_activity, c.id_role, b.nm_indicator, b.nm_indicator_eng, d.achievement"+period+" \n" +
                     "from "+tb2+" b\n" +
                     "left join "+tb+" c on b.id_activity = c.id\n" +
-                    "left join (select * from "+type+" where year_entry = :year "+tg_date+") d on b.id = d.id_assign\n" +
+                    "left join (select * from "+type+" where id_monper = :id_monper and year_entry = :year "+tg_date+") d on b.id = d.id_assign\n" +
+                    "inner join (select * from "+prog+" where id_monper = :id_monper) e on c.id_program = e.id \n" +
                     "where c.id_role = :id_role\n" +
                     ") as a\n" +
                     ") as semua";
         Query query = em.createNativeQuery(sql);
 //        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
         query.setParameter("id_role", id_role);
         query.setParameter("year", year);
 //        query.setParameter("type", type);
@@ -365,8 +374,8 @@ public class RateController {
         hasil.put("content",list);
         return hasil;
     }  
-    @GetMapping("admin/get-cek-data-all-budget/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}")
-    public @ResponseBody Map<String, Object>  cek_data_all_budget(@PathVariable("id_role") String id_role,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time) {
+    @GetMapping("admin/get-cek-data-all-budget/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}/{id_monper}")
+    public @ResponseBody Map<String, Object>  cek_data_all_budget(@PathVariable("id_role") String id_role,@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time, @PathVariable("id_monper") String id_monper) {
         String tg_date = "";
         if(period.equals("1")){
             if(isi_time.equals("777777")){
@@ -395,10 +404,13 @@ public class RateController {
         }else{}
         
         String id_activity_1 = "";
+        String prog = "";
         if(type.equals("entry_gov_budget")){
             id_activity_1 = "d.id_gov_activity";
+            prog = "gov_program";
         }else{
             id_activity_1 = "d.id_nsa_activity";
+            prog = "nsa_program";
         }
         String sql  = "select \n" +
                     "(\n" +
@@ -406,9 +418,10 @@ public class RateController {
                     "(\n" +
                     "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
                     "from "+tb+" b\n" +
-                    "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" ) d on b.id = "+id_activity_1+"\n" +
+                    "inner join (select * from "+type+" where id_monper = :id_monper and year_entry = :year and achievement"+period+" != 0 "+tg_date+" ) d on b.id = "+id_activity_1+"\n" +
+                    "inner join (select * from "+prog+" where id_monper = :id_monper ) e on b.id_program = e.id \n" +
                     " \n" +
-                    "where b.id_role = :id_role \n" +
+                    "where b.id_role = :id_role  \n" +
                     ") as a\n" +
                     ") as isi,\n" +
                     "(\n" +
@@ -416,13 +429,15 @@ public class RateController {
                     "(\n" +
                     "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
                     "from "+tb+" b\n" +
-                    "left join (select * from "+type+" where year_entry = :year "+tg_date+") d on b.id = "+id_activity_1+"\n" +
+                    "left join (select * from "+type+" where id_monper = :id_monper and year_entry = :year "+tg_date+") d on b.id = "+id_activity_1+"\n" +
+                    "inner join (select * from "+prog+" where id_monper = :id_monper) e on b.id_program = e.id \n" +
                     " \n" +
-                    "where b.id_role = :id_role\n" +
+                    "where b.id_role = :id_role \n" +
                     ") as a\n" +
                     ") as semua";
         Query query = em.createNativeQuery(sql);
 //        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
         query.setParameter("id_role", id_role);
         query.setParameter("year", year);
 //        query.setParameter("type", type);
@@ -433,8 +448,8 @@ public class RateController {
         return hasil;
     }  
     
-    @GetMapping("admin/get-cek-data-all-deadline/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{sts}/{isi_time}")
-    public @ResponseBody Map<String, Object>  cek_data_all_deadline(@PathVariable("id_role") String id_role,@PathVariable("year") int year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("sts") String sts_monper, @PathVariable("isi_time") String isi_time) {
+    @GetMapping("admin/get-cek-data-all-deadline/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{sts}/{isi_time}/{id_monper}")
+    public @ResponseBody Map<String, Object>  cek_data_all_deadline(@PathVariable("id_role") String id_role,@PathVariable("year") int year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("sts") String sts_monper, @PathVariable("isi_time") String isi_time, @PathVariable("id_monper") String id_monper) {
         String tg_date = "";
         if(sts_monper.equals("yearly")){
             if(period.equals("1")){
@@ -484,6 +499,12 @@ public class RateController {
                 tg_date_1 = "and date_created4 <= '"+isi_time+"' ";
             }
         }else{}
+        String prog = "";
+        if(type.equals("entry_gov_indicator")){
+            prog = "gov_program";
+        }else{
+            prog = "nsa_program";
+        }
         System.out.println("tgdate = "+tg_date);
         String sql  = "select \n" +
                     "(\n" +
@@ -493,6 +514,7 @@ public class RateController {
                     "from "+tb2+" b\n" +
                     "left join "+tb+" c on b.id_activity = c.id\n" +
                     "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" "+tg_date_1+" ) d on b.id = d.id_assign\n" +
+                    "inner join (select * from "+prog+" where id_monper = :id_monper) e on c.id_program = e.id \n" +
                     "where c.id_role = :id_role \n" +
                     ") as a\n" +
                     ") as isi,\n" +
@@ -503,11 +525,13 @@ public class RateController {
                     "from "+tb2+" b\n" +
                     "left join "+tb+" c on b.id_activity = c.id\n" +
                     "left join (select * from "+type+" where year_entry = :year "+tg_date_1+") d on b.id = d.id_assign\n" +
+                    "inner join (select * from "+prog+" where id_monper = :id_monper) e on c.id_program = e.id \n" +
                     "where c.id_role = :id_role\n" +
                     ") as a\n" +
                     ") as semua";
         Query query = em.createNativeQuery(sql);
 //        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
         query.setParameter("id_role", id_role);
         query.setParameter("year", year);
 //        query.setParameter("type", type);
@@ -518,8 +542,8 @@ public class RateController {
         return hasil;
     }    
     
-    @GetMapping("admin/get-cek-data-all-deadline-budget/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{sts}/{isi_time}")
-    public @ResponseBody Map<String, Object>  cek_data_all_deadline_budget(@PathVariable("id_role") String id_role,@PathVariable("year") int year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("sts") String sts_monper, @PathVariable("isi_time") String isi_time) {
+    @GetMapping("admin/get-cek-data-all-deadline-budget/{id_role}/{year}/{period}/{type}/{tb}/{tb2}/{sts}/{isi_time}/{id_monper}")
+    public @ResponseBody Map<String, Object>  cek_data_all_deadline_budget(@PathVariable("id_role") String id_role,@PathVariable("year") int year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("sts") String sts_monper, @PathVariable("isi_time") String isi_time, @PathVariable("id_monper") String id_monper) {
         String tg_date = "";
         if(sts_monper.equals("yearly")){
             if(period.equals("1")){
@@ -571,10 +595,13 @@ public class RateController {
         }else{}
         
         String id_activity_1 = "";
+        String prog = "";
         if(type.equals("entry_gov_budget")){
             id_activity_1 = "d.id_gov_activity";
+            prog = "gov_program";
         }else{
             id_activity_1 = "d.id_nsa_activity";
+            prog = "nsa_program";
         }
         System.out.println("tgdate = "+tg_date);
         String sql  = "select \n" +
@@ -584,6 +611,7 @@ public class RateController {
                     "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
                     "from "+tb+" b\n" +
                     "inner join (select * from "+type+" where year_entry = :year and achievement"+period+" != 0 "+tg_date+" "+tg_date_1+" ) d on b.id = "+id_activity_1+"\n" +
+                    "inner join (select * from "+prog+" where id_monper = :id_monper) e on b.id_program = e.id \n" +
                     "where b.id_role = :id_role \n" +
                     ") as a\n" +
                     ") as isi,\n" +
@@ -593,11 +621,13 @@ public class RateController {
                     "select b.id, b.id_activity, b.id_role, b.nm_activity, b.nm_activity_eng, d.achievement"+period+" \n" +
                     "from "+tb+" b\n" +
                     "left join (select * from "+type+" where year_entry = :year "+tg_date_1+") d on b.id = "+id_activity_1+"\n" +
+                    "inner join (select * from "+prog+" where id_monper = :id_monper) e on b.id_program = e.id \n" +
                     "where b.id_role = :id_role\n" +
                     ") as a\n" +
                     ") as semua";
         Query query = em.createNativeQuery(sql);
 //        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
         query.setParameter("id_role", id_role);
         query.setParameter("year", year);
 //        query.setParameter("type", type);
@@ -694,7 +724,7 @@ public class RateController {
         if(catrole.equals("Government")){
             String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, "
                         + "'' as nama_unit,"
-                        + "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end,"
+                        + "c.id as id_entry, case when ( COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when (COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,"
                         + "c.date_created, c.date_created2, c.date_created3, c.date_created4 "
                         + "from gov_activity a \n"
                         + "inner join (select * from entry_gov_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_gov_activity " +
@@ -707,7 +737,7 @@ public class RateController {
         }else if(catrole.equals("NSA")){
             String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, "
                         + "'' as nama_unit,"
-                        + "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end,"
+                        + "c.id as id_entry, case when ( COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when (COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,"
                         + "c.date_created, c.date_created2, c.date_created3, c.date_created4 "
                         + "from nsa_activity a \n"
                         + "inner join (select * from entry_nsa_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_nsa_activity " +
@@ -759,7 +789,7 @@ public class RateController {
         if(catrole.equals("Government")){
             String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit, \n" +
-                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end,\n" +
+                        "c.id as id_entry, case when (COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when ( COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,\n" +
                         "c.date_created, c.date_created2, c.date_created3, c.date_created4 \n" +
                         "from gov_indicator a\n" +
                         "left join gov_activity b on a.id_activity = b.id\n" +
@@ -774,7 +804,7 @@ public class RateController {
         }else if(catrole.equals("NSA")){
             String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit,\n" +
-                        "c.id as id_entry, case when (c.achievement1 is null) then 0 else c.achievement1 end, case when (c.achievement2 is null) then 0 else c.achievement2 end, case when (c.achievement3 is null) then 0 else c.achievement3 end, case when (c.achievement4 is null) then 0 else c.achievement4 end, \n" +
+                        "c.id as id_entry, case when (COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when ( COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end, \n" +
                         "c.date_created, c.date_created2, c.date_created3, c.date_created4 \n" +
                         "from nsa_indicator a\n" +
                         "left join nsa_activity b on a.id_activity = b.id\n" +
@@ -796,6 +826,134 @@ public class RateController {
         return hasil;
     }    
     
+    @GetMapping("admin/get-jumlah-catrole/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}/{id_monper}/{catrole}/{id_prov}")
+    public @ResponseBody Map<String, Object>  get_jumlah_catrole(@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time, @PathVariable("id_monper") String id_monper, @PathVariable("catrole") String catrole, @PathVariable("id_prov") String id_prov) {
+        String tg_date = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
+        String prog = "";
+        String id_indi = "";
+        if(type.equals("entry_gov_indicator")){
+            prog = "gov_program";
+            id_indi = "d.id_gov_indicator";
+        }else{
+            prog = "nsa_program";
+            id_indi = "d.id_nsa_indicator";
+        }
+        String sql  = "select count(*) as tot from\n" +
+                    "(\n" +
+                    "select a.id_role, a.nm_role, a.cat_role, a.id_prov, b.id as id_acti, b.id_activity as kode_activity, \n" +
+                    "b.nm_activity, b.nm_activity_eng, c.id as id_prog, c.id_program as kode_program, c.nm_program, c.nm_program_eng,\n" +
+                    "d.id as id_indi, "+id_indi+" as kode_indicator, d.nm_indicator, d.nm_indicator_eng, e.nm_unit,\n" +
+                    "f.id as id_entry, COALESCE(NULLIF(f.new_value"+period+",''),f.achievement"+period+") as realisasi\n" +
+                    "from ref_role a\n" +
+                    "inner join "+tb+" b on a.id_role = b.id_role\n" +
+                    "left join ( select * from "+prog+" where id_monper = :id_monper ) c on b.id_program = c.id\n" +
+                    "inner join "+tb2+" d on b.id = d.id_activity\n" +
+                    "left join ref_unit e on d.unit = e.id_unit\n" +
+                    "left join (select * from "+type+" where year_entry = :year and id_monper = :id_monper "+tg_date+") f on d.id = f.id_assign\n" +
+                    "where a.cat_role = :catrole and a.id_prov = :id_prov \n" +
+                    ") as jml";
+        Query query = em.createNativeQuery(sql);
+//        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
+//        query.setParameter("id_role", id_role);
+        query.setParameter("year", year);
+        query.setParameter("catrole", catrole);
+        query.setParameter("id_prov", id_prov);
+//        query.setParameter("type", type);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get-jumlah-catrole-budget/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}/{id_monper}/{catrole}/{id_prov}")
+    public @ResponseBody Map<String, Object>  get_jumlah_catrole_budget(@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time, @PathVariable("id_monper") String id_monper, @PathVariable("catrole") String catrole, @PathVariable("id_prov") String id_prov) {
+        String tg_date = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date = "";
+            }else{
+                tg_date = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
+        String prog = "";
+        String id_indi = "";
+        if(type.equals("entry_gov_budget")){
+            prog = "gov_program";
+            id_indi = "f.id_gov_activity";
+        }else{
+            prog = "nsa_program";
+            id_indi = "f.id_nsa_activity";
+        }
+        String sql  = "select count(*) as tot from\n" +
+                    "(\n" +
+                    "select a.id_role, a.nm_role, a.cat_role, a.id_prov, b.id as id_acti, b.id_activity as kode_activity, \n" +
+                    "b.nm_activity, b.nm_activity_eng, c.id as id_prog, c.id_program as kode_program, c.nm_program, c.nm_program_eng,\n" +
+                    "f.id as id_entry, COALESCE(NULLIF(f.new_value"+period+",''),f.achievement"+period+") as realisasi\n" +
+                    "from ref_role a\n" +
+                    "inner join "+tb+" b on a.id_role = b.id_role\n" +
+                    "inner join ( select * from "+prog+" where id_monper = :id_monper ) c on b.id_program = c.id\n" +
+                    "left join (select * from "+type+" where year_entry = :year and id_monper = :id_monper "+tg_date+") f on b.id = "+id_indi+" \n" +
+                    "where a.cat_role = :catrole and a.id_prov = :id_prov \n" +
+                    ") as jml";
+        Query query = em.createNativeQuery(sql);
+//        query.setParameter("period", period);
+        query.setParameter("id_monper", id_monper);
+//        query.setParameter("id_role", id_role);
+        query.setParameter("year", year);
+        query.setParameter("catrole", catrole);
+        query.setParameter("id_prov", id_prov);
+//        query.setParameter("type", type);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
     
     @PostMapping(path = "admin/save-submission/{dat_id_indicator}/{dat_achievement}/{dat_entry}/{period}/{catrole}/{id_monper}/{tahun}", consumes = "application/json", produces = "application/json")
     @ResponseBody

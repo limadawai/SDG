@@ -1537,8 +1537,47 @@
                         {"data": function (row, data, index, display) {
                             if(row[3] == '1'){
                                 var ps = "style='font-size:90%;'";
-                                return "<div "+ps+" ><b>"+row[1]+"</b></div>";
-//                                return "<div "+ps+" ><b>"+row[1]+"</b> <a class='data_all_role' data-catrole='"+row[2]+"' href='#'> - "+row[2]+"00</a></div>";
+//                                return "<div "+ps+" ><b>"+row[1]+"</b></div>";
+//                                var d_id_role    = row[0];
+                                var d_dataid    = $("#periode").val();
+                                var d_data_id   = d_dataid.split("###");;
+                                var d_id_monper = d_data_id[0];
+                                var d_tahun     = d_data_id[1];
+                                var d_period    = $("#period").val();
+                                var d_time      = $("#time_activity").val();
+                                var dt          = "";
+                                if(d_time == ''){
+                                    var isi_time = '777777';
+    //                                console.log('kosong')
+                                }else{
+                                    var isi_time = d_time;
+    //                                console.log('isi '+d_time)
+                                }
+                                if(row[2] == 'Government'){
+                                    var type    = 'entry_gov_indicator';
+                                    var type_b  = 'entry_gov_budget';
+                                    var tb      = 'gov_activity';
+                                    var tb2     = 'gov_indicator';
+                                }else if(row[2] == 'NSA'){
+                                    var type    = 'entry_nsa_indicator';
+                                    var type_b  = 'entry_nsa_budget';
+                                    var tb      = 'nsa_activity';
+                                    var tb2     = 'nsa_indicator';
+                                }else{}
+                                if(v_pil_prog == 'indicator'){
+                                    var link2 = urls+'get-jumlah-catrole/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time+'/'+d_id_monper+'/'+row[2]+'/'+v_idprov;
+                                }else{
+                                    var link2 = urls+'get-jumlah-catrole-budget/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time+'/'+d_id_monper+'/'+row[2]+'/'+v_idprov;
+                                }
+                                $.ajax({
+                                    type: "GET",
+                                    async:false,
+                                    url: link2,
+                                    success: function (result3) {
+                                        dt = result3.content[0];
+                                    }
+                                });
+                                return "<div "+ps+" ><b>"+row[1]+"</b> <a class='data_all_role' data-catrole='"+row[2]+"' href='#'> - "+dt+"</a></div>";
                             }else{
                                 var ps = "style='font-size:90%; margin-left: 30px'";
 //                                return "<div "+ps+" >"+row[1]+"</div>";
@@ -1573,9 +1612,9 @@
                                 var tb2     = 'nsa_indicator';
                             }else{}
                             if(v_pil_prog == 'indicator'){
-                                var link2 = urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time;
+                                var link2 = urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time+'/'+d_id_monper;
                             }else{
-                                var link2 = urls+'get-cek-data-all-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time;
+                                var link2 = urls+'get-cek-data-all-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time+'/'+d_id_monper;
                             }
                             $.ajax({
                                 type: "GET",
@@ -1630,9 +1669,9 @@
                                 var tb2     = 'nsa_indicator';
                             }else{}
                             if(v_pil_prog == 'indicator'){
-                                var link2 = urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time;
+                                var link2 = urls+'get-cek-data-all/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time+'/'+d_id_monper;
                             }else{
-                                var link2 = urls+'get-cek-data-all-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time;
+                                var link2 = urls+'get-cek-data-all-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time+'/'+d_id_monper;
                             }
                             $.ajax({
                                 type: "GET",
@@ -1708,9 +1747,9 @@
                                 });
                                 
                                 if(v_pil_prog == 'indicator'){
-                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time+'/'+d_id_monper;
                                 }else{
-                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time+'/'+d_id_monper;
                                 }
                                 
                                 $.ajax({
@@ -1749,9 +1788,9 @@
                                 });
                                 
                                 if(v_pil_prog == 'indicator'){
-                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time+'/'+d_id_monper;
                                 }else{
-                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time+'/'+d_id_monper;
                                 }
                                 
                                 $.ajax({
@@ -1820,9 +1859,9 @@
                                 });
                                 
                                 if(v_pil_prog == 'indicator'){
-                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time+'/'+d_id_monper;
                                 }else{
-                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time+'/'+d_id_monper;
                                 }
                                 $.ajax({
                                     type: "GET",
@@ -1867,9 +1906,9 @@
                                 });
                                 
                                 if(v_pil_prog == 'indicator'){
-                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                    var link3 = urls+'get-cek-data-all-deadline/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time+'/'+d_id_monper;
                                 }else{
-                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time;
+                                    var link3 = urls+'get-cek-data-all-deadline-budget/'+d_id_role+'/'+d_tahun+'/'+d_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+sts+'/'+isi_time+'/'+d_id_monper;
                                 }
                                 
                                 $.ajax({
