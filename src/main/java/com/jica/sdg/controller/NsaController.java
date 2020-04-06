@@ -171,7 +171,7 @@ public class NsaController {
     	String role = "";
     	String prov = "";
     	if(!id.equals("00")) {role=" and a.id_role = '"+id+"' ";}
-    	if(!id_prov.equals("all")) {prov=" and b.id_prov = '"+id+"' ";}
+    	if(!id_prov.equals("all")) {prov=" and b.id_prov = '"+id_prov+"' ";}
     	String sql = "select a.id_nsa,a.nm_nsa,a.achieve_nsa,a.loc_nsa,a.beneficiaries,a.year_impl,a.major_part, "
     			+ "c.nsa_type,c.web_url,c.head_office,c.name_pic,c.pos_pic,c.email_pic,c.hp_pic,a.id_role "
     			+ "from nsa_profile a "
