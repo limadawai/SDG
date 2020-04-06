@@ -1235,6 +1235,10 @@ public class RanRadSdgController {
         provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
         monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
         Integer id_role = (Integer) session.getAttribute("id_role");
+        Optional<Role> list = roleService.findOne(id_role);
+    	String privilege    = list.get().getPrivilege();
+    	model.addAttribute("privilege", privilege);
+    	model.addAttribute("id_role", id_role);
         exportExcell(id_monper,id_role);
         String a = System.getProperty("user.dir"); 
         return "admin/ran_rad/map/goals";
