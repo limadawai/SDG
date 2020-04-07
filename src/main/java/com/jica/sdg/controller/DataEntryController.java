@@ -170,9 +170,16 @@ public class DataEntryController {
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
+        
+        String sql1  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'created')";
+        Query query1 = em.createNativeQuery(sql1);
+        query1.setParameter("id", id);
+        List list1   = query1.getResultList();
+        
         Map<String, Object> hasil = new HashMap<>();
         
         hasil.put("content",list);
+        hasil.put("target",list1);
         return hasil;
     }
     
