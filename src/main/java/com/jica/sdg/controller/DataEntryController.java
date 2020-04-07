@@ -347,7 +347,7 @@ public class DataEntryController {
     				"c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \r\n" + 
     				"f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, +\r\n" + 
     				"'' as achi1, '' as achi2, '' as achi3, '' as achi4, \r\n" + 
-    				"'' as new1, '' as new2, '' as new3, '' as new4, CASE when l.nm_role is null then 'Unassign' else l.nm_role end, l.id_role \r\n" + 
+    				"'' as new1, '' as new2, '' as new3, '' as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
     				"from sdg_indicator as d\r\n" + 
     				"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov and a.id_monper = :id_monper \r\n" + 
     				"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
@@ -363,7 +363,7 @@ public class DataEntryController {
         			"c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \r\n" + 
         			"f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, +\r\n" + 
         			"k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \r\n" + 
-        			"k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, CASE when l.nm_role is null then 'Unassign' else l.nm_role end, l.id_role \r\n" + 
+        			"k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
         			"from sdg_indicator as d\r\n" + 
         			"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov and a.id_monper = :id_monper \r\n" + 
         			"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
@@ -427,7 +427,7 @@ public class DataEntryController {
     				"c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \r\n" + 
     				"f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, +\r\n" + 
     				"'' as achi1, '' as achi2, '' as achi3, '' as achi4, \r\n" + 
-    				"'' as new1, '' as new2, '' as new3, '' as new4, CASE when l.nm_role is null then 'Unassign' else l.nm_role end, l.id_role \r\n" + 
+    				"'' as new1, '' as new2, '' as new3, '' as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
     				"from sdg_indicator as d\r\n" + 
     				"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov and a.id_monper = :id_monper \r\n" + 
     				"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" +
@@ -443,7 +443,7 @@ public class DataEntryController {
         			"c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \r\n" + 
         			"f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, +\r\n" + 
         			"k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \r\n" + 
-        			"k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, CASE when l.nm_role is null then 'Unassign' else l.nm_role end, l.id_role \r\n" + 
+        			"k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
         			"from sdg_indicator as d\r\n" + 
         			"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov and a.id_monper = :id_monper \r\n" + 
         			"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
