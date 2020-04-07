@@ -826,6 +826,217 @@ public class RateController {
         return hasil;
     }    
     
+    
+    @GetMapping("admin/get_sub_prog_level1_catrole/{id_monper}/{catrole}/{id_prov}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level1_catrole(@PathVariable("id_monper") String id_monper, @PathVariable("catrole") String catrole, @PathVariable("id_prov") String id_prov) {
+        System.out.println("catrole = "+catrole+", id_monper = "+id_monper);
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program as kode_program\n" +
+                        "from ref_role a\n" +
+                        "inner join gov_activity b on a.id_role = b.id_role\n" +
+                        "left join ( select * from gov_program where id_monper = :id_monper ) c on b.id_program = c.id\n" +
+                        "where a.cat_role = :catrole and a.id_prov = :id_prov and c.id is not null";
+            query = em.createNativeQuery(sql);
+            query.setParameter("catrole", catrole);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prov", id_prov);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select distinct b.id, b.nm_program, b.nm_program_eng, b.id_program as kode_program\n" +
+                        "from ref_role a\n" +
+                        "inner join ( select * from nsa_program where id_monper = :id_monper ) b on a.id_role = b.id_role\n" +
+                        "where a.cat_role = :catrole and a.id_prov = :id_prov and b.id is not null";
+            query = em.createNativeQuery(sql);
+            query.setParameter("catrole", catrole);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prov", id_prov);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    } 
+    
+    @GetMapping("admin/get_sub_prog_level2_catrole/{id_program}/{catrole}/{id_prov}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level2_catrole(@PathVariable("id_program") String id_program, @PathVariable("catrole") String catrole, @PathVariable("id_prov") String id_prov) {
+        
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select distinct b.id, b.nm_activity, b.nm_activity_eng, b.id_activity as kode_activity\n" +
+                        "from ref_role a\n" +
+                        "inner join gov_activity b on a.id_role = b.id_role\n" +
+                        "where a.cat_role = :catrole and a.id_prov = :id_prov and b.id_program = :id_program and b.id is not null";
+            query = em.createNativeQuery(sql);
+            query.setParameter("catrole", catrole);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_program", id_program);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select distinct b.id, b.nm_activity, b.nm_activity_eng, b.id_activity as kode_activity\n" +
+                        "from ref_role a\n" +
+                        "inner join nsa_activity b on a.id_role = b.id_role\n" +
+                        "where a.cat_role = :catrole and a.id_prov = :id_prov and b.id_program = :id_program and b.id is not null";
+            query = em.createNativeQuery(sql);
+            query.setParameter("catrole", catrole);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_program", id_program);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    @GetMapping("admin/get_sub_prog_level2_catrole_budget/{id_program}/{id_prov}/{catrole}/{period}/{id_monper}/{year}/{isi_time}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level2_catrole_budget(@PathVariable("id_program") String id_program, @PathVariable("id_prov") String id_prov, @PathVariable("catrole") String catrole, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("isi_time") String isi_time) {
+        String tg_date_1 = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
+        
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select b.id, b.nm_activity, b.nm_activity_eng, '' as nama_unit, c.id as id_entry, \n" +
+                        "case when ( COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when (COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,\n" +
+                        "c.date_created, c.date_created2, c.date_created3, c.date_created4\n" +
+                        "from ref_role a\n" +
+                        "inner join gov_activity b on a.id_role = b.id_role\n" +
+                        "left join (select * from entry_gov_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on b.id = c.id_gov_activity \n" +
+                        "where a.cat_role = :catrole and a.id_prov = :id_prov and b.id_program = :id_program ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("catrole", catrole);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_program", id_program);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select b.id, b.nm_activity, b.nm_activity_eng, '' as nama_unit, c.id as id_entry, \n" +
+                        "case when ( COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when (COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,\n" +
+                        "c.date_created, c.date_created2, c.date_created3, c.date_created4\n" +
+                        "from ref_role a\n" +
+                        "inner join nsa_activity b on a.id_role = b.id_role\n" +
+                        "left join (select * from entry_nsa_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on b.id = c.id_nsa_activity \n" +
+                        "where a.cat_role = :catrole and a.id_prov = :id_prov and b.id_program = :id_program ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("catrole", catrole);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_program", id_program);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }    
+    
+    
+    @GetMapping("admin/get_sub_prog_level3_catrole/{id_program}/{id_activity}/{id_prov}/{catrole}/{period}/{id_monper}/{year}/{isi_time}")
+    public @ResponseBody Map<String, Object>  get_sub_prog_level3_catrole(@PathVariable("id_program") String id_program, @PathVariable("id_activity") String id_activity, @PathVariable("id_prov") String id_prov, @PathVariable("catrole") String catrole, @PathVariable("period") String period, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("isi_time") String isi_time) {
+        String tg_date_1 = "";
+        if(period.equals("1")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("2")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created2 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("3")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created3 <= '"+isi_time+"' ";
+            }
+        }else if(period.equals("4")){
+            if(isi_time.equals("777777")){
+                tg_date_1 = "";
+            }else{
+                tg_date_1 = "and date_created4 <= '"+isi_time+"' ";
+            }
+        }else{}
+        Query query = em.createNativeQuery("");
+        if(catrole.equals("Government")){
+            String sql  = "select c.id, c.nm_indicator, c.nm_indicator_eng,\n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = c.unit) as nama_unit,\n" +
+                        "d.id as id_entry, case when (COALESCE(NULLIF(d.new_value1,''),d.achievement1) is null) then 0 else COALESCE(NULLIF(d.new_value1,''),d.achievement1) end, case when ( COALESCE(NULLIF(d.new_value2,''),d.achievement2) is null) then 0 else COALESCE(NULLIF(d.new_value2,''),d.achievement2) end, case when ( COALESCE(NULLIF(d.new_value3,''),d.achievement3) is null) then 0 else COALESCE(NULLIF(d.new_value3,''),d.achievement3) end, case when ( COALESCE(NULLIF(d.new_value4,''),d.achievement4) is null) then 0 else COALESCE(NULLIF(d.new_value4,''),d.achievement4) end,\n" +
+                        "d.date_created, d.date_created2, d.date_created3, d.date_created4,\n" +
+                        "c.id_gov_indicator as kode_indicator\n" +
+                        "from ref_role a\n" +
+                        "inner join gov_activity b on a.id_role = b.id_role\n" +
+                        "inner join gov_indicator c on b.id = c.id_activity\n" +
+                        "left join (select * from entry_gov_indicator where year_entry = :year and id_monper = :id_monper "+tg_date_1+") d on c.id = d.id_assign\n" +
+                        "where a.cat_role = :catrole and a.id_prov = :id_prov and c.id_program = :id_program and c.id_activity = :id_activity ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_program", id_program);
+            query.setParameter("id_activity", id_activity);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("catrole", catrole);
+        }else if(catrole.equals("NSA")){
+            String sql  = "select c.id, c.nm_indicator, c.nm_indicator_eng,\n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = c.unit) as nama_unit,\n" +
+                        "d.id as id_entry, case when (COALESCE(NULLIF(d.new_value1,''),d.achievement1) is null) then 0 else COALESCE(NULLIF(d.new_value1,''),d.achievement1) end, case when ( COALESCE(NULLIF(d.new_value2,''),d.achievement2) is null) then 0 else COALESCE(NULLIF(d.new_value2,''),d.achievement2) end, case when ( COALESCE(NULLIF(d.new_value3,''),d.achievement3) is null) then 0 else COALESCE(NULLIF(d.new_value3,''),d.achievement3) end, case when ( COALESCE(NULLIF(d.new_value4,''),d.achievement4) is null) then 0 else COALESCE(NULLIF(d.new_value4,''),d.achievement4) end,\n" +
+                        "d.date_created, d.date_created2, d.date_created3, d.date_created4,\n" +
+                        "c.id_nsa_indicator as kode_indicator\n" +
+                        "from ref_role a\n" +
+                        "inner join nsa_activity b on a.id_role = b.id_role\n" +
+                        "inner join nsa_indicator c on b.id = c.id_activity\n" +
+                        "left join (select * from entry_nsa_indicator where year_entry = :year and id_monper = :id_monper "+tg_date_1+") d on c.id = d.id_assign\n" +
+                        "where a.cat_role = :catrole and a.id_prov = :id_prov and c.id_program = :id_program and c.id_activity = :id_activity ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("catrole", catrole);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_program", id_program);
+            query.setParameter("id_activity", id_activity);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+        }else{}
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }  
+    
+    
     @GetMapping("admin/get-jumlah-catrole/{year}/{period}/{type}/{tb}/{tb2}/{isi_time}/{id_monper}/{catrole}/{id_prov}")
     public @ResponseBody Map<String, Object>  get_jumlah_catrole(@PathVariable("year") String year, @PathVariable("period") String period, @PathVariable("type") String type, @PathVariable("tb") String tb, @PathVariable("tb2") String tb2, @PathVariable("isi_time") String isi_time, @PathVariable("id_monper") String id_monper, @PathVariable("catrole") String catrole, @PathVariable("id_prov") String id_prov) {
         String tg_date = "";

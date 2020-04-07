@@ -1087,6 +1087,18 @@ public class DataEntryController {
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
     
+    @GetMapping("admin/list-cek-catrole-best/{id_role}")
+    public @ResponseBody Map<String, Object> getcekcatrolebest(@PathVariable("id_role") String id_role) {
+        String sql  = "select a.cat_role from ref_role as a where a.id_role = :id_role ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-get-sts-monper-gov/{id_monper}")
     public @ResponseBody Map<String, Object> getGetStsMonperGov(@PathVariable("id_monper") String id_monper) {
         String sql  = "select gov_prog_bud from ran_rad as a where a.id_monper = :id_monper ";
