@@ -46,12 +46,13 @@
                                 <option value="entry_gov_budget" >Budget</option>
                                 <option value="entry_gov_indicator" >Indicator</option>
                             </select>-->
-                            <select id="period" name="period" class="form-control">
-                                <option value="0" ><span class=""> -- Pilih -- </span> </option>
-                            </select>
                             <select id="pil_prog" name="pil_prog" class="form-control">
+                                <option value="0" ><span class=""> -- Pilih -- </span> </option>
                                 <option value="budget" ><span class=""> Budget </span> </option>
                                 <option value="indicator" ><span class=""> Indicator </span> </option>
+                            </select>
+                            <select id="period" name="period" class="form-control">
+                                <option value="0" ><span class=""> -- Pilih -- </span> </option>
                             </select>
                             <div id="datetimepicker1" class="input-append date">
                                 <input id="time_activity" class="input-small" name="time_activity" data-format="yyyy/MM/dd" type="text"></input>
@@ -412,54 +413,372 @@
         });
             
         $("#periode").on('change', function(e){
-            var tipe    = $("#type").val();
+            var tipe    = $("#pil_prog").val();
+            var role    = $("#idrole").val();
             var periode = $("#periode").val();
             var data    = periode.split("###");
-            if(tipe == 'entry_gov_budget'){
-                $.ajax({
-                    type: "GET",
-                    url: urls+'list-get-sts-monper-gov/'+data[0],
-                    success: function (result1) {
-                        var sts = result1.content;
-                        console.log(sts);
-                        if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
-                        }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
-                        }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
-                        }else{}
+            var catrole = '';
+            $.ajax({
+                async:false,
+                type: "GET",
+                url: urls+'list-cek-catrole-best/'+role,
+                success: function (cek_catrole) {
+                    catrole = cek_catrole.content;
+                }
+            });
+
+            if(tipe == 'budget'){
+                if(role == '999999'){
+                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                    $("#period").html(s_html);
+                }else{
+                    if(catrole == 'Government'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-gov/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else if(catrole == 'NSA'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-nongov/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else{
+                        var s_html = '<option value="0" >-- Pilih --</option>';
                         $("#period").html(s_html);
-                        if(sts == 'yearly'){
-                            $("#period").trigger('change');
-                        }
                     }
-                });
+                }
+                
+            }else if(tipe == 'indicator'){
+                if(role == '999999'){
+                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                    $("#period").html(s_html);
+                }else{
+                    if(catrole == 'Government'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-gov_act/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else if(catrole == 'NSA'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-nongov_act/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else{
+                        var s_html = '<option value="0" >-- Pilih --</option>';
+                        $("#period").html(s_html);
+                    }
+                }
+                
             }else{
-                $.ajax({
-                    type: "GET",
-                    url: urls+'list-get-sts-monper-gov_act/'+data[0],
-                    success: function (result1) {
-                        var sts = result1.content;
-                        if(sts == 'yearly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
-                        }else if(sts == 'semesterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
-                        }else if(sts == 'quarterly'){
-                            var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
-                        }else{}
-                        $("#period").html(s_html);
-                        if(sts == 'yearly'){
-                            $("#period").trigger('change');
-                        }
-                    }
-                });
+                var s_html = '<option value="0" >-- Pilih --</option>';
+                $("#period").html(s_html);
             }
-//            
-//            $("#tabel-approve-gov-activity").hide();
-//            $("#tabel-approve-gov-indicator").hide();
-//            grid_role();
-//            grid();
+        });
+        
+        $("#pil_prog").on('change', function(e){
+            var tipe    = $("#pil_prog").val();
+            var role    = $("#idrole").val();
+            var periode = $("#periode").val();
+            var data    = periode.split("###");
+            var catrole = '';
+            $.ajax({
+                async:false,
+                type: "GET",
+                url: urls+'list-cek-catrole-best/'+role,
+                success: function (cek_catrole) {
+                    catrole = cek_catrole.content;
+                }
+            });
+
+            if(tipe == 'budget'){
+                if(role == '999999'){
+                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                    $("#period").html(s_html);
+                }else{
+                    if(catrole == 'Government'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-gov/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else if(catrole == 'NSA'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-nongov/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else{
+                        var s_html = '<option value="0" >-- Pilih --</option>';
+                        $("#period").html(s_html);
+                    }
+                }
+                
+            }else if(tipe == 'indicator'){
+                if(role == '999999'){
+                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                    $("#period").html(s_html);
+                }else{
+                    if(catrole == 'Government'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-gov_act/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else if(catrole == 'NSA'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-nongov_act/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else{
+                        var s_html = '<option value="0" >-- Pilih --</option>';
+                        $("#period").html(s_html);
+                    }
+                }
+                
+            }else{
+                var s_html = '<option value="0" >-- Pilih --</option>';
+                $("#period").html(s_html);
+            }
+        });
+        
+        $("#idrole").on('change', function(e){
+            var tipe    = $("#pil_prog").val();
+            var role    = $("#idrole").val();
+            var periode = $("#periode").val();
+            var data    = periode.split("###");
+            var catrole = '';
+            $.ajax({
+                async:false,
+                type: "GET",
+                url: urls+'list-cek-catrole-best/'+role,
+                success: function (cek_catrole) {
+                    catrole = cek_catrole.content;
+                }
+            });
+
+            if(tipe == 'budget'){
+                if(role == '999999'){
+                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                    $("#period").html(s_html);
+                }else{
+                    if(catrole == 'Government'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-gov/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else if(catrole == 'NSA'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-nongov/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else{
+                        var s_html = '<option value="0" >-- Pilih --</option>';
+                        $("#period").html(s_html);
+                    }
+                }
+                
+            }else if(tipe == 'indicator'){
+                if(role == '999999'){
+                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                    $("#period").html(s_html);
+                }else{
+                    if(catrole == 'Government'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-gov_act/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else if(catrole == 'NSA'){
+                        $.ajax({
+                            type: "GET",
+                            url: urls+'list-get-sts-monper-nongov_act/'+data[0],
+                            success: function (result1) {
+                                var sts = result1.content;
+                                console.log(sts);
+                                if(sts == 'yearly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" selected>End of fiscal year</option>';
+                                }else if(sts == 'semesterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Semester 1</option><option value="2" >Semester 2</option>';
+                                }else if(sts == 'quarterly'){
+                                    var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
+                                }else{}
+                                $("#period").html(s_html);
+                                if(sts == 'yearly'){
+                                    $("#period").trigger('change');
+                                }
+                            }
+                        });
+                    }else{
+                        var s_html = '<option value="0" >-- Pilih --</option>';
+                        $("#period").html(s_html);
+                    }
+                }
+                
+            }else{
+                var s_html = '<option value="0" >-- Pilih --</option>';
+                $("#period").html(s_html);
+            }
         });
         
         $("#period").on('change', function(e){
