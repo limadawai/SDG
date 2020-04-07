@@ -1708,7 +1708,8 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> listEntrySdgTarget(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
         String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
                     "g.sdg_indicator, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit \n" +
+                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit, "+
+                    "(select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = d.id and year between g.start_year and g.end_year) as target,i.baseline " +
                     "from ran_rad as g\n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -1717,6 +1718,7 @@ public class DataEntryController {
                     "left join \n" +
                     "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join sdg_funding as i on d.id = i.id_sdg_indicator \n" +
                     "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov order by a.id_goals, a.id_target, a.id_indicator";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
