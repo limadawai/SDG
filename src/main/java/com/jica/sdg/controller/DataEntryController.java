@@ -1469,6 +1469,10 @@ public class DataEntryController {
             	list.get().setAchievement2(entryNsaIndicator.getAchievement2());
             	list.get().setAchievement3(entryNsaIndicator.getAchievement3());
             	list.get().setAchievement4(entryNsaIndicator.getAchievement4());
+            	list.get().setNew_value1(entryNsaIndicator.getNew_value1());
+            	list.get().setNew_value2(entryNsaIndicator.getNew_value2());
+            	list.get().setNew_value3(entryNsaIndicator.getNew_value3());
+            	list.get().setNew_value4(entryNsaIndicator.getNew_value4());
             	list.get().setYear_entry(entryNsaIndicator.getYear_entry());
             	list.get().setId_monper(entryNsaIndicator.getId_monper());
         		list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryNsaIndicator(foundUpdateObject));
