@@ -292,6 +292,20 @@
 	        $('#id_role, #id_monper').on('change', function(){
 	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	        });
+	        
+	        function cekStatusMonper(){
+	        	var status = "";
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-monPer/'+$('#id_monper').val(),
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	status = val.status;
+                    },
+                });
+	        	return status;
+	        }
 			
 			var table = $('#tabel-goals').DataTable({
 				responsive: true,
@@ -300,6 +314,15 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"drawCallback": function( settings ) {
+					if(cekStatusMonper()=="completed"){
+		        		$('#showModal').hide();
+		        		$('#tbody-goals').find('.update, .detail, .delete').hide();
+		        	}else{
+		        		$('#showModal').show();
+		        		$('#tbody-goals').find('.update, .detail, .delete').show();
+		        	}
+				},
 				"ajax": {
 					"url": urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val(),
 					dataSrc: 'content',
