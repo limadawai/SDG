@@ -1409,7 +1409,7 @@ public class RateController {
                         if(period.equals("1")) {
                             System.out.println("ke 1");
                             EntryNsaBudget entryNsaBudget = new EntryNsaBudget();
-//                            entryGovIndicator.setId(null);
+                            System.out.println("nilai = "+data_achievement[i]);
                             entryNsaBudget.setId_nsa_activity(Integer.parseInt(data_indicator[i]));
                             entryNsaBudget.setAchievement1(Integer.parseInt(data_achievement[i]));
                             entryNsaBudget.setYear_entry(tahun);

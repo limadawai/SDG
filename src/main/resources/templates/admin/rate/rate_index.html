@@ -1055,6 +1055,11 @@
                     }
                 });
                 
+                if(dt[0] == null){
+                    var ketdt = '0';
+                }else{
+                    var ketdt = dt[0];
+                }
                 if(dt[1] == null){
                     var ketdt1 = '0';
                 }else{
@@ -1062,6 +1067,8 @@
                 }
                 
                 if(ketdt1 == '0'){
+                    $("#tbl_program > tbody").html("");
+                }else if(ketdt == '0'){
                     $("#tbl_program > tbody").html("");
                 }else{
                     $("#tbl_program > tbody").html("");
@@ -1198,6 +1205,12 @@
                     }
                 });
                 
+                if(dt[0] == null){
+                    var ketdt = '0';
+                }else{
+                    var ketdt = dt[0];
+                }
+                
                 if(dt[1] == null){
                     var ketdt1 = '0';
                 }else{
@@ -1205,6 +1218,8 @@
                 }
                 
                 if(ketdt1 == '0'){
+                    $("#tbl_program > tbody").html("");
+                }else if(ketdt == '0'){
                     $("#tbl_program > tbody").html("");
                 }else{
                     $("#tbl_program > tbody").html("");
@@ -1300,113 +1315,159 @@
                     var isi_time = d_time;
 //                                console.log('isi '+d_time)
                 }
-                $("#tbl_program_nilai > tbody").html("");
+                
+                var v_pil_prog  = $("#pil_prog").val();
+                var dt ="";
+                if(catrole == 'Government'){
+                    var type    = 'entry_gov_indicator';
+                    var type_b  = 'entry_gov_budget';
+                    var tb      = 'gov_activity';
+                    var tb2     = 'gov_indicator';
+                }else if(catrole == 'NSA'){
+                    var type    = 'entry_nsa_indicator';
+                    var type_b  = 'entry_nsa_budget';
+                    var tb      = 'nsa_activity';
+                    var tb2     = 'nsa_indicator';
+                }else{}
+                if(v_pil_prog == 'indicator'){
+                    var link2 = urls+'get-cek-data-all/'+id_role+'/'+tahun+'/'+v_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time+'/'+id_monper;
+                }else{
+                    var link2 = urls+'get-cek-data-all-budget/'+id_role+'/'+tahun+'/'+v_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time+'/'+id_monper;
+                }
                 $.ajax({
                     type: "GET",
                     async:false,
-                    url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
-                    success: function (data_level1) {
-                        console.log(data_level1.content);
-                        var level1 = data_level1.content;
-                        if (level1 != '') {
-                            for (i in level1) {
-                                if($("#fs").is(':checked')){
-                                    var prog_1 = level1[i][3]+" "+level1[i][1];
-                                }else{
-                                    var prog_1 = level1[i][3]+" "+level1[i][2];
-                                }
-                                var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
-                                $("#tbl_program_nilai > tbody").append(tb_prog);
-                                
-                                $.ajax({
-                                    type: "GET",
-                                    async:false,
-                                    url: urls + "get_sub_prog_level2/"+level1[i][0]+"/"+id_role+"/"+catrole,
-                                    success: function (data_level2) {
-//                                        console.log(data_level2.content);
-                                        var level2 = data_level2.content;
-                                        if (level2 != '') {
-                                            for (o in level2) {
-                                                if($("#fs").is(':checked')){
-                                                    var prog_2 = level2[o][3]+" "+level2[o][1];
-                                                }else{
-                                                    var prog_2 = level2[o][3]+" "+level2[o][2];
-                                                }
-                                                var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
-                                                $("#tbl_program_nilai > tbody").append(tb_prog2);
-
-                                                $.ajax({
-                                                    type: "GET",
-                                                    async:false,
-                                                    url: urls + "get_sub_prog_level3/"+level1[i][0]+"/"+level2[o][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
-                                                    success: function (data_level3) {
-                //                                        console.log(data_level2.content);
-                                                        var level3 = data_level3.content;
-                                                        if (level3 != '') {
-                                                            for (p in level3) {
-                                                                if($("#fs").is(':checked')){
-                                                                    var prog_3 = level3[p][13]+" "+level3[p][1];
-                                                                }else{
-                                                                    var prog_3 = level3[p][13]+" "+level3[p][2];
-                                                                }
-                                                                if(v_period == '1'){
-                                                                    var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                    if(level3[p][5] == '0'){
-                                                                        var warna = 'style="background-color: #ffa5a5"';
-                                                                    }else{
-                                                                        var warna = '';
-                                                                    }
-                                                                }else if(v_period == '2'){
-                                                                    var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                    if(level3[p][6] == '0'){
-                                                                        var warna = 'style="background-color: #ffa5a5"';
-                                                                    }else{
-                                                                        var warna = '';
-                                                                    }
-                                                                }else if(v_period == '3'){
-                                                                    if(level3[p][7] == '0'){
-                                                                        var warna = 'style="background-color: #ffa5a5"';
-                                                                    }else{
-                                                                        var warna = '';
-                                                                    }
-                                                                    var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                }else if(v_period == '4'){
-                                                                    if(level3[p][8] == '0'){
-                                                                        var warna = 'style="background-color: #ffa5a5"';
-                                                                    }else{
-                                                                        var warna = '';
-                                                                    }
-                                                                    var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                }else{}
-//                                                                if(v_period == '1'){
-//                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="text" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
-//                                                                }else if(v_period == '2'){
-//                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="text" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
-//                                                                }else if(v_period == '3'){
-//                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="text" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
-//                                                                }else if(v_period == '4'){
-//                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="text" value="'+level3[p][8]+'" class="input-block-level">';
-//                                                                }else{}
-                                                                
-                                                                var tb_prog3 = '<tr '+warna+'> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator11" id="id_indicator11" type="hidden" value="'+level3[p][0]+'" class="input-block-level"><input name="id_entry11" id="id_entry11" type="hidden" value="'+level3[p][4]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
-                                                                $("#tbl_program_nilai > tbody").append(tb_prog3);
-
-                                                                
-
-                                                            }
-                                                        }
-                                                    }
-                                                });
-
-                                            }
-                                        }
-                                    }
-                                });
-                                
-                            }
-                        }
+                    url: link2,
+                    success: function (result3) {
+                        dt = result3.content[0];
                     }
                 });
+                
+                if(dt[0] == null){
+                    var ketdt = '0';
+                }else{
+                    var ketdt = dt[0];
+                }
+                
+                if(dt[1] == null){
+                    var ketdt1 = '0';
+                }else{
+                    var ketdt1 = dt[1];
+                }
+                
+                if(ketdt1 == '0'){
+                    $("#tbl_program_nilai > tbody").html("");
+                }else if(ketdt == '0'){
+                    $("#tbl_program_nilai > tbody").html("");
+                }else{
+                    $("#tbl_program_nilai > tbody").html("");
+                    $.ajax({
+                        type: "GET",
+                        async:false,
+                        url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
+                        success: function (data_level1) {
+                            console.log(data_level1.content);
+                            var level1 = data_level1.content;
+                            if (level1 != '') {
+                                for (i in level1) {
+                                    if($("#fs").is(':checked')){
+                                        var prog_1 = level1[i][3]+" "+level1[i][1];
+                                    }else{
+                                        var prog_1 = level1[i][3]+" "+level1[i][2];
+                                    }
+                                    var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
+                                    $("#tbl_program_nilai > tbody").append(tb_prog);
+
+                                    $.ajax({
+                                        type: "GET",
+                                        async:false,
+                                        url: urls + "get_sub_prog_level2/"+level1[i][0]+"/"+id_role+"/"+catrole,
+                                        success: function (data_level2) {
+    //                                        console.log(data_level2.content);
+                                            var level2 = data_level2.content;
+                                            if (level2 != '') {
+                                                for (o in level2) {
+                                                    if($("#fs").is(':checked')){
+                                                        var prog_2 = level2[o][3]+" "+level2[o][1];
+                                                    }else{
+                                                        var prog_2 = level2[o][3]+" "+level2[o][2];
+                                                    }
+                                                    var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
+                                                    $("#tbl_program_nilai > tbody").append(tb_prog2);
+
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        async:false,
+                                                        url: urls + "get_sub_prog_level3/"+level1[i][0]+"/"+level2[o][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
+                                                        success: function (data_level3) {
+                    //                                        console.log(data_level2.content);
+                                                            var level3 = data_level3.content;
+                                                            if (level3 != '') {
+                                                                for (p in level3) {
+                                                                    if($("#fs").is(':checked')){
+                                                                        var prog_3 = level3[p][13]+" "+level3[p][1];
+                                                                    }else{
+                                                                        var prog_3 = level3[p][13]+" "+level3[p][2];
+                                                                    }
+                                                                    if(v_period == '1'){
+                                                                        var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                        if(level3[p][5] == '0'){
+                                                                            var warna = 'style="background-color: #ffa5a5"';
+                                                                        }else{
+                                                                            var warna = '';
+                                                                        }
+                                                                    }else if(v_period == '2'){
+                                                                        var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                        if(level3[p][6] == '0'){
+                                                                            var warna = 'style="background-color: #ffa5a5"';
+                                                                        }else{
+                                                                            var warna = '';
+                                                                        }
+                                                                    }else if(v_period == '3'){
+                                                                        if(level3[p][7] == '0'){
+                                                                            var warna = 'style="background-color: #ffa5a5"';
+                                                                        }else{
+                                                                            var warna = '';
+                                                                        }
+                                                                        var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                    }else if(v_period == '4'){
+                                                                        if(level3[p][8] == '0'){
+                                                                            var warna = 'style="background-color: #ffa5a5"';
+                                                                        }else{
+                                                                            var warna = '';
+                                                                        }
+                                                                        var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                    }else{}
+    //                                                                if(v_period == '1'){
+    //                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="text" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+    //                                                                }else if(v_period == '2'){
+    //                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="text" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+    //                                                                }else if(v_period == '3'){
+    //                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="text" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
+    //                                                                }else if(v_period == '4'){
+    //                                                                    var ket_input = '<input name="submission[][achievement1]" id="submission[][achievement1]" type="hidden" value="'+level3[p][5]+'" class="input-block-level"><input name="submission[][achievement2]" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="submission[][achievement3]" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="submission[][achievement4]" id="submission[][achievement4]" type="text" value="'+level3[p][8]+'" class="input-block-level">';
+    //                                                                }else{}
+
+                                                                    var tb_prog3 = '<tr '+warna+'> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator11" id="id_indicator11" type="hidden" value="'+level3[p][0]+'" class="input-block-level"><input name="id_entry11" id="id_entry11" type="hidden" value="'+level3[p][4]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
+                                                                    $("#tbl_program_nilai > tbody").append(tb_prog3);
+
+
+
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+                    });
+                }
             }
             
             function grid_modal_nilai_budget(){
@@ -1425,80 +1486,126 @@
                     var isi_time = d_time;
 //                                console.log('isi '+d_time)
                 }
-                $("#tbl_program_nilai > tbody").html("");
+                
+                var v_pil_prog  = $("#pil_prog").val();
+                var dt ="";
+                if(catrole == 'Government'){
+                    var type    = 'entry_gov_indicator';
+                    var type_b  = 'entry_gov_budget';
+                    var tb      = 'gov_activity';
+                    var tb2     = 'gov_indicator';
+                }else if(catrole == 'NSA'){
+                    var type    = 'entry_nsa_indicator';
+                    var type_b  = 'entry_nsa_budget';
+                    var tb      = 'nsa_activity';
+                    var tb2     = 'nsa_indicator';
+                }else{}
+                if(v_pil_prog == 'indicator'){
+                    var link2 = urls+'get-cek-data-all/'+id_role+'/'+tahun+'/'+v_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time+'/'+id_monper;
+                }else{
+                    var link2 = urls+'get-cek-data-all-budget/'+id_role+'/'+tahun+'/'+v_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time+'/'+id_monper;
+                }
                 $.ajax({
                     type: "GET",
                     async:false,
-                    url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
-                    success: function (data_level1) {
-                        console.log(data_level1.content);
-                        var level1 = data_level1.content;
-                        if (level1 != '') {
-                            for (i in level1) {
-                                if($("#fs").is(':checked')){
-                                    var prog_1 = level1[i][3]+" "+level1[i][1];
-                                }else{
-                                    var prog_1 = level1[i][3]+" "+level1[i][2];
-                                }
-                                var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
-                                $("#tbl_program_nilai > tbody").append(tb_prog);
-                                
-                                $.ajax({
-                                    type: "GET",
-                                    async:false,
-                                    url: urls + "get_sub_prog_level2_budget/"+level1[i][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
-                                    success: function (data_level2) {
-//                                        console.log(data_level2.content);
-                                        var level2 = data_level2.content;
-                                        if (level2 != '') {
-                                            for (o in level2) {
-                                                if($("#fs").is(':checked')){
-                                                    var prog_2 = level2[o][13]+" "+level2[o][1];
-                                                }else{
-                                                    var prog_2 = level2[o][13]+" "+level2[o][2];
-                                                }
-                                                if(v_period == '1'){
-                                                    if(level2[o][5] == '0'){
-                                                        var warna = 'style="background-color: #ffa5a5"';
-                                                    }else{
-                                                        var warna = '';
-                                                    }
-                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="text" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
-                                                }else if(v_period == '2'){
-                                                    if(level2[o][5] == '0'){
-                                                        var warna = 'style="background-color: #ffa5a5"';
-                                                    }else{
-                                                        var warna = '';
-                                                    }
-                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="text" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
-                                                }else if(v_period == '3'){
-                                                    if(level2[o][5] == '0'){
-                                                        var warna = 'style="background-color: #ffa5a5"';
-                                                    }else{
-                                                        var warna = '';
-                                                    }
-                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="text" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
-                                                }else if(v_period == '4'){
-                                                    if(level2[o][5] == '0'){
-                                                        var warna = 'style="background-color: #ffa5a5"';
-                                                    }else{
-                                                        var warna = '';
-                                                    }
-                                                    var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="text" value="'+level2[o][8]+'" class="input-block-level" readonly>';
-                                                }else{}
-                                                var tb_prog2 = '<tr '+warna+'> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"><input name="id_indicator" id="id_indicator" type="hidden" value="'+level2[o][0]+'" class="input-block-level"><input name="id_entry" id="id_entry" type="hidden" value="'+level2[o][4]+'" class="input-block-level">'+ket_input+' '+level2[o][3]+'</td> </tr>';
-                                                $("#tbl_program_nilai > tbody").append(tb_prog2);
-
-
-                                            }
-                                        }
-                                    }
-                                });
-                                
-                            }
-                        }
+                    url: link2,
+                    success: function (result3) {
+                        dt = result3.content[0];
                     }
                 });
+                
+                if(dt[0] == null){
+                    var ketdt = '0';
+                }else{
+                    var ketdt = dt[0];
+                }
+                
+                if(dt[1] == null){
+                    var ketdt1 = '0';
+                }else{
+                    var ketdt1 = dt[1];
+                }
+                
+                if(ketdt1 == '0'){
+                    $("#tbl_program_nilai > tbody").html("");
+                }else if(ketdt == '0'){
+                    $("#tbl_program_nilai > tbody").html("");
+                }else{
+                    $("#tbl_program_nilai > tbody").html("");
+                    $.ajax({
+                        type: "GET",
+                        async:false,
+                        url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
+                        success: function (data_level1) {
+                            console.log(data_level1.content);
+                            var level1 = data_level1.content;
+                            if (level1 != '') {
+                                for (i in level1) {
+                                    if($("#fs").is(':checked')){
+                                        var prog_1 = level1[i][3]+" "+level1[i][1];
+                                    }else{
+                                        var prog_1 = level1[i][3]+" "+level1[i][2];
+                                    }
+                                    var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
+                                    $("#tbl_program_nilai > tbody").append(tb_prog);
+
+                                    $.ajax({
+                                        type: "GET",
+                                        async:false,
+                                        url: urls + "get_sub_prog_level2_budget/"+level1[i][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
+                                        success: function (data_level2) {
+    //                                        console.log(data_level2.content);
+                                            var level2 = data_level2.content;
+                                            if (level2 != '') {
+                                                for (o in level2) {
+                                                    if($("#fs").is(':checked')){
+                                                        var prog_2 = level2[o][13]+" "+level2[o][1];
+                                                    }else{
+                                                        var prog_2 = level2[o][13]+" "+level2[o][2];
+                                                    }
+                                                    if(v_period == '1'){
+                                                        if(level2[o][5] == '0'){
+                                                            var warna = 'style="background-color: #ffa5a5"';
+                                                        }else{
+                                                            var warna = '';
+                                                        }
+                                                        var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="text" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
+                                                    }else if(v_period == '2'){
+                                                        if(level2[o][5] == '0'){
+                                                            var warna = 'style="background-color: #ffa5a5"';
+                                                        }else{
+                                                            var warna = '';
+                                                        }
+                                                        var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="text" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
+                                                    }else if(v_period == '3'){
+                                                        if(level2[o][5] == '0'){
+                                                            var warna = 'style="background-color: #ffa5a5"';
+                                                        }else{
+                                                            var warna = '';
+                                                        }
+                                                        var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="text" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level" readonly>';
+                                                    }else if(v_period == '4'){
+                                                        if(level2[o][5] == '0'){
+                                                            var warna = 'style="background-color: #ffa5a5"';
+                                                        }else{
+                                                            var warna = '';
+                                                        }
+                                                        var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="hidden" value="'+level2[o][5]+'" class="input-block-level" readonly><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level" readonly><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level" readonly><input name="achievement4" id="submission[][achievement4]" type="text" value="'+level2[o][8]+'" class="input-block-level" readonly>';
+                                                    }else{}
+                                                    var tb_prog2 = '<tr '+warna+'> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"><input name="id_indicator" id="id_indicator" type="hidden" value="'+level2[o][0]+'" class="input-block-level"><input name="id_entry" id="id_entry" type="hidden" value="'+level2[o][4]+'" class="input-block-level">'+ket_input+' '+level2[o][3]+'</td> </tr>';
+                                                    $("#tbl_program_nilai > tbody").append(tb_prog2);
+
+
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+                    });
+                }
             }
             
             //modal date
@@ -1536,212 +1643,258 @@
                     var isi_time = d_time;
 //                                console.log('isi '+d_time)
                 }
-                $("#tbl_program_date > tbody").html("");
+                
+                var v_pil_prog  = $("#pil_prog").val();
+                var dt ="";
+                if(catrole == 'Government'){
+                    var type    = 'entry_gov_indicator';
+                    var type_b  = 'entry_gov_budget';
+                    var tb      = 'gov_activity';
+                    var tb2     = 'gov_indicator';
+                }else if(catrole == 'NSA'){
+                    var type    = 'entry_nsa_indicator';
+                    var type_b  = 'entry_nsa_budget';
+                    var tb      = 'nsa_activity';
+                    var tb2     = 'nsa_indicator';
+                }else{}
+                if(v_pil_prog == 'indicator'){
+                    var link2 = urls+'get-cek-data-all/'+id_role+'/'+tahun+'/'+v_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time+'/'+id_monper;
+                }else{
+                    var link2 = urls+'get-cek-data-all-budget/'+id_role+'/'+tahun+'/'+v_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time+'/'+id_monper;
+                }
                 $.ajax({
                     type: "GET",
                     async:false,
-                    url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
-                    success: function (data_level1) {
-                        console.log(data_level1.content);
-                        var level1 = data_level1.content;
-                        if (level1 != '') {
-                            for (i in level1) {
-                                if($("#fs").is(':checked')){
-                                    var prog_1 = level1[i][3]+" "+level1[i][1];
-                                }else{
-                                    var prog_1 = level1[i][3]+" "+level1[i][2];
-                                }
-                                var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
-                                $("#tbl_program_date > tbody").append(tb_prog);
-                                
-                                $.ajax({
-                                    type: "GET",
-                                    async:false,
-                                    url: urls + "get_sub_prog_level2/"+level1[i][0]+"/"+id_role+"/"+catrole,
-                                    success: function (data_level2) {
-//                                        console.log(data_level2.content);
-                                        var level2 = data_level2.content;
-                                        if (level2 != '') {
-                                            for (o in level2) {
-                                                if($("#fs").is(':checked')){
-                                                    var prog_2 = level2[o][3]+" "+level2[o][1];
-                                                }else{
-                                                    var prog_2 = level2[o][3]+" "+level2[o][2];
-                                                }
-                                                var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
-                                                $("#tbl_program_date > tbody").append(tb_prog2);
-
-                                                $.ajax({
-                                                    type: "GET",
-                                                    async:false,
-                                                    url: urls + "get_sub_prog_level3/"+level1[i][0]+"/"+level2[o][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
-                                                    success: function (data_level3) {
-                //                                        console.log(data_level2.content);
-                                                        var level3 = data_level3.content;
-                                                        var sts;
-                                                        if (level3 != '') {
-                                                            for (p in level3) {
-                                                                if($("#fs").is(':checked')){
-                                                                    var prog_3 = level3[p][13]+" "+level3[p][1];
-                                                                }else{
-                                                                    var prog_3 = level3[p][13]+" "+level3[p][2];
-                                                                }
-                                                                if(catrole == 'Government'){
-                                                                    $.ajax({
-                                                                        type: "GET",
-                                                                        async:false,
-                                                                        url: urls+'list-get-sts-monper-gov_act/'+id_monper,
-                                                                        success: function (resultmonper) {
-                                                                            sts = resultmonper.content;
-                                                                        }
-                                                                    });
-                                                                    if(sts == 'yearly'){
-                                                                        if(v_period == '1'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][9] <= (tahun+1)+'-01-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else{}
-                                                                    }else if(sts == 'semesterly'){
-                                                                        if(v_period == '1'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][9] <= tahun+'-07-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else if(v_period == '2'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][10] <= (tahun+1)+'-01-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else{}
-                                                                        
-                                                                    }else if(sts == 'quarterly'){
-                                                                        if(v_period == '1'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][9] <= tahun+'-04-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else if(v_period == '2'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][10] <= tahun+'-07-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else if(v_period == '3'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][11] <= tahun+'-10-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else if(v_period == '4'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][12] <= (tahun+1)+'-01-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else{}
-                                                                    }else{}
-
-                                                                }else if(catrole == 'NSA'){
-                                                                    $.ajax({
-                                                                        type: "GET",
-                                                                        async:false,
-                                                                        url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
-                                                                        success: function (resultmonper) {
-                                                                            sts = resultmonper.content;
-                                                                        }
-                                                                    });
-                                                                    if(sts == 'yearly'){
-                                                                        if(v_period == '1'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][9] <= (tahun+1)+'-01-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else{}
-                                                                    }else if(sts == 'semesterly'){
-                                                                        if(v_period == '1'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][9] <= tahun+'-07-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else if(v_period == '2'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][10] <= (tahun+1)+'-01-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else{}
-                                                                        
-                                                                    }else if(sts == 'quarterly'){
-                                                                        if(v_period == '1'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][9] <= tahun+'-04-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else if(v_period == '2'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][10] <= tahun+'-07-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else if(v_period == '3'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][11] <= tahun+'-10-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else if(v_period == '4'){
-                                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                                            if(level3[p][12] <= (tahun+1)+'-01-15'){
-                                                                                var warna = '';
-                                                                            }else{
-                                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                                            }
-                                                                        }else{}
-                                                                    }else{}
-
-                                                                }else{}
-                                                                
-                                                                
-                                                                var tb_prog3 = '<tr '+warna+'> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator11" id="id_indicator11" type="hidden" value="'+level3[p][0]+'" class="input-block-level"><input name="id_entry11" id="id_entry11" type="hidden" value="'+level3[p][4]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
-                                                                $("#tbl_program_date > tbody").append(tb_prog3);
-
-                                                                
-
-                                                            }
-                                                        }
-                                                    }
-                                                });
-
-                                            }
-                                        }
-                                    }
-                                });
-                                
-                            }
-                        }
+                    url: link2,
+                    success: function (result3) {
+                        dt = result3.content[0];
                     }
                 });
+                
+                if(dt[0] == null){
+                    var ketdt = '0';
+                }else{
+                    var ketdt = dt[0];
+                }
+                
+                if(dt[1] == null){
+                    var ketdt1 = '0';
+                }else{
+                    var ketdt1 = dt[1];
+                }
+                
+                if(ketdt1 == '0'){
+                    $("#tbl_program_date > tbody").html("");
+                }else if(ketdt == '0'){
+                    $("#tbl_program_date > tbody").html("");
+                }else{
+                    $("#tbl_program_date > tbody").html("");
+                    $.ajax({
+                        type: "GET",
+                        async:false,
+                        url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
+                        success: function (data_level1) {
+                            console.log(data_level1.content);
+                            var level1 = data_level1.content;
+                            if (level1 != '') {
+                                for (i in level1) {
+                                    if($("#fs").is(':checked')){
+                                        var prog_1 = level1[i][3]+" "+level1[i][1];
+                                    }else{
+                                        var prog_1 = level1[i][3]+" "+level1[i][2];
+                                    }
+                                    var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
+                                    $("#tbl_program_date > tbody").append(tb_prog);
+
+                                    $.ajax({
+                                        type: "GET",
+                                        async:false,
+                                        url: urls + "get_sub_prog_level2/"+level1[i][0]+"/"+id_role+"/"+catrole,
+                                        success: function (data_level2) {
+    //                                        console.log(data_level2.content);
+                                            var level2 = data_level2.content;
+                                            if (level2 != '') {
+                                                for (o in level2) {
+                                                    if($("#fs").is(':checked')){
+                                                        var prog_2 = level2[o][3]+" "+level2[o][1];
+                                                    }else{
+                                                        var prog_2 = level2[o][3]+" "+level2[o][2];
+                                                    }
+                                                    var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
+                                                    $("#tbl_program_date > tbody").append(tb_prog2);
+
+                                                    $.ajax({
+                                                        type: "GET",
+                                                        async:false,
+                                                        url: urls + "get_sub_prog_level3/"+level1[i][0]+"/"+level2[o][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
+                                                        success: function (data_level3) {
+                    //                                        console.log(data_level2.content);
+                                                            var level3 = data_level3.content;
+                                                            var sts;
+                                                            if (level3 != '') {
+                                                                for (p in level3) {
+                                                                    if($("#fs").is(':checked')){
+                                                                        var prog_3 = level3[p][13]+" "+level3[p][1];
+                                                                    }else{
+                                                                        var prog_3 = level3[p][13]+" "+level3[p][2];
+                                                                    }
+                                                                    if(catrole == 'Government'){
+                                                                        $.ajax({
+                                                                            type: "GET",
+                                                                            async:false,
+                                                                            url: urls+'list-get-sts-monper-gov_act/'+id_monper,
+                                                                            success: function (resultmonper) {
+                                                                                sts = resultmonper.content;
+                                                                            }
+                                                                        });
+                                                                        if(sts == 'yearly'){
+                                                                            if(v_period == '1'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][9] <= (tahun+1)+'-01-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else{}
+                                                                        }else if(sts == 'semesterly'){
+                                                                            if(v_period == '1'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][9] <= tahun+'-07-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else if(v_period == '2'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][10] <= (tahun+1)+'-01-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else{}
+
+                                                                        }else if(sts == 'quarterly'){
+                                                                            if(v_period == '1'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][9] <= tahun+'-04-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else if(v_period == '2'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][10] <= tahun+'-07-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else if(v_period == '3'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][11] <= tahun+'-10-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else if(v_period == '4'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][12] <= (tahun+1)+'-01-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else{}
+                                                                        }else{}
+
+                                                                    }else if(catrole == 'NSA'){
+                                                                        $.ajax({
+                                                                            type: "GET",
+                                                                            async:false,
+                                                                            url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
+                                                                            success: function (resultmonper) {
+                                                                                sts = resultmonper.content;
+                                                                            }
+                                                                        });
+                                                                        if(sts == 'yearly'){
+                                                                            if(v_period == '1'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][9] <= (tahun+1)+'-01-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else{}
+                                                                        }else if(sts == 'semesterly'){
+                                                                            if(v_period == '1'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][9] <= tahun+'-07-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else if(v_period == '2'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][10] <= (tahun+1)+'-01-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else{}
+
+                                                                        }else if(sts == 'quarterly'){
+                                                                            if(v_period == '1'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][9] <= tahun+'-04-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else if(v_period == '2'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][10] <= tahun+'-07-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else if(v_period == '3'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][11] <= tahun+'-10-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else if(v_period == '4'){
+                                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                                if(level3[p][12] <= (tahun+1)+'-01-15'){
+                                                                                    var warna = '';
+                                                                                }else{
+                                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                                }
+                                                                            }else{}
+                                                                        }else{}
+
+                                                                    }else{}
+
+
+                                                                    var tb_prog3 = '<tr '+warna+'> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator11" id="id_indicator11" type="hidden" value="'+level3[p][0]+'" class="input-block-level"><input name="id_entry11" id="id_entry11" type="hidden" value="'+level3[p][4]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
+                                                                    $("#tbl_program_date > tbody").append(tb_prog3);
+
+
+
+                                                                }
+                                                            }
+                                                        }
+                                                    });
+
+                                                }
+                                            }
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+                    });
+                }
             }
             
             function grid_modal_date_budget(){
@@ -1760,191 +1913,238 @@
                     var isi_time = d_time;
 //                                console.log('isi '+d_time)
                 }
-                $("#tbl_program_date > tbody").html("");
+                
+                var v_pil_prog  = $("#pil_prog").val();
+                var dt ="";
+                if(catrole == 'Government'){
+                    var type    = 'entry_gov_indicator';
+                    var type_b  = 'entry_gov_budget';
+                    var tb      = 'gov_activity';
+                    var tb2     = 'gov_indicator';
+                }else if(catrole == 'NSA'){
+                    var type    = 'entry_nsa_indicator';
+                    var type_b  = 'entry_nsa_budget';
+                    var tb      = 'nsa_activity';
+                    var tb2     = 'nsa_indicator';
+                }else{}
+                if(v_pil_prog == 'indicator'){
+                    var link2 = urls+'get-cek-data-all/'+id_role+'/'+tahun+'/'+v_period+'/'+type+'/'+tb+'/'+tb2+'/'+isi_time+'/'+id_monper;
+                }else{
+                    var link2 = urls+'get-cek-data-all-budget/'+id_role+'/'+tahun+'/'+v_period+'/'+type_b+'/'+tb+'/'+tb2+'/'+isi_time+'/'+id_monper;
+                }
                 $.ajax({
                     type: "GET",
                     async:false,
-                    url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
-                    success: function (data_level1) {
-                        console.log(data_level1.content);
-                        var level1 = data_level1.content;
-                        if (level1 != '') {
-                            for (i in level1) {
-                                if($("#fs").is(':checked')){
-                                    var prog_1 = level1[i][3]+" "+level1[i][1];
-                                }else{
-                                    var prog_1 = level1[i][3]+" "+level1[i][2];
-                                }
-                                var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
-                                $("#tbl_program_date > tbody").append(tb_prog);
-                                
-                                $.ajax({
-                                    type: "GET",
-                                    async:false,
-                                    url: urls + "get_sub_prog_level2_budget/"+level1[i][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
-                                    success: function (data_level2) {
-//                                        console.log(data_level2.content);
-                                        var level3 = data_level2.content;
-                                        var sts;
-                                        if (level3 != '') {
-                                            for (p in level3) {
-                                                if($("#fs").is(':checked')){
-                                                    var prog_3 = level3[p][13]+" "+level3[p][1];
-                                                }else{
-                                                    var prog_3 = level3[p][13]+" "+level3[p][2];
-                                                }
-                                                if(catrole == 'Government'){
-                                                    $.ajax({
-                                                        type: "GET",
-                                                        async:false,
-                                                        url: urls+'list-get-sts-monper-gov_act/'+id_monper,
-                                                        success: function (resultmonper) {
-                                                            sts = resultmonper.content;
-                                                        }
-                                                    });
-                                                    if(sts == 'yearly'){
-                                                        if(v_period == '1'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][9] <= (tahun+1)+'-01-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else{}
-                                                    }else if(sts == 'semesterly'){
-                                                        if(v_period == '1'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][9] <= tahun+'-07-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else if(v_period == '2'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][10] <= (tahun+1)+'-01-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else{}
-
-                                                    }else if(sts == 'quarterly'){
-                                                        if(v_period == '1'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][9] <= tahun+'-04-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else if(v_period == '2'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][10] <= tahun+'-07-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else if(v_period == '3'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][11] <= tahun+'-10-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else if(v_period == '4'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][12] <= (tahun+1)+'-01-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else{}
-                                                    }else{}
-
-                                                }else if(catrole == 'NSA'){
-                                                    $.ajax({
-                                                        type: "GET",
-                                                        async:false,
-                                                        url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
-                                                        success: function (resultmonper) {
-                                                            sts = resultmonper.content;
-                                                        }
-                                                    });
-                                                    if(sts == 'yearly'){
-                                                        if(v_period == '1'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][9] <= (tahun+1)+'-01-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else{}
-                                                    }else if(sts == 'semesterly'){
-                                                        if(v_period == '1'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][9] <= tahun+'-07-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else if(v_period == '2'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][10] <= (tahun+1)+'-01-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else{}
-
-                                                    }else if(sts == 'quarterly'){
-                                                        if(v_period == '1'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][9] <= tahun+'-04-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else if(v_period == '2'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][10] <= tahun+'-07-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else if(v_period == '3'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][11] <= tahun+'-10-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else if(v_period == '4'){
-                                                            var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
-                                                            if(level3[p][12] <= (tahun+1)+'-01-15'){
-                                                                var warna = '';
-                                                            }else{
-                                                                var warna = 'style="background-color: #ffa5a5"';
-                                                            }
-                                                        }else{}
-                                                    }else{}
-
-                                                }else{}
-
-
-                                                var tb_prog3 = '<tr '+warna+'> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator11" id="id_indicator11" type="hidden" value="'+level3[p][0]+'" class="input-block-level"><input name="id_entry11" id="id_entry11" type="hidden" value="'+level3[p][4]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
-                                                $("#tbl_program_date > tbody").append(tb_prog3);
-
-
-
-                                            }
-                                        }
-
-                                    }
-                                });
-                                
-                            }
-                        }
+                    url: link2,
+                    success: function (result3) {
+                        dt = result3.content[0];
                     }
                 });
+                
+                if(dt[0] == null){
+                    var ketdt = '0';
+                }else{
+                    var ketdt = dt[0];
+                }
+                
+                if(dt[1] == null){
+                    var ketdt1 = '0';
+                }else{
+                    var ketdt1 = dt[1];
+                }
+                
+                if(ketdt1 == '0'){
+                    $("#tbl_program_date > tbody").html("");
+                }else if(ketdt == '0'){
+                    $("#tbl_program_date > tbody").html("");
+                }else{
+                    $("#tbl_program_date > tbody").html("");
+                    $.ajax({
+                        type: "GET",
+                        async:false,
+                        url: urls + "get_sub_prog_level1/"+id_monper+"/"+id_role+"/"+catrole,
+                        success: function (data_level1) {
+                            console.log(data_level1.content);
+                            var level1 = data_level1.content;
+                            if (level1 != '') {
+                                for (i in level1) {
+                                    if($("#fs").is(':checked')){
+                                        var prog_1 = level1[i][3]+" "+level1[i][1];
+                                    }else{
+                                        var prog_1 = level1[i][3]+" "+level1[i][2];
+                                    }
+                                    var tb_prog = '<tr> <td ><b>'+prog_1+'</b></td> <td style="width: 30%;"></td> </tr>';
+                                    $("#tbl_program_date > tbody").append(tb_prog);
+
+                                    $.ajax({
+                                        type: "GET",
+                                        async:false,
+                                        url: urls + "get_sub_prog_level2_budget/"+level1[i][0]+"/"+id_role+"/"+catrole+"/"+v_period+"/"+id_monper+"/"+tahun+"/"+isi_time,
+                                        success: function (data_level2) {
+    //                                        console.log(data_level2.content);
+                                            var level3 = data_level2.content;
+                                            var sts;
+                                            if (level3 != '') {
+                                                for (p in level3) {
+                                                    if($("#fs").is(':checked')){
+                                                        var prog_3 = level3[p][13]+" "+level3[p][1];
+                                                    }else{
+                                                        var prog_3 = level3[p][13]+" "+level3[p][2];
+                                                    }
+                                                    if(catrole == 'Government'){
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            async:false,
+                                                            url: urls+'list-get-sts-monper-gov_act/'+id_monper,
+                                                            success: function (resultmonper) {
+                                                                sts = resultmonper.content;
+                                                            }
+                                                        });
+                                                        if(sts == 'yearly'){
+                                                            if(v_period == '1'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][9] <= (tahun+1)+'-01-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else{}
+                                                        }else if(sts == 'semesterly'){
+                                                            if(v_period == '1'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][9] <= tahun+'-07-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else if(v_period == '2'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][10] <= (tahun+1)+'-01-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else{}
+
+                                                        }else if(sts == 'quarterly'){
+                                                            if(v_period == '1'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][9] <= tahun+'-04-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else if(v_period == '2'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][10] <= tahun+'-07-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else if(v_period == '3'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][11] <= tahun+'-10-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else if(v_period == '4'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][12] <= (tahun+1)+'-01-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else{}
+                                                        }else{}
+
+                                                    }else if(catrole == 'NSA'){
+                                                        $.ajax({
+                                                            type: "GET",
+                                                            async:false,
+                                                            url: urls+'list-get-sts-monper-nongov_act/'+id_monper,
+                                                            success: function (resultmonper) {
+                                                                sts = resultmonper.content;
+                                                            }
+                                                        });
+                                                        if(sts == 'yearly'){
+                                                            if(v_period == '1'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][9] <= (tahun+1)+'-01-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else{}
+                                                        }else if(sts == 'semesterly'){
+                                                            if(v_period == '1'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][9] <= tahun+'-07-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else if(v_period == '2'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][10] <= (tahun+1)+'-01-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else{}
+
+                                                        }else if(sts == 'quarterly'){
+                                                            if(v_period == '1'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][9] <= tahun+'-04-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else if(v_period == '2'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="text" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][10] <= tahun+'-07-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else if(v_period == '3'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="text" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][11] <= tahun+'-10-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else if(v_period == '4'){
+                                                                var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="hidden" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="text" value="'+level3[p][8]+'" class="input-block-level" readonly>';
+                                                                if(level3[p][12] <= (tahun+1)+'-01-15'){
+                                                                    var warna = '';
+                                                                }else{
+                                                                    var warna = 'style="background-color: #ffa5a5"';
+                                                                }
+                                                            }else{}
+                                                        }else{}
+
+                                                    }else{}
+
+
+                                                    var tb_prog3 = '<tr '+warna+'> <td style="text-indent: 4em">'+prog_3+'</td> <td style="width: 30%;"><input name="id_indicator11" id="id_indicator11" type="hidden" value="'+level3[p][0]+'" class="input-block-level"><input name="id_entry11" id="id_entry11" type="hidden" value="'+level3[p][4]+'" class="input-block-level">'+ket_input+' '+level3[p][3]+'</td> </tr>';
+                                                    $("#tbl_program_date > tbody").append(tb_prog3);
+
+
+
+                                                }
+                                            }
+
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+                    });
+                }
+                
             }
             
             
@@ -1984,6 +2184,7 @@
                     var isi_time = d_time;
 //                                console.log('isi '+d_time)
                 }
+                
                 $("#tbl_program_catrole > tbody").html("");
                 $.ajax({
                     type: "GET",
@@ -2206,9 +2407,9 @@
                 header += '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Percent</span> <span style="display:none">/</span> <span class="lang_indo">Persentase</span> </th>';
                 header += '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">On Time</span> <span style="display:none">/</span> <span class="lang_indo">Tepat Waktu</span> </th>';
                 header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Percent On Time</span> <span style="display:none">/</span> <span class="lang_indo">Persentase Tepat Waktu</span> </th> ';
-                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Applied</span> <span style="display:none">/</span> <span class="lang_indo">Di Ajukan</span> </th> ';
-                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Approved</span> <span style="display:none">/</span> <span class="lang_indo">Di Setujui</span> </th> ';
-                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Show Report</span> <span style="display:none">/</span> <span class="lang_indo">Lihat Laporan</span> </th> ';                            
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Current apply status</span> <span style="display:none">/</span> <span class="lang_indo">Status apply saat ini</span> </th> ';
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Current approval status</span> <span style="display:none">/</span> <span class="lang_indo">Status approve saat ini</span> </th> ';
+                header +=   '<th style="text-align:center;font-size:80%;%"> <span class="lang_eng" style="display:none">Current show report status</span> <span style="display:none">/</span> <span class="lang_indo">Status show report saat ini</span> </th> ';                            
                 header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
 
                 $('#tabel-entri-sdg').html(header);
