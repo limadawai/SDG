@@ -40,6 +40,7 @@
                                 <option value="0" >-- Pilih --</option>
                             </select>
                             <select id="type" name="type" class="form-control">
+                            	<option value="0" >-- Pilih --</option>
                                 <option value="entry_gov_budget" >Budget</option>
                                 <option value="entry_gov_indicator" >Indicator</option>
                             </select>
@@ -672,6 +673,7 @@
 //                        $("#unshow_report").show();
                         grid_role();
                         cek_show_report();
+                        grid();
                     },
                 });
             }, function (dismiss) {
@@ -732,6 +734,7 @@
 //                        $("#unshow_report").show();
                         grid_role();
                         cek_show_report();
+                        grid();
                     },
                 });
             }, function (dismiss) {
@@ -860,6 +863,7 @@
                         $("#tabel-approve-gov-activity").hide();
                         $("#tabel-approve-gov-indicator").hide();
                         grid_role();
+                        grid();
                     },
                 });
             }
@@ -953,7 +957,7 @@
 //                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                         }
@@ -981,7 +985,7 @@
 //                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[19] == null || row[19] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[19]+"</div>";
                                         }
@@ -1095,14 +1099,14 @@
 //                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[7] == null || row[7] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[7]+"</div>";
                                         }
@@ -1123,14 +1127,14 @@
 //                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[19] == null || row[19] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[19]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[20] == null || row[20] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[20]+"</div>";
                                         }
@@ -1246,56 +1250,56 @@
 //                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[7] == null || row[7] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[7]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[8] == null || row[8] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[8]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[9] == null || row[9] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[9]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[19] == null || row[19] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[19]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[20] == null || row[20] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[20]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[21] == null || row[21] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[21]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[22] == null || row[22] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[22]+"</div>";
                                         }
@@ -1436,14 +1440,14 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[14] == null || row[14] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[14]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                         }
@@ -1471,7 +1475,7 @@
 //                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[22] == null || row[22] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[22]+"</div>";
                                         }
@@ -1571,21 +1575,21 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[14] == null || row[14] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[14]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[7] == null || row[7] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[7]+"</div>";
                                         }
@@ -1606,14 +1610,14 @@
 //                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[22] == null || row[22] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[22]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[23] == null || row[23] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[23]+"</div>";
                                         }
@@ -1718,63 +1722,63 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[14] == null || row[14] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[14]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[7] == null || row[7] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[7]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[8] == null || row[8] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[8]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[9] == null || row[9] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[9]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[22] == null || row[22] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[22]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[23] == null || row[23] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[23]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[24] == null || row[24] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[24]+"</div>";
                                         }
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if(row[25] == null || row[25] == ""){
-                                            return "<div style='font-size:90%;'> 0 </div>";
+                                            return "<div style='font-size:90%;'>  </div>";
                                         }else{
                                             return "<div style='font-size:90%;'>"+row[25]+"</div>";
                                         }
@@ -1873,44 +1877,44 @@
                 var periode         = data[13];
 //                alert(ket_ran_rad);
                 if(value1 == 'null' || value1 == ""){
-                    var achieve1 = '0';
+                    var achieve1 = '';
                 }else{
                     var achieve1 = value1;
                 }
                 if(value2 == 'null' || value2 == ""){
-                    var achieve2 = '0';
+                    var achieve2 = '';
                 }else{
                     var achieve2 = value2;
                 }
                 if(value3 == 'null' || value3 == ""){
-                    var achieve3 = '0';
+                    var achieve3 = '';
                 }else{
                     var achieve3 = value3;
                 }
                 if(value4 == 'null' || value4 == ""){
-                    var achieve4 = '0';
+                    var achieve4 = '';
                 }else{
                     var achieve4 = value4;
                 }
                 
                 
                 if(nilai1 == 'null' || nilai1 == ""){
-                    var achieve_1 = '0';
+                    var achieve_1 = '';
                 }else{
                     var achieve_1 = nilai1;
                 }
                 if(nilai2 == 'null' || nilai2 == ""){
-                    var achieve_2 = '0';
+                    var achieve_2 = '';
                 }else{
                     var achieve_2 = nilai2;
                 }
                 if(nilai3 == 'null' || nilai3 == ""){
-                    var achieve_3 = '0';
+                    var achieve_3 = '';
                 }else{
                     var achieve_3 = nilai3;
                 }
                 if(nilai4 == 'null' || nilai4 == ""){
-                    var achieve_4 = '0';
+                    var achieve_4 = '';
                 }else{
                     var achieve_4 = nilai4;
                 }
@@ -2052,22 +2056,22 @@
                 var nmrol               = $("#nmrol").val();
                 var v_idrole            = $("#idrol").val();
                 if(achievement1 == ''){
-                    var acv1 = '0';
+                    var acv1 = '';
                 }else{
                     var acv1 = achievement1;
                 }
                 if(achievement2 == ''){
-                    var acv2 = '0';
+                    var acv2 = '';
                 }else{
                     var acv2 = achievement2;
                 }
                 if(achievement3 == ''){
-                    var acv3 = '0';
+                    var acv3 = '';
                 }else{
                     var acv3 = achievement3;
                 }
                 if(achievement4 == ''){
-                    var acv4 = '0';
+                    var acv4 = '';
                 }else{
                     var acv4 = achievement4;
                 }
@@ -2091,7 +2095,7 @@
                                 'id_monper': id_monper
                             });
                 }else if(type == 'entry_gov_indicator'){
-                    var ur = 'save-entry-gov_prog_indicator';
+                    var ur = 'save-entry-gov_prog_indicator/'+v_dataid;
                     var data    = JSON.stringify({
                                 'id': id,
                                 'id_assign': id_activity,

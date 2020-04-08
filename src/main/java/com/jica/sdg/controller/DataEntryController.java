@@ -356,7 +356,7 @@ public class DataEntryController {
     				"'' as achi1, '' as achi2, '' as achi3, '' as achi4, \r\n" + 
     				"'' as new1, '' as new2, '' as new3, '' as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
     				"from sdg_indicator as d\r\n" + 
-    				"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov and a.id_monper = :id_monper \r\n" + 
+    				"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov \r\n" + 
     				"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
     				"left join sdg_target as c on d.id_target = c.id \r\n" +
     				"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
@@ -372,7 +372,7 @@ public class DataEntryController {
         			"k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \r\n" + 
         			"k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
         			"from sdg_indicator as d\r\n" + 
-        			"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov and a.id_monper = :id_monper \r\n" + 
+        			"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov \r\n" + 
         			"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
         			"left join sdg_target as c on d.id_target = c.id \r\n" +
         			"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
@@ -436,7 +436,7 @@ public class DataEntryController {
     				"'' as achi1, '' as achi2, '' as achi3, '' as achi4, \r\n" + 
     				"'' as new1, '' as new2, '' as new3, '' as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
     				"from sdg_indicator as d\r\n" + 
-    				"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov and a.id_monper = :id_monper \r\n" + 
+    				"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov \r\n" + 
     				"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" +
     				"left join sdg_target as c on d.id_target = c.id \r\n" + 
     				"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
@@ -452,7 +452,7 @@ public class DataEntryController {
         			"k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \r\n" + 
         			"k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
         			"from sdg_indicator as d\r\n" + 
-        			"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov and a.id_monper = :id_monper \r\n" + 
+        			"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov \r\n" + 
         			"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
         			"left join sdg_target as c on d.id_target = c.id \r\n" + 
         			"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
@@ -1029,14 +1029,21 @@ public class DataEntryController {
             	list.get().setAchievement2(entryGovIndicator.getAchievement2());
             	list.get().setAchievement3(entryGovIndicator.getAchievement3());
             	list.get().setAchievement4(entryGovIndicator.getAchievement4());
+            	list.get().setNew_value1(entryGovIndicator.getNew_value1());
+            	list.get().setNew_value2(entryGovIndicator.getNew_value2());
+            	list.get().setNew_value3(entryGovIndicator.getNew_value3());
+            	list.get().setNew_value4(entryGovIndicator.getNew_value4());
             	list.get().setYear_entry(entryGovIndicator.getYear_entry());
             	list.get().setId_monper(entryGovIndicator.getId_monper());
         		list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryGovIndicator(foundUpdateObject));
+        		System.out.print("1");
         	}else {
         		entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+        		System.out.print("2");
         	}
     	}else {
     		entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+    		System.out.print("3");
     	}
     	
         Query query;
@@ -1092,11 +1099,14 @@ public class DataEntryController {
             	list.get().setYear_entry(entryGovBudget.getYear_entry());
             	list.get().setId_monper(entryGovBudget.getId_monper());
                 list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryGovBudget(foundUpdateObject));
+                System.out.print("1");
         	}else {
                 entrySdgService.saveEntryGovBudget(entryGovBudget);
+                System.out.print("2");
         	}
     	}else {
     		entrySdgService.saveEntryGovBudget(entryGovBudget);
+    		 System.out.print("3");
     	}
     	   System.out.println("achie = "+achiev);
         Query query;
@@ -1459,6 +1469,10 @@ public class DataEntryController {
             	list.get().setAchievement2(entryNsaIndicator.getAchievement2());
             	list.get().setAchievement3(entryNsaIndicator.getAchievement3());
             	list.get().setAchievement4(entryNsaIndicator.getAchievement4());
+            	list.get().setNew_value1(entryNsaIndicator.getNew_value1());
+            	list.get().setNew_value2(entryNsaIndicator.getNew_value2());
+            	list.get().setNew_value3(entryNsaIndicator.getNew_value3());
+            	list.get().setNew_value4(entryNsaIndicator.getNew_value4());
             	list.get().setYear_entry(entryNsaIndicator.getYear_entry());
             	list.get().setId_monper(entryNsaIndicator.getId_monper());
         		list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryNsaIndicator(foundUpdateObject));

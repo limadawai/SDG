@@ -230,6 +230,20 @@
 	        	$('.provinsi').show();
 	        }
 	        
+	        function cekStatusMonper(){
+	        	var status = "";
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-monPer/'+$('#id_monper').val(),
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	status = val.status;
+                    },
+                });
+	        	return status;
+	        }
+	        
 	      //Bahasa
 	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data dan Data level dibawahnya?";
@@ -396,10 +410,10 @@
 	        	//table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
 	        });
-	        
 	        $('#id_role, #id_monper').on('change', function(){
 	        	//table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
+	        	
 	        });
 			
 			var table = $('#tabel-goals').DataTable({
@@ -409,6 +423,15 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"drawCallback": function( settings ) {
+					if(cekStatusMonper()=="completed"){
+		        		$('#showModal').hide();
+		        		$('#tbody-goals').find('.update, .detail, .delete').hide();
+		        	}else{
+		        		$('#showModal').show();
+		        		$('#tbody-goals').find('.update, .detail, .delete').show();
+		        	}
+				},
 				buttons: [
 		        	{
 		        	    extend: 'print',

@@ -647,14 +647,14 @@ public class RateController {
         System.out.println("catrole = "+catrole+", id_monper = "+id_monper);
         Query query = em.createNativeQuery("");
         if(catrole.equals("Government")){
-            String sql  = "select distinct a.id, a.nm_program, a.nm_program_eng from gov_program a \n" +
+            String sql  = "select distinct a.id, a.nm_program, a.nm_program_eng, a.id_program from gov_program a \n" +
                         "left join gov_activity b on a.id = b.id_program\n" +
                         "where a.id_monper = :id_monper and b.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
             query.setParameter("id_monper", id_monper);
         }else if(catrole.equals("NSA")){
-            String sql  = "select a.id, a.nm_program, a.nm_program_eng from nsa_program a \n" +
+            String sql  = "select a.id, a.nm_program, a.nm_program_eng, a.id_program from nsa_program a \n" +
                         "where a.id_monper = :id_monper and a.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
@@ -674,13 +674,13 @@ public class RateController {
         
         Query query = em.createNativeQuery("");
         if(catrole.equals("Government")){
-            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng from gov_activity a\n" +
+            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, a.id_activity from gov_activity a\n" +
                         "where a.id_program = :id_program and a.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
             query.setParameter("id_program", id_program);
         }else if(catrole.equals("NSA")){
-            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng from nsa_activity a\n" +
+            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, a.id_activity from nsa_activity a\n" +
                         "where a.id_program = :id_program and a.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
@@ -729,7 +729,7 @@ public class RateController {
             String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, "
                         + "'' as nama_unit,"
                         + "c.id as id_entry, case when ( COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when (COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,"
-                        + "c.date_created, c.date_created2, c.date_created3, c.date_created4 "
+                        + "c.date_created, c.date_created2, c.date_created3, c.date_created4, a.id_activity "
                         + "from gov_activity a \n"
                         + "inner join (select * from entry_gov_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_gov_activity " +
                         "where a.id_program = :id_program and a.id_role = :id_role ";
@@ -742,7 +742,7 @@ public class RateController {
             String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, "
                         + "'' as nama_unit,"
                         + "c.id as id_entry, case when ( COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when (COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,"
-                        + "c.date_created, c.date_created2, c.date_created3, c.date_created4 "
+                        + "c.date_created, c.date_created2, c.date_created3, c.date_created4, a.id_activity "
                         + "from nsa_activity a \n"
                         + "inner join (select * from entry_nsa_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_nsa_activity " +
                         "where a.id_program = :id_program and a.id_role = :id_role ";
@@ -794,7 +794,7 @@ public class RateController {
             String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit, \n" +
                         "c.id as id_entry, case when (COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when ( COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,\n" +
-                        "c.date_created, c.date_created2, c.date_created3, c.date_created4 \n" +
+                        "c.date_created, c.date_created2, c.date_created3, c.date_created4, a.id_gov_indicator \n" +
                         "from gov_indicator a\n" +
                         "left join gov_activity b on a.id_activity = b.id\n" +
                         "inner join (select * from entry_gov_indicator where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_assign\n" +
@@ -809,7 +809,7 @@ public class RateController {
             String sql  = "select a.id, a.nm_indicator, a.nm_indicator_eng, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = a.unit) as nama_unit,\n" +
                         "c.id as id_entry, case when (COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when ( COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end, \n" +
-                        "c.date_created, c.date_created2, c.date_created3, c.date_created4 \n" +
+                        "c.date_created, c.date_created2, c.date_created3, c.date_created4, a.id_nsa_indicator \n" +
                         "from nsa_indicator a\n" +
                         "left join nsa_activity b on a.id_activity = b.id\n" +
                         "inner join (select * from entry_nsa_indicator where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on a.id = c.id_assign\n" +
@@ -929,7 +929,7 @@ public class RateController {
         if(catrole.equals("Government")){
             String sql  = "select b.id, b.nm_activity, b.nm_activity_eng, '' as nama_unit, c.id as id_entry, \n" +
                         "case when ( COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when (COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,\n" +
-                        "c.date_created, c.date_created2, c.date_created3, c.date_created4\n" +
+                        "c.date_created, c.date_created2, c.date_created3, c.date_created4, b.id_activity as kode_activity \n" +
                         "from ref_role a\n" +
                         "inner join gov_activity b on a.id_role = b.id_role\n" +
                         "left join (select * from entry_gov_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on b.id = c.id_gov_activity \n" +
@@ -943,7 +943,7 @@ public class RateController {
         }else if(catrole.equals("NSA")){
             String sql  = "select b.id, b.nm_activity, b.nm_activity_eng, '' as nama_unit, c.id as id_entry, \n" +
                         "case when ( COALESCE(NULLIF(c.new_value1,''),c.achievement1) is null) then 0 else COALESCE(NULLIF(c.new_value1,''),c.achievement1) end, case when (COALESCE(NULLIF(c.new_value2,''),c.achievement2) is null) then 0 else COALESCE(NULLIF(c.new_value2,''),c.achievement2) end, case when ( COALESCE(NULLIF(c.new_value3,''),c.achievement3) is null) then 0 else COALESCE(NULLIF(c.new_value3,''),c.achievement3) end, case when ( COALESCE(NULLIF(c.new_value4,''),c.achievement4) is null) then 0 else COALESCE(NULLIF(c.new_value4,''),c.achievement4) end,\n" +
-                        "c.date_created, c.date_created2, c.date_created3, c.date_created4\n" +
+                        "c.date_created, c.date_created2, c.date_created3, c.date_created4, b.id_activity as kode_activity\n" +
                         "from ref_role a\n" +
                         "inner join nsa_activity b on a.id_role = b.id_role\n" +
                         "left join (select * from entry_nsa_budget where year_entry = :year and id_monper = :id_monper "+tg_date_1+") c on b.id = c.id_nsa_activity \n" +
@@ -1409,7 +1409,7 @@ public class RateController {
                         if(period.equals("1")) {
                             System.out.println("ke 1");
                             EntryNsaBudget entryNsaBudget = new EntryNsaBudget();
-//                            entryGovIndicator.setId(null);
+                            System.out.println("nilai = "+data_achievement[i]);
                             entryNsaBudget.setId_nsa_activity(Integer.parseInt(data_indicator[i]));
                             entryNsaBudget.setAchievement1(Integer.parseInt(data_achievement[i]));
                             entryNsaBudget.setYear_entry(tahun);

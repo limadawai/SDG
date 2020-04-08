@@ -143,17 +143,19 @@ public class ApprovalController {
 				approvalService.deleteApproveGovBudget(apptemp.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
 				approvalService.save(apptemp);
 			}
-			EntryApproval apptemp = new EntryApproval();
-			apptemp.setId_form_type(app.getId_form_type());
-			apptemp.setId_role(null);
-			apptemp.setId_monper(app.getId_monper());
-			apptemp.setYear(app.getYear());
-			apptemp.setApproval(app.getApproval());
-			apptemp.setType(app.getType());
-			apptemp.setPeriode(app.getPeriode());
-			apptemp.setApproval_date(new Date());
-			approvalService.deleteApproveGovBudget(apptemp.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
-			approvalService.save(apptemp);
+			if(app.getType().equals("entry_sdg")) {
+				EntryApproval apptemp = new EntryApproval();
+				apptemp.setId_form_type(app.getId_form_type());
+				apptemp.setId_role(null);
+				apptemp.setId_monper(app.getId_monper());
+				apptemp.setYear(app.getYear());
+				apptemp.setApproval(app.getApproval());
+				apptemp.setType(app.getType());
+				apptemp.setPeriode(app.getPeriode());
+				apptemp.setApproval_date(new Date());
+				approvalService.deleteApproveGovBudget(apptemp.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
+				approvalService.save(apptemp);
+			}
 		}else {
 			Query query;
 			if(app.getType().equals("entry_sdg")) {

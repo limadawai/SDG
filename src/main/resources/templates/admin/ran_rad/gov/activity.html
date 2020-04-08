@@ -278,7 +278,19 @@
                     }
                 }
             });
-	        
+	        function cekStatusMonper(){
+	        	var status = "";
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-monPer/'+$('#id_monper').val(),
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	status = val.status;
+                    },
+                });
+	        	return status;
+	        }
 			var table = $('#tabel-target').DataTable({
 				responsive: true,
 				sDom: 'Brtip',
@@ -286,6 +298,15 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"drawCallback": function( settings ) {
+					if(cekStatusMonper()=="completed"){
+		        		$('#showModal').hide();
+		        		$('#tabel-target').find('.update, .detail, .delete').hide();
+		        	}else{
+		        		$('#showModal').show();
+		        		$('#tabel-target').find('.update, .detail, .delete').show();
+		        	}
+				},
 				buttons: [
 		        	{
 		        	    extend: 'print',
