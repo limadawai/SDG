@@ -303,14 +303,14 @@
             {"data": function (row, data, index, display) {
             	if(privilege=="SUPER"){
             		return "<div style='text-align:center;'>"+
-                    '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                    '<button data-id="'+row[0]+'" data-id_prov="'+row[5]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>&nbsp;&nbsp;'+
+                    '<button data-id="'+row[0]+'" data-id_prov="'+row[5]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>&nbsp;&nbsp;'+
+                    '<button data-id="'+row[0]+'" data-id_prov="'+row[5]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
             	}else if(privilege=="ADMIN" && id_prov==row[5] && row[2]!="SUPER"){
             		return "<div style='text-align:center;'>"+
-                    '<button data-id="'+row[0]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
-                    '<button data-id="'+row[0]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
-                    '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
+                    '<button data-id="'+row[0]+'" data-id_prov="'+row[5]+'" type="button" title="detail" class="btn btn-success btn-mini detail"><i class="icon-edit"></i></button>'+
+                    '<button data-id="'+row[0]+'" data-id_prov="'+row[5]+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
+                    '<button data-id="'+row[0]+'" data-id_prov="'+row[5]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
             	}else{
             		return "";
             	}
@@ -335,7 +335,8 @@
 		$('#name').val("").removeAttr("readonly");
 		$('#detail').text("").removeAttr("readonly");
 		$('#password').val("").removeAttr("readonly");
-		$('#id_role').val("").removeAttr("readonly");
+		$('#id_role').val("").removeAttr("disabled");
+		$('#prov').val("").removeAttr("disabled");
 		$('.control-group').removeClass('error');
 		$('.help-block').text("");
 	}
@@ -459,6 +460,7 @@
 	
 	$('#tbody').on('click', '.update', function(){
 		var id = $(this).attr('data-id');
+		var id_prov = $(this).attr('data-id_prov');
 		$.ajax({
 			type: "GET",
             url: urls+'manajemen/get-user/'+id,
@@ -471,12 +473,14 @@
 				$('#name').val(val.name);
 				$('#detail').text(val.detail);
 				$('#id_role').val(val.id_role);
+				$('#prov').val(id_prov);
 				$('#email').val(val.email);
 				$('#myModal').modal('show');
             },
         })
      }).on('click', '.detail', function(){
 		var id = $(this).attr('data-id');
+		var id_prov = $(this).attr('data-id_prov');
 		$.ajax({
 			type: "GET",
             url: urls+'manajemen/get-user/'+id,
@@ -486,9 +490,10 @@
 				$('#username').val(val.userName).attr("readonly",true);
 				$('#name').val(val.name).attr("readonly",true);
 				$('#detail').text(val.detail).attr("readonly",true);
-				$('#id_role').val(val.id_role).attr("readonly",true);
+				$('#id_role').val(val.id_role).attr("disabled",true);
 				$('#password').val(val.password).attr("readonly",true);
 				$('#email').val(val.email).attr("readonly",true);
+				$('#prov').val(id_prov).attr("disabled",true);
 				$('#myModal').modal('show');
             },
         })

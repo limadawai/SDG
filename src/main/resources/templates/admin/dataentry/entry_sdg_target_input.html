@@ -276,7 +276,7 @@
             async:false,
             success: function (result1) {
                 $("#periode").html('<option value="0" >-- Pilih --</option>');
-                var array1 = result1.content;
+                var array1 = result1.target;
                 if (array1 != '') {
                     for (i in array1) {
                     	var text     = array1[i][1]+'-'+array1[i][2];

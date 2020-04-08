@@ -170,9 +170,16 @@ public class DataEntryController {
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
+        
+        String sql1  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'created')";
+        Query query1 = em.createNativeQuery(sql1);
+        query1.setParameter("id", id);
+        List list1   = query1.getResultList();
+        
         Map<String, Object> hasil = new HashMap<>();
         
         hasil.put("content",list);
+        hasil.put("target",list1);
         return hasil;
     }
     
@@ -342,92 +349,124 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> listEntrySdg(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
     	Query query;
     	if(id_role.equals("0")) {
-    		String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
-                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
-                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, "+
-                    "'' as achi1, '' as achi2, '' as achi3, '' as achi4, \n" +
-                    "'' as new1, '' as new2, '' as new3, '' as new4, l.nm_role, l.id_role \n" +
-                    "from ran_rad as g \n" +
-                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
-                    "left join sdg_goals as b on a.id_goals = b.id \n" +
-                    "left join sdg_target as c on a.id_target = c.id \n" +
-                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
-                    "left join \n" +
-                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where year = :year) as e on d.id = e.id_sdg_indicator and e.id_role = a.id_role \n" +
-                    "left join \n" +
-                    "(select * from entry_sdg where year_entry = :year and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator and f.id_role = a.id_role \n" +
-                    "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where g.id_monper = :id_monper and g.id_prov = :id_prov ";
-        	sql  += "union select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
-                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
-                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
-                    "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
-                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role, l.id_role \n" +
-                    "from ran_rad as g \n" +
-                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
-                    "left join sdg_goals as b on a.id_goals = b.id \n" +
-                    "left join sdg_target as c on a.id_target = c.id \n" +
-                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
-                    "left join \n" +
-                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where year = :year) as e on d.id = e.id_sdg_indicator and e.id_role = a.id_role \n" +
-                    "left join \n" +
-                    "(select * from entry_sdg where year_entry = :year and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator and f.id_role = a.id_role \n" +
-                    "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "right join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
-                    "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
-                    "left join (select * from entry_sdg_detail where year_entry = :year and id_monper = :id_monper) as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail and k.id_role = a.id_role \n" +
-                    "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where g.id_monper = :id_monper and g.id_prov = :id_prov order by 1,2,3,31,32 ";
+    		String sql  = "select b.id as id_goals, c.id as id_target, d.id as id_indicator, b.nm_goals, c.nm_target, d.nm_indicator,CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\r\n" + 
+    				"f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \r\n" + 
+    				"c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \r\n" + 
+    				"f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, +\r\n" + 
+    				"'' as achi1, '' as achi2, '' as achi3, '' as achi4, \r\n" + 
+    				"'' as new1, '' as new2, '' as new3, '' as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
+    				"from sdg_indicator as d\r\n" + 
+    				"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov \r\n" + 
+    				"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
+    				"left join sdg_target as c on d.id_target = c.id \r\n" +
+    				"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
+    				"left join sdg_indicator_target as e on d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
+    				"left join entry_sdg as f on d.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper =:id_monper\r\n" + 
+    				"left join ref_unit as h on d.unit = h.id_unit \r\n" + 
+    				"left join ref_role as l on a.id_role = l.id_role \r\n" + 
+    				"";
+        	sql  += "union select b.id as id_goals, c.id as id_target, d.id as id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\r\n" + 
+        			"f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \r\n" + 
+        			"c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \r\n" + 
+        			"f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, +\r\n" + 
+        			"k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \r\n" + 
+        			"k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
+        			"from sdg_indicator as d\r\n" + 
+        			"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov \r\n" + 
+        			"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
+        			"left join sdg_target as c on d.id_target = c.id \r\n" +
+        			"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
+        			"left join sdg_indicator_target as e on d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
+        			"left join entry_sdg as f on d.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper =:id_monper\r\n" + 
+        			"left join ref_unit as h on d.unit = h.id_unit \r\n" + 
+        			"right join sdg_ranrad_disaggre as i on i.id_indicator = d.id \r\n" + 
+        			"left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \r\n" + 
+        			"left join entry_sdg_detail as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail and k.year_entry = :year and k.id_monper = :id_monper\r\n" + 
+        			"left join ref_role as l on a.id_role = l.id_role \r\n" + 
+        			"ORDER BY 1,2,3,31,32";
 	        query = em.createNativeQuery(sql);
 	        query.setParameter("id_prov", id_prov);
 	        query.setParameter("id_monper", id_monper);
 	        query.setParameter("year", year);
         }else {
-        	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
-                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
-                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, "+
-                    "'' as achi1, '' as achi2, '' as achi3, '' as achi4, \n" +
-                    "'' as new1, '' as new2, '' as new3, '' as new4, l.nm_role, l.id_role \n" +
-                    "from ran_rad as g \n" +
-                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
-                    "left join sdg_goals as b on a.id_goals = b.id \n" +
-                    "left join sdg_target as c on a.id_target = c.id \n" +
-                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
-                    "left join \n" +
-                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
-                    "left join \n" +
-                    "(select * from entry_sdg where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
-                    "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov ";
-        	sql  += "union select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, h.nm_unit, d.increment_decrement, e.value,\n" +
-                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
-                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
-                    "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
-                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role, l.id_role \n" +
-                    "from ran_rad as g \n" +
-                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
-                    "left join sdg_goals as b on a.id_goals = b.id \n" +
-                    "left join sdg_target as c on a.id_target = c.id \n" +
-                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
-                    "left join \n" +
-                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
-                    "left join \n" +
-                    "(select * from entry_sdg where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
-                    "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "right join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
-                    "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
-                    "left join (select * from entry_sdg_detail where year_entry = :year and id_role = :id_role and id_monper = :id_monper) as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail \n" +
-                    "left join ref_role as l on a.id_role = l.id_role \n" +
-                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov order by 1,2,3,31,32 ";
+        	String role = id_role.equals("null")?"id_role is null ":"id_role = '"+id_role+"'";
+//        	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator,CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\n" +
+//                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
+//                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
+//                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, "+
+//                    "'' as achi1, '' as achi2, '' as achi3, '' as achi4, \n" +
+//                    "'' as new1, '' as new2, '' as new3, '' as new4, l.nm_role, l.id_role \n" +
+//                    "from ran_rad as g \n" +
+//                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
+//                    "left join sdg_goals as b on a.id_goals = b.id \n" +
+//                    "left join sdg_target as c on a.id_target = c.id \n" +
+//                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
+//                    "left join \n" +
+//                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where "+role+" and year = :year) as e on d.id = e.id_sdg_indicator \n" +
+//                    "left join \n" +
+//                    "(select * from entry_sdg where year_entry = :year and "+role+" and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
+//                    "left join ref_unit as h on d.unit = h.id_unit \n" +
+//                    "left join ref_role as l on a.id_role = l.id_role \n" +
+//                    "where a."+role+" and g.id_monper = :id_monper and g.id_prov = :id_prov ";
+//        	sql  += "union select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\n" +
+//                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
+//                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
+//                    "f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, "+
+//                    "k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \n" +
+//                    "k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, l.nm_role, l.id_role \n" +
+//                    "from ran_rad as g \n" +
+//                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
+//                    "left join sdg_goals as b on a.id_goals = b.id \n" +
+//                    "left join sdg_target as c on a.id_target = c.id \n" +
+//                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
+//                    "left join \n" +
+//                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where "+role+" and year = :year) as e on d.id = e.id_sdg_indicator \n" +
+//                    "left join \n" +
+//                    "(select * from entry_sdg where year_entry = :year and "+role+" and id_monper = :id_monper) as f on d.id = f.id_sdg_indicator \n" +
+//                    "left join ref_unit as h on d.unit = h.id_unit \n" +
+//                    "right join sdg_ranrad_disaggre as i on i.id_indicator = d.id \n" +
+//                    "left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \n" +
+//                    "left join (select * from entry_sdg_detail where year_entry = :year and "+role+" and id_monper = :id_monper) as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail \n" +
+//                    "left join ref_role as l on a.id_role = l.id_role \n" +
+//                    "where a."+role+" and g.id_monper = :id_monper and g.id_prov = :id_prov order by 1,2,3,31,32 ";
+        	String sql  = "select b.id as id_goals, c.id as id_target, d.id as id_indicator, b.nm_goals, c.nm_target, d.nm_indicator,CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\r\n" + 
+    				"f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \r\n" + 
+    				"c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \r\n" + 
+    				"f.new_value1, f.new_value2, f.new_value3, f.new_value4, '' as id_disaggre, '' as nm_disaggre, '' as nm_disaggre_eng, '' as desc_disaggre, '' as desc_disaggre_eng, '' as iddisaggre, '' as iddetaildis, '' as identrysdgdetail, +\r\n" + 
+    				"'' as achi1, '' as achi2, '' as achi3, '' as achi4, \r\n" + 
+    				"'' as new1, '' as new2, '' as new3, '' as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
+    				"from sdg_indicator as d\r\n" + 
+    				"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov \r\n" + 
+    				"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" +
+    				"left join sdg_target as c on d.id_target = c.id \r\n" + 
+    				"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
+    				"left join sdg_indicator_target as e on d.id = e.id_sdg_indicator and e.year = :year \r\n" + 
+    				"left join entry_sdg as f on d.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper =:id_monper \r\n" + 
+    				"left join ref_unit as h on d.unit = h.id_unit \r\n" + 
+    				"left join ref_role as l on a.id_role = l.id_role \r\n" + 
+    				"where l."+role+ " ";
+        	sql  += "union select b.id as id_goals, c.id as id_target, d.id as id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\r\n" + 
+        			"f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \r\n" + 
+        			"c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \r\n" + 
+        			"f.new_value1, f.new_value2, f.new_value3, f.new_value4, i.id_disaggre, i.nm_disaggre, i.nm_disaggre_eng, j.desc_disaggre, j.desc_disaggre_eng, i.id as iddisaggre, j.id as iddetaildis, k.id as identrysdgdetail, +\r\n" + 
+        			"k.achievement1 as achi1, k.achievement2 as achi2, k.achievement3 as achi3, k.achievement4 as achi4, \r\n" + 
+        			"k.new_value1 as new1, k.new_value2 as new2, k.new_value3 as new3, k.new_value4 as new4, CASE when l.nm_role is null then 'Unassigned' else l.nm_role end, l.id_role \r\n" + 
+        			"from sdg_indicator as d\r\n" + 
+        			"left join assign_sdg_indicator as a on a.id_indicator = d.id AND a.id_prov = :id_prov \r\n" + 
+        			"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
+        			"left join sdg_target as c on d.id_target = c.id \r\n" + 
+        			"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
+        			"left join sdg_indicator_target as e on d.id = e.id_sdg_indicator and e.year = :year \r\n" + 
+        			"left join entry_sdg as f on d.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper =:id_monper \r\n" + 
+        			"left join ref_unit as h on d.unit = h.id_unit \r\n" + 
+        			"right join sdg_ranrad_disaggre as i on i.id_indicator = d.id \r\n" + 
+        			"left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \r\n" + 
+        			"left join entry_sdg_detail as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail and k.year_entry = :year and k.id_monper = :id_monper \r\n" + 
+        			"left join ref_role as l on a.id_role = l.id_role \r\n" + 
+        			"where l."+role+ " "+
+        			"ORDER BY 1,2,3,31,32";
 	        query = em.createNativeQuery(sql);
 	        query.setParameter("id_prov", id_prov);
-	        query.setParameter("id_role", id_role);
 	        query.setParameter("id_monper", id_monper);
 	        query.setParameter("year", year);
         }
@@ -741,14 +780,16 @@ public class DataEntryController {
     
     @PostMapping(path = "admin/save-entry-sdg", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveEntrySdg(@RequestBody EntrySdg entrySdg) {
+    public void saveEntrySdg(@RequestBody EntrySdg entrySdg, HttpSession session) {
+    	entrySdg.setCreated_by((Integer) session.getAttribute("id_role"));
         entrySdgService.saveEntrySdg(entrySdg);
 //        entrySdgService.updateEntrySdg(id_sdg_indicator, achievement1, achievement2, achievement3, achievement4, year_entry, id_role, id_monper);
     }
     
     @PostMapping(path = "admin/save-entry-sdg-detail", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveEntrySdgDetail(@RequestBody EntrySdgDetail entrySdg) {
+    public void saveEntrySdgDetail(@RequestBody EntrySdgDetail entrySdg, HttpSession session) {
+    	entrySdg.setCreated_by((Integer) session.getAttribute("id_role"));
         entrySdgDetailService.saveEntrySdgDetail(entrySdg);
     }
 
@@ -988,14 +1029,21 @@ public class DataEntryController {
             	list.get().setAchievement2(entryGovIndicator.getAchievement2());
             	list.get().setAchievement3(entryGovIndicator.getAchievement3());
             	list.get().setAchievement4(entryGovIndicator.getAchievement4());
+            	list.get().setNew_value1(entryGovIndicator.getNew_value1());
+            	list.get().setNew_value2(entryGovIndicator.getNew_value2());
+            	list.get().setNew_value3(entryGovIndicator.getNew_value3());
+            	list.get().setNew_value4(entryGovIndicator.getNew_value4());
             	list.get().setYear_entry(entryGovIndicator.getYear_entry());
             	list.get().setId_monper(entryGovIndicator.getId_monper());
         		list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryGovIndicator(foundUpdateObject));
+        		System.out.print("1");
         	}else {
         		entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+        		System.out.print("2");
         	}
     	}else {
     		entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+    		System.out.print("3");
     	}
     	
         Query query;
@@ -1051,11 +1099,14 @@ public class DataEntryController {
             	list.get().setYear_entry(entryGovBudget.getYear_entry());
             	list.get().setId_monper(entryGovBudget.getId_monper());
                 list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryGovBudget(foundUpdateObject));
+                System.out.print("1");
         	}else {
                 entrySdgService.saveEntryGovBudget(entryGovBudget);
+                System.out.print("2");
         	}
     	}else {
     		entrySdgService.saveEntryGovBudget(entryGovBudget);
+    		 System.out.print("3");
     	}
     	   System.out.println("achie = "+achiev);
         Query query;
@@ -1674,7 +1725,8 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> listEntrySdgTarget(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
         String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
                     "g.sdg_indicator, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit \n" +
+                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit, "+
+                    "(select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = d.id and year between g.start_year and g.end_year) as target,i.baseline " +
                     "from ran_rad as g\n" +
                     "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
                     "left join sdg_goals as b on a.id_goals = b.id \n" +
@@ -1683,6 +1735,7 @@ public class DataEntryController {
                     "left join \n" +
                     "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
                     "left join ref_unit as h on d.unit = h.id_unit \n" +
+                    "left join sdg_funding as i on d.id = i.id_sdg_indicator \n" +
                     "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov order by a.id_goals, a.id_target, a.id_indicator";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);

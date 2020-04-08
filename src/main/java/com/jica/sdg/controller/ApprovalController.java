@@ -143,7 +143,17 @@ public class ApprovalController {
 				approvalService.deleteApproveGovBudget(apptemp.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
 				approvalService.save(apptemp);
 			}
-			
+			EntryApproval apptemp = new EntryApproval();
+			apptemp.setId_form_type(app.getId_form_type());
+			apptemp.setId_role(null);
+			apptemp.setId_monper(app.getId_monper());
+			apptemp.setYear(app.getYear());
+			apptemp.setApproval(app.getApproval());
+			apptemp.setType(app.getType());
+			apptemp.setPeriode(app.getPeriode());
+			apptemp.setApproval_date(new Date());
+			approvalService.deleteApproveGovBudget(apptemp.getId_role(), app.getId_monper(), app.getYear(), app.getType(), app.getPeriode());
+			approvalService.save(apptemp);
 		}else {
 			Query query;
 			if(app.getType().equals("entry_sdg")) {
@@ -187,10 +197,10 @@ public class ApprovalController {
 	}
 	
     @GetMapping("admin/get-approve/{type}/{year}/{id_monper}/{periode}/{id_role}")
-    public @ResponseBody Map<String, Object> getApprove(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode, @PathVariable("id_role") Integer id_role) {
+    public @ResponseBody Map<String, Object> getApprove(@PathVariable("type") String type, @PathVariable("year") Integer year, @PathVariable("id_monper") Integer id_monper, @PathVariable("periode") Integer periode, @PathVariable("id_role") String id_role) {
     	List list;
     	Query query;
-    	if(id_role == 0) {
+    	if(id_role.equals("0")) {
     		String sql = "select DISTINCT '' as id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode";
             query = em.createNativeQuery(sql);
             query.setParameter("year", year);
@@ -198,13 +208,13 @@ public class ApprovalController {
             query.setParameter("type", type);
             query.setParameter("periode", periode);
         }else {
-        	String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and id_role = :id_role";
+        	String role = id_role.equals("null")?" id_role is null ":" id_role = '"+id_role+"'";
+        	String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and "+role;
             query = em.createNativeQuery(sql);
             query.setParameter("year", year);
             query.setParameter("id_monper", id_monper);
             query.setParameter("type", type);
             query.setParameter("periode", periode);
-            query.setParameter("id_role", id_role);
         }
     	
         list   = query.getResultList();
