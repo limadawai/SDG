@@ -1029,14 +1029,21 @@ public class DataEntryController {
             	list.get().setAchievement2(entryGovIndicator.getAchievement2());
             	list.get().setAchievement3(entryGovIndicator.getAchievement3());
             	list.get().setAchievement4(entryGovIndicator.getAchievement4());
+            	list.get().setNew_value1(entryGovIndicator.getNew_value1());
+            	list.get().setNew_value2(entryGovIndicator.getNew_value2());
+            	list.get().setNew_value3(entryGovIndicator.getNew_value3());
+            	list.get().setNew_value4(entryGovIndicator.getNew_value4());
             	list.get().setYear_entry(entryGovIndicator.getYear_entry());
             	list.get().setId_monper(entryGovIndicator.getId_monper());
         		list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryGovIndicator(foundUpdateObject));
+        		System.out.print("1");
         	}else {
         		entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+        		System.out.print("2");
         	}
     	}else {
     		entrySdgService.saveEntryGovIndicator(entryGovIndicator);
+    		System.out.print("3");
     	}
     	
         Query query;
@@ -1092,11 +1099,14 @@ public class DataEntryController {
             	list.get().setYear_entry(entryGovBudget.getYear_entry());
             	list.get().setId_monper(entryGovBudget.getId_monper());
                 list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryGovBudget(foundUpdateObject));
+                System.out.print("1");
         	}else {
                 entrySdgService.saveEntryGovBudget(entryGovBudget);
+                System.out.print("2");
         	}
     	}else {
     		entrySdgService.saveEntryGovBudget(entryGovBudget);
+    		 System.out.print("3");
     	}
     	   System.out.println("achie = "+achiev);
         Query query;
