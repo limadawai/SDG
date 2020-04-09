@@ -61,6 +61,14 @@
                                     <thead >
                                         <tr>
                                             <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">No</span>
+                                                <span class="lang_indo">No</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
+                                                <span class="lang_eng" style="display:none">Province</span>
+                                                <span class="lang_indo">Provinsi</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
                                                 <span class="lang_eng" style="display:none">Area / Sector</span>
                                                 <span class="lang_indo">Area / Sektor</span>
                                             </th>
@@ -391,6 +399,16 @@
             "searching": true,
             "columns": [
                 {"data": function (row, data, index, display) {
+                    return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                }},
+                {"data": function (row, data, index, display) {
+//                    if(row[0] == null || row[0] == ""){
+//                        return "<div style='font-size:90%;'>-</div>";
+//                    }else{
+//                    }
+                    return "<div style='font-size:90%;'>"+row[15]+"</div>";
+                }},
+                {"data": function (row, data, index, display) {
                     if(row[0] == null || row[0] == ""){
                         return "<div style='font-size:90%;'>-</div>";
                     }else{
@@ -498,7 +516,7 @@
                             $.ajax({
                                 type: "GET",
                                 async:false,
-                                url: urls+'jumlah_role_philan/'+id_role,
+                                url: urls+'jumlah_role_philan/'+id_role+'/'+row[7],
                                 success: function (result) {
                                     jumlah = result.content[0];
                                 }
