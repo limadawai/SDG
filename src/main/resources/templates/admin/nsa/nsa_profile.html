@@ -72,6 +72,9 @@
                                                 <span>No</span>
                                             </th>
                                             <th style="text-align:center;font-size:80%;">
+                                                <span class="head-tabel" data-lang_eng="Province" data-lang_indo="Provinsi"></span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;">
                                                 <span class="head-tabel" data-lang_eng="NSA Profile Name" data-lang_indo="Nama Profil NSA"></span>
                                             </th>
                                             <th style="text-align:center;font-size:80%;">
@@ -410,6 +413,9 @@
                 "columns": [
                     {"data": function (row, data, index, display) {
                     return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[15]?row[15]:'')+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
                         return "<div style='font-size:90%;'>"+(row[1]?row[1]:'')+"</div>";

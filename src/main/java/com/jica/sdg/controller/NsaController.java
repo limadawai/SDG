@@ -173,9 +173,11 @@ public class NsaController {
     	if(!id.equals("00")) {role=" and a.id_role = '"+id+"' ";}
     	if(!id_prov.equals("all")) {prov=" and b.id_prov = '"+id_prov+"' ";}
     	String sql = "select a.id_nsa,a.nm_nsa,a.achieve_nsa,a.loc_nsa,a.beneficiaries,a.year_impl,a.major_part, "
-    			+ "c.nsa_type,c.web_url,c.head_office,c.name_pic,c.pos_pic,c.email_pic,c.hp_pic,a.id_role "
+    			+ "c.nsa_type,c.web_url,c.head_office,c.name_pic,c.pos_pic,c.email_pic,c.hp_pic,a.id_role, e.nm_prov "
     			+ "from nsa_profile a "
     			+ "left join nsa_detail c on a.id_nsa=c.id_nsa "
+    			+ "left join ref_role d on a.id_role = d.id_role "
+    			+ "left join ref_province e on d.id_prov = e.id_prov "
                 + "left join ref_role b on b.id_role = a.id_role where 1=1 "+prov+" "+role;
     	Query query = em.createNativeQuery(sql);
     	List list = query.getResultList();
@@ -494,11 +496,11 @@ public class NsaController {
     	String prov = "";
     	if(!id.equals("all")) {role=" and a.id_role = '"+id+"' ";}
     	if(!id_prov.equals("all")) {prov=" and d.id_prov = '"+id_prov+"' ";}
-    	String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id_program, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy, d.id_prov, a.nm_program_eng from nsa_program as a \n" +
+    	String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id_program, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy, d.id_prov, a.nm_program_eng, e.nm_prov from nsa_program as a \n" +
                     "left join nsa_collaboration as b on a.id_program = b.id_program\n" +
                     "left join philanthropy_collaboration as c on b.id_philanthropy = c.id_philanthropy\n" +
                     "left join ref_role as d on a.id_role = d.id_role\n " +
-//                    "left join nsa_inst as e on c.id_inst = e.id_inst\n " +
+                    "left join ref_province as e on d.id_prov = e.id_prov\n " +
                     "where 1=1 "+role+" "+prov;
         Query query = em.createNativeQuery(sql);
         List list   = query.getResultList();
@@ -507,13 +509,14 @@ public class NsaController {
         return hasil;
     }
     
-    @GetMapping("admin/jumlah_role_philan/{id}")
-    public @ResponseBody Map<String, Object> jumlah_role_philan(@PathVariable("id") String id) {
+    @GetMapping("admin/jumlah_role_philan/{id}/{id_collaboration}")
+    public @ResponseBody Map<String, Object> jumlah_role_philan(@PathVariable("id") String id, @PathVariable("id_collaboration") String id_collaboration) {
         String sql  = "select count(*) as tot from philanthropy_collaboration a\n" +
                     "left join nsa_inst b on a.id_inst = b.id_inst\n" +
-                    "where b.id_role = :id ";
+                    "where b.id_role = :id and nm_philanthropy = :id_collaboration";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
+        query.setParameter("id_collaboration", id_collaboration);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
