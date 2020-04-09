@@ -61,7 +61,7 @@
 								</div>
                     		</div>
                     		<div class="span6" align="right">
-                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary"><i class="icon-plus"></i>
+                    			<button data-toggle="modal" id="showModal" data-target="#myModal" class="btn btn-primary"><i class="icon-plus"></i>
                     				<span class="lang_eng" style="display:none">Add Activity Indicator</span><span class="lang_indo">Tambah Indikator Kegiatan</span>
                     			</button>
                     		</div>
@@ -438,7 +438,19 @@
 	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
 	            }
 	        });
-
+	        function cekStatusMonper(){
+	        	var status = "";
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-monPer/'+$('#id_monper').val(),
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	status = val.status;
+                    },
+                });
+	        	return status;
+	        }
 			var table = $('#tabel-indicator').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
@@ -446,6 +458,15 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"drawCallback": function( settings ) {
+					if(cekStatusMonper()=="completed"){
+		        		$('#showModal').hide();
+		        		$('#tabel-indicator').find('.update, .detail, .delete').hide();
+		        	}else{
+		        		$('#showModal').show();
+		        		$('#tabel-indicator').find('.update, .detail, .delete').show();
+		        	}
+				},
 				"ajax": {
 					"url": urls+'list-govIndicator/'+id_program+'/'+id_activity,
 					dataSrc: 'content',

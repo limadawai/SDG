@@ -495,7 +495,7 @@ public class DataEntryController {
     			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
     			+ "left join entry_gov_indicator h on h.id_assign = c.id and h.year_entry = :year and h.id_monper = g.id_monper "
     			+ "left join entry_gov_budget i on i.id_gov_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
-    			+ "where g.id_monper = :id_monper and g.id_prov = :id_prov "+role
+    			+ "where g.id_monper = :id_monper and g.id_prov = :id_prov and c.id is not null "+role
     			+ "order by a.id_role, b.id, c.id, a.id ";
         query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
@@ -526,7 +526,7 @@ public class DataEntryController {
     			+ "left join ran_rad g on f.id_prov = g.id_prov and b.id_monper = g.id_monper "
     			+ "left join entry_nsa_indicator h on h.id_assign = c.id and h.year_entry = :year and h.id_monper = g.id_monper "
     			+ "left join entry_nsa_budget i on i.id_nsa_activity = a.id and i.year_entry = :year and i.id_monper = g.id_monper "
-    			+ "where g.id_monper = :id_monper and g.id_prov = :id_prov "+role
+    			+ "where g.id_monper = :id_monper and g.id_prov = :id_prov and c.id is not null  "+role
     			+ "order by b.id, c.id, a.id ";
         query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
@@ -1469,6 +1469,10 @@ public class DataEntryController {
             	list.get().setAchievement2(entryNsaIndicator.getAchievement2());
             	list.get().setAchievement3(entryNsaIndicator.getAchievement3());
             	list.get().setAchievement4(entryNsaIndicator.getAchievement4());
+            	list.get().setNew_value1(entryNsaIndicator.getNew_value1());
+            	list.get().setNew_value2(entryNsaIndicator.getNew_value2());
+            	list.get().setNew_value3(entryNsaIndicator.getNew_value3());
+            	list.get().setNew_value4(entryNsaIndicator.getNew_value4());
             	list.get().setYear_entry(entryNsaIndicator.getYear_entry());
             	list.get().setId_monper(entryNsaIndicator.getId_monper());
         		list.ifPresent(foundUpdateObject ->entrySdgService.saveEntryNsaIndicator(foundUpdateObject));

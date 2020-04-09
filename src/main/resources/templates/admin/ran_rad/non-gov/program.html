@@ -130,7 +130,7 @@
 				    	<span class="help-block" id="error_nm_program"></span>
 				    </div>
 				  </div>
-				  <div class="control-group nasional">
+				  <!-- <div class="control-group nasional">
 				    <label class="lang_eng control-label" style="display:none;text-align:left">Add Province Location</label>
 				    <label class="lang_indo control-label" style="text-align:left">Provinsi</label>
 				    <div class="controls">
@@ -167,7 +167,7 @@
 	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
 	        			</select>
 				    </div>
-				  </div>
+				  </div> -->
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -292,6 +292,20 @@
 	        $('#id_role, #id_monper').on('change', function(){
 	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	        });
+	        
+	        function cekStatusMonper(){
+	        	var status = "";
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-monPer/'+$('#id_monper').val(),
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	status = val.status;
+                    },
+                });
+	        	return status;
+	        }
 			
 			var table = $('#tabel-goals').DataTable({
 				responsive: true,
@@ -300,6 +314,15 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"drawCallback": function( settings ) {
+					if(cekStatusMonper()=="completed"){
+		        		$('#showModal').hide();
+		        		$('#tbody-goals').find('.update, .detail, .delete').hide();
+		        	}else{
+		        		$('#showModal').show();
+		        		$('#tbody-goals').find('.update, .detail, .delete').show();
+		        	}
+				},
 				"ajax": {
 					"url": urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val(),
 					dataSrc: 'content',

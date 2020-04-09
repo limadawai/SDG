@@ -47,6 +47,7 @@
                                 <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
                             </select>
                             <select id="type" name="type" class="form-control">
+                            	<option value="0" >-- Pilih --</option>
                                 <option value="budget" >Budget</option>
                                 <option value="indicator" >Indicator</option>
                             </select>
@@ -254,6 +255,10 @@
                         }
                     }
                 });
+                $("#type").val('0');
+                if(t){
+                	t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                }
             });
                         
             $("#periode").on('change', function(e){
@@ -261,10 +266,17 @@
                 var id_monper   = data_id[0];
                 var tahun       = data_id[1];
                 var type = $("#type").val();
-                if(type=="indicator"){
-                	grid();	
-                }else{
-                	gridBud();
+                if($("#id_prov").val()!='0' && $("#idrole").val()!='10000' && $("#type").val()!='0'){
+                	var type = $("#type").val();
+                	if(type=="indicator"){
+                    	grid();	
+                    }else if(type=="budget"){
+                    	gridBud();
+                    }else{
+                    	if(t){
+                    		t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                        }
+                    }	
                 }
             });
             
@@ -272,8 +284,12 @@
             	var type = $(this).val();
             	if(type=="indicator"){
                 	grid();	
-                }else{
+                }else if(type=="budget"){
                 	gridBud();
+                }else{
+                	if(t){
+                		t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                    }
                 }
             });
             
@@ -281,7 +297,18 @@
                 var data_id     = this.value.split("###");;
                 var id_monper   = data_id[0];
                 var tahun       = data_id[1];
-                //grid();
+                if($("#id_prov").val()!='0' && $("#periode").val()!='0' && $("#type").val()!='0'){
+                	var type = $("#type").val();
+                	if(type=="indicator"){
+                    	grid();	
+                    }else if(type=="budget"){
+                    	gridBud();
+                    }else{
+                    	if(t){
+                    		t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                        }
+                    }
+                }
             });
 
             $('#teruskan').on('click', '#apply_btn', function(e){
@@ -347,8 +374,12 @@
 	        	var type = $("#type").val();
             	if(type=="indicator"){
                 	grid();	
-                }else{
+                }else if(type=="budget"){
                 	gridBud();
+                }else{
+                	if(t){
+                		t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                    }
                 }
 	        	bhs($(this).is(':checked'));
 	        });
@@ -642,20 +673,20 @@
                     "searching": true,
                     "columns": [
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[0]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[1]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[2]+"</div>";
+                            return "<div style='font-size:90%;'>"+(row[0]?row[0]:'')+"</div><span style='font-size:90%; padding-left: 15px'>"+(row[1]?row[1]:'')+"</span><div style='font-size:90%; padding-left: 30px'>"+(row[2]?row[2]:'')+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
                             if($('#fs').is(':checked')){
-                                return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[5]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[7]+"</div>";
+                                return "<div style='font-size:90%;'>"+(row[3]?row[3]:'')+"</div><span style='font-size:90%; padding-left: 15px'>"+(row[5]?row[5]:'')+"</span><div style='font-size:90%; padding-left: 30px'>"+(row[7]?row[7]:'')+"</div>";
                             }else{
-                                return "<div style='font-size:90%;'>"+row[4]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[6]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[8]+"</div>";
+                                return "<div style='font-size:90%;'>"+(row[4]?row[4]:'')+"</div><span style='font-size:90%; padding-left: 15px'>"+(row[6]?row[6]:'')+"</span><div style='font-size:90%; padding-left: 30px'>"+(row[8]?row[8]:'')+"</div>";
                             }
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+                            return "<div style='font-size:90%;'>"+(row[9]?row[9]:'')+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[10]+"</div>";
+                            return "<div style='font-size:90%;'>"+(row[10]?row[10]:'')+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
                         	return "<div style='font-size:90%;'>"+(row[11]?row[11]:'')+"</div>";
@@ -664,7 +695,7 @@
                         	var color_sts = "";
                         	var text = "";
                         	var update = ""
-                            if(row[12]){
+                            if(row[12]!=null){
                                 text = " "+row[12];
                                 color_sts = 'btn btn-success';
                                 update="update";
@@ -697,7 +728,7 @@
                         	var color_sts = "";
                         	var text = "";
                         	var update = ""
-                       		if(row[13]){
+                       		if(row[13]!=null){
                                    text = " "+row[13];
                                    color_sts = 'btn btn-success';
                                    update="update";
@@ -730,7 +761,7 @@
                         	var color_sts = "";
                         	var text = "";
                         	var update = ""
-                       		if(row[14]){
+                       		if(row[14]!=null){
                                    text = " "+row[14];
                                    color_sts = 'btn btn-success';
                                    update="update";
@@ -763,7 +794,7 @@
                         	var color_sts = "";
                         	var text = "";
                         	var update = ""
-                       		if(row[15]){
+                       		if(row[15]!=null){
                                    text = " "+row[15];
                                    color_sts = 'btn btn-success';
                                    update="update";
@@ -1095,20 +1126,20 @@
                     "searching": true,
                     "columns": [
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[0]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[1]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[2]+"</div>";
+                            return "<div style='font-size:90%;'>"+(row[0]?row[0]:'')+"</div><span style='font-size:90%; padding-left: 15px'>"+(row[1]?row[1]:'')+"</span><div style='font-size:90%; padding-left: 30px'>"+(row[2]?row[2]:'')+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
                             if($('#fs').is(':checked')){
-                                return "<div style='font-size:90%;'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[5]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[7]+"</div>";
+                                return "<div style='font-size:90%;'>"+(row[3]?row[3]:'')+"</div><span style='font-size:90%; padding-left: 15px'>"+(row[5]?row[5]:'')+"</span><div style='font-size:90%; padding-left: 30px'>"+(row[7]?row[7]:'')+"</div>";
                             }else{
-                                return "<div style='font-size:90%;'>"+row[4]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[6]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[8]+"</div>";
+                                return "<div style='font-size:90%;'>"+(row[4]?row[4]:'')+"</div><span style='font-size:90%; padding-left: 15px'>"+(row[6]?row[6]:'')+"</span><div style='font-size:90%; padding-left: 30px'>"+(row[8]?row[8]:'')+"</div>";
                             }
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
+                            return "<div style='font-size:90%;'>"+(row[9]?row[9]:'')+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
-                            return "<div style='font-size:90%;'>"+row[10]+"</div>";
+                            return "<div style='font-size:90%;'>"+(row[10]?row[10]:'')+"</div>";
                         }},
                         {"data": function (row, data, index, display) {
                         	return "<div style='font-size:90%;'>"+(row[11]?row[11]:'')+"</div>";
@@ -1117,7 +1148,7 @@
                         	var color_sts = "";
                         	var text = "";
                         	var update = ""
-                            if(row[16]){
+                            if(row[16] != null){
                                 text = " "+row[16];
                                 color_sts = 'btn btn-success';
                                 update="update";
@@ -1150,7 +1181,7 @@
                         	var color_sts = "";
                         	var text = "";
                         	var update = ""
-                            if(row[17]){
+                            if(row[17] != null){
                                 text = " "+row[17];
                                 color_sts = 'btn btn-success';
                                 update="update";
@@ -1183,7 +1214,7 @@
                         	var color_sts = "";
                         	var text = "";
                         	var update = ""
-                            if(row[18]){
+                            if(row[18] != null){
                                 text = " "+row[18];
                                 color_sts = 'btn btn-success';
                                 update="update";
@@ -1216,7 +1247,7 @@
                         	var color_sts = "";
                         	var text = "";
                         	var update = ""
-                            if(row[19]){
+                            if(row[19] != null){
                                 text = " "+row[19];
                                 color_sts = 'btn btn-success';
                                 update="update";

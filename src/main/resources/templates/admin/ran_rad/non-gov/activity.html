@@ -57,7 +57,7 @@
 								</div>
                     		</div>
                     		<div class="span6" align="right">
-                    			<button data-toggle="modal" data-target="#myModal" class="btn btn-primary">
+                    			<button id="showModal" data-toggle="modal" data-target="#myModal" class="btn btn-primary">
                     			<i class="icon-plus"></i>
                     				<span class="lang_eng" style="display:none">Add Activity</span>
                     				<span class="lang_indo">Tambah Kegiatan</span>
@@ -223,6 +223,21 @@
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-nsaActivity/'+id_program).load();
 	        });
+	        
+	        function cekStatusMonper(){
+	        	var status = "";
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-monPer/'+$('#id_monper').val(),
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	status = val.status;
+                    },
+                });
+	        	return status;
+	        }
+	        
 			var table = $('#tabel-target').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
@@ -230,6 +245,15 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"drawCallback": function( settings ) {
+					if(cekStatusMonper()=="completed"){
+		        		$('#showModal').hide();
+		        		$('#tbody-target').find('.update, .detail, .delete').hide();
+		        	}else{
+		        		$('#showModal').show();
+		        		$('#tbody-target').find('.update, .detail, .delete').show();
+		        	}
+				},
 				"ajax": {
 					"url": urls+'list-nsaActivity/'+id_program,
 					dataSrc: 'content',
