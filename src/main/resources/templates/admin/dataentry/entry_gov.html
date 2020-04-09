@@ -255,6 +255,10 @@
                         }
                     }
                 });
+                $("#type").val('0');
+                if(t){
+                	t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                }
             });
                         
             $("#periode").on('change', function(e){
@@ -266,8 +270,12 @@
                 	var type = $("#type").val();
                 	if(type=="indicator"){
                     	grid();	
-                    }else{
+                    }else if(type=="budget"){
                     	gridBud();
+                    }else{
+                    	if(t){
+                    		t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                        }
                     }	
                 }
             });
@@ -278,6 +286,10 @@
                 	grid();	
                 }else if(type=="budget"){
                 	gridBud();
+                }else{
+                	if(t){
+                		t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                    }
                 }
             });
             
@@ -289,9 +301,13 @@
                 	var type = $("#type").val();
                 	if(type=="indicator"){
                     	grid();	
-                    }else{
+                    }else if(type=="budget"){
                     	gridBud();
-                    }	
+                    }else{
+                    	if(t){
+                    		t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                        }
+                    }
                 }
             });
 
@@ -358,8 +374,12 @@
 	        	var type = $("#type").val();
             	if(type=="indicator"){
                 	grid();	
-                }else{
+                }else if(type=="budget"){
                 	gridBud();
+                }else{
+                	if(t){
+                		t.ajax.url(urls+'list-entry-gov/'+0+'/'+0+'/'+0+'/'+0).load();
+                    }
                 }
 	        	bhs($(this).is(':checked'));
 	        });
