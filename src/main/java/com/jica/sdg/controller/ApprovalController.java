@@ -590,4 +590,60 @@ public class ApprovalController {
         return "admin/role_manajemen/message";
     }
     
+    @GetMapping("admin/list-message")
+    public @ResponseBody Map<String, Object> listMessage(HttpSession session) {
+    	Query query;
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> role = roleService.findOne(id_role);
+    	String privilege = role.get().getPrivilege();
+    	String id_prov = role.get().getId_prov();
+    	if(privilege.equals("SUPER")) {
+    		String sql  = " SELECT a.type,a.year,a.description, "
+    				+ "CASE when a.type='entry_sdg' then b.sdg_indicator "
+    				+ "when a.type='entry_gov_indicator' then b.gov_prog "
+    				+ "when a.type='entry_gov_budget' then b.gov_prog_bud "
+    				+ "when a.type='entry_nsa_indicator' then b.nsa_prog "
+    				+ "when a.type='entry_nsa_budget' then b.nsa_prog_bud "
+    				+ "ELSE '' END as period, "
+    				+ "c.nm_role, a.periode,a.approval_date "
+    				+ "from entry_approval a "
+    				+ "left join ran_rad b on a.id_monper = b.id_monper "
+    				+ "left join ref_role c on a.id_role = c.id_role "
+    				+ "where a.approval = '3' order by a.id_monper, a.year, a.periode" ;
+            query = em.createNativeQuery(sql);
+    	}else if(privilege.equals("ADMIN")) {
+    		String sql  = " SELECT a.type,a.year,a.description, "
+    				+ "CASE when a.type='entry_sdg' then b.sdg_indicator "
+    				+ "when a.type='entry_gov_indicator' then b.gov_prog "
+    				+ "when a.type='entry_gov_budget' then b.gov_prog_bud "
+    				+ "when a.type='entry_nsa_indicator' then b.nsa_prog "
+    				+ "when a.type='entry_nsa_budget' then b.nsa_prog_bud "
+    				+ "ELSE '' END as period, "
+    				+ "c.nm_role, a.periode,a.approval_date "
+    				+ "from entry_approval a "
+    				+ "left join ran_rad b on a.id_monper = b.id_monper "
+    				+ "left join ref_role c on a.id_role = c.id_role "
+    				+ "where a.approval = '3' and c.id_prov = '"+id_prov+"' order by a.id_monper, a.year, a.periode" ;
+    		query = em.createNativeQuery(sql);
+    	}else{
+    		String sql  = " SELECT a.type,a.year,a.description, "
+    				+ "CASE when a.type='entry_sdg' then b.sdg_indicator "
+    				+ "when a.type='entry_gov_indicator' then b.gov_prog "
+    				+ "when a.type='entry_gov_budget' then b.gov_prog_bud "
+    				+ "when a.type='entry_nsa_indicator' then b.nsa_prog "
+    				+ "when a.type='entry_nsa_budget' then b.nsa_prog_bud "
+    				+ "ELSE '' END as period, "
+    				+ "c.nm_role, a.periode,a.approval_date "
+    				+ "from entry_approval a "
+    				+ "left join ran_rad b on a.id_monper = b.id_monper "
+    				+ "left join ref_role c on a.id_role = c.id_role "
+    				+ "where a.approval = '3' and a.id_role = '"+id_role+"' order by a.id_monper, a.year, a.periode" ;
+    		query = em.createNativeQuery(sql);
+    	} 
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
 }

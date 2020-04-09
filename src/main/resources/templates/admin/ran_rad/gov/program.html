@@ -191,6 +191,7 @@
 		//$(document).ready(function (e) {
 			var token = $("meta[name='_csrf']").attr("content");
 	        var header = $("meta[name='_csrf_header']").attr("content");
+	        $("#rel_prov > option[value='000']").remove();
 	        $("#rel_prov").select2({
 	        	dropdownParent: $('#myModal')
 	        }).attr('disabled', true);
@@ -213,9 +214,10 @@
 	        
 	        $('#rel_prov').on("select2:select", function (e) { 
 	            var data = e.params.data.text;
-	            if(data=='all'){
-	             $("#rel_prov > option").prop("selected","selected");
-	             $("#rel_prov").trigger("change");
+	            if(data=='ALL'){
+	            	$('#rel_prov').val("").trigger('change')
+	           		$("#rel_prov > option[value!='all']").prop("selected","selected");
+		            $("#rel_prov").trigger("change");  	
 	            }
 	       });
 	        
@@ -378,45 +380,7 @@
                     },
                 });
 	        }); */
-	        
-	        $('#id_prov').on('change', function(){
-	        	var id = $(this).val();
-	        	$.ajax({
-					type: "GET",
-                    url: urls+'manajemen/list-role/'+id,
-                    async:false,
-                    success: function (result) {
-						$('#id_role').html("");
-						var array = result.content;
-						for(i=0; i<array.length;i++){
-							var selected = (i==0)?'selected':'';
-							$('#id_role').append('<option '+selected+' value="'+array[i].id_role+'">' +array[i].nm_role+'</option>');
-						}
-                    },
-                });
-	        	
-	        	$.ajax({
-					type: "GET",
-                    url: urls+'list-monPer/'+id,
-                    async:false,
-                    success: function (result) {
-						$('#id_monper').html("");
-						var array = result.content;
-						for(i=0; i<array.length;i++){
-							$('#id_monper').append('<option value="'+array[i].id_monper+'">' +array[i].start_year+' - '+array[i].end_year+'</option>');
-						}
-                    },
-                });
-	        	//table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
-	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
-	        });
-	        $('#id_role, #id_monper').on('change', function(){
-	        	//table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
-	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
-	        	
-	        });
-			
-			var table = $('#tabel-goals').DataTable({
+	        var table = $('#tabel-goals').DataTable({
 				responsive: true,
 				sDom: 'Brtip',
 				"bLengthChange": false,
@@ -462,7 +426,7 @@
 		        ],
 				"ajax": {
 					//"url": urls+'list-govProg/'+id_role+'/'+id_monper,
-					"url": urls+'list-govProg/'+id_monper,
+					"url": urls+'list-govProg/'+$('#id_monper').val(),
 					dataSrc: 'content',
 				},
 				"searching": true,
@@ -496,6 +460,58 @@
 				],
 				select: true
 			});	
+	        $('#id_prov').on('change', function(){
+	        	var id = $(this).val();
+	        	sessionStorage.provinsi_gov_prog  = id;
+	        	/* $.ajax({
+					type: "GET",
+                    url: urls+'manajemen/list-role/'+id,
+                    async:false,
+                    success: function (result) {
+						$('#id_role').html("");
+						var array = result.content;
+						for(i=0; i<array.length;i++){
+							var selected = (i==0)?'selected':'';
+							$('#id_role').append('<option '+selected+' value="'+array[i].id_role+'">' +array[i].nm_role+'</option>');
+						}
+                    },
+                }); */
+	        	
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'list-monPer/'+id,
+                    async:false,
+                    success: function (result) {
+						$('#id_monper').html("");
+						var array = result.content;
+						for(i=0; i<array.length;i++){
+							$('#id_monper').append('<option value="'+array[i].id_monper+'">' +array[i].start_year+' - '+array[i].end_year+'</option>');
+						}
+						if(sessionStorage.provinsi_gov_prog && sessionStorage.monper_gov_prog){
+                        	$("#id_monper").val(sessionStorage.monper_gov_prog);
+                        }
+                    },
+                });
+	        	if(id == '000'){
+		        	$('.nasional').show();
+		        	$('.provinsi').hide();
+		        }else{
+		        	$('.nasional').hide();
+		        	$('.provinsi').show();
+		        }
+	        	//table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
+	        });
+	        if(sessionStorage.provinsi_gov_prog && sessionStorage.monper_gov_prog){
+            	$("#id_prov").val(sessionStorage.provinsi_gov_prog).trigger('change');
+            	$("#id_monper").val(sessionStorage.monper_gov_prog);
+            }
+	        $('#id_role, #id_monper').on('change', function(){
+	        	//table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	sessionStorage.monper_gov_prog  = $('#id_monper').val();
+	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
+	        });
+				
 			
 			$('#text-cari').on( 'keyup', function () {
 				var val=$(this).val();
@@ -536,6 +552,7 @@
 				var rel_prog_id = $('#rel_prog_id').val();
 				var internal_code = $('#internal_code').val();
 				var rel_prov = $('#rel_prov').val()?$('#rel_prov').val().toString():'';
+				console.log(rel_prov);
 				/* var ministry = $('#ministry').val(); */
 				if(nm_program==""){
 					nm_program=nm_program_eng;
