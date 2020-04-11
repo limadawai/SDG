@@ -506,6 +506,7 @@
                     type: "GET",
                     url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                     success: function (result10) {
+                        
                         $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
                         $("#nm_nsa_profil").append('<option value="00" >All</option>');
                         var array = result10.content;
@@ -627,6 +628,8 @@
                     type: "GET",
                     url: urls+'list-get-option-role-nsa-profil/'+id_prov,
                     success: function (result) {
+//                        $("#nm_nsa_profil").html('');
+                        $("#nm_nsa_profil").html('<option value="0" >-- Pilih --</option>');
                         $("#nm_nsa_profil").append('<option value="00" >-- ALL --</option>');
                         var array = result.content;
                         if (array != '') {

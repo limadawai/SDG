@@ -649,12 +649,15 @@ public class RateController {
         if(catrole.equals("Government")){
             String sql  = "select distinct a.id, a.nm_program, a.nm_program_eng, a.id_program from gov_program a \n" +
                         "left join gov_activity b on a.id = b.id_program\n" +
+                        "inner join gov_indicator c on b.id = c.id_activity\n" +
                         "where a.id_monper = :id_monper and b.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
             query.setParameter("id_monper", id_monper);
         }else if(catrole.equals("NSA")){
-            String sql  = "select a.id, a.nm_program, a.nm_program_eng, a.id_program from nsa_program a \n" +
+            String sql  = "select distinct a.id, a.nm_program, a.nm_program_eng, a.id_program from nsa_program a \n" +
+                        "inner join nsa_activity b on a.id = b.id_program \n" +
+                        "inner join nsa_indicator c on b.id = c.id_activity \n" +
                         "where a.id_monper = :id_monper and a.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
@@ -674,13 +677,15 @@ public class RateController {
         
         Query query = em.createNativeQuery("");
         if(catrole.equals("Government")){
-            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, a.id_activity from gov_activity a\n" +
+            String sql  = "select distinct a.id, a.nm_activity, a.nm_activity_eng, a.id_activity from gov_activity a\n" +
+                        "inner join gov_indicator c on a.id = c.id_activity \n" +
                         "where a.id_program = :id_program and a.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
             query.setParameter("id_program", id_program);
         }else if(catrole.equals("NSA")){
-            String sql  = "select a.id, a.nm_activity, a.nm_activity_eng, a.id_activity from nsa_activity a\n" +
+            String sql  = "select distinct a.id, a.nm_activity, a.nm_activity_eng, a.id_activity from nsa_activity a\n" +
+                        "inner join nsa_indicator c on a.id = c.id_activity \n" +
                         "where a.id_program = :id_program and a.id_role = :id_role ";
             query = em.createNativeQuery(sql);
             query.setParameter("id_role", id_role);
@@ -840,6 +845,7 @@ public class RateController {
                         "from ref_role a\n" +
                         "inner join gov_activity b on a.id_role = b.id_role\n" +
                         "left join ( select * from gov_program where id_monper = :id_monper ) c on b.id_program = c.id\n" +
+                        "inner join gov_indicator d on b.id = d.id_activity\n" +
                         "where a.cat_role = :catrole and a.id_prov = :id_prov and c.id is not null";
             query = em.createNativeQuery(sql);
             query.setParameter("catrole", catrole);
@@ -849,6 +855,8 @@ public class RateController {
             String sql  = "select distinct b.id, b.nm_program, b.nm_program_eng, b.id_program as kode_program\n" +
                         "from ref_role a\n" +
                         "inner join ( select * from nsa_program where id_monper = :id_monper ) b on a.id_role = b.id_role\n" +
+                        "inner join nsa_activity c on b.id = c.id_program\n" +
+                        "inner join nsa_indicator d on c.id = d.id_activity\n" +
                         "where a.cat_role = :catrole and a.id_prov = :id_prov and b.id is not null";
             query = em.createNativeQuery(sql);
             query.setParameter("catrole", catrole);
@@ -872,6 +880,7 @@ public class RateController {
             String sql  = "select distinct b.id, b.nm_activity, b.nm_activity_eng, b.id_activity as kode_activity\n" +
                         "from ref_role a\n" +
                         "inner join gov_activity b on a.id_role = b.id_role\n" +
+                        "inner join gov_indicator c on b.id = c.id_activity\n" +
                         "where a.cat_role = :catrole and a.id_prov = :id_prov and b.id_program = :id_program and b.id is not null";
             query = em.createNativeQuery(sql);
             query.setParameter("catrole", catrole);
@@ -881,6 +890,7 @@ public class RateController {
             String sql  = "select distinct b.id, b.nm_activity, b.nm_activity_eng, b.id_activity as kode_activity\n" +
                         "from ref_role a\n" +
                         "inner join nsa_activity b on a.id_role = b.id_role\n" +
+                        "inner join nsa_indicator c on b.id = c.id_activity\n" +
                         "where a.cat_role = :catrole and a.id_prov = :id_prov and b.id_program = :id_program and b.id is not null";
             query = em.createNativeQuery(sql);
             query.setParameter("catrole", catrole);
