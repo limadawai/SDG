@@ -457,6 +457,12 @@ public class NsaController {
     public void deleteSdg(@PathVariable("id") Integer id) {
         insProfilrService.deleteInsProfil(id);
     }
+    
+    @DeleteMapping("admin/delete-philan-collaboration/{id}")
+    @ResponseBody
+    public void deletePhilan(@PathVariable("id") Integer id) {
+        philanthropyService.deletePhilantropi(id);
+    }
 
     @GetMapping("admin/nsa/nsa-collaboration")
     public String nsa_collaboration(Model model, HttpSession session) {

@@ -37,9 +37,9 @@ public class PhilanthropyService implements IPhilanthropyService{
 //            return (Optional<NsaCollaboration>) nsaCollaborationRepo.findById(id);
 //        }
 //        
-//        @Override
-//	public void deleteNsaCollaboration(Long id) {
-//            nsaCollaborationRepo.deleteById(id);
-//	}
+        @Override
+	public void deletePhilantropi(Integer id) {
+            philanthropyRepo.deleteById(id);
+	}
         
 }
