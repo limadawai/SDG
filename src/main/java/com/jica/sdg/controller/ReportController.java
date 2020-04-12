@@ -2154,35 +2154,35 @@ public class ReportController {
         sqlInd.append("SELECT DISTINCT c.nm_unit,d.baseline,b.increment_decrement,c.calculation,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
-    		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = a.id_indicator and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
+    		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = b.id and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
     		
     		//achievement
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_sdg as achievement1_"+i+" where achievement1_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_sdg as achievement2_"+i+" where achievement2_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_sdg as achievement3_"+i+" where achievement3_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_sdg as achievement4_"+i+" where achievement4_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement4_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_sdg as achievement1_"+i+" where achievement1_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_sdg as achievement2_"+i+" where achievement2_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_sdg as achievement3_"+i+" where achievement3_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_sdg as achievement4_"+i+" where achievement4_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_sdg as new_value1_"+i+" where new_value1_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_sdg as new_value2_"+i+" where new_value2_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_sdg as new_value3_"+i+" where new_value3_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_sdg as new_value4_"+i+" where new_value4_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value4_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_sdg as new_value1_"+i+" where new_value1_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_sdg as new_value2_"+i+" where new_value2_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_sdg as new_value3_"+i+" where new_value3_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_sdg as new_value4_"+i+" where new_value4_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
-    	sqlInd.append(" e.nm_role FROM assign_sdg_indicator a\r\n" + 
-    			" left join sdg_indicator b on a.id_indicator = b.id\r\n" +
+    	sqlInd.append(" CASE when e.nm_role is null then 'Unassigned' else e.nm_role end FROM sdg_indicator b\r\n" + 
+    			" left join assign_sdg_indicator a on a.id_indicator = b.id and a.id_prov = :id_prov\r\n" +
     			" left join ref_unit c on b.unit = c.id_unit\r\n" + 
-    			" left join sdg_funding d on a.id_indicator = d.id_sdg_indicator\r\n" + 
+    			" left join sdg_funding d on b.id = d.id_sdg_indicator\r\n" + 
     			" left join ref_role e on a.id_role = e.id_role\r\n" + 
-    			" right join entry_sdg f on a.id_indicator = f.id_sdg_indicator and f.id_monper = a.id_monper and f.id_role = a.id_role\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator \r\n" + 
+    			" right join entry_sdg f on b.id = f.id_sdg_indicator and f.id_monper = :id_monper \r\n" + 
+    			" WHERE b.id = :id_indicator \r\n" + 
     			" ");
     	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
     	queryIndGov.setParameter("id_prov", id_prov);
@@ -2208,37 +2208,37 @@ public class ReportController {
         sqlInd.append("SELECT DISTINCT c.nm_unit,d.baseline,b.increment_decrement,c.calculation,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
-    		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = a.id_indicator and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
+    		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = b.id and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
     		
     		//achievement
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_sdg_detail as achievement1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_sdg_detail as achievement2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_sdg_detail as achievement3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_sdg_detail as achievement4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement4_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_sdg_detail as achievement1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_sdg_detail as achievement2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_sdg_detail as achievement3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_sdg_detail as achievement4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_sdg_detail as new_value1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_sdg_detail as new_value2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_sdg_detail as new_value3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_sdg_detail as new_value4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value4_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_sdg_detail as new_value1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_sdg_detail as new_value2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_sdg_detail as new_value3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_sdg_detail as new_value4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
-    	sqlInd.append(" e.nm_role FROM assign_sdg_indicator a\r\n" + 
-    			" left join sdg_indicator b on a.id_indicator = b.id\r\n" +
+    	sqlInd.append(" CASE when e.nm_role is null then 'Unassigned' else e.nm_role end FROM sdg_indicator b\r\n" + 
+    			" left join assign_sdg_indicator a on a.id_indicator = b.id and a.id_prov = :id_prov\r\n" +
     			" left join ref_unit c on b.unit = c.id_unit\r\n" + 
-    			" left join sdg_funding d on a.id_indicator = d.id_sdg_indicator\r\n" + 
+    			" left join sdg_funding d on b.id = d.id_sdg_indicator\r\n" + 
     			" left join ref_role e on a.id_role = e.id_role\r\n" + 
-    			" left join sdg_ranrad_disaggre g on a.id_indicator = g.id_indicator\r\n" + 
+    			" left join sdg_ranrad_disaggre g on b.id = g.id_indicator\r\n" + 
     			" left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre\r\n" + 
-    			" right join entry_sdg_detail f on f.id_disaggre = g.id and f.id_disaggre_detail = h.id and f.id_monper = a.id_monper and f.id_role = a.id_role\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator and h.id = :id_disaggre_detail \r\n" + 
+    			" right join entry_sdg_detail f on f.id_disaggre = g.id and f.id_disaggre_detail = h.id and f.id_monper = :id_monper \r\n" + 
+    			" WHERE b.id = :id_indicator and h.id = :id_disaggre_detail \r\n" + 
     			" ");
     	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
     	queryIndGov.setParameter("id_prov", id_prov);
