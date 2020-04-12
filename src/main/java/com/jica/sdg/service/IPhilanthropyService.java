@@ -15,5 +15,5 @@ public interface IPhilanthropyService {
     
 //    Optional<NsaCollaboration> findOne(Long id);
 //    
-//    void deleteNsaCollaboration(Long id);
+    void deletePhilantropi(Integer id);
 }

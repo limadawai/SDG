@@ -125,8 +125,11 @@ public class NsaController {
     
     @GetMapping("admin/list-getid-nsa-profil/{id}")
     public @ResponseBody Map<String, Object> nsaProfilListid(@PathVariable("id") String id) {
+        
+        String id_role = id.equals("all")?"":" and a.id_role = '"+id+"' ";
+        
         String sql = "select a.*,b.id_prov from nsa_profile a "
-                     + "left join ref_role b on b.id_role = a.id_role where a.id_role = '"+id+"'";
+                     + "left join ref_role b on b.id_role = a.id_role where 1=1 "+id_role+" ";
         
         Query list = em.createNativeQuery(sql);
         List<Object[]> rows = list.getResultList();
@@ -409,10 +412,16 @@ public class NsaController {
     
     @GetMapping("admin/list-getid-ins-profil/{id}")
     public @ResponseBody Map<String, Object> insProfilListid(@PathVariable("id") String id) {
-        List<Insprofile> list = insProfilrService.findId(id);
-        Map<String, Object> hasil = new HashMap<>();
-        hasil.put("content",list);
-        return hasil;
+        String sql  = "select a.*, c.nm_prov from nsa_inst a "
+                    + "left join ref_role b on a.id_role = b.id_role "
+                    + "left join ref_province c on b.id_prov = c.id_prov "
+                    + "where a.id_role = :id";
+	    Query query = em.createNativeQuery(sql);
+            query.setParameter("id", id);
+	    List list   = query.getResultList();
+	    Map<String, Object> hasil = new HashMap<>();
+	    hasil.put("content",list);
+	    return hasil;
     }
     
     @GetMapping("admin/list-ins-profil")
@@ -426,8 +435,9 @@ public class NsaController {
     @GetMapping("admin/listins/{id_prov}")
 	    public @ResponseBody Map<String, Object> listins(@PathVariable("id_prov") String idprov) {
     	String id_prov = idprov.equals("all")?"":" and a.id_prov = '"+idprov+"' ";
-	    	String sql  = "select a.id_role as idrole, b.* from ref_role a left join "
-	    			+ "nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' "+id_prov
+	    	String sql  = "select b.*, c.nm_prov from ref_role a left join "
+	    			+ "ref_province c on a.id_prov = c.id_prov "
+	    			+ "left join nsa_inst b on b.id_role = a.id_role where a.cat_role = 'Institution' "+id_prov
 	    			+ "order by a.id_role asc";
 	    Query query = em.createNativeQuery(sql);
 	    List list   = query.getResultList();
@@ -446,6 +456,12 @@ public class NsaController {
     @ResponseBody
     public void deleteSdg(@PathVariable("id") Integer id) {
         insProfilrService.deleteInsProfil(id);
+    }
+    
+    @DeleteMapping("admin/delete-philan-collaboration/{id}")
+    @ResponseBody
+    public void deletePhilan(@PathVariable("id") Integer id) {
+        philanthropyService.deletePhilantropi(id);
     }
 
     @GetMapping("admin/nsa/nsa-collaboration")
