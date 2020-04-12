@@ -129,7 +129,8 @@
 	    					}else{
 	    						nm_goals = hasilGoal.sdg[i][2];
 	    					}
-	            			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+kode_goals+". "+nm_goals+"</b></div><p/>";
+	            			if(i>0){textSdg +='<br/><br/><br/><br/><br/><br/>';}
+	            			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:left;background-color:#3EC1E9;display:block;'><b><h3>Goal "+kode_goals+". "+nm_goals+"</h3></b></div><p/>";
 	                		
 	            			//GOALS GOVERNMENT PROGRAM
 	            			$.ajax({
@@ -140,7 +141,7 @@
 	            	            async : false,
 	            	            success: function (hasilGoal1) {
 	            	            	if(hasilGoal1.progGov.length>0){
-	            	            		textSdg += "<div><b><u>Government Program</u></b></div>";
+	            	            		textSdg += "<div style='font-size:90%;'><b><u>Government Program</u></b></div>";
 	            	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	            	            			var row = hasilGoal1.progGov;
 	            	            			var id_program = row[a][0];
@@ -152,7 +153,7 @@
 	    	                            	}else{
 	    	                            		nm_program = row[a][3];
 	    	                            	}
-	                            			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+	                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 	                            			
 	                            			$.ajax({
 	                            	            url: urls + "get-mapping-goals-govActivity",
@@ -172,7 +173,7 @@
 	                    	                            	}else{
 	                    	                            		nm_activity = row[b][3];
 	                    	                            	}
-	                                            			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+	                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
 	                            	            			
 	                                            			$.ajax({
 	                                            	            url: urls + "get-mapping-goals-govIndicator",
@@ -192,7 +193,7 @@
 	                                    	                            	}else{
 	                                    	                            		nm_indicator = row[c][3];
 	                                    	                            	}
-	                                                            			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+	                                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
 	                                            	            			
 	                                                            			$.ajax({
 	                                                            	            url: urls + "get-mapping-goals-relisasi",
@@ -263,7 +264,7 @@
 	            	            async : false,
 	            	            success: function (hasilGoal1) {
 	            	            	if(hasilGoal1.progGov.length>0){
-	            	            		textSdg += "<div><b><u>Non Government Program</u></b></div>";
+	            	            		textSdg += "<div style='font-size:90%;'><b><u>Non Government Program</u></b></div>";
 	            	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	            	            			var row = hasilGoal1.progGov;
 	            	            			var id_program = row[a][0];
@@ -275,7 +276,7 @@
 	    	                            	}else{
 	    	                            		nm_program = row[a][3];
 	    	                            	}
-	                            			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+	                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 	                            			
 	                            			$.ajax({
 	                            	            url: urls + "get-mapping-goals-nsaActivity",
@@ -295,7 +296,7 @@
 	                    	                            	}else{
 	                    	                            		nm_activity = row[b][3];
 	                    	                            	}
-	                                            			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+	                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
 	                                            			
 	                                            			$.ajax({
 	                                            	            url: urls + "get-mapping-goals-nsaIndicator",
@@ -315,7 +316,7 @@
 	                                    	                            	}else{
 	                                    	                            		nm_indicator = row[c][3];
 	                                    	                            	}
-	                                                            			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+	                                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
 	                                                            			
 	                                                            			$.ajax({
 	                                                            	            url: urls + "get-mapping-goals-nsarelisasi",
@@ -394,7 +395,7 @@
 	    							}else{
 	    								nm_target = hasilTarget.sdg[j][2];
 	    							}
-	    		            		textSdg += "<p style='font-size:90%;'><b>SDG Targets "+kode_target+". "+nm_target+"</b><p/>";
+	    		            		textSdg += "<br/><br/><p style='font-size:90%;'><b><h4>SDG Targets "+kode_target+". "+nm_target+"</h4></b><p/>";
 	    		            		
 	    		            		//TARGET GOVERNMENT PROGRAM
 	    		        			$.ajax({
@@ -405,7 +406,7 @@
 	    		        	            async : false,
 	    		        	            success: function (hasilGoal1) {
 	    		        	            	if(hasilGoal1.progGov.length>0){
-	    		        	            		textSdg += "<div><b><u>Government Program</u></b></div>";
+	    		        	            		textSdg += "<div style='font-size:90%;'><b><u>Government Program</u></b></div>";
 	    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	    		        	            			var row = hasilGoal1.progGov;
 	    		        	            			var id_program = row[a][0];
@@ -417,7 +418,7 @@
 	    			                            	}else{
 	    			                            		nm_program = row[a][3];
 	    			                            	}
-	    		                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+	    		                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 	    		                        			
 	    		                        			$.ajax({
 	    		                        	            url: urls + "get-mapping-target-govActivity",
@@ -437,7 +438,7 @@
 	    		                	                            	}else{
 	    		                	                            		nm_activity = row[b][3];
 	    		                	                            	}
-	    		                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+	    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
 	    		                                        			
 	    		                                        			$.ajax({
 	    		                                        	            url: urls + "get-mapping-target-govIndicator",
@@ -457,7 +458,7 @@
 	    		                                	                            	}else{
 	    		                                	                            		nm_indicator = row[c][3];
 	    		                                	                            	}
-	    		                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+	    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
 	    		                                                        			
 	    		                                                        			$.ajax({
 	    	                                                            	            url: urls + "get-mapping-target-relisasi",
@@ -528,7 +529,7 @@
 	    		        	            async : false,
 	    		        	            success: function (hasilGoal1) {
 	    		        	            	if(hasilGoal1.progGov.length>0){
-	    		        	            		textSdg += "<div><b><u>Non Government Program</u></b></div>";
+	    		        	            		textSdg += "<div style='font-size:90%;'><b><u>Non Government Program</u></b></div>";
 	    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	    		        	            			var row = hasilGoal1.progGov;
 	    		        	            			var id_program = row[a][0];
@@ -540,7 +541,7 @@
 	    			                            	}else{
 	    			                            		nm_program = row[a][3];
 	    			                            	}
-	    		                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+	    		                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 	    		                        			
 	    		                        			$.ajax({
 	    		                        	            url: urls + "get-mapping-target-nsaActivity",
@@ -560,7 +561,7 @@
 	    		                	                            	}else{
 	    		                	                            		nm_activity = row[b][3];
 	    		                	                            	}
-	    		                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+	    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
 	    		                                        			
 	    		                                        			$.ajax({
 	    		                                        	            url: urls + "get-mapping-target-nsaIndicator",
@@ -580,7 +581,7 @@
 	    		                                	                            	}else{
 	    		                                	                            		nm_indicator = row[c][3];
 	    		                                	                            	}
-	    		                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+	    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
 	    		                                                        			
 	    		                                                        			$.ajax({
 	    	                                                            	            url: urls + "get-mapping-target-nsarelisasi",
@@ -658,7 +659,7 @@
 	    		    							}else{
 	    		    								nm_indicator = hasilIndicator.sdg[k][2];
 	    		    							}
-	    		    		            		textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+kode_indicator+". "+nm_indicator+"</b><p/>";
+	    		    		            		textSdg += "<br/><br/><p style='font-size:90%;'><b><h5>SDG Indicators "+kode_indicator+". "+nm_indicator+"</h5></b><p/>";
 	    		    		            		
 	    		    		            		$.ajax({
 	    		    		    		            url: urls + "get-disaggre-report",
@@ -691,7 +692,7 @@
 	    		    		        	            async : false,
 	    		    		        	            success: function (hasilGoal1) {
 	    		    		        	            	if(hasilGoal1.progGov.length>0){
-	    		    		        	            		textSdg += "<div><b><u>Government Program</u></b></div>";
+	    		    		        	            		textSdg += "<div style='font-size:90%;'><b><u>Government Program</u></b></div>";
 	    		    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	    		    		        	            			var row = hasilGoal1.progGov;
 	    		    		        	            			var id_program = row[a][0];
@@ -703,7 +704,7 @@
 	    		    			                            	}else{
 	    		    			                            		nm_program = row[a][3];
 	    		    			                            	}
-	    		    		                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+	    		    		                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 	    		    		        	            			
 	    		    		                        			$.ajax({
 	    		    		                        	            url: urls + "get-mapping-indicator-govActivity",
@@ -723,7 +724,7 @@
 	    		    		                	                            	}else{
 	    		    		                	                            		nm_activity = row[b][3];
 	    		    		                	                            	}
-	    		    		                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+	    		    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
 	    		    		                        	            			
 	    		    		                                        			$.ajax({
 	    		    		                                        	            url: urls + "get-mapping-indicator-govIndicator",
@@ -743,7 +744,7 @@
 	    		    		                                	                            	}else{
 	    		    		                                	                            		nm_indicator = row[c][3];
 	    		    		                                	                            	}
-	    		    		                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+	    		    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
 	    		    		                                        	            			
 	    		    		                                                        			$.ajax({
 	    		    	                                                            	            url: urls + "get-mapping-indicator-relisasi",
@@ -814,7 +815,7 @@
 	    		    		        	            async : false,
 	    		    		        	            success: function (hasilGoal1) {
 	    		    		        	            	if(hasilGoal1.progGov.length>0){
-	    		    		        	            		textSdg += "<div><b><u>Non Government Program</u></b></div>";
+	    		    		        	            		textSdg += "<div style='font-size:90%;'><b><u>Non Government Program</u></b></div>";
 	    		    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	    		    		        	            			var row = hasilGoal1.progGov;
 	    		    		        	            			var id_program = row[a][0];
@@ -826,7 +827,7 @@
 	    		    			                            	}else{
 	    		    			                            		nm_program = row[a][3];
 	    		    			                            	}
-	    		    		                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+	    		    		                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 	    		    		                        			
 	    		    		                        			$.ajax({
 	    		    		                        	            url: urls + "get-mapping-indicator-nsaActivity",
@@ -846,7 +847,7 @@
 	    		    		                	                            	}else{
 	    		    		                	                            		nm_activity = row[b][3];
 	    		    		                	                            	}
-	    		    		                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+	    		    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
 	    		    		                                        			
 	    		    		                                        			$.ajax({
 	    		    		                                        	            url: urls + "get-mapping-indicator-nsaIndicator",
@@ -866,7 +867,7 @@
 	    		    		                                	                            	}else{
 	    		    		                                	                            		nm_indicator = row[c][3];
 	    		    		                                	                            	}
-	    		    		                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+	    		    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
 	    		    		                                        	            			
 	    		    		                                                        			$.ajax({
     			    	                                                            	            url: urls + "get-mapping-indicator-nsarelisasi",
