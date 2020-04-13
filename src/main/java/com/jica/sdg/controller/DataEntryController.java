@@ -1793,7 +1793,7 @@ public class DataEntryController {
         	JSONObject obj = c.getJSONObject(i);
         	String year = obj.getString("year");
         	String value = obj.getString("nilai");
-        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and id_role = '"+id_role+"' and year = '"+year+"' ").executeUpdate();
+        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and year = '"+year+"' ").executeUpdate();
         	if(!value.equals("")) {
         		em.createNativeQuery("INSERT INTO sdg_indicator_target (id_sdg_indicator,id_role,year,value) values ('"+id_indicator+"','"+id_role+"','"+year+"','"+value+"')").executeUpdate();
         	}
