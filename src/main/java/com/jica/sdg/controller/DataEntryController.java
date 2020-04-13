@@ -195,6 +195,18 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-get-option-monper-eva/{id}")
+    public @ResponseBody Map<String, Object> getOptionMonperReportListEva(@PathVariable("id") String id) {
+        String sql  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'completed') order by id_monper desc";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id", id);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-get-option-category/{id_prov}/{id_role}/{id_monper}")
     public @ResponseBody Map<String, Object> getOptionCategoryList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper) {
         String wheremonper = "";
@@ -333,9 +345,14 @@ public class DataEntryController {
         return hasil;
     }
     
-    @GetMapping("admin/list-get-sts-monper-all/{id_prov}")
-    public @ResponseBody Map<String, Object> getGetStsMonperAll(@PathVariable("id_prov") String id_prov) {
-        String sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where (a.status = 'on Going' or a.status = 'completed') and a.id_prov=:id_prov ";
+    @GetMapping("admin/list-get-sts-monper-all/{id_prov}/{id_monper}")
+    public @ResponseBody Map<String, Object> getGetStsMonperAll(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
+    	String sql;
+    	if(id_monper.equals("0")) {
+    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where (a.status = 'on Going' or a.status = 'completed') and a.id_prov=:id_prov order by id_monper desc ";
+    	}else {
+    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where a.id_prov=:id_prov and a.id_monper = '"+id_monper+"' order by id_monper desc ";
+    	} 
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         List list   = query.getResultList();
@@ -1776,7 +1793,7 @@ public class DataEntryController {
         	JSONObject obj = c.getJSONObject(i);
         	String year = obj.getString("year");
         	String value = obj.getString("nilai");
-        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and id_role = '"+id_role+"' and year = '"+year+"' ").executeUpdate();
+        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and year = '"+year+"' ").executeUpdate();
         	if(!value.equals("")) {
         		em.createNativeQuery("INSERT INTO sdg_indicator_target (id_sdg_indicator,id_role,year,value) values ('"+id_indicator+"','"+id_role+"','"+year+"','"+value+"')").executeUpdate();
         	}

@@ -158,14 +158,31 @@ public class ReportController {
     }
     
     @GetMapping("admin/get-sdg-goals/{sdg}")
-    public @ResponseBody Map<String, Object> getSdgGoalsEva(@RequestParam("id_role") int id_role, @PathVariable("sdg") String sdg) {
+    public @ResponseBody Map<String, Object> getSdgGoalsEva(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_monper") String id_monper,
+    		@PathVariable("sdg") String sdg) {
     	Query query;
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	
     	if(sdg.equals("0")) {
-    		String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM assign_sdg_indicator a "
-        			+ " left join sdg_goals b on a.id_goals = b.id "
-        			+ " WHERE a.id_role = :id_role";
+    		String sql;
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct b.id_old, b.nm_goals, b.nm_goals_eng, b.id_goals "
+        				+ " FROM history_sdg_indicator c "
+        				+ " left join assign_sdg_indicator a on a.id_indicator = c.id_old "
+            			+ " left join history_sdg_goals b on c.id_goals = b.id_old "
+            			+ " WHERE c.id_old is not null and c.id_monper = '"+id_monper+"' "+role;
+    		}else {
+    			sql = "SELECT distinct b.id, b.nm_goals, b.nm_goals_eng, b.id_goals "
+        				+ " FROM sdg_indicator c "
+        				+ " left join assign_sdg_indicator a on a.id_indicator = c.id "
+            			+ " left join sdg_goals b on c.id_goals = b.id "
+            			+ " WHERE c.id is not null "+role;
+    		}
             query = manager.createNativeQuery(sql);
-            query.setParameter("id_role", id_role);
     	}else {
     		String[] arrOfStr = sdg.split(","); 
     		StringBuffer goals = new StringBuffer();
@@ -193,12 +210,22 @@ public class ReportController {
     			}
     		}
     		String hasilgoals = (goals.length()==0)?"":goals.substring(0, goals.length() - 1);
-    		String gol = (hasilgoals.equals(""))?"":" and a.id_goals in("+hasilgoals+") ";
-    		String sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM assign_sdg_indicator a "
-        			+ " left join sdg_goals b on a.id_goals = b.id "
-        			+ " WHERE a.id_role = :id_role "+gol;
+    		String gol = (hasilgoals.equals(""))?"":" and c.id_goals in("+hasilgoals+") ";
+    		String sql;
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct b.id_old, b.nm_goals, b.nm_goals_eng, b.id_goals "
+        				+ " FROM history_sdg_indicator c "
+        				+ " left join assign_sdg_indicator a on a.id_indicator = c.id_old "
+            			+ " left join history_sdg_goals b on c.id_goals = b.id_old "
+            			+ " WHERE c.id_old is not null and c.id_monper = '"+id_monper+"' "+role+" "+gol;
+    		}else {
+    			sql = "SELECT distinct b.id, b.nm_goals, b.nm_goals_eng, b.id_goals "
+        				+ " FROM sdg_indicator c "
+        				+ " left join assign_sdg_indicator a on a.id_indicator = c.id "
+            			+ " left join sdg_goals b on c.id_goals = b.id "
+            			+ " WHERE c.id is not null "+role+" "+gol;
+    		}
             query = manager.createNativeQuery(sql);
-            query.setParameter("id_role", id_role);
     	}
     	
         List listSdg = query.getResultList();
@@ -221,16 +248,6 @@ public class ReportController {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
     		String sql;
     		if(status.equals("completed")) {
-//    			sql = "SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM gov_map a "
-//            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
-//            			+ " right join gov_indicator c on a.id_gov_indicator = c.id "
-//            			+ " right join gov_activity d on c.id_activity = d.id "
-//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
-//        			sql += "union SELECT distinct a.id_goals as id, b.nm_goals, b.nm_goals_eng, b.id_goals FROM nsa_map a "
-//            			+ " left join history_sdg_goals b on a.id_goals = b.id_old and a.id_monper = b.id_monper "
-//            			+ " right join nsa_indicator c on a.id_nsa_indicator = c.id "
-//            			+ " right join nsa_activity d on c.id_activity = d.id "
-//            			+ " WHERE a.id_prov = :id_prov and a.id_monper = :id_monper "+role;
     			sql = "SELECT distinct a.id_old, a.nm_goals, a.nm_goals_eng, a.id_goals FROM history_sdg_goals a order by a.id_old";
     			query = manager.createNativeQuery(sql);
     		}else {
@@ -2137,35 +2154,35 @@ public class ReportController {
         sqlInd.append("SELECT DISTINCT c.nm_unit,d.baseline,b.increment_decrement,c.calculation,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
-    		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = a.id_indicator and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
+    		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = b.id and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
     		
     		//achievement
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_sdg as achievement1_"+i+" where achievement1_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_sdg as achievement2_"+i+" where achievement2_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_sdg as achievement3_"+i+" where achievement3_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_sdg as achievement4_"+i+" where achievement4_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement4_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_sdg as achievement1_"+i+" where achievement1_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_sdg as achievement2_"+i+" where achievement2_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_sdg as achievement3_"+i+" where achievement3_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_sdg as achievement4_"+i+" where achievement4_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_sdg as new_value1_"+i+" where new_value1_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_sdg as new_value2_"+i+" where new_value2_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_sdg as new_value3_"+i+" where new_value3_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_sdg as new_value4_"+i+" where new_value4_"+i+".id_sdg_indicator = a.id_indicator and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value4_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_sdg as new_value1_"+i+" where new_value1_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_sdg as new_value2_"+i+" where new_value2_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_sdg as new_value3_"+i+" where new_value3_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_sdg as new_value4_"+i+" where new_value4_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
-    	sqlInd.append(" e.nm_role FROM assign_sdg_indicator a\r\n" + 
-    			" left join sdg_indicator b on a.id_indicator = b.id\r\n" +
+    	sqlInd.append(" CASE when e.nm_role is null then 'Unassigned' else e.nm_role end FROM sdg_indicator b\r\n" + 
+    			" left join assign_sdg_indicator a on a.id_indicator = b.id and a.id_prov = :id_prov\r\n" +
     			" left join ref_unit c on b.unit = c.id_unit\r\n" + 
-    			" left join sdg_funding d on a.id_indicator = d.id_sdg_indicator\r\n" + 
+    			" left join sdg_funding d on b.id = d.id_sdg_indicator\r\n" + 
     			" left join ref_role e on a.id_role = e.id_role\r\n" + 
-    			" right join entry_sdg f on a.id_indicator = f.id_sdg_indicator and f.id_monper = a.id_monper and f.id_role = a.id_role\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator \r\n" + 
+    			" right join entry_sdg f on b.id = f.id_sdg_indicator and f.id_monper = :id_monper \r\n" + 
+    			" WHERE b.id = :id_indicator \r\n" + 
     			" ");
     	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
     	queryIndGov.setParameter("id_prov", id_prov);
@@ -2191,37 +2208,37 @@ public class ReportController {
         sqlInd.append("SELECT DISTINCT c.nm_unit,d.baseline,b.increment_decrement,c.calculation,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
-    		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = a.id_indicator and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
+    		sqlInd.append("(select value from sdg_indicator_target as target_"+i+" where target_"+i+".id_sdg_indicator = b.id and target_"+i+".id_role = a.id_role and year = "+i+") as target_"+i+", ");
     		
     		//achievement
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement1 from entry_sdg_detail as achievement1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement2 from entry_sdg_detail as achievement2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement3 from entry_sdg_detail as achievement3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select achievement4 from entry_sdg_detail as achievement4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as achievement4_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement1 from entry_sdg_detail as achievement1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement2 from entry_sdg_detail as achievement2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement3 from entry_sdg_detail as achievement3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select achievement4 from entry_sdg_detail as achievement4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value1 from entry_sdg_detail as new_value1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value2 from entry_sdg_detail as new_value2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value3 from entry_sdg_detail as new_value3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_sdg_detail as new_value4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = a.id_monper and id_role = a.id_role and year_entry = "+i+") END as new_value4_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value1 from entry_sdg_detail as new_value1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value2 from entry_sdg_detail as new_value2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value3 from entry_sdg_detail as new_value3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				"ELSE (select new_value4 from entry_sdg_detail as new_value4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
-    	sqlInd.append(" e.nm_role FROM assign_sdg_indicator a\r\n" + 
-    			" left join sdg_indicator b on a.id_indicator = b.id\r\n" +
+    	sqlInd.append(" CASE when e.nm_role is null then 'Unassigned' else e.nm_role end FROM sdg_indicator b\r\n" + 
+    			" left join assign_sdg_indicator a on a.id_indicator = b.id and a.id_prov = :id_prov\r\n" +
     			" left join ref_unit c on b.unit = c.id_unit\r\n" + 
-    			" left join sdg_funding d on a.id_indicator = d.id_sdg_indicator\r\n" + 
+    			" left join sdg_funding d on b.id = d.id_sdg_indicator\r\n" + 
     			" left join ref_role e on a.id_role = e.id_role\r\n" + 
-    			" left join sdg_ranrad_disaggre g on a.id_indicator = g.id_indicator\r\n" + 
+    			" left join sdg_ranrad_disaggre g on b.id = g.id_indicator\r\n" + 
     			" left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre\r\n" + 
-    			" right join entry_sdg_detail f on f.id_disaggre = g.id and f.id_disaggre_detail = h.id and f.id_monper = a.id_monper and f.id_role = a.id_role\r\n" + 
-    			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_indicator = :id_indicator and h.id = :id_disaggre_detail \r\n" + 
+    			" right join entry_sdg_detail f on f.id_disaggre = g.id and f.id_disaggre_detail = h.id and f.id_monper = :id_monper \r\n" + 
+    			" WHERE b.id = :id_indicator and h.id = :id_disaggre_detail \r\n" + 
     			" ");
     	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
     	queryIndGov.setParameter("id_prov", id_prov);
@@ -2250,14 +2267,34 @@ public class ReportController {
     }
     
     @GetMapping("admin/get-sdg-target/{sdg}")
-    public @ResponseBody Map<String, Object> getSdgTargetEva(@RequestParam("id_role") int id_role, @RequestParam("id_goals") int id_goals, @PathVariable("sdg") String sdg) {
+    public @ResponseBody Map<String, Object> getSdgTargetEva(
+    		@RequestParam("id_role") String id_role, 
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_goals") int id_goals, 
+    		@PathVariable("sdg") String sdg) {
     	Query query;
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	
     	if(sdg.equals("0")) {
-    		String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM assign_sdg_indicator a "
-        			+ " left join sdg_target b on a.id_target = b.id "
-        			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals";
+    		String sql;
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct d.id_old, d.nm_target, d.nm_target_eng, d.id_target "
+        				+ " FROM history_sdg_indicator c "
+        				+ " left join assign_sdg_indicator a on a.id_indicator = c.id_old "
+            			+ " left join history_sdg_goals b on c.id_goals = b.id_old "
+            			+ " left join history_sdg_target d on c.id_target = d.id_old "
+            			+ " WHERE c.id_old is not null and c.id_goals = :id_goals and c.id_monper = '"+id_monper+"' "+role;
+    		}else {
+    			sql = "SELECT distinct d.id, d.nm_target, d.nm_target_eng, d.id_target "
+        				+ " FROM sdg_indicator c "
+        				+ " left join assign_sdg_indicator a on a.id_indicator = c.id "
+            			+ " left join sdg_goals b on c.id_goals = b.id "
+            			+ " left join sdg_target d on c.id_target = d.id "
+            			+ " WHERE c.id is not null and c.id_goals = :id_goals "+role;
+    		}
             query = manager.createNativeQuery(sql);
-            query.setParameter("id_role", id_role);
             query.setParameter("id_goals", id_goals);
     	}else {
     		String[] arrOfStr = sdg.split(","); 
@@ -2287,12 +2324,24 @@ public class ReportController {
     		}
     		String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
     		
-    		String tar = (hasiltarget.equals(""))?"":" and a.id_target in("+hasiltarget+") ";
-    		String sql = "SELECT distinct a.id_target as id, b.nm_target, b.nm_target_eng, b.id_target FROM assign_sdg_indicator a "
-        			+ " left join sdg_target b on a.id_target = b.id "
-        			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals "+tar;
+    		String tar = (hasiltarget.equals(""))?"":" and c.id_target in("+hasiltarget+") ";
+    		String sql;
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct d.id_old, d.nm_target, d.nm_target_eng, d.id_target "
+        				+ " FROM history_sdg_indicator c "
+        				+ " left join assign_sdg_indicator a on a.id_indicator = c.id_old "
+            			+ " left join history_sdg_goals b on c.id_goals = b.id_old "
+            			+ " left join history_sdg_target d on c.id_target = d.id_old "
+            			+ " WHERE c.id_old is not null and c.id_goals = :id_goals and c.id_monper = '"+id_monper+"' "+role+" "+tar;
+    		}else {
+    			sql = "SELECT distinct d.id, d.nm_target, d.nm_target_eng, d.id_target "
+        				+ " FROM sdg_indicator c "
+        				+ " left join assign_sdg_indicator a on a.id_indicator = c.id "
+            			+ " left join sdg_goals b on c.id_goals = b.id "
+            			+ " left join sdg_target d on c.id_target = d.id "
+            			+ " WHERE c.id is not null and c.id_goals = :id_goals "+role+" "+tar;
+    		}
             query = manager.createNativeQuery(sql);
-            query.setParameter("id_role", id_role);
             query.setParameter("id_goals", id_goals);
     	}
     	
@@ -2302,23 +2351,102 @@ public class ReportController {
         return hasil;
     }
     
-    @GetMapping("admin/get-sdg-indicator-utama")
+    @GetMapping("admin/get-sdg-indicator-utama/{sdg}")
     public @ResponseBody Map<String, Object> getSdgIndicatorUtama(
-    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_goals") int id_goals, 
-    		@RequestParam("id_target") int id_target) {
-    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
-    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
-    			+ " d.baseline "
-    			+ " FROM assign_sdg_indicator a "
-    			+ " left join sdg_indicator b on a.id_indicator = b.id "
-    			+ " left join ref_unit c on b.unit = c.id_unit "
-    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
-    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target ";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_role", id_role);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
+    		@RequestParam("id_target") int id_target,
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_prov") String id_prov,
+    		@PathVariable("sdg") String sdg) {
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String sql;
+    	Query query;
+    	
+    	if(sdg.equals("0")) {
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct b.id_old, b.nm_indicator, "
+            			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+            			+ " d.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+            			+ " FROM history_sdg_indicator b "
+            			+ " left join assign_sdg_indicator a on b.id_old = a.id_indicator and a.id_prov = :id_prov "
+            			+ " left join ref_unit c on b.unit = c.id_unit "
+            			+ " left join sdg_funding d on b.id_old = d.id_sdg_indicator "
+            			+ " left join ref_role g on a.id_role = g.id_role "
+            			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_monper='"+id_monper+"' "+role;
+        	}else {
+        		sql = "SELECT distinct b.id, b.nm_indicator, "
+            			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+            			+ " d.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+            			+ " FROM sdg_indicator b "
+            			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
+            			+ " left join ref_unit c on b.unit = c.id_unit "
+            			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+            			+ " left join ref_role g on a.id_role = g.id_role "
+            			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target "+role;
+        	}        	
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_goals", id_goals);
+            query.setParameter("id_target", id_target);
+            query.setParameter("id_prov", id_prov);
+    	}else {
+    		String[] arrOfStr = sdg.split(","); 
+    		StringBuffer indicator = new StringBuffer();
+    		if(arrOfStr.length>0) {
+    			for (int i = 0; i < arrOfStr.length; i++) {
+        			String[] arrOfStr1 = arrOfStr[i].split("---");
+        			int cek=1;
+        			for(int j=0;j<arrOfStr1.length;j++) {
+        				cek = (cek==4)?1:cek;
+        				if(!arrOfStr1[j].equals("0") && cek==3) {
+        					indicator.append("'"+arrOfStr1[j]+"',");
+        				}
+        				cek = cek+1;
+        			}
+        		}
+    		}else{
+    			String[] arrOfStr1 = sdg.split("---");
+    			int cek=1;
+    			for(int j=0;j<arrOfStr1.length;j++) {
+    				cek = (cek==4)?1:cek;
+    				if(!arrOfStr1[j].equals("0") && cek==3) {
+    					indicator.append("'"+arrOfStr1[j]+"',");
+    				}
+    				cek = cek+1;
+    			}
+    		}
+    		String hasilindicator = (indicator.length()==0)?"":indicator.substring(0, indicator.length() - 1);
+    		String indOld = (hasilindicator.equals(""))?"":" and b.id_old in("+hasilindicator+") ";
+    		String ind = (hasilindicator.equals(""))?"":" and b.id in("+hasilindicator+") ";
+    		
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct b.id_old, b.nm_indicator, "
+            			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+            			+ " d.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+            			+ " FROM history_sdg_indicator b "
+            			+ " left join assign_sdg_indicator a on b.id_old = a.id_indicator and a.id_prov = :id_prov "
+            			+ " left join ref_unit c on b.unit = c.id_unit "
+            			+ " left join sdg_funding d on b.id_old = d.id_sdg_indicator "
+            			+ " left join ref_role g on a.id_role = g.id_role "
+            			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_monper='"+id_monper+"' "+role+" "+indOld;
+        	}else {
+        		sql = "SELECT distinct b.id, b.nm_indicator, "
+            			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+            			+ " d.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+            			+ " FROM sdg_indicator b "
+            			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
+            			+ " left join ref_unit c on b.unit = c.id_unit "
+            			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+            			+ " left join ref_role g on a.id_role = g.id_role "
+            			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target "+role+" "+ind;
+        	}        	
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_goals", id_goals);
+            query.setParameter("id_target", id_target);
+            query.setParameter("id_prov", id_prov);
+    	}
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);
@@ -2327,56 +2455,152 @@ public class ReportController {
     
     @GetMapping("admin/get-sdg-indicator-slave")
     public @ResponseBody Map<String, Object> getSdgIndicatorSlave(
-    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_indicator") int id_indicator, 
     		@RequestParam("year") int year,
-    		@RequestParam("id_monper") int id_monper) {
-    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
+    		@RequestParam("id_monper") int id_monper,
+    		@RequestParam("id_prov") String id_prov) {
+    	
+    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	
+    	String sql = "SELECT distinct b.id, b.nm_indicator, "
     			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
     			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
-    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation "
-    			+ " FROM assign_sdg_indicator a "
-    			+ " left join sdg_indicator b on a.id_indicator = b.id "
+    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+    			+ " FROM sdg_indicator b "
+    			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
     			+ " left join ref_unit c on b.unit = c.id_unit "
-    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
-    			+ " left join sdg_indicator_target e on a.id_indicator = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
-    			+ " left join entry_sdg f on a.id_indicator = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
-    			+ " WHERE a.id_role = :id_role and a.id_indicator = :id_indicator ";
+    			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+    			+ " left join entry_sdg f on b.id = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+    			+ " left join sdg_indicator_target e on b.id = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+    			+ " left join ref_role g on a.id_role = g.id_role "
+    			+ " WHERE b.id = :id_indicator "+role;
+    	
         Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_role", id_role);
         query.setParameter("id_indicator", id_indicator);
         query.setParameter("year", year);
         query.setParameter("id_monper", id_monper);
+        query.setParameter("id_prov", id_prov);
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);
         return hasil;
     }
     
-    @GetMapping("admin/get-sdg-indicator")
+    @GetMapping("admin/get-sdg-indicator/{sdg}")
     public @ResponseBody Map<String, Object> getSdgIndicator(
-    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_goals") int id_goals, 
     		@RequestParam("id_target") int id_target, 
     		@RequestParam("year") int year,
-    		@RequestParam("id_monper") int id_monper) {
-    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
-    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
-    			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
-    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation "
-    			+ " FROM assign_sdg_indicator a "
-    			+ " left join sdg_indicator b on a.id_indicator = b.id "
-    			+ " left join ref_unit c on b.unit = c.id_unit "
-    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
-    			+ " left join sdg_indicator_target e on a.id_indicator = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
-    			+ " left join entry_sdg f on a.id_indicator = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
-    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target ";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_role", id_role);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("year", year);
-        query.setParameter("id_monper", id_monper);
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_prov") String id_prov,
+    		@PathVariable("sdg") String sdg) {
+    	
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = monper.get().getStatus();
+    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String sql;
+    	Query query;
+    	if(sdg.equals("0")) {
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct b.id_old, b.nm_indicator, "
+            			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+            			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+            			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+            			+ " FROM history_sdg_indicator b "
+            			+ " left join assign_sdg_indicator a on b.id_old = a.id_indicator and a.id_prov = :id_prov "
+            			+ " left join ref_unit c on b.unit = c.id_unit "
+            			+ " left join sdg_funding d on b.id_old = d.id_sdg_indicator "
+            			+ " left join entry_sdg f on b.id_old = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+            			+ " left join sdg_indicator_target e on b.id_old = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+            			+ " left join ref_role g on a.id_role = g.id_role "
+            			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_monper='"+id_monper+"' "+role;
+        	}else {
+        		sql = "SELECT distinct b.id, b.nm_indicator, "
+            			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+            			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+            			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+            			+ " FROM sdg_indicator b "
+            			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
+            			+ " left join ref_unit c on b.unit = c.id_unit "
+            			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+            			+ " left join entry_sdg f on b.id = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+            			+ " left join sdg_indicator_target e on b.id = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+            			+ " left join ref_role g on a.id_role = g.id_role "
+            			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target "+role;
+        	}        	
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_goals", id_goals);
+            query.setParameter("id_target", id_target);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prov", id_prov);
+    	}else {
+    		String[] arrOfStr = sdg.split(","); 
+    		StringBuffer indicator = new StringBuffer();
+    		if(arrOfStr.length>0) {
+    			for (int i = 0; i < arrOfStr.length; i++) {
+        			String[] arrOfStr1 = arrOfStr[i].split("---");
+        			int cek=1;
+        			for(int j=0;j<arrOfStr1.length;j++) {
+        				cek = (cek==4)?1:cek;
+        				if(!arrOfStr1[j].equals("0") && cek==3) {
+        					indicator.append("'"+arrOfStr1[j]+"',");
+        				}
+        				cek = cek+1;
+        			}
+        		}
+    		}else{
+    			String[] arrOfStr1 = sdg.split("---");
+    			int cek=1;
+    			for(int j=0;j<arrOfStr1.length;j++) {
+    				cek = (cek==4)?1:cek;
+    				if(!arrOfStr1[j].equals("0") && cek==3) {
+    					indicator.append("'"+arrOfStr1[j]+"',");
+    				}
+    				cek = cek+1;
+    			}
+    		}
+    		String hasilindicator = (indicator.length()==0)?"":indicator.substring(0, indicator.length() - 1);
+    		String indOld = (hasilindicator.equals(""))?"":" and b.id_old in("+hasilindicator+") ";
+    		String ind = (hasilindicator.equals(""))?"":" and b.id in("+hasilindicator+") ";
+    		
+    		if(status.equals("completed")) {
+    			sql = "SELECT distinct b.id_old, b.nm_indicator, "
+            			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+            			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+            			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+            			+ " FROM history_sdg_indicator b "
+            			+ " left join assign_sdg_indicator a on b.id_old = a.id_indicator and a.id_prov = :id_prov "
+            			+ " left join ref_unit c on b.unit = c.id_unit "
+            			+ " left join sdg_funding d on b.id_old = d.id_sdg_indicator "
+            			+ " left join entry_sdg f on b.id_old = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+            			+ " left join sdg_indicator_target e on b.id_old = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+            			+ " left join ref_role g on a.id_role = g.id_role "
+            			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_monper='"+id_monper+"' "+role+" "+indOld;
+        	}else {
+        		sql = "SELECT distinct b.id, b.nm_indicator, "
+            			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+            			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+            			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+            			+ " FROM sdg_indicator b "
+            			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
+            			+ " left join ref_unit c on b.unit = c.id_unit "
+            			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+            			+ " left join entry_sdg f on b.id = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+            			+ " left join sdg_indicator_target e on b.id = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+            			+ " left join ref_role g on a.id_role = g.id_role "
+            			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target "+role+" "+ind;
+        	}        	
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_goals", id_goals);
+            query.setParameter("id_target", id_target);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prov", id_prov);
+    	}
+    	
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);
@@ -2385,33 +2609,60 @@ public class ReportController {
     
     @GetMapping("admin/get-sdg-disaggre")
     public @ResponseBody Map<String, Object> getSdgDisaggre(
-    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_goals") int id_goals, 
     		@RequestParam("id_target") int id_target, 
     		@RequestParam("year") int year,
-    		@RequestParam("id_monper") int id_monper,
-    		@RequestParam("id_indicator") int id_indicator) {
-    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
-    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
-    			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
-    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
-    			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation "
-    			+ " FROM assign_sdg_indicator a "
-    			+ " left join sdg_indicator b on a.id_indicator = b.id "
-    			+ " left join ref_unit c on b.unit = c.id_unit "
-    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
-    			+ " left join sdg_indicator_target e on a.id_indicator = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
-    			+ " right join sdg_ranrad_disaggre g on a.id_indicator = g.id_indicator "
-    			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
-    			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
-    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator ";
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_indicator") int id_indicator,
+    		@RequestParam("id_prov") String id_prov) {
+    	
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = monper.get().getStatus();
+    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String sql;
+    	
+    	if(status.equals("completed")) {
+    		sql = "SELECT distinct b.id_old as id, b.nm_indicator, "
+        			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+        			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+        			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+        			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation, CASE when i.nm_role is null then 'Unassigned' else i.nm_role end  "
+        			+ " FROM history_sdg_indicator b "
+        			+ " left join assign_sdg_indicator a on a.id_indicator = b.id_old and a.id_prov = :id_prov "
+        			+ " left join ref_unit c on b.unit = c.id_unit "
+        			+ " left join sdg_funding d on b.id_old = d.id_sdg_indicator "
+        			+ " left join sdg_indicator_target e on b.id_old = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+        			+ " right join history_sdg_ranrad_disaggre g on b.id_old = g.id_indicator "
+        			+ " left join history_sdg_ranrad_disaggre_detail h on g.id_old = h.id_disaggre "
+        			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id_old = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+        			+ " left join ref_role i on a.id_role = i.id_role "
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator "+role;
+    	}else {
+    		sql = "SELECT distinct b.id as id, b.nm_indicator, "
+        			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+        			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+        			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+        			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation, CASE when i.nm_role is null then 'Unassigned' else i.nm_role end  "
+        			+ " FROM sdg_indicator b "
+        			+ " left join assign_sdg_indicator a on a.id_indicator = b.id and a.id_prov = :id_prov "
+        			+ " left join ref_unit c on b.unit = c.id_unit "
+        			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+        			+ " left join sdg_indicator_target e on b.id = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+        			+ " right join sdg_ranrad_disaggre g on b.id = g.id_indicator "
+        			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
+        			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+        			+ " left join ref_role i on a.id_role = i.id_role "
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id = :id_indicator "+role;
+    	}
+    	
         Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_role", id_role);
         query.setParameter("id_goals", id_goals);
         query.setParameter("id_target", id_target);
         query.setParameter("year", year);
         query.setParameter("id_monper", id_monper);
         query.setParameter("id_indicator", id_indicator);
+        query.setParameter("id_prov", id_prov);
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);
@@ -2420,27 +2671,57 @@ public class ReportController {
     
     @GetMapping("admin/get-sdg-disaggre-utama")
     public @ResponseBody Map<String, Object> getSdgDisaggreUtama(
-    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_goals") int id_goals, 
     		@RequestParam("id_target") int id_target, 
-    		@RequestParam("id_indicator") int id_indicator) {
-    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
-    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
-    			+ " d.baseline, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
-    			+ " '' as new_value1, '' as new_value2, '' as new_value3, '' as new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
-    			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation, h.id_disaggre, h.id as id_dis_detail "
-    			+ " FROM assign_sdg_indicator a "
-    			+ " left join sdg_indicator b on a.id_indicator = b.id "
-    			+ " left join ref_unit c on b.unit = c.id_unit "
-    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
-    			+ " right join sdg_ranrad_disaggre g on a.id_indicator = g.id_indicator "
-    			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
-    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator ";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_role", id_role);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("id_indicator", id_indicator);
+    		@RequestParam("id_indicator") int id_indicator,
+    		@RequestParam("id_prov") String id_prov,
+    		@RequestParam("id_monper") String id_monper) {
+    	
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	Query query;
+    	if(status.equals("completed")) {
+    		String sql = "SELECT distinct b.id_old as id, b.nm_indicator, "
+        			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+        			+ " d.baseline, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
+        			+ " '' as new_value1, '' as new_value2, '' as new_value3, '' as new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+        			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation, h.id_disaggre, h.id as id_dis_detail, CASE when i.nm_role is null then 'Unassigned' else i.nm_role end "
+        			+ " FROM history_sdg_indicator b "
+        			+ " left join assign_sdg_indicator a on a.id_indicator = b.id_old and a.id_prov = :id_prov "
+        			+ " left join ref_unit c on b.unit = c.id_unit "
+        			+ " left join sdg_funding d on b.id_old = d.id_sdg_indicator "
+        			+ " right join sdg_ranrad_disaggre g on b.id_old = g.id_indicator "
+        			+ " left join sdg_ranrad_disaggre_detail h on g.id_old = h.id_disaggre "
+        			+ " left join ref_role i on a.id_role = i.id_role "
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator "+role;
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_goals", id_goals);
+            query.setParameter("id_target", id_target);
+            query.setParameter("id_indicator", id_indicator);
+            query.setParameter("id_prov", id_prov);
+    	}else {
+    		String sql = "SELECT distinct b.id, b.nm_indicator, "
+        			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+        			+ " d.baseline, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
+        			+ " '' as new_value1, '' as new_value2, '' as new_value3, '' as new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+        			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation, h.id_disaggre, h.id as id_dis_detail, CASE when i.nm_role is null then 'Unassigned' else i.nm_role end "
+        			+ " FROM sdg_indicator b "
+        			+ " left join assign_sdg_indicator a on a.id_indicator = b.id and a.id_prov = :id_prov "
+        			+ " left join ref_unit c on b.unit = c.id_unit "
+        			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+        			+ " right join sdg_ranrad_disaggre g on b.id = g.id_indicator "
+        			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
+        			+ " left join ref_role i on a.id_role = i.id_role "
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id = :id_indicator "+role;
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_goals", id_goals);
+            query.setParameter("id_target", id_target);
+            query.setParameter("id_indicator", id_indicator);
+            query.setParameter("id_prov", id_prov);
+    	}
+    	
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);
@@ -2449,37 +2730,70 @@ public class ReportController {
     
     @GetMapping("admin/get-sdg-disaggre-slave")
     public @ResponseBody Map<String, Object> getSdgDisaggreSlave(
-    		@RequestParam("id_role") int id_role, 
+    		@RequestParam("id_role") String id_role, 
     		@RequestParam("id_goals") int id_goals, 
     		@RequestParam("id_target") int id_target, 
     		@RequestParam("year") int year,
-    		@RequestParam("id_monper") int id_monper,
+    		@RequestParam("id_monper") String id_monper,
     		@RequestParam("id_indicator") int id_indicator,
+    		@RequestParam("id_prov") String id_prov,
     		@RequestParam("id_dis") String id_dis,
     		@RequestParam("id_dis_detail") String id_dis_detail) {
-    	String sql = "SELECT distinct a.id_indicator as id, b.nm_indicator, "
-    			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
-    			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
-    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
-    			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation "
-    			+ " FROM assign_sdg_indicator a "
-    			+ " left join sdg_indicator b on a.id_indicator = b.id "
-    			+ " left join ref_unit c on b.unit = c.id_unit "
-    			+ " left join sdg_funding d on a.id_indicator = d.id_sdg_indicator "
-    			+ " left join sdg_indicator_target e on a.id_indicator = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
-    			+ " right join sdg_ranrad_disaggre g on a.id_indicator = g.id_indicator "
-    			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
-    			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
-    			+ " WHERE a.id_role = :id_role and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and g.id = :id_dis and h.id = :id_dis_detail";
-        Query query = manager.createNativeQuery(sql);
-        query.setParameter("id_role", id_role);
-        query.setParameter("id_goals", id_goals);
-        query.setParameter("id_target", id_target);
-        query.setParameter("year", year);
-        query.setParameter("id_monper", id_monper);
-        query.setParameter("id_indicator", id_indicator);
-        query.setParameter("id_dis", id_dis);
-        query.setParameter("id_dis_detail", id_dis_detail);
+    	
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	Query query;
+    	if(status.equals("completed")) {
+    		String sql = "SELECT distinct b.id_old as id, b.nm_indicator, "
+        			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+        			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+        			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+        			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation "
+        			+ " FROM history_sdg_indicator b "
+        			+ " left join assign_sdg_indicator a on a.id_indicator = b.id_old  and a.id_prov = :id_prov "
+        			+ " left join ref_unit c on b.unit = c.id_unit "
+        			+ " left join sdg_funding d on b.id_old = d.id_sdg_indicator "
+        			+ " left join sdg_indicator_target e on b.id_old = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+        			+ " right join history_sdg_ranrad_disaggre g on b.id_old = g.id_indicator "
+        			+ " left join history_sdg_ranrad_disaggre_detail h on g.id_old = h.id_disaggre "
+        			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id_old = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator and g.id = :id_dis and h.id = :id_dis_detail "+role;
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_goals", id_goals);
+            query.setParameter("id_target", id_target);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_indicator", id_indicator);
+            query.setParameter("id_dis", id_dis);
+            query.setParameter("id_dis_detail", id_dis_detail);
+    	}else {
+    		String sql = "SELECT distinct b.id, b.nm_indicator, "
+        			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
+        			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
+        			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, g.nm_disaggre, g.nm_disaggre_eng, "
+        			+ " h.desc_disaggre, h.desc_disaggre_eng, c.calculation "
+        			+ " FROM sdg_indicator b "
+        			+ " left join assign_sdg_indicator a on a.id_indicator = b.id and a.id_prov = :id_prov "
+        			+ " left join ref_unit c on b.unit = c.id_unit "
+        			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+        			+ " left join sdg_indicator_target e on b.id = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+        			+ " right join sdg_ranrad_disaggre g on b.id = g.id_indicator "
+        			+ " left join sdg_ranrad_disaggre_detail h on g.id = h.id_disaggre "
+        			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id = :id_indicator and g.id = :id_dis and h.id = :id_dis_detail "+role;
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("id_goals", id_goals);
+            query.setParameter("id_target", id_target);
+            query.setParameter("year", year);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_indicator", id_indicator);
+            query.setParameter("id_dis", id_dis);
+            query.setParameter("id_dis_detail", id_dis_detail);
+    	}
+    	
         List listSdg = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",listSdg);

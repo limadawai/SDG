@@ -181,10 +181,6 @@
 			var privilege = [[${privilege}]];
 			var id_role = [[${id_role}]];
 			
-			$('#id_role').val(id_role).trigger('change');
-			if(privilege=="USER"){
-				$('#id_role').attr('disabled',true);
-			}
 			//Bahasa
 	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data dan Data level dibawahnya?";
@@ -246,52 +242,7 @@
 	        	}
 	        }
 	        headtabel();
-	        $('#fs').on('change', function(e){
-	        	bhs($(this).is(':checked'));
-	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
-	        	headtabel();
-	        });
-	        
-	        $('#id_role').on('change', function(){
-	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$(this).val()).load();
-	        });
-	        
-	        $('#showModal').on('click', function(){
-	        	if($('#id_prov').val() && $('#id_monper').val() && $('#id_role').val()){
-	        		$("#myModal").modal("show");
-	        	}else{
-	        		swal(titleMod,messMod,'error');
-	        	}
-	        });
-	        
-	        $.ajax({
-                type: "GET",
-                url: urls+'manajemen/list-role-gov/'+$("#id_prov").val(),
-                async:false,
-                success: function (result) {
-                	//$("#id_role").html('<option value="0" >-- Pilih --</option>');
-                    var array = result.content;
-                    if (array != '') {
-                        for (i in array) {
-                            $("#id_role").append('<option value="'+array[i].id_role+'" >'+array[i].nm_role+'</option>');
-                        }
-                    }
-                }
-            });
-	        function cekStatusMonper(){
-	        	var status = "";
-	        	$.ajax({
-					type: "GET",
-                    url: urls+'get-monPer/'+$('#id_monper').val(),
-                    async:false,
-                    success: function (result) {
-                    	var val = result.content;
-                    	status = val.status;
-                    },
-                });
-	        	return status;
-	        }
-			var table = $('#tabel-target').DataTable({
+	        var table = $('#tabel-target').DataTable({
 				responsive: true,
 				sDom: 'Brtip',
 				"bLengthChange": false,
@@ -372,6 +323,56 @@
 				],
 				select: true
 			});	
+	        $('#fs').on('change', function(e){
+	        	bhs($(this).is(':checked'));
+	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
+	        	headtabel();
+	        });
+	        
+	        $('#id_role').on('change', function(){
+	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$(this).val()).load();
+	        });
+	        
+	        $('#showModal').on('click', function(){
+	        	if($('#id_prov').val() && $('#id_monper').val() && $('#id_role').val()){
+	        		$("#myModal").modal("show");
+	        	}else{
+	        		swal(titleMod,messMod,'error');
+	        	}
+	        });
+	        
+	        $.ajax({
+                type: "GET",
+                url: urls+'manajemen/list-role-gov/'+$("#id_prov").val(),
+                async:false,
+                success: function (result) {
+                	//$("#id_role").html('<option value="0" >-- Pilih --</option>');
+                    var array = result.content;
+                    if (array != '') {
+                        for (i in array) {
+                            $("#id_role").append('<option value="'+array[i].id_role+'" >'+array[i].nm_role+'</option>');
+                        }
+                    }
+                    $('#id_role').val(id_role).trigger('change');
+        			if(privilege=="USER"){
+        				$('#id_role').attr('disabled',true);
+        			}
+                }
+            });
+	        function cekStatusMonper(){
+	        	var status = "";
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-monPer/'+$('#id_monper').val(),
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	status = val.status;
+                    },
+                });
+	        	return status;
+	        }
+			
 			
 			$('#text-cari').on( 'keyup', function () {
 				var val=$(this).val();
