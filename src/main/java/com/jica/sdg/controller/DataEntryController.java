@@ -246,7 +246,7 @@ public class DataEntryController {
         }
         
         
-        String sql  = " SELECT DISTINCT b.id,b.nm_goals  FROM entry_problem_identify_map a \n" +
+        String sql  = " SELECT DISTINCT b.id,b.nm_goals,b.id_goals  FROM entry_problem_identify_map a \n" +
                     "JOIN sdg_goals b ON a.id_goals = b.id \n" +
                     "LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation  \n" +
                     "WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory;
@@ -280,7 +280,7 @@ public class DataEntryController {
           whereidgoals = "  and a.id_goals =  '"+id_goals+"'";  
         }
         
-        String sql  =   " SELECT DISTINCT b.id,b.nm_target  FROM entry_problem_identify_map a \n" +
+        String sql  =   " SELECT DISTINCT b.id,b.nm_target,b.id_target  FROM entry_problem_identify_map a \n" +
                         " JOIN sdg_target b ON a.id_target = b.id\n" +
                         " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation    \n" +
                         " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals;
@@ -319,7 +319,7 @@ public class DataEntryController {
           whereidtarget = "and a.id_target =  '"+id_target+"'";  
         }
         
-        String sql  =   " SELECT DISTINCT b.id,b.nm_indicator  FROM entry_problem_identify_map a \n" +
+        String sql  =   " SELECT DISTINCT b.id,b.nm_indicator,b.id_indicator  FROM entry_problem_identify_map a \n" +
                         " JOIN sdg_indicator b ON a.id_indicator = b.id\n" +
                         " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation \n " +
                         " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget;
