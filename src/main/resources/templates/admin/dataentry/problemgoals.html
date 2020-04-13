@@ -103,6 +103,10 @@
                                                 <span class="lang_indo">Solusi</span>
                                             </th>
                                             <th style="text-align:center;font-size:80%;" >
+                                                <span class="lang_eng" style="display:none">Status</span>
+                                                <span class="lang_indo">Status</span>
+                                            </th>
+                                            <th style="text-align:center;font-size:80%;" >
                                                 <span class="lang_eng" style="display:none">Action</span>
                                                 <span class="lang_indo">Aksi</span>
                                             </th>
@@ -191,7 +195,7 @@
         var filtersdg   = [[${filtersdg}]];
         var lisdg2       = [];
         $2.each(filtersdg.data,function(i,x){
-            var obj2 = {'id':x[0],'parent':x[5],'text':x[1],'a_attr':{'level':x[3],'id_parent':x[0]},'state' : {'opened' : true} }
+            var obj2 = {'id':x[0],'parent':x[5],'text':x[4]+' '+x[1],'a_attr':{'level':x[3],'id_parent':x[0]},'state' : {'opened' : true} }
             lisdg2.push(obj2);
         });
         
@@ -483,7 +487,25 @@
                                         {"data": function (row, data, index, display) {
 							return "<div style='font-size:80%;'>"+row[15]+"</div>";
 					}},
-                                        {"data": function (row, data, index, display) {
+                                     {"data": function (row, data, index, display) {
+                                            
+                                             if(row[17]==1){
+                                                 return '<span style="font-size:90%; background: #b5ffb5; text-align: center;">Aply</span>';
+                                             }
+                                             if(row[17]==2){
+                                                 return '<span style="font-size:90%; background: #b5ffb5; text-align: center;">Approve</span>';
+                                             }
+                                             if(row[17]==3){
+                                                 return '<span style="font-size:90%; background: #b5ffb5; text-align: center;">Rejected</span>';
+                                             }
+                                             if(row[17]==4){
+                                                 return '<span style="font-size:90%; background: #b5ffb5; text-align: center;">Done</span>';
+                                             }
+                                             if(row[17]==null||row[17]==''){
+                                                 return ''
+                                             }
+                                     }},
+                                     {"data": function (row, data, index, display) {
                                                 var data =  JSON.stringify(row).replace(/'/g, "&#39");
                                                 var id = row[16];
 							if(row[17]==1||row[17]==3){
@@ -509,11 +531,12 @@
 				],
 				columnDefs: [
                                     { "width": "10%", "targets": 0 },
-                                    { "width": "50%", "targets": 1 },
+                                    { "width": "40%", "targets": 1 },
                                     { "width": "10%", "targets": 2 },
                                     { "width": "15%", "targets": 3 },
                                     { "width": "15%", "targets": 4 },
                                     { "width": "10%", "targets": 5 },
+                                    { "width": "10%", "targets": 6 },
 //                                    {
 //                                        "targets": [ 0 ],
 //                                        "visible": false,
@@ -798,76 +821,81 @@
             var follow_up       = $('#follow_up').val();
             var sdgs_group      = $('#filter_sdg').val();
             var data_sdgs_map   = $2('#filter_sdg').jstree(true).get_checked();
-            var sdgs_map =[];
-            $.each(data_sdgs_map,function(i,x){
-                var id_goals,id_target,id_indicator ="";
-                var split_length = (x.split('.').length-1);
-                var split        =  x.split('.');
-                if(split_length==0){
-                    id_goals = x;
-                    id_target       = "";
-                    id_indicator    = "";
-                    
-                }
-                if(split_length==1){
-                    
-                    id_goals     = split[0];
-                    id_target    = split[1];
-                    id_indicator    = "";
-                }
-                if(split_length==2){
-                    
-                    id_goals        = split[0];
-                    id_target       = split[1];
-                    id_indicator    = split[2];
-                }
-                sdgs_map.push({
-                                'id_prov'       :id_prov,
-                                'id_monper'     :id_monper,
-                                'id_goals'      :id_goals,
-                                'id_target'     :id_target,
-                                'id_indicator'  :id_indicator
-                                ,'id_sdgs'      :x
-                            });
-                
-            });
-           
-            var sdgs_group_split = sdgs_group.split(".");
-            var id_goals         = sdgs_group_split[0];
-            var id_target        = sdgs_group_split[1];
-            var id_indicator     = sdgs_group_split[2];
-            
-            $('.control-group').removeClass('error');
-            $('.help-block').text("");
+            if(data_sdgs_map.length>0){
+                    var sdgs_map =[];
+                    $.each(data_sdgs_map,function(i,x){
+                        var id_goals,id_target,id_indicator ="";
+                        var split_length = (x.split('.').length-1);
+                        var split        =  x.split('.');
+                        if(split_length==0){
+                            id_goals = x;
+                            id_target       = "";
+                            id_indicator    = "";
 
-            var data = JSON.stringify({
-                            'id'            :id,
-                            'id_cat'        :id_cat,
-                            'id_goals'      :id_goals,
-                            'id_target'     :id_target,
-                            'id_indicator'  :id_indicator,
-                            'problem'       :problem,
-                            'follow_up'     :follow_up,
-                            'id_monper'     :id_monper,
-                            'id_role'       :v_idrole,
-                            'id_prov'       :id_prov,
-                            'tahun'         :tahun,
-                            'id_relation'   :id_relation,
-                            'sdgs_map'      :sdgs_map
-                        });
-                    $.ajax({
-                            type: "POST",
-                            url: urls+'problem-identification/save',
-                            beforeSend : function(xhr){
-                                xhr.setRequestHeader(header,token);
-                            },
-                            headers:{'Accept':'application/json','Content-Type':'application/json'},
-                                                data: data,
-                            success: function (result) {
-                               grid();// table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole).load();
-                                $('#myModal').modal('hide');
-                            },
-                        });
+                        }
+                        if(split_length==1){
+
+                            id_goals     = split[0];
+                            id_target    = split[1];
+                            id_indicator    = "";
+                        }
+                        if(split_length==2){
+
+                            id_goals        = split[0];
+                            id_target       = split[1];
+                            id_indicator    = split[2];
+                        }
+                        sdgs_map.push({
+                                        'id_prov'       :id_prov,
+                                        'id_monper'     :id_monper,
+                                        'id_goals'      :id_goals,
+                                        'id_target'     :id_target,
+                                        'id_indicator'  :id_indicator
+                                        ,'id_sdgs'      :x
+                                    });
+                
+                    });
+           
+                    var sdgs_group_split = sdgs_group.split(".");
+                    var id_goals         = sdgs_group_split[0];
+                    var id_target        = sdgs_group_split[1];
+                    var id_indicator     = sdgs_group_split[2];
+
+                    $('.control-group').removeClass('error');
+                    $('.help-block').text("");
+
+                    var data = JSON.stringify({
+                                    'id'            :id,
+                                    'id_cat'        :id_cat,
+                                    'id_goals'      :id_goals,
+                                    'id_target'     :id_target,
+                                    'id_indicator'  :id_indicator,
+                                    'problem'       :problem,
+                                    'follow_up'     :follow_up,
+                                    'id_monper'     :id_monper,
+                                    'id_role'       :v_idrole,
+                                    'id_prov'       :id_prov,
+                                    'tahun'         :tahun,
+                                    'id_relation'   :id_relation,
+                                    'sdgs_map'      :sdgs_map
+                                });
+                            $.ajax({
+                                    type: "POST",
+                                    url: urls+'problem-identification/save',
+                                    beforeSend : function(xhr){
+                                        xhr.setRequestHeader(header,token);
+                                    },
+                                    headers:{'Accept':'application/json','Content-Type':'application/json'},
+                                                        data: data,
+                                    success: function (result) {
+                                       grid();// table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole).load();
+                                        $('#myModal').modal('hide');
+                                    },
+                                });
+            }else{
+//                swal("Peringatan","SDG Belum Tercentang",'error');
+            }
+            
         });
         
 //       $2(document).ready(function(){
