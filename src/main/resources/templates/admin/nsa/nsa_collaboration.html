@@ -93,7 +93,7 @@
                                                 <span class="lang_eng" style="display:none">Challenges/ Types of Support Needed</span>
                                                 <span class="lang_indo">Tantangan/ Jenis Dukungan yang Dibutuhkan</span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;">
+                                            <th style="text-align:center;font-size:80%;width: 10%;">
                                                 <span class="lang_eng" style="display:none">Institution Name</span>
                                                 <span class="lang_indo">Nama Institusi</span>
                                             </th>
@@ -105,6 +105,14 @@
                                 <div id="export" style="display: none">
                                     <table  id="tabel-nsa-collaboration-export" class="table table-striped table-bordered">
                                         <thead >
+                                            <tr>
+                                                <th style="text-align:center;font-size:80%;border-style:ridge;" colspan="8">
+                                                    <span class="lang_eng" style="display:none">Program Detail  </span>
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;border-style:ridge;" colspan="4">
+                                                    <span class="lang_eng" style="display:none">Support</span>
+                                                </th>
+                                            </tr>
                                             <tr>
                                                 <th style="text-align:center;font-size:80%;border-style:ridge;">
                                                     <span class="lang_indo">No</span>
@@ -139,6 +147,17 @@
                                                 <th style="text-align:center;font-size:80%;border-style:ridge;">
                                                     <span class="lang_eng" style="display:none">Institution Name / </span>
                                                     <span class="lang_indo">Nama Institusi</span>
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;border-style:ridge;">
+                                                    <span class="lang_eng" style="display:none">Name of Pillar Supported / </span>
+                                                    <span class="lang_indo">Nama Pilar yang Didukung</span>
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;border-style:ridge;">
+                                                    <span class="lang_eng" style="display:none">Area / Location</span>
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;border-style:ridge;">
+                                                    <span class="lang_eng" style="display:none">Type of Support / </span>
+                                                    <span class="lang_indo">Tipe</span>
                                                 </th>
                                             </tr>
                                         </thead>
@@ -446,6 +465,10 @@
                                 var td8 = level1[i][5];
                             }
                             var dt ="";
+                            var dt1 ="";
+                            var dt2 ="";
+                            var dt3 ="";
+                            var ket_pilan ="";
                             $.ajax({
                                 type: "GET",
                                 async:false,
@@ -457,11 +480,33 @@
                                         for (u in level2) {
                                             
                                             dt += "- "+level2[u][6] +"<br/>";
+                                            dt1 += ""+level2[u][3] +"<br/>";
+                                            dt2 += ""+level2[u][4] +"<br/>";
+                                            if(level2[u][1] == '1'){
+                                                ket_pilan = " Civil Society Organization/Organisasi Kepemudaan/Komunitas";
+                                            }else if(level2[u][1] == '2'){
+                                                ket_pilan = " Organisasi Non-Pemerintah/LSM";
+                                            }else if(level2[u][1] == '3'){
+                                                ket_pilan = " Organisasi Hak Perempuan (WRO)/Organisasi Difabel (DPO)";
+                                            }else if(level2[u][1] == '4'){
+                                                ket_pilan = " Sektor bisnis";
+                                            }else if(level2[u][1] == '5'){
+                                                ket_pilan = " Institusi akademis";
+                                            }else if(level2[u][1] == '6'){
+                                                ket_pilan = " Media dan asosiasi media";
+                                            }else if(level2[u][1] == '7'){
+                                                ket_pilan = " Organisasi multilateral atau bilateral";
+                                            }else if(level2[u][1] == '8'){
+                                                ket_pilan = " Organisasi filantropi";
+                                            }else if(level2[u][1] == '9'){
+                                                ket_pilan = " Lainnya";
+                                            }
+                                            dt3 += ""+ket_pilan +"<br/>";
                                         }
                                     }
                                 }
                             });
-                            var tb_prog = '<tr> <td style="border-style:ridge;">'+(i+1)+'</td> <td style="border-style:ridge;">'+level1[i][15]+'</td> <td style="border-style:ridge;">'+td3+'</td> <td style="border-style:ridge;">'+td4+'</td> <td style="border-style:ridge;">'+td5+'</td> <td style="border-style:ridge;">'+td6+'</td> <td style="border-style:ridge;">'+td7+'</td> <td style="border-style:ridge;">'+td8+'</td> <td style="border-style:ridge;">'+dt+'</td></tr>';
+                            var tb_prog = '<tr> <td style="border-style:ridge;">'+(i+1)+'</td> <td style="border-style:ridge;">'+level1[i][15]+'</td> <td style="border-style:ridge;">'+td3+'</td> <td style="border-style:ridge;">'+td4+'</td> <td style="border-style:ridge;">'+td5+'</td> <td style="border-style:ridge;">'+td6+'</td> <td style="border-style:ridge;">'+td7+'</td> <td style="border-style:ridge;">'+td8+'</td> <td style="border-style:ridge;">'+dt+'</td> <td style="border-style:ridge;">'+dt1+'</td> <td style="border-style:ridge;">'+dt2+'</td> <td style="border-style:ridge;">'+dt3+'</td></tr>';
                             $("#tabel-nsa-collaboration-export > tbody").append(tb_prog);
                         }
                     }
@@ -561,10 +606,21 @@
                         if(cat_role != 'Institution'){
                             //NSA bisa edit
                             if(cat_role == 'Government'){
-                                if(row[5] == null || row[5] == ""){
-                                    return "<div style='text-align:center;'>-</div>";
+//                                if(row[5] == null || row[5] == ""){
+//                                    return "<div style='text-align:center;'>-</div>";
+//                                }else{
+//                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
+//                                }
+                                if(row[7] == null || row[7] == ""){
+                                    return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
                                 }else{
-                                    return "<div style='text-align:center;'>"+row[5]+"</div>";
+                                    if(row[5] == null || row[5] == ""){
+                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                                    }else{
+                                        var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                        return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                                    }
                                 }
                             }else{
                                 if(row[7] == null || row[7] == ""){
@@ -618,10 +674,10 @@
                 {"data": function (row, data, index, display) {
 
                     if(privilege=="SUPER" || privilege=="ADMIN"){
-                        if(cat_role == 'Institution'){
+                        if(cat_role == 'Institution' || cat_role == 'Government'){
                             var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
                             return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
-                        }else if(cat_role == 'NSA' || cat_role == 'Government'){
+                        }else if(cat_role == 'NSA'){
                             var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
                             return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
                         }else{
