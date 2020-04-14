@@ -3708,7 +3708,7 @@ public class ReportController {
     
     @GetMapping("admin/getmonper")
     public @ResponseBody List<Object> getmonper(@RequestParam("id_prov") String idprov) {
-    	String sql = "SELECT id_monper, start_year, end_year FROM ran_rad WHERE id_prov = :id_prov";
+    	String sql = "SELECT id_monper, start_year, end_year FROM ran_rad WHERE id_prov = :id_prov and (a.status = 'on Going' or a.status = 'completed')";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
         List list = query.getResultList();
