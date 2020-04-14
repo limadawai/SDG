@@ -27,6 +27,7 @@
                         <option value="0" >-- Pilih Periode --</option>
                     </select>
                 </div>
+                <button id="cari" class="btn btn-primary"><span class="lang_indo">Cari</span><span class="lang_eng" style="display: none">Search</span></button>
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-tasks"></i></span>
@@ -73,12 +74,16 @@
         $('#fs').on('change', function(){
             if($(this).is(':checked')){
                 indo();
+                $(".lang_indo").show("");
+                $(".lang_eng").hide("");
 //                show_gov_prog();
 //                show_non_gov_prog();
                 show_sdg_goal();
                 grid_gov_nongov_tampil();
             } else {
                 inggris();
+                $(".lang_indo").hide("");
+                $(".lang_eng").show("");
 //                show_gov_prog();
 //                show_non_gov_prog();
                 show_sdg_goal();
@@ -101,14 +106,16 @@
         // ********************** Content Div Kiri **********************
         
         function getTarget(id) {
+//            var valperiode = $("#periode").val();
+            var valperiode = sessionStorage.graph_idmonper;
         	$.ajax({
         		url: urls + "getalltarget",
+                        data: {'id_goals':id, 'id_monper':valperiode},
         		type: 'get',
-        		data: 'id_goals='+id,
         		dataType: 'json',
         		cache: false,
         		success: function (restarget) {
-                            //console.log(restarget);
+                            console.log("yo "+id+" jumlah = "+restarget.length);
                             var isitarget = "<ul id='ultar"+id+"'>";
                             for (var i=0; i<restarget.length; i++) {
                                 if($('#fs').is(':checked')){
@@ -139,11 +146,13 @@
         
         function getIndicator(idgoals, idtarget) {
             var combo_daerah = $("#daerah").val();
+//            var valperiode = $("#periode").val();
+            var valperiode = sessionStorage.graph_idmonper;
             var combo_periode1 = '0';
             $.ajax({
                     url: urls + "getallindicator",
                     type: 'get',
-                    data: {'id_goals':idgoals, 'id_target':idtarget},
+                    data: {'id_goals':idgoals, 'id_target':idtarget, 'id_monper':valperiode},
                     dataType: 'json',
                     cache: false,
                     success: function (resindi) {
@@ -405,7 +414,7 @@
             });
             
         	//=============== SDG Goals ================
-            show_sdg_goal();
+//            show_sdg_goal();
             grid_gov_nongov_tampil();
         }
         
@@ -452,7 +461,7 @@
             });
             
         	//=============== SDG Goals ================
-            show_sdg_goal();
+//            show_sdg_goal();
             grid_gov_nongov_tampil();
             
             
@@ -543,14 +552,16 @@
         function show_sdg_goal(){
             var valdaerah  = $("#daerah").val();
             var valrole    = $("#selrole").val();
-            var valperiode = $("#periode").val();
+//            var valperiode = $("#periode").val();
+            var valperiode = sessionStorage.graph_idmonper;
             $.ajax({
             	url: urls + "getallgoals",
+                data: {'id_monper':valperiode},
                 type: 'get',
                 dataType: 'json',
                 cache: false,
                 success: function (resgoals) {
-                	//console.log(resgoals);
+                	console.log("goal = "+resgoals.length);
                 	$("#divkiri").empty();
                 	var isi = "<ol id='olgoals'>";
                		for (var i=0; i<resgoals.length; i++) {
@@ -700,6 +711,48 @@
             show_gov_prog(sessionStorage.graph_idgoals, sessionStorage.graph_idtarget, sessionStorage.graph_idindicator, valda, valrole, combo_periode);
             show_non_gov_prog(sessionStorage.graph_idgoals, sessionStorage.graph_idtarget, sessionStorage.graph_idindicator, valda, valrole, combo_periode);
         }
+        
+        $('#cari').on('click', function(e){
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+            var idgoals         = $(this).data("idgoals");
+            var idtarget        = $(this).data("idtarget");
+            var idindicator     = $(this).data("idindicator");
+            sessionStorage.graph_idprov  = valda;
+            sessionStorage.graph_idrole  = valrole;
+            sessionStorage.graph_idmonper  = combo_periode;
+            sessionStorage.graph_idgoals  = idgoals;
+            sessionStorage.graph_idtarget  = idtarget;
+            sessionStorage.graph_idindicator  = idindicator;
+//                alert('monper '+combo_periode);
+            $cek = 0;
+            if (valrole == '0'){	
+                if($('#fs').is(':checked')){
+                    swal("Anda harus memilih tipe Role");
+                }else{
+                    swal("You must Choose Role");
+                }
+                $cek += 1;
+            }
+            if (combo_periode == '0'){					
+                if($('#fs').is(':checked')){
+                    swal("Anda harus memilih Periode");
+                }else{
+                    swal("You must Choose Period");
+                }
+                $cek += 1;
+            }
+            if ($cek == 0)
+            {
+//                grid_gov_nongov_tampil();
+                show_sdg_goal();
+//                alert("report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+valda+"/"+valrole+"/"+combo_periode);
+                
+//                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+combo_periode+"/"+flag+"/"+valda+"/"+valrole;
+            //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
+            }
+        });
 
     </script>
 </body>
