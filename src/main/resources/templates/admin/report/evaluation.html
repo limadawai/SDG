@@ -651,10 +651,12 @@
                                                     		text += "<td style='font-size:80%;border-style:ridge;'></td>";
                                                     		text += "<td style='font-size:80%;border-style:ridge;'><div style='margin-left:20px'>Disaggregation "+nm_disaggre+" "+nm_disaggre_detail+"</div></td>";
                                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][21]?hasilnya.content[l][21]:'')+"</td>";
-                                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][5]?hasilnya.content[l][5]:'')+"</td>";
-                                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][6]?hasilnya.content[l][6]:'')+"</td>";
-                                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][7]?hasilnya.content[l][7]:'')+"</td>";
-                                                    		
+                                                    		//text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][5]?hasilnya.content[l][5]:'')+"</td>";
+                                                    		//text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][6]?hasilnya.content[l][6]:'')+"</td>";
+                                                    		//text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][7]?hasilnya.content[l][7]:'')+"</td>";
+                                                    		text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                    		text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                    		text += "<td style='font-size:80%;border-style:ridge;'></td>";
                                                     		var nilai1Detail=(hasilnya.content[l][12])?hasilnya.content[l][12]:hasilnya.content[l][8];
                                                     		var nilai2Detail=(hasilnya.content[l][13])?hasilnya.content[l][13]:hasilnya.content[l][9];
                                                     		var nilai3Detail=(hasilnya.content[l][14])?hasilnya.content[l][14]:hasilnya.content[l][10];
@@ -814,7 +816,7 @@
                             		var id_monper = hasilSts.content[l][1];
                             		var start_year = hasilSts.content[l][2];
                             		var end_year = hasilSts.content[l][3];
-                            		for(var tahun = end_year ; tahun >= start_year; tahun--){
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
                             			if(sts == 'yearly'){
                             				colspan = 2;
                                     	}else{
@@ -834,7 +836,7 @@
                             		var id_monper = hasilSts.content[l][1];
                             		var start_year = hasilSts.content[l][2];
                             		var end_year = hasilSts.content[l][3];
-                            		for(var tahun = end_year ; tahun >= start_year; tahun--){
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
                             			if(sts == 'yearly'){
                                     		spansdg = 2;
                                     		colspan = 1;
@@ -856,7 +858,7 @@
                             		var id_monper = hasilSts.content[l][1];
                             		var start_year = hasilSts.content[l][2];
                             		var end_year = hasilSts.content[l][3];
-                            		for(var tahun = end_year ; tahun >= start_year; tahun--){
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
                             			if(sts == 'yearly'){
                                     		text += "<td style='text-align:center;vertical-align:middle;border-style:ridge;'><b></b></td>";
                                     	}else if(sts == 'semesterly'){
@@ -912,7 +914,7 @@
                                                 });
                                                 var color_sts="";
                                                 var achive = "";
-                                        		for(var year = end_year ; year >= start_year; year--){
+                                        		for(var year = start_year; year <= end_year; year++){
                                         			$.ajax({
                                                         url: urls + 'get-sdg-indicator-slave',
                                                         type: 'get',
@@ -1023,8 +1025,11 @@
                                                     		text += "<td style='font-size:80%;border-style:ridge;'></td>";
                                                     		text += "<td style='font-size:80%;border-style:ridge;'><div style='margin-left:20px'>Disaggregation "+nm_disaggre+" "+nm_disaggre_detail+"</div></td>";
                                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][23]?hasilnya.content[l][23]:'')+"</td>":'';
-                                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][5]?hasilnya.content[l][5]:'')+"</td>";
-                                                    		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][6]?hasilnya.content[l][6]:'')+"</td>":'';
+                                                    		//text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][5]?hasilnya.content[l][5]:'')+"</td>";
+                                                    		//text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][6]?hasilnya.content[l][6]:'')+"</td>":'';
+                                                    		
+                                                    		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'></td>":'';
+                                                    		text += "<td style='font-size:80%;border-style:ridge;'></td>";
                                                     		
                                                     		for(var z=0; z < hasilSts.content.length; z++){
                                                         		var sts  = hasilSts.content[z][0];
@@ -1045,7 +1050,7 @@
                                                                 });
                                                                 var color_sts="";
                                                                 var achive = "";
-                                                        		for(var year = end_year ; year >= start_year; year--){
+                                                        		for(var year = start_year; year <= end_year; year++){
                                                         			$.ajax({
                                                                         url: urls + 'get-sdg-disaggre-slave',
                                                                         type: 'get',
@@ -1056,8 +1061,8 @@
                                                                         success: function (hasildis) {
                                                                         	if(hasildis.content.length>0){
                                                                         		for (var n = 0; n < hasildis.content.length; n++) {
-                                                                            		text += "<td>"+(hasildis.content[n][7]?hasildis.content[n][7]:'')+"</td>";
-                                                                            		
+                                                                            		//text += "<td>"+(hasildis.content[n][7]?hasildis.content[n][7]:'')+"</td>";
+                                                                            		text += "<td style='font-size:80%;border-style:ridge;'></td>";
                                                                             		var nilai1Detail=(hasildis.content[n][12])?hasildis.content[n][12]:hasildis.content[n][8];
                                                                             		var nilai2Detail=(hasildis.content[n][13])?hasildis.content[n][13]:hasildis.content[n][9];
                                                                             		var nilai3Detail=(hasildis.content[n][14])?hasildis.content[n][14]:hasildis.content[n][10];

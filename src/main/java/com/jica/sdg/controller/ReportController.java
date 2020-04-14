@@ -1406,7 +1406,7 @@ public class ReportController {
     			" left join nsa_program f on f.id = c.id_program\r\n" + 
     			" left join ref_role g on d.id_role = g.id_role\r\n" + 
     			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '')\r\n" + 
+    			" and (a.id_target is null or a.id_target = '') and (a.id_indicator is null or a.id_indicator = '') and d.id = :id_activity \r\n" + 
     			" ");
     	if(!id_role.equals("all")) {sqlBudNsa.append(" and d.id_role = '"+id_role+"'");}
     	sqlBudNsa.append(" ORDER BY 1,2,3 ");
@@ -1414,6 +1414,7 @@ public class ReportController {
     	queryBudNsa.setParameter("id_prov", id_prov);
     	queryBudNsa.setParameter("id_monper", id_monper);
     	queryBudNsa.setParameter("id_goals", id_goals);
+    	queryBudNsa.setParameter("id_activity", id_activity);
         List listBudNsa = queryBudNsa.getResultList();
         
         
@@ -1465,7 +1466,7 @@ public class ReportController {
     			" left join nsa_program f on f.id = c.id_program\r\n" + 
     			" left join ref_role g on d.id_role = g.id_role\r\n" + 
     			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '')\r\n" + 
+    			" and a.id_target = :id_target and (a.id_indicator is null or a.id_indicator = '') and d.id = :id_activity \r\n" + 
     			" ");
     	if(!id_role.equals("all")) {sqlBudNsa.append(" and d.id_role = '"+id_role+"'");}
     	sqlBudNsa.append(" ORDER BY 1,2,3 ");
@@ -1474,6 +1475,7 @@ public class ReportController {
     	queryBudNsa.setParameter("id_monper", id_monper);
     	queryBudNsa.setParameter("id_goals", id_goals);
     	queryBudNsa.setParameter("id_target", id_target);
+    	queryBudNsa.setParameter("id_activity", id_activity);
         List listBudNsa = queryBudNsa.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("budgetGov",listBudNsa);
@@ -1493,47 +1495,48 @@ public class ReportController {
     		@RequestParam("id_indicator") String id_indicator) {
     	
     	//nsa
-    	StringBuilder sqlBudNsa = new StringBuilder();
-    	sqlBudNsa.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
+    	StringBuilder sqlBud = new StringBuilder();
+    	sqlBud.append("SELECT DISTINCT f.id_program, d.id_activity, f.nm_program,\r\n" + 
     			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng,\r\n" + 
     			"d.budget_allocation,");
     	for(int i = start_year; i<=end_year;i++) {
     		//achievement
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
     				"ELSE (select achievement1 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
     				"ELSE (select achievement2 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
     				"ELSE (select achievement3 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
     				"ELSE (select achievement4 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
     				"ELSE (select new_value1 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
     				"ELSE (select new_value2 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
     				"ELSE (select new_value3 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
     				"ELSE (select new_value4 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
-    	sqlBudNsa.append(" g.nm_role FROM nsa_map a\r\n" + 
+    	sqlBud.append(" g.nm_role FROM nsa_map a\r\n" + 
     			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
     			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
     			" left join nsa_program f on f.id = c.id_program\r\n" + 
     			" left join ref_role g on d.id_role = g.id_role\r\n" + 
     			" WHERE a.id_prov = :id_prov and a.id_monper = :id_monper and a.id_goals = :id_goals\r\n" + 
-    			" and a.id_target = :id_target and a.id_indicator = :id_indicator\r\n" + 
+    			" and a.id_target = :id_target and a.id_indicator = :id_indicator and d.id = :id_activity\r\n" + 
     			" ");
-    	if(!id_role.equals("all")) {sqlBudNsa.append(" and d.id_role = '"+id_role+"'");}
-    	sqlBudNsa.append(" ORDER BY 1,2,3 ");
-    	Query queryBudNsa = manager.createNativeQuery(sqlBudNsa.toString());
+    	if(!id_role.equals("all")) {sqlBud.append(" and d.id_role = '"+id_role+"'");}
+    	sqlBud.append(" ORDER BY 1,2,3 ");
+    	Query queryBudNsa = manager.createNativeQuery(sqlBud.toString());
     	queryBudNsa.setParameter("id_prov", id_prov);
     	queryBudNsa.setParameter("id_monper", id_monper);
     	queryBudNsa.setParameter("id_goals", id_goals);
     	queryBudNsa.setParameter("id_target", id_target);
     	queryBudNsa.setParameter("id_indicator", id_indicator);
+    	queryBudNsa.setParameter("id_activity", id_activity);
         List listBudNsa = queryBudNsa.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("budgetGov",listBudNsa);
@@ -2228,7 +2231,7 @@ public class ReportController {
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
     				"ELSE (select new_value3 from entry_sdg_detail as new_value3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
-    				"ELSE (select new_value4 from entry_sdg_detail as new_value4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and and year_entry = "+i+") END as new_value4_"+i+", ");
+    				"ELSE (select new_value4 from entry_sdg_detail as new_value4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlInd.append(" CASE when e.nm_role is null then 'Unassigned' else e.nm_role end FROM sdg_indicator b\r\n" + 
     			" left join assign_sdg_indicator a on a.id_indicator = b.id and a.id_prov = :id_prov\r\n" +

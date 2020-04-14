@@ -8,6 +8,7 @@
     <title th:text="Institution Profile">Institution Profile</title>
 </head>
 <body>
+<title>NSA / NSA Collaboration</title>
     <div th:include="admin/layout :: menu"></div>
 
 <!--  Content  -->
@@ -602,7 +603,7 @@
                     }
                 }},
                 {"data": function (row, data, index, display) {
-                    if(privilege=="SUPER" || privilege=="ADMIN"){
+                    /* if(privilege=="SUPER" || privilege=="ADMIN"){
                         if(cat_role != 'Institution'){
                             //NSA bisa edit
                             if(cat_role == 'Government'){
@@ -643,6 +644,25 @@
                                 return "<div style='text-align:center;'>"+row[5]+"</div>";
                             }
                         }
+                    } */
+                    if(privilege=="SUPER" || (privilege=="ADMIN" && id_prov==row[13])){
+                    	if(row[7] == null || row[7] == ""){
+                            return "<div style='text-align:center;'>"+'<button data-id="'+row[1]+'###'+row[9]+'###'+row[8]+'" type="button" title="Add Detail" class="btn btn-success add_detail"> Add Detail</button></div>';
+                        }else{
+                            if(row[5] == null || row[5] == ""){
+                                var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+"<i class='icon-edit'></i> - </a></div>";
+                            }else{
+                                var data_id = row[7]+'###'+row[0]+'###'+row[9]+'###'+row[2]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[8]+'###'+row[1];
+                                return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Detail" class="edit_detail" href="#">'+" "+row[5]+"</a></div>";
+                            }
+                        }
+                    }else if(privilege=="ADMIN" && id_prov!=row[13]){
+                    	if(row[5] == null || row[5] == ""){
+                            return "<div style='text-align:center;'>-</div>";
+                        }else{
+                            return "<div style='text-align:center;'>"+row[5]+"</div>";
+                        }
                     }else if(privilege=="USER"){
                         //user yg catrole nya nsa bisa edit
                         if(cat_role == 'NSA'){
@@ -673,7 +693,7 @@
                 }},
                 {"data": function (row, data, index, display) {
 
-                    if(privilege=="SUPER" || privilege=="ADMIN"){
+                    /* if(privilege=="SUPER" || privilege=="ADMIN"){
                         if(cat_role == 'Institution' || cat_role == 'Government'){
                             var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
                             return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
@@ -683,6 +703,13 @@
                         }else{
                             return "";
                         }
+                    } */
+                    if(privilege=="SUPER" || (privilege=="ADMIN" && id_prov==row[13])){
+                    	var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                        return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary btn-small add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" data-id_prov = "'+row[13]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                    }else if(privilege=="ADMIN" && id_prov!=row[13]){
+                    	var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
+                        return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" data-id_prov = "'+row[13]+'" type="button" title="Add View" class="btn btn-success btn-small add_view"> View</button>'+"</div>";
                     }else if(privilege=="USER"){
                         //user yg catrole nya INST bisa edit
                         if(cat_role == 'Institution'){
@@ -699,16 +726,16 @@
                             
                             if(jumlah == '0'){
                                 var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                                return "<div style='text-align:center;'>"+'<button data-id="'+data_id+'" type="button" title="Add Support" class="btn btn-primary add_support"> Add Support</button>'+' <button data-id="'+row[7]+'" data-idprog="'+row[9]+'" data-id_prov = "'+row[13]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
                             }else{
                                 var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                                return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" data-id_prov = "'+row[13]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
                             }
                             
                         }else{
                             //selain INST gak bisa edit
                             var data_id = row[8]+'###'+row[10]+'###'+row[6]+'###'+row[11]+'###'+row[12]+'###'+row[7];
-                            return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
+                            return "<div style='text-align:center;'>"+'<button data-id="'+row[7]+'" data-idprog="'+row[9]+'" data-id_prov = "'+row[13]+'" type="button" title="Add View" class="btn btn-success add_view"> View</button>'+"</div>";
                         }
                     }else{
                         return "";
@@ -1050,6 +1077,7 @@
         $('#tabel-nsa-collaboration').on('click', '.add_view', function(){
             var dataid      = $(this).data('id');
             var dataprog    = $(this).data('idprog');
+            var prov    	= $(this).data('id_prov');
             
             $('#tabel_view_support').DataTable({
                 responsive: true,
@@ -1070,7 +1098,7 @@
                     }},
                     {"data": function (row, data, index, display) {
                             
-                        if(privilege=="SUPER" || privilege=="ADMIN"){
+                        /* if(privilege=="SUPER" || privilege=="ADMIN"){
                             if(cat_role == 'Institution'){
                                 var data_id = row[0]+'###'+row[1]+'###'+row[3]+'###'+row[3]+'###'+row[4]+'###'+row[2]+'###'+row[5]+'###'+row[2];
                                 return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="btn btn-primary btn-mini edit_support" href="#">'+"<i class='icon-edit'></i></a>"+'<a data-id="'+data_id+'" title="Delete Support" class="btn btn-danger btn-mini delete_support" style="margin-left:4px" href="#">'+"<i class='icon-trash'></i></a></div>";
@@ -1079,6 +1107,12 @@
                             }else{
                                 return "";
                             }
+                        } */
+                        if(privilege=="SUPER" || (privilege=="ADMIN" && id_prov==prov)){
+                        	var data_id = row[0]+'###'+row[1]+'###'+row[3]+'###'+row[3]+'###'+row[4]+'###'+row[2]+'###'+row[5]+'###'+row[2];
+                            return "<div style='text-align:center;'>"+'<a data-id="'+data_id+'" title="Update Support" class="btn btn-primary btn-mini edit_support" href="#">'+"<i class='icon-edit'></i></a>"+'<a data-id="'+data_id+'" title="Delete Support" class="btn btn-danger btn-mini delete_support" style="margin-left:4px" href="#">'+"<i class='icon-trash'></i></a></div>";
+                        }else if(privilege=="ADMIN" && id_prov!=prov){
+                        	return "";
                         }else if(privilege=="USER"){
                             if(cat_role == 'Institution'){
                                 if(row[7] == id_role){
