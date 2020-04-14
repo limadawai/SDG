@@ -172,7 +172,7 @@
                     url: urls+'list-get-option-monper/'+id_prov,
                     success: function (result1) {
                         if(id_role == '1'){
-                            $("#periode").html('<option value="0" >-- Pilih --</option><option value="*" >ALL</option>'); 
+                            $("#periode").html('<option value="0" >-- Pilih --</option>'); 
                          }else{
                              $("#periode").html('<option value="0" >-- Pilih --</option>');
                          }
@@ -248,7 +248,7 @@
                         
                         if(result1.content.length>0){
                             $.each(result1.content,function(i,x){
-                                option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
+                                option += '<option value="'+x[0]+'" >'+x[2]+' '+x[1]+'</option>';
                             })
                         }
                         $('#goals').html(option);
@@ -279,7 +279,7 @@
                         
                         if(result1.content.length>0){
                             $.each(result1.content,function(i,x){
-                                option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
+                                option += '<option value="'+x[0]+'" >'+x[2]+' '+x[1]+'</option>';
                             })
                         }
                         $('#target').html(option);
@@ -309,7 +309,7 @@
                        
                         if(result1.content.length>0){
                             $.each(result1.content,function(i,x){
-                                option += '<option value="'+x[0]+'" >'+x[1]+'</option>';
+                                option += '<option value="'+x[0]+'" >'+x[2]+' '+x[1]+'</option>';
                             })
                         }
                         $('#indicator').html(option);
