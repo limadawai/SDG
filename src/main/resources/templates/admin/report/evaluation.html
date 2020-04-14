@@ -814,7 +814,7 @@
                             		var id_monper = hasilSts.content[l][1];
                             		var start_year = hasilSts.content[l][2];
                             		var end_year = hasilSts.content[l][3];
-                            		for(var tahun = end_year ; tahun >= start_year; tahun--){
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
                             			if(sts == 'yearly'){
                             				colspan = 2;
                                     	}else{
@@ -834,7 +834,7 @@
                             		var id_monper = hasilSts.content[l][1];
                             		var start_year = hasilSts.content[l][2];
                             		var end_year = hasilSts.content[l][3];
-                            		for(var tahun = end_year ; tahun >= start_year; tahun--){
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
                             			if(sts == 'yearly'){
                                     		spansdg = 2;
                                     		colspan = 1;
@@ -856,7 +856,7 @@
                             		var id_monper = hasilSts.content[l][1];
                             		var start_year = hasilSts.content[l][2];
                             		var end_year = hasilSts.content[l][3];
-                            		for(var tahun = end_year ; tahun >= start_year; tahun--){
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
                             			if(sts == 'yearly'){
                                     		text += "<td style='text-align:center;vertical-align:middle;border-style:ridge;'><b></b></td>";
                                     	}else if(sts == 'semesterly'){

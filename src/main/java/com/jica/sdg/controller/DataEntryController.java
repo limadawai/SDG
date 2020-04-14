@@ -349,9 +349,9 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> getGetStsMonperAll(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
     	String sql;
     	if(id_monper.equals("0")) {
-    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where (a.status = 'on Going' or a.status = 'completed') and a.id_prov=:id_prov order by id_monper desc ";
+    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where (a.status = 'on Going' or a.status = 'completed') and a.id_prov=:id_prov order by id_monper asc ";
     	}else {
-    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where a.id_prov=:id_prov and a.id_monper = '"+id_monper+"' order by id_monper desc ";
+    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where a.id_prov=:id_prov and a.id_monper = '"+id_monper+"' order by id_monper asc ";
     	} 
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
