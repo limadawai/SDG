@@ -166,12 +166,12 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-monper/{id}")
     public @ResponseBody Map<String, Object> getOptionMonperList(@PathVariable("id") String id) {
-        String sql  = "select * from ran_rad as a where a.id_prov = :id and a.status = 'on Going'";
+        String sql  = "select * from ran_rad as a where a.id_prov = :id and a.status = 'on Going' order by start_year";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
         
-        String sql1  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'created')";
+        String sql1  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'created') order by start_year";
         Query query1 = em.createNativeQuery(sql1);
         query1.setParameter("id", id);
         List list1   = query1.getResultList();
@@ -185,7 +185,7 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-monper-report/{id}")
     public @ResponseBody Map<String, Object> getOptionMonperReportList(@PathVariable("id") String id) {
-        String sql  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'completed')";
+        String sql  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'completed') order by start_year";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
@@ -197,7 +197,7 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-monper-eva/{id}")
     public @ResponseBody Map<String, Object> getOptionMonperReportListEva(@PathVariable("id") String id) {
-        String sql  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'completed') order by id_monper desc";
+        String sql  = "select * from ran_rad as a where a.id_prov = :id and (a.status = 'on Going' or a.status = 'completed') order by start_year desc";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id", id);
         List list   = query.getResultList();
@@ -349,9 +349,9 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> getGetStsMonperAll(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
     	String sql;
     	if(id_monper.equals("0")) {
-    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where (a.status = 'on Going' or a.status = 'completed') and a.id_prov=:id_prov order by id_monper asc ";
+    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where (a.status = 'on Going' or a.status = 'completed') and a.id_prov=:id_prov order by start_year asc ";
     	}else {
-    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where a.id_prov=:id_prov and a.id_monper = '"+id_monper+"' order by id_monper asc ";
+    		sql  = "select sdg_indicator, id_monper, start_year, end_year from ran_rad as a where a.id_prov=:id_prov and a.id_monper = '"+id_monper+"' order by start_year asc ";
     	} 
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);

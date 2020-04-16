@@ -719,6 +719,7 @@
             var periode     = $(this).data("periode");
             $("#id_approval").val(id);
             $('.approval[value="'+approval+'"]').prop("checked", true).trigger("click");
+            $("#description").val("");
             $("#description").text((description?description:''));
             $("#myModal").modal('show');	
         }).on('click', ".unapprove", function(e){

@@ -5,12 +5,13 @@
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <head th:include="admin/layout :: header">
-    <title th:text="${title}"></title>
+    
     <style>
         .pointer {cursor: pointer;}
     </style>
 </head>
 <body>
+<title>Data Approval / Best Practice</title>
     <div th:include="admin/layout :: menu"></div>
 
     <div id="content">
@@ -1488,6 +1489,7 @@
             var periode     = $(this).data("periode");
             $("#id_approval").val(id);
             $('.approval[value="'+approval+'"]').prop("checked", true).trigger("click");
+            $("#description").val("");
             $("#description").text((description?description:''));
             $("#myModal").modal('show');	
         }).on('click', ".unapprove", function(e){
