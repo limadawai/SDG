@@ -321,6 +321,7 @@
                 url: urls+'list-get-option-role-all-profil/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                    $("#idrole").html('<option value="999999" >All</option>');
                     var array = result.content;
                     if (array != '') {
                         for (i in array) {
@@ -1099,9 +1100,9 @@
                                             if (level2 != '') {
                                                 for (o in level2) {
                                                     if($("#fs").is(':checked')){
-                                                        var prog_2 = level2[o][3]+" "+level2[o][1];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][3]+" "+level2[o][1];
                                                     }else{
-                                                        var prog_2 = level2[o][3]+" "+level2[o][2];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][3]+" "+level2[o][2];
                                                     }
                                                     var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
                                                     $("#tbl_program > tbody").append(tb_prog2);
@@ -1116,9 +1117,9 @@
                                                             if (level3 != '') {
                                                                 for (p in level3) {
                                                                     if($("#fs").is(':checked')){
-                                                                        var prog_3 = level3[p][13]+" "+level3[p][1];
+                                                                        var prog_3 = level1[i][3]+"."+level2[o][3]+"."+level3[p][13]+" "+level3[p][1];
                                                                     }else{
-                                                                        var prog_3 = level3[p][13]+" "+level3[p][2];
+                                                                        var prog_3 = level1[i][3]+"."+level2[o][3]+"."+level3[p][13]+" "+level3[p][2];
                                                                     }
                                                                     if(v_period == '1'){
                                                                         var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="text" value="'+level3[p][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level3[p][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level3[p][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level3[p][8]+'" class="input-block-level">';
@@ -1250,9 +1251,9 @@
                                             if (level2 != '') {
                                                 for (o in level2) {
                                                     if($("#fs").is(':checked')){
-                                                        var prog_2 = level2[o][13]+" "+level2[o][1];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][13]+" "+level2[o][1];
                                                     }else{
-                                                        var prog_2 = level2[o][13]+" "+level2[o][2];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][13]+" "+level2[o][2];
                                                     }
                                                     if(v_period == '1'){
                                                         var ket_input = '<input name="achievement1" id="submission[][achievement1]" type="text" value="'+level2[o][5]+'" class="input-block-level"><input name="achievement2" id="submission[][achievement2]" type="hidden" value="'+level2[o][6]+'" class="input-block-level"><input name="achievement3" id="submission[][achievement3]" type="hidden" value="'+level2[o][7]+'" class="input-block-level"><input name="achievement4" id="submission[][achievement4]" type="hidden" value="'+level2[o][8]+'" class="input-block-level">';
@@ -1388,9 +1389,9 @@
                                             if (level2 != '') {
                                                 for (o in level2) {
                                                     if($("#fs").is(':checked')){
-                                                        var prog_2 = level2[o][3]+" "+level2[o][1];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][3]+" "+level2[o][1];
                                                     }else{
-                                                        var prog_2 = level2[o][3]+" "+level2[o][2];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][3]+" "+level2[o][2];
                                                     }
                                                     var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
                                                     $("#tbl_program_nilai > tbody").append(tb_prog2);
@@ -1405,9 +1406,9 @@
                                                             if (level3 != '') {
                                                                 for (p in level3) {
                                                                     if($("#fs").is(':checked')){
-                                                                        var prog_3 = level3[p][13]+" "+level3[p][1];
+                                                                        var prog_3 = level1[i][3]+"."+level2[o][3]+"."+level3[p][13]+" "+level3[p][1];
                                                                     }else{
-                                                                        var prog_3 = level3[p][13]+" "+level3[p][2];
+                                                                        var prog_3 = level1[i][3]+"."+level2[o][3]+"."+level3[p][13]+" "+level3[p][2];
                                                                     }
                                                                     if(v_period == '1'){
                                                                         var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
@@ -1559,9 +1560,9 @@
                                             if (level2 != '') {
                                                 for (o in level2) {
                                                     if($("#fs").is(':checked')){
-                                                        var prog_2 = level2[o][13]+" "+level2[o][1];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][13]+" "+level2[o][1];
                                                     }else{
-                                                        var prog_2 = level2[o][13]+" "+level2[o][2];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][13]+" "+level2[o][2];
                                                     }
                                                     if(v_period == '1'){
                                                         if(level2[o][5] == '0'){
@@ -1716,9 +1717,9 @@
                                             if (level2 != '') {
                                                 for (o in level2) {
                                                     if($("#fs").is(':checked')){
-                                                        var prog_2 = level2[o][3]+" "+level2[o][1];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][3]+" "+level2[o][1];
                                                     }else{
-                                                        var prog_2 = level2[o][3]+" "+level2[o][2];
+                                                        var prog_2 = level1[i][3]+"."+level2[o][3]+" "+level2[o][2];
                                                     }
                                                     var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
                                                     $("#tbl_program_date > tbody").append(tb_prog2);
@@ -1734,9 +1735,9 @@
                                                             if (level3 != '') {
                                                                 for (p in level3) {
                                                                     if($("#fs").is(':checked')){
-                                                                        var prog_3 = level3[p][13]+" "+level3[p][1];
+                                                                        var prog_3 = level1[i][3]+"."+level2[o][3]+"."+level3[p][13]+" "+level3[p][1];
                                                                     }else{
-                                                                        var prog_3 = level3[p][13]+" "+level3[p][2];
+                                                                        var prog_3 = level1[i][3]+"."+level2[o][3]+"."+level3[p][13]+" "+level3[p][2];
                                                                     }
                                                                     if(catrole == 'Government'){
                                                                         $.ajax({
@@ -1987,9 +1988,9 @@
                                             if (level3 != '') {
                                                 for (p in level3) {
                                                     if($("#fs").is(':checked')){
-                                                        var prog_3 = level3[p][13]+" "+level3[p][1];
+                                                        var prog_3 = level1[i][3]+"."+level3[p][13]+" "+level3[p][1];
                                                     }else{
-                                                        var prog_3 = level3[p][13]+" "+level3[p][2];
+                                                        var prog_3 = level1[i][3]+"."+level3[p][13]+" "+level3[p][2];
                                                     }
                                                     if(catrole == 'Government'){
                                                         $.ajax({
@@ -2213,9 +2214,9 @@
                                         if (level2 != '') {
                                             for (o in level2) {
                                                 if($("#fs").is(':checked')){
-                                                    var prog_2 = level2[o][3]+" "+level2[o][1];
+                                                    var prog_2 = level1[i][3]+"."+level2[o][3]+" "+level2[o][1];
                                                 }else{
-                                                    var prog_2 = level2[o][3]+" "+level2[o][2];
+                                                    var prog_2 = level1[i][3]+"."+level2[o][3]+" "+level2[o][2];
                                                 }
                                                 var tb_prog2 = '<tr> <td style="text-indent: 2em">'+prog_2+'</td> <td style="width: 30%;"></td> </tr>';
                                                 $("#tbl_program_catrole > tbody").append(tb_prog2);
@@ -2230,9 +2231,9 @@
                                                         if (level3 != '') {
                                                             for (p in level3) {
                                                                 if($("#fs").is(':checked')){
-                                                                    var prog_3 = level3[p][13]+" "+level3[p][1];
+                                                                    var prog_3 = level1[i][3]+"."+level2[o][3]+"."+level3[p][13]+" "+level3[p][1];
                                                                 }else{
-                                                                    var prog_3 = level3[p][13]+" "+level3[p][2];
+                                                                    var prog_3 = level1[i][3]+"."+level2[o][3]+"."+level3[p][13]+" "+level3[p][2];
                                                                 }
                                                                 if(v_period == '1'){
                                                                     var ket_input = '<input name="achievement11" id="submission[][achievement11]" type="text" value="'+level3[p][5]+'" class="input-block-level" readonly><input name="achievement21" id="submission[][achievement21]" type="hidden" value="'+level3[p][6]+'" class="input-block-level" readonly><input name="achievement31" id="submission[][achievement31]" type="hidden" value="'+level3[p][7]+'" class="input-block-level" readonly><input name="achievement41" id="submission[][achievement41]" type="hidden" value="'+level3[p][8]+'" class="input-block-level" readonly>';
@@ -2339,9 +2340,9 @@
                                         if (level2 != '') {
                                             for (o in level2) {
                                                 if($("#fs").is(':checked')){
-                                                    var prog_2 = level2[o][13]+" "+level2[o][1];
+                                                    var prog_2 = level1[i][3]+"."+level2[o][13]+" "+level2[o][1];
                                                 }else{
-                                                    var prog_2 = level2[o][13]+" "+level2[o][2];
+                                                    var prog_2 = level1[i][3]+"."+level2[o][13]+" "+level2[o][2];
                                                 }
                                                 if(v_period == '1'){
                                                     if(level2[o][5] == '0'){

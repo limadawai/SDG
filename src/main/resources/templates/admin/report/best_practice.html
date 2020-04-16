@@ -235,7 +235,7 @@
             });
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-monper/'+valdaerah,
+                url: urls+'list-get-option-monper-report/'+valdaerah,
                 success: function (result1) {
                 	$("#periode").empty();
                     $("#periode").html('<option value="0" >-- Pilih Tahun --</option>');
@@ -271,6 +271,7 @@
 //    	}else{
 //    	}
     	$('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
+
     });
     
     $("#role").on("change", function(){
@@ -500,6 +501,9 @@
         	        	});
         	        });
         }
+        $('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
+        ambilData(0);	
+        ambilData_sum(0);
     });
     
     $('.accordion-inner').on('click', '#filter-sdg', function(){

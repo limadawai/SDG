@@ -3049,16 +3049,32 @@ public class ReportController {
     }
     
     @GetMapping("admin/getallgoals")
-    public @ResponseBody List<Object> getallgoals() {
-    	String sql = "SELECT id, nm_goals, nm_goals_eng, id_goals FROM sdg_goals ORDER BY id ASC";
+    public @ResponseBody List<Object> getallgoals(@RequestParam("id_monper") int id_monper) {
+        System.out.println("monper = "+id_monper);
+        Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql = "";
+        if(status.equals("completed")) {
+            System.out.println("comple - "+id_monper);
+            sql = "SELECT distinct id_old, nm_goals, nm_goals_eng, id_goals FROM history_sdg_goals where id_monper = '"+id_monper+"' ORDER BY id ASC";
+        }else{
+            sql = "SELECT distinct id, nm_goals, nm_goals_eng, id_goals FROM sdg_goals ORDER BY id ASC";
+        }
     	Query query = manager.createNativeQuery(sql);
         List list = query.getResultList();
         return list;
     }
     
     @GetMapping("admin/getalltarget")
-    public @ResponseBody List<Object> getalltarget(@RequestParam("id_goals") int id_goals) {
-    	String sql = "SELECT id, nm_target, nm_target_eng, id_target FROM sdg_target WHERE id_goals = :id_goals ORDER BY id ASC";
+    public @ResponseBody List<Object> getalltarget(@RequestParam("id_goals") int id_goals, @RequestParam("id_monper") int id_monper) {
+        Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql="";
+        if(status.equals("completed")) {
+            sql = "SELECT distinct id_old, nm_target, nm_target_eng, id_target FROM history_sdg_target WHERE id_goals = :id_goals and id_monper = '"+id_monper+"' ORDER BY id ASC";
+        }else{
+            sql = "SELECT distinct id, nm_target, nm_target_eng, id_target FROM sdg_target WHERE id_goals = :id_goals ORDER BY id ASC";
+        }
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_goals", id_goals);
         List list = query.getResultList();
@@ -3066,9 +3082,17 @@ public class ReportController {
     }
     
     @GetMapping("admin/getallindicator")
-    public @ResponseBody List<Object> getallindicator(@RequestParam("id_goals") int id_goals, @RequestParam("id_target") int id_target) {
-    	String sql = "SELECT id, nm_indicator, nm_indicator_eng, id_indicator FROM sdg_indicator WHERE id_goals = :id_goals AND "
+    public @ResponseBody List<Object> getallindicator(@RequestParam("id_goals") int id_goals, @RequestParam("id_target") int id_target, @RequestParam("id_monper") int id_monper) {
+    	Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql="";
+        if(status.equals("completed")) {
+            sql = "SELECT distinct id_old, nm_indicator, nm_indicator_eng, id_indicator FROM history_sdg_indicator WHERE id_goals = :id_goals AND "
+    			+ "id_target = :id_target and id_monper = '"+id_monper+"' GROUP BY id, id_goals, id_target ORDER BY id ASC";
+        }else{
+            sql = "SELECT distinct id, nm_indicator, nm_indicator_eng, id_indicator FROM sdg_indicator WHERE id_goals = :id_goals AND "
     			+ "id_target = :id_target GROUP BY id, id_goals, id_target ORDER BY id ASC";
+        }
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_goals", id_goals);
         query.setParameter("id_target", id_target);
@@ -3098,7 +3122,7 @@ public class ReportController {
 //        System.out.println("id "+id_role);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                             "left join gov_program as c on b.id_program = c.id\n" +
@@ -3112,7 +3136,7 @@ public class ReportController {
                 query.setParameter("id_monper", id_monper);
                 query.setParameter("id_role", id_role);
             }else{
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                             "left join gov_program as c on b.id_program = c.id\n" +
@@ -3128,7 +3152,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                             "left join gov_program as c on b.id_program = c.id\n" +
@@ -3142,7 +3166,7 @@ public class ReportController {
                 query.setParameter("id_monper", id_monper);
                 query.setParameter("id_role", id_role);
             }else{
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                             "left join gov_program as c on b.id_program = c.id\n" +
@@ -3167,7 +3191,7 @@ public class ReportController {
 //        System.out.println("id "+id_role);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                             "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3181,7 +3205,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("idprog", idprog);
             }else{
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                             "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3197,7 +3221,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                             "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3211,7 +3235,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("idprog", idprog);
             }else{
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                             "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3236,7 +3260,7 @@ public class ReportController {
 //        System.out.println("id "+id_role);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_gov_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
@@ -3250,7 +3274,7 @@ public class ReportController {
                 query.setParameter("idprog", idprog);
                 query.setParameter("idactivity", idactivity);
             }else{
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_gov_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
@@ -3266,7 +3290,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_gov_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
@@ -3280,7 +3304,7 @@ public class ReportController {
                 query.setParameter("idprog", idprog);
                 query.setParameter("idactivity", idactivity);
             }else{
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_gov_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from gov_map as a\n" +
                             "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
@@ -3305,7 +3329,7 @@ public class ReportController {
         System.out.println("id indi = "+id_indicator);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join nsa_program as c on b.id_program = c.id\n" +
@@ -3319,7 +3343,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("id_monper", id_monper);
             }else{
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join nsa_program as c on b.id_program = c.id\n" +
@@ -3335,7 +3359,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join nsa_program as c on b.id_program = c.id\n" +
@@ -3349,7 +3373,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("id_monper", id_monper);
             }else{
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join nsa_program as c on b.id_program = c.id\n" +
@@ -3375,7 +3399,7 @@ public class ReportController {
 //        System.out.println("id "+id_role);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3389,7 +3413,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("idprog", idprog);
             }else{
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3405,7 +3429,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3419,7 +3443,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("idprog", idprog);
             }else{
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3445,7 +3469,7 @@ public class ReportController {
 //        System.out.println("id "+id_role);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_nsa_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
@@ -3460,7 +3484,7 @@ public class ReportController {
                 query.setParameter("idprog", idprog);
                 query.setParameter("idactivity", idactivity);
             }else{
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_nsa_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
@@ -3477,7 +3501,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_nsa_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
@@ -3492,7 +3516,7 @@ public class ReportController {
                 query.setParameter("idprog", idprog);
                 query.setParameter("idactivity", idactivity);
             }else{
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_nsa_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
@@ -3684,7 +3708,7 @@ public class ReportController {
     
     @GetMapping("admin/getmonper")
     public @ResponseBody List<Object> getmonper(@RequestParam("id_prov") String idprov) {
-    	String sql = "SELECT id_monper, start_year, end_year FROM ran_rad WHERE id_prov = :id_prov";
+    	String sql = "SELECT id_monper, start_year, end_year FROM ran_rad WHERE id_prov = :id_prov and (status = 'on Going' or status = 'completed')";
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_prov", idprov);
         List list = query.getResultList();
@@ -3791,14 +3815,32 @@ public class ReportController {
     }
     
     @GetMapping("admin/getgoals")
-    public @ResponseBody List<Object> getgoals(@RequestParam("id_goals") int idgoals, @RequestParam("id_target") int idtarget, 
-    		@RequestParam("id_indicator") int id_indicator) {
-    	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, "
+    public @ResponseBody List<Object> getgoals(@RequestParam("id_goals") String idgoals, @RequestParam("id_target") String idtarget, 
+    		@RequestParam("id_indicator") String id_indicator, @RequestParam("id_monper") int id_monper) {
+        Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql;
+//        System.out.println("goal = "+idgoals+" , target = "+idtarget+" , indicator = "+id_indicator);
+//        if(id_indicator.equals("null")){
+//            System.out.println("indicator null");
+//        }else{
+//            System.out.println("indicator gak null");
+//        }
+        if(status.equals("completed")) {
+            sql = "SELECT a.id_old AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, "
+    			+ "c.id AS idtarget, c.nm_target, c.nm_target_eng, a.id_indicator, b.id_goals, c.id_target "
+    			+ "FROM history_sdg_indicator a LEFT JOIN "
+    			+ "(select * from history_sdg_goals where id_monper = '"+id_monper+"') b ON b.id_old = a.id_goals LEFT JOIN "
+    			+ "(select * from history_sdg_target where id_monper = '"+id_monper+"') c ON c.id_old = a.id_target "
+    			+ "WHERE a.id_old = :id_indicator";
+        }else{
+            sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, "
     			+ "c.id AS idtarget, c.nm_target, c.nm_target_eng, a.id_indicator, b.id_goals, c.id_target "
     			+ "FROM sdg_indicator a LEFT JOIN "
     			+ "sdg_goals b ON b.id = a.id_goals LEFT JOIN "
     			+ "sdg_target c ON c.id = a.id_target "
     			+ "WHERE a.id = :id_indicator";
+        }
     	Query query = manager.createNativeQuery(sql);
 //        query.setParameter("id_goals", idgoals);
 //        query.setParameter("id_target", idtarget);
@@ -3807,11 +3849,48 @@ public class ReportController {
         return list;
     }
     
+    @GetMapping("admin/gettargetlabel")
+    public @ResponseBody List<Object> gettargetlabel(@RequestParam("id_goals") String idgoals, @RequestParam("id_target") String idtarget, 
+    		@RequestParam("id_indicator") String id_indicator, @RequestParam("id_monper") int id_monper) {
+        Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql;
+        System.out.println("goal = "+idgoals+" , target = "+idtarget+" , indicator = "+id_indicator);
+//        if(id_indicator.equals("null")){
+//            System.out.println("indicator null");
+//        }else{
+//            System.out.println("indicator gak null");
+//        }
+        if(status.equals("completed")) {
+            sql = "select \n" +
+                "(select id_goals from history_sdg_goals where id_old = :id_goals and id_monper = '"+id_monper+"' ) as kode_g,\n" +
+                "(select nm_goals from history_sdg_goals where id_old = :id_goals and id_monper = '"+id_monper+"' ) as nm_g,\n" +
+                "(select nm_goals_eng from history_sdg_goals where id_old = :id_goals and id_monper = '"+id_monper+"' ) as nm_g_e,\n" +
+                "(select id_target from history_sdg_target where id_old = :id_target and id_monper = '"+id_monper+"' ) as kode_t,\n" +
+                "(select nm_target from history_sdg_target where id_old = :id_target and id_monper = '"+id_monper+"' ) as nm_t,\n" +
+                "(select nm_target_eng from history_sdg_target where id_old = :id_target and id_monper = '"+id_monper+"' ) as nm_t_e";
+        }else{
+            sql = "select \n" +
+                "(select id_goals from sdg_goals where id = :id_goals ) as kode_g,\n" +
+                "(select nm_goals from sdg_goals where id = :id_goals ) as nm_g,\n" +
+                "(select nm_goals_eng from sdg_goals where id = :id_goals ) as nm_g_e,\n" +
+                "(select id_target from sdg_target where id = :id_target ) as kode_t,\n" +
+                "(select nm_target from sdg_target where id = :id_target ) as nm_t,\n" +
+                "(select nm_target_eng from sdg_target where id = :id_target ) as nm_t_e";
+        }
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_goals", idgoals);
+        query.setParameter("id_target", idtarget);
+//        query.setParameter("id_indicator", id_indicator);
+        List list = query.getResultList();
+        return list;
+    }
+    
     @GetMapping("admin/getprogov")
     public @ResponseBody List<Object> getprogov(@RequestParam("id_program") int idgoals, @RequestParam("id_activity") int idtarget, 
     		@RequestParam("id_indicator") int idindikator) {
     	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idprog, b.nm_program, b.nm_program_eng, "
-    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.id_gov_indicator, b.id_program, c.id_activity FROM gov_indicator a LEFT JOIN "
+    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.internal_code as ic1, b.internal_code as ic2, c.internal_code as ic3 FROM gov_indicator a LEFT JOIN "
     			+ "gov_program b ON b.id = a.id_program LEFT JOIN "
     			+ "gov_activity c ON c.id = a.id_activity "
     			+ "WHERE a.id = :id_indicator";
@@ -3827,7 +3906,7 @@ public class ReportController {
     public @ResponseBody List<Object> getpronsa(@RequestParam("id_program") int idgoals, @RequestParam("id_activity") int idtarget, 
     		@RequestParam("id_indicator") int idindikator) {
     	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idprog, b.nm_program, b.nm_program_eng, "
-    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.id_nsa_indicator, b.id_program, c.id_activity FROM nsa_indicator a LEFT JOIN "
+    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.internal_code as ic1, b.internal_code as ic2, c.internal_code as ic3 FROM nsa_indicator a LEFT JOIN "
     			+ "nsa_program b ON b.id = a.id_program LEFT JOIN "
     			+ "nsa_activity c ON c.id = a.id_activity  "
     			+ "WHERE a.id = :id_indicator";
@@ -3873,8 +3952,39 @@ public class ReportController {
     @GetMapping("admin/get_data_sdg_disaggre")
     public @ResponseBody Map<String, Object> get_data_sdg_disaggre(@RequestParam("id_monper") int idmonper, @RequestParam("id_indicator") int id_indicator, @RequestParam("id_prov") String id_prov, @RequestParam("tahun") int tahun, @RequestParam("role") String role) {
         Query query;
+        Optional<RanRad> monper = radService.findOne(idmonper);
+    	String status = monper.get().getStatus();
+        
         if(role.equals("11111")){
-            String sql = "select a.id_role, nm_role, \n" +
+            String sql = "";
+            if(status.equals("completed")) {
+                sql = "select a.id_role, nm_role, \n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM history_sdg_indicator WHERE id_old = :id_indicator)) as nama_unit,\n" +
+                        "b1.value as target_1, b2.value as target_2, b3.value as target_3, b4.value as target_4, b5.value as target_5,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+tahun+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c1.realisasi_11 end) real_11, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c1.realisasi_12 end) real_12, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c1.realisasi_13 end) real_13, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c1.realisasi_14 end) real_14,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c2.realisasi_21 end) real_21, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c2.realisasi_22 end) real_22, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c2.realisasi_23 end) real_23, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c2.realisasi_24 end) real_24,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c3.realisasi_31 end) real_31, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c3.realisasi_32 end) real_32, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c3.realisasi_33 end) real_33, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c3.realisasi_34 end) real_34,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c4.realisasi_41 end) real_41, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c4.realisasi_42 end) real_42, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c4.realisasi_43 end) real_43, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c4.realisasi_44 end) real_44,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c5.realisasi_51 end) real_51, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c5.realisasi_52 end) real_52, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c5.realisasi_53 end) real_53, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c5.realisasi_54 end) real_54,\n" +
+                        "(select baseline from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper) as ratb,\n" +
+                        "(select funding_source from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper) as sumber,\n" +
+                        "'JICA SDG' as pelaku\n" +
+                        "from ref_role a \n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+0)+"') as b1 on a.id_role = b1.id_role\n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+1)+"') as b2 on a.id_role = b2.id_role\n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+2)+"') as b3 on a.id_role = b3.id_role\n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+3)+"') as b4 on a.id_role = b4.id_role\n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+4)+"') as b5 on a.id_role = b5.id_role\n" +
+                        "\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_11, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_12, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_13, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_14, id_role FROM entry_sdg_detail where year_entry = '"+(tahun+0)+"' and id_monper = :id_monper and id_disaggre = (select id_old from history_sdg_ranrad_disaggre where id_indicator = :id_indicator) and id_disaggre_detail = (select b.id as id_disaggre_detail from history_sdg_ranrad_disaggre a left join history_sdg_ranrad_disaggre_detail b on a.id_old = b.id_disaggre where a.id_indicator = :id_indicator) ) as c1 on a.id_role = c1.id_role\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_21, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_22, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_23, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_24, id_role FROM entry_sdg_detail where year_entry = '"+(tahun+1)+"' and id_monper = :id_monper and id_disaggre = (select id_old from history_sdg_ranrad_disaggre where id_indicator = :id_indicator) and id_disaggre_detail = (select b.id as id_disaggre_detail from history_sdg_ranrad_disaggre a left join history_sdg_ranrad_disaggre_detail b on a.id_old = b.id_disaggre where a.id_indicator = :id_indicator) ) as c2 on a.id_role = c2.id_role\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_31, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_32, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_33, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_34, id_role FROM entry_sdg_detail where year_entry = '"+(tahun+2)+"' and id_monper = :id_monper and id_disaggre = (select id_old from history_sdg_ranrad_disaggre where id_indicator = :id_indicator) and id_disaggre_detail = (select b.id as id_disaggre_detail from history_sdg_ranrad_disaggre a left join history_sdg_ranrad_disaggre_detail b on a.id_old = b.id_disaggre where a.id_indicator = :id_indicator) ) as c3 on a.id_role = c3.id_role\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_41, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_42, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_43, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_44, id_role FROM entry_sdg_detail where year_entry = '"+(tahun+3)+"' and id_monper = :id_monper and id_disaggre = (select id_old from history_sdg_ranrad_disaggre where id_indicator = :id_indicator) and id_disaggre_detail = (select b.id as id_disaggre_detail from history_sdg_ranrad_disaggre a left join history_sdg_ranrad_disaggre_detail b on a.id_old = b.id_disaggre where a.id_indicator = :id_indicator) ) as c4 on a.id_role = c4.id_role\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_51, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_52, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_53, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_54, id_role FROM entry_sdg_detail where year_entry = '"+(tahun+4)+"' and id_monper = :id_monper and id_disaggre = (select id_old from history_sdg_ranrad_disaggre where id_indicator = :id_indicator) and id_disaggre_detail = (select b.id as id_disaggre_detail from history_sdg_ranrad_disaggre a left join history_sdg_ranrad_disaggre_detail b on a.id_old = b.id_disaggre where a.id_indicator = :id_indicator) ) as c5 on a.id_role = c5.id_role\n" +
+                        "\n" +
+                        "where a.id_prov = :id_prov ";
+            }else{
+                sql = "select a.id_role, nm_role, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM sdg_indicator WHERE id = :id_indicator)) as nama_unit,\n" +
                         "b1.value as target_1, b2.value as target_2, b3.value as target_3, b4.value as target_4, b5.value as target_5,\n" +
                         "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+tahun+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c1.realisasi_11 end) real_11, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c1.realisasi_12 end) real_12, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c1.realisasi_13 end) real_13, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c1.realisasi_14 end) real_14,\n" +
@@ -3899,6 +4009,7 @@ public class ReportController {
                         "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_51, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_52, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_53, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_54, id_role FROM entry_sdg_detail where year_entry = '"+(tahun+4)+"' and id_monper = :id_monper and id_disaggre = (select id from sdg_ranrad_disaggre where id_indicator = :id_indicator) and id_disaggre_detail = (select b.id as id_disaggre_detail from sdg_ranrad_disaggre a left join sdg_ranrad_disaggre_detail b on a.id = b.id_disaggre where a.id_indicator = :id_indicator) ) as c5 on a.id_role = c5.id_role\n" +
                         "\n" +
                         "where a.id_prov = :id_prov ";
+            }
             query = manager.createNativeQuery(sql);
             query.setParameter("id_monper", idmonper);
             query.setParameter("id_indicator", id_indicator);
@@ -3906,7 +4017,35 @@ public class ReportController {
 //            query.setParameter("tahun", tahun);
 //            query.setParameter("role", role);
         }else{
-            String sql  = "select '' as id_role,(select nm_role from ref_role where id_role = :role) as pelaku, \n" +
+            String sql = "";
+            if(status.equals("completed")) {
+                sql  = "select '' as id_role,(select nm_role from ref_role where id_role = :role) as pelaku, \n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM history_sdg_indicator WHERE id_old = :id_indicator)) as nama_unit,\n" +
+                        "(select value from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+tahun+"' and id_role = :role) as target_1,\n" +
+                        "(select value from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+1)+"' and id_role = :role) as target_2,\n" +
+                        "(select value from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+2)+"' and id_role = :role) as target_3,\n" +
+                        "(select value from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+3)+"' and id_role = :role) as target_4,\n" +
+                        "(select value from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+4)+"' and id_role = :role) as target_5,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c1.realisasi_11 end) real_11, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c1.realisasi_12 end) real_12, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c1.realisasi_13 end) real_13, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c1.realisasi_14 end) real_14,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c2.realisasi_21 end) real_21, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c2.realisasi_22 end) real_22, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c2.realisasi_23 end) real_23, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c2.realisasi_24 end) real_24,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c3.realisasi_31 end) real_31, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c3.realisasi_32 end) real_32, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c3.realisasi_33 end) real_33, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c3.realisasi_34 end) real_34,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c4.realisasi_41 end) real_41, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c4.realisasi_42 end) real_42, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c4.realisasi_43 end) real_43, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c4.realisasi_44 end) real_44,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c5.realisasi_51 end) real_51, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c5.realisasi_52 end) real_52, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c5.realisasi_53 end) real_53, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c5.realisasi_54 end) real_54,\n" +
+                        "(select baseline from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper) as ratb,\n" +
+                        "(select funding_source from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper) as sumber,\n" +
+                        "a.nm_disaggre, a.nm_disaggre_eng, a.desc_disaggre, a.desc_disaggre_eng\n" +
+                        "from \n" +
+                        "(select z.*, b.id_old as id_detail, b.id_disaggre as id_disaggre_dt, b.desc_disaggre, b.desc_disaggre_eng\n" +
+                        "from history_sdg_ranrad_disaggre as z\n" +
+                        "left join history_sdg_ranrad_disaggre_detail as b on z.id_old = b.id_disaggre\n" +
+                        "where z.id_indicator = :id_indicator) as a\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_11, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_12, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_13, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_14, id_role, id_disaggre, id_disaggre_detail FROM entry_sdg_detail where year_entry = '"+(tahun+0)+"' and id_monper = :id_monper and id_role = :role ) as c1 on a.id_disaggre_dt = c1.id_disaggre and a.id_detail = c1.id_disaggre_detail\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_21, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_22, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_23, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_24, id_role, id_disaggre, id_disaggre_detail FROM entry_sdg_detail where year_entry = '"+(tahun+1)+"' and id_monper = :id_monper and id_role = :role ) as c2 on a.id_disaggre_dt = c2.id_disaggre and a.id_detail = c2.id_disaggre_detail\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_31, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_32, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_33, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_34, id_role, id_disaggre, id_disaggre_detail FROM entry_sdg_detail where year_entry = '"+(tahun+2)+"' and id_monper = :id_monper and id_role = :role ) as c3 on a.id_disaggre_dt = c3.id_disaggre and a.id_detail = c3.id_disaggre_detail\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_41, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_42, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_43, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_44, id_role, id_disaggre, id_disaggre_detail FROM entry_sdg_detail where year_entry = '"+(tahun+3)+"' and id_monper = :id_monper and id_role = :role ) as c4 on a.id_disaggre_dt = c4.id_disaggre and a.id_detail = c4.id_disaggre_detail\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_51, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_52, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_53, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_54, id_role, id_disaggre, id_disaggre_detail FROM entry_sdg_detail where year_entry = '"+(tahun+4)+"' and id_monper = :id_monper and id_role = :role ) as c5 on a.id_disaggre_dt = c5.id_disaggre and a.id_detail = c5.id_disaggre_detail";
+            }else{
+                sql  = "select '' as id_role,(select nm_role from ref_role where id_role = :role) as pelaku, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM sdg_indicator WHERE id = :id_indicator)) as nama_unit,\n" +
                         "(select value from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+tahun+"' and id_role = :role) as target_1,\n" +
                         "(select value from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+1)+"' and id_role = :role) as target_2,\n" +
@@ -3931,6 +4070,7 @@ public class ReportController {
                         "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_31, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_32, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_33, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_34, id_role, id_disaggre, id_disaggre_detail FROM entry_sdg_detail where year_entry = '"+(tahun+2)+"' and id_monper = :id_monper and id_role = :role ) as c3 on a.id_disaggre_dt = c3.id_disaggre and a.id_detail = c3.id_disaggre_detail\n" +
                         "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_41, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_42, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_43, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_44, id_role, id_disaggre, id_disaggre_detail FROM entry_sdg_detail where year_entry = '"+(tahun+3)+"' and id_monper = :id_monper and id_role = :role ) as c4 on a.id_disaggre_dt = c4.id_disaggre and a.id_detail = c4.id_disaggre_detail\n" +
                         "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_51, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_52, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_53, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_54, id_role, id_disaggre, id_disaggre_detail FROM entry_sdg_detail where year_entry = '"+(tahun+4)+"' and id_monper = :id_monper and id_role = :role ) as c5 on a.id_disaggre_dt = c5.id_disaggre and a.id_detail = c5.id_disaggre_detail";
+            }
             query = manager.createNativeQuery(sql);
             query.setParameter("id_monper", idmonper);
             query.setParameter("id_indicator", id_indicator);
@@ -3947,8 +4087,14 @@ public class ReportController {
     @GetMapping("admin/get_data_sdg")
     public @ResponseBody Map<String, Object> get_data_sdg(@RequestParam("id_monper") int idmonper, @RequestParam("id_indicator") int id_indicator, @RequestParam("id_prov") String id_prov, @RequestParam("tahun") int tahun, @RequestParam("role") String role) {
         Query query;
+        Optional<RanRad> monper = radService.findOne(idmonper);
+    	String status = monper.get().getStatus();
+        
         if(role.equals("11111")){
-            String sql = "select a.id_role, nm_role, \n" +
+            String sql = "";
+            if(status.equals("completed")) {
+                //gak pengaruh
+                sql = "select a.id_role, nm_role, \n" +
                         "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM sdg_indicator WHERE id = :id_indicator)) as nama_unit,\n" +
                         "b1.value as target_1, b2.value as target_2, b3.value as target_3, b4.value as target_4, b5.value as target_5,\n" +
                         "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+tahun+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c1.realisasi_11 end) real_11, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c1.realisasi_12 end) real_12, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c1.realisasi_13 end) real_13, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c1.realisasi_14 end) real_14,\n" +
@@ -3973,6 +4119,33 @@ public class ReportController {
                         "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_51, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_52, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_53, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_54, id_role FROM entry_sdg where year_entry = '"+(tahun+4)+"' and id_monper = :id_monper and id_sdg_indicator = :id_indicator ) as c5 on a.id_role = c5.id_role\n" +
                         "\n" +
                         "where a.id_prov = :id_prov ";
+            }else{
+                sql = "select a.id_role, nm_role, \n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM sdg_indicator WHERE id = :id_indicator)) as nama_unit,\n" +
+                        "b1.value as target_1, b2.value as target_2, b3.value as target_3, b4.value as target_4, b5.value as target_5,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+tahun+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c1.realisasi_11 end) real_11, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c1.realisasi_12 end) real_12, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c1.realisasi_13 end) real_13, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+0)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c1.realisasi_14 end) real_14,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c2.realisasi_21 end) real_21, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c2.realisasi_22 end) real_22, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c2.realisasi_23 end) real_23, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+1)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c2.realisasi_24 end) real_24,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c3.realisasi_31 end) real_31, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c3.realisasi_32 end) real_32, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c3.realisasi_33 end) real_33, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+2)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c3.realisasi_34 end) real_34,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c4.realisasi_41 end) real_41, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c4.realisasi_42 end) real_42, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c4.realisasi_43 end) real_43, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+3)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c4.realisasi_44 end) real_44,\n" +
+                        "(case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '1') = 0 ) then 0 else c5.realisasi_51 end) real_51, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '2') = 0 ) then 0 else c5.realisasi_52 end) real_52, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '3') = 0 ) then 0 else c5.realisasi_53 end) real_53, (case when ((select count(*) from entry_show_report where id_monper = :id_monper and year = '"+(tahun+4)+"' and type = 'entry_sdg' and period = '4') = 0 ) then 0 else c5.realisasi_54 end) real_54,\n" +
+                        "(select baseline from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper) as ratb,\n" +
+                        "(select funding_source from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper) as sumber,\n" +
+                        "'JICA SDG' as pelaku\n" +
+                        "from ref_role a \n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+0)+"') as b1 on a.id_role = b1.id_role\n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+1)+"') as b2 on a.id_role = b2.id_role\n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+2)+"') as b3 on a.id_role = b3.id_role\n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+3)+"') as b4 on a.id_role = b4.id_role\n" +
+                        "left join (select * from sdg_indicator_target where id_sdg_indicator = :id_indicator and year = '"+(tahun+4)+"') as b5 on a.id_role = b5.id_role\n" +
+                        "\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_11, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_12, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_13, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_14, id_role FROM entry_sdg where year_entry = '"+(tahun+0)+"' and id_monper = :id_monper and id_sdg_indicator = :id_indicator ) as c1 on a.id_role = c1.id_role\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_21, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_22, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_23, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_24, id_role FROM entry_sdg where year_entry = '"+(tahun+1)+"' and id_monper = :id_monper and id_sdg_indicator = :id_indicator ) as c2 on a.id_role = c2.id_role\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_31, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_32, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_33, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_34, id_role FROM entry_sdg where year_entry = '"+(tahun+2)+"' and id_monper = :id_monper and id_sdg_indicator = :id_indicator ) as c3 on a.id_role = c3.id_role\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_41, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_42, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_43, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_44, id_role FROM entry_sdg where year_entry = '"+(tahun+3)+"' and id_monper = :id_monper and id_sdg_indicator = :id_indicator ) as c4 on a.id_role = c4.id_role\n" +
+                        "left join (SELECT COALESCE(NULLIF(new_value1,''),achievement1) as realisasi_51, COALESCE(NULLIF(new_value2,''),achievement2) as realisasi_52, COALESCE(NULLIF(new_value3,''),achievement3) as realisasi_53, COALESCE(NULLIF(new_value4,''),achievement4) as realisasi_54, id_role FROM entry_sdg where year_entry = '"+(tahun+4)+"' and id_monper = :id_monper and id_sdg_indicator = :id_indicator ) as c5 on a.id_role = c5.id_role\n" +
+                        "\n" +
+                        "where a.id_prov = :id_prov ";
+            }
             query = manager.createNativeQuery(sql);
             query.setParameter("id_monper", idmonper);
             query.setParameter("id_indicator", id_indicator);
@@ -4099,7 +4272,7 @@ public class ReportController {
         Query query;
         if(role.equals("11111")){
             String sql = "select z.id_role, z.nm_role, \n" +
-                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM gov_indicator WHERE id = :id_indicator)) as nama_unit,\n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM nsa_indicator WHERE id = :id_indicator)) as nama_unit,\n" +
                         "(select value from nsa_target where id_nsa_indicator = :id_indicator and year = '"+(tahun+0)+"') as target_1, \n" +
                         "(select value from nsa_target where id_nsa_indicator = :id_indicator and year = '"+(tahun+1)+"') as target_2, \n" +
                         "(select value from nsa_target where id_nsa_indicator = :id_indicator and year = '"+(tahun+2)+"') as target_3, \n" +
@@ -4130,7 +4303,7 @@ public class ReportController {
 //            query.setParameter("role", role);
         }else{
             String sql  = "select z.id_role, z.nm_role, \n" +
-                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM gov_indicator WHERE id = :id_indicator)) as nama_unit,\n" +
+                        "(SELECT nm_unit FROM ref_unit WHERE id_unit = (SELECT unit FROM nsa_indicator WHERE id = :id_indicator)) as nama_unit,\n" +
                         "(select value from nsa_target where id_nsa_indicator = :id_indicator and year = '"+(tahun+0)+"') as target_1, \n" +
                         "(select value from nsa_target where id_nsa_indicator = :id_indicator and year = '"+(tahun+1)+"') as target_2, \n" +
                         "(select value from nsa_target where id_nsa_indicator = :id_indicator and year = '"+(tahun+2)+"') as target_3, \n" +
