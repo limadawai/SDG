@@ -146,7 +146,13 @@
 				return "<div style='font-size:90%;'>"+(row[4]?row[4]:'')+"</div>";
 			}},
 			{"data": function (row, data, index, display) {
-				return "<div style='font-size:90%;'>"+(row[6]?row[6]:'')+"</div>";
+				var data="";
+				if(row[6]){
+					var tgl = new Date(row[6]);
+					const months = ["JAN", "FEB", "MAR","APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+					data = tgl.getDate() + "-" + months[tgl.getMonth()] + "-" + tgl.getFullYear()+ " " + tgl.getHours() + ":" + tgl.getMinutes(); 
+				}
+				return "<div style='font-size:90%;'>"+data+"</div>";
 			}},
 			{"data": function (row, data, index, display) {
 					return "<div style='font-size:90%;'>"+(row[0]?row[0].replace('entry_',''):'')+"</div>";

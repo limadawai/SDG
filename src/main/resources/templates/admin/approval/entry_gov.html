@@ -890,19 +890,11 @@
                     url: urls+'list-get-sts-monper-gov/'+id_monper,
                     success: function (result1) {
                         var sts = result1.content;
-//                        console.log(sts);
                         if(sts == 'yearly'){
                             $('#tabel-approve-gov-acty').html("");
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Code</span> <span class="lang_indo">Kode</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Name</span> <span class="lang_indo">Nama</span> </th> \n\
                                        ';
-                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
-                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements II</span> <span class="lang_indo">Pencapaian SDG II</span> </th> ';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
-//                            
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi I</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">New Value I</span> <span class="lang_indo">Nilai Baru I</span> </th> ';
@@ -912,9 +904,6 @@
                             header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
                             
                             $('#tabel-approve-gov-acty').html(header);
-                            
-//                            var table = $('#tabel-entri-sdg').DataTable({
-//                            $("#tabel-approve-gov").remove();
                             $('#tabel-approve-gov-acty').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
@@ -934,27 +923,15 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[18]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[0]+"</span>";
-//                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
-//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
                                             return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span>";
-//                                            return "<div style='font-size:90%;'>" + row[4] + "</div>";
                                         }else{
-//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-//                                            return "<div style='font-size:90%;'>" + row[13] + "</div>";
-                                            return "<div style='font-size:90%;'>"+row[17]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span>";
+											return "<div style='font-size:90%;'>"+row[17]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span>";
                                         }
 
                                     }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[14] == null || row[14] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-//                                        }
-//                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
                                             return "<div style='font-size:90%;'>  </div>";
@@ -962,27 +939,6 @@
                                             return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                         }
                                     }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[7] == null || row[7] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
-//                                        }
-//                                    }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[8] == null || row[8] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-//                                        }
-//                                    }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[9] == null || row[9] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
-//                                        }
-//                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[19] == null || row[19] == ""){
                                             return "<div style='font-size:90%;'>  </div>";
@@ -995,29 +951,6 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        
-//                                        var id_role             = $('#idrole').val();
-//                                        var id_monper1          = monper_1;
-//                                        var year                = tahun_1;
-//                                        var type                = "entry_gov_budget";
-//                                        var apply               = "";
-//                                        $.ajax({
-//                                            type: "GET",
-//                                            async:false,
-//                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
-//                                            success: function (result1) {
-//                                                apply = result1.content;
-//                                            }
-//                                        });
-//                                        if(apply == "1"){
-//                                            return '';
-//                                        }else if(apply == "2"){
-//                                            return '';
-//                                        }else if(apply == "3"){
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }else{
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }
                                         if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
@@ -1033,17 +966,11 @@
                             
                         }else if(sts == 'semesterly'){
                             $('#tabel-approve-gov-acty').html("");
-//                            $("#tabel-approve-gov").remove();
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Code</span> <span class="lang_indo">Kode</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Name</span> <span class="lang_indo">Nama</span> </th> \n\
                                        ';
-                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
-                            
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi I</span> </th> ';
                             
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
-//                            
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization II</span> <span class="lang_indo">Realisasi II</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">New Value I</span> <span class="lang_indo">Nilai Baru I</span> </th> ';
@@ -1053,11 +980,8 @@
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Action</span> <span class="lang_indo">Aksi</span> </th> ';
                             
                             header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
-//                            console.log(header);
                             $('#tabel-approve-gov-acty').html(header);
-                            
-//                            $("#tabel-approve-gov").remove();
-                            $('#tabel-approve-gov-acty').DataTable({
+                            var table = $('#tabel-approve-gov-acty').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
                                 "bLengthChange": false,
@@ -1076,27 +1000,15 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[18]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[0]+"</span>";
-//                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
-//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
                                             return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span>";
-//                                            return "<div style='font-size:90%;'>" + row[4] + "</div>";
                                         }else{
-//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-//                                            return "<div style='font-size:90%;'>" + row[13] + "</div>";
                                             return "<div style='font-size:90%;'>"+row[17]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span>";
                                         }
 
                                     }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[14] == null || row[14] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-//                                        }
-//                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
                                             return "<div style='font-size:90%;'>  </div>";
@@ -1111,20 +1023,6 @@
                                             return "<div style='font-size:90%;'>"+row[7]+"</div>";
                                         }
                                     }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[8] == null || row[8] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-//                                        }
-//                                    }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[9] == null || row[9] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
-//                                        }
-//                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[19] == null || row[19] == ""){
                                             return "<div style='font-size:90%;'>  </div>";
@@ -1144,30 +1042,6 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        
-                                        
-//                                        var id_role             = $('#idrole').val();
-//                                        var id_monper1          = monper_1;
-//                                        var year                = tahun_1;
-//                                        var type                = "entry_gov_budget";
-//                                        var apply               = "";
-//                                        $.ajax({
-//                                            type: "GET",
-//                                            async:false,
-//                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
-//                                            success: function (result1) {
-//                                                apply = result1.content;
-//                                            }
-//                                        });
-//                                        if(apply == "1"){
-//                                            return '';
-//                                        }else if(apply == "2"){
-//                                            return '';
-//                                        }else if(apply == "3"){
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }else{
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }
                                         if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
@@ -1181,6 +1055,13 @@
                                 ],
                                 select: true
                             });	
+                            if(v_periode==1){
+                            	table.column(4).visible(false);
+                            	table.column(6).visible(false);
+                            }else if(v_periode==2){
+                            	table.column(3).visible(false);
+                            	table.column(5).visible(false);
+                            }
                         }else if(sts == 'quarterly'){
                             $('#tabel-approve-gov-acty').html("");
                             var header = '';
@@ -1205,10 +1086,7 @@
                             header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
                             
                             $('#tabel-approve-gov-acty').html(header);
-                            
-//                            var table2 = $('#tabel-entri-sdg').DataTable({
-//                            $("#tabel-approve-gov").remove();
-                            $('#tabel-approve-gov-acty').DataTable({
+                            var table = $('#tabel-approve-gov-acty').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
                                 "bLengthChange": false,
@@ -1227,27 +1105,15 @@
                                     }},
                                     {"data": function (row, data, index, display) {
                                         return "<div style='font-size:90%;'>"+row[18]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[0]+"</span>";
-//                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
-//                                            return "<div style='font-size:90%;'>"+row[4]+"</div>";
                                             return "<div style='font-size:90%;'>"+row[16]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span>";
-//                                            return "<div style='font-size:90%;'>" + row[4] + "</div>";
                                         }else{
-//                                            return "<div style='font-size:90%;'>"+row[13]+"</div>";
-//                                            return "<div style='font-size:90%;'>" + row[13] + "</div>";
-                                            return "<div style='font-size:90%;'>"+row[17]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span>";
+											return "<div style='font-size:90%;'>"+row[17]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span>";
                                         }
 
                                     }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[14] == null || row[14] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[14]+"</div>";
-//                                        }
-//                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[6] == null || row[6] == ""){
                                             return "<div style='font-size:90%;'>  </div>";
@@ -1309,29 +1175,6 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        
-//                                        var id_role             = $('#idrole').val();
-//                                        var id_monper1          = monper_1;
-//                                        var year                = tahun_1;
-//                                        var type                = "entry_gov_budget";
-//                                        var apply               = "";
-//                                        $.ajax({
-//                                            type: "GET",
-//                                            async:false,
-//                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
-//                                            success: function (result1) {
-//                                                apply = result1.content;
-//                                            }
-//                                        });
-//                                        if(apply == "1"){
-//                                            return '';
-//                                        }else if(apply == "2"){
-//                                            return '';
-//                                        }else if(apply == "3"){
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }else{
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }
                                         if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
@@ -1344,21 +1187,38 @@
                                 ],
                                 select: true
                             });	
+                            if(v_periode==1){
+                            	table.column(4).visible(false);
+                            	table.column(5).visible(false);
+                            	table.column(6).visible(false);
+                            	table.column(8).visible(false);
+                            	table.column(9).visible(false);
+                            	table.column(10).visible(false);
+                            }else if(v_periode==2){
+                            	table.column(3).visible(false);
+                            	table.column(5).visible(false);
+                            	table.column(6).visible(false);
+                            	table.column(7).visible(false);
+                            	table.column(9).visible(false);
+                            	table.column(10).visible(false);
+                            }else if(v_periode==3){
+                            	table.column(3).visible(false);
+                            	table.column(4).visible(false);
+                            	table.column(6).visible(false);
+                            	table.column(7).visible(false);
+                            	table.column(8).visible(false);
+                            	table.column(10).visible(false);
+                            }else if(v_periode==4){
+                            	table.column(3).visible(false);
+                            	table.column(4).visible(false);
+                            	table.column(5).visible(false);
+                            	table.column(7).visible(false);
+                            	table.column(8).visible(false);
+                            	table.column(9).visible(false);
+                            }
+                            
                         }else{
                             var header = '';
-//                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
-//                                            <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements II</span> <span class="lang_indo">Pencapaian SDG II</span> </th> ';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements IV</span> <span class="lang_indo">Pencapaian SDG IV</span> </th> ';
-//                            
-//                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
-                            
                             $('#tabel-approve-gov').html(header);
                         }
                     }
@@ -1381,19 +1241,14 @@
                     url: urls+'list-get-sts-monper-gov_act/'+id_monper,
                     success: function (result1) {
                         var sts = result1.content;
-//                        console.log(sts);
                         if(sts == 'yearly'){
                             $('#tabel-approve-gov-indi').html("");
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Code</span> <span class="lang_indo">Kode</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Name</span> <span class="lang_indo">Nama</span> </th>  ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th> ';
-                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements II</span> <span class="lang_indo">Pencapaian SDG II</span> </th> ';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
-//                            
-                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi I</span> </th> ';
+
+							header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi I</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">New Value I</span> <span class="lang_indo">Nilai Baru I</span> </th> ';
                             
@@ -1402,9 +1257,6 @@
                             header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
                             
                             $('#tabel-approve-gov-indi').html(header);
-                            
-//                            var table = $('#tabel-entri-sdg').DataTable({
-//                            $("#tabel-approve-gov").remove();
                             $('#tabel-approve-gov-indi').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
@@ -1452,27 +1304,6 @@
                                             return "<div style='font-size:90%;'>"+row[6]+"</div>";
                                         }
                                     }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[7] == null || row[7] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[7]+"</div>";
-//                                        }
-//                                    }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[8] == null || row[8] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-//                                        }
-//                                    }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[9] == null || row[9] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
-//                                        }
-//                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[22] == null || row[22] == ""){
                                             return "<div style='font-size:90%;'>  </div>";
@@ -1485,29 +1316,6 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        
-//                                        var id_role             = $('#idrole').val();
-//                                        var id_monper1          = monper_1;
-//                                        var year                = tahun_1;
-//                                        var type                = "entry_gov_indicator";
-//                                        var apply               = "";
-//                                        $.ajax({
-//                                            type: "GET",
-//                                            async:false,
-//                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
-//                                            success: function (result1) {
-//                                                apply = result1.content;
-//                                            }
-//                                        });
-//                                        if(apply == "1"){
-//                                            return '';
-//                                        }else if(apply == "2"){
-//                                            return '';
-//                                        }else if(apply == "3"){
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }else{
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }
                                         
                                         if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
@@ -1524,28 +1332,22 @@
                             
                         }else if(sts == 'semesterly'){
                             $('#tabel-approve-gov-indi').html("");
-//                            $("#tabel-approve-gov").remove();
                             var header = '';
                             header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">No.</span> <span class="lang_indo">No.</span> </th> <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Code</span> <span class="lang_indo">Kode</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Name</span> <span class="lang_indo">Nama</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target</span> <span class="lang_indo">Target</span> </th>  ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization I</span> <span class="lang_indo">Realisasi I</span> </th> ';
-                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
-//                            
-                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization II</span> <span class="lang_indo">Realisasi II</span> </th> ';
+
+							header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Realization II</span> <span class="lang_indo">Realisasi II</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">New Value I</span> <span class="lang_indo">Nilai Baru I</span> </th> ';
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">New Value II</span> <span class="lang_indo">Nilai Baru II</span> </th> ';
                             
                             header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Action</span> <span class="lang_indo">Aksi</span> </th> ';
                             
                             header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
-//                            console.log(header);
-                            $('#tabel-approve-gov-indi').html(header);
-                            
-//                            $("#tabel-approve-gov").remove();
-                            $('#tabel-approve-gov-indi').DataTable({
+							$('#tabel-approve-gov-indi').html(header);
+							var table =$('#tabel-approve-gov-indi').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
                                 "bLengthChange": false,
@@ -1594,20 +1396,6 @@
                                             return "<div style='font-size:90%;'>"+row[7]+"</div>";
                                         }
                                     }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[8] == null || row[8] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[8]+"</div>";
-//                                        }
-//                                    }},
-//                                    {"data": function (row, data, index, display) {
-//                                        if(row[9] == null || row[9] == ""){
-//                                            return "<div style='font-size:90%;'> 0 </div>";
-//                                        }else{
-//                                            return "<div style='font-size:90%;'>"+row[9]+"</div>";
-//                                        }
-//                                    }},
                                     {"data": function (row, data, index, display) {
                                         if(row[22] == null || row[22] == ""){
                                             return "<div style='font-size:90%;'>  </div>";
@@ -1627,29 +1415,6 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        
-//                                        var id_role             = $('#idrole').val();
-//                                        var id_monper1          = monper_1;
-//                                        var year                = tahun_1;
-//                                        var type                = "entry_gov_indicator";
-//                                        var apply               = "";
-//                                        $.ajax({
-//                                            type: "GET",
-//                                            async:false,
-//                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
-//                                            success: function (result1) {
-//                                                apply = result1.content;
-//                                            }
-//                                        });
-//                                        if(apply == "1"){
-//                                            return '';
-//                                        }else if(apply == "2"){
-//                                            return '';
-//                                        }else if(apply == "3"){
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }else{
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }
                                         if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
@@ -1662,6 +1427,13 @@
                                 ],
                                 select: true
                             });	
+                            if(v_periode==1){
+                            	table.column(5).visible(false);
+                            	table.column(7).visible(false);
+                            }else if(v_periode==2){
+                            	table.column(4).visible(false);
+                            	table.column(6).visible(false);
+                            }
                         }else if(sts == 'quarterly'){
                             $('#tabel-approve-gov-indi').html("");
                             var header = '';
@@ -1689,10 +1461,7 @@
                             header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
                             
                             $('#tabel-approve-gov-indi').html(header);
-                            
-//                            var table2 = $('#tabel-entri-sdg').DataTable({
-//                            $("#tabel-approve-gov").remove();
-                            $('#tabel-approve-gov-indi').DataTable({
+                            var table = $('#tabel-approve-gov-indi').DataTable({
                                 responsive: true,
                                 sDom: 'lrtip',
                                 "bLengthChange": false,
@@ -1788,29 +1557,6 @@
                                         var v_data_id   = v_dataid.split("###");
                                         var id_monper   = v_data_id[0];
                                         var tahun       = v_data_id[1];
-                                        
-//                                        var id_role             = $('#idrole').val();
-//                                        var id_monper1          = monper_1;
-//                                        var year                = tahun_1;
-//                                        var type                = "entry_gov_indicator";
-//                                        var apply               = "";
-//                                        $.ajax({
-//                                            type: "GET",
-//                                            async:false,
-//                                            url: urls+'get-status-approve/'+id_role+'/'+id_monper1+'/'+year+'/'+type,
-//                                            success: function (result1) {
-//                                                apply = result1.content;
-//                                            }
-//                                        });
-//                                        if(apply == "1"){
-//                                            return '';
-//                                        }else if(apply == "2"){
-//                                            return '';
-//                                        }else if(apply == "3"){
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }else{
-//                                            return '<a data-id="'+row[0]+'###'+row[3]+'###'+row[4]+'###'+row[5]+'###'+row[6]+'###'+row[7]+'###'+row[8]+'###'+row[9]+'###'+tahun+'###'+row[11]+'###'+row[12]+'###'+tahun+'###'+row[15]+'" title="Edit" class="btn btn-primary update" href="#"><i class="icon-edit "></i> </a>';
-//                                        }
                                         if(approval == '4' || approval == '3' || approval == '2'){
                                             return '';
                                         }else{
@@ -1822,22 +1568,38 @@
                                 ],
                                 select: true
                             });	
-                            
+
+                            if(v_periode==1){
+                            	table.column(5).visible(false);
+                            	table.column(6).visible(false);
+                            	table.column(7).visible(false);
+                            	table.column(9).visible(false);
+                            	table.column(10).visible(false);
+                            	table.column(11).visible(false);
+                            }else if(v_periode==2){
+                            	table.column(4).visible(false);
+                            	table.column(6).visible(false);
+                            	table.column(7).visible(false);
+                            	table.column(8).visible(false);
+                            	table.column(10).visible(false);
+                            	table.column(11).visible(false);
+                            }else if(v_periode==3){
+                            	table.column(4).visible(false);
+                            	table.column(5).visible(false);
+                            	table.column(7).visible(false);
+                            	table.column(8).visible(false);
+                            	table.column(9).visible(false);
+                            	table.column(11).visible(false);
+                            }else if(v_periode==4){
+                            	table.column(4).visible(false);
+                            	table.column(5).visible(false);
+                            	table.column(6).visible(false);
+                            	table.column(8).visible(false);
+                            	table.column(9).visible(false);
+                            	table.column(10).visible(false);
+                            }
                         }else{
                             var header = '';
-//                            header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;width: 10%"> <span class="lang_eng" style="display:none">Indicator Code</span> <span class="lang_indo">Kode Indikator</span> </th> <th style="text-align:center;font-size:80%;width: 45%"><span class="lang_eng" style="display:none">Indicator Name</span> <span class="lang_indo">Nama Indikator</span> </th> \n\
-//                                            <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Unit</span><span class="lang_indo">Unit</span> </th> <th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">Target SDGs</span> <span class="lang_indo">Target SDG</span> </th> ';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements II</span> <span class="lang_indo">Pencapaian SDG II</span> </th> ';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
-//                            
-//                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements IV</span> <span class="lang_indo">Pencapaian SDG IV</span> </th> ';
-//                            
-//                            header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
-                            
                             $('#tabel-approve-gov').html(header);
                         }
                     }

@@ -119,6 +119,7 @@
 				    <div class="controls">
 				    	<input type="hidden" id="id" name="id" class="input-block-level"/>
 				    	<input type="text" id="id_activity" name="id_activity" class="input-medium input-block-level"/>
+				    	<input type="hidden" id="id_activity_lama" name="id_activity" class="input-medium input-block-level"/>
 				    	<span class="lang_eng" style="display:none;">* Please use the same activity code with E-Monev</span>
 				    	<span class="lang_indo">* Mohon menggunakan kode yang sama dengan E-Monev</span>
 				    	<span class="help-block" id="error_id_activity"></span>
@@ -192,6 +193,7 @@
 	        var messDelBiasa = "Menghapus Data?";
 	        var titleMod = "Maaf";
 	        var messMod = "Semua pilihan harus dipilih";
+	        var messCode = "Kode sudah ada!";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -206,6 +208,7 @@
 	    	        messDelBiasa = "Menghapus Data?";
 	    	        titleMod = "Maaf";
 	    	        messMod = "Semua pilihan harus dipilih";
+	    	        messCode = "Kode sudah ada!";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -219,6 +222,7 @@
 	    	        messDelBiasa = "Delete this data?";
 	    	        titleMod = "Sorry";
 	    	        messMod = "All dropdownlists must be selected";
+	    	        messCode = "Code already exist!";
 	        	}
 	        }
 	        if(lang){
@@ -382,6 +386,7 @@
 			function clearForm(){
 				$('#id').val("");
 				$('#id_activity').val("").removeAttr("readonly");
+				$('#id_activity_lama').val("").removeAttr("readonly");
 				$('#nm_activity').val("").removeAttr("readonly");
 				$('#nm_activity_eng').val("").removeAttr("readonly");
 				$('#internal_code').val("").removeAttr("readonly");
@@ -398,6 +403,7 @@
 			$('#submit').on('click', function(){
 				var id_program = $('#id_program').val();
 				var id_activity = $('#id_activity').val();
+				var id_activity_lama = $('#id_activity_lama').val();
 				var id = $('#id').val();
 				var nm_activity = $('#nm_activity').val();
 				var nm_activity_eng = $('#nm_activity_eng').val();
@@ -427,6 +433,23 @@
                     $("#error_nm_activity").text(required);
                     cek += 1;
                 } */
+                
+                if(id_activity_lama != id_activity){
+                	$.ajax({
+    					type: "GET",
+                        url: urls+'cek-govActivity/'+id_program+'/'+id_activity,
+                        async:false,
+                        success: function (result) {
+                        	var val = result.content;
+    						if(val[0]>0){
+    							$('#myModal').modal('hide');
+    							swal("Code",messCode,'error');
+    							cek += 1;
+    						}
+                        },
+                    });
+                }
+                
 				if(cek==0){
 					var data = JSON.stringify({
 						'id_program':id_program,
@@ -461,6 +484,7 @@
                     success: function (result) {
                     	var val = result.content;
                     	$('#id_activity').val(val.id_activity);
+                    	$('#id_activity_lama').val(val.id_activity);
                     	$('#id').val(val.id);
         				$('#nm_activity').val(val.nm_activity);
         				$('#nm_activity_eng').val(val.nm_activity_eng);
@@ -482,6 +506,7 @@
                     	var val = result.content;
                     	$('#id').val(val.id);
                     	$('#id_activity').val(val.id_activity).attr("readonly",true);
+                    	$('#id_activity_lama').val(val.id_activity).attr("readonly",true);
         				$('#nm_activity').val(val.nm_activity).attr("readonly",true);
         				$('#nm_activity_eng').val(val.nm_activity_eng).attr("readonly",true);
         				$('#internal_code').val(val.internal_code?val.internal_code:'').attr("readonly",true);
@@ -537,8 +562,7 @@
                     }
                 })
              });
-             
-             
+                         
              /* $('#id_activity').on('keyup keypress blur change',function(){
                  $('#internal_code').val($(this).val());
              }); */

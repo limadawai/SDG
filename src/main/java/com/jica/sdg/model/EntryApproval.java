@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "entry_approval")
 public class EntryApproval implements Serializable {
@@ -36,7 +38,8 @@ public class EntryApproval implements Serializable {
     private String approval;
     
     @Column(nullable = false)
-    @Temporal(TemporalType.DATE)
+    @JsonFormat(pattern="yyyy-mm-dd HH:mm")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date approval_date;
     
     @Column(name = "type")

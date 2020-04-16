@@ -29,13 +29,16 @@ import com.jica.sdg.model.EntryGriojk;
 import com.jica.sdg.model.EntryShowReport;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
-import com.jica.sdg.model.Unit;
 import com.jica.sdg.service.IEntryApprovalService;
 import com.jica.sdg.service.IEntrySdgDetailService;
 import com.jica.sdg.service.IEntrySdgService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.NsaProfileService;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 @Controller
@@ -65,9 +68,12 @@ public class ApprovalController {
 	@PostMapping(path = "admin/save-approval", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	@Transactional
-	public void saveApproval(@RequestBody EntryApproval app) {
+	public void saveApproval(@RequestBody EntryApproval app) throws ParseException {
 		if(app.getId()==null) {
-			app.setApproval_date(new Date());
+			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm");
+			Date date = new Date();
+			Date date1=new SimpleDateFormat("yyyy/MM/dd HH:mm").parse(dateFormat.format(date)); 
+			app.setApproval_date(date1);
 		}
 		if(app.getId_role()==0) {
 			String sql;

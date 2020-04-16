@@ -677,6 +677,18 @@ public class RanRadSdgController {
     	}
 	}
     
+    @GetMapping("admin/cek-govActivity/{id_program}/{id_activity}")
+    public @ResponseBody Map<String, Object> cekgovActivity(@PathVariable("id_program") String id_program,@PathVariable("id_activity") String id_activity) {
+        String sql = "select count(id_activity) from gov_activity where id_program=:id_program and id_activity=:id_activity";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_program", id_program);
+        query.setParameter("id_activity", id_activity);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/get-govActivity/{id}")
     public @ResponseBody Map<String, Object> getGovActivity(@PathVariable("id") Integer id) {
         Optional<GovActivity> list = govActivityService.findOne(id);
@@ -738,6 +750,18 @@ public class RanRadSdgController {
     public @ResponseBody Map<String, Object> govIndicatorList(@PathVariable("id_program") Integer id_program, @PathVariable("id_activity") Integer id_activity) {
         List list = govIndicatorService.findAllIndi(id_program, id_activity);
 		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/cek-govIndicaor/{id_activity}/{id_gov_indicator}")
+    public @ResponseBody Map<String, Object> cekgovIndicator(@PathVariable("id_activity") String id_activity,@PathVariable("id_gov_indicator") String id_gov_indicator) {
+        String sql = "select count(id_gov_indicator) from gov_indicator where id_activity=:id_activity and id_gov_indicator=:id_gov_indicator";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_activity", id_activity);
+        query.setParameter("id_gov_indicator", id_gov_indicator);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
     }
