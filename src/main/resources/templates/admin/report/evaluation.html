@@ -475,7 +475,7 @@
 						nm_goals = response.sdg[i][2];
 					}
                 	if(i>0){text += "<br/>";}
-                	text += "<div style=''><h3>Goal Name : "+kode_goals+". "+nm_goals+"</h3></div>";
+                	text += "<div style=''><h4>Goal Name : "+kode_goals+". "+nm_goals+"</h4></div>";
                 	
                 	$.ajax({
                         url: urls + 'get-sdg-target/'+sdg_indicator,
@@ -495,7 +495,7 @@
         							nm_target = result.content[j][2];
         						}
                             	if(j>0){text += "<br/>";}
-                            	text += "<div style=''><h4>Target Name : "+kode_target+". "+nm_target+"</h4></div>";
+                            	text += "<div style=''><h5>Target Name : "+kode_target+". "+nm_target+"</h5></div>";
                         		
                             	var spansdg;
                             	var colspan;
@@ -779,7 +779,7 @@
 						nm_goals = response.sdg[i][2];
 					}
                 	if(i>0){text += "<br/>";}
-                	text += "<div style='font-size:90%;width:100%;text-align:left;'><h3>Goal Name : "+kode_goals+". "+nm_goals+"</h3></div>";
+                	text += "<div style='font-size:90%;width:100%;text-align:left;'><h4>Goal Name : "+kode_goals+". "+nm_goals+"</h4></div>";
                 	
                 	$.ajax({
                         url: urls + 'get-sdg-target/'+sdg_indicator,
@@ -799,7 +799,7 @@
         							nm_target = result.content[j][2];
         						}
                             	if(j>0){text += "<br/>";}
-                            	text += "<div style='font-size:90%;width:100%;text-align:left;'><h4>Target Name : "+kode_target+". "+nm_target+"</h4></div>";
+                            	text += "<div style='font-size:90%;width:100%;text-align:left;'><h5>Target Name : "+kode_target+". "+nm_target+"</h5></div>";
                         		
                             	var spansdg;
                             	var colspan;
