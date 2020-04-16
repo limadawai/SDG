@@ -208,7 +208,7 @@
         }
         
         // ********************** Content Div Kanan Atas **********************
-        function getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram) {
+        function getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram) {
 //            var valdaerah  = $("#daerah").val();
 //            var valrole    = $("#selrole").val();
 //            var valperiode = $("#periode").val();
@@ -223,12 +223,12 @@
                             var isiactivity = "<ul id='ulact"+idprogram+"'>";
                             for (var i=0; i<resactivity.length; i++) {
                                 if($('#fs').is(':checked')){
-                                    var prog_l = resactivity[i][3]+" "+resactivity[i][1];
+                                    var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][1];
                                 }else{
-                                    var prog_l = resactivity[i][3]+" "+resactivity[i][2];
+                                    var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
                                 isiactivity += "<li id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
-                                getGovIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, resactivity[i][0]);
+                                getGovIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
                             $("#lilili"+idprogram).append(isiactivity);
@@ -236,7 +236,7 @@
             });
         }
         
-        function getGovIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, idactivity) {
+        function getGovIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram, idactivity, codeactivity) {
         	$.ajax({
         		url: urls + "getallgovindi",
         		type: 'get',
@@ -248,9 +248,9 @@
         			var isiindicator = "<ul id='ulindi"+idprogram+"'>";
         			for (var i=0; i<resgovindicator.length; i++) {
                                     if($('#fs').is(':checked')){
-                                        var prog_l = resgovindicator[i][3]+" "+resgovindicator[i][1];
+                                        var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][1];
                                     }else{
-                                        var prog_l = resgovindicator[i][3]+" "+resgovindicator[i][2];
+                                        var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
                                     isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+$("#periode").val()+","+2+")'>"+prog_l+"</li>";
         			}
@@ -515,7 +515,7 @@
                                 var prog_l = resprog[i][3]+" "+resprog[i][2];
                             }
                             isi += "<li id='lilili"+resprog[i][0]+"'>"+prog_l+"</li>";
-                            getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0]);
+                            getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
                     }
                     isi += "</ol>";
                     $("#kananatas").append(isi);

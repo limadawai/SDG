@@ -271,6 +271,7 @@
 //    	}else{
 //    	}
     	$('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
+
     });
     
     $("#role").on("change", function(){
@@ -500,6 +501,9 @@
         	        	});
         	        });
         }
+        $('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
+        ambilData(0);	
+        ambilData_sum(0);
     });
     
     $('.accordion-inner').on('click', '#filter-sdg', function(){
