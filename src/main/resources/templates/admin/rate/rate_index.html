@@ -319,7 +319,7 @@
         }else{
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-role-all-profil/'+id_prov,
+                url: urls+'list-get-option-role-sub/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     $("#idrole").html('<option value="999999" >All</option>');
@@ -369,7 +369,7 @@
             var id_prov = this.value ;
             $.ajax({
                 type: "GET",
-                url: urls+'list-get-option-role-all-profil/'+id_prov,
+                url: urls+'list-get-option-role-sub/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     $("#idrole").html('<option value="999999" >All</option>');
