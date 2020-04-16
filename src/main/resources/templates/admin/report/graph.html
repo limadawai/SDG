@@ -261,7 +261,7 @@
         }
         
      	// ********************** Content Div Kanan Bawah **********************
-     	function getNsaActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram) {
+     	function getNsaActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram) {
 //            var valrole    = $("#selrole").val();
             console.log(idprogram+' - '+valrole);
             $.ajax({
@@ -275,12 +275,12 @@
                             var isiactivity = "<ul id='ulactnsa"+idprogram+"'>";
                             for (var i=0; i<resactivity.length; i++) {
                                 if($('#fs').is(':checked')){
-                                    var prog_l = resactivity[i][3]+" "+resactivity[i][1];
+                                    var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][1];
                                 }else{
-                                    var prog_l = resactivity[i][3]+" "+resactivity[i][2];
+                                    var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
                                 isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
-                                getNsaIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, resactivity[i][0]);
+                                getNsaIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
                             $("#lilinsa"+idprogram).append(isiactivity);
@@ -288,7 +288,7 @@
             });
         }
      	
-     	function getNsaIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, idactivity) {
+     	function getNsaIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram, idactivity, codeactivity) {
         	$.ajax({
         		url: urls + "getallnsaindi",
         		type: 'get',
@@ -300,9 +300,9 @@
         			var isiindicator = "<ul id='ulindinsa"+idprogram+"'>";
         			for (var i=0; i<resnsaindicator.length; i++) {
                                     if($('#fs').is(':checked')){
-                                        var prog_l = resnsaindicator[i][3]+" "+resnsaindicator[i][1];
+                                        var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][1];
                                     }else{
-                                        var prog_l = resnsaindicator[i][3]+" "+resnsaindicator[i][2];
+                                        var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
                                     isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+$("#periode").val()+","+3+")'>"+prog_l+"</li>";
         			}
@@ -541,7 +541,7 @@
                                 var prog_l = resprog[i][3]+" "+resprog[i][2];
                             }
                             isi += "<li id='lilinsa"+resprog[i][0]+"'>"+prog_l+"</li>";
-                            getNsaActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0])
+                            getNsaActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0], resprog[i][3])
                     }
                     isi += "</ol>";
                     $("#kananbawah").append(isi);

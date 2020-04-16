@@ -3329,7 +3329,7 @@ public class ReportController {
         System.out.println("id indi = "+id_indicator);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join nsa_program as c on b.id_program = c.id\n" +
@@ -3343,7 +3343,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("id_monper", id_monper);
             }else{
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join nsa_program as c on b.id_program = c.id\n" +
@@ -3359,7 +3359,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join nsa_program as c on b.id_program = c.id\n" +
@@ -3373,7 +3373,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("id_monper", id_monper);
             }else{
-                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.id_program\n" +
+                String sql  = "select distinct c.id, c.nm_program, c.nm_program_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join nsa_program as c on b.id_program = c.id\n" +
@@ -3399,7 +3399,7 @@ public class ReportController {
 //        System.out.println("id "+id_role);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3413,7 +3413,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("idprog", idprog);
             }else{
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3429,7 +3429,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3443,7 +3443,7 @@ public class ReportController {
                 query.setParameter("id_role", id_role);
                 query.setParameter("idprog", idprog);
             }else{
-                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.id_activity\n" +
+                String sql  = "select distinct c.id, c.nm_activity, c.nm_activity_eng, c.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                             "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
@@ -3469,7 +3469,7 @@ public class ReportController {
 //        System.out.println("id "+id_role);
         if(id_target.equals("null")){
             if(id_indicator.equals("null")){
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_nsa_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
@@ -3484,7 +3484,7 @@ public class ReportController {
                 query.setParameter("idprog", idprog);
                 query.setParameter("idactivity", idactivity);
             }else{
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_nsa_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
@@ -3501,7 +3501,7 @@ public class ReportController {
             }
         }else{
             if(id_indicator.equals("null")){
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_nsa_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
@@ -3516,7 +3516,7 @@ public class ReportController {
                 query.setParameter("idprog", idprog);
                 query.setParameter("idactivity", idactivity);
             }else{
-                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_nsa_indicator\n" +
+                String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                             "from nsa_map as a\n" +
                             "left join (select * from nsa_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_nsa_indicator = b.id\n" +
                             "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
@@ -3815,11 +3815,17 @@ public class ReportController {
     }
     
     @GetMapping("admin/getgoals")
-    public @ResponseBody List<Object> getgoals(@RequestParam("id_goals") int idgoals, @RequestParam("id_target") int idtarget, 
-    		@RequestParam("id_indicator") int id_indicator, @RequestParam("id_monper") int id_monper) {
+    public @ResponseBody List<Object> getgoals(@RequestParam("id_goals") String idgoals, @RequestParam("id_target") String idtarget, 
+    		@RequestParam("id_indicator") String id_indicator, @RequestParam("id_monper") int id_monper) {
         Optional<RanRad> monper = radService.findOne(id_monper);
     	String status = monper.get().getStatus();
         String sql;
+//        System.out.println("goal = "+idgoals+" , target = "+idtarget+" , indicator = "+id_indicator);
+//        if(id_indicator.equals("null")){
+//            System.out.println("indicator null");
+//        }else{
+//            System.out.println("indicator gak null");
+//        }
         if(status.equals("completed")) {
             sql = "SELECT a.id_old AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, "
     			+ "c.id AS idtarget, c.nm_target, c.nm_target_eng, a.id_indicator, b.id_goals, c.id_target "
@@ -3843,11 +3849,48 @@ public class ReportController {
         return list;
     }
     
+    @GetMapping("admin/gettargetlabel")
+    public @ResponseBody List<Object> gettargetlabel(@RequestParam("id_goals") String idgoals, @RequestParam("id_target") String idtarget, 
+    		@RequestParam("id_indicator") String id_indicator, @RequestParam("id_monper") int id_monper) {
+        Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql;
+        System.out.println("goal = "+idgoals+" , target = "+idtarget+" , indicator = "+id_indicator);
+//        if(id_indicator.equals("null")){
+//            System.out.println("indicator null");
+//        }else{
+//            System.out.println("indicator gak null");
+//        }
+        if(status.equals("completed")) {
+            sql = "select \n" +
+                "(select id_goals from history_sdg_goals where id_old = :id_goals and id_monper = '"+id_monper+"' ) as kode_g,\n" +
+                "(select nm_goals from history_sdg_goals where id_old = :id_goals and id_monper = '"+id_monper+"' ) as nm_g,\n" +
+                "(select nm_goals_eng from history_sdg_goals where id_old = :id_goals and id_monper = '"+id_monper+"' ) as nm_g_e,\n" +
+                "(select id_target from history_sdg_target where id_old = :id_target and id_monper = '"+id_monper+"' ) as kode_t,\n" +
+                "(select nm_target from history_sdg_target where id_old = :id_target and id_monper = '"+id_monper+"' ) as nm_t,\n" +
+                "(select nm_target_eng from history_sdg_target where id_old = :id_target and id_monper = '"+id_monper+"' ) as nm_t_e";
+        }else{
+            sql = "select \n" +
+                "(select id_goals from sdg_goals where id = :id_goals ) as kode_g,\n" +
+                "(select nm_goals from sdg_goals where id = :id_goals ) as nm_g,\n" +
+                "(select nm_goals_eng from sdg_goals where id = :id_goals ) as nm_g_e,\n" +
+                "(select id_target from sdg_target where id = :id_target ) as kode_t,\n" +
+                "(select nm_target from sdg_target where id = :id_target ) as nm_t,\n" +
+                "(select nm_target_eng from sdg_target where id = :id_target ) as nm_t_e";
+        }
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_goals", idgoals);
+        query.setParameter("id_target", idtarget);
+//        query.setParameter("id_indicator", id_indicator);
+        List list = query.getResultList();
+        return list;
+    }
+    
     @GetMapping("admin/getprogov")
     public @ResponseBody List<Object> getprogov(@RequestParam("id_program") int idgoals, @RequestParam("id_activity") int idtarget, 
     		@RequestParam("id_indicator") int idindikator) {
     	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idprog, b.nm_program, b.nm_program_eng, "
-    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.id_gov_indicator, b.id_program, c.id_activity FROM gov_indicator a LEFT JOIN "
+    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.internal_code as ic1, b.internal_code as ic2, c.internal_code as ic3 FROM gov_indicator a LEFT JOIN "
     			+ "gov_program b ON b.id = a.id_program LEFT JOIN "
     			+ "gov_activity c ON c.id = a.id_activity "
     			+ "WHERE a.id = :id_indicator";
@@ -3863,7 +3906,7 @@ public class ReportController {
     public @ResponseBody List<Object> getpronsa(@RequestParam("id_program") int idgoals, @RequestParam("id_activity") int idtarget, 
     		@RequestParam("id_indicator") int idindikator) {
     	String sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idprog, b.nm_program, b.nm_program_eng, "
-    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.id_nsa_indicator, b.id_program, c.id_activity FROM nsa_indicator a LEFT JOIN "
+    			+ "c.id AS idact, c.nm_activity, c.nm_activity_eng, a.internal_code as ic1, b.internal_code as ic2, c.internal_code as ic3 FROM nsa_indicator a LEFT JOIN "
     			+ "nsa_program b ON b.id = a.id_program LEFT JOIN "
     			+ "nsa_activity c ON c.id = a.id_activity  "
     			+ "WHERE a.id = :id_indicator";

@@ -220,19 +220,19 @@
                 cache: false,
                 async: false,
                 success: function (goal) {
-                	//console.log(goal);
+//                	console.log(goal);
                         if($('#fs').is(':checked')){
                             //indo
                             var isihead1 = "<b><span class=''>Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
                             isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
-                            isihead1 += "<b><span>Kegiatan : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
-                            isihead1 += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
+                            isihead1 += "<b><span>Kegiatan : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                            isihead1 += "<b><span>Indikator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
                         }else{
                             //eng
                             var isihead1 = "<b><span class=''>Government</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
                             isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
-                            isihead1 += "<b><span>Activity : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
-                            isihead1 += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
+                            isihead1 += "<b><span>Activity : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                            isihead1 += "<b><span>Indicator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
                         }
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divgoals").html(isihead1); 
@@ -240,30 +240,83 @@
             });
             
             $("#divdaerah").html(""); 
-            $.ajax({
-            	url: urls + "getgoals",
-                type: 'get',
-                data: {'id_goals': idgoals,'id_target': idtarget,'id_indicator': idindicator,'id_monper':idmonper},
-                dataType: 'json',
-                cache: false,
-                async: false,
-                success: function (goal) {
-                	//console.log(goal);
-                        if($('#fs').is(':checked')){
-                            //indo
-                            var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
-                            isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
-                            isihead += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
-                        }else{
-                            //eng
-                            var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
-                            isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
-                            isihead += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
-                        }
-                	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
-                	$("#divdaerah").html(isihead); 
-                }
-            });
+            if(idindicator == "null"){
+                $('#tabsdg').hide();
+                $('#tabsdg_disagre').hide();
+                $('#tabgrafik_sdg').hide();
+                $.ajax({
+                    url: urls + "gettargetlabel",
+                    type: 'get',
+                    data: {'id_goals': idgoals,'id_target': idtarget,'id_indicator': idindicator,'id_monper':idmonper},
+                    dataType: 'json',
+                    cache: false,
+                    async: false,
+                    success: function (goal) {
+                            console.log(goal[0][4]);
+                            if($('#fs').is(':checked')){
+                                //indo
+                                var isihead = '';
+                                if(goal[0][1] == null){
+                                    isihead += "";
+                                }else{
+                                    isihead += "<b><span>Goal : "+goal[0][0]+" "+goal[0][1]+"</span></b><br>";
+                                }
+                                if(goal[0][4] == null){
+                                    isihead += "";
+                                }else{
+                                    isihead += "<b><span>Target : "+goal[0][3]+" "+goal[0][4]+"</span></b><br>";
+                                }
+                            }else{
+                                //eng
+                                var isihead = '';
+                                if(goal[0][1] == null){
+                                    isihead += "";
+                                }else{
+                                    isihead += "<b><span>Goal : "+goal[0][0]+" "+goal[0][2]+"</span></b><br>";
+                                }
+                                if(goal[0][4] == null){
+                                    isihead += "";
+                                }else{
+                                    isihead += "<b><span>Target : "+goal[0][3]+" "+goal[0][5]+"</span></b><br>";
+                                }
+                            }
+
+                            /* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
+                            $("#divdaerah").html(isihead); 
+                    }
+                });
+            }else{
+                $('#tabsdg').show();
+                $('#tabsdg_disagre').show();
+                $('#tabgrafik_sdg').show();
+                $.ajax({
+                    url: urls + "getgoals",
+                    type: 'get',
+                    data: {'id_goals': idgoals,'id_target': idtarget,'id_indicator': idindicator,'id_monper':idmonper},
+                    dataType: 'json',
+                    cache: false,
+                    async: false,
+                    success: function (goal) {
+                            //console.log(goal);
+                            if($('#fs').is(':checked')){
+                                //indo
+                                var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
+                                isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                                isihead += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
+                            }else{
+                                //eng
+                                var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
+                                isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                                isihead += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
+                            }
+
+                            /* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
+                            $("#divdaerah").html(isihead); 
+                    }
+                });
+            }
+            
+            
         }
         
         function label_atas_nsa(){
@@ -281,14 +334,14 @@
                         //indo
                         var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
                         isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
-                        isihead1 += "<b><span>Kegiatan : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
-                        isihead1 += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
+                        isihead1 += "<b><span>Kegiatan : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                        isihead1 += "<b><span>Indikator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
                     }else{
                         //eng
                         var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
                         isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
-                        isihead1 += "<b><span>Activity : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
-                        isihead1 += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
+                        isihead1 += "<b><span>Activity : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                        isihead1 += "<b><span>Indicator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
                     }
                 	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
                 	$("#divgoals").html(isihead1); 
@@ -296,22 +349,81 @@
             });
             
             $("#divdaerah").html(""); 
-            $.ajax({
-            	url: urls + "getgoals",
-                type: 'get',
-                data: {'id_goals': idgoals,'id_target': idtarget,'id_indicator': idindicator,'id_monper':idmonper},
-                dataType: 'json',
-                cache: false,
-                async: false,
-                success: function (goal) {
-                	//console.log(goal);
-                	var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
-                            isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
-                            isihead += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
-                	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
-                	$("#divdaerah").html(isihead); 
-                }
-            });
+            if(idindicator == "null"){
+                $('#tabsdg').hide();
+                $('#tabsdg_disagre').hide();
+                $('#tabgrafik_sdg').hide();
+                $.ajax({
+                    url: urls + "gettargetlabel",
+                    type: 'get',
+                    data: {'id_goals': idgoals,'id_target': idtarget,'id_indicator': idindicator,'id_monper':idmonper},
+                    dataType: 'json',
+                    cache: false,
+                    async: false,
+                    success: function (goal) {
+                            //console.log(goal);
+                            if($('#fs').is(':checked')){
+                                //indo
+                                var isihead = '';
+                                if(goal[0][1] == null){
+                                    isihead += "";
+                                }else{
+                                    isihead += "<b><span>Goal : "+goal[0][0]+" "+goal[0][1]+"</span></b><br>";
+                                }
+                                if(goal[0][4] == null){
+                                    isihead += "";
+                                }else{
+                                    isihead += "<b><span>Target : "+goal[0][3]+" "+goal[0][4]+"</span></b><br>";
+                                }
+                            }else{
+                                //eng
+                                var isihead = '';
+                                if(goal[0][1] == null){
+                                    isihead += "";
+                                }else{
+                                    isihead += "<b><span>Goal : "+goal[0][0]+" "+goal[0][2]+"</span></b><br>";
+                                }
+                                if(goal[0][4] == null){
+                                    isihead += "";
+                                }else{
+                                    isihead += "<b><span>Target : "+goal[0][3]+" "+goal[0][5]+"</span></b><br>";
+                                }
+                            }
+
+                            /* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
+                            $("#divdaerah").html(isihead); 
+                    }
+                });
+            }else{
+                $('#tabsdg').show();
+                $('#tabsdg_disagre').show();
+                $('#tabgrafik_sdg').show();
+                $.ajax({
+                    url: urls + "getgoals",
+                    type: 'get',
+                    data: {'id_goals': idgoals,'id_target': idtarget,'id_indicator': idindicator,'id_monper':idmonper},
+                    dataType: 'json',
+                    cache: false,
+                    async: false,
+                    success: function (goal) {
+                            //console.log(goal);
+                            if($('#fs').is(':checked')){
+                                //indo
+                                var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
+                                isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                                isihead += "<b><span>Indikator : "+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
+                            }else{
+                                //eng
+                                var isihead = "<b><span>Goal : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
+                                isihead += "<b><span>Target : "+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                                isihead += "<b><span>Indicator : "+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
+                            }
+
+                            /* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
+                            $("#divdaerah").html(isihead); 
+                    }
+                });
+            }
         }
         
         function get_dat_sdg(){
