@@ -2028,6 +2028,33 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-entry/gri-ojk/{year}")
+    public @ResponseBody Map<String, Object> gri(HttpSession session,@PathVariable("year") String year) {
+    	String tahun = year.equals("all")?"":" where year = '"+year+"'";
+    	String sql = "select * from entry_gri_ojk "+tahun;
+        Query list = em.createNativeQuery(sql);
+        List<Object[]> rows = list.getResultList();
+        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Map<String, Object> hasil = new HashMap<>();
+        for (Object[] row : rows) {
+            result.add(
+                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
+            );
+        }
+        hasil.put("content",result);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-year-ojk")
+    public @ResponseBody Map<String, Object> yearOjk() {
+        String sql  = "select distinct year from entry_gri_ojk order by year";
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @PostMapping(path = "admin/save-entry/gri-ojk"/*, consumes = "application/json", produces = "application/json"*/)
 	@ResponseBody
         @Transactional

@@ -3,11 +3,11 @@
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/layout :: header">
-    <title th:text="Manajemen Role"></title>
+    
 </head>
 <body>
     <div th:include="admin/layout :: menu"></div>
-
+	<title>Data Approval / GRI / OJK</title>
     <div id="content">  
         <div id="content-header">
             <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>GRI / OJK</a></div>
@@ -28,7 +28,9 @@
                                 <input placeholder="Search..." class="span12" id="text-cari" type="text"/>
                                 <span class="add-on"><i class="icon-search"></i></span>
                             </div>
-                           
+                           	<select id="year" name="year" class="form-control">
+                                <option value="0" >-- Pilih --</option>
+                            </select>
                         </div>
                         <div class="row-fluid">
                             <div class="span12">
@@ -91,7 +93,7 @@
                                 <input name="id" id="id" type="hidden" class="input-block-level">
                                 <div class="radio">
                                     <label>
-                                        <input id="approval" type="radio" name="approval" value="1" >
+                                        <input id="approval" type="radio" name="approval" value="5" >
                                         <span class="lang_eng" style="display:none">No Action</span>
                                         <span class="lang_indo">Tidak Ada Aksi</span>
                                     </label>
@@ -209,6 +211,26 @@
       $("#privilege option[value='ADMIN']").remove();
     }
     
+    $.ajax({
+        type: "GET",
+        url: urls+'list-year-ojk',
+        success: function (result) {
+            $("#year").html('<option value="0" >-- Pilih --</option>');
+            $("#year").html('<option value="all" >-- All --</option>');
+            var array = result.content;
+            if (array != '') {
+                for (i in array) {
+                    $("#year").append('<option value="'+array[i]+'" >'+array[i]+'</option>');
+                }
+            }
+        }
+    });
+    
+    $("#year").on('change', function(){
+    	var val = $(this).val();
+    	table.ajax.url(urls+'list-entry/gri-ojk/'+val).load();
+    });
+    
 //    $('#id_prov').on('change', function(){
 //    	var id = $(this).val();
 //    	table.ajax.url(urls+'manajemen/list-role/'+id).load();
@@ -310,7 +332,7 @@
         "autoWidth": true,
         "responsive":true,
         "ajax": {
-            "url": '/sdg/admin/list-entry/gri-ojk/',
+            "url": '/sdg/admin/list-entry/gri-ojk/all',
             dataSrc: 'content',
         },
         "searching": true,
@@ -325,25 +347,56 @@
                 return "<div style='font-size:90%;text-align:center;'>"+(row.year)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                var status = '';
-                if(row.approval==null||row.approval==1||row.approval==3){
-                    status = '-'
+                if(row.approval == '1'){
+                    return "<span style='font-size:90%; background: #f5ff6e; text-align: center;'>Wait Approval</span>";
+                }else if(row.approval == '2'){
+                    return "<span style='font-size:90%; background: #6eeaff; text-align: center;'>Approved</span>";
+                }else if(row.approval == '3'){
+                    return "<span style='font-size:90%; background: #ffa6a6; text-align: center;'>Rejected</span>";
+                }else if(row.approval == '4'){
+                    return "<span style='font-size:90%; background: #b5ffb5; text-align: center;'>Done</span>";
+                }else if(row.approval == '5'){
+                	return "<span style='font-size:90%; background: #f5ff6e; text-align: center;'>Not Approved</span>";
+                }else{
+                	return "<span style='font-size:90%; text-align: center;'>-</span>";
                 }
-                if(row.approval==2){
-                    status = 'Approve'
-                }
-                return "<div style='font-size:90%;text-align:center;'>"+status+"</div>";}
-            },
-            {"data": function (row, data, index, display) {
-                    var button = "";
-                    if(row.approval==2){
-                        button = '<button data-id="'+row.id+'" type="button" title="unUprove" class="btn btn-success btn-mini unuprove">UnApprove</button>&nbsp;&nbsp;';
-                    }else{
-                        button = '<button data-id="'+row.id+'" type="button" title="update" class="btn btn-success btn-mini update"><i class="icon-circle-blank"></i></button>&nbsp;&nbsp;';
-                    }
-//            	if(privilege=="SUPER"){
+			}},
+            {"data": function (row, data, index, display) {					
+                    var warna = "btn-primary";
+					var text = "Approve";
+					var hide = "";
+					var kelas = "update"
+					if(row.approval==2){
+						if($("#fs").is(':checked')){
+							text = "Batal Setujui";
+						}else{
+							text = "Unapprove";
+						}
+						warna = "btn-success";
+						kelas = "unuprove";
+					}else if(row.approval==3){
+						if($("#fs").is(':checked')){
+							text = "Batal Tolak";
+						}else{
+							text = "unreject";
+						}
+						warna = "btn-danger";
+						kelas = "unuprove";
+					}else if(row.approval==4){
+						hide = 'display:none';
+						kelas = "update";
+					}else if(row.approval==5){
+						if($("#fs").is(':checked')){
+							text = "Approve";
+						}else{
+							text = "Approve";
+						}
+						warna = "btn-default";
+						kelas = "update";
+					}
             		 return "<div style='text-align:center;'>"+
-                     '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file1+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+button;
+                     '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file1+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+
+                     '<button data-id="'+row.id+'" type="button" title="approve" class="btn '+warna+' '+kelas+' ">'+text+'</div>';
                      
               }
             }
