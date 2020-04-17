@@ -474,12 +474,24 @@ public class AdministrasiController {
     }
     
     @GetMapping("admin/manajemen/list-request/{new}")
-    public @ResponseBody Map<String, Object> req(@PathVariable("new") String ok) {
+    public @ResponseBody Map<String, Object> req(@PathVariable("new") String ok, HttpSession session) {
     	List list;
+    	Integer id_role = (Integer) session.getAttribute("id_role");
+    	Optional<Role> listRole = roleService.findOne(id_role);
+    	String privilege = listRole.get().getPrivilege();
+    	String id_prov = listRole.get().getId_prov();
     	if(ok.equals("1")) {
-    		list = userReqService.findAllNew();
+    		if(privilege.equals("SUPER")) {
+    			list = userReqService.findAllNew();
+    		}else {
+    			list = userReqService.findAllNewProv(id_prov);
+    		}
     	}else {
-    		list = userReqService.findAll();
+    		if(privilege.equals("SUPER")) {
+    			list = userReqService.findAll();
+    		}else {
+    			list = userReqService.findAllProv(id_prov);
+    		}
     	}
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content", list);
