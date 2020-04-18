@@ -61,6 +61,7 @@
                                             <span class="lang_indo">Batal Terapkan</span>
                                             <span class="lang_eng">UnApply</span>
                                         </a>
+                                  <div id="status"></div>
                     		</div>
                             </div>
 <!--                            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
@@ -205,7 +206,9 @@
                         'data' : lisdg2,
                         'check_callback': false,
                         "themes" : {
-                                    "variant" : "small"
+                                    "variant" : "small",
+                                    "dots" : false,
+                                    "icons":false
                                   }
                     },"checkbox" : {
                         "three_state"   : false,
@@ -236,7 +239,9 @@
                         'data' : data,
                         'check_callback': false,
                         "themes" : {
-                                    "variant" : "small"
+                                    "variant" : "small",
+                                    "dots" : false,
+                                    "icons":false
                                   }
                     },"checkbox" : {
                         "three_state"   : false,
@@ -346,7 +351,7 @@
             var tahun       = data_id[1];
             grid();
              table.columns.adjust();
-            $('#add_problem').show();
+           // $('#add_problem').show();
         });
 
         $("#idrole").on('change', function(e){
@@ -508,19 +513,19 @@
                                                 var data =  JSON.stringify(row).replace(/'/g, "&#39");
                                                 var id = row[16];
 							if(row[17]==1||row[17]==3){
-                                                            $('#unapply_btn').show();
+                                                           /*  $('#unapply_btn').show();
                                                             $('#add_problem').hide();
-                                                            $('#apply_btn').hide();
+                                                            $('#apply_btn').hide(); */
                                                             return '';
                                                         }else if(row[17]==2||row[17]==4){
-                                                            $('#unapply_btn').hide();
+                                                           /*  $('#unapply_btn').hide();
                                                             $('#add_problem').hide();
-                                                            $('#apply_btn').hide();
+                                                            $('#apply_btn').hide(); */
                                                             return '';
                                                         }else{
-                                                            $('#apply_btn').show();
+                                                            /* $('#apply_btn').show();
                                                             $('#unapply_btn').hide(); 
-                                                            $('#add_problem').show();
+                                                            $('#add_problem').show(); */
                                                            return "<div style='text-align:center;'>"+
                                                             '<button data-id="'+id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
                                                             '<button data-id="'+id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>'; 
@@ -559,14 +564,56 @@
                 var tahun       = v_data_id[1];
 //                alert(urls+'list-problem/'+id_monper);
                 table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole ).load(function(result){
-                    var count_data = result.content.length;
+                    /* var count_data = result.content.length;
                     if(count_data==0){
                         $('#apply_btn,#unapply_btn').hide();
                         $('#add_problem').show();
                     }else{
-                    }
+                    } */
+                    
                 });
-                
+                $.ajax({
+                type: "GET",
+                url: urls+'get-status-approve/'+v_idrole+'/'+id_monper+'/'+tahun+'/entry_problem_identify/0',
+                async:false,
+                success: function (result1) {
+                	$("#status").html("");
+                	console.log(result1.content[0]);
+                    if(result1.content[0] == "1"){
+                        $('#apply_btn').hide();
+                        $('#unapply_btn').show();
+                        $('#add_problem').hide();
+                        $("#status").html("");
+                    }else if(result1.content[0] == "2"){
+                        $('#apply_btn').hide();
+                        $('#unapply_btn').hide();
+                        $('#add_problem').hide();
+                        $("#status").append("<span class='label label-success'>Approved</span>");
+                    }else if(result1.content[0] == "3"){
+                        $('#apply_btn').hide();
+                        $('#unapply_btn').show();
+                        $('#add_problem').hide();
+                        $("#status").append("<span class='label label-important'>Rejected</span>");
+                    }else if(result1.content[0] == "4"){
+                        $('#apply_btn').hide();
+                        $('#unapply_btn').hide();
+                        $('#add_problem').hide();
+                        $("#status").append("<span class='label label-info'>Show Report</span>");
+                    }else if(result1.content[0] == "5"){
+                        $('#apply_btn').hide();
+                        $('#unapply_btn').show();
+                        $('#add_problem').hide();
+                        $("#status").append("<span class='label label-default'>No Action</span>");
+                    }else{
+                    	if(v_idprov!="0" && v_idrole!="0" && v_dataid!="0"){
+                    		$('#apply_btn').show();
+                            $('#unapply_btn').hide();
+                            $('#add_problem').show();
+                    	}
+                        $("#status").html("");
+                    }
+                }
+            });
             }
             
             $('#text-cari').on( 'keyup', function () {
@@ -575,13 +622,13 @@
             });
             
             $('#apply_btn').on('click',function(){
-                 var data_ref = table.rows( 0 ).data();
-                 var id_goals        = data_ref[0][1];
-                 var id_target       = data_ref[0][5];
-                 var id_indicator    = data_ref[0][9];
-                 var id_monper       = data_ref[0][18];
-                 var tahun           = data_ref[0][19];
-                 var id_role         = data_ref[0][20];
+                 
+                 var v_idprov    = $("#id_prov").val();
+                 var v_idrole    = $("#idrole").val();
+                 var v_dataid    = $("#periode").val();
+                 var v_data_id   = v_dataid.split("###");;
+                 var id_monper   = v_data_id[0];
+                 var tahun       = v_data_id[1];
                             swal({
                                 title: "Are You Sure",
                                 text: "",
@@ -596,12 +643,9 @@
 //                                return false;
                                  
                                  var data = JSON.stringify({
-                                                'id_goals'      :id_goals,
-                                                'id_target'     :id_target,
-                                                'id_indicator'  :id_indicator,
                                                 'id_monper'     :id_monper,
                                                 'tahun'         :tahun,
-                                                'id_role'       :id_role
+                                                'id_role'       :v_idrole
                                             });
                                     
                                     $.ajax({
@@ -636,13 +680,12 @@
                                
                         });
             $('#unapply_btn').on('click',function(){
-                 var data_ref = table.rows( 0 ).data();
-                 var id_goals        = data_ref[0][1];
-                 var id_target       = data_ref[0][5];
-                 var id_indicator    = data_ref[0][9];
-                 var id_monper       = data_ref[0][18];
-                 var tahun           = data_ref[0][19];
-                 var id_role         = data_ref[0][20];
+            	var v_idprov    = $("#id_prov").val();
+                var v_idrole    = $("#idrole").val();
+                var v_dataid    = $("#periode").val();
+                var v_data_id   = v_dataid.split("###");;
+                var id_monper   = v_data_id[0];
+                var tahun       = v_data_id[1];
                             swal({
                                 title: "Are You Sure",
                                 text: "",
@@ -657,12 +700,8 @@
 //                                return false;
                                  
                                  var data = JSON.stringify({
-                                                'id_goals'      :id_goals,
-                                                'id_target'     :id_target,
-                                                'id_indicator'  :id_indicator,
                                                 'id_monper'     :id_monper,
-                                                'tahun'         :tahun,
-                                                'id_role'       :id_role
+                                                'tahun'         :tahun
                                             });
                                     
                                     $.ajax({
