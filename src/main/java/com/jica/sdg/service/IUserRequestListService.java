@@ -9,7 +9,11 @@ public interface IUserRequestListService {
 
     List<UserRequestList> findAllNew();
     
+    List<UserRequestList> findAllNewProv(String id_prov);
+    
     List<UserRequestList> findAll();
+    
+    List<UserRequestList> findAllProv(String id_prov);
 
     void saveUserRequestList(UserRequestList u);
     

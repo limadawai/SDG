@@ -5,12 +5,13 @@
 <meta name="_csrf" th:content="${_csrf.token}"/>
 <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 <head th:include="admin/layout :: header">
-    <title th:text="${title}"></title>
+    
     <style>
         .pointer {cursor: pointer;}
     </style>
 </head>
 <body>
+	<title>Input Data / Problem Identification form & follow up</title>
     <div th:include="admin/layout :: menu"></div>    
     <div id="content">
         <div id="content-header">
@@ -490,18 +491,16 @@
                                      {"data": function (row, data, index, display) {
                                             
                                              if(row[17]==1){
-                                                 return '<span style="font-size:90%; background: #b5ffb5; text-align: center;">Aply</span>';
-                                             }
-                                             if(row[17]==2){
-                                                 return '<span style="font-size:90%; background: #b5ffb5; text-align: center;">Approve</span>';
-                                             }
-                                             if(row[17]==3){
-                                                 return '<span style="font-size:90%; background: #b5ffb5; text-align: center;">Rejected</span>';
-                                             }
-                                             if(row[17]==4){
-                                                 return '<span style="font-size:90%; background: #b5ffb5; text-align: center;">Done</span>';
-                                             }
-                                             if(row[17]==null||row[17]==''){
+                                                 return '<span class="label label-success">Apply</span>';
+                                             }else if(row[17]==2){
+                                                 return "<span class='label label-success'>Approved</span>";
+                                             }else if(row[17]==3){
+                                                 return "<span class='label label-important'>Rejected</span>";
+                                             }else if(row[17]==4){
+                                                 return "<span class='label label-info'>Show Report</span>";
+                                             }else if(row[17]==5){
+                                            	 return "<span class='label label-default'>No Action</span>";
+                                             }else{
                                                  return ''
                                              }
                                      }},

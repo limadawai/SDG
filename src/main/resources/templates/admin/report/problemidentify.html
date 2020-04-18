@@ -3,26 +3,27 @@
       xmlns:="http://www.w3.org/1999/xhtml"
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/layout :: header">
-    <title th:text="Define RAN/RAD/SDGs Indicator"></title>
+    
 </head>
 <body>
+	<title>Report /Problem Identification Form & Follow Up</title>
     <div th:include="admin/layout :: menu"></div>
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Data Entry /Problem Identification Form & Follow Up</a></div>
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Report /Problem Identification Form & Follow Up</a></div>
         </div>
         <div class="container-fluid">
 			<div class="row-fluid">
 				<div class="widget-box">
 					<div class="widget-content">
-                                            Group by : <select id="filter_category" name="filter_category" class="form-control">
-                                                <option value="0" >-- Pilih --</option>
-                                                <option value="1">Institute/Agency</option>
-                                                <option value="2">Goals</option>
-                                                <option value="3">Category</option>
-                                            </select>
-                                            <select id="result_category" name="result_category" class="form-control">
-                                            </select>
+                         Group by : <select id="filter_category" name="filter_category" class="form-control">
+                             <option value="0" >-- Pilih --</option>
+                             <option value="1">Institute/Agency</option>
+                             <option value="2">Goals</option>
+                             <option value="3">Category</option>
+                         </select>
+                         <select id="result_category" name="result_category" class="form-control">
+                         </select>
 					</div>
 				</div>
 			</div>

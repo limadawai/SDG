@@ -41,4 +41,14 @@ public class UserRequestListService implements IUserRequestListService{
 	public List<UserRequestList> findAllNew() {
 		return (List<UserRequestList>) repo.findAllNew();
 	}
+
+	@Override
+	public List<UserRequestList> findAllNewProv(String id_prov) {
+		return repo.findAllNewProv(id_prov);
+	}
+
+	@Override
+	public List<UserRequestList> findAllProv(String id_prov) {
+		return repo.findAllProv(id_prov);
+	}
 }

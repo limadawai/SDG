@@ -104,7 +104,7 @@
 	// <![CDATA[
 		var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
-        
+        var id_klik="";
       //Bahasa
         var titleDel = "Anda Yakin";
         var messDel = "Menghapus Data?";
@@ -261,6 +261,9 @@
                     $('#id_monper').append(option);
                 }
             }); 
+        	if(id_klik){
+        		$(id_klik).trigger('click');
+        	}
         });
         
         function hideBtn(){
@@ -271,6 +274,7 @@
         
         //get sdg
         $('#sdg').on('click', function(e){
+        	id_klik = '#sdg';
         	hideBtn();
         	$('.btnsdg').show();
         	$('#id_monper').hide();
@@ -424,6 +428,7 @@
         
       //get gov
         $('#gov').on('click', function(e){
+        	id_klik = '#gov';
         	hideBtn();
         	$('.btngov').show();
                 $('#id_monper').show();
@@ -531,6 +536,7 @@
       
       //get nongov
         $('#non-gov').on('click', function(e){
+        	id_klik = '#non-gov';
         	hideBtn();
         	$('.btnnongov').show();
                 $('#id_monper').show();
