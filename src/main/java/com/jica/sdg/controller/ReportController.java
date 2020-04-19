@@ -4934,7 +4934,9 @@ public class ReportController {
                         "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
                         "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
                         "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
-                +       "       JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' where a.id_prov = :id_prov  "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
+                +       "       JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' "
+                		+ "		JOIN entry_approval h on b.id_role = h.id_role and b.id_monper = h.id_monper and b.year = h.year and h.type = 'entry_problem_identify' and h.approval != '3' "
+                + " where a.id_prov = :id_prov  "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
         
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
@@ -4960,7 +4962,9 @@ public class ReportController {
                          "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
                          "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
                          "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
-                +        "      JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
+                +        "      JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' "
+                		+ "		JOIN entry_approval h on b.id_role = h.id_role and b.id_monper = h.id_monper and b.year = h.year and h.type = 'entry_problem_identify' and h.approval != '3' "
+                + "where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
         
         Query query2 = em.createNativeQuery(sql2);
               query2.setParameter("id_prov", id_prov);

@@ -327,7 +327,7 @@ public class ApprovalController {
         String id_monper = jsonObunit.get("id_monper").toString();  
         String tahun = jsonObunit.get("tahun").toString();
         String period = jsonObunit.get("period").toString();
-        Query query = em.createNativeQuery("UPDATE entry_approval set approval = '4' where type='entry_sdg' and id_monper = :id_monper and year = :year and periode = :periode");
+        Query query = em.createNativeQuery("UPDATE entry_approval set approval = '4' where type='entry_sdg' and id_monper = :id_monper and year = :year and periode = :periode and (approval = '2' or approval = '1')");
         query.setParameter("id_monper", id_monper);
         query.setParameter("year", tahun);
         query.setParameter("periode", period);

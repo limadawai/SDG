@@ -1012,28 +1012,15 @@ public class DataEntryController {
     @GetMapping("admin/get-status-approve/{id_role}/{id_monper}/{year}/{type}/{periode}")
     public @ResponseBody Map<String, Object> getStatusApprove(@PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("type") String type, @PathVariable("periode") String periode) {
     	List list;
-		
-		  if(type.equals("entry_problem_identify")) { 
-			  String sql = "select approval from entry_approval as a where a.id_monper = :id_monper and a.year = :year and a.type = :type and periode = :periode "; 
-			  Query query = em.createNativeQuery(sql); 
-			  query.setParameter("id_monper",id_monper); 
-			  query.setParameter("year", year); 
-			  query.setParameter("type", type); 
-			  query.setParameter("periode", periode); 
-			  list = query.getResultList();
-		  }else {
-        	String sql  = "select approval from entry_approval as a where a.id_role = :id_role and a.id_monper = :id_monper and a.year = :year and a.type = :type and periode = :periode ";
-            Query query = em.createNativeQuery(sql);
-            query.setParameter("id_role", id_role);
-            query.setParameter("id_monper", id_monper);
-            query.setParameter("year", year);
-            query.setParameter("type", type);
-            query.setParameter("periode", periode);
-            list   = query.getResultList();
-        }
-    	
+    	String sql  = "select approval from entry_approval as a where a.id_role = :id_role and a.id_monper = :id_monper and a.year = :year and a.type = :type and periode = :periode ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_role", id_role);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        query.setParameter("type", type);
+        query.setParameter("periode", periode);
+        list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        
         hasil.put("content",list);
         return hasil;
     }

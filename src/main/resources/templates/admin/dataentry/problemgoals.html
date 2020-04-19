@@ -61,7 +61,6 @@
                                             <span class="lang_indo">Batal Terapkan</span>
                                             <span class="lang_eng">UnApply</span>
                                         </a>
-                                  <div id="status"></div>
                     		</div>
                             </div>
 <!--                            <div class="btn-toolbar lang_eng" style="float:right; display: none" id="btn_eng">
@@ -583,7 +582,6 @@
                         $('#apply_btn').hide();
                         $('#unapply_btn').show();
                         $('#add_problem').hide();
-                        $("#status").html("");
                     }else if(result1.content[0] == "2"){
                         $('#apply_btn').hide();
                         $('#unapply_btn').hide();
@@ -593,7 +591,6 @@
                         $('#apply_btn').hide();
                         $('#unapply_btn').show();
                         $('#add_problem').hide();
-                        $("#status").append("<span class='label label-important'>Rejected</span>");
                     }else if(result1.content[0] == "4"){
                         $('#apply_btn').hide();
                         $('#unapply_btn').hide();
@@ -603,7 +600,6 @@
                         $('#apply_btn').hide();
                         $('#unapply_btn').show();
                         $('#add_problem').hide();
-                        $("#status").append("<span class='label label-default'>No Action</span>");
                     }else{
                     	if(v_idprov!="0" && v_idrole!="0" && v_dataid!="0"){
                     		$('#apply_btn').show();
@@ -657,7 +653,7 @@
                                                 headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                 data: data,
                                                 success: function (result) {
-                                                    table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+id_role).load(function(e){
+                                                    table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole).load(function(e){
 //                                                        if(e.count_data>0){
                                                              $('#apply_btn').hide();
                                                              $('#add_problem').hide();
@@ -701,7 +697,8 @@
                                  
                                  var data = JSON.stringify({
                                                 'id_monper'     :id_monper,
-                                                'tahun'         :tahun
+                                                'tahun'         :tahun,
+                                                'id_role'		: v_idrole
                                             });
                                     
                                     $.ajax({
@@ -713,7 +710,7 @@
                                                 headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                 data: data,
                                                 success: function (result) {
-                                                    table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+id_role).load(function(e){
+                                                    table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole	).load(function(e){
 //                                                        if(e.count_data>0){
                                                              $('#apply_btn').show();
                                                              $('#unapply_btn').hide();
