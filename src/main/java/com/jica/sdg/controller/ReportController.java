@@ -1152,23 +1152,31 @@ public class ReportController {
     			"d.budget_allocation,");
     	for(int i = start_year; i<=end_year;i++) {
     		//achievement
-    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n "
+    				+ " when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " + 
     				"ELSE (select achievement1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlBud.append(" g.nm_role FROM gov_map a\r\n" + 
@@ -1263,22 +1271,30 @@ public class ReportController {
     	for(int i = start_year; i<=end_year;i++) {
     		//achievement
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlBud.append(" g.nm_role FROM gov_map a\r\n" + 
@@ -1323,22 +1339,30 @@ public class ReportController {
     	for(int i = start_year; i<=end_year;i++) {
     		//achievement
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_gov_budget where id_gov_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlBud.append(" g.nm_role FROM gov_map a\r\n" + 
@@ -1382,22 +1406,30 @@ public class ReportController {
     	for(int i = start_year; i<=end_year;i++) {
     		//achievement
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
+    		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" +
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlBudNsa.append(" g.nm_role FROM nsa_map a\r\n" + 
@@ -1442,22 +1474,30 @@ public class ReportController {
     	for(int i = start_year; i<=end_year;i++) {
     		//achievement
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlBudNsa.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlBudNsa.append(" g.nm_role FROM nsa_map a\r\n" + 
@@ -1502,22 +1542,30 @@ public class ReportController {
     	for(int i = start_year; i<=end_year;i++) {
     		//achievement
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlBud.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_budget' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_nsa_budget where id_nsa_activity = d.id and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlBud.append(" g.nm_role FROM nsa_map a\r\n" + 
@@ -1563,22 +1611,30 @@ public class ReportController {
     		
     		//achievement
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
@@ -1707,22 +1763,30 @@ public class ReportController {
     		
     		//achievement
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
@@ -1800,22 +1864,30 @@ public class ReportController {
     		
     		//achievement
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_gov_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_gov_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_gov_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_gov_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_gov_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_gov_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_gov_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_gov_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_gov_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_gov_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlInd.append(" g.nm_role FROM gov_map a\r\n" + 
@@ -1891,22 +1963,30 @@ public class ReportController {
     		
     		//achievement
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_nsa_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_nsa_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_nsa_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_nsa_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_nsa_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_nsa_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_nsa_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_nsa_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlNsaInd.append(" g.nm_role FROM nsa_map a\r\n" + 
@@ -1980,22 +2060,30 @@ public class ReportController {
     		
     		//achievement
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_nsa_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_nsa_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_nsa_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_nsa_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_nsa_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_nsa_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_nsa_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_nsa_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlNsaInd.append(" g.nm_role FROM nsa_map a\r\n" + 
@@ -2072,22 +2160,30 @@ public class ReportController {
     		
     		//achievement
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_nsa_indicator as achievement1_"+i+" where achievement1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_nsa_indicator as achievement2_"+i+" where achievement2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_nsa_indicator as achievement3_"+i+" where achievement3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_nsa_indicator as achievement4_"+i+" where achievement4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_nsa_indicator as new_value1_"+i+" where new_value1_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_nsa_indicator as new_value2_"+i+" where new_value2_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_nsa_indicator as new_value3_"+i+" where new_value3_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlNsaInd.append("case when (select count(*) from entry_show_report where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = a.id_monper and year = "+i+" and type = 'entry_nsa_indicator' and id_role = d.id_role and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_nsa_indicator as new_value4_"+i+" where new_value4_"+i+".id_assign = a.id_nsa_indicator and id_monper = a.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlNsaInd.append(" g.nm_role FROM nsa_map a\r\n" + 
@@ -2161,22 +2257,30 @@ public class ReportController {
     		
     		//achievement
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_sdg as achievement1_"+i+" where achievement1_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_sdg as achievement2_"+i+" where achievement2_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_sdg as achievement3_"+i+" where achievement3_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_sdg as achievement4_"+i+" where achievement4_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_sdg as new_value1_"+i+" where new_value1_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_sdg as new_value2_"+i+" where new_value2_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_sdg as new_value3_"+i+" where new_value3_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" +
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_sdg as new_value4_"+i+" where new_value4_"+i+".id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlInd.append(" CASE when e.nm_role is null then 'Unassigned' else e.nm_role end FROM sdg_indicator b\r\n" + 
@@ -2187,6 +2291,7 @@ public class ReportController {
     			" right join entry_sdg f on b.id = f.id_sdg_indicator and f.id_monper = :id_monper \r\n" + 
     			" WHERE b.id = :id_indicator \r\n" + 
     			" ");
+    	System.out.println(sqlInd.toString());
     	Query queryIndGov = manager.createNativeQuery(sqlInd.toString());
     	queryIndGov.setParameter("id_prov", id_prov);
     	queryIndGov.setParameter("id_monper", id_monper);
@@ -2215,22 +2320,30 @@ public class ReportController {
     		
     		//achievement
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement1 from entry_sdg_detail as achievement1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement2 from entry_sdg_detail as achievement2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement2_"+i+", ");
-    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" +
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement3 from entry_sdg_detail as achievement3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select achievement4 from entry_sdg_detail as achievement4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as achievement4_"+i+", ");
     	
     		//new value
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '1') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '1' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value1 from entry_sdg_detail as new_value1_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value1_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '2') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '2' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value2 from entry_sdg_detail as new_value2_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value2_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '3') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '3' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value3 from entry_sdg_detail as new_value3_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value3_"+i+", ");
     		sqlInd.append("case when (select count(*) from entry_show_report where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and period = '4') = 0 THEN '' \r\n" + 
+    				" when (select count(*) from entry_approval where id_monper = f.id_monper and year = "+i+" and type = 'entry_sdg' and (CASE WHEN e.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '4' and approval <> 3) = 0 THEN '' " +
     				"ELSE (select new_value4 from entry_sdg_detail as new_value4_"+i+" where id_disaggre = g.id and id_disaggre_detail = h.id and id_monper = f.id_monper and year_entry = "+i+") END as new_value4_"+i+", ");
     	}
     	sqlInd.append(" CASE when e.nm_role is null then 'Unassigned' else e.nm_role end FROM sdg_indicator b\r\n" + 
