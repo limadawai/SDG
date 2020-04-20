@@ -283,12 +283,12 @@ public class EntryController {
         String id_monper         = jsonObunit.get("id_monper").toString();  
         String tahun             = jsonObunit.get("tahun").toString();
         String id_role           = jsonObunit.get("id_role").toString();
-            em.createNativeQuery("delete from entry_approval  where id_monper = '"+id_monper+"' AND year = '"+tahun+"' AND id_role = '"+id_role+"' AND type = 'entry_problem_identify'").executeUpdate();
-            Query query = em.createNativeQuery("INSERT INTO entry_approval (id_role,id_monper,YEAR,TYPE,approval,approval_date,periode)\n" +
-                                                "SELECT DISTINCT a.id_role,a.id_monper,a.year,'entry_problem_identify' AS TYPE,'1' AS approval, CURDATE() AS approval_date ,'0' as periode FROM entry_problem_identify a \n" +
-                                                "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
-                                                "WHERE a.id_monper = '"+id_monper+"' AND a.year = '"+tahun+"' AND a.id_role = '"+id_role+"'  ;");
-            query.executeUpdate();
+            em.createNativeQuery("delete from entry_approval where id_role = '"+id_role+"' and id_monper = '"+id_monper+"' AND year = '"+tahun+"' AND type = 'entry_problem_identify'").executeUpdate();
+           Query query = em.createNativeQuery("INSERT INTO entry_approval (id_role,id_monper,YEAR,TYPE,approval,approval_date,periode)\n" +
+                                               "SELECT DISTINCT a.id_role,a.id_monper,a.year,'entry_problem_identify' AS TYPE,'1' AS approval, CURDATE() AS approval_date ,'0' as periode FROM entry_problem_identify a \n" +
+                                               "LEFT JOIN ref_category b ON  a.id_cat = b.id_cat \n" +
+                                               "WHERE a.id_monper = '"+id_monper+"' AND a.year = '"+tahun+"' AND a.id_role = '"+id_role+"'  ;");
+           query.executeUpdate();
 	}    
     @PostMapping(path = "admin/problem-identification/un-aply", consumes = "application/json", produces = "application/json")
 	@ResponseBody
@@ -298,7 +298,7 @@ public class EntryController {
         String id_monper            = jsonObunit.get("id_monper").toString();  
         String tahun                = jsonObunit.get("tahun").toString();
         String id_role              = jsonObunit.get("id_role").toString();
-            Query query = em.createNativeQuery(" DELETE FROM entry_approval WHERE id_role='"+id_role+"' AND id_monper='"+id_monper+"' AND YEAR='"+tahun+"' AND  TYPE='entry_problem_identify'");
+            Query query = em.createNativeQuery(" DELETE FROM entry_approval WHERE id_role='"+id_role+"' and id_monper='"+id_monper+"' AND YEAR='"+tahun+"' AND  TYPE='entry_problem_identify'");
             query.executeUpdate();
 	}    
     @GetMapping("testcrud")

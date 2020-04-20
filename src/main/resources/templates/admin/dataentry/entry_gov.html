@@ -411,6 +411,22 @@
                     }
                 });
                 
+                var cek1;
+            	var cek2;
+            	var cek3;
+            	var cek4;
+            	$.ajax({
+                    type: "GET",
+                    async:false,
+                    url: urls+'cek-show-report/'+id_monper+'/'+tahun+'/entry_gov_indicator',
+                    success: function (result1) {
+                    	cek1 = result1.cek[0][0];
+                    	cek2 = result1.cek[0][1];
+                    	cek3 = result1.cek[0][2];
+                    	cek4 = result1.cek[0][3];
+                    }
+            	});
+                
             	var header = '';
             	var headerFull = '';
                 header += '<tr class="" >';
@@ -474,11 +490,11 @@
                         if(cektabel==0){
                         	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
                         	//Indicator
-                        	var btnApply1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApply2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApply3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApply4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                            $.ajax({
+                        	var btnApply1=(cek1>0)?'':'<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApply2=(cek2>0)?'':'<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApply3=(cek3>0)?'':'<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApply4=(cek4>0)?'':'<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	$.ajax({
             					type: "GET",
                                 url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                 async:false,
@@ -506,7 +522,11 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek1>0){
+                                				btnApply1=label;
+                                			}else{
+                                				btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}                                			
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -514,12 +534,17 @@
                 							}else{
                 								label = "<span class='label label-default'>No Action</span>";
                 							}
-                                			btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek1>0){
+                                				btnApply1=label;
+                                			}else{
+                                				btnApply1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
                                 		}
                                 	}
                                 },
                             });
-                            $.ajax({
+                        	
+                        	$.ajax({
             					type: "GET",
             					url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                 async:false,
@@ -547,7 +572,11 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek2>0){
+                                				btnApply2=label;
+                                			}else{
+                                				btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -555,13 +584,18 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek2>0){
+                                				btnApply2=label;
+                                			}else{
+                                				btnApply2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			}
                                 		}
                                 		
                                 	}
                                 },
                             });
-                            $.ajax({
+                            
+                        	$.ajax({
             					type: "GET",
             					url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
                                 async:false,
@@ -589,7 +623,11 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek3>0){
+                                				btnApply3=label;
+                                			}else{
+                                				btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -597,13 +635,18 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek3>0){
+                                				btnApply3=label;
+                                			}else{
+                                				btnApply3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
                                 		}
                                 		
                                 	}
                                 },
                             });
-                            $.ajax({
+                            
+                        	$.ajax({
             					type: "GET",
             					url: urls+'get-approve/entry_gov_indicator/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
                                 async:false,
@@ -631,7 +674,11 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek4>0){
+                                				btnApply4=label;
+                                			}else{
+                                				btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -639,13 +686,17 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek4>0){
+                                				btnApply4=label;
+                                			}else{
+                                				btnApply4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_indicator###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
                                 		}
                                 		
                                 	}
                                 },
                             });
-                          
+                            
                             var appind="";
                             if(sts=="semesterly"){
                             	appind = '<td>'+btnApply2+'</td>';
@@ -722,6 +773,9 @@
                                 	}
                                 },
                             });
+                        	if(cek1>0){
+                        		update = "";
+                        	}
                         	return '<a data-id="'+row[22]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'###indicator" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                         }},
                         {"data": function (row, data, index, display) {
@@ -755,6 +809,9 @@
                                 	}
                                 },
                             });
+                        	if(cek2>0){
+                        		update = "";
+                        	}
                         	return '<a data-id="'+row[22]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###2'+'###'+id+'###indicator" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                         }},
                         {"data": function (row, data, index, display) {
@@ -788,6 +845,9 @@
                                 	}
                                 },
                             });
+                        	if(cek3>0){
+                        		update = "";
+                        	}
                         	return '<a data-id="'+row[22]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###3'+'###'+id+'###indicator" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                         }},
                         {"data": function (row, data, index, display) {
@@ -821,6 +881,9 @@
                                 	}
                                 },
                             });
+                        	if(cek4>0){
+                        		update = "";
+                        	}
                         	return '<a data-id="'+row[22]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###4'+'###'+id+'###indicator" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                         }},
                     ],
@@ -862,6 +925,23 @@
                     	stsBud = result1.content[0];
                     }
                 });
+                
+                var cek1;
+            	var cek2;
+            	var cek3;
+            	var cek4;
+            	$.ajax({
+                    type: "GET",
+                    async:false,
+                    url: urls+'cek-show-report/'+id_monper+'/'+tahun+'/entry_gov_budget',
+                    success: function (result1) {
+                    	cek1 = result1.cek[0][0];
+                    	cek2 = result1.cek[0][1];
+                    	cek3 = result1.cek[0][2];
+                    	cek4 = result1.cek[0][3];
+                    }
+            	});
+            	
             	var header = '';
             	var headerFull = '';
                 header += '<tr class="" >';
@@ -929,11 +1009,11 @@
                         	var tabel = $('#tabel-entri-sdg > tbody').find('tr:last');
                         	
                           //Budget
-                        	var btnApplyBud1='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApplyBud2='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApplyBud3='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                        	var btnApplyBud4='<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
-                            $.ajax({
+                        	var btnApplyBud1=(cek1>0)?'':'<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApplyBud2=(cek2>0)?'':'<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApplyBud3=(cek3>0)?'':'<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	var btnApplyBud4=(cek4>0)?'':'<a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Apply" class="btn btn-success apply" href="#"><i class="icon-upload "></i>Apply</a></td>';
+                        	$.ajax({
             					type: "GET",
                                 url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/1'+'/'+v_idrole,
                                 async:false,
@@ -961,7 +1041,12 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApplyBud1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek1>0){
+                                				btnApplyBud1=label;
+                                			}else{
+                                				btnApplyBud1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
+                                			
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -969,12 +1054,18 @@
                 							}else{
                 								label = "<span class='label label-default'>No Action</span>";
                 							}
-                                			btnApplyBud1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek1>0){
+                                				btnApplyBud1=label;
+                                			}else{
+                                				btnApplyBud1=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###1" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
+                                			
                                 		}
                                 	}
                                 },
                             });
-                            $.ajax({
+                        	
+                        	$.ajax({
             					type: "GET",
             					url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/2'+'/'+v_idrole,
                                 async:false,
@@ -1002,7 +1093,12 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApplyBud2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek2>0){
+                                				btnApplyBud2=label;
+                                			}else{
+                                				btnApplyBud2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
+                                			
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -1010,13 +1106,19 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApplyBud2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek2>0){
+                                				btnApplyBud2=label;
+                                			}else{
+                                				btnApplyBud2=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###2" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
+                                			
                                 		}
                                 		
                                 	}
                                 },
                             });
-                            $.ajax({
+                            
+                        	$.ajax({
             					type: "GET",
             					url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/3'+'/'+v_idrole,
                                 async:false,
@@ -1044,7 +1146,12 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApplyBud3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek3>0){
+                                				btnApplyBud3=label;
+                                			}else{
+                                				btnApplyBud3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
+                                			
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -1052,13 +1159,19 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApplyBud3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek3>0){
+                                				btnApplyBud3=label;
+                                			}else{
+                                				btnApplyBud3=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###3" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
+                                			
                                 		}
                                 		
                                 	}
                                 },
                             });
-                            $.ajax({
+                            
+                        	$.ajax({
             					type: "GET",
             					url: urls+'get-approve/entry_gov_budget/'+tahun+'/'+id_monper+'/4'+'/'+v_idrole,
                                 async:false,
@@ -1086,7 +1199,12 @@
                 							}else{
                 								label = "<span class='label label-important'>Rejected</span>";
                 							}
-                                			btnApplyBud4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek4>0){
+                                				btnApplyBud4=label;
+                                			}else{
+                                				btnApplyBud4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
+                                			
                                 		}else if(apply[0][1]=="5"){
                                 			var label;
                                 			if($("#fs").is(':checked')){
@@ -1094,13 +1212,18 @@
                 							}else{
                 								label = "<span class='label label-important'>No Action</span>";
                 							}
-                                			btnApplyBud4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';
+                                			if(cek4>0){
+                                				btnApplyBud4=label;
+                                			}else{
+                                				btnApplyBud4=label+'<br/><br/><a data-id="0###'+v_idrole+'###'+id_monper+'###'+tahun+'###1###entry_gov_budget###4" title="Unapply" class="btn btn-danger unapply" href="#"><i class="icon-upload "></i>Unapply</a></td>';	
+                                			}
+                                			
                                 		}
                                 		
                                 	}
                                 },
                             });
-
+                            
                             var appbud="";
                             if(stsBud=="semesterly"){
                             	appbud = '<td>'+btnApplyBud2+'</td>';
@@ -1175,6 +1298,9 @@
                                 	}
                                 },
                             });
+                        	if(cek1>0){
+                        		update = "";
+                        	}
                         	return '<a data-id="'+row[23]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###1'+'###'+id+'###budget" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                         }},
                         {"data": function (row, data, index, display) {
@@ -1208,6 +1334,9 @@
                                 	}
                                 },
                             });
+                        	if(cek2>0){
+                        		update = "";
+                        	}
                         	return '<a data-id="'+row[23]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###2'+'###'+id+'###budget" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                         }},
                         {"data": function (row, data, index, display) {
@@ -1241,6 +1370,9 @@
                                 	}
                                 },
                             });
+                        	if(cek3>0){
+                        		update = "";
+                        	}
                         	return '<a data-id="'+row[23]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###3'+'###'+id+'###budget" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                         }},
                         {"data": function (row, data, index, display) {
@@ -1274,6 +1406,9 @@
                                 	}
                                 },
                             });
+                        	if(cek4>0){
+                        		update = "";
+                        	}
                         	return '<a data-id="'+row[23]+'###'+val1+'###'+val2+'###'+val3+'###'+val4+'###4'+'###'+id+'###budget" title="Update" class="'+color_sts+' '+update+' " href="#"><i class="icon-edit "></i>'+text+"</a> ";
                         }},
                         

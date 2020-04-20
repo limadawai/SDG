@@ -257,6 +257,9 @@
         $("#welcome").html("Welcome, "+name);
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
+        $('.appl').hide();
+        $('.unappl').hide();
+        $('#showModal').hide();
 //        btn_apply();
         //$("#time_activity").datepicker();
         $('#time_activity').datepicker({
@@ -528,7 +531,7 @@
         		swal(titleMod,messMod,'error');
         	}
         });
-        
+        var cek1;
         function btn_apply(){
             var id_role             = $('#idrole').val();
             var v_dataid            = $("#periode").val();
@@ -538,8 +541,10 @@
 //            var id_monper           = monper_1;
 //            var year                = tahun_1;
             var type                = "entry_best_practice";
+            
             $.ajax({
                 type: "GET",
+                async:false,
                 url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+year+'/'+type+'/1',
                 success: function (result1) {
                 	console.log(result1.content)
@@ -563,6 +568,10 @@
                         $('.unappl').hide();
                         $('#showModal').hide();
                         
+                    }else if(id_role==0 || v_dataid==0){
+                    	$('.appl').hide();
+                        $('.unappl').hide();
+                        $('#showModal').hide();
                     }else{
                         $('.appl').show();
                         $('.unappl').hide();
@@ -571,6 +580,22 @@
                     }
                 }
             });
+            
+            
+            $.ajax({
+                type: "GET",
+                async:false,
+                url: urls+'cek-show-report/'+id_monper+'/'+year+'/entry_best_practice',
+                success: function (result1) {
+                	var cek = result1.cek[0][0];
+                	cek1 = cek;
+                	if(cek>0){
+                		$('.appl').hide();
+                        $('.unappl').hide();
+                        $('#showModal').hide();
+                	}
+                }
+        	});
         }
         
         function program(){
@@ -936,11 +961,14 @@
                                         	}
                                         },
                                     });
-                                    if(label){
+                                    if(cek1>0){
+                                    	return label;
+                                    }else if(label){
                                     	return label;
                                     }else{
                                     	return text1;
                                     }
+                                    
                                 }}
 			],
 			"columnDefs": [
@@ -954,7 +982,7 @@
         	var year = id[1];
         	var id_role = $('#idrole').val();
         	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
-                btn_apply();
+            btn_apply();
         });
         
         

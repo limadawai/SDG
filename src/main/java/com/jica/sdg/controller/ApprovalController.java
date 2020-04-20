@@ -34,6 +34,7 @@ import com.jica.sdg.service.IEntrySdgDetailService;
 import com.jica.sdg.service.IEntrySdgService;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
+import com.jica.sdg.service.ModelCrud;
 import com.jica.sdg.service.NsaProfileService;
 
 import java.text.DateFormat;
@@ -63,6 +64,9 @@ public class ApprovalController {
 	
 	@Autowired
 	IEntrySdgDetailService sdgDetailService;
+	
+	@Autowired
+    ModelCrud modelCrud;
 	
 	
 	@PostMapping(path = "admin/save-approval", consumes = "application/json", produces = "application/json")
@@ -323,7 +327,7 @@ public class ApprovalController {
         String id_monper = jsonObunit.get("id_monper").toString();  
         String tahun = jsonObunit.get("tahun").toString();
         String period = jsonObunit.get("period").toString();
-        Query query = em.createNativeQuery("UPDATE entry_approval set approval = '4' where type='entry_sdg' and id_monper = :id_monper and year = :year and periode = :periode");
+        Query query = em.createNativeQuery("UPDATE entry_approval set approval = '4' where type='entry_sdg' and id_monper = :id_monper and year = :year and periode = :periode and (approval = '2' or approval = '1')");
         query.setParameter("id_monper", id_monper);
         query.setParameter("year", tahun);
         query.setParameter("periode", period);
@@ -537,12 +541,12 @@ public class ApprovalController {
             Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
             list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
-        Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text ,'#' AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
-                                                "	UNION \n" +
-                                                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id) AS id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target) AS id_text ,a.id AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
-                                                "	UNION \n" +
-                                                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id,'.',c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target,'-',c.id_indicator) AS id_text ,CONCAT(a.id,'.',b.id) AS id_parent2  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
-                                                "	ORDER BY id_parent");
+    	Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text ,'#' AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                "	UNION \n" +
+                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id) AS id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,b.id_target AS id_text ,a.id AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                "	UNION \n" +
+                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id,'.',c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,c.id_indicator AS id_text ,CONCAT(a.id,'.',b.id) AS id_parent2  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                "	ORDER BY id_parent");
         
         List list3 =  query3.getResultList();
         Map<String, Object> filtersdg = new HashMap<>();
@@ -550,6 +554,7 @@ public class ApprovalController {
         model.addAttribute("filtersdg",filtersdg);
         model.addAttribute("id_prov", id_prov);
         model.addAttribute("privilege", privilege);
+        model.addAttribute("refcategory",modelCrud.getRefCategory());
         return "admin/approval/problem_identify";
     }
     
