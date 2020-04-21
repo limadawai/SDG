@@ -146,17 +146,10 @@ public class AdminController {
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list);
             
-            String sql = "SELECT DISTINCT 'c',year_entry FROM entry_sdg order by 2 asc ";
+            String sql = "SELECT min(start_year) as awal_tahun, max(end_year) as akhir_tahun from ran_rad ";
             Query list2 = em.createNativeQuery(sql);
-            List<Object[]> rows = list2.getResultList();
-            List<TahunMap> result = new ArrayList<>(rows.size());
-            Map<String, Object> hasiltahun = new HashMap<>();
-            for (Object[] row : rows) {
-                result.add(
-                            new TahunMap((Integer)row[1])
-                );
-            }
-            hasiltahun.put("tahunmap",result);
+            Map<String, Object> hasiltahun = new HashMap<>();            
+            hasiltahun.put("tahunmap",list2.getResultList());
             
             
             Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
