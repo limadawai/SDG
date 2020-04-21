@@ -216,6 +216,7 @@
                     $("#role").empty();
                     $("#role").append("<option value='0'>-- Pilih Role --</option>");
                     $("#role").append("<option data-cat='all' value='all'>-- ALL --</option>");
+                    $("#role").append("<option value='unassign'>Unassign</option>");
                     for (var i=0; i<result.length; i++) {
                         $("#role").append("<option data-cat='"+result[i]['cat_role']+"' value='" + result[i]['id_role'] + "'>" + result[i]['nm_role'] + "</option>");
                     }
@@ -726,7 +727,7 @@
                                                                     }
                                                                 }
                                                     		}
-                                                    		text += "<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td></tr>";
+                                                    		text += "<td style='text-align:center;border-style:ridge;'></td></tr>";
                                                     	}
                                                 	}
                                                 }
@@ -1155,7 +1156,7 @@
                                                         			
                                                         		}
                                                     		}
-                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' >"+color_sts+"</td></tr>":'</tr>';
+                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' ></td></tr>":'</tr>';
                                                     	}
                                                 	}
                                                 }

@@ -165,7 +165,14 @@ public class ReportController {
     	Query query;
     	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = (monper.isPresent())?monper.get().getStatus():"";
-    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
     	
     	if(sdg.equals("0")) {
     		String sql;
@@ -2390,8 +2397,14 @@ public class ReportController {
     	Query query;
     	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = (monper.isPresent())?monper.get().getStatus():"";
-    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
-    	
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
     	if(sdg.equals("0")) {
     		String sql;
     		if(status.equals("completed")) {
@@ -2476,7 +2489,14 @@ public class ReportController {
     		@PathVariable("sdg") String sdg) {
     	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = (monper.isPresent())?monper.get().getStatus():"";
-    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
     	String sql;
     	Query query;
     	
@@ -2576,7 +2596,14 @@ public class ReportController {
     		@RequestParam("id_monper") int id_monper,
     		@RequestParam("id_prov") String id_prov) {
     	
-    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
     	
     	String sql = "SELECT distinct b.id, b.nm_indicator, "
     			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
@@ -2614,7 +2641,14 @@ public class ReportController {
     	
     	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = monper.get().getStatus();
-    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
     	String sql;
     	Query query;
     	if(sdg.equals("0")) {
@@ -2808,7 +2842,14 @@ public class ReportController {
     	
     	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = monper.get().getStatus();
-    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
     	String sql;
     	
     	if(status.equals("completed")) {
@@ -2905,7 +2946,14 @@ public class ReportController {
     	
     	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = (monper.isPresent())?monper.get().getStatus():"";
-    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
     	Query query;
     	if(status.equals("completed")) {
     		String sql = "SELECT distinct b.id_old as id, b.nm_indicator, "
@@ -2967,7 +3015,14 @@ public class ReportController {
     	
     	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = (monper.isPresent())?monper.get().getStatus():"";
-    	String role = id_role.equals("all")?"":" and a.id_role = '"+id_role+"'";
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
     	Query query;
     	String sql;
     	if(status.equals("completed")) {
