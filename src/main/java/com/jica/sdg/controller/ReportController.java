@@ -2604,17 +2604,35 @@ public class ReportController {
     	}else {
     		role = " and a.id_role = '"+id_role+"'";
     	}
-    	
+    	    	
     	String sql = "SELECT distinct b.id, b.nm_indicator, "
     			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
-    			+ " d.baseline, e.value, f.achievement1, f.achievement2, f.achievement3, f.achievement4, "
-    			+ " f.new_value1, f.new_value2, f.new_value3, f.new_value4, c.calculation, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
+    			+ " d.baseline, e.value, "
+    			+ " case when (select count(*) from entry_approval where id_monper = f.id_monper and year = f.year_entry and type = 'entry_sdg' and (CASE WHEN g.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '1' and approval <> 3) = 0 THEN '' "
+    			+ " ELSE (select achievement1 from entry_sdg as achievement1 where achievement1.id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = f.year_entry) END as achievement1, "
+    			+ " case when (select count(*) from entry_approval where id_monper = f.id_monper and year = f.year_entry and type = 'entry_sdg' and (CASE WHEN g.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '2' and approval <> 3) = 0 THEN '' "
+    			+ " ELSE (select achievement2 from entry_sdg as achievement2 where achievement2.id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = f.year_entry) END as achievement2, "
+    			+ " case when (select count(*) from entry_approval where id_monper = f.id_monper and year = f.year_entry and type = 'entry_sdg' and (CASE WHEN g.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '3' and approval <> 3) = 0 THEN '' "
+    			+ " ELSE (select achievement3 from entry_sdg as achievement3 where achievement3.id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = f.year_entry) END as achievement3, "
+    			+ " case when (select count(*) from entry_approval where id_monper = f.id_monper and year = f.year_entry and type = 'entry_sdg' and (CASE WHEN g.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '4' and approval <> 3) = 0 THEN '' "
+    			+ " ELSE (select achievement1 from entry_sdg as achievement4 where achievement4.id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = f.year_entry) END as achievement4, "
+    			
+    			+ " case when (select count(*) from entry_approval where id_monper = f.id_monper and year = f.year_entry and type = 'entry_sdg' and (CASE WHEN g.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '1' and approval <> 3) = 0 THEN '' "
+    			+ " ELSE (select new_value1 from entry_sdg as achievement1 where achievement1.id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = f.year_entry) END as new_value1, "
+    			+ " case when (select count(*) from entry_approval where id_monper = f.id_monper and year = f.year_entry and type = 'entry_sdg' and (CASE WHEN g.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '2' and approval <> 3) = 0 THEN '' "
+    			+ " ELSE (select new_value2 from entry_sdg as achievement2 where achievement2.id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = f.year_entry) END as new_value2, "
+    			+ " case when (select count(*) from entry_approval where id_monper = f.id_monper and year = f.year_entry and type = 'entry_sdg' and (CASE WHEN g.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '3' and approval <> 3) = 0 THEN '' "
+    			+ " ELSE (select new_value3 from entry_sdg as achievement3 where achievement3.id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = f.year_entry) END as new_value3, "
+    			+ " case when (select count(*) from entry_approval where id_monper = f.id_monper and year = f.year_entry and type = 'entry_sdg' and (CASE WHEN g.nm_role is null THEN id_role is null ELSE id_role = f.id_role END) and periode = '4' and approval <> 3) = 0 THEN '' "
+    			+ " ELSE (select new_value4 from entry_sdg as achievement4 where achievement4.id_sdg_indicator = b.id and id_monper = f.id_monper and year_entry = f.year_entry) END as new_value4, "
+    			
+    			+ " c.calculation, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end "
     			+ " FROM sdg_indicator b "
     			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
     			+ " left join ref_unit c on b.unit = c.id_unit "
     			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
-    			+ " left join entry_sdg f on b.id = f.id_sdg_indicator and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
-    			+ " left join sdg_indicator_target e on b.id = e.id_sdg_indicator and a.id_role = e.id_role and e.year = :year "
+    			+ " left join entry_sdg f on b.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper = :id_monper "
+    			+ " left join sdg_indicator_target e on b.id = e.id_sdg_indicator and e.year = :year "
     			+ " left join ref_role g on a.id_role = g.id_role "
     			+ " WHERE b.id = :id_indicator "+role+" order by b.id";
     	
