@@ -216,6 +216,7 @@
                     $("#role").empty();
                     $("#role").append("<option value='0'>-- Pilih Role --</option>");
                     $("#role").append("<option data-cat='all' value='all'>-- ALL --</option>");
+                    $("#role").append("<option value='unassign'>Unassign</option>");
                     for (var i=0; i<result.length; i++) {
                         $("#role").append("<option data-cat='"+result[i]['cat_role']+"' value='" + result[i]['id_role'] + "'>" + result[i]['nm_role'] + "</option>");
                     }
@@ -726,7 +727,7 @@
                                                                     }
                                                                 }
                                                     		}
-                                                    		text += "<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td></tr>";
+                                                    		text += "<td style='text-align:center;border-style:ridge;'></td></tr>";
                                                     	}
                                                 	}
                                                 }
@@ -1048,6 +1049,7 @@
                                                                     	cekSdg = result.sdg;
                                                                     }
                                                                 });
+
                                                                 var color_sts="";
                                                                 var achive = "";
                                                         		for(var year = start_year; year <= end_year; year++){
@@ -1059,6 +1061,7 @@
                                                                         cache: false,
                                                                         async : false,
                                                                         success: function (hasildis) {
+                                                                        	console.log(hasildis.content);
                                                                         	if(hasildis.content.length>0){
                                                                         		for (var n = 0; n < hasildis.content.length; n++) {
                                                                             		//text += "<td>"+(hasildis.content[n][7]?hasildis.content[n][7]:'')+"</td>";
@@ -1067,7 +1070,7 @@
                                                                             		var nilai2Detail=(hasildis.content[n][13])?hasildis.content[n][13]:hasildis.content[n][9];
                                                                             		var nilai3Detail=(hasildis.content[n][14])?hasildis.content[n][14]:hasildis.content[n][10];
                                                                             		var nilai4Detail=(hasildis.content[n][15])?hasildis.content[n][15]:hasildis.content[n][11];
-                                                                            		
+                                                                            		console.log(nilai1Detail)
                                                                             		var nilai1sdgDetail="";
                                                                             		var nilai2sdgDetail="";
                                                                             		var nilai3sdgDetail="";
@@ -1153,7 +1156,7 @@
                                                         			
                                                         		}
                                                     		}
-                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' >"+color_sts+"</td></tr>":'</tr>';
+                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' ></td></tr>":'</tr>';
                                                     	}
                                                 	}
                                                 }
