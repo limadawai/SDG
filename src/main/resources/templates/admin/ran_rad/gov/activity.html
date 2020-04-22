@@ -173,6 +173,13 @@
     </div>
     <div th:include="admin/layout :: footer"></div>
 </body>
+<style>
+.swal2-container {
+  display: -webkit-box;
+  display: flex;
+  position: fixed;
+  z-index: 300000!important;
+</style>
 <script th:inline="javascript" >
 	// <![CDATA[
 		//$(document).ready(function (e) {
@@ -330,11 +337,13 @@
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
+	        	//table.ajax.reload( null, false );
 	        	headtabel();
 	        });
 	        
 	        $('#id_role').on('change', function(){
 	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$(this).val()).load();
+	        	//table.ajax.reload( null, false );
 	        });
 	        
 	        $('#showModal').on('click', function(){
@@ -442,7 +451,7 @@
                         success: function (result) {
                         	var val = result.content;
     						if(val[0]>0){
-    							$('#myModal').modal('hide');
+    							//$('#myModal').modal('hide');
     							swal("Code",messCode,'error');
     							cek += 1;
     						}
@@ -469,7 +478,8 @@
 	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
 						data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
+	                    	//table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
+	                    	table.ajax.reload( null, false );
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
@@ -551,7 +561,8 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
+                        	//table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
+                        	table.ajax.reload( null, false );
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

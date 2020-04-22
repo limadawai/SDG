@@ -266,11 +266,12 @@ public class RanRadSdgController {
         return hasil;
     }
 	
-	@GetMapping("admin/cek-id_target/{id_target}")
-    public @ResponseBody Map<String, Object> cektarget(@PathVariable("id_target") String id_target) {
-        String sql = "select count(id_target) from sdg_target where id_target=:id_target";
+	@GetMapping("admin/cek-id_target/{id_target}/{id_goals}")
+    public @ResponseBody Map<String, Object> cektarget(@PathVariable("id_target") String id_target,@PathVariable("id_goals") String id_goals) {
+        String sql = "select count(id_target) from sdg_target where id_target=:id_target and id_goals=:id_goals";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_target", id_target);
+        query.setParameter("id_goals", id_goals);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -339,11 +340,12 @@ public class RanRadSdgController {
         return hasil;
     }
     
-    @GetMapping("admin/cek-id_indicator/{id_indicator}")
-    public @ResponseBody Map<String, Object> cekindicator(@PathVariable("id_indicator") String id_indicator) {
-        String sql = "select count(id_indicator) from sdg_indicator where id_indicator=:id_indicator";
+    @GetMapping("admin/cek-id_indicator/{id_indicator}/{id_target}")
+    public @ResponseBody Map<String, Object> cekindicator(@PathVariable("id_indicator") String id_indicator,@PathVariable("id_target") String id_target) {
+        String sql = "select count(id_indicator) from sdg_indicator where id_indicator=:id_indicator and id_target = :id_target";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_indicator", id_indicator);
+        query.setParameter("id_target", id_target);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);

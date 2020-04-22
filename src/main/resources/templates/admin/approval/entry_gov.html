@@ -674,6 +674,9 @@
                         grid_role();
                         cek_show_report();
                         grid();
+                        if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                        	newValue(new_id_role, new_id_monper, new_type, new_periode, new_nmrole, new_approval);
+                    	}
                     },
                 });
             }, function (dismiss) {
@@ -735,6 +738,9 @@
                         grid_role();
                         cek_show_report();
                         grid();
+                        if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                        	newValue(new_id_role, new_id_monper, new_type, new_periode, new_nmrole, new_approval);
+                    	}
                     },
                 });
             }, function (dismiss) {
@@ -742,6 +748,27 @@
                 }
             });
         });
+        
+        var new_id_role;
+        var new_id_monper;
+        var new_type;
+        var new_nmrole;
+        var new_approval;
+        var new_periode;
+        
+        function newValue(id_role, id_monper, type, periode, nmrole, approval){
+        	$('#nmrol').val(nmrole);
+            $('#idrol').val(id_role);
+            grid(id_role, id_monper, type, periode, nmrole, approval);
+            $('.tombol-new').show();
+            if(type == 'entry_gov_budget'){
+                $("#tabel-approve-gov-activity").show();
+                $("#tabel-approve-gov-indicator").hide();
+            }else{
+                $("#tabel-approve-gov-activity").hide();
+                $("#tabel-approve-gov-indicator").show();
+            }
+        }
         
         $('#tbody-role').on('click', '.approve', function(){
             var id          = $(this).data("id");
@@ -772,9 +799,12 @@
 //                        var data_id     = $("#periode").val().split("###");;
 //                        var id_monper   = data_id[0];
 //                        var tahun       = data_id[1];
-                    $("#tabel-approve-gov-activity").hide();
-                    $("#tabel-approve-gov-indicator").hide();
+                    //$("#tabel-approve-gov-activity").hide();
+                    //$("#tabel-approve-gov-indicator").hide();
                     grid_role();
+                    if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                    	newValue(new_id_role, new_id_monper, new_type, new_periode, new_nmrole, 1);
+                	}
                 },
             });
             
@@ -797,9 +827,12 @@
 //                        var data_id     = $("#periode").val().split("###");;
 //                        var id_monper   = data_id[0];
 //                        var tahun       = data_id[1];
-                    $("#tabel-approve-gov-activity").hide();
-                    $("#tabel-approve-gov-indicator").hide();
+                    //$("#tabel-approve-gov-activity").hide();
+                    //$("#tabel-approve-gov-indicator").hide();
                     grid_role();
+                    if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                    	newValue(new_id_role, new_id_monper, new_type, new_periode, new_nmrole, 1);
+                	}
                 },
             });
             
@@ -810,18 +843,15 @@
             var periode     = $(this).data("periode");
             var nmrole      = $(this).data("nmrole");
             var approval    = $(this).data("approval");
-            $('#nmrol').val(nmrole);
-            $('#idrol').val(id_role);
-            console.log(id_role+' '+ id_monper+' '+ type+' '+ periode+' '+ nmrole+' '+ approval)
-            grid(id_role, id_monper, type, periode, nmrole, approval);
-            $('.tombol-new').show();
-            if(type == 'entry_gov_budget'){
-                $("#tabel-approve-gov-activity").show();
-                $("#tabel-approve-gov-indicator").hide();
-            }else{
-                $("#tabel-approve-gov-activity").hide();
-                $("#tabel-approve-gov-indicator").show();
-            }
+            
+            new_id_role = id_role;
+            new_id_monper = id_monper;
+            new_type = type;
+            new_nmrole = nmrole;
+            new_approval = approval;
+            new_periode = periode;
+            
+            newValue(id_role, id_monper, type, periode, nmrole, approval);
         });
         
         $('#myModal').on('hidden.bs.modal',function(){
@@ -861,10 +891,13 @@
 //                        var data_id     = $("#periode").val().split("###");;
 //                        var id_monper   = data_id[0];
 //                        var tahun       = data_id[1];
-                        $("#tabel-approve-gov-activity").hide();
-                        $("#tabel-approve-gov-indicator").hide();
+                        //$("#tabel-approve-gov-activity").hide();
+                        //$("#tabel-approve-gov-indicator").hide();
                         grid_role();
                         grid();
+                        if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                        	newValue(new_id_role, new_id_monper, new_type, new_periode, new_nmrole, approval);
+                    	}
                     },
                 });
             }

@@ -1773,25 +1773,25 @@ public class DataEntryController {
     		role = " and a.id_role = '"+id_role+"'";
     	}
     	
-    	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
-                    "g.sdg_indicator, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit, "+
-                    "(select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = d.id and year between g.start_year and g.end_year) as target,i.baseline " +
-                    "from ran_rad as g\n" +
-                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
-                    "left join sdg_goals as b on a.id_goals = b.id \n" +
-                    "left join sdg_target as c on a.id_target = c.id \n" +
-                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
-                    "left join \n" +
-                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
-                    "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "left join sdg_funding as i on d.id = i.id_sdg_indicator \n" +
-                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov order by a.id_goals, a.id_target, a.id_indicator";
-        Query query = em.createNativeQuery(sql);
+    	String sql = "SELECT distinct b.id_goals, b.id_target, b.id, h.nm_goals, i.nm_target, b.nm_indicator, b.unit, b.increment_decrement, '' as value, "
+    			+ " k.sdg_indicator, h.id_goals as kode_goals, h.nm_goals_eng, "
+    			+ " i.id_target as kode_target, i.nm_target_eng, b.id_indicator as kode_indicator, b.nm_indicator_eng, j.nm_unit, "
+    			+ " (select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = b.id and year between k.start_year and k.end_year and id_monper = k.id_monper) as target,l.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end, g.id_role "
+    			+ " FROM sdg_indicator b "
+    			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
+    			+ " left join ref_unit c on b.unit = c.id_unit "
+    			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+    			+ " left join ref_role g on a.id_role = g.id_role "
+    			+ " left join sdg_goals as h on b.id_goals = h.id "
+                + " left join sdg_target as i on b.id_target = i.id "
+                + " left join ref_unit as j on b.unit = j.id_unit "
+                + " left join ran_rad as k on k.id_monper = :id_monper "
+                +"  left join sdg_funding as l on b.id = l.id_sdg_indicator and l.id_monper = k.id_monper "
+    			+ " WHERE 1=1 "+role+" order by b.id";
+    	Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
-        query.setParameter("id_role", id_role);
         query.setParameter("id_monper", id_monper);
-        query.setParameter("year", year);
+        System.out.println(id_prov+" "+id_monper+" "+year);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -1811,20 +1811,21 @@ public class DataEntryController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-sdgTargetIndicator/{id_indicator}/{id_role}", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-sdgTargetIndicator/{id_indicator}/{id_role}/{id_monper}", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	@Transactional
-	public void saveSdgTarget(@RequestBody Map<String, Object> payload,@PathVariable("id_indicator") Integer id_indicator,@PathVariable("id_role") Integer id_role) {
+	public void saveSdgTarget(@RequestBody Map<String, Object> payload,@PathVariable("id_indicator") Integer id_indicator,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper) {
     	JSONObject jsonObject = new JSONObject(payload);
         JSONObject catatan = jsonObject.getJSONObject("target");
         JSONArray c = catatan.getJSONArray("target");
+        String role = id_role.equals("unassign")?null:"'"+id_role+"'";
         for (int i = 0 ; i < c.length(); i++) {
         	JSONObject obj = c.getJSONObject(i);
         	String year = obj.getString("year");
         	String value = obj.getString("nilai");
-        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and year = '"+year+"' ").executeUpdate();
+        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and year = '"+year+"' and id_monper = '"+id_monper+"'").executeUpdate();
         	if(!value.equals("")) {
-        		em.createNativeQuery("INSERT INTO sdg_indicator_target (id_sdg_indicator,id_role,year,value) values ('"+id_indicator+"','"+id_role+"','"+year+"','"+value+"')").executeUpdate();
+        		em.createNativeQuery("INSERT INTO sdg_indicator_target (id_sdg_indicator,id_role,year,value,id_monper) values ('"+id_indicator+"',"+role+",'"+year+"','"+value+"','"+id_monper+"')").executeUpdate();
         	}
         }
     }
@@ -1837,8 +1838,9 @@ public class DataEntryController {
         String id_sdg_indicator = jsonObunit.get("id_sdg_indicator").toString();  
         String baseline = jsonObunit.get("baseline").toString();
         String funding_source = jsonObunit.get("funding_source").toString();
-        em.createNativeQuery("delete from sdg_funding where id_sdg_indicator ='"+id_sdg_indicator+"'").executeUpdate();
-        em.createNativeQuery("INSERT INTO sdg_funding (id_sdg_indicator,baseline,funding_source) values ('"+id_sdg_indicator+"','"+baseline+"','"+funding_source+"')").executeUpdate();
+        String id_monper = jsonObunit.get("id_monper").toString();
+        em.createNativeQuery("delete from sdg_funding where id_sdg_indicator ='"+id_sdg_indicator+"' and id_monper = '"+id_monper+"'").executeUpdate();
+        em.createNativeQuery("INSERT INTO sdg_funding (id_sdg_indicator,baseline,funding_source,id_monper) values ('"+id_sdg_indicator+"','"+baseline+"','"+funding_source+"','"+id_monper+"')").executeUpdate();
     }
     
     @GetMapping("admin/get-sdgFunding/{id_indicator}")

@@ -5261,7 +5261,7 @@ public class ReportController {
           whereidindicator = "and a.id_indicator =  '"+id_indicator+"'";  
         }
 
-        String sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up FROM entry_problem_identify_map a\n" +
+        String sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id FROM entry_problem_identify_map a\n" +
                         "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
                         "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
                         "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
@@ -5281,7 +5281,7 @@ public class ReportController {
         }
         
         if(group.equals("2")){
-            wheregroup = " t.id_goals,t.nm_goals ";
+            wheregroup = " t.id_goals,t.nm_goals,t.kode_id ";
         }
         
         if(group.equals("3")){
@@ -5289,7 +5289,7 @@ public class ReportController {
         }
         
         String sql2  =   "SELECT DISTINCT "+wheregroup+" FROM (\n" +
-                         " SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up FROM entry_problem_identify_map a\n" +
+                         " SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id FROM entry_problem_identify_map a\n" +
                          "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
                          "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
                          "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
