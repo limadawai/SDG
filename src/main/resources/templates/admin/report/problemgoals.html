@@ -55,13 +55,11 @@
                             </select>
                         </div>
                         <div class="pull-left" style="width:100%">
-                            <select th:field="*{listprov}" class="span3" id="goals" name="goals">
+                            <select class="span3" id="goals" name="goals">
                                 <option value="0" >-- Pilih --</option>
-                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="target" name="target" class="form-control">
                                 <option value="0" >-- Pilih --</option>
-                                <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
                             
 <!--                            <div class="lang_indo"><span> Periode</span></div>
@@ -170,7 +168,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: urls+'list-get-option-monper/'+id_prov,
+                    url: urls+'list-get-option-monper-report/'+id_prov,
                     success: function (result1) {
                         if(id_role == '1'){
                             $("#periode").html('<option value="0" >-- Pilih --</option>'); 

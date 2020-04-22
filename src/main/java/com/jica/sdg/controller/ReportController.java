@@ -5260,16 +5260,36 @@ public class ReportController {
         if(!id_indicator.equals("*")&&!id_indicator.equals("0")){
           whereidindicator = "and a.id_indicator =  '"+id_indicator+"'";  
         }
+        
+        Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+     	String status = (monper.isPresent())?monper.get().getStatus():"";
+     	
+     	String sql;
+     	
+     	if(status.equals("completed")) {
+     		sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id FROM entry_problem_identify_map a\n" +
+                    "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
+                    "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
+                    "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
+                    "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
+                    "	LEFT JOIN history_sdg_goals f ON  a.id_goals = f.id_old and f.id_monper = a.id_monper "
+            +       "       JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' "
+            		+ "		JOIN entry_approval h on b.id_role = h.id_role and b.id_monper = h.id_monper and b.year = h.year and h.type = 'entry_problem_identify' and h.approval != '3' "
+            + " where a.id_prov = :id_prov  "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
+    
+     	}else {
+     		sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id FROM entry_problem_identify_map a\n" +
+                    "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
+                    "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
+                    "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
+                    "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
+                    "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
+            +       "       JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' "
+            		+ "		JOIN entry_approval h on b.id_role = h.id_role and b.id_monper = h.id_monper and b.year = h.year and h.type = 'entry_problem_identify' and h.approval != '3' "
+            + " where a.id_prov = :id_prov  "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
+    
+     	}
 
-        String sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id FROM entry_problem_identify_map a\n" +
-                        "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
-                        "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
-                        "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
-                        "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
-                        "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
-                +       "       JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' "
-                		+ "		JOIN entry_approval h on b.id_role = h.id_role and b.id_monper = h.id_monper and b.year = h.year and h.type = 'entry_problem_identify' and h.approval != '3' "
-                + " where a.id_prov = :id_prov  "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
         
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
@@ -5287,17 +5307,32 @@ public class ReportController {
         if(group.equals("3")){
             wheregroup = " t.id_role,t.nm_role ";
         }
-        
-        String sql2  =   "SELECT DISTINCT "+wheregroup+" FROM (\n" +
-                         " SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id FROM entry_problem_identify_map a\n" +
-                         "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
-                         "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
-                         "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
-                         "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
-                         "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
-                +        "      JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' "
-                		+ "		JOIN entry_approval h on b.id_role = h.id_role and b.id_monper = h.id_monper and b.year = h.year and h.type = 'entry_problem_identify' and h.approval != '3' "
-                + "where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
+        String sql2;
+        if(status.equals("completed")) {
+        	sql2  =   "SELECT DISTINCT "+wheregroup+" FROM (\n" +
+                    " SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id FROM entry_problem_identify_map a\n" +
+                    "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
+                    "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
+                    "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
+                    "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
+                    "	LEFT JOIN history_sdg_goals f ON  a.id_goals = f.id_old and a.id_monper = f.id_monper "
+           +        "      JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' "
+           		+ "		JOIN entry_approval h on b.id_role = h.id_role and b.id_monper = h.id_monper and b.year = h.year and h.type = 'entry_problem_identify' and h.approval != '3' "
+           + "where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
+   
+        }else {
+        	sql2  =   "SELECT DISTINCT "+wheregroup+" FROM (\n" +
+                    " SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id FROM entry_problem_identify_map a\n" +
+                    "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
+                    "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
+                    "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
+                    "	LEFT JOIN ref_province e ON b.id_prov = e.id_prov \n" +
+                    "	LEFT JOIN sdg_goals f ON  a.id_goals = f.id "
+           +        "      JOIN entry_show_report g on a.id_monper = g.id_monper and g.year = b.year and g.type = 'entry_problem_identify' "
+           		+ "		JOIN entry_approval h on b.id_role = h.id_role and b.id_monper = h.id_monper and b.year = h.year and h.type = 'entry_problem_identify' and h.approval != '3' "
+           + "where a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator+" ) t	ORDER BY "+wheregroup+" ASC ";
+   
+        }
         
         Query query2 = em.createNativeQuery(sql2);
               query2.setParameter("id_prov", id_prov);

@@ -20,6 +20,7 @@ import com.jica.sdg.service.*;
 import java.util.*;
 
 import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgFunding;
 import com.jica.sdg.model.SdgGoals;
@@ -230,7 +231,10 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}")
     public @ResponseBody Map<String, Object> getOptionGoalsList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category) {
-        String whereidrole ="";
+    	Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	
+    	String whereidrole ="";
         String wheremonper = "";
         String whereidcategory ="";
         if(!id_monper.equals("*")){
@@ -245,11 +249,19 @@ public class DataEntryController {
           whereidcategory = " AND c.id_cat =  '"+id_category+"'";  
         }
         
-        
-        String sql  = " SELECT DISTINCT b.id,b.nm_goals,b.id_goals  FROM entry_problem_identify_map a \n" +
+        String sql;
+        if(status.equals("completed")) {
+        	sql  = " SELECT DISTINCT b.id_old,b.nm_goals,b.id_goals  FROM entry_problem_identify_map a \n" +
+                    "JOIN history_sdg_goals b ON a.id_goals = b.id_old and b.id_monper = '"+id_monper+"' \n" +
+                    "LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation  \n" +
+                    "WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory;
+        }else {
+        	sql  = " SELECT DISTINCT b.id,b.nm_goals,b.id_goals  FROM entry_problem_identify_map a \n" +
                     "JOIN sdg_goals b ON a.id_goals = b.id \n" +
                     "LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation  \n" +
                     "WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory;
+        }
+        
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         List list   = query.getResultList();
@@ -261,7 +273,10 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}")
     public @ResponseBody Map<String, Object> getOptionTargetList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals) {
-        String whereidrole ="";
+    	Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	
+    	String whereidrole ="";
         String wheremonper = "";
         String whereidcategory ="";
         String whereidgoals ="";
@@ -279,11 +294,19 @@ public class DataEntryController {
         if(!id_goals.equals("*")){
           whereidgoals = "  and a.id_goals =  '"+id_goals+"'";  
         }
+        String sql;
+        if(status.equals("completed")) {
+        	sql  =   " SELECT DISTINCT b.id_old,b.nm_target,b.id_target  FROM entry_problem_identify_map a \n" +
+                    " JOIN history_sdg_target b ON a.id_target = b.id_old and b.id_monper = '"+id_monper+"' \n" +
+                    " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation    \n" +
+                    " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals;
+        }else {
+        	sql  =   " SELECT DISTINCT b.id,b.nm_target,b.id_target  FROM entry_problem_identify_map a \n" +
+                    " JOIN sdg_target b ON a.id_target = b.id\n" +
+                    " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation    \n" +
+                    " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals;
+        }
         
-        String sql  =   " SELECT DISTINCT b.id,b.nm_target,b.id_target  FROM entry_problem_identify_map a \n" +
-                        " JOIN sdg_target b ON a.id_target = b.id\n" +
-                        " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation    \n" +
-                        " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals;
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         List list   = query.getResultList();
@@ -295,7 +318,10 @@ public class DataEntryController {
     
      @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}/{id_target}")
     public @ResponseBody Map<String, Object> getOptionIndicatorList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals,@PathVariable("id_target") String id_target) {
-        String whereidrole ="";
+    	Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+     	String status = (monper.isPresent())?monper.get().getStatus():"";
+     	
+    	String whereidrole ="";
         String wheremonper = "";
         String whereidcategory ="";
         String whereidgoals ="";
@@ -318,11 +344,20 @@ public class DataEntryController {
         if(!id_target.equals("*")){
           whereidtarget = "and a.id_target =  '"+id_target+"'";  
         }
+        String sql;
+        if(status.equals("completed")) {
+        	sql  =   " SELECT DISTINCT b.id_old,b.nm_indicator,b.id_indicator  FROM entry_problem_identify_map a \n" +
+                    " JOIN history_sdg_indicator b ON a.id_indicator = b.id_old and b.id_monper = '"+id_monper+"' \n" +
+                    " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation \n " +
+                    " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget;
+        }else {
+        	sql  =   " SELECT DISTINCT b.id,b.nm_indicator,b.id_indicator  FROM entry_problem_identify_map a \n" +
+                    " JOIN sdg_indicator b ON a.id_indicator = b.id\n" +
+                    " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation \n " +
+                    " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget;
+        }
         
-        String sql  =   " SELECT DISTINCT b.id,b.nm_indicator,b.id_indicator  FROM entry_problem_identify_map a \n" +
-                        " JOIN sdg_indicator b ON a.id_indicator = b.id\n" +
-                        " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation \n " +
-                        " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget;
+        
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         List list   = query.getResultList();

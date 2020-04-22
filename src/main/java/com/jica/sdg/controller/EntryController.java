@@ -8,6 +8,7 @@ import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.Nsaprofile2;
 import com.jica.sdg.model.Problemlist;
 import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
@@ -324,23 +325,47 @@ public class EntryController {
     
     @GetMapping("admin/list-problem/{id_monper}/{tahun}/{id_role}")
      public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper,@PathVariable("tahun") String tahun,@PathVariable("id_role") String id_role) {
-        String sql = "SELECT   \n" +
-"                         d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng  \n" +
-"                        ,e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
-"                        ,f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
-"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
-"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
-                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
-                            "LEFT JOIN sdg_goals b ON g.id_goals = b.id \n" +
-                            "LEFT JOIN sdg_target c ON g.id_target = c.id\n" +
-                            "LEFT JOIN sdg_indicator d ON g.id_indicator = d.id \n" +
-                            "WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs2\n" +
-"                         FROM entry_problem_identify a  \n" +
-"                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
-"                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
-"                        LEFT JOIN sdg_goals d ON a.id_goals = d.id \n" +
-"                        LEFT JOIN sdg_target e ON a.id_target = e.id \n" +
-"                        LEFT JOIN sdg_indicator f ON a.id_indicator = f.id WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";        
+    	Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	String sql;
+    	if(status.equals("completed")) {
+    		sql = "SELECT   \n" +
+    				"                         d.id_goals,d.id_old AS id_sdg_goals,d.nm_goals,d.nm_goals_eng  \n" +
+    				"                        ,e.id_target,e.id_old AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
+    				"                        ,f.id_indicator,f.id_old AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
+    				"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
+    				"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
+    				                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
+    				                            "LEFT JOIN history_sdg_goals b ON g.id_goals = b.id_old and b.id_monper = '"+id_monper+"' \n" +
+    				                            "LEFT JOIN history_sdg_target c ON g.id_target = c.id_old and c.id_monper = '"+id_monper+"' \n" +
+    				                            "LEFT JOIN history_sdg_indicator d ON g.id_indicator = d.id_old and d.id_monper = '"+id_monper+"'  \n" +
+    				                            "WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs2\n" +
+    				"                         FROM entry_problem_identify a  \n" +
+    				"                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
+    				"                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
+    				"                        LEFT JOIN history_sdg_goals d ON a.id_goals = d.id_old and d.id_monper = '"+id_monper+"'  \n" +
+    				"                        LEFT JOIN history_sdg_target e ON a.id_target = e.id_old and e.id_monper = '"+id_monper+"'  \n" +
+    				"                        LEFT JOIN history_sdg_indicator f ON a.id_indicator = f.id_old and f.id_monper = '"+id_monper+"'  WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";
+    	}else {
+    		sql = "SELECT   \n" +
+    				"                         d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng  \n" +
+    				"                        ,e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
+    				"                        ,f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
+    				"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
+    				"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
+    				                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
+    				                            "LEFT JOIN sdg_goals b ON g.id_goals = b.id \n" +
+    				                            "LEFT JOIN sdg_target c ON g.id_target = c.id\n" +
+    				                            "LEFT JOIN sdg_indicator d ON g.id_indicator = d.id \n" +
+    				                            "WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs2\n" +
+    				"                         FROM entry_problem_identify a  \n" +
+    				"                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
+    				"                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
+    				"                        LEFT JOIN sdg_goals d ON a.id_goals = d.id \n" +
+    				"                        LEFT JOIN sdg_target e ON a.id_target = e.id \n" +
+    				"                        LEFT JOIN sdg_indicator f ON a.id_indicator = f.id WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";
+    	}
+    	        
         Query list = em.createNativeQuery(sql);
         
         Map<String, Object> hasil = new HashMap<>();
