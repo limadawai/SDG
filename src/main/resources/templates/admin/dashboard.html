@@ -116,7 +116,11 @@
         var map         = [[${map}]];
         var tahunmap    = [[${tahunmap}]];
         var filtersdg   = [[${filtersdg}]];
-//        console.log(tahunmap);
+        var start_year  = parseInt(tahunmap.tahunmap[0][0]);
+        var end_year    = parseInt(tahunmap.tahunmap[0][1]);
+//        console.log(start_year);
+//        console.log(end_year);
+       
 //        console.log(map);
         var data_map =[];
         $.each(map.content,function(i,x){
@@ -125,16 +129,20 @@
 //            console.log(x[1]);
         });
         
-        var data_tahun = []
-        var lengthtahun = tahunmap.tahunmap.length;
-         $.each(tahunmap.tahunmap,function(i,x){
-             var obj = {'id':x.tahun,'text':x.tahun,'level':'1'}
-             if(i+1==lengthtahun){
-                 var obj = {'id':x.tahun,'text':x.tahun,'level':'1','selected':true}
-             }
-             data_tahun.push(obj)
-        });
         
+//        var lengthtahun = tahunmap.tahunmap.length;
+//         $.each(tahunmap.tahunmap,function(i,x){
+//             var obj = {'id':x.tahun,'text':x.tahun,'level':'1'}
+//             if(i+1==lengthtahun){
+//                 var obj = {'id':x.tahun,'text':x.tahun,'level':'1','selected':true}
+//             }
+//             data_tahun.push(obj)
+//        });
+        var data_tahun = []
+        for(start_year;start_year<=end_year;start_year++){
+             var obj = {'id':start_year,'text':start_year,'level':'1'}
+            data_tahun.push(obj)
+       }
         var data_filter = [{'id':'0','text':'ALL','level':'1'}]
          $.each(filtersdg.data,function(i,x){
              var obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3]}

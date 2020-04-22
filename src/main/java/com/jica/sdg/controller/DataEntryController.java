@@ -1764,7 +1764,16 @@ public class DataEntryController {
     
     @GetMapping("admin/list-entry-sdg-target/{id_prov}/{id_role}/{id_monper}/{year}")
     public @ResponseBody Map<String, Object> listEntrySdgTarget(@PathVariable("id_prov") String id_prov, @PathVariable("id_role") String id_role, @PathVariable("id_monper") String id_monper,@PathVariable("year") String year) {
-        String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
+    	String role;
+    	if(id_role.equals("all")) {
+    		role = "";
+    	}else if(id_role.equals("unassign")) {
+    		role = " and a.id_role is null ";
+    	}else {
+    		role = " and a.id_role = '"+id_role+"'";
+    	}
+    	
+    	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
                     "g.sdg_indicator, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
                     "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit, "+
                     "(select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = d.id and year between g.start_year and g.end_year) as target,i.baseline " +
