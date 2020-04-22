@@ -138,6 +138,13 @@
     </div>
     <div th:include="admin/layout :: footer"></div>
 </body>
+<style>
+.swal2-container {
+  display: -webkit-box;
+  display: flex;
+  position: fixed;
+  z-index: 300000!important;
+</style>
 <div id="myModal" data-backdrop="static"class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close tutup" data-dismiss="modal" aria-hidden="true">×</button>
@@ -323,7 +330,8 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
-	        	table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+	        	//table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+	        	table.ajax.reload( null, false );
 	        });
 
 	        //Indikator SDG untuk mapping
@@ -598,7 +606,7 @@
                         success: function (result) {
                         	var val = result.content;
     						if(val[0]>0){
-    							$('#myModal').modal('hide');
+    							//$('#myModal').modal('hide');
     							swal("Code",messCode,'error');
     							cek += 1;
     						}
@@ -626,7 +634,8 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+	                    	//table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+	                    	table.ajax.reload( null, false );
 	                    	var id_gov_indicator = result.content;
 	                    	var target =  $('#form-target').serializeObject();
 	                    	$.ajax({
@@ -820,7 +829,8 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+                        	//table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+                        	table.ajax.reload( null, false );
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

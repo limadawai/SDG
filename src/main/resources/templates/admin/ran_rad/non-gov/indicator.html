@@ -341,7 +341,8 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
-	        	table.ajax.url(urls+'list-nsaIndicator/'+id_program+'/'+id_activity).load();
+	        	table.ajax.reload( null, false );
+	        	//table.ajax.url(urls+'list-nsaIndicator/'+id_program+'/'+id_activity).load();
 	        });
 	        
 	        var tahun = $("#id_monper").text().split(" - ");
@@ -664,7 +665,8 @@
 	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
 						data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-nsaIndicator/'+id_program+'/'+id_activity).load();
+	                    	//table.ajax.url(urls+'list-nsaIndicator/'+id_program+'/'+id_activity).load();
+	                    	table.ajax.reload( null, false );
 	                    	var id_nsa_indicator = result.content;
 	                    	var target =  $('#form-target').serializeObject();
 	                    	$.ajax({
@@ -696,6 +698,7 @@
 	                            },             
 	                         });
 	                    	$('#myModal').modal('hide');
+	                    	clearForm();
 	                    },
 	                });
 				}
@@ -855,7 +858,8 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-nsaIndicator/'+id_program+'/'+id_activity).load();
+                        	table.ajax.reload( null, false );
+                        	//table.ajax.url(urls+'list-nsaIndicator/'+id_program+'/'+id_activity).load();
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

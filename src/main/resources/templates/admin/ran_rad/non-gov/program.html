@@ -246,7 +246,8 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
-	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	//table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	table.ajax.reload( null, false );
 	        });
 	        
 	        $('#showModal').on('click', function(){
@@ -286,11 +287,13 @@
 						}
                     },
                 });
-	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	//table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	table.ajax.reload( null, false );
 	        });
 	        
 	        $('#id_role, #id_monper').on('change', function(){
-	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	//table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	table.ajax.reload( null, false );
 	        });
 	        
 	        function cekStatusMonper(){
@@ -435,7 +438,8 @@
 	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
 						data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	                    	//table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	                    	table.ajax.reload( null, false );
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
@@ -519,7 +523,8 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+                        	//table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+                        	table.ajax.reload( null, false );
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

@@ -82,6 +82,7 @@
                                         <tr class="lang_eng" style="display: none">
                                             <th style="text-align:center;font-size:80%;">Indicator Code</th>
                                             <th style="text-align:center;font-size:80%;">Indicator Name</th>
+                                            <th style="text-align:center;font-size:80%;">Role</th>
                                             <th style="text-align:center;font-size:80%;">Unit</th>
                                             <th style="text-align:center;font-size:80%;">Target</th>
                                             <th style="text-align:center;font-size:80%;">Baseline</th>
@@ -89,6 +90,7 @@
                                         <tr class="lang_indo" id="thead_indo">
                                             <th style="text-align:center;font-size:80%;">Kode Indikator</th>
                                             <th style="text-align:center;font-size:80%;">Nama Indikator</th>
+                                            <th style="text-align:center;font-size:80%;">Role</th>
                                             <th style="text-align:center;font-size:80%;">Unit</th>
                                             <th style="text-align:center;font-size:80%;">Target</th>
                                             <th style="text-align:center;font-size:80%;">Baseline</th>
@@ -208,7 +210,62 @@
                 
                 
             }
-            
+            var table = $('#tabel-entri-sdg').DataTable({
+                responsive: true,
+                sDom: 'lrtip',
+                "bLengthChange": false,
+                "cache": false,
+                "autoWidth": true,
+                "responsive":true,
+                "bDestroy": true,
+                "ajax": {
+                    "url": urls+'list-entry-sdg-target/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
+                    dataSrc: 'content',
+                },
+                "searching": true,
+                "columns": [
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+row[10]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[12]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[14]+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        var v_idrole1   = $("#idrole").val();
+                        var v_dataid2   = $("#periode").val();
+                        var v_dataid1   = v_dataid2.split("###");;
+                        var id_monper1  = v_dataid1[0];
+                        var tahun1      = v_dataid1[1];
+                        var v_idprov1   = $("#id_prov").val();
+                        if($('#fs').is(':checked')){
+                            return "<div style='font-size:90%;'><a href='"+urls+"entry/sdg-target/input/"+row[2]+"/"+v_idprov1+"/"+(row[20]?row[20]:'unassign')+"/"+id_monper1+"/"+tahun1+"' class='target'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</a></div>";
+                        }else{
+                            return "<div style='font-size:90%;'><a href='"+urls+"entry/sdg-target/input/"+row[2]+"/"+v_idprov1+"/"+(row[20]?row[20]:'unassign')+"/"+id_monper1+"/"+tahun1+"' class='target'>"+row[11]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[15]+"</a></div>";
+                        }
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[19]?row[19]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[16]?row[16]:'')+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                    	var target="";
+                    	if(row[17]){
+                    		var a = row[17].split(',');
+                    		console.log(a);
+                    		for(var i=0;i<a.length;i++){
+                    			var b = a[i].split('---');
+                    			target += "Year:"+b[1]+" Target:"+b[0]+"<br/>"
+                    		}
+                    	}
+                        return "<div style='font-size:90%;'>"+target+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                        return "<div style='font-size:90%;'>"+(row[18]?row[18]:'')+"</div>";
+                    }},
+                ],
+                "columnDefs": [
+                ],
+                select: true
+            });	
             
             $("#id_prov").on('change', function(e){
                 var id_prov = this.value ;
@@ -219,6 +276,8 @@
                     url: urls+'list-get-option-role-all-profil/'+id_prov,
                     success: function (result) {
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        $("#idrole").append("<option data-cat='all' value='all'>-- ALL --</option>");
+                        $("#idrole").append("<option value='unassign'>Unassign</option>");
                         var array = result.content;
                         if (array != '') {
                             for (i in array) {
@@ -257,6 +316,7 @@
                         }
                     }
                 });
+                table.ajax.url(urls+'list-entry-sdg-target/'+0+'/'+0+'/'+0+'/'+0 ).load();
             });
             
             $("#periode").on('change', function(e){
@@ -264,6 +324,7 @@
                 sessionStorage.periode_target  = $(this).val();
                 var id_monper   = data_id[0];
                 var tahun       = data_id[1];
+                table.ajax.url(urls+'list-entry-sdg-target/'+0+'/'+0+'/'+0+'/'+0 ).load();
                 grid();
             });
             
@@ -272,7 +333,10 @@
                 sessionStorage.idrole_target  = $(this).val();
                 var id_monper   = data_id[0];
                 var tahun       = data_id[1];
-                grid();
+                table.ajax.url(urls+'list-entry-sdg-target/'+0+'/'+0+'/'+0+'/'+0 ).load();
+                if($("#periode").val()!='0'){
+                	grid();
+                }
             });
             
             if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
@@ -325,6 +389,7 @@
 	        }
 	        
 	        $('#fs').on('change', function(e){
+	        	table.ajax.url(urls+'list-entry-sdg-target/'+0+'/'+0+'/'+0+'/'+0 ).load();
                     grid();
 	        	bhs($(this).is(':checked'));
 	        });
@@ -337,59 +402,7 @@
             var id_monper   = v_data_id[0];
             var tahun       = v_data_id[1];
             
-            var table = $('#tabel-entri-sdg').DataTable({
-                responsive: true,
-                sDom: 'lrtip',
-                "bLengthChange": false,
-                "cache": false,
-                "autoWidth": true,
-                "responsive":true,
-                "bDestroy": true,
-                "ajax": {
-                    "url": urls+'list-entry-sdg-target/'+v_idprov+'/'+v_idrole+'/'+id_monper+'/'+tahun,
-                    dataSrc: 'content',
-                },
-                "searching": true,
-                "columns": [
-                    {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[10]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[12]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[14]+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                        var v_idrole1   = $("#idrole").val();
-                        var v_dataid2   = $("#periode").val();
-                        var v_dataid1   = v_dataid2.split("###");;
-                        var id_monper1  = v_dataid1[0];
-                        var tahun1      = v_dataid1[1];
-                        var v_idprov1   = $("#id_prov").val();
-                        if($('#fs').is(':checked')){
-                            return "<div style='font-size:90%;'><a href='"+urls+"entry/sdg-target/input/"+row[2]+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"' class='target'>"+row[3]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[4]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[5]+"</a></div>";
-                        }else{
-                            return "<div style='font-size:90%;'><a href='"+urls+"entry/sdg-target/input/"+row[2]+"/"+v_idprov1+"/"+v_idrole1+"/"+id_monper1+"/"+tahun1+"' class='target'>"+row[11]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[13]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[15]+"</a></div>";
-                        }
-                    }},
-                    {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[16]+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                    	var target="";
-                    	if(row[17]){
-                    		var a = row[17].split(',');
-                    		console.log(a);
-                    		for(var i=0;i<a.length;i++){
-                    			var b = a[i].split('---');
-                    			target += "Year:"+b[1]+" Target:"+b[0]+"<br/>"
-                    		}
-                    	}
-                        return "<div style='font-size:90%;'>"+target+"</div>";
-                    }},
-                    {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+(row[18]?row[18]:'')+"</div>";
-                    }},
-                ],
-                "columnDefs": [
-                ],
-                select: true
-            });	
+            
 
             //memanggil tb spp
             function grid()

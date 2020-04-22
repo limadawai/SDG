@@ -540,7 +540,7 @@
                                       { "title": "Description" },
                                       { "title": "Follow up Plan" }];
                    
-                    var divtable = `<div><h3>`+x[1]+`</h3><div id="total`+uuid+`"></div><table class="table table-striped table-bordered" id="table`+uuid+`"></table></div>`;
+                    var divtable = `<div><h3>`+(x[2]?x[2]:'')+" "+x[1]+`</h3><div id="total`+uuid+`"></div><table class="table table-striped table-bordered" id="table`+uuid+`"></table></div>`;
                    	$('#report').append(divtable);
                     var data = [];
                     no = 0;
