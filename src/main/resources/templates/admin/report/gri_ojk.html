@@ -609,6 +609,30 @@
                         "cache": false,
                         "autoWidth": true,
                         "responsive":true,
+                        buttons: [
+        		        	{
+        		        	    extend: 'print',
+        		        	    text: 'Print',
+        		        	},
+        		        	{
+        		        		extend: 'excelHtml5',
+        		        		filename: 'GRI/OJK',
+        		        		text: 'Save as Excel',
+        		        		exportOptions: {
+        		        		    format: {
+        		        		        body: function(data, column, row) {
+        		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+        		        		            data = data.replace(/<.*?>/g, "");
+        		        		            data = data.replace("&amp;", "&");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            return data;
+        		        		        }
+        		        		    }
+        		        	,
+        		        		}
+        		        	},
+        		        ],
                         "ajax": {
                             "url": '/sdg/admin/get-report/gri-ojk',
                             dataSrc: 'content',
