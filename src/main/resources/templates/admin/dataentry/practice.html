@@ -1182,6 +1182,7 @@
             var cek = 0;
             
             if(fname && $.inArray(extnya, arrExt) == -1){
+                $("#myModal").modal("hide");
                 if($('#fs').is(':checked')){
                     swal("Maaf! Tipe file yang diperbolehkan hanya .jpeg dan .jpg");
                 }else{
@@ -1190,6 +1191,7 @@
                 cek += 1;
             }
             if(fname && fsize > (1 * 1024 * 1024)){
+                $("#myModal").modal("hide");
                 if($('#fs').is(':checked')){
                     swal("Maaf! File Gagal Diupload Maksimal 1MB");
                 }else{
