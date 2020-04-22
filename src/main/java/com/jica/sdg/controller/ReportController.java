@@ -180,7 +180,7 @@ public class ReportController {
     			sql = "SELECT distinct b.id_old, b.nm_goals, b.nm_goals_eng, b.id_goals "
         				+ " FROM history_sdg_indicator c "
         				+ " left join assign_sdg_indicator a on a.id_indicator = c.id_old "
-            			+ " left join history_sdg_goals b on c.id_goals = b.id_old "
+            			+ " left join history_sdg_goals b on c.id_goals = b.id_old and b.id_monper = c.id_monper "
             			+ " WHERE c.id_old is not null and c.id_monper = '"+id_monper+"' "+role+" order by b.id_old";
     		}else {
     			sql = "SELECT distinct b.id, b.nm_goals, b.nm_goals_eng, b.id_goals "
@@ -223,7 +223,7 @@ public class ReportController {
     			sql = "SELECT distinct b.id_old, b.nm_goals, b.nm_goals_eng, b.id_goals "
         				+ " FROM history_sdg_indicator c "
         				+ " left join assign_sdg_indicator a on a.id_indicator = c.id_old "
-            			+ " left join history_sdg_goals b on c.id_goals = b.id_old "
+            			+ " left join history_sdg_goals b on c.id_goals = b.id_old and b.id_monper = c.id_monper "
             			+ " WHERE c.id_old is not null and c.id_monper = '"+id_monper+"' "+role+" "+gol+" order by b.id_old";
     		}else {
     			sql = "SELECT distinct b.id, b.nm_goals, b.nm_goals_eng, b.id_goals "
@@ -2411,8 +2411,8 @@ public class ReportController {
     			sql = "SELECT distinct d.id_old, d.nm_target, d.nm_target_eng, d.id_target "
         				+ " FROM history_sdg_indicator c "
         				+ " left join assign_sdg_indicator a on a.id_indicator = c.id_old "
-            			+ " left join history_sdg_goals b on c.id_goals = b.id_old "
-            			+ " left join history_sdg_target d on c.id_target = d.id_old "
+            			+ " left join history_sdg_goals b on c.id_goals = b.id_old and b.id_monper = c.id_monper "
+            			+ " left join history_sdg_target d on c.id_target = d.id_old and d.id_monper = c.id_monper "
             			+ " WHERE c.id_old is not null and c.id_goals = :id_goals and c.id_monper = '"+id_monper+"' "+role+" order by d.id_old";
     		}else {
     			sql = "SELECT distinct d.id, d.nm_target, d.nm_target_eng, d.id_target "
@@ -2458,8 +2458,8 @@ public class ReportController {
     			sql = "SELECT distinct d.id_old, d.nm_target, d.nm_target_eng, d.id_target "
         				+ " FROM history_sdg_indicator c "
         				+ " left join assign_sdg_indicator a on a.id_indicator = c.id_old "
-            			+ " left join history_sdg_goals b on c.id_goals = b.id_old "
-            			+ " left join history_sdg_target d on c.id_target = d.id_old "
+            			+ " left join history_sdg_goals b on c.id_goals = b.id_old and b.id_monper = c.id_monper "
+            			+ " left join history_sdg_target d on c.id_target = d.id_old and d.id_monper = c.id_monper "
             			+ " WHERE c.id_old is not null and c.id_goals = :id_goals and c.id_monper = '"+id_monper+"' "+role+" "+tar+" order by d.id_old";
     		}else {
     			sql = "SELECT distinct d.id, d.nm_target, d.nm_target_eng, d.id_target "
