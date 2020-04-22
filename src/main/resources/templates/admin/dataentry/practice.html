@@ -113,7 +113,7 @@
                 <h3 class="lang_indo">Tambah Praktik Terbaik</h3>
             </div>
             <div class="modal-body">
-                <form id="form-sdgGoals">
+                <!--<form id="form-sdgGoals">-->
 <!--                    <div class="control-group">
                         <div class="controls">
                             <div class="accordion" id="accordion2">
@@ -230,7 +230,28 @@
                             <span class="help-block" id="error_challenges_learning"></span>
                         </div>
                     </div>
-                </form>
+                    <div class="control-group">
+                        <label class="lang_eng control-label" style="display:none">Upload</label>
+                        <label class="lang_indo control-label">Upload</label>
+                        <div class="profile_img">
+                            <div id="crop-avatar">
+                                <!-- Current avatar -->
+                                <img class="img-responsive avatar-view" id="gambar-profil" th:src="@{/img/facebook.png}" alt="Picture" style="width: 200px"/>
+                            </div>
+                        </div>
+                        <div class="controls">
+                            <form id="form-data-pribadi" method="POST">
+                                <input type="file" id="file2" name="files" class="form-control"/>
+                            </form>
+                            <span class="help-block" id="error_upload"></span>
+                        </div>
+                    </div>
+<!--<form id="form-rencana">
+                                    <label for="name">Upload</label>
+                                    <input type="file" name="files_cv" class="form-control input-sm unit"/>
+                                    <div id="error_file" class="error"></div>
+                                </form>-->
+                <!--</form>-->
             </div>
             <div class="modal-footer">
                 <button class="btn tutup" data-dismiss="modal" aria-hidden="true">
@@ -746,6 +767,7 @@
         	}else{
         		swal(titleMod,messMod,'error');
         	}
+                $(".profile_img").hide();
         });
         
         var table = $('#tabel-practice').DataTable({
@@ -1147,9 +1169,34 @@
             }
             console.log(sdg_indicator);
             
+            var filenya     = $("#file2")[0].files[0], fname = '', fsize = 0, extnya = '';
+            var arrExt 	= [".png", ".jpg", ".jpeg"];
+            if(typeof(filenya) != 'undefined'){
+                fsize 	= filenya.size,
+                fname 	= filenya.name,
+                extnya 	= fname.substr(fname.lastIndexOf(".")).toLowerCase();
+            }
+            
             $('.control-group').removeClass('error');
             $('.help-block').text("");
             var cek = 0;
+            
+            if(fname && $.inArray(extnya, arrExt) == -1){
+                if($('#fs').is(':checked')){
+                    swal("Maaf! Tipe file yang diperbolehkan hanya .jpeg dan .jpg");
+                }else{
+                    swal("Sorry! Uploaded file must be .jpeg dan .jpg");
+                }
+                cek += 1;
+            }
+            if(fname && fsize > (1 * 1024 * 1024)){
+                if($('#fs').is(':checked')){
+                    swal("Maaf! File Gagal Diupload Maksimal 1MB");
+                }else{
+                    swal("Sorry! Uploaded files a maximum of 1MB");
+                }
+                cek += 1;
+            }
                         
 //                        if (id_gov_indicator == ""){
 //                            $("#error_id_gov_indicator").parents(".control-group").first().addClass("error");
@@ -1229,6 +1276,47 @@
                                 
                             }
                         });
+                        
+                        //upload foto
+                        var formElement = document.getElementById('form-data-pribadi');
+                        var formData    = new FormData(formElement);
+                        var idbest   = result.v_id;
+                        console.log("isi id = "+result.v_id)
+                        console.log("isi file = "+document.getElementById('form-data-pribadi'))
+                        formData.append('idbest', idbest);
+//                        $.ajax({
+//                            type: "POST",
+//                            url: urls+'save-govIndicatorBest/'+sdg_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
+//                            beforeSend : function(xhr){
+//                                xhr.setRequestHeader(header,token);
+//                            },
+//                            headers:{'Accept':'application/json','Content-Type':'application/json'},
+//                            data: data,
+//                            success: function (result12) {
+//                                
+//                            }
+//                        });
+                        $.ajax({
+                            beforeSend : function(xhr){
+                                xhr.setRequestHeader(header,token);
+                            },
+                            headers:{'Accept':'application/json'},
+                            type: "POST",
+                            enctype: 'multipart/form-data',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            url: urls+'create-foto-best-pract',
+                            success: function (result3) {
+                            },
+                            error: function (result3) {
+                                swal(
+                                    'Maaf...',
+                                    'File Gagal Diupload ',
+                                    'error'
+                                );
+                            }
+                         });
                     	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
                     	$('#myModal').modal('hide');
                     },
@@ -1321,6 +1409,11 @@
                     $('#background').val(val.background);
                     $('#implementation_process').val(val.implementation_process);
                     $('#challenges_learning').val(val.challenges_learning);
+                    $(".profile_img").show();
+                    console.log("foto = "+val.foto_file);
+                    if(val.foto_file){
+                        $("#gambar-profil").attr("src","data:image/jpg;base64, "+val.foto_file);
+                    }
                     $.ajax({
     					type: "GET",
                         url: urls+'list-getBestMapByGovInd/'+val.id,
@@ -1354,6 +1447,10 @@
                     $('#background').val(val.background);
                     $('#implementation_process').val(val.implementation_process);
                     $('#challenges_learning').val(val.challenges_learning);
+                    $(".profile_img").show();
+                    if(val.foto_file){
+                        $("#gambar-profil").attr("src","data:image/jpg;base64, "+val.foto_file);
+                    }
                     $.ajax({
                         type: "GET",
                         url: urls+'list-getBestMapByGovInd/'+val.id,

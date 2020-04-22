@@ -13,8 +13,10 @@ import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.model.Unit;
+import com.jica.sdg.repository.BestPracticeRepository;
 import com.jica.sdg.repository.EntryProblemIdentifyRepository;
 import com.jica.sdg.service.*;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -34,12 +36,18 @@ import java.util.Optional;
 import java.util.UUID;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class EntryController {
@@ -75,6 +83,9 @@ public class EntryController {
     
     @Autowired
     IBestPracticeService bestService;
+    
+    @Autowired
+    BestPracticeRepository bestRepo;
     
     @Autowired
     IBestMapService bestMapService;
@@ -507,7 +518,7 @@ public class EntryController {
     
     @PostMapping(path = "admin/save-best/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveBest(@RequestBody BestPractice best,
+    public Map<String, Object> saveBest(@RequestBody BestPractice best,
 			@PathVariable("sdg_indicator") String sdg_indicator,
 			@PathVariable("id_monper") Integer id_monper,
 			@PathVariable("id_prov") String id_prov) {
@@ -534,7 +545,74 @@ public class EntryController {
                 bestMapService.saveGovMap(map);
             }
     	}
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("v_id",best.getId());
+        return hasil;
     }
+    
+    @RequestMapping(value = "admin/create-foto-best-pract",method = RequestMethod.POST)
+//    @PostMapping(path = "admin/create-foto-best-pract"/*, consumes = "application/json", produces = "application/json"*/)
+    @ResponseBody
+    @Transactional
+    @ResponseStatus(HttpStatus.OK)
+    public void saveFoto(@RequestParam("files") MultipartFile files, @RequestParam("idbest") int idbest) throws IOException {
+            BestPractice best = new BestPractice();
+            System.out.println("id ya = "+idbest);
+            System.out.println("file nya = "+IOUtils.toByteArray(files.getInputStream()));
+            int idbes = Integer.valueOf(idbest);
+            Optional<BestPractice> listbest = bestService.findOne(idbest);
+//            int id    = listbest.get().getId();
+            best.setId(listbest.get().getId());
+            best.setId_program(listbest.get().getId_program());
+            best.setId_activity(listbest.get().getId_activity());
+            best.setId_indicator(listbest.get().getId_indicator());
+            best.setId_role(listbest.get().getId_role());
+            best.setProgram(listbest.get().getProgram());
+            best.setLocation(listbest.get().getLocation());
+            best.setTime_activity(listbest.get().getTime_activity());
+            best.setBackground(listbest.get().getBackground());
+            best.setImplementation_process(listbest.get().getImplementation_process());
+            best.setChallenges_learning(listbest.get().getChallenges_learning());
+            best.setId_monper(listbest.get().getId_monper());
+            best.setYear(listbest.get().getYear());
+            if(!files.isEmpty()) {
+			best.setFoto_file(IOUtils.toByteArray(files.getInputStream()));
+//			pegawaiDao.save(t);
+			bestService.saveBestPractice(best);
+//                    em.createNativeQuery("update best_practice set foto_file = '"+IOUtils.toByteArray(files.getInputStream())+"' where id = '"+idbest+"' ").executeUpdate();
+            }
+    }
+//    
+//    @PostMapping(path = "admin/save-best/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
+//    @ResponseBody
+//    public void saveBest(@RequestBody BestPractice best,
+//			@PathVariable("sdg_indicator") String sdg_indicator,
+//			@PathVariable("id_monper") Integer id_monper,
+//			@PathVariable("id_prov") String id_prov) {
+//    	bestService.saveBestPractice(best);
+//        if(!sdg_indicator.equals("0")) {
+//            bestMapService.deleteGovMapByGovInd(best.getId());
+//            String[] sdg = sdg_indicator.split(",");
+//            for(int i=0;i<sdg.length;i++) {
+//                String[] a = sdg[i].split("---");
+//                Integer id_goals = Integer.parseInt(a[0]);
+//                Integer id_target = Integer.parseInt(a[1]);
+//                Integer id_indicator = Integer.parseInt(a[2]);
+//                BestMap map = new BestMap();
+//                map.setId_goals(id_goals);
+//                if(id_target!=0) {
+//                        map.setId_target(id_target);
+//                }
+//                if(id_indicator!=0) {
+//                        map.setId_indicator(id_indicator);
+//                }
+//                map.setId_best_practice(best.getId());
+//                map.setId_monper(id_monper);
+//                map.setId_prov(id_prov);
+//                bestMapService.saveGovMap(map);
+//            }
+//    	}
+//    }
     
     @PostMapping(path = "admin/save-best-entry", consumes = "application/json", produces = "application/json")
 	@ResponseBody
