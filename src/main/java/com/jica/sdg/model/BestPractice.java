@@ -12,6 +12,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.Lob;
 
 @Entity
 @Table(name = "best_practice")
@@ -59,13 +60,17 @@ public class BestPractice implements Serializable {
     
     @Column(name = "year")
     private Integer year;
+    
+    @Lob
+    @Column(nullable = true, columnDefinition="BLOB")
+    private byte[] foto_file;
 
     public BestPractice() {
     }
 
 	public BestPractice(Integer id, Integer id_program, Integer id_activity, Integer id_indicator, Integer id_role,
 			String location, Date time_activity, String program, String background, String implementation_process,
-			String challenges_learning, Integer id_monper, Integer year) {
+			String challenges_learning, Integer id_monper, Integer year, byte[]foto_file) {
 		super();
 		this.id = id;
 		this.id_program = id_program;
@@ -80,8 +85,19 @@ public class BestPractice implements Serializable {
 		this.challenges_learning = challenges_learning;
 		this.id_monper = id_monper;
 		this.year = year;
+		this.foto_file = foto_file;
 	}
 
+    public byte[] getFoto_file() {
+        return foto_file;
+    }
+
+    public void setFoto_file(byte[] foto_file) {
+        this.foto_file = foto_file;
+    }
+
+        
+        
     public String getProgram() {
         return program;
     }
