@@ -377,7 +377,7 @@ public class DataEntryController {
     				"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
     				"left join sdg_target as c on d.id_target = c.id \r\n" +
     				"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
-    				"left join sdg_indicator_target as e on d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
+    				"left join sdg_indicator_target as e on e.id_monper = a.id_monper and d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
     				"left join entry_sdg as f on d.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper =:id_monper\r\n" + 
     				"left join ref_unit as h on d.unit = h.id_unit \r\n" + 
     				"left join ref_role as l on a.id_role = l.id_role \r\n" + 
@@ -393,7 +393,7 @@ public class DataEntryController {
         			"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
         			"left join sdg_target as c on d.id_target = c.id \r\n" +
         			"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
-        			"left join sdg_indicator_target as e on d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
+        			"left join sdg_indicator_target as e on e.id_monper = a.id_monper and d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
         			"left join entry_sdg as f on d.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper =:id_monper\r\n" + 
         			"left join ref_unit as h on d.unit = h.id_unit \r\n" + 
         			"right join sdg_ranrad_disaggre as i on i.id_indicator = d.id \r\n" + 
@@ -782,7 +782,7 @@ public class DataEntryController {
     			+ "c.new_value1 as new1, c.new_value2 as new2, c.new_value3 as new3, c.new_value4 as new4, id_disaggre, id_disaggre_detail, e.nm_role "
     			+ "from assign_sdg_indicator d "
     			+ "left join entry_sdg a on a.id_sdg_indicator = d.id_indicator and a.id_role = d.id_role and a.id_monper = d.id_monper and a.year_entry = '"+year+"' "
-    			+ "left join sdg_indicator_target b on b.id_sdg_indicator = d.id_indicator and b.id_role = d.id_role and b.year = '"+year+"' "
+    			+ "left join sdg_indicator_target b on a.id_monper = b.id_monper and b.id_sdg_indicator = d.id_indicator and b.id_role = d.id_role and b.year = '"+year+"' "
     			+ "left join entry_sdg_detail c on c.id_disaggre = '"+id_disaggre+"' and c.id_disaggre_detail = '"+id_disaggre_detail+"' and c.year_entry = '"+year+"' and c.id_role = d.id_role and c.id_monper = d.id_monper "
     			+ "left join ref_role e on d.id_role = e.id_role "
                 //+ "where d.id_indicator = '"+id_indicator+"' and d.id_role = '"+id_role+"' and d.id_monper = '"+id_monper+"'";
@@ -1776,11 +1776,11 @@ public class DataEntryController {
     	String sql = "SELECT distinct b.id_goals, b.id_target, b.id, h.nm_goals, i.nm_target, b.nm_indicator, b.unit, b.increment_decrement, '' as value, "
     			+ " k.sdg_indicator, h.id_goals as kode_goals, h.nm_goals_eng, "
     			+ " i.id_target as kode_target, i.nm_target_eng, b.id_indicator as kode_indicator, b.nm_indicator_eng, j.nm_unit, "
-    			+ " (select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = b.id and year between k.start_year and k.end_year and id_monper = k.id_monper) as target,l.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end, g.id_role "
+    			+ " (select group_concat(concat(value,'---',year)) from sdg_indicator_target where a.id_monper = b.id_monper and id_sdg_indicator = b.id and year between k.start_year and k.end_year and id_monper = k.id_monper) as target,l.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end, g.id_role "
     			+ " FROM sdg_indicator b "
     			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
     			+ " left join ref_unit c on b.unit = c.id_unit "
-    			+ " left join sdg_funding d on b.id = d.id_sdg_indicator "
+    			+ " left join sdg_funding d on b.id = d.id_sdg_indicator and d.id_monper = :id_monper "
     			+ " left join ref_role g on a.id_role = g.id_role "
     			+ " left join sdg_goals as h on b.id_goals = h.id "
                 + " left join sdg_target as i on b.id_target = i.id "

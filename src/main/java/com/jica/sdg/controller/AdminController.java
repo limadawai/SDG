@@ -134,7 +134,7 @@ public class AdminController {
                                             "    ,e.nm_indicator\n"+
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
-                                            "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                            "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                             "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                             "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
                                             "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
@@ -186,7 +186,7 @@ public class AdminController {
                                             "    ,e.nm_indicator\n"+
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
-                                            "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                            "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                             "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                             "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
                                             "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
