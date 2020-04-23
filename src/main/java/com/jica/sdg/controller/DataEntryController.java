@@ -441,7 +441,14 @@ public class DataEntryController {
 	        query.setParameter("id_monper", id_monper);
 	        query.setParameter("year", year);
         }else {
-        	String role = id_role.equals("null")?"id_role is null ":"id_role = '"+id_role+"'";
+        	String role;
+        	if(id_role.equals("all")) {
+        		role = "";
+        	}else if(id_role.equals("unassign")) {
+        		role = "id_role is null ";
+        	}else {
+        		role = "id_role = '"+id_role+"'";
+        	}
 //        	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator,CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\n" +
 //                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
 //                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
