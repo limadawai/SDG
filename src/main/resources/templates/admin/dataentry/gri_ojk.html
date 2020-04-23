@@ -346,7 +346,7 @@
 //            	if(privilege=="SUPER"){
             		 return "<div style='text-align:center;'>"+
                      '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete">Delete</button>&nbsp;&nbsp;<a href="/sdg/admin/export-entry/gri-ojk/'+row[3]+'" class="btn btn-success btn-mini" target="_blank">Excel</a>&nbsp;&nbsp;'+
-                     '<a href="data:application/pdf;base64,'+row[7]+'" class="btn btn-warning btn-mini" target="_blank">Pdf</a></div>';
+                     '<a download="file.pdf" href="data:application/pdf;base64,'+row[7]+'" class="btn btn-warning btn-mini" target="_blank">Pdf</a></div>';
               }
             }
         ],
