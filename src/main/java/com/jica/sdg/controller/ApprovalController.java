@@ -455,16 +455,10 @@ public class ApprovalController {
     @GetMapping("admin/get-approval/gri-ojk/{id}")
     public @ResponseBody Map<String, Object> getUnit(@PathVariable("id") Integer id) {
         String sql = "select * from entry_gri_ojk where id = '"+id+"'";
-        Query list = em.createNativeQuery(sql);
-        List<Object[]> rows = list.getResultList();
-        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        for (Object[] row : rows) {
-            result.add(
-                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
-            );
-        }
-        hasil.put("content",result);
+        hasil.put("content",list);
         return hasil;
     }
     
