@@ -333,7 +333,7 @@
 //                 console.log(datarow);
                 $('#'+uuid).DataTable({
                         responsive: true,
-                        sDom: 'lrtip',
+                        sDom: 'Brtip',
                         "retrieve": true,
                         "bLengthChange": false,
                         "cache": false,
@@ -342,6 +342,34 @@
                         "ordering": false,
                         "info":     false,
                         "searching": true,
+                        buttons: [
+        		        	{
+        		        	    extend: 'print',
+        		        	    text: 'Print',
+        		        	    exportOptions: {
+        		        	        columns: [ 0,1,2,3 ]
+        		        	    }
+        		        	},
+        		        	{
+        		        		extend: 'excelHtml5',
+        		        		filename: 'Gov Program',
+        		        		text: 'Save as Excel',
+        		        		exportOptions: {
+        		        		    format: {
+        		        		        body: function(data, column, row) {
+        		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+        		        		            data = data.replace(/<.*?>/g, "");
+        		        		            data = data.replace("&amp;", "&");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            return data;
+        		        		        }
+        		        		    }
+        		        	,
+                		    columns: [ 0,1,2,3 ]
+        		        		}
+        		        	},
+        		        ],
                         "aaData" : allRow.content,
                         "aoColumns":data_column,
 //                        "data": datarow,
