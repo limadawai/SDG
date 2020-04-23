@@ -316,7 +316,7 @@
                         }
                     }
                 });
-                table.ajax.url(urls+'list-entry-sdg-target/'+0+'/'+0+'/'+0+'/'+0 ).load();
+                grid();
             });
             
             $("#periode").on('change', function(e){
@@ -390,7 +390,7 @@
 	        
 	        $('#fs').on('change', function(e){
 	        	table.ajax.url(urls+'list-entry-sdg-target/'+0+'/'+0+'/'+0+'/'+0 ).load();
-                    grid();
+                grid();
 	        	bhs($(this).is(':checked'));
 	        });
             
