@@ -337,13 +337,11 @@
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$('#id_role').val()).load();
-	        	//table.ajax.reload( null, false );
 	        	headtabel();
 	        });
 	        
 	        $('#id_role').on('change', function(){
 	        	table.ajax.url(urls+'list-govActivity/'+id_program+'/'+$(this).val()).load();
-	        	//table.ajax.reload( null, false );
 	        });
 	        
 	        $('#showModal').on('click', function(){

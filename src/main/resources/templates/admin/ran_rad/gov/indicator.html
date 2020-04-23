@@ -330,8 +330,7 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
-	        	//table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
-	        	table.ajax.reload( null, false );
+	        	table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
 	        });
 
 	        //Indikator SDG untuk mapping
