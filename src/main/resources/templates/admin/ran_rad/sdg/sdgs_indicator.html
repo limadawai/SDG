@@ -225,8 +225,8 @@
 	        }
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
-	        	//table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
-	        	table.ajax.reload( null, false );
+	        	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
+	        	//table.ajax.reload( null, false );
 	        });
 	                    
 			var table = $('#tabel-indicator').DataTable({

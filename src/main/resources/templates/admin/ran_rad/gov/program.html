@@ -314,8 +314,7 @@
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        	 headtabel();
-	        	//table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
-	        	 table.ajax.reload( null, false );
+	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
 	        });
 	        
 	        $('#showModal').on('click', function(){
@@ -508,8 +507,8 @@
 		        	$('.provinsi').show();
 		        }
 	        	//table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
-	        	//table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
-	        	table.ajax.reload( null, false );
+	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
+	        	
 	        });
 	        if(sessionStorage.provinsi_gov_prog){
             	$("#id_prov").val(sessionStorage.provinsi_gov_prog).trigger('change');
@@ -517,8 +516,7 @@
 	        $('#id_role, #id_monper').on('change', function(){
 	        	//table.ajax.url(urls+'list-govProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	        	sessionStorage.monper_gov_prog  = $('#id_monper').val();
-	        	//table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
-	        	table.ajax.reload( null, false );
+	        	table.ajax.url(urls+'list-govProg/'+$('#id_monper').val()).load();
 	        });
 				
 			

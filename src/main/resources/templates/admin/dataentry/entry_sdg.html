@@ -181,6 +181,7 @@
                         if (array != '') {
                         	if(privilege == 'ADMIN' || privilege == 'SUPER'){
                         		$("#idrole").append('<option value="0" >-- ALL --</option>');
+                        		$("#idrole").append('<option value="unassign" >Unassign</option>');
                         	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
@@ -226,6 +227,7 @@
                         if (array != '') {
                         	if(privilege == 'ADMIN' || privilege == 'SUPER'){
                         		$("#idrole").append('<option value="0" >-- ALL --</option>');
+                        		$("#idrole").append('<option value="unassign">Unassign</option>');
                         	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');

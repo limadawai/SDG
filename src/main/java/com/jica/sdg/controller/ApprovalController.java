@@ -220,7 +220,14 @@ public class ApprovalController {
             query.setParameter("type", type);
             query.setParameter("periode", periode);
         }else {
-        	String role = id_role.equals("null")?" id_role is null ":" id_role = '"+id_role+"'";
+        	String role;
+        	if(id_role.equals("all")) {
+        		role = "";
+        	}else if(id_role.equals("unassign")) {
+        		role = "id_role is null ";
+        	}else {
+        		role = "id_role = '"+id_role+"'";
+        	}
         	String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and "+role;
             query = em.createNativeQuery(sql);
             query.setParameter("year", year);

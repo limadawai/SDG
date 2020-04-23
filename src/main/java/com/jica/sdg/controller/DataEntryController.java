@@ -449,7 +449,14 @@ public class DataEntryController {
 	        query.setParameter("id_monper", id_monper);
 	        query.setParameter("year", year);
         }else {
-        	String role = id_role.equals("null")?"id_role is null ":"id_role = '"+id_role+"'";
+        	String role;
+        	if(id_role.equals("all")) {
+        		role = "";
+        	}else if(id_role.equals("unassign")) {
+        		role = "id_role is null ";
+        	}else {
+        		role = "id_role = '"+id_role+"'";
+        	}
 //        	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator,CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\n" +
 //                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
 //                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
@@ -1819,7 +1826,7 @@ public class DataEntryController {
     	String sql = "SELECT distinct b.id_goals, b.id_target, b.id, h.nm_goals, i.nm_target, b.nm_indicator, b.unit, b.increment_decrement, '' as value, "
     			+ " k.sdg_indicator, h.id_goals as kode_goals, h.nm_goals_eng, "
     			+ " i.id_target as kode_target, i.nm_target_eng, b.id_indicator as kode_indicator, b.nm_indicator_eng, j.nm_unit, "
-    			+ " (select group_concat(concat(value,'---',year)) from sdg_indicator_target where a.id_monper = b.id_monper and id_sdg_indicator = b.id and year between k.start_year and k.end_year and id_monper = k.id_monper) as target,l.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end, g.id_role "
+    			+ " (select group_concat(concat(value,'---',year)) from sdg_indicator_target where a.id_monper = :id_monper and id_sdg_indicator = b.id and year between k.start_year and k.end_year and id_monper = k.id_monper) as target,l.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end, g.id_role "
     			+ " FROM sdg_indicator b "
     			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
     			+ " left join ref_unit c on b.unit = c.id_unit "
@@ -1886,11 +1893,12 @@ public class DataEntryController {
         em.createNativeQuery("INSERT INTO sdg_funding (id_sdg_indicator,baseline,funding_source,id_monper) values ('"+id_sdg_indicator+"','"+baseline+"','"+funding_source+"','"+id_monper+"')").executeUpdate();
     }
     
-    @GetMapping("admin/get-sdgFunding/{id_indicator}")
-    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator) {
-        String sql  = "select baseline, funding_source from sdg_funding where id_sdg_indicator = :id_indicator";
+    @GetMapping("admin/get-sdgFunding/{id_indicator}/{id_monper}")
+    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator,@PathVariable("id_monper") String id_monper) {
+        String sql  = "select baseline, funding_source from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_indicator", id_indicator);
+        query.setParameter("id_monper", id_monper);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
