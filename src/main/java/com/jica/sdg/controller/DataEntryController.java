@@ -1878,11 +1878,12 @@ public class DataEntryController {
         em.createNativeQuery("INSERT INTO sdg_funding (id_sdg_indicator,baseline,funding_source,id_monper) values ('"+id_sdg_indicator+"','"+baseline+"','"+funding_source+"','"+id_monper+"')").executeUpdate();
     }
     
-    @GetMapping("admin/get-sdgFunding/{id_indicator}")
-    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator) {
-        String sql  = "select baseline, funding_source from sdg_funding where id_sdg_indicator = :id_indicator";
+    @GetMapping("admin/get-sdgFunding/{id_indicator}/{id_monper}")
+    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator,@PathVariable("id_monper") String id_monper) {
+        String sql  = "select baseline, funding_source from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_indicator", id_indicator);
+        query.setParameter("id_monper", id_monper);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);

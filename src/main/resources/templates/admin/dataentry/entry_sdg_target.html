@@ -167,6 +167,10 @@
                     url: urls+'list-get-option-role-all-profil/'+id_prov,
                     success: function (result) {
                         $("#idrole").html('<option value="0" >-- Pilih --</option>');
+                        if(privilege=="ADMIN"){
+                        	$("#idrole").append("<option data-cat='all' value='all'>-- ALL --</option>");
+                            $("#idrole").append("<option value='unassign'>Unassign</option>");
+                        }
                         var array = result.content;
                         if (array != '') {
                             for (i in array) {
@@ -174,9 +178,12 @@
                             }
                         }
                         if(privilege == 'ADMIN'){
-                            $("#idrole").val('0').trigger("change").attr('disabled',false);
+                            $("#idrole").val('0').attr('disabled',false);
                         }else{
-                            $("#idrole").val(id_role).trigger("change").attr('disabled',true);
+                        	$("#idrole").val(id_role).attr('disabled',true);
+                        }
+                        if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
+                        	$("#idrole").val(sessionStorage.idrole_target);
                         }
                     }
                 });
@@ -191,25 +198,18 @@
                             for (i in array1) {
                             	var text     = array1[i][1]+'-'+array1[i][2];
                             	$("#periode").append('<option value="'+array1[i][0]+'" >'+text+'</option>');
-                                /* var selisih     = (array1[i][2] - array1[i][1]);
-//                                console.log(array1[i][2]);
-                                var x;
-                                for(x=0; x<=selisih; x++){
-//                                    console.log((array1[i][1]+x));
-                                    $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
-                                } */
-                                
+                            }
+                            if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
+                            	$("#periode").val(sessionStorage.periode_target).trigger("change");
                             }
                         }
                         
                     }
                 });
-                
-                $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
-                
-                
-                
+                $("#id_prov").val(id_prov).attr('disabled',true);
+                sessionStorage.provinsi_target  = id_prov;
             }
+            
             var table = $('#tabel-entri-sdg').DataTable({
                 responsive: true,
                 sDom: 'lrtip',
@@ -301,14 +301,6 @@
                             for (i in array1) {
                             	var text     = array1[i][1]+'-'+array1[i][2];
                             	$("#periode").append('<option value="'+array1[i][0]+'" >'+text+'</option>');
-                                /* var selisih     = (array1[i][2] - array1[i][1]);
-//                                console.log(array1[i][2]);
-                                var x;
-                                for(x=0; x<=selisih; x++){
-//                                    console.log((array1[i][1]+x));
-                                    $("#periode").append('<option value="'+array1[i][0]+'###'+(array1[i][1]+x)+'" >'+(array1[i][1]+x)+'</option>');
-                                } */
-                                
                             }
                             if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
                             	$("#periode").val(sessionStorage.periode_target);
@@ -339,10 +331,11 @@
                 }
             });
             
-            if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
-            	$("#id_prov").val(sessionStorage.provinsi_target).trigger("change");
+            if(id_role==1){
+            	if(sessionStorage.idrole_target && sessionStorage.periode_target && sessionStorage.provinsi_target){
+                	$("#id_prov").val(sessionStorage.provinsi_target).trigger("change");
+                }	
             }
-            
             
             $('#teruskan').on('click', '#apply_btn', function(e){
                 alert('button is not a function');
