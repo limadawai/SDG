@@ -341,21 +341,21 @@
                 return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.company_name)+"</div>";}
+                return "<div style='font-size:90%;'>"+row[1]+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;text-align:center;'>"+(row.year)+"</div>";}
+                return "<div style='font-size:90%;text-align:center;'>"+row[2]+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                if(row.approval == '1'){
+                if(row[6] == '1'){
                     return "<span style='font-size:90%; background: #f5ff6e; text-align: center;'>Wait Approval</span>";
-                }else if(row.approval == '2'){
+                }else if(row[6] == '2'){
                     return "<span style='font-size:90%; background: #6eeaff; text-align: center;'>Approved</span>";
-                }else if(row.approval == '3'){
+                }else if(row[6] == '3'){
                     return "<span style='font-size:90%; background: #ffa6a6; text-align: center;'>Rejected</span>";
-                }else if(row.approval == '4'){
+                }else if(row[6] == '4'){
                     return "<span style='font-size:90%; background: #b5ffb5; text-align: center;'>Done</span>";
-                }else if(row.approval == '5'){
+                }else if(row[6] == '5'){
                 	return "<span style='font-size:90%; background: #f5ff6e; text-align: center;'>Not Approved</span>";
                 }else{
                 	return "<span style='font-size:90%; text-align: center;'>-</span>";
@@ -366,7 +366,7 @@
 					var text = "Approve";
 					var hide = "";
 					var kelas = "update"
-					if(row.approval==2){
+					if(row[6]==2){
 						if($("#fs").is(':checked')){
 							text = "Batal Setujui";
 						}else{
@@ -374,7 +374,7 @@
 						}
 						warna = "btn-success";
 						kelas = "unuprove";
-					}else if(row.approval==3){
+					}else if(row[6]==3){
 						if($("#fs").is(':checked')){
 							text = "Batal Tolak";
 						}else{
@@ -382,10 +382,10 @@
 						}
 						warna = "btn-danger";
 						kelas = "unuprove";
-					}else if(row.approval==4){
+					}else if(row[6]==4){
 						hide = 'display:none';
 						kelas = "update";
-					}else if(row.approval==5){
+					}else if(row[6]==5){
 						if($("#fs").is(':checked')){
 							text = "Approve";
 						}else{
@@ -395,8 +395,8 @@
 						kelas = "update";
 					}
             		 return "<div style='text-align:center;'>"+
-                     '<a  href="/sdg/admin/export-entry/gri-ojk/'+row.file1+'" title="update" class="btn btn-warning btn-mini" target="_blank"><i class="icon-folder-close-alt"></i></a>&nbsp;&nbsp;'+
-                     '<button data-id="'+row.id+'" type="button" title="approve" class="btn '+warna+' '+kelas+' ">'+text+'</div>';
+                     '<button data-id="'+row[0]+'" type="button" title="approve" class="btn '+warna+' '+kelas+' btn-mini">'+text+'</button>&nbsp;&nbsp;<a  href="/sdg/admin/export-entry/gri-ojk/'+row[3]+'" title="update" class="btn btn-warning btn-mini" target="_blank">Excel</a>&nbsp;&nbsp;'+
+                     '<a href="data:application/pdf;base64,'+row[7]+'" class="btn btn-warning btn-mini" target="_blank">Pdf</a></div>';
                      
               }
             }

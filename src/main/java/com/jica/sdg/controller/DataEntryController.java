@@ -28,6 +28,7 @@ import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgIndicatorTarget;
 import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.model.Unit;
+import com.jica.sdg.repository.EntryGriOjkRepository;
 import com.jica.sdg.service.IEntrySdgService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.IGovProgramService;
@@ -59,6 +60,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 //import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -113,6 +115,12 @@ public class DataEntryController {
     
     @Autowired
     IGovActivityService govActService;
+    
+    @Autowired
+    IEntryGriOjkService entryGriOjkService;
+    
+    @Autowired
+    EntryGriOjkRepository entryGirOjkRepo;
     
     @Autowired
     INsaProgramService nsaProgService;
@@ -2089,16 +2097,10 @@ public class DataEntryController {
 //    		sql = "select a.* from ref_unit a left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
 //    	}
         
-        Query list = em.createNativeQuery(sql);
-        List<Object[]> rows = list.getResultList();
-        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        for (Object[] row : rows) {
-            result.add(
-                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
-            );
-        }
-        hasil.put("content",result);
+        hasil.put("content",list);
         return hasil;
     }
     
@@ -2106,16 +2108,10 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> gri(HttpSession session,@PathVariable("year") String year) {
     	String tahun = year.equals("all")?"":" where year = '"+year+"'";
     	String sql = "select * from entry_gri_ojk "+tahun;
-        Query list = em.createNativeQuery(sql);
-        List<Object[]> rows = list.getResultList();
-        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        for (Object[] row : rows) {
-            result.add(
-                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
-            );
-        }
-        hasil.put("content",result);
+        hasil.put("content",list);
         return hasil;
     }
     
@@ -2137,20 +2133,33 @@ public class DataEntryController {
                                             ,@RequestParam("id") String id
                                             ,@RequestParam("company_name") String company_name
                                             ,@RequestParam("year") String year
-                                            ,@RequestParam("files") MultipartFile[] uploadfiles) {
+                                            ,@RequestParam("files") MultipartFile[] uploadfiles, @RequestParam("file_pdf") MultipartFile file_pdf) throws IOException {
         Integer id_role = (Integer) session.getAttribute("id_role");
 //        JSONObject jsonObunit = new JSONObject(payload); 
 //        System.out.println(company_name);
 //        String company_name      = jsonObunit.get("company_name").toString(); 
 //        String year              = jsonObunit.get("year").toString(); 
 //        String id                = jsonObunit.get("id").toString();
-        
+            EntryGriojk gri = new EntryGriojk();
             if(id.equals("")){
-                 UUID uuid1 = UUID.randomUUID();
-                 UUID uuid2 = UUID.randomUUID();
-                 String file1 =  company_name.toLowerCase()+"-"+year+".xls";
-                 String file2 =  uuid2.toString() + ".xls";
-                em.createNativeQuery("INSERT INTO entry_gri_ojk (company_name,year,file1,file2) values ('"+company_name+"','"+year+"','"+file1+"','"+file2+"')").executeUpdate();
+                UUID uuid1 = UUID.randomUUID();
+                UUID uuid2 = UUID.randomUUID();
+                String file1 =  company_name.toLowerCase()+"-"+year+".xls";
+                String file2 =  uuid2.toString() + ".xls";
+                gri.setCompany_name(company_name);
+                int tahun = Integer.valueOf(year);
+                gri.setYear(tahun);
+                gri.setFile1(file1);
+                gri.setFile2(file2);
+                gri.setFile3(IOUtils.toByteArray(file_pdf.getInputStream()));
+                gri.setDescription("");
+                gri.setApproval(1);
+                entryGriOjkService.saveEntryGriOjk(gri);
+//                 UUID uuid1 = UUID.randomUUID();
+//                 UUID uuid2 = UUID.randomUUID();
+//                 String file1 =  company_name.toLowerCase()+"-"+year+".xls";
+//                 String file2 =  uuid2.toString() + ".xls";
+//                em.createNativeQuery("INSERT INTO entry_gri_ojk (company_name,year,file1,file2) values ('"+company_name+"','"+year+"','"+file1+"','"+file2+"')").executeUpdate();
                 String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
                 if (!StringUtils.isEmpty(uploadedFileName)) {
@@ -2169,6 +2178,14 @@ public class DataEntryController {
         return new ResponseEntity("Successfully uploaded - "
                 + "test", HttpStatus.OK);
 	}
+        
+    @GetMapping("admin/get-griojk/{id}")
+    public @ResponseBody Map<String, Object> getGriojkval(@PathVariable("id") Integer id){
+    	Optional<EntryGriojk> list = entryGriOjkService.findOne(id);
+    	Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
         
         private void saveUploadedFiles(List<MultipartFile> files,String file1,String file2,String year,String company) throws IOException {
             int i = 1;
@@ -2211,6 +2228,7 @@ public class DataEntryController {
         
 
     public  void importExcell(String path,String year,String company) throws FileNotFoundException, IOException {
+        System.out.println("kesini lho");
        FileInputStream fis = new FileInputStream(path);
        DataFormatter formatter = new DataFormatter();
        Workbook wb = new HSSFWorkbook(fis);

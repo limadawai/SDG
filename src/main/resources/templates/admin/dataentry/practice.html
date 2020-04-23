@@ -241,7 +241,7 @@
                         </div>
                         <div class="controls">
                             <form id="form-data-pribadi" method="POST">
-                                <input type="file" id="file2" name="files" class="form-control"/>
+                                <input type="file" id="file2" name="files" class="form-control" multiple/>
                             </form>
                             <span class="help-block" id="error_upload"></span>
                         </div>
@@ -1186,7 +1186,7 @@
                 if($('#fs').is(':checked')){
                     swal("Maaf! Tipe file yang diperbolehkan hanya .jpeg dan .jpg");
                 }else{
-                    swal("Sorry! Uploaded file must be .jpeg dan .jpg");
+                    swal("Sorry! Uploaded file must be .jpeg and .jpg");
                 }
                 cek += 1;
             }

@@ -1,7 +1,21 @@
 package com.jica.sdg.model;
 
-import javax.persistence.*;
+//import javax.persistence.*;
+//import java.io.Serializable;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.Date;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.Lob;
 
 @Entity
 @Table(name = "entry_gri_ojk")
@@ -31,23 +45,25 @@ public class EntryGriojk implements Serializable {
     @Column(nullable = false, length = 255)
     private String description;
 
-    public EntryGriojk(Integer id, String company_name, Integer year, String file1, String file2) {
-        this.id = id;
-        this.company_name = company_name;
-        this.year = year;
-        this.file1 = file1;
-        this.file2 = file2;
+    @Lob
+    @Column(nullable = true, columnDefinition="BLOB")
+    private byte[] file3;
+    
+    public EntryGriojk() {
     }
-
-    public EntryGriojk(Integer id, String company_name, Integer year, String file1, String file2, String description,Integer approval ) {
-        this.id = id;
+    
+    public EntryGriojk(Integer id, String company_name, Integer year, String file1 ,String file2, String description,Integer approval, byte[]file3) {
+		super();
+		this.id = id;
         this.company_name = company_name;
         this.year = year;
         this.file1 = file1;
         this.file2 = file2;
         this.approval = approval;
         this.description = description;
-    }
+        this.file3 = file3;
+	}
+    
     
     
     
@@ -90,6 +106,16 @@ public class EntryGriojk implements Serializable {
     public void setFile2(String file2) {
         this.file2 = file2;
     }
+
+    public byte[] getFile3() {
+        return file3;
+    }
+
+    public void setFile3(byte[] file3) {
+        this.file3 = file3;
+    }
+
+    
 
     public Integer getApproval() {
         return approval;
