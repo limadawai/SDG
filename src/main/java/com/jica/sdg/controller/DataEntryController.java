@@ -1930,8 +1930,12 @@ public class DataEntryController {
         model.addAttribute("id_indicator_1", id_indicator);
         
     	Optional<SdgIndicator> sdgIndicator = sdgIndicatorService.findOne(id_indicator);
+    	Optional<SdgGoals> listgol = sdgGoalsService.findOne(Integer.parseInt(sdgIndicator.get().getId_goals()));
+    	Optional<SdgTarget> list1 = sdgTargetService.findOne(Integer.parseInt(sdgIndicator.get().getId_target()));
         model.addAttribute("title", "SDG Indicators Monitoring");
         sdgIndicator.ifPresent(foundUpdateObject -> model.addAttribute("sdgInd", foundUpdateObject));
+        listgol.ifPresent(foundUpdateObject -> model.addAttribute("goals", foundUpdateObject));
+        list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         return "admin/dataentry/entry_sdg_target_input";
     }
     

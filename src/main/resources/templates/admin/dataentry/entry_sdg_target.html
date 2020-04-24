@@ -225,7 +225,7 @@
                 "searching": true,
                 "columns": [
                     {"data": function (row, data, index, display) {
-                        return "<div style='font-size:90%;'>"+row[10]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[12]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[14]+"</div>";
+                        return "<div style='font-size:90%;'>"+row[10]+"</div><span style='font-size:90%;'>"+row[10]+'.'+row[12]+"</span><div style='font-size:90%;'>"+row[10]+'.'+row[12]+'.'+row[14]+"</div>";
                     }},
                     {"data": function (row, data, index, display) {
                         var v_idrole1   = $("#idrole").val();
