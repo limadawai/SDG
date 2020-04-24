@@ -329,7 +329,7 @@
         	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
         	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
         	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+id_goals+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-        								                            '<span style="vertical-align:middle">'+result.content[j].id_target+". "+nm_target+'</span>'+
+        								                            '<span style="vertical-align:middle">'+response.content[i].id_goals+'.'+result.content[j].id_target+". "+nm_target+'</span>'+
         								                      '</label><br/>';
         	                                    	$.ajax({
         	                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
@@ -349,7 +349,7 @@
         	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
         	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
         									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+id_goals+'---'+id_target+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-        									                            '<span style="vertical-align:middle">'+result1.content[k][1]+". "+nm_indicator+'</span>'+
+        									                            '<span style="vertical-align:middle">'+response.content[i].id_goals+'.'+result.content[j].id_target+'.'+result1.content[k][1]+". "+nm_indicator+'</span>'+
         									                      '</label><br/>';
         	                                            	}
         	                                            }
@@ -560,7 +560,7 @@
         	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
         	            			var row = hasilGoal1.progGov;
         	            			var id_program = row[a][0];
-        	            			var kode_program = row[a][1];
+        	            			var kode_program = row[a][4];
                         			var nm_program;
                         			var nm_activity;
                         			if($('#fs').is(':checked')){
@@ -631,14 +631,14 @@
                         	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
                         	            			var row = hasilGoal2.progGov;
                         	            			var id_activity = row[b][0];
-                        	            			var kode_activity = row[b][1];
+                        	            			var kode_activity = row[b][4];
                                         			var nm_activity;
                                         			if($('#fs').is(':checked')){
                                         				nm_activity = row[b][2];
                 	                            	}else{
                 	                            		nm_activity = row[b][3];
                 	                            	}
-                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
                                         			$.ajax({
                                         	            url: urls + "get-mapping-goals-govBudget",
                                         	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -753,14 +753,14 @@
                                         	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
                                         	            			var row = hasilGoal3.progGov;
                                         	            			var id_gov_indicator = row[c][0];
-                                        	            			var kode_indicator = row[c][1];
+                                        	            			var kode_indicator = row[c][4];
                                                         			var nm_indicator;
                                                         			if($('#fs').is(':checked')){
                                                         				nm_indicator = row[c][2];
                                 	                            	}else{
                                 	                            		nm_indicator = row[c][3];
                                 	                            	}
-                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+                                                        			textSdg += "<div>Indicator : "+kode_program+'.'+kode_activity+'.'+kode_indicator+". "+nm_indicator+"</div>";
                                         	            		
                                                         			$.ajax({
                                                         	            url: urls + "get-mapping-goals-relisasi",
@@ -898,7 +898,7 @@
         	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
         	            			var row = hasilGoal1.progGov;
         	            			var id_program = row[a][0];
-        	            			var kode_program = row[a][1];
+        	            			var kode_program = row[a][4];
                         			var nm_program;
                         			var nm_activity;
                         			if($('#fs').is(':checked')){
@@ -919,14 +919,14 @@
                         	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
                         	            			var row = hasilGoal2.progGov;
                         	            			var id_activity = row[b][0];
-                        	            			var kode_activity = row[b][1];
+                        	            			var kode_activity = row[b][4];
                                         			var nm_activity;
                                         			if($('#fs').is(':checked')){
                                         				nm_activity = row[b][2];
                 	                            	}else{
                 	                            		nm_activity = row[b][3];
                 	                            	}
-                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
                                         			$.ajax({
                                         	            url: urls + "get-mapping-goals-nsaBudget",
                                         	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -1041,14 +1041,14 @@
                                         	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
                                         	            			var row = hasilGoal3.progGov;
                                         	            			var id_nsa_indicator = row[c][0];
-                                        	            			var kode_indicator = row[c][1];
+                                        	            			var kode_indicator = row[c][3];
                                                         			var nm_indicator;
                                                         			if($('#fs').is(':checked')){
                                                         				nm_indicator = row[c][2];
                                 	                            	}else{
                                 	                            		nm_indicator = row[c][3];
                                 	                            	}
-                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+                                                        			textSdg += "<div>Indicator : "+kode_program+'.'+kode_activity+'.'+kode_indicator+". "+nm_indicator+"</div>";
                                         	            		
                                                         			$.ajax({
                                                         	            url: urls + "get-mapping-goals-nsarelisasi",
@@ -1190,7 +1190,7 @@
 							}else{
 								nm_target = hasilTarget.sdg[j][2];
 							}
-		            		textSdg += "<p style='font-size:90%;'><b>SDG Targets "+kode_target+". "+nm_target+"</b><p/>";
+		            		textSdg += "<p style='font-size:90%;'><b>SDG Targets "+kode_goals+'.'+kode_target+". "+nm_target+"</b><p/>";
 		            		
 		            		//TARGET GOVERNMENT PROGRAM
 		        			$.ajax({
@@ -1205,7 +1205,7 @@
 		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 		        	            			var row = hasilGoal1.progGov;
 		        	            			var id_program = row[a][0];
-		        	            			var kode_program = row[a][1];
+		        	            			var kode_program = row[a][4];
 		                        			var nm_program;
 		                        			var nm_activity;
 		                        			if($('#fs').is(':checked')){
@@ -1276,14 +1276,14 @@
 		                        	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 		                        	            			var row = hasilGoal2.progGov;
 		                        	            			var id_activity = row[b][0];
-		                        	            			var kode_activity = row[b][1];
+		                        	            			var kode_activity = row[b][4];
 		                                        			var nm_activity;
 		                                        			if($('#fs').is(':checked')){
 		                                        				nm_activity = row[b][2];
 		                	                            	}else{
 		                	                            		nm_activity = row[b][3];
 		                	                            	}
-		                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+		                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
 		                                        			$.ajax({
 		                                        	            url: urls + "get-mapping-target-govBudget",
 		                                        	            data: {'id_role':idrole,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -1398,14 +1398,14 @@
 		                                        	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 		                                        	            			var row = hasilGoal3.progGov;
 		                                        	            			var id_gov_indicator = row[c][0];
-		                                        	            			var kode_indicator = row[c][1];
+		                                        	            			var kode_indicator = row[c][4];
 		                                                        			var nm_indicator;
 		                                                        			if($('#fs').is(':checked')){
 		                                                        				nm_indicator = row[c][2];
 		                                	                            	}else{
 		                                	                            		nm_indicator = row[c][3];
 		                                	                            	}
-		                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+		                                                        			textSdg += "<div>Indicator : "+kode_program+'.'+kode_activity+'.'+kode_indicator+". "+nm_indicator+"</div>";
 		                                        	            		
 		                                                        			$.ajax({
 		                                                        	            url: urls + "get-mapping-target-relisasi",
@@ -1543,7 +1543,7 @@
 		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 		        	            			var row = hasilGoal1.progGov;
 		        	            			var id_program = row[a][0];
-		        	            			var kode_program = row[a][1];
+		        	            			var kode_program = row[a][4];
 		                        			var nm_program;
 		                        			var nm_activity;
 		                        			if($('#fs').is(':checked')){
@@ -1564,14 +1564,14 @@
 		                        	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 		                        	            			var row = hasilGoal2.progGov;
 		                        	            			var id_activity = row[b][0];
-		                        	            			var kode_activity = row[b][1];
+		                        	            			var kode_activity = row[b][4];
 		                                        			var nm_activity;
 		                                        			if($('#fs').is(':checked')){
 		                                        				nm_activity = row[b][2];
 		                	                            	}else{
 		                	                            		nm_activity = row[b][3];
 		                	                            	}
-		                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+		                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
 		                                        			$.ajax({
 		                                        	            url: urls + "get-mapping-target-nsaBudget",
 		                                        	            data: {'id_role':idrole,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -1686,14 +1686,14 @@
 		                                        	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 		                                        	            			var row = hasilGoal3.progGov;
 		                                        	            			var id_nsa_indicator = row[c][0];
-		                                        	            			var kode_indicator = row[c][1];
+		                                        	            			var kode_indicator = row[c][4];
 		                                                        			var nm_indicator;
 		                                                        			if($('#fs').is(':checked')){
 		                                                        				nm_indicator = row[c][2];
 		                                	                            	}else{
 		                                	                            		nm_indicator = row[c][3];
 		                                	                            	}
-		                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+		                                                        			textSdg += "<div>Indicator : "+kode_program+'.'+kode_activity+'.'+kode_indicator+". "+nm_indicator+"</div>";
 		                                        	            		
 		                                                        			$.ajax({
 		                                                        	            url: urls + "get-mapping-target-nsarelisasi",
@@ -1834,7 +1834,7 @@
 		    							}else{
 		    								nm_indicator = hasilIndicator.sdg[k][2];
 		    							}
-		    		            		textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+kode_indicator+". "+nm_indicator+"</b><p/>";
+		    		            		textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+kode_goals+'.'+kode_target+"."+kode_indicator+". "+nm_indicator+"</b><p/>";
 		    		            		
 		    		            		$.ajax({
 		    		        	            url: urls + "get-entry-sdg",
@@ -2001,7 +2001,7 @@
 		    		    							}else{
 		    		    								nm_disagre = hasilDis.dis[l][4]+" "+hasilDis.dis[l][6];
 		    		    							}
-		    		    		            		textSdg += "<p style='font-size:90%;'><b>Disaggregation "+kode_dis+". "+nm_disagre+"</b><p/>";
+		    		    		            		textSdg += "<p style='font-size:90%;'><b>Disaggregation "+kode_goals+"."+kode_target+'.'+kode_indicator+'.'+kode_dis+". "+nm_disagre+"</b><p/>";
 		    		    		            	
 		    		    		            		$.ajax({
 		    		    		        	            url: urls + "get-entry-sdg-detail",
@@ -2167,7 +2167,7 @@
 		    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 		    		        	            			var row = hasilGoal1.progGov;
 		    		        	            			var id_program = row[a][0];
-		    		        	            			var kode_program = row[a][1];
+		    		        	            			var kode_program = row[a][4];
 		    		                        			var nm_program;
 		    		                        			var nm_activity;
 		    		                        			if($('#fs').is(':checked')){
@@ -2238,14 +2238,14 @@
 		    		                        	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 		    		                        	            			var row = hasilGoal2.progGov;
 		    		                        	            			var id_activity = row[b][0];
-		    		                        	            			var kode_activity = row[b][1];
+		    		                        	            			var kode_activity = row[b][4];
 		    		                                        			var nm_activity;
 		    		                                        			if($('#fs').is(':checked')){
 		    		                                        				nm_activity = row[b][2];
 		    		                	                            	}else{
 		    		                	                            		nm_activity = row[b][3];
 		    		                	                            	}
-		    		                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+		    		                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
 		    		                                        			$.ajax({
 		    		                                        	            url: urls + "get-mapping-indicator-govBudget",
 		    		                                        	            data: {'id_role':idrole,'id_indicator':id_indicator,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -2360,14 +2360,14 @@
 		    		                                        	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 		    		                                        	            			var row = hasilGoal3.progGov;
 		    		                                        	            			var id_gov_indicator = row[c][0];
-		    		                                        	            			var kode_indicator = row[c][1];
+		    		                                        	            			var kode_indicator = row[c][4];
 		    		                                                        			var nm_indicator;
 		    		                                                        			if($('#fs').is(':checked')){
 		    		                                                        				nm_indicator = row[c][2];
 		    		                                	                            	}else{
 		    		                                	                            		nm_indicator = row[c][3];
 		    		                                	                            	}
-		    		                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+		    		                                                        			textSdg += "<div>Indicator : "+kode_program+'.'+kode_activity+'.'+kode_indicator+". "+nm_indicator+"</div>";
 		    		                                        	            		
 		    		                                                        			$.ajax({
 		    		                                                        	            url: urls + "get-mapping-indicator-relisasi",
@@ -2505,7 +2505,7 @@
 		    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 		    		        	            			var row = hasilGoal1.progGov;
 		    		        	            			var id_program = row[a][0];
-		    		        	            			var kode_program = row[a][1];
+		    		        	            			var kode_program = row[a][4];
 		    		                        			var nm_program;
 		    		                        			var nm_activity;
 		    		                        			if($('#fs').is(':checked')){
@@ -2526,14 +2526,14 @@
 		    		                        	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 		    		                        	            			var row = hasilGoal2.progGov;
 		    		                        	            			var id_activity = row[b][0];
-		    		                        	            			var kode_activity = row[b][1];
+		    		                        	            			var kode_activity = row[b][4];
 		    		                                        			var nm_activity;
 		    		                                        			if($('#fs').is(':checked')){
 		    		                                        				nm_activity = row[b][2];
 		    		                	                            	}else{
 		    		                	                            		nm_activity = row[b][3];
 		    		                	                            	}
-		    		                                        			textSdg += "<div>Activity : "+kode_activity+". "+nm_activity+"</div>";
+		    		                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
 		    		                                        			$.ajax({
 		    		                                        	            url: urls + "get-mapping-indicator-nsaBudget",
 		    		                                        	            data: {'id_role':idrole,'id_indicator':id_indicator,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -2648,14 +2648,14 @@
 		    		                                        	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 		    		                                        	            			var row = hasilGoal3.progGov;
 		    		                                        	            			var id_nsa_indicator = row[c][0];
-		    		                                        	            			var kode_indicator = row[c][1];
+		    		                                        	            			var kode_indicator = row[c][4];
 		    		                                                        			var nm_indicator;
 		    		                                                        			if($('#fs').is(':checked')){
 		    		                                                        				nm_indicator = row[c][2];
 		    		                                	                            	}else{
 		    		                                	                            		nm_indicator = row[c][3];
 		    		                                	                            	}
-		    		                                                        			textSdg += "<div>Indicator : "+kode_indicator+". "+nm_indicator+"</div>";
+		    		                                                        			textSdg += "<div>Indicator : "+kode_program+'.'+kode_activity+'.'+kode_indicator+". "+nm_indicator+"</div>";
 		    		                                        	            		
 		    		                                                        			$.ajax({
 		    		                                                        	            url: urls + "get-mapping-indicator-nsarelisasi",

@@ -1826,7 +1826,7 @@ public class DataEntryController {
     	String sql = "SELECT distinct b.id_goals, b.id_target, b.id, h.nm_goals, i.nm_target, b.nm_indicator, b.unit, b.increment_decrement, '' as value, "
     			+ " k.sdg_indicator, h.id_goals as kode_goals, h.nm_goals_eng, "
     			+ " i.id_target as kode_target, i.nm_target_eng, b.id_indicator as kode_indicator, b.nm_indicator_eng, j.nm_unit, "
-    			+ " (select group_concat(concat(value,'---',year)) from sdg_indicator_target where a.id_monper = :id_monper and id_sdg_indicator = b.id and year between k.start_year and k.end_year and id_monper = k.id_monper) as target,l.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end, g.id_role "
+    			+ " (select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = b.id and year between k.start_year and k.end_year and id_monper = k.id_monper) as target,l.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end, g.id_role "
     			+ " FROM sdg_indicator b "
     			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
     			+ " left join ref_unit c on b.unit = c.id_unit "
