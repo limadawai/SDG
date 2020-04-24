@@ -140,13 +140,14 @@ public class AdminController {
                                             "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
                                             "     JOIN sdg_target f ON e.id_target = f.id\n" +
                                             "     JOIN sdg_goals g ON f.id_goals = g.id\n" +
-                                            " WHERE b.year = YEAR(NOW())");
+                                            "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
+                                            " WHERE b.year = YEAR(NOW()) AND (h.approval = '2' OR  h.approval = '4')");
         
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list);
             
-            String sql = "SELECT min(start_year) as awal_tahun, max(end_year) as akhir_tahun from ran_rad where status = 'on Going' and status = 'compleate'";
+            String sql = "SELECT min(start_year) as awal_tahun, max(end_year) as akhir_tahun from ran_rad where status ='on Going' or status = 'completed'";
             Query list2 = em.createNativeQuery(sql);
             Map<String, Object> hasiltahun = new HashMap<>();            
             hasiltahun.put("tahunmap",list2.getResultList());
@@ -191,8 +192,9 @@ public class AdminController {
                                             "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
                                             "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
                                             "     JOIN sdg_target f ON e.id_target = f.id\n" +
-                                            "     JOIN sdg_goals g ON f.id_goals = g.id\n" +
-                                            "     WHERE b.year = '"+tahun+"' "+where+"");
+                                            "     JOIN sdg_goals g ON f.id_goals = g.id\n"
+                                          + "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
+                                            "     WHERE b.year = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list);
