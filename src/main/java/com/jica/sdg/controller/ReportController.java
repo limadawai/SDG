@@ -5252,12 +5252,7 @@ public class ReportController {
     	Optional<Role> list = roleService.findOne(id_role);
     	String id_prov      = list.get().getId_prov();
     	String privilege    = list.get().getPrivilege();
-    	if(id_prov.equals("000")) {
-            model.addAttribute("listprov", provinsiService.findAllProvinsi());
-    	}else {
-            Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
-            list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
-    	}
+    	 model.addAttribute("listprov", provinsiService.findAllProvinsi());
         
          Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text ,'#' AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                                                 "	UNION \n" +

@@ -545,7 +545,8 @@
 					}else{
 						nm_goals = hasilGoal.sdg[i][2];
 					}
-        			textSdg += "<p style='font-size:90%;'><div style='width:100%;padding:4px;text-align:center;background-color:#3EC1E9;display:block;'><b>Goal "+kode_goals+". "+nm_goals+"</b></div><p/>";
+        			if(i>0){textSdg +='<br/><br/><br/><br/><br/><br/>';}
+        			textSdg += "<p ><div style='width:100%;padding:4px;text-align:left;background-color:#3EC1E9;display:block;'><b><h3>Goal "+kode_goals+". "+nm_goals+"</h3></b></div><p/>";
             		
         			//GOALS GOVERNMENT PROGRAM
         			$.ajax({
@@ -556,7 +557,7 @@
         	            async : false,
         	            success: function (hasilGoal1) {
         	            	if(hasilGoal1.progGov.length>0){
-        	            		textSdg += "<div><b><u>Government Program</u></b></div>";
+        	            		textSdg += "<div ><b><u>Government Program</u></b></div>";
         	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
         	            			var row = hasilGoal1.progGov;
         	            			var id_program = row[a][0];
@@ -568,7 +569,7 @@
 	                            	}else{
 	                            		nm_program = row[a][3];
 	                            	}
-                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+                        			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
                         			
                         			//RELATED PROG NASIONAL KE PROVINSI
                         			if($('#cek_rel_prog').is(':checked')){
@@ -589,7 +590,7 @@
                             	            success: function (hasilGoal3) {
                             	            	if(hasilGoal3.progGov.length>0){
                             	            		var row = hasilGoal3.progGov;
-                            	            		textSdg += "<br/><div class='related'><div><b><u>"+nas+"Program Related :</u></b></div>";
+                            	            		textSdg += "<br/><div  class='related'><div><b><u>"+nas+"Program Related :</u></b></div>";
                             	            		for (var k = 0; k < hasilGoal3.progGov.length; k++) {
                             	            			var id_program_rel = row[k][0];
                             	            			var kode_program_rel = row[k][1];
@@ -600,17 +601,20 @@
                     	                            	}else{
                     	                            		nm_program_rel = row[k][3];
                     	                            	}
+                                            			textSdg +='<br/>';
                                             			if(idprov=="000"){
                                             				if(k==0){
-                                	            				textSdg += "<div><b><u>Province : "+row[k][5]+"</u></b></div>";
+                                            					textSdg +='<br/>';
+                                	            				textSdg += "<div ><b><span style='margin-right:20px'>Province</span>: "+row[k][5]+"</b></div>";
                                 	            			}else{
                                 	            				if(row[k][5] != row[k-1][5]){
-                                	            					textSdg += "<div><b><u>Province : "+row[k][5]+"</u></b></div>";
+                                	            					textSdg +='<br/>';
+                                	            					textSdg += "<div ><b><span style='margin-right:20px'>Province</span>: "+row[k][5]+"</b></div>";
                                 	            				}
                                 	            			}
                                             			}
                             	            			
-                            	            			textSdg += "<div>Program : "+kode_program_rel+". "+nm_program_rel+"</div>";
+                            	            			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program_rel+". "+nm_program_rel+"</div>";
                             	            			
                             	            		}
                             	            		textSdg += "</div><br/>"
@@ -638,7 +642,7 @@
                 	                            	}else{
                 	                            		nm_activity = row[b][3];
                 	                            	}
-                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
+                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
                                         			$.ajax({
                                         	            url: urls + "get-mapping-goals-govBudget",
                                         	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -906,7 +910,7 @@
 	                            	}else{
 	                            		nm_program = row[a][3];
 	                            	}
-                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+                        			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
                         			
                         			$.ajax({
                         	            url: urls + "get-mapping-goals-nsaActivity",
@@ -926,7 +930,7 @@
                 	                            	}else{
                 	                            		nm_activity = row[b][3];
                 	                            	}
-                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
+                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
                                         			$.ajax({
                                         	            url: urls + "get-mapping-goals-nsaBudget",
                                         	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -1190,7 +1194,7 @@
 							}else{
 								nm_target = hasilTarget.sdg[j][2];
 							}
-		            		textSdg += "<p style='font-size:90%;'><b>SDG Targets "+kode_goals+'.'+kode_target+". "+nm_target+"</b><p/>";
+		            		textSdg += "<p ><b>SDG Targets "+kode_goals+'.'+kode_target+". "+nm_target+"</b><p/>";
 		            		
 		            		//TARGET GOVERNMENT PROGRAM
 		        			$.ajax({
@@ -1213,7 +1217,7 @@
 			                            	}else{
 			                            		nm_program = row[a][3];
 			                            	}
-		                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+		                        			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 		                        			
 		                        			//RELATED PROG NASIONAL KE PROVINSI
 		                        			if($('#cek_rel_prog').is(':checked')){
@@ -1247,15 +1251,17 @@
 		                    	                            	}
 		                                            			if(idprov=="000"){
 		                                            				if(k==0){
-		                                	            				textSdg += "<div><b><u>Province : "+row[k][5]+"</u></b></div>";
+		                                            					textSdg +='<br/>';
+		                                	            				textSdg += "<div ><b><span style='margin-right:20px'>Province</span>: "+row[k][5]+"</b></div>";
 		                                	            			}else{
 		                                	            				if(row[k][5] != row[k-1][5]){
-		                                	            					textSdg += "<div><b><u>Province : "+row[k][5]+"</u></b></div>";
+		                                	            					textSdg +='<br/>';
+		                                	            					textSdg += "<div ><b><span style='margin-right:20px'>Province</span>: "+row[k][5]+"</b></div>";
 		                                	            				}
 		                                	            			}
 		                                            			}
 		                            	            			
-		                            	            			textSdg += "<div>Program : "+kode_program_rel+". "+nm_program_rel+"</div>";
+		                            	            			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program_rel+". "+nm_program_rel+"</div>";
 		                            	            			
 		                            	            		}
 		                            	            		textSdg += "</div><br/>"
@@ -1283,7 +1289,7 @@
 		                	                            	}else{
 		                	                            		nm_activity = row[b][3];
 		                	                            	}
-		                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
+		                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 		                                        			$.ajax({
 		                                        	            url: urls + "get-mapping-target-govBudget",
 		                                        	            data: {'id_role':idrole,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -1551,7 +1557,7 @@
 			                            	}else{
 			                            		nm_program = row[a][3];
 			                            	}
-		                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+		                        			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 		                        			
 		                        			$.ajax({
 		                        	            url: urls + "get-mapping-target-nsaActivity",
@@ -1571,7 +1577,7 @@
 		                	                            	}else{
 		                	                            		nm_activity = row[b][3];
 		                	                            	}
-		                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
+		                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 		                                        			$.ajax({
 		                                        	            url: urls + "get-mapping-target-nsaBudget",
 		                                        	            data: {'id_role':idrole,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -1834,7 +1840,7 @@
 		    							}else{
 		    								nm_indicator = hasilIndicator.sdg[k][2];
 		    							}
-		    		            		textSdg += "<p style='font-size:90%;'><b>SDG Indicators "+kode_goals+'.'+kode_target+"."+kode_indicator+". "+nm_indicator+"</b><p/>";
+		    		            		textSdg += "<p ><b>SDG Indicators "+kode_goals+'.'+kode_target+"."+kode_indicator+". "+nm_indicator+"</b><p/>";
 		    		            		
 		    		            		$.ajax({
 		    		        	            url: urls + "get-entry-sdg",
@@ -2001,7 +2007,7 @@
 		    		    							}else{
 		    		    								nm_disagre = hasilDis.dis[l][4]+" "+hasilDis.dis[l][6];
 		    		    							}
-		    		    		            		textSdg += "<p style='font-size:90%;'><b>Disaggregation "+kode_goals+"."+kode_target+'.'+kode_indicator+'.'+kode_dis+". "+nm_disagre+"</b><p/>";
+		    		    		            		textSdg += "<p ><b>Disaggregation "+kode_goals+"."+kode_target+'.'+kode_indicator+'.'+kode_dis+". "+nm_disagre+"</b><p/>";
 		    		    		            	
 		    		    		            		$.ajax({
 		    		    		        	            url: urls + "get-entry-sdg-detail",
@@ -2175,7 +2181,7 @@
 		    			                            	}else{
 		    			                            		nm_program = row[a][3];
 		    			                            	}
-		    		                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+		    		                        			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 		    		                        			
 		    		                        			//RELATED PROG NASIONAL KE PROVINSI
 		    		                        			if($('#cek_rel_prog').is(':checked')){
@@ -2209,15 +2215,18 @@
 		    		                    	                            	}
 		    		                                            			if(idprov=="000"){
 		    		                                            				if(k==0){
-		    		                                	            				textSdg += "<div><b><u>Province : "+row[k][5]+"</u></b></div>";
+		    		                                            					textSdg +='<br/>';
+		    		                                	            				textSdg += "<div ><b><span style='margin-right:20px'>Province</span>: "+row[k][5]+"</b></div>";
 		    		                                	            			}else{
 		    		                                	            				if(row[k][5] != row[k-1][5]){
-		    		                                	            					textSdg += "<div><b><u>Province : "+row[k][5]+"</u></b></div>";
+		    		                                	            					textSdg +='<br/>';
+		    		                                	            					textSdg += "<div ><b><span style='margin-right:20px'>Province</span>: "+row[k][5]+"</b></div>";
 		    		                                	            				}
 		    		                                	            			}
 		    		                                            			}
 		    		                            	            			
-		    		                            	            			textSdg += "<div>Program : "+kode_program_rel+". "+nm_program_rel+"</div>";
+		    		                            	            			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program_rel+". "+nm_program_rel+"</div>";
+		    		                            	            			
 		    		                            	            			
 		    		                            	            		}
 		    		                            	            		textSdg += "</div><br/>"
@@ -2245,7 +2254,7 @@
 		    		                	                            	}else{
 		    		                	                            		nm_activity = row[b][3];
 		    		                	                            	}
-		    		                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
+		    		                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 		    		                                        			$.ajax({
 		    		                                        	            url: urls + "get-mapping-indicator-govBudget",
 		    		                                        	            data: {'id_role':idrole,'id_indicator':id_indicator,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -2513,7 +2522,7 @@
 		    			                            	}else{
 		    			                            		nm_program = row[a][3];
 		    			                            	}
-		    		                        			textSdg += "<div>Program : "+kode_program+". "+nm_program+"</div>";
+		    		                        			textSdg += "<div ><span style='margin-right:20px'>Program</span>: "+kode_program+". "+nm_program+"</div>";
 		    		                        			
 		    		                        			$.ajax({
 		    		                        	            url: urls + "get-mapping-indicator-nsaActivity",
@@ -2533,7 +2542,7 @@
 		    		                	                            	}else{
 		    		                	                            		nm_activity = row[b][3];
 		    		                	                            	}
-		    		                                        			textSdg += "<div>Activity : "+kode_program+'.'+kode_activity+". "+nm_activity+"</div>";
+		    		                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 		    		                                        			$.ajax({
 		    		                                        	            url: urls + "get-mapping-indicator-nsaBudget",
 		    		                                        	            data: {'id_role':idrole,'id_indicator':id_indicator,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
