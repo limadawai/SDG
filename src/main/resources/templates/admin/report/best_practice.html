@@ -725,17 +725,34 @@
                                                         }else{
                                                             var isi_indicator1 = array_level3[p][20];
                                                         }
+                                                        if(array_level3[p][22] == null || array_level3[p][22] == '0'){
+                                                            var no_goal = '';
+                                                        }else{
+                                                            var no_goal = array_level3[p][22];
+                                                        }
+                                                        if(array_level3[p][23] == null || array_level3[p][23] == '0'){
+                                                            var isi_goal = '';
+                                                        }else{
+                                                            var isi_goal = array_level3[p][23];
+                                                        }
+                                                        if(array_level3[p][24] == null || array_level3[p][24] == '0'){
+                                                            var isi_goal1 = '';
+                                                        }else{
+                                                            var isi_goal1 = array_level3[p][24];
+                                                        }
                                                         //level2
                                                         if($('#fs').is(':checked')){
                                                             var target      = no_target+" "+isi_target;
                                                             var indicator   = no_indicator+" "+isi_indicator;
+                                                            var goal        = no_goal+" "+isi_goal;
                                                         }else{
                                                             var target      = no_target+" "+isi_target1;
                                                             var indicator   = no_indicator+" "+isi_indicator1;
+                                                            var goal        = no_goal+" "+isi_goal1;
                                                         }
                                                         
                                                         text += "<tr style='font-size:80%;border-style:ridge;'>";
-                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+target+"<br/>"+indicator+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+goal+"<br/>"+target+"<br/>"+indicator+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][14]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][8]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
