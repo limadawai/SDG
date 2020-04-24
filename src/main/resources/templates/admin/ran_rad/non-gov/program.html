@@ -198,116 +198,7 @@
 	        	$('.nasional').hide();
 	        	$('.provinsi').show();
 	        }
-	        
-	      //Bahasa
-	        var titleDel = "Anda Yakin";
-	        var messDel = "Menghapus Data dan Data level dibawahnya?";
-	        var buttDel = 'Ya, Hapus data ini!';
-	        var titleOk	= "Hapus";
-	        var messOk = "Data berhasil dihapus";
-	        var messNOk = "Data tidak dapat dihapus";
-	        var required = "Harus diisi";
-	        var messDelBiasa = "Menghapus Data?";
-	        var titleMod = "Maaf";
-	        var messMod = "Semua pilihan harus dipilih";
-	        function bhs(cek){
-				if(cek){
-					$(".lang_indo").show();
-	        		$(".lang_eng").hide();
-	        		titleDel = "Anda Yakin";
-	        		messDel = "Menghapus Data dan Data level dibawahnya?";
-	        		buttDel = 'Ya, Hapus data ini!';
-	        		titleOk	= "Hapus";
-	    	        messOk = "Data berhasil dihapus";
-	    	        messNOk = "Data tidak dapat dihapus";
-	    	        required = "Harus diisi";
-	    	        messDelBiasa = "Menghapus Data?";
-	    	        titleMod = "Maaf";
-	    	        messMod = "Semua pilihan harus dipilih";
-	        	}else{	    	        
-	    	        $(".lang_indo").hide();
-	        		$(".lang_eng").show();
-	        		titleDel = "Are you sure";
-	        		messDel = "Lower level data exists but will be deleted. OK?";
-	        		buttDel = 'Yes, Delete this data!';
-	        		titleOk	= "Delete";
-	    	        messOk = "Delete successful";
-	    	        messNOk = "Can't delete data";
-	    	        required = "Required";
-	    	        messDelBiasa = "Delete this data?";
-	    	        titleMod = "Sorry";
-	    	        messMod = "All dropdownlists must be selected";
-	        	}
-	        }
-	        if(lang){
-	        	bhs(lang=="0");
-	        }else{
-	        	bhs($('#fs').is(':checked'));
-	        }
-	        $('#fs').on('change', function(e){
-	        	bhs($(this).is(':checked'));
-	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
-	        });
-	        
-	        $('#showModal').on('click', function(){
-	        	if($('#id_prov').val() && $('#id_monper').val() && $('#id_role').val()){
-	        		$("#myModal").modal("show");
-	        	}else{
-	        		swal(titleMod,messMod,'error');
-	        	}
-	        });
-
-	        $('#id_prov').on('change', function(){
-	        	var id = $(this).val();
-	        	$.ajax({
-					type: "GET",
-                    url: urls+'manajemen/list-role-nsa/'+id,
-                    async:false,
-                    success: function (result) {
-						$('#id_role').html("");
-						var array = result.content;
-						console.log(id);
-						for(i=0; i<array.length;i++){
-							var selected = (i==0)?'selected':'';
-							$('#id_role').append('<option '+selected+' value="'+array[i].id_role+'">' +array[i].nm_role+'</option>');
-						}
-                    },
-                });
-	        	
-	        	$.ajax({
-					type: "GET",
-                    url: urls+'list-monPer/'+id,
-                    async:false,
-                    success: function (result) {
-						$('#id_monper').html("");
-						var array = result.content;
-						for(i=0; i<array.length;i++){
-							$('#id_monper').append('<option value="'+array[i].id_monper+'">' +array[i].start_year+' - '+array[i].end_year+'</option>');
-						}
-                    },
-                });
-	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
-	        });
-	        
-	        $('#id_role, #id_monper').on('change', function(){
-	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
-	        });
-	        
-	        function cekStatusMonper(){
-	        	var status = "";
-	        	$.ajax({
-					type: "GET",
-                    url: urls+'get-monPer/'+$('#id_monper').val(),
-                    async:false,
-                    success: function (result) {
-                    	var val = result.content;
-                    	status = val.status;
-                    },
-                });
-	        	return status;
-	        }
-			
-			var table = $('#tabel-goals').DataTable({
+	        var table = $('#tabel-goals').DataTable({
 				responsive: true,
 				sDom: 'lrtip',
 				"bLengthChange": false,
@@ -358,6 +249,129 @@
 				],
 				select: true
 			});	
+	        
+	      //Bahasa
+	        var titleDel = "Anda Yakin";
+	        var messDel = "Menghapus Data dan Data level dibawahnya?";
+	        var buttDel = 'Ya, Hapus data ini!';
+	        var titleOk	= "Hapus";
+	        var messOk = "Data berhasil dihapus";
+	        var messNOk = "Data tidak dapat dihapus";
+	        var required = "Harus diisi";
+	        var messDelBiasa = "Menghapus Data?";
+	        var titleMod = "Maaf";
+	        var messMod = "Semua pilihan harus dipilih";
+	        function bhs(cek){
+				if(cek){
+					$(".lang_indo").show();
+	        		$(".lang_eng").hide();
+	        		titleDel = "Anda Yakin";
+	        		messDel = "Menghapus Data dan Data level dibawahnya?";
+	        		buttDel = 'Ya, Hapus data ini!';
+	        		titleOk	= "Hapus";
+	    	        messOk = "Data berhasil dihapus";
+	    	        messNOk = "Data tidak dapat dihapus";
+	    	        required = "Harus diisi";
+	    	        messDelBiasa = "Menghapus Data?";
+	    	        titleMod = "Maaf";
+	    	        messMod = "Semua pilihan harus dipilih";
+	        	}else{	    	        
+	    	        $(".lang_indo").hide();
+	        		$(".lang_eng").show();
+	        		titleDel = "Are you sure";
+	        		messDel = "Lower level data exists but will be deleted. OK?";
+	        		buttDel = 'Yes, Delete this data!';
+	        		titleOk	= "Delete";
+	    	        messOk = "Delete successful";
+	    	        messNOk = "Can't delete data";
+	    	        required = "Required";
+	    	        messDelBiasa = "Delete this data?";
+	    	        titleMod = "Sorry";
+	    	        messMod = "All dropdownlists must be selected";
+	        	}
+	        }
+	        if(lang){
+	        	bhs(lang=="0");
+	        }else{
+	        	bhs($('#fs').is(':checked'));
+	        }
+	        $('#fs').on('change', function(e){
+	        	bhs($(this).is(':checked'));
+	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	//table.ajax.reload( null, false );
+	        });
+	        
+	        $('#showModal').on('click', function(){
+	        	if($('#id_prov').val() && $('#id_monper').val() && $('#id_role').val()){
+	        		$("#myModal").modal("show");
+	        	}else{
+	        		swal(titleMod,messMod,'error');
+	        	}
+	        });
+
+	        $('#id_prov').on('change', function(){
+	        	var id = $(this).val();
+	        	sessionStorage.provinsi_non_gov_prog = id;
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'manajemen/list-role-nsa/'+id,
+                    async:false,
+                    success: function (result) {
+						$('#id_role').html("");
+						var array = result.content;
+						console.log(id);
+						for(i=0; i<array.length;i++){
+							var selected = (i==0)?'selected':'';
+							$('#id_role').append('<option '+selected+' value="'+array[i].id_role+'">' +array[i].nm_role+'</option>');
+						}
+                    },
+                });
+	        	if(sessionStorage.role_non_gov_prog){
+                	$("#id_role").val(sessionStorage.role_non_gov_prog);
+                }
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'list-monPer/'+id,
+                    async:false,
+                    success: function (result) {
+						$('#id_monper').html("");
+						var array = result.content;
+						for(i=0; i<array.length;i++){
+							$('#id_monper').append('<option value="'+array[i].id_monper+'">' +array[i].start_year+' - '+array[i].end_year+'</option>');
+						}
+						if(sessionStorage.monper_non_gov_prog){
+                        	$("#id_monper").val(sessionStorage.monper_non_gov_prog);
+                        }
+                    },
+                });
+	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	//table.ajax.reload( null, false );
+	        });
+	        if(sessionStorage.provinsi_non_gov_prog){
+            	$("#id_prov").val(sessionStorage.provinsi_non_gov_prog).trigger('change');
+            }
+	        $('#id_role, #id_monper').on('change', function(){
+	        	sessionStorage.monper_non_gov_prog  = $('#id_monper').val();
+	        	sessionStorage.role_non_gov_prog  = $('#id_role').val();
+	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	        	//table.ajax.reload( null, false );
+	        });
+	        
+	        function cekStatusMonper(){
+	        	var status = "";
+	        	$.ajax({
+					type: "GET",
+                    url: urls+'get-monPer/'+$('#id_monper').val(),
+                    async:false,
+                    success: function (result) {
+                    	var val = result.content;
+                    	status = val.status;
+                    },
+                });
+	        	return status;
+	        }
+			
+			
 			
 			$('#text-cari').on( 'keyup', function () {
 				var val=$(this).val();
@@ -435,7 +449,8 @@
 	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
 						data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	                    	//table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+	                    	table.ajax.reload( null, false );
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
@@ -519,7 +534,8 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+                        	//table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
+                        	table.ajax.reload( null, false );
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

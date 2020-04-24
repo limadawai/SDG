@@ -35,8 +35,8 @@
 				<div class="widget-box">
 					<div class="widget-content">
 						Program : 
-						<a th:href="@{/admin/ran_rad/non-gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program}" class="lang_indo"></a>
-						<a th:href="@{/admin/ran_rad/non-gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program_eng}" class="lang_eng" style="display:none"></a>
+						<a th:href="@{/admin/ran_rad/non-gov/program}" th:text="${govProg.internal_code+' - '+govProg.nm_program}" class="lang_indo"></a>
+						<a th:href="@{/admin/ran_rad/non-gov/program}" th:text="${govProg.internal_code+' - '+govProg.nm_program_eng}" class="lang_eng" style="display:none"></a>
 					</div>
 				</div>
 			</div>
@@ -222,6 +222,7 @@
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-nsaActivity/'+id_program).load();
+	        	//table.ajax.reload( null, false );
 	        });
 	        
 	        function cekStatusMonper(){
@@ -267,7 +268,7 @@
 							return "<div style='font-size:90%;'>"+row.id_activity+"</div>";
 						}}, */
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+(row.internal_code?row.internal_code:'')+"</div>";
+							return "<div style='font-size:90%;'>"+[[${govProg.internal_code}]]+"."+(row.internal_code?row.internal_code:'')+"</div>";
 					}},
 					{"data": function (row, data, index, display) {
 						var nama;
@@ -362,7 +363,8 @@
 	                    headers:{'Accept':'application/json','Content-Type':'application/json'},
 						data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-nsaActivity/'+id_program).load();
+	                    	//table.ajax.url(urls+'list-nsaActivity/'+id_program).load();
+	                    	table.ajax.reload( null, false );
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
@@ -442,7 +444,8 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-nsaActivity/'+id_program).load();
+                        	//table.ajax.url(urls+'list-nsaActivity/'+id_program).load();
+                        	table.ajax.reload( null, false );
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

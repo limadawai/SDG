@@ -55,13 +55,11 @@
                             </select>
                         </div>
                         <div class="pull-left" style="width:100%">
-                            <select th:field="*{listprov}" class="span3" id="goals" name="goals">
+                            <select class="span3" id="goals" name="goals">
                                 <option value="0" >-- Pilih --</option>
-                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
                             </select>
                             <select id="target" name="target" class="form-control">
                                 <option value="0" >-- Pilih --</option>
-                                <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
                             </select>
                             
 <!--                            <div class="lang_indo"><span> Periode</span></div>
@@ -114,11 +112,7 @@
                             $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
                         }
                     }
-                    if(privilege == 'ADMIN'){
-                        $("#idrole").val('0').trigger("change").attr('disabled',false);
-                    }else{
-                        $("#idrole").val(id_role).trigger("change").attr('disabled',true);
-                    }
+                    $("#idrole").val(id_role).trigger("change");
                 }
             });
 
@@ -170,7 +164,7 @@
 
                 $.ajax({
                     type: "GET",
-                    url: urls+'list-get-option-monper/'+id_prov,
+                    url: urls+'list-get-option-monper-report/'+id_prov,
                     success: function (result1) {
                         if(id_role == '1'){
                             $("#periode").html('<option value="0" >-- Pilih --</option>'); 
@@ -540,7 +534,7 @@
                                       { "title": "Description" },
                                       { "title": "Follow up Plan" }];
                    
-                    var divtable = `<div><h3>`+x[1]+`</h3><div id="total`+uuid+`"></div><table class="table table-striped table-bordered" id="table`+uuid+`"></table></div>`;
+                    var divtable = `<div><h3>`+(x[2]?x[2]:'')+" "+x[1]+`</h3><div id="total`+uuid+`"></div><table class="table table-striped table-bordered" id="table`+uuid+`"></table></div>`;
                    	$('#report').append(divtable);
                     var data = [];
                     no = 0;

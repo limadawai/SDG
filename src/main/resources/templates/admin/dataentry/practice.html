@@ -113,7 +113,7 @@
                 <h3 class="lang_indo">Tambah Praktik Terbaik</h3>
             </div>
             <div class="modal-body">
-                <form id="form-sdgGoals">
+                <!--<form id="form-sdgGoals">-->
 <!--                    <div class="control-group">
                         <div class="controls">
                             <div class="accordion" id="accordion2">
@@ -230,7 +230,28 @@
                             <span class="help-block" id="error_challenges_learning"></span>
                         </div>
                     </div>
-                </form>
+                    <div class="control-group">
+                        <label class="lang_eng control-label" style="display:none">Upload</label>
+                        <label class="lang_indo control-label">Upload</label>
+                        <div class="profile_img">
+<!--                            <div id="crop-avatar">
+                                 Current avatar 
+                                <img class="img-responsive avatar-view" id="gambar-profil" th:src="@{/img/facebook.png}" alt="Picture" style="width: 200px"/>
+                            </div>-->
+                        </div>
+                        <div class="controls">
+                            <form id="form-data-pribadi" method="POST">
+                                <input type="file" id="file2" name="files" class="form-control" multiple/>
+                            </form>
+                            <span class="help-block" id="error_upload"></span>
+                        </div>
+                    </div>
+<!--<form id="form-rencana">
+                                    <label for="name">Upload</label>
+                                    <input type="file" name="files_cv" class="form-control input-sm unit"/>
+                                    <div id="error_file" class="error"></div>
+                                </form>-->
+                <!--</form>-->
             </div>
             <div class="modal-footer">
                 <button class="btn tutup" data-dismiss="modal" aria-hidden="true">
@@ -746,6 +767,9 @@
         	}else{
         		swal(titleMod,messMod,'error');
         	}
+                $("#submit").show();
+                $("#file2").show();
+                $(".profile_img").hide();
         });
         
         var table = $('#tabel-practice').DataTable({
@@ -790,10 +814,10 @@
 						        				'<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
 						                  '</label><br/>';
 				                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-						        					'<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+						        					'<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][7]+'.'+result1.content[k][8]:"")+" "+nm_target+'</span>'+
 						                     '</label><br/>';
 				                     text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-						                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+						                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][7]+'.'+result1.content[k][8]+'.'+result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
 						                   '</label><br/>';
 			                	}
 			                }
@@ -823,9 +847,9 @@
                                                                             }
                                                     text += '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
                                                                       '<br/>';
-                                                        text += '<span style="vertical-align:middle;margin-left:20px">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+                                                        text += '<span style="vertical-align:middle;margin-left:20px">'+(result1.content[k][8]?result1.content[k][7]+'.'+result1.content[k][8]:"")+" "+nm_target+'</span>'+
                                                                          '<br/>';
-                                                         text += '<span style="vertical-align:middle;margin-left:40px">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+                                                         text += '<span style="vertical-align:middle;margin-left:40px">'+(result1.content[k][9]?result1.content[k][7]+'.'+result1.content[k][8]+'.'+result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
                                                                        '<br/>';
 //                                                    text += '<label style="display:inline-block;white-space:nowrap;">'+
 //                                                                                            '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
@@ -883,6 +907,8 @@
                         //            var year                = tahun_1;
                                     var type                = "entry_best_practice";
                                     var text1 = "";
+                                    var sts = "";
+                                    var view1 = "";
                                     $.ajax({
                                         url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+year+'/'+type+'/1',
                                         type: 'get',
@@ -892,13 +918,26 @@
                                         success: function (result1) {
 //                                            alert('isi '+result1.content);
                                             if(result1.content == "1"){
+                                                if($("#fs").is(':checked')){
+                                                    sts += "<span class='label label-success'>Diterapkan</span>";
+                                                }else{
+                                                    sts += "<span class='label label-success'>Applied</span>";
+                                                }
+                                                view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 text1 += '';
 
                                             }else if(result1.content == "2"){
+                                                if($("#fs").is(':checked')){
+                                                    sts = "";
+                                                }else{
+                                                    sts = "";
+                                                }
+                                                view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 $('.appl').hide();
                                                 $('.unappl').hide();
-
+                                                text1 += '';
                                             }else if(result1.content == "3"){
+                                                view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 var detail = "";
 						var cat = $("#idrole").find(":selected").data("cat");
 						if(cat=="NSA"){
@@ -908,15 +947,18 @@
 						'<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-warning btn-mini update">Edit</button>'+detail+"</div>";
 
                                             }else if(result1.content == "4"){
+                                                view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 text1 += '';
 
                                             }else{
                                                 var detail = "";
                                                 var view = "";
+                                                
 						var cat = $("#idrole").find(":selected").data("cat");
 						if(cat=="NSA"){
                                                     detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
 						}
+                                                view1 += '';
                                                 view = '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 detail = '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button>';
 						text1 += "<div style='text-align:center;'>"+
@@ -962,11 +1004,11 @@
                                         },
                                     });
                                     if(cek1>0){
-                                    	return label;
+                                    	return sts+" "+label +"<br/><br/>"+view1;
                                     }else if(label){
-                                    	return label;
+                                    	return sts+" "+label +"<br/><br/>"+view1;
                                     }else{
-                                    	return text1;
+                                    	return sts+" "+text1+"<br/><br/>"+view1;
                                     }
                                     
                                 }}
@@ -1028,7 +1070,7 @@
                                 option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
                                 cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
                                                                 '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-                                                                            '<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
+                                                                            '<span style="vertical-align:middle">'+id_goals+'.'+result.content[j].id_target+' '+nm_target+'</span>'+
                                                                       '</label><br/>';
                                 $.ajax({
                                     url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
@@ -1048,7 +1090,7 @@
                                                 option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
                                                 cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
                                                                                     '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-                                                                                    '<span style="vertical-align:middle">'+result1.content[k][1]+' '+nm_indicator+'</span>'+
+                                                                                    '<span style="vertical-align:middle">'+id_goals+'.'+id_target+'.'+result1.content[k][1]+' '+nm_indicator+'</span>'+
                                                                               '</label><br/>';
                                         }
                                     }
@@ -1147,9 +1189,36 @@
             }
             console.log(sdg_indicator);
             
+            var filenya     = $("#file2")[0].files[0], fname = '', fsize = 0, extnya = '';
+            var arrExt 	= [".png", ".jpg", ".jpeg"];
+            if(typeof(filenya) != 'undefined'){
+                fsize 	= filenya.size,
+                fname 	= filenya.name,
+                extnya 	= fname.substr(fname.lastIndexOf(".")).toLowerCase();
+            }
+            
             $('.control-group').removeClass('error');
             $('.help-block').text("");
             var cek = 0;
+            
+            if(fname && $.inArray(extnya, arrExt) == -1){
+                $("#myModal").modal("hide");
+                if($('#fs').is(':checked')){
+                    swal("Maaf! Tipe file yang diperbolehkan hanya .jpeg dan .jpg");
+                }else{
+                    swal("Sorry! Uploaded file must be .jpeg and .jpg");
+                }
+                cek += 1;
+            }
+            if(fname && fsize > (1 * 1024 * 1024)){
+                $("#myModal").modal("hide");
+                if($('#fs').is(':checked')){
+                    swal("Maaf! File Gagal Diupload Maksimal 1MB");
+                }else{
+                    swal("Sorry! Uploaded files a maximum of 1MB");
+                }
+                cek += 1;
+            }
                         
 //                        if (id_gov_indicator == ""){
 //                            $("#error_id_gov_indicator").parents(".control-group").first().addClass("error");
@@ -1229,6 +1298,47 @@
                                 
                             }
                         });
+                        
+                        //upload foto
+                        var isi_file = $("#file2").val();
+                        var formElement = document.getElementById('form-data-pribadi');
+                        var formData    = new FormData(formElement);
+                        var idbest   = result.v_id;
+                        console.log("isi id = "+result.v_id)
+                        console.log("isi file = "+$("#file2").val())
+                        formData.append('idbest', idbest);
+                        formData.append('idcek', id);
+                        formData.append('isi_file', isi_file);
+                        $.ajax({
+                            beforeSend : function(xhr){
+                                xhr.setRequestHeader(header,token);
+                            },
+                            headers:{'Accept':'application/json'},
+                            type: "POST",
+                            enctype: 'multipart/form-data',
+                            data: formData,
+                            processData: false,
+                            contentType: false,
+                            url: urls+'create-foto-best-pract',
+                            success: function (result3) {
+                            },
+                            error: function (result3) {
+                                swal(
+                                    'Maaf...',
+                                    'File Gagal Diupload ',
+                                    'error'
+                                );
+                            }
+                         });
+                        $('#id').val("");
+			$('#id_program').val("");
+			$('#location').val("");
+			$('#time_activity').val("");
+			$('#background').val("");
+			$('#implementation_process').val("");
+			$('#challenges_learning').val("");
+			$('#sdg_indicator').val("").trigger('change');
+			$('#file2').val("").trigger('change');
                     	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
                     	$('#myModal').modal('hide');
                     },
@@ -1321,6 +1431,25 @@
                     $('#background').val(val.background);
                     $('#implementation_process').val(val.implementation_process);
                     $('#challenges_learning').val(val.challenges_learning);
+                    $("#file2").show();
+                    $(".profile_img").show();
+                    $.ajax({
+                        type: "GET",
+                        url: urls+'get-all-foto/'+id,
+                        success: function (resulthasil) {
+                            var val2 = resulthasil.content;
+                            console.log(val2);
+                            var ht = "";
+                            for(var i=0;i<val2.length;i++){
+                                ht += '<img class="img-responsive avatar-view" id="gambar-profil" src="data:image/jpg;base64,'+val2[i][2]+'" alt="Picture" style="width: 200px"/><br/><br/>';
+                            }
+                            $(".profile_img").html(ht);
+                        }
+                    });
+//                    console.log("foto = "+val.foto_file);
+//                    if(val.foto_file){
+//                        $("#gambar-profil").attr("src","data:image/jpg;base64, "+val.foto_file);
+//                    }
                     $.ajax({
     					type: "GET",
                         url: urls+'list-getBestMapByGovInd/'+val.id,
@@ -1354,6 +1483,21 @@
                     $('#background').val(val.background);
                     $('#implementation_process').val(val.implementation_process);
                     $('#challenges_learning').val(val.challenges_learning);
+                    $("#file2").hide();
+                    $(".profile_img").show();
+                    $.ajax({
+                        type: "GET",
+                        url: urls+'get-all-foto/'+id,
+                        success: function (resulthasil) {
+                            var val2 = resulthasil.content;
+                            console.log(val2);
+                            var ht = "";
+                            for(var i=0;i<val2.length;i++){
+                                ht += '<img class="img-responsive avatar-view" id="gambar-profil" src="data:image/jpg;base64,'+val2[i][2]+'" alt="Picture" style="width: 200px"/><br/><br/>';
+                            }
+                            $(".profile_img").html(ht);
+                        }
+                    });
                     $.ajax({
                         type: "GET",
                         url: urls+'list-getBestMapByGovInd/'+val.id,

@@ -170,7 +170,7 @@
             var id_prov     = [[${id_prov}]];
             var privilege   = [[${privilege}]];
             if(id_role == '1'){
-                
+            	
             }else{
                 $.ajax({
                     type: "GET",
@@ -181,6 +181,7 @@
                         if (array != '') {
                         	if(privilege == 'ADMIN' || privilege == 'SUPER'){
                         		$("#idrole").append('<option value="0" >-- ALL --</option>');
+                        		$("#idrole").append('<option value="unassign" >Unassign</option>');
                         	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
@@ -226,6 +227,7 @@
                         if (array != '') {
                         	if(privilege == 'ADMIN' || privilege == 'SUPER'){
                         		$("#idrole").append('<option value="0" >-- ALL --</option>');
+                        		$("#idrole").append('<option value="unassign">Unassign</option>');
                         	}
                             for (i in array) {
                                 $("#idrole").append('<option value="'+array[i][0]+'" >'+array[i][1]+'</option>');
@@ -495,9 +497,9 @@
                                 	{"data": function (row, data, index, display) {
                                     	var disaggre = "";
                                     	if(row[25]){
-                                    		return "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    		return "<div style='font-size:90%;'>"+row[15]+"."+row[17]+"."+row[19]+"."+row[25]+"</div>"
                                     	}else{
-                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>";
+                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%;'>"+row[15]+"."+row[17]+"</span><div style='font-size:90%;'>"+row[15]+"."+row[17]+"."+row[19]+"</div>";
                                     	}
                                     }},
                                     {"data": function (row, data, index, display) {
@@ -799,9 +801,9 @@
                                 	{"data": function (row, data, index, display) {
                                     	var disaggre = "";
                                     	if(row[25]){
-                                    		return "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    		return "<div style='font-size:90%;'>"+row[15]+"."+row[17]+"."+row[19]+"."+row[25]+"</div>"
                                     	}else{
-                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>";
+                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%;'>"+row[15]+"."+row[17]+"</span><div style='font-size:90%;'>"+row[15]+"."+row[17]+"."+row[19]+"</div>";
                                     	}
                                     }},
                                     {"data": function (row, data, index, display) {
@@ -1316,9 +1318,9 @@
                                 	{"data": function (row, data, index, display) {
                                     	var disaggre = "";
                                     	if(row[25]){
-                                    		return "<div style='font-size:90%; padding-left: 35px'>"+row[25]+"</div>"
+                                    		return "<div style='font-size:90%;'>"+row[15]+"."+row[17]+"."+row[19]+"."+row[25]+"</div>"
                                     	}else{
-                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[17]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[19]+"</div>";
+                                    		return "<div style='font-size:90%;'>"+row[15]+"</div><span style='font-size:90%;'>"+row[15]+"."+row[17]+"</span><div style='font-size:90%;'>"+row[15]+"."+row[17]+"."+row[19]+"</div>";
                                     	}
                                     }},
                                     {"data": function (row, data, index, display) {

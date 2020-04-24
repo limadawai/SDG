@@ -45,6 +45,7 @@
                     	<br/>
                         <div class="row-fluid">
                             <div class="span12">
+                            	<button type="button" title="detail" class="btn btn-success btn-mini copy">Copy testing</button>
                             	<div class="table-responsive">
                                 <table class="table table-bordered table-striped" id="tabel-goals">
                                     <thead>
@@ -231,6 +232,8 @@
 	        if(privilege=="USER"){
 	        	$('#addNew').hide();
 	        }
+	        
+	        
 	        //Bahasa
 	        var titleDel = "Anda Yakin";
 	        var messDel = "Menghapus Data?";
@@ -278,6 +281,16 @@
 	        	var id = $(this).val();
 	        	table.ajax.url(urls+'list-monPer/'+id).load();
 	        });
+	        
+	        $('.copy').on('click', function(){
+	        	$.ajax({
+	                url: urls + "copy-period",
+	                type: 'get',
+	                success: function(result) {
+	                	table.ajax.url(urls+'list-monPer/'+$('#id_prov').val()).load();
+	                }
+		            });
+	        });
 			
 			var table = $('#tabel-goals').DataTable({
 				responsive: true,
@@ -316,7 +329,7 @@
 	                            '<button data-id="'+row.id_monper+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>';
 							}
 							
-						}}
+						}},
 				],
 				"columnDefs": [
 				],

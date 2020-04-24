@@ -220,7 +220,14 @@ public class ApprovalController {
             query.setParameter("type", type);
             query.setParameter("periode", periode);
         }else {
-        	String role = id_role.equals("null")?" id_role is null ":" id_role = '"+id_role+"'";
+        	String role;
+        	if(id_role.equals("all")) {
+        		role = "";
+        	}else if(id_role.equals("unassign")) {
+        		role = "id_role is null ";
+        	}else {
+        		role = "id_role = '"+id_role+"'";
+        	}
         	String sql = "select id, approval from entry_approval where type=:type and year=:year and id_monper=:id_monper and periode = :periode and "+role;
             query = em.createNativeQuery(sql);
             query.setParameter("year", year);
@@ -455,16 +462,10 @@ public class ApprovalController {
     @GetMapping("admin/get-approval/gri-ojk/{id}")
     public @ResponseBody Map<String, Object> getUnit(@PathVariable("id") Integer id) {
         String sql = "select * from entry_gri_ojk where id = '"+id+"'";
-        Query list = em.createNativeQuery(sql);
-        List<Object[]> rows = list.getResultList();
-        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        for (Object[] row : rows) {
-            result.add(
-                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
-            );
-        }
-        hasil.put("content",result);
+        hasil.put("content",list);
         return hasil;
     }
     
@@ -543,9 +544,9 @@ public class ApprovalController {
     	}
     	Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text ,'#' AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                 "	UNION \n" +
-                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id) AS id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,b.id_target AS id_text ,a.id AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id) AS id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text ,a.id AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                 "	UNION \n" +
-                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id,'.',c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,c.id_indicator AS id_text ,CONCAT(a.id,'.',b.id) AS id_parent2  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id,'.',c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text ,CONCAT(a.id,'.',b.id) AS id_parent2  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                 "	ORDER BY id_parent");
         
         List list3 =  query3.getResultList();

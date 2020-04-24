@@ -20,6 +20,7 @@ import com.jica.sdg.service.*;
 import java.util.*;
 
 import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgFunding;
 import com.jica.sdg.model.SdgGoals;
@@ -27,6 +28,7 @@ import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgIndicatorTarget;
 import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.model.Unit;
+import com.jica.sdg.repository.EntryGriOjkRepository;
 import com.jica.sdg.service.IEntrySdgService;
 import com.jica.sdg.service.ISdgIndicatorService;
 import com.jica.sdg.service.IGovProgramService;
@@ -58,6 +60,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 //import org.springframework.data.jpa.repository.Query;
 import javax.transaction.Transactional;
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -112,6 +115,12 @@ public class DataEntryController {
     
     @Autowired
     IGovActivityService govActService;
+    
+    @Autowired
+    IEntryGriOjkService entryGriOjkService;
+    
+    @Autowired
+    EntryGriOjkRepository entryGirOjkRepo;
     
     @Autowired
     INsaProgramService nsaProgService;
@@ -230,7 +239,10 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}")
     public @ResponseBody Map<String, Object> getOptionGoalsList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category) {
-        String whereidrole ="";
+    	Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	
+    	String whereidrole ="";
         String wheremonper = "";
         String whereidcategory ="";
         if(!id_monper.equals("*")){
@@ -245,11 +257,19 @@ public class DataEntryController {
           whereidcategory = " AND c.id_cat =  '"+id_category+"'";  
         }
         
-        
-        String sql  = " SELECT DISTINCT b.id,b.nm_goals,b.id_goals  FROM entry_problem_identify_map a \n" +
+        String sql;
+        if(status.equals("completed")) {
+        	sql  = " SELECT DISTINCT b.id_old,b.nm_goals,b.id_goals  FROM entry_problem_identify_map a \n" +
+                    "JOIN history_sdg_goals b ON a.id_goals = b.id_old and b.id_monper = '"+id_monper+"' \n" +
+                    "LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation  \n" +
+                    "WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory;
+        }else {
+        	sql  = " SELECT DISTINCT b.id,b.nm_goals,b.id_goals  FROM entry_problem_identify_map a \n" +
                     "JOIN sdg_goals b ON a.id_goals = b.id \n" +
                     "LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation  \n" +
                     "WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory;
+        }
+        
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         List list   = query.getResultList();
@@ -261,7 +281,10 @@ public class DataEntryController {
     
     @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}")
     public @ResponseBody Map<String, Object> getOptionTargetList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals) {
-        String whereidrole ="";
+    	Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	
+    	String whereidrole ="";
         String wheremonper = "";
         String whereidcategory ="";
         String whereidgoals ="";
@@ -279,11 +302,19 @@ public class DataEntryController {
         if(!id_goals.equals("*")){
           whereidgoals = "  and a.id_goals =  '"+id_goals+"'";  
         }
+        String sql;
+        if(status.equals("completed")) {
+        	sql  =   " SELECT DISTINCT b.id_old,b.nm_target,b.id_target  FROM entry_problem_identify_map a \n" +
+                    " JOIN history_sdg_target b ON a.id_target = b.id_old and b.id_monper = '"+id_monper+"' \n" +
+                    " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation    \n" +
+                    " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals;
+        }else {
+        	sql  =   " SELECT DISTINCT b.id,b.nm_target,b.id_target  FROM entry_problem_identify_map a \n" +
+                    " JOIN sdg_target b ON a.id_target = b.id\n" +
+                    " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation    \n" +
+                    " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals;
+        }
         
-        String sql  =   " SELECT DISTINCT b.id,b.nm_target,b.id_target  FROM entry_problem_identify_map a \n" +
-                        " JOIN sdg_target b ON a.id_target = b.id\n" +
-                        " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation    \n" +
-                        " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals;
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         List list   = query.getResultList();
@@ -295,7 +326,10 @@ public class DataEntryController {
     
      @GetMapping("admin/list-get-option-goals/{id_prov}/{id_role}/{id_monper}/{id_category}/{id_goals}/{id_target}")
     public @ResponseBody Map<String, Object> getOptionIndicatorList(@PathVariable("id_prov") String id_prov,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper,@PathVariable("id_category") String id_category,@PathVariable("id_goals") String id_goals,@PathVariable("id_target") String id_target) {
-        String whereidrole ="";
+    	Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+     	String status = (monper.isPresent())?monper.get().getStatus():"";
+     	
+    	String whereidrole ="";
         String wheremonper = "";
         String whereidcategory ="";
         String whereidgoals ="";
@@ -318,11 +352,20 @@ public class DataEntryController {
         if(!id_target.equals("*")){
           whereidtarget = "and a.id_target =  '"+id_target+"'";  
         }
+        String sql;
+        if(status.equals("completed")) {
+        	sql  =   " SELECT DISTINCT b.id_old,b.nm_indicator,b.id_indicator  FROM entry_problem_identify_map a \n" +
+                    " JOIN history_sdg_indicator b ON a.id_indicator = b.id_old and b.id_monper = '"+id_monper+"' \n" +
+                    " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation \n " +
+                    " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget;
+        }else {
+        	sql  =   " SELECT DISTINCT b.id,b.nm_indicator,b.id_indicator  FROM entry_problem_identify_map a \n" +
+                    " JOIN sdg_indicator b ON a.id_indicator = b.id\n" +
+                    " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation \n " +
+                    " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget;
+        }
         
-        String sql  =   " SELECT DISTINCT b.id,b.nm_indicator,b.id_indicator  FROM entry_problem_identify_map a \n" +
-                        " JOIN sdg_indicator b ON a.id_indicator = b.id\n" +
-                        " LEFT JOIN entry_problem_identify c ON a.id_relation_entry_problem_identify = c.id_relation \n " +
-                        " WHERE a.id_prov = :id_prov "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget;
+        
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         List list   = query.getResultList();
@@ -377,7 +420,7 @@ public class DataEntryController {
     				"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
     				"left join sdg_target as c on d.id_target = c.id \r\n" +
     				"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
-    				"left join sdg_indicator_target as e on d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
+    				"left join sdg_indicator_target as e on e.id_monper = a.id_monper and d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
     				"left join entry_sdg as f on d.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper =:id_monper\r\n" + 
     				"left join ref_unit as h on d.unit = h.id_unit \r\n" + 
     				"left join ref_role as l on a.id_role = l.id_role \r\n" + 
@@ -393,7 +436,7 @@ public class DataEntryController {
         			"left join ran_rad g on a.id_monper = g.id_monper and g.id_prov = a.id_prov\r\n" + 
         			"left join sdg_target as c on d.id_target = c.id \r\n" +
         			"left join sdg_goals as b on d.id_goals = b.id \r\n" + 
-        			"left join sdg_indicator_target as e on d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
+        			"left join sdg_indicator_target as e on e.id_monper = a.id_monper and d.id = e.id_sdg_indicator and e.year = :year\r\n" + 
         			"left join entry_sdg as f on d.id = f.id_sdg_indicator and f.year_entry = :year and f.id_monper =:id_monper\r\n" + 
         			"left join ref_unit as h on d.unit = h.id_unit \r\n" + 
         			"right join sdg_ranrad_disaggre as i on i.id_indicator = d.id \r\n" + 
@@ -406,7 +449,14 @@ public class DataEntryController {
 	        query.setParameter("id_monper", id_monper);
 	        query.setParameter("year", year);
         }else {
-        	String role = id_role.equals("null")?"id_role is null ":"id_role = '"+id_role+"'";
+        	String role;
+        	if(id_role.equals("all")) {
+        		role = "";
+        	}else if(id_role.equals("unassign")) {
+        		role = "id_role is null ";
+        	}else {
+        		role = "id_role = '"+id_role+"'";
+        	}
 //        	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator,CASE when h.nm_unit is null then '' else h.nm_unit end as nm_unit, d.increment_decrement, e.value,\n" +
 //                    "f.achievement1, f.achievement2, f.achievement3, f.achievement4, g.sdg_indicator, f.id as id_target_1, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
 //                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, \n" +
@@ -502,7 +552,7 @@ public class DataEntryController {
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng, "
     			+ "f.nm_role, d.nm_unit, e.value, h.achievement1, h.achievement2, h.achievement3, h.achievement4, "
     			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
-    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact "
+    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact, b.internal_code as intid_program, a.internal_code as intid_activity, c.internal_code as intid_gov_indicator "
     			+ "from gov_activity as a "
     			+ "left join gov_program b on a.id_program = b.id "
     			+ "left join gov_indicator c on a.id_program = c.id_program and a.id = c.id_activity "
@@ -533,7 +583,7 @@ public class DataEntryController {
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng, "
     			+ "f.nm_role, d.nm_unit, e.value, h.achievement1, h.achievement2, h.achievement3, h.achievement4, "
     			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
-    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact "
+    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact, b.internal_code as intid_program, a.internal_code as intid_activity, c.internal_code as intid_nsa_indicator "
     			+ "from nsa_activity as a "
     			+ "left join nsa_program b on a.id_program = b.id "
     			+ "left join nsa_indicator c on a.id_program = c.id_program and a.id = c.id_activity "
@@ -564,7 +614,7 @@ public class DataEntryController {
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, '' as nm_indicator, '' as nm_indicator_eng, "
     			+ "f.nm_role, '' as nm_unit, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
     			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
-    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact "
+    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact, b.internal_code as inid_program, a.internal_code as inid_activity "
     			+ "from gov_activity as a "
     			+ "left join gov_program b on a.id_program = b.id "
     			+ "left join ref_role f on a.id_role = f.id_role "
@@ -591,7 +641,7 @@ public class DataEntryController {
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, '' as nm_indicator, '' as nm_indicator_eng, "
     			+ "f.nm_role, '' as nm_unit, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
     			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
-    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact "
+    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact, b.internal_code as intid_program, a.internal_code as intid_activity "
     			+ "from nsa_activity as a "
     			+ "left join nsa_program b on a.id_program = b.id "
     			+ "left join ref_role f on a.id_role = f.id_role "
@@ -782,7 +832,7 @@ public class DataEntryController {
     			+ "c.new_value1 as new1, c.new_value2 as new2, c.new_value3 as new3, c.new_value4 as new4, id_disaggre, id_disaggre_detail, e.nm_role "
     			+ "from assign_sdg_indicator d "
     			+ "left join entry_sdg a on a.id_sdg_indicator = d.id_indicator and a.id_role = d.id_role and a.id_monper = d.id_monper and a.year_entry = '"+year+"' "
-    			+ "left join sdg_indicator_target b on b.id_sdg_indicator = d.id_indicator and b.id_role = d.id_role and b.year = '"+year+"' "
+    			+ "left join sdg_indicator_target b on a.id_monper = b.id_monper and b.id_sdg_indicator = d.id_indicator and b.id_role = d.id_role and b.year = '"+year+"' "
     			+ "left join entry_sdg_detail c on c.id_disaggre = '"+id_disaggre+"' and c.id_disaggre_detail = '"+id_disaggre_detail+"' and c.year_entry = '"+year+"' and c.id_role = d.id_role and c.id_monper = d.id_monper "
     			+ "left join ref_role e on d.id_role = e.id_role "
                 //+ "where d.id_indicator = '"+id_indicator+"' and d.id_role = '"+id_role+"' and d.id_monper = '"+id_monper+"'";
@@ -894,7 +944,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select gov_prog_bud from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_activity_eng, c.value as nilai_target, a.id, \n" +
                     "e.nm_program, e.nm_program_eng, e.id_program as id_prog, \n" +
-                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4 \n" +
+                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4, e.internal_code as intprog, a.internal_code as intact \n" +
                     "from gov_activity as a\n" +
                     "left join (select * from gov_program ) as e on a.id_program = e.id \n" +
                     "left join (select * from entry_gov_budget where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_gov_activity \n" +
@@ -1309,7 +1359,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id ,\n" +
                     "d.nm_activity, d.nm_activity_eng, d.id_activity as id_acty, e.nm_program, e.nm_program_eng, e.id_program as id_prog, \n" +
-                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4 \n" +
+                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4, e.internal_code as intprog, d.internal_code as intact, a.internal_code as intind \n" +
                     "from gov_indicator as a \n" +
                     "left join (select * from gov_activity where id_role = :id_role ) as d on a.id_activity = d.id \n" +
                     "left join (select * from gov_program ) as e on a.id_program = e.id \n" +
@@ -1445,7 +1495,7 @@ public class DataEntryController {
                     "b.id as id_entrynsa, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select nsa_prog_bud from ran_rad where id_monper = :id_monper) as ket_ran_rad, a.nm_activity_eng, c.value as nilai_target, a.id, \n" +
                     "e.nm_program, e.nm_program_eng, e.id_program as id_prog, \n" +
-                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4 \n" +
+                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4, e.internal_code as intprog, a.internal_code as intact \n" +
                     "from nsa_activity as a\n" +
                     "left join (select * from nsa_program ) as e on a.id_program = e.id \n" +
                     "left join (select * from entry_nsa_budget where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_nsa_activity\n" +
@@ -1690,7 +1740,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select nsa_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id, \n" +
                     "d.nm_activity, d.nm_activity_eng, d.id_activity as id_acty, e.nm_program, e.nm_program_eng, e.id_program as id_prog, \n" +
-                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4 \n" +
+                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4, e.internal_code as intprog, d.internal_code as intact, a.internal_code as intind \n" +
                     "from nsa_indicator as a\n" +
                     "left join (select * from nsa_activity where id_role = :id_role ) as d on a.id_activity = d.id \n" +
                     "left join (select * from nsa_program ) as e on a.id_program = e.id \n" +
@@ -1773,25 +1823,25 @@ public class DataEntryController {
     		role = " and a.id_role = '"+id_role+"'";
     	}
     	
-    	String sql  = "select a.id_goals, a.id_target, a.id_indicator, b.nm_goals, c.nm_target, d.nm_indicator, d.unit, d.increment_decrement, e.value,\n" +
-                    "g.sdg_indicator, b.id_goals as kode_goals, b.nm_goals_eng, \n" +
-                    "c.id_target as kode_target, c.nm_target_eng, d.id_indicator as kode_indicator, d.nm_indicator_eng, h.nm_unit, "+
-                    "(select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = d.id and year between g.start_year and g.end_year) as target,i.baseline " +
-                    "from ran_rad as g\n" +
-                    "left join assign_sdg_indicator as a on a.id_prov = g.id_prov \n" +
-                    "left join sdg_goals as b on a.id_goals = b.id \n" +
-                    "left join sdg_target as c on a.id_target = c.id \n" +
-                    "left join sdg_indicator as d on a.id_indicator = d.id \n" +
-                    "left join \n" +
-                    "(select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_role = :id_role and year = :year) as e on d.id = e.id_sdg_indicator \n" +
-                    "left join ref_unit as h on d.unit = h.id_unit \n" +
-                    "left join sdg_funding as i on d.id = i.id_sdg_indicator \n" +
-                    "where a.id_role = :id_role and g.id_monper = :id_monper and g.id_prov = :id_prov order by a.id_goals, a.id_target, a.id_indicator";
-        Query query = em.createNativeQuery(sql);
+    	String sql = "SELECT distinct b.id_goals, b.id_target, b.id, h.nm_goals, i.nm_target, b.nm_indicator, b.unit, b.increment_decrement, '' as value, "
+    			+ " k.sdg_indicator, h.id_goals as kode_goals, h.nm_goals_eng, "
+    			+ " i.id_target as kode_target, i.nm_target_eng, b.id_indicator as kode_indicator, b.nm_indicator_eng, j.nm_unit, "
+    			+ " (select group_concat(concat(value,'---',year)) from sdg_indicator_target where id_sdg_indicator = b.id and year between k.start_year and k.end_year and id_monper = k.id_monper) as target,l.baseline, CASE when g.nm_role is null then 'Unassigned' else g.nm_role end, g.id_role "
+    			+ " FROM sdg_indicator b "
+    			+ " left join assign_sdg_indicator a on b.id = a.id_indicator and a.id_prov = :id_prov "
+    			+ " left join ref_unit c on b.unit = c.id_unit "
+    			+ " left join sdg_funding d on b.id = d.id_sdg_indicator and d.id_monper = :id_monper "
+    			+ " left join ref_role g on a.id_role = g.id_role "
+    			+ " left join sdg_goals as h on b.id_goals = h.id "
+                + " left join sdg_target as i on b.id_target = i.id "
+                + " left join ref_unit as j on b.unit = j.id_unit "
+                + " left join ran_rad as k on k.id_monper = :id_monper "
+                +"  left join sdg_funding as l on b.id = l.id_sdg_indicator and l.id_monper = k.id_monper "
+    			+ " WHERE 1=1 "+role+" order by b.id";
+    	Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
-        query.setParameter("id_role", id_role);
         query.setParameter("id_monper", id_monper);
-        query.setParameter("year", year);
+        System.out.println(id_prov+" "+id_monper+" "+year);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -1811,20 +1861,21 @@ public class DataEntryController {
         return hasil;
     }
     
-    @PostMapping(path = "admin/save-sdgTargetIndicator/{id_indicator}/{id_role}", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "admin/save-sdgTargetIndicator/{id_indicator}/{id_role}/{id_monper}", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	@Transactional
-	public void saveSdgTarget(@RequestBody Map<String, Object> payload,@PathVariable("id_indicator") Integer id_indicator,@PathVariable("id_role") Integer id_role) {
+	public void saveSdgTarget(@RequestBody Map<String, Object> payload,@PathVariable("id_indicator") Integer id_indicator,@PathVariable("id_role") String id_role,@PathVariable("id_monper") String id_monper) {
     	JSONObject jsonObject = new JSONObject(payload);
         JSONObject catatan = jsonObject.getJSONObject("target");
         JSONArray c = catatan.getJSONArray("target");
+        String role = id_role.equals("unassign")?null:"'"+id_role+"'";
         for (int i = 0 ; i < c.length(); i++) {
         	JSONObject obj = c.getJSONObject(i);
         	String year = obj.getString("year");
         	String value = obj.getString("nilai");
-        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and year = '"+year+"' ").executeUpdate();
+        	em.createNativeQuery("delete from sdg_indicator_target where id_sdg_indicator ='"+id_indicator+"' and year = '"+year+"' and id_monper = '"+id_monper+"'").executeUpdate();
         	if(!value.equals("")) {
-        		em.createNativeQuery("INSERT INTO sdg_indicator_target (id_sdg_indicator,id_role,year,value) values ('"+id_indicator+"','"+id_role+"','"+year+"','"+value+"')").executeUpdate();
+        		em.createNativeQuery("INSERT INTO sdg_indicator_target (id_sdg_indicator,id_role,year,value,id_monper) values ('"+id_indicator+"',"+role+",'"+year+"','"+value+"','"+id_monper+"')").executeUpdate();
         	}
         }
     }
@@ -1837,15 +1888,17 @@ public class DataEntryController {
         String id_sdg_indicator = jsonObunit.get("id_sdg_indicator").toString();  
         String baseline = jsonObunit.get("baseline").toString();
         String funding_source = jsonObunit.get("funding_source").toString();
-        em.createNativeQuery("delete from sdg_funding where id_sdg_indicator ='"+id_sdg_indicator+"'").executeUpdate();
-        em.createNativeQuery("INSERT INTO sdg_funding (id_sdg_indicator,baseline,funding_source) values ('"+id_sdg_indicator+"','"+baseline+"','"+funding_source+"')").executeUpdate();
+        String id_monper = jsonObunit.get("id_monper").toString();
+        em.createNativeQuery("delete from sdg_funding where id_sdg_indicator ='"+id_sdg_indicator+"' and id_monper = '"+id_monper+"'").executeUpdate();
+        em.createNativeQuery("INSERT INTO sdg_funding (id_sdg_indicator,baseline,funding_source,id_monper) values ('"+id_sdg_indicator+"','"+baseline+"','"+funding_source+"','"+id_monper+"')").executeUpdate();
     }
     
-    @GetMapping("admin/get-sdgFunding/{id_indicator}")
-    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator) {
-        String sql  = "select baseline, funding_source from sdg_funding where id_sdg_indicator = :id_indicator";
+    @GetMapping("admin/get-sdgFunding/{id_indicator}/{id_monper}")
+    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator,@PathVariable("id_monper") String id_monper) {
+        String sql  = "select baseline, funding_source from sdg_funding where id_sdg_indicator = :id_indicator and id_monper = :id_monper";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_indicator", id_indicator);
+        query.setParameter("id_monper", id_monper);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
@@ -1877,8 +1930,12 @@ public class DataEntryController {
         model.addAttribute("id_indicator_1", id_indicator);
         
     	Optional<SdgIndicator> sdgIndicator = sdgIndicatorService.findOne(id_indicator);
+    	Optional<SdgGoals> listgol = sdgGoalsService.findOne(Integer.parseInt(sdgIndicator.get().getId_goals()));
+    	Optional<SdgTarget> list1 = sdgTargetService.findOne(Integer.parseInt(sdgIndicator.get().getId_target()));
         model.addAttribute("title", "SDG Indicators Monitoring");
         sdgIndicator.ifPresent(foundUpdateObject -> model.addAttribute("sdgInd", foundUpdateObject));
+        listgol.ifPresent(foundUpdateObject -> model.addAttribute("goals", foundUpdateObject));
+        list1.ifPresent(foundUpdate -> model.addAttribute("target", foundUpdate));
         return "admin/dataentry/entry_sdg_target_input";
     }
     
@@ -2044,16 +2101,22 @@ public class DataEntryController {
 //    		sql = "select a.* from ref_unit a left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
 //    	}
         
-        Query list = em.createNativeQuery(sql);
-        List<Object[]> rows = list.getResultList();
-        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        for (Object[] row : rows) {
-            result.add(
-                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
-            );
-        }
-        hasil.put("content",result);
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry/gri-ojk-list/{year}/{comp}")
+    public @ResponseBody Map<String, Object> Gri(@PathVariable("comp") String comp,@PathVariable("year") String year) {
+    	String tahun = year.equals("all")?"":" and year = '"+year+"'";
+    	String komp = comp.equals("all")?"":" and company_name = '"+comp+"'";
+    	String sql = "select * from entry_gri_ojk where 1=1 "+tahun+" "+komp;
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
         return hasil;
     }
     
@@ -2061,16 +2124,10 @@ public class DataEntryController {
     public @ResponseBody Map<String, Object> gri(HttpSession session,@PathVariable("year") String year) {
     	String tahun = year.equals("all")?"":" where year = '"+year+"'";
     	String sql = "select * from entry_gri_ojk "+tahun;
-        Query list = em.createNativeQuery(sql);
-        List<Object[]> rows = list.getResultList();
-        List<EntryGriojk> result = new ArrayList<>(rows.size());
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
-        for (Object[] row : rows) {
-            result.add(
-                        new EntryGriojk((Integer)row[0], (String) row[1],(Integer)row[2], (String) row[3], (String) row[4],(String)row[5], (Integer)row[6])
-            );
-        }
-        hasil.put("content",result);
+        hasil.put("content",list);
         return hasil;
     }
     
@@ -2092,20 +2149,33 @@ public class DataEntryController {
                                             ,@RequestParam("id") String id
                                             ,@RequestParam("company_name") String company_name
                                             ,@RequestParam("year") String year
-                                            ,@RequestParam("files") MultipartFile[] uploadfiles) {
+                                            ,@RequestParam("files") MultipartFile[] uploadfiles, @RequestParam("file_pdf") MultipartFile file_pdf) throws IOException {
         Integer id_role = (Integer) session.getAttribute("id_role");
 //        JSONObject jsonObunit = new JSONObject(payload); 
 //        System.out.println(company_name);
 //        String company_name      = jsonObunit.get("company_name").toString(); 
 //        String year              = jsonObunit.get("year").toString(); 
 //        String id                = jsonObunit.get("id").toString();
-        
+            EntryGriojk gri = new EntryGriojk();
             if(id.equals("")){
-                 UUID uuid1 = UUID.randomUUID();
-                 UUID uuid2 = UUID.randomUUID();
-                 String file1 =  company_name.toLowerCase()+"-"+year+".xls";
-                 String file2 =  uuid2.toString() + ".xls";
-                em.createNativeQuery("INSERT INTO entry_gri_ojk (company_name,year,file1,file2) values ('"+company_name+"','"+year+"','"+file1+"','"+file2+"')").executeUpdate();
+                UUID uuid1 = UUID.randomUUID();
+                UUID uuid2 = UUID.randomUUID();
+                String file1 =  company_name.toLowerCase()+"-"+year+".xls";
+                String file2 =  uuid2.toString() + ".xls";
+                gri.setCompany_name(company_name);
+                int tahun = Integer.valueOf(year);
+                gri.setYear(tahun);
+                gri.setFile1(file1);
+                gri.setFile2(file2);
+                gri.setFile3(IOUtils.toByteArray(file_pdf.getInputStream()));
+                gri.setDescription("");
+                gri.setApproval(1);
+                entryGriOjkService.saveEntryGriOjk(gri);
+//                 UUID uuid1 = UUID.randomUUID();
+//                 UUID uuid2 = UUID.randomUUID();
+//                 String file1 =  company_name.toLowerCase()+"-"+year+".xls";
+//                 String file2 =  uuid2.toString() + ".xls";
+//                em.createNativeQuery("INSERT INTO entry_gri_ojk (company_name,year,file1,file2) values ('"+company_name+"','"+year+"','"+file1+"','"+file2+"')").executeUpdate();
                 String uploadedFileName = Arrays.stream(uploadfiles).map(x -> x.getOriginalFilename())
                 .filter(x -> !StringUtils.isEmpty(x)).collect(Collectors.joining(" , "));
                 if (!StringUtils.isEmpty(uploadedFileName)) {
@@ -2124,6 +2194,14 @@ public class DataEntryController {
         return new ResponseEntity("Successfully uploaded - "
                 + "test", HttpStatus.OK);
 	}
+        
+    @GetMapping("admin/get-griojk/{id}")
+    public @ResponseBody Map<String, Object> getGriojkval(@PathVariable("id") Integer id){
+    	Optional<EntryGriojk> list = entryGriOjkService.findOne(id);
+    	Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
         
         private void saveUploadedFiles(List<MultipartFile> files,String file1,String file2,String year,String company) throws IOException {
             int i = 1;
@@ -2166,6 +2244,7 @@ public class DataEntryController {
         
 
     public  void importExcell(String path,String year,String company) throws FileNotFoundException, IOException {
+        System.out.println("kesini lho");
        FileInputStream fis = new FileInputStream(path);
        DataFormatter formatter = new DataFormatter();
        Workbook wb = new HSSFWorkbook(fis);

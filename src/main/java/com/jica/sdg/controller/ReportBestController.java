@@ -164,6 +164,42 @@ public class ReportBestController {
         return hasil;
     }
     
+    @GetMapping("admin/getbest_level2_ins/{sdg}")
+    public @ResponseBody Map<String, Object> getbest_level2_ins(@RequestParam("id_monper") String id_monper, @RequestParam("year") String year, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @PathVariable("sdg") String sdg) {
+    	Query query;
+        String sql = "";
+        if(id_role.equals("131313")){
+        	sql  = "select DISTINCT c.id_role, c.nm_role " +
+                    "from best_map a " +
+                    "join best_practice b on a.id_best_practice = b.id and b.id_role <> '999999' and b.id_monper = a.id_monper and b.year = :year "+
+                    "join entry_approval d on a.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 " +
+                    "left join ref_role c on c.id_role = d.id_role "+
+                    "where a.id_prov = :id_prov and a.id_monper = :id_monper ";
+        	query = manager.createNativeQuery(sql);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+            query.setParameter("id_prov", id_prov);
+        }else {
+        	sql  = "select DISTINCT c.id_role, c.nm_role " +
+                    "from best_map a " +
+                    "join best_practice b on a.id_best_practice = b.id and b.id_role =:id_role and b.id_role <> '999999' and b.id_monper = a.id_monper and b.year = :year "+
+                    "join entry_approval d on a.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 " +
+                    "left join ref_role c on c.id_role = d.id_role " +
+                    "where a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role ";
+        	query = manager.createNativeQuery(sql);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_prov", id_prov);
+        }
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+        
+    }
+    
     @GetMapping("admin/getbest_level2/{sdg}")
     public @ResponseBody Map<String, Object> getbest_level2(@RequestParam("id_monper") String id_monper, @RequestParam("year") String year, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @PathVariable("sdg") String sdg) {
     	Query query;
@@ -181,8 +217,9 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning\n" +
                             "from best_map a\n" +
-                            "inner join (select * from best_practice where id_role <> '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
+                            "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 \n" +
                             ")as z\n" +
                             "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"' ) y on z.id_goals = y.id_old";
                 }else{
@@ -192,10 +229,11 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning\n" +
                             "from best_map a\n" +
-                            "inner join (select * from best_practice where id_role <> '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
+                            "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 \n" +
                             ")as z\n" +
-                            "left join sdg_goals y on z.id_goals = y.id";
+                            "left join sdg_goals y on z.id_goals = y.id ";
                 }
                 query = manager.createNativeQuery(sql);
                 query.setParameter("id_monper", id_monper);
@@ -209,8 +247,9 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning\n" +
                             "from best_map a\n" +
-                            "inner join (select * from best_practice where id_role <> '999999' and id_role = :id_role and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
+                            "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 and b.id_role = :id_role \n" +
                             ")as z\n" +
                             "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"' ) y on z.id_goals = y.id_old";
                 }else{
@@ -220,8 +259,9 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning\n" +
                             "from best_map a\n" +
-                            "inner join (select * from best_practice where id_role <> '999999' and id_role = :id_role and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper \n" +
+                            "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
+                            "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 and b.id_role = :id_role \n" +
                             ")as z\n" +
                             "left join sdg_goals y on z.id_goals = y.id";
                 }
@@ -269,8 +309,9 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning\n" +
                             "from best_map a\n" +
-                            "inner join (select * from best_practice where id_role <> '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+tar+"\n" +
+                            "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
+                            "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 \n" +
                             ")as z\n" +
                             "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"' ) y on z.id_goals = y.id_old";
                 }else{
@@ -280,8 +321,9 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning\n" +
                             "from best_map a\n" +
-                            "inner join (select * from best_practice where id_role <> '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+tar+"\n" +
+                            "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
+                            "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 \n" +
                             ")as z\n" +
                             "left join sdg_goals y on z.id_goals = y.id";
                 }
@@ -297,8 +339,9 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning\n" +
                             "from best_map a\n" +
-                            "inner join (select * from best_practice where id_role <> '999999' and id_role = :id_role and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+tar+"\n" +
+                            "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
+                            "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 and b.id_role = :id_role "+tar+" \n" +
                             ")as z\n" +
                             "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"' ) y on z.id_goals = y.id_old";
                 }else{
@@ -308,8 +351,9 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning\n" +
                             "from best_map a\n" +
-                            "inner join (select * from best_practice where id_role <> '999999' and id_role = :id_role and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper "+tar+"\n" +
+                            "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
+                            "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 and b.id_role = :id_role "+tar+" \n" +
                             ")as z\n" +
                             "left join sdg_goals y on z.id_goals = y.id";
                 }
@@ -510,12 +554,13 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role <> '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
                             "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') d on a.id_target = d.id_old\n" +
-                            "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
+                            "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n "+
+                            " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
                             "and a.id_goals = :id_goals order by c.nm_role";
                 }else{
@@ -523,12 +568,13 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role <> '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
                             "left join sdg_target d on a.id_target = d.id\n" +
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                            " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
                             "and a.id_goals = :id_goals order by c.nm_role";
                 }
@@ -543,12 +589,13 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role <> '999999' and id_role = :id_role and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
                             "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') d on a.id_target = d.id_old\n" +
                             "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
+                            " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
                             "and a.id_goals = :id_goals ";
                 }else{
@@ -556,12 +603,13 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role <> '999999' and id_role = :id_role and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
                             "left join sdg_target d on a.id_target = d.id\n" +
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                            " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
                             "and a.id_goals = :id_goals ";
                 }
@@ -608,12 +656,13 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select l.* from best_practice l inner join (select * from entry_approval where id_monper = :id_monper and year = :year and type = 'entry_best_practice' and periode = '1' and approval <> '3') b on l.id_role = b.id_role where l.id_role <> '999999' and l.id_monper = :id_monper and l.year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
                             "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') d on a.id_target = d.id_old\n" +
                             "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
+                            " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
                             "and a.id_goals = :id_goals "+tar;
                 }else{
@@ -621,12 +670,13 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select l.* from best_practice l inner join (select * from entry_approval where id_monper = :id_monper and year = :year and type = 'entry_best_practice' and periode = '1' and approval <> '3') b on l.id_role = b.id_role where l.id_role <> '999999' and l.id_monper = :id_monper and l.year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
                             "left join sdg_target d on a.id_target = d.id\n" +
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                            " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
                             "and a.id_goals = :id_goals "+tar;
                 }
@@ -641,12 +691,13 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select l.* from best_practice l inner join (select * from entry_approval where id_monper = :id_monper and year = :year and type = 'entry_best_practice' and periode = '1' and approval <> '3') b on l.id_role = b.id_role where l.id_role <> '999999' and l.id_role = :id_role and l.id_monper = :id_monper and l.year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
                             "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') d on a.id_target = d.id_old\n" +
                             "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
+                            " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
                             "and a.id_goals = :id_goals "+tar;
                 }else{
@@ -654,12 +705,13 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select l.* from best_practice l inner join (select * from entry_approval where id_monper = :id_monper and year = :year and type = 'entry_best_practice' and periode = '1' and approval <> '3') b on l.id_role = b.id_role where l.id_role <> '999999' and l.id_role = :id_role and l.id_monper = :id_monper and l.year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
                             "left join sdg_target d on a.id_target = d.id\n" +
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                            " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
                             "and a.id_goals = :id_goals "+tar;
                 }
@@ -671,6 +723,128 @@ public class ReportBestController {
                 query.setParameter("id_goals", id_goals);
     //            System.out.println("sql nya = "+sql);
             }
+        }
+        
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/getbest_level3_ins/{sdg}")
+    public @ResponseBody Map<String, Object> getbest_level3_ins(@RequestParam("id_monper") String id_monper, @RequestParam("year") String year, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @PathVariable("sdg") String sdg) {
+    	Query query;
+        System.out.println("id_monper = "+id_monper+" year = "+year+" id_prov = "+id_prov+" id_role = "+id_role);
+        Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = monper.get().getStatus();
+        
+//        String sqlcek  = "select count(*) as total from entry_approval where id_role = '8' and id_monper = '1' and year = '2020' and type = 'entry_best_practice' and periode = '1' and approval = '3'";
+        
+        String sql = "";
+//        131313
+        if(sdg.equals("0")) {
+        	if(status.equals("completed")) {
+                sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                        "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                        "b.challenges_learning, c.nm_role,\n" +
+                        "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
+                        "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
+                        ",f.id_goals as kode_goals, f.nm_goals, f.nm_goals_eng\n" +
+                        "from best_map a\n" +
+                        "inner join (select * from best_practice where id_role <> '999999' and id_role = :id_role and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                        "left join ref_role c on b.id_role = c.id_role\n" +
+                        "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') d on a.id_target = d.id_old\n" +
+                        "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
+                        "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"') f on a.id_goals = f.id_old\n" +
+                        "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
+                        " ";
+            }else{
+                sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                        "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                        "b.challenges_learning, c.nm_role,\n" +
+                        "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
+                        "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id "+
+                        ",f.id_goals as kode_goals, f.nm_goals, f.nm_goals_eng\n" +
+                        "from best_map a\n" +
+                        "inner join (select * from best_practice where id_role <> '999999' and id_role = :id_role and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
+                        "left join ref_role c on b.id_role = c.id_role\n" +
+                        "left join sdg_target d on a.id_target = d.id\n" +
+                        "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                        "left join sdg_goals f on a.id_goals = f.id\n" +
+                        "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
+                        " ";
+            }
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_prov", id_prov);
+    	}else {
+            String[] arrOfStr = sdg.split(","); 
+            StringBuffer target = new StringBuffer();
+            if(arrOfStr.length>0) {
+                for (int i = 0; i < arrOfStr.length; i++) {
+                    String[] arrOfStr1 = arrOfStr[i].split("---");
+                    int cek=1;
+                    for(int j=0;j<arrOfStr1.length;j++) {
+                        cek = (cek==4)?1:cek;
+                        if(!arrOfStr1[j].equals("0") && cek==2) {
+                            target.append("'"+arrOfStr1[j]+"',");
+                        }
+                        cek = cek+1;
+                    }
+                }
+            }else{
+                String[] arrOfStr1 = sdg.split("---");
+                int cek=1;
+                for(int j=0;j<arrOfStr1.length;j++) {
+                    cek = (cek==4)?1:cek;
+                    if(!arrOfStr1[j].equals("0") && cek==2) {
+                        target.append("'"+arrOfStr1[j]+"',");
+                    }
+                    cek = cek+1;
+                }
+            }
+            String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
+
+            String tar = (hasiltarget.equals(""))?"":" and a.id_target in("+hasiltarget+") ";
+            if(status.equals("completed")) {
+                sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                        "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                        "b.challenges_learning, c.nm_role,\n" +
+                        "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
+                        "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
+                        ",f.id_goals as kode_goals, f.nm_goals, f.nm_goals_eng\n" +
+                        "from best_map a\n" +
+                        "inner join (select l.* from best_practice l inner join (select * from entry_approval where id_monper = :id_monper and year = :year and type = 'entry_best_practice' and periode = '1' and approval <> '3') b on l.id_role = b.id_role where l.id_role <> '999999' and l.id_role = :id_role and l.id_monper = :id_monper and l.year = :year) b on a.id_best_practice = b.id\n" +
+                        "left join ref_role c on b.id_role = c.id_role\n" +
+                        "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') d on a.id_target = d.id_old\n" +
+                        "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
+                        "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"') f on a.id_goals = f.id_old\n" +
+                        "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
+                        " "+tar;
+            }else{
+                sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
+                        "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
+                        "b.challenges_learning, c.nm_role,\n" +
+                        "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
+                        "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
+                        ",f.id_goals as kode_goals, f.nm_goals, f.nm_goals_eng\n" +
+                        "from best_map a\n" +
+                        "inner join (select l.* from best_practice l inner join (select * from entry_approval where id_monper = :id_monper and year = :year and type = 'entry_best_practice' and periode = '1' and approval <> '3') b on l.id_role = b.id_role where l.id_role <> '999999' and l.id_role = :id_role and l.id_monper = :id_monper and l.year = :year) b on a.id_best_practice = b.id\n" +
+                        "left join ref_role c on b.id_role = c.id_role\n" +
+                        "left join sdg_target d on a.id_target = d.id\n" +
+                        "left join sdg_indicator e on a.id_indicator = e.id\n" +
+                        "left join sdg_goals f on a.id_goals = f.id\n" +
+                        "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
+                        " "+tar;
+            }
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+            query.setParameter("id_role", id_role);
+            query.setParameter("id_prov", id_prov);
         }
         
         
@@ -695,7 +869,7 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
@@ -708,7 +882,7 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
@@ -728,7 +902,7 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
@@ -741,7 +915,7 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
@@ -793,7 +967,7 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
@@ -806,7 +980,7 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
@@ -826,7 +1000,7 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +
@@ -839,7 +1013,7 @@ public class ReportBestController {
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
                             "b.challenges_learning, c.nm_role,\n" +
                             "d.id_target as kode_target, d.nm_target, d.nm_target_eng,\n" +
-                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng\n" +
+                            "e.id_indicator as kode_indicator, e.nm_indicator, e.nm_indicator_eng, b.id\n" +
                             "from best_map a\n" +
                             "inner join (select * from best_practice where id_role = '999999' and id_monper = :id_monper and year = :year) b on a.id_best_practice = b.id\n" +
                             "left join ref_role c on b.id_role = c.id_role\n" +

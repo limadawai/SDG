@@ -35,12 +35,12 @@
 				<div class="widget-box">
 					<div class="widget-content">
 							Program : 
-							<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program}" class="lang_indo"></a>
-						<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program_eng}" class="lang_eng" style="display:none"></a>
+							<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.internal_code+' - '+govProg.nm_program}" class="lang_indo"></a>
+						<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.internal_code+' - '+govProg.nm_program_eng}" class="lang_eng" style="display:none"></a>
 							<br/>
 							<span class="lang_eng" style="display:none">Activity : </span><span class="lang_indo">Kegiatan : </span>
-							<a th:href="@{'/admin/ran_rad/gov/program/'+${govProg.id}+'/activity'}" th:text="${govActivity.id_activity+' - '+govActivity.nm_activity}" class="lang_indo"></a>
-							<a th:href="@{'/admin/ran_rad/gov/program/'+${govProg.id}+'/activity'}" th:text="${govActivity.id_activity+' - '+govActivity.nm_activity_eng}" class="lang_eng" style="display:none"></a>
+							<a th:href="@{'/admin/ran_rad/gov/program/'+${govProg.id}+'/activity'}" th:text="${govProg.internal_code+'.'+govActivity.internal_code+' - '+govActivity.nm_activity}" class="lang_indo"></a>
+							<a th:href="@{'/admin/ran_rad/gov/program/'+${govProg.id}+'/activity'}" th:text="${govProg.internal_code+'.'+govActivity.internal_code+' - '+govActivity.nm_activity_eng}" class="lang_eng" style="display:none"></a>
 					</div>
 				</div>
 			</div>
@@ -78,8 +78,8 @@
 													<span class="lang_indo">No</span>
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;" width="5%">
-	                                            	<span class="lang_eng" style="display:none">Code</span>
-	                                            	<span class="lang_indo">Kode</span>
+	                                            	<span class="lang_eng" style="display:none">SDG E-Monev Code</span>
+	                                            	<span class="lang_indo">Kode SDG E-Monev</span>
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;" width="50%">
 	                                            	<span class="lang_eng" style="display:none">Activity Indicator</span>
@@ -138,6 +138,13 @@
     </div>
     <div th:include="admin/layout :: footer"></div>
 </body>
+<style>
+.swal2-container {
+  display: -webkit-box;
+  display: flex;
+  position: fixed;
+  z-index: 300000!important;
+</style>
 <div id="myModal" data-backdrop="static"class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close tutup" data-dismiss="modal" aria-hidden="true">×</button>
@@ -368,7 +375,7 @@
                                     	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
                                     	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
                                     					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-							                            '<span style="vertical-align:middle">'+result.content[j].id_target+". "+nm_target+'</span>'+
+							                            '<span style="vertical-align:middle">'+id_goals+'.'+result.content[j].id_target+". "+nm_target+'</span>'+
 							                      '</label><br/>';
                                     	$.ajax({
                                             url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
@@ -388,7 +395,7 @@
                                                 	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
                                                 	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
 								                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-								                            '<span style="vertical-align:middle">'+result1.content[k][1]+". "+nm_indicator+'</span>'+
+								                            '<span style="vertical-align:middle">'+id_goals+'.'+id_target+'.'+result1.content[k][1]+". "+nm_indicator+'</span>'+
 								                      '</label><br/>';
                                             	}
                                             }
@@ -481,7 +488,7 @@
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row[1]+"</div>";
+							return "<div style='font-size:90%;'>"+[[${govProg.internal_code}]]+"."+[[${govActivity.internal_code}]]+"."+row[6]+"</div>";
 						}},
 
 					{"data": function (row, data, index, display) {
@@ -598,7 +605,7 @@
                         success: function (result) {
                         	var val = result.content;
     						if(val[0]>0){
-    							$('#myModal').modal('hide');
+    							//$('#myModal').modal('hide');
     							swal("Code",messCode,'error');
     							cek += 1;
     						}
@@ -626,7 +633,8 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data,
 	                    success: function (result) {
-	                    	table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+	                    	//table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+	                    	table.ajax.reload( null, false );
 	                    	var id_gov_indicator = result.content;
 	                    	var target =  $('#form-target').serializeObject();
 	                    	$.ajax({
@@ -820,7 +828,8 @@
                         },
                         success: function (result) {
                         	swal(titleOk,messOk,'success');
-                        	table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+                        	//table.ajax.url(urls+'list-govIndicator/'+id_program+'/'+id_activity).load();
+                        	table.ajax.reload( null, false );
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

@@ -219,6 +219,8 @@
                         <label class="lang_eng control-label" style="display:none">Description</label>
                         <label class="lang_indo control-label">Deskripsi</label>
                         <div class="controls">
+                        	<input id="modal_id_role" name="modal_id_role" type="hidden"/>
+            				<input id="modal_nama" name="modal_nama" type="hidden"/>
                             <textarea readonly="true" id="description" name="description" class="input-xlarge input-block-level" rows="5"></textarea>
                             <span class="help-block" id="error_description"></span>
                         </div>
@@ -574,15 +576,15 @@
                         if(row[3]==2){
                             warna = "btn-success";
                             return "<div style='text-align:center;'>"+
-                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unapprove">UnApprove</button></div>';
+                            '<button data-id_role="'+row[1]+'" data-nama="'+row[2]+'" data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unapprove">UnApprove</button></div>';
                         }else if(row[3]==3){
                             warna = "btn-danger";
                             return "<div style='text-align:center;'>"+
-                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unreject">UnReject</button></div>';
+                            '<button data-id_role="'+row[1]+'" data-nama="'+row[2]+'" data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unreject">UnReject</button></div>';
                         }else if(row[3]==1){
                             warna = "btn-primary";
                             return "<div style='text-align:center;'>"+
-                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' approve">Approve</button></div>';
+                            '<button data-id_role="'+row[1]+'" data-nama="'+row[2]+'" data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' approve">Approve</button></div>';
                         }else if(row[3]==4){
                             warna = "";
                             return "";
@@ -668,10 +670,13 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data1,
                     success: function (result) {
-                        $("#tabel-approve-gov-activity").hide();
-                        $("#tabel-approve-gov-indicator").hide();
+                        //$("#tabel-approve-gov-activity").hide();
+                        //$("#tabel-approve-gov-indicator").hide();
                         grid_role();
                         cek_show_report();
+                        if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                        	newValue(new_id_role, new_id_monper, new_type, new_periode, new_nmrole, new_approval);
+                    	}
                     },
                 });
             }, function (dismiss) {
@@ -724,10 +729,13 @@
                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                     data: data1,
                     success: function (result) {
-                        $("#tabel-approve-gov-activity").hide();
-                        $("#tabel-approve-gov-indicator").hide();
+                        //$("#tabel-approve-gov-activity").hide();
+                        //$("#tabel-approve-gov-indicator").hide();
                         grid_role();
                         cek_show_report();
+                        if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                        	newValue(new_id_role, new_id_monper, new_type, new_periode, new_nmrole, new_approval);
+                    	}
                     },
                 });
             }, function (dismiss) {
@@ -736,73 +744,15 @@
             });
         });
         
-        $('#tbody-role').on('click', '.approve', function(){
-            var id = $(this).data("id");
-            var approval = $(this).data("approval");
-            var description = $(this).data("description");
-            $("#id_approval").val(id);
-            $('.approval[value="'+approval+'"]').prop("checked", true).trigger("click");
-            $("#description").val("");
-            $("#description").text((description?description:''));
-            $("#myModal").modal('show');	
-        }).on('click', ".unapprove", function(e){
-            var id          = $(this).data("id");
-            var data = JSON.stringify({
-                        'id':id,
-                        'approval':'1',
-                        'description':"-"
-            });
-            $.ajax({
-                type: "POST",
-                url: urls+'update-approval',
-                beforeSend : function(xhr){
-                    xhr.setRequestHeader(header,token);
-                },
-                headers:{'Accept':'application/json','Content-Type':'application/json'},
-                data: data,
-                success: function (result) {
-//                        var data_id     = $("#periode").val().split("###");;
-//                        var id_monper   = data_id[0];
-//                        var tahun       = data_id[1];
-                    $("#tabel-approve-gov-activity").hide();
-                    $("#tabel-approve-gov-indicator").hide();
-                    grid_role();
-                },
-            });
-            
-        }).on('click', ".unreject", function(e){
-            var id          = $(this).data("id");
-            var data = JSON.stringify({
-                        'id':id,
-                        'approval':'1',
-                        'description':"-"
-            });
-            $.ajax({
-                type: "POST",
-                url: urls+'update-approval',
-                beforeSend : function(xhr){
-                    xhr.setRequestHeader(header,token);
-                },
-                headers:{'Accept':'application/json','Content-Type':'application/json'},
-                data: data,
-                success: function (result) {
-//                        var data_id     = $("#periode").val().split("###");;
-//                        var id_monper   = data_id[0];
-//                        var tahun       = data_id[1];
-                    $("#tabel-approve-gov-activity").hide();
-                    $("#tabel-approve-gov-indicator").hide();
-                    grid_role();
-                },
-            });
-            
-        }).on('click', ".id_role", function(e){
-            var id_role     = $(this).data("id");
-            var id_monper   = $(this).data("monper");
-            var type        = $(this).data("type");
-            var periode     = $(this).data("periode");
-            var nmrole      = $(this).data("nmrole");
-            var approval    = $(this).data("approval");
-            $('#nmrol').val(nmrole);
+        var new_id_role;
+        var new_id_monper;
+        var new_type;
+        var new_nmrole;
+        var new_approval;
+        var new_periode;
+        
+        function newValue(id_role, id_monper, type, periode, nmrole, approval){
+        	$('#nmrol').val(nmrole);
             $('#idrol').val(id_role);
             grid(id_role, id_monper, type, periode, nmrole, approval);
             $('.tombol-new').show();
@@ -813,6 +763,95 @@
                 $("#tabel-approve-gov-activity").hide();
                 $("#tabel-approve-gov-indicator").show();
             }
+        }
+        
+        $('#tbody-role').on('click', '.approve', function(){
+            var id = $(this).data("id");
+            var approval = $(this).data("approval");
+            var description = $(this).data("description");
+            $("#id_approval").val(id);
+            $('.approval[value="'+approval+'"]').prop("checked", true).trigger("click");
+            $("#description").val("");
+            $("#description").text((description?description:''));
+            $("#modal_id_role").val($(this).data("id_role"));
+        	$("#modal_nama").val($(this).data("nama"));
+            $("#myModal").modal('show');	
+        }).on('click', ".unapprove", function(e){
+            var id          = $(this).data("id");
+            var id_role = $(this).data("id_role");
+            var nama = $(this).data("nama");
+            var data = JSON.stringify({
+                        'id':id,
+                        'approval':'1',
+                        'description':"-"
+            });
+            $.ajax({
+                type: "POST",
+                url: urls+'update-approval',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header,token);
+                },
+                headers:{'Accept':'application/json','Content-Type':'application/json'},
+                data: data,
+                success: function (result) {
+//                        var data_id     = $("#periode").val().split("###");;
+//                        var id_monper   = data_id[0];
+//                        var tahun       = data_id[1];
+                    //$("#tabel-approve-gov-activity").hide();
+                    //$("#tabel-approve-gov-indicator").hide();
+                    grid_role();
+                    if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                    	newValue(id_role, new_id_monper, new_type, new_periode, nama, 1);
+                	}
+                },
+            });
+            
+        }).on('click', ".unreject", function(e){
+            var id          = $(this).data("id");
+            var id_role = $(this).data("id_role");
+            var nama = $(this).data("nama");
+            var data = JSON.stringify({
+                        'id':id,
+                        'approval':'1',
+                        'description':"-"
+            });
+            $.ajax({
+                type: "POST",
+                url: urls+'update-approval',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader(header,token);
+                },
+                headers:{'Accept':'application/json','Content-Type':'application/json'},
+                data: data,
+                success: function (result) {
+//                        var data_id     = $("#periode").val().split("###");;
+//                        var id_monper   = data_id[0];
+//                        var tahun       = data_id[1];
+                    //$("#tabel-approve-gov-activity").hide();
+                    //$("#tabel-approve-gov-indicator").hide();
+                    grid_role();
+                    if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                    	newValue(id_role, new_id_monper, new_type, new_periode, nama, 1);
+                	}
+                },
+            });
+            
+        }).on('click', ".id_role", function(e){
+            var id_role     = $(this).data("id");
+            var id_monper   = $(this).data("monper");
+            var type        = $(this).data("type");
+            var periode     = $(this).data("periode");
+            var nmrole      = $(this).data("nmrole");
+            var approval    = $(this).data("approval");
+            
+            new_id_role = id_role;
+            new_id_monper = id_monper;
+            new_type = type;
+            new_nmrole = nmrole;
+            new_approval = approval;
+            new_periode = periode;
+            
+            newValue(id_role, id_monper, type, periode, nmrole, approval);
         });
         
         
@@ -853,9 +892,14 @@
 //                        var data_id     = $("#periode").val().split("###");;
 //                        var id_monper   = data_id[0];
 //                        var tahun       = data_id[1];
-                        $("#tabel-approve-gov-activity").hide();
-                        $("#tabel-approve-gov-indicator").hide();
+                        //$("#tabel-approve-gov-activity").hide();
+                        //$("#tabel-approve-gov-indicator").hide();
                         grid_role();
+                        var id_role = $("#modal_id_role").val();
+                        var nama = $("#modal_nama").val();
+                        if($("#tabel-approve-gov-activity").is(":visible") || $("#tabel-approve-gov-indicator").is(":visible")){
+                        	newValue(id_role, new_id_monper, new_type, new_periode, nama, approval);
+                    	}
                     },
                 });
             }
@@ -925,7 +969,7 @@
                                     }},
                                     {"data": function (row, data, index, display) {
 //                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
-                                        return "<div style='font-size:90%;'>"+row[18]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[0]+"</span>";
+                                    	return "<div style='font-size:90%;'>"+row[23]+"</div><span style='font-size:90%;'>"+row[23]+'.'+row[24]+"</span>";
                                     }},
                                     {"data": function (row, data, index, display) {
 //                                        if($('#fs').is(':checked')){
@@ -1072,7 +1116,7 @@
                                     }},
                                     {"data": function (row, data, index, display) {
 //                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
-                                        return "<div style='font-size:90%;'>"+row[18]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[0]+"</span>";
+                                    	return "<div style='font-size:90%;'>"+row[23]+"</div><span style='font-size:90%;'>"+row[23]+'.'+row[24]+"</span>";
                                     }},
                                     {"data": function (row, data, index, display) {
 //                                        if($('#fs').is(':checked')){
@@ -1233,7 +1277,7 @@
                                     }},
                                     {"data": function (row, data, index, display) {
 //                                        return "<div style='font-size:90%;'>"+row[0]+"</div>";
-                                        return "<div style='font-size:90%;'>"+row[18]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[0]+"</span>";
+                                    	return "<div style='font-size:90%;'>"+row[23]+"</div><span style='font-size:90%;'>"+row[23]+'.'+row[24]+"</span>";
                                     }},
                                     {"data": function (row, data, index, display) {
 //                                        if($('#fs').is(':checked')){
@@ -1466,7 +1510,7 @@
                                         return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row[21]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[2]+"</div>";
+                                    	return "<div style='font-size:90%;'>"+row[26]+"</div><span style='font-size:90%;'>"+row[26]+'.'+row[27]+"</span><div style='font-size:90%;'>"+row[26]+'.'+row[27]+'.'+row[28]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
@@ -1605,7 +1649,7 @@
                                         return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row[21]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[2]+"</div>";
+                                    	return "<div style='font-size:90%;'>"+row[26]+"</div><span style='font-size:90%;'>"+row[26]+'.'+row[27]+"</span><div style='font-size:90%;'>"+row[26]+'.'+row[27]+'.'+row[28]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){
@@ -1758,7 +1802,7 @@
                                         return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
-                                        return "<div style='font-size:90%;'>"+row[21]+"</div><span style='font-size:90%; padding-left: 15px'>"+row[18]+"</span><div style='font-size:90%; padding-left: 30px'>"+row[2]+"</div>";
+                                    	return "<div style='font-size:90%;'>"+row[26]+"</div><span style='font-size:90%;'>"+row[26]+'.'+row[27]+"</span><div style='font-size:90%;'>"+row[26]+'.'+row[27]+'.'+row[28]+"</div>";
                                     }},
                                     {"data": function (row, data, index, display) {
                                         if($('#fs').is(':checked')){

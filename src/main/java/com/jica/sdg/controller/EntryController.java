@@ -2,20 +2,26 @@ package com.jica.sdg.controller;
 
 import com.jica.sdg.model.BestMap;
 import com.jica.sdg.model.BestPractice;
+import com.jica.sdg.model.BestPracticeFile;
 import com.jica.sdg.model.EntryBestPractice;
 import com.jica.sdg.model.EntryProblemIdentify;
 import com.jica.sdg.model.GovProgram;
 import com.jica.sdg.model.Nsaprofile2;
 import com.jica.sdg.model.Problemlist;
 import com.jica.sdg.model.Provinsi;
+import com.jica.sdg.model.RanRad;
 import com.jica.sdg.model.Role;
 import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.model.Unit;
+import com.jica.sdg.model.UploadFileResponse;
+import com.jica.sdg.repository.BestPracticeRepository;
 import com.jica.sdg.repository.EntryProblemIdentifyRepository;
 import com.jica.sdg.service.*;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +38,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
+import org.apache.commons.io.IOUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+//import com.jica.sdg.service.FileStorageService;
 
 @Controller
 public class EntryController {
@@ -77,10 +94,21 @@ public class EntryController {
     IBestPracticeService bestService;
     
     @Autowired
+    IBestPracticeFileService bestFileService;
+    
+    @Autowired
+    BestPracticeRepository bestRepo;
+    
+    @Autowired
     IBestMapService bestMapService;
     
     @Autowired
     IEntryBestPracticeService enbestService;
+    
+//    
+//    @Autowired
+//    private FileStorageService fileStorageService;
+    
     // ****************** Problem Identification & Follow Up ******************
     @GetMapping("admin/problem-identification")
      public String govprogram(Model model, HttpSession session) {
@@ -106,9 +134,9 @@ public class EntryController {
         
          Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text ,'#' AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                                                 "	UNION \n" +
-                                                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id) AS id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,b.id_target AS id_text ,a.id AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id) AS id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text ,a.id AS id_parent2 FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                                                 "	UNION \n" +
-                                                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id,'.',c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,c.id_indicator AS id_text ,CONCAT(a.id,'.',b.id) AS id_parent2  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "	SELECT DISTINCT  CONCAT(a.id,'.',b.id,'.',c.id) AS id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text ,CONCAT(a.id,'.',b.id) AS id_parent2  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                                                 "	ORDER BY id_parent");
         
         List list3 =  query3.getResultList();
@@ -313,23 +341,47 @@ public class EntryController {
     
     @GetMapping("admin/list-problem/{id_monper}/{tahun}/{id_role}")
      public @ResponseBody Map<String, Object> govProgList(@PathVariable("id_monper") String id_monper,@PathVariable("tahun") String tahun,@PathVariable("id_role") String id_role) {
-        String sql = "SELECT   \n" +
-"                         d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng  \n" +
-"                        ,e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
-"                        ,f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
-"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
-"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
-                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
-                            "LEFT JOIN sdg_goals b ON g.id_goals = b.id \n" +
-                            "LEFT JOIN sdg_target c ON g.id_target = c.id\n" +
-                            "LEFT JOIN sdg_indicator d ON g.id_indicator = d.id \n" +
-                            "WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs2\n" +
-"                         FROM entry_problem_identify a  \n" +
-"                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
-"                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
-"                        LEFT JOIN sdg_goals d ON a.id_goals = d.id \n" +
-"                        LEFT JOIN sdg_target e ON a.id_target = e.id \n" +
-"                        LEFT JOIN sdg_indicator f ON a.id_indicator = f.id WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";        
+    	Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	String sql;
+    	if(status.equals("completed")) {
+    		sql = "SELECT   \n" +
+    				"                         d.id_goals,d.id_old AS id_sdg_goals,d.nm_goals,d.nm_goals_eng  \n" +
+    				"                        ,e.id_target,e.id_old AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
+    				"                        ,f.id_indicator,f.id_old AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
+    				"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
+    				"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
+    				                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
+    				                            "LEFT JOIN history_sdg_goals b ON g.id_goals = b.id_old and b.id_monper = '"+id_monper+"' \n" +
+    				                            "LEFT JOIN history_sdg_target c ON g.id_target = c.id_old and c.id_monper = '"+id_monper+"' \n" +
+    				                            "LEFT JOIN history_sdg_indicator d ON g.id_indicator = d.id_old and d.id_monper = '"+id_monper+"'  \n" +
+    				                            "WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs2\n" +
+    				"                         FROM entry_problem_identify a  \n" +
+    				"                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
+    				"                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
+    				"                        LEFT JOIN history_sdg_goals d ON a.id_goals = d.id_old and d.id_monper = '"+id_monper+"'  \n" +
+    				"                        LEFT JOIN history_sdg_target e ON a.id_target = e.id_old and e.id_monper = '"+id_monper+"'  \n" +
+    				"                        LEFT JOIN history_sdg_indicator f ON a.id_indicator = f.id_old and f.id_monper = '"+id_monper+"'  WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";
+    	}else {
+    		sql = "SELECT   \n" +
+    				"                         d.id_goals,d.id AS id_sdg_goals,d.nm_goals,d.nm_goals_eng  \n" +
+    				"                        ,e.id_target,e.id AS id_sdg_target,e.nm_target,e.nm_target_eng  \n" +
+    				"                        ,f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
+    				"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
+    				"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
+    				                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
+    				                            "LEFT JOIN sdg_goals b ON g.id_goals = b.id \n" +
+    				                            "LEFT JOIN sdg_target c ON g.id_target = c.id\n" +
+    				                            "LEFT JOIN sdg_indicator d ON g.id_indicator = d.id \n" +
+    				                            "WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs2\n" +
+    				"                         FROM entry_problem_identify a  \n" +
+    				"                        LEFT JOIN ref_category b ON  a.id_cat = b.id_cat  \n" +
+    				"                        LEFT JOIN entry_approval c ON  a.id_role = c.id_role AND a.id_monper = c.id_monper AND a.year = c.year AND c.type = 'entry_problem_identify' \n" +
+    				"                        LEFT JOIN sdg_goals d ON a.id_goals = d.id \n" +
+    				"                        LEFT JOIN sdg_target e ON a.id_target = e.id \n" +
+    				"                        LEFT JOIN sdg_indicator f ON a.id_indicator = f.id WHERE a.id_monper = '"+id_monper+"' and a.year = '"+tahun+"' and a.id_role = '"+id_role+"' ";
+    	}
+    	        
         Query list = em.createNativeQuery(sql);
         
         Map<String, Object> hasil = new HashMap<>();
@@ -507,7 +559,7 @@ public class EntryController {
     
     @PostMapping(path = "admin/save-best/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
     @ResponseBody
-    public void saveBest(@RequestBody BestPractice best,
+    public Map<String, Object> saveBest(@RequestBody BestPractice best,
 			@PathVariable("sdg_indicator") String sdg_indicator,
 			@PathVariable("id_monper") Integer id_monper,
 			@PathVariable("id_prov") String id_prov) {
@@ -534,7 +586,103 @@ public class EntryController {
                 bestMapService.saveGovMap(map);
             }
     	}
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("v_id",best.getId());
+        return hasil;
     }
+    
+    @RequestMapping(value = "admin/create-foto-best-pract",method = RequestMethod.POST)
+//    @PostMapping(path = "admin/create-foto-best-pract"/*, consumes = "application/json", produces = "application/json"*/)
+    @ResponseBody
+    @Transactional
+    @ResponseStatus(HttpStatus.OK)
+    public List<UploadFileResponse> saveFoto(@RequestParam("files") MultipartFile[] files, @RequestParam("idbest") String idbest, @RequestParam("idcek") String idcek, @RequestParam("isi_file") String isi_file)  {
+       
+        int idbes = Integer.valueOf(idbest);
+        if(isi_file.equals("")){
+                
+        }else{
+            bestFileService.deleteBestPracticeFile(idbes);
+        }
+            List<UploadFileResponse> list = Arrays.asList(files)
+                .stream()
+                .map(file -> uploadFile(file, idbes))
+                .collect(Collectors.toList());
+            System.out.println("file ya = "+files);
+        return list;
+    }
+    
+    @PostMapping("/uploadFilePegawai")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idbest") int idbest) {
+        String fileName = "";
+        String fileDownloadUri = "";
+        try {
+            
+            BestPracticeFile best = new BestPracticeFile();
+            int idbes = Integer.valueOf(idbest);
+            Optional<BestPractice> listbest = bestService.findOne(idbest);
+    //            int id    = listbest.get().getId();
+            best.setId_best_practice(listbest.get().getId());
+            if(!file.isEmpty()) {
+    //			fileName = fileStorageService.storeFilePegawai(file, idpegawai.toString(),i);   
+    //			fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+    //	                .path("/downloadFile/")
+    //	                .path(fileName)
+    //	                .toUriString();
+                best.setFile(IOUtils.toByteArray(file.getInputStream()));
+                bestFileService.saveBestPracticeFile(best);
+
+            }
+        
+        } catch (Exception e) {
+        }
+        
+        return new UploadFileResponse(fileName, fileDownloadUri,
+            file.getContentType(), file.getSize());
+    }
+    
+    @GetMapping("admin/get-all-foto/{id}")
+    public @ResponseBody Map<String, Object> allfoto(@PathVariable("id") String id_best) {
+        String sql  = "select * from best_practice_file where id_best_practice = :id_best_practice ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_best_practice", id_best);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+//    
+//    @PostMapping(path = "admin/save-best/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
+//    @ResponseBody
+//    public void saveBest(@RequestBody BestPractice best,
+//			@PathVariable("sdg_indicator") String sdg_indicator,
+//			@PathVariable("id_monper") Integer id_monper,
+//			@PathVariable("id_prov") String id_prov) {
+//    	bestService.saveBestPractice(best);
+//        if(!sdg_indicator.equals("0")) {
+//            bestMapService.deleteGovMapByGovInd(best.getId());
+//            String[] sdg = sdg_indicator.split(",");
+//            for(int i=0;i<sdg.length;i++) {
+//                String[] a = sdg[i].split("---");
+//                Integer id_goals = Integer.parseInt(a[0]);
+//                Integer id_target = Integer.parseInt(a[1]);
+//                Integer id_indicator = Integer.parseInt(a[2]);
+//                BestMap map = new BestMap();
+//                map.setId_goals(id_goals);
+//                if(id_target!=0) {
+//                        map.setId_target(id_target);
+//                }
+//                if(id_indicator!=0) {
+//                        map.setId_indicator(id_indicator);
+//                }
+//                map.setId_best_practice(best.getId());
+//                map.setId_monper(id_monper);
+//                map.setId_prov(id_prov);
+//                bestMapService.saveGovMap(map);
+//            }
+//    	}
+//    }
     
     @PostMapping(path = "admin/save-best-entry", consumes = "application/json", produces = "application/json")
 	@ResponseBody
@@ -555,6 +703,7 @@ public class EntryController {
     public void delete_best_practice(@PathVariable("id") Integer id, @PathVariable("id_prov") Integer id_prov, @PathVariable("id_monper") Integer id_monper) {
         System.out.println("delete ya ");
         em.createNativeQuery("delete from best_practice where id = '"+id+"' ").executeUpdate();
+        bestFileService.deleteBestPracticeFile(id);
 //        em.createNativeQuery("delete from best_map where id_best_practice = '"+id+"' and id_prov = '"+id_prov+"' and id_monper = '"+id_monper+"' ").executeUpdate();
 //        em.createQuery(
 //          "DELETE FROM Transaction e WHERE e IN (:transactions)").

@@ -640,6 +640,7 @@
                         
                     }
                 });
+                tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$('#nm_nsa_profil').val()+'/'+$('#id_prov').val()).load();
             });
             
             $("#nm_nsa_profil").on('change', function(e){

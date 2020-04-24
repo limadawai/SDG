@@ -8,6 +8,9 @@
     <title th:text="SDG Indicator Monitoring">Report Evaluation</title>
 </head>
 <body>
+<title>
+	Report Best Practice
+</title>
 <div th:include="admin/layout :: menu"></div>
 <div id="content">
     <div id="content-header">
@@ -30,6 +33,13 @@
 			                <select id="periode" name="idmonper" class="input-xlarge">
 			                    <option value="0" >-- Pilih Tahun --</option>
 			                </select>
+			                <select id="group" name="group" class="form-control">
+                                <option value="1" selected='true' >SDGs Goals</option>
+                                <option value="2" >Role</option>
+                            </select>
+                            <button class="btn btn-primary" type="button" id="show_report" style="margin-top: -10px;">
+                                <i class="icon-search"></i>
+                            </button>
 	        			</div>
 	        		</div>
         		</div>
@@ -107,6 +117,24 @@
             </div>
         </div>
     </div>
+    <div id="myModalgambar"data-backdrop="static" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="lang_eng" style="display:none">Best Pactice Image</h3>
+            <h3 class="lang_indo">Praktik Terbaik Gambar</h3>
+        </div>
+        <div class="modal-body">
+            <div class="profile_img">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn tutup" data-dismiss="modal" aria-hidden="true">
+                <span class="lang_eng" style="display:none">Close</span>
+                <span class="lang_indo">Tutup</span>
+            </button>
+        </div>
+    </div>
+    
 </div>
 <div class="modal-loading-new"></div>
 <style th:inline="text">
@@ -263,247 +291,143 @@
     }
     
     $("#periode").on("change", function(){
-    	$("#indi").html("");
-        ambilData(0);	
-        ambilData_sum(0);	
-//    	if($(this).val()=="all"){	
-//    		ambilDataAll(0);
-//    	}else{
-//    	}
-    	$('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
+    	/* SDG INDICATOR */
+        //Indikator SDG untuk mapping
+        		$("#indi").html("");
+    	        var monper = $("#periode").val().split("###");
+    	    	var id_monper   = monper[0];
+    	    	var year   = monper[1];
+    	        var cekbok = "";
+    	        $.ajax({
+    	            url: urls + "get-sdg-goals-best",
+    	            data: {'id_monper':id_monper},
+    	            type: 'get',
+    	            dataType: 'json',
+    	            async : false,
+    	            success: function (response) {
+    	        		$('.accordion-inner').html(cekbok);
+    	        		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
+    	        				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
+    	                        '<span style="vertical-align:middle">ALL</span>'+
+    	                  '</label><br/>';
+    	            	for (var i = 0; i < response.sdg.length; i++) {
+    	        			var nm_goals;
+    	        			var id_goals=response.sdg[i][0];
+    	        			var kode_goals=response.sdg[i][3];
+    	                	if($("#fs").is(':checked')){
+    	                		nm_goals = response.sdg[i][1];
+    						}else{
+    							nm_goals = response.sdg[i][2];
+    						}
+    	                	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
+    	                				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+id_goals+'---0---0">&nbsp;&nbsp;&nbsp;'+
+    		                            '<span style="vertical-align:middle">'+kode_goals+" "+nm_goals+'</span>'+
+    		                      '</label><br/>';
+    	                  $.ajax({
+    	                      url: urls + 'get-sdg-target-best',
+    	                      type: 'get',
+    	                      data: {'id_goals':id_goals,'id_monper':id_monper},
+    	                      dataType: 'json',
+    	                      cache: false,
+    	                      async : false,
+    	                      success: function (result) {
+    	                      	for (var j = 0; j < result.content.length; j++) {
+    	                      		var nm_target;
+    	                      		var id_target=result.content[j][0];
+    	                      		var kode_target=result.content[j][3];
+    	                          	if($("#fs").is(':checked')){
+    	                          		nm_target = result.content[j][1];
+    	      						}else{
+    	      							nm_target = result.content[j][2];
+    	      						}
+    	                          	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+    	            					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+id_goals+'---'+id_target+'---0">&nbsp;&nbsp;&nbsp;'+
+    		                            '<span style="vertical-align:middle">'+kode_target+" "+nm_target+'</span>'+
+    		                      '</label><br/>';
+    		                      
+    	                      	}
+    	                      }
+    	                  });
+    	            	}
+    	            }
+    	        });
+    	        cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
+    			$('.accordion-inner').append(cekbok);
+    	    	$('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
+    	    	
+    	    	$('.accordion-inner').on('change', '#all-sdg', function(){
+    	        	var status = this.checked;
+    	        	$('.accordion-inner').find("input[name='sdg_indicator']").each(function(){
+    	        		this.checked = status;
+    	        	});
+    	        });
+    	        
+    	        $('.accordion-inner').on('click', '.menu-master', function(){
+    	        	var id = $(this).data('id');
+    	        	if ($(this).is(":checked")) {
+    	                $(".accordion-inner").find('.menu'+id).prop("checked", true);
+    	            } else {
+    	            	 $(".accordion-inner").find('.menu'+id).prop("checked", false);
+    	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+    	            }
+    	        });
+    	        
+    	        $('.accordion-inner').on('click', '.menu-slave', function(){
+    	        	var id = $(this).data('id');
+    	        	var goals = $(this).data('goals');
+    	        	if ($(this).is(":checked")) {
+    	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+    	            } else {
+    	            	 $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+    	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+    	            }
+    	        	
+    	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+    	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+    	            } else {
+    	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+    	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+    	            }
+    	        });
+    	        
+    	        $('.accordion-inner').on('click', '.menu-slave-1', function(){
+    	        	var id = $(this).data('id');
+    	        	var goals = $(this).data('goals');
+    	        	if ($(".menu-slave-1-"+id+":checked").length==$(".menu-slave-1-"+id).length) {
+    	                $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+    	            } else {
+    	            	 $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+    	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+    	            }
+    	        	
+    	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+    	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+    	            } else {
+    	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+    	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+    	            }
+    	        });
 
+    });
+    
+    $('#show_report').on('click', function(){
+    	$("#indi").html("");
+    	if($('#group').val() == "1"){
+    		ambilData(0);	
+    	}else{
+    		ambilDataIns(0);
+    	}
+        	
+        ambilData_sum(0);
     });
     
     $("#role").on("change", function(){
         var idrole = $(this).val();
         if (idrole != "0") {
             $("#indi").html("");
-            
-            /* SDG INDICATOR */
-            //Indikator SDG untuk mapping
-        	        if(idrole=="131313"){
-        	        	$.ajax({
-        	                url: urls + 'list-sdgGoals',
-        	                type: 'get',
-        	                dataType: 'json',
-        	                cache: false,
-        	                async : false,
-        	                success: function (response) {
-        	                		var option = "";
-        	                		var cekbok = "";
-        	                		$('.accordion-inner').html(cekbok);
-        	                		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
-		                    				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
-				                            '<span style="vertical-align:middle">ALL</span>'+
-				                      '</label><br/>';
-        	                		for (var i = 0; i < response.content.length; i++) {
-        	                			var nm_goals;
-        	                			var id_goals=response.content[i].id;
-        	                        	if($("#fs").is(':checked')){
-        	                        		nm_goals = response.content[i].nm_goals;
-        	    						}else{
-        	    							nm_goals = response.content[i].nm_goals_eng;
-        	    						}
-        	                        	option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
-        	                        	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
-        	                        				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
-        				                            '<span style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
-        				                      '</label><br/>';
-        	                        	$.ajax({
-        	                                url: urls + 'list-sdgTarget/'+response.content[i].id,
-        	                                type: 'get',
-        	                                dataType: 'json',
-        	                                cache: false,
-        	                                async : false,
-        	                                success: function (result) {
-        	                                	for (var j = 0; j < result.content.length; j++) {
-        	                                		var nm_target;
-        	                                		var id_target=result.content[j].id;
-        	                                    	if($("#fs").is(':checked')){
-        	                                    		nm_target = result.content[j].nm_target;
-        	                						}else{
-        	                							nm_target = result.content[j].nm_target_eng;
-        	                						}
-        	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
-        	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="0---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-        								                            '<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
-        								                      '</label><br/>';
-//        	                                    	$.ajax({
-//        	                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
-//        	                                            type: 'get',
-//        	                                            dataType: 'json',
-//        	                                            cache: false,
-//        	                                            async : false,
-//        	                                            success: function (result1) {
-//        	                                            	for (var k = 0; k < result1.content.length; k++) {
-//        	                                            		var nm_indicator;
-//        	                                            		var id_indicator=result1.content[k][0];
-//        	                                                	if($("#fs").is(':checked')){
-//        	                                                		nm_indicator = result1.content[k][4];
-//        	                            						}else{
-//        	                            							nm_indicator = result1.content[k][6];
-//        	                            						}
-//        	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
-//        	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-//        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="0---0---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-//        									                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
-//        									                      '</label><br/>';
-//        	                                            	}
-//        	                                            }
-//        	                                    	});
-        	                                    	option += '</optgroup>';
-        	                                	}
-        	                                }
-        	                        	});
-        	                        	option += '</optgroup>';
-        	                		}
-        	                		cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
-        	                		$('.accordion-inner').append(cekbok);
-        	                	}
-        	                });
-        	        }else{
-        	        	$.ajax({
-                            //url: urls + 'list-sdgGoals',
-                            url: urls + "get-sdg-goals",
-                            data: 'id_role=' + idrole,
-                            type: 'get',
-                            dataType: 'json',
-                            cache: false,
-                            async : false,
-                            success: function (response) {
-                            		var option = "";
-                            		var cekbok = "";
-                            		$('.accordion-inner').html(cekbok);
-                            		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
-		                    				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
-				                            '<span style="vertical-align:middle">ALL</span>'+
-				                      '</label><br/>';
-                            		for (var i = 0; i < response.sdg.length; i++) {
-                            			var nm_goals;
-                            			var id_goals=response.sdg[i][0];
-                                    	if($("#fs").is(':checked')){
-                                    		nm_goals = response.sdg[i][1];
-                						}else{
-                							nm_goals = response.sdg[i][2];
-                						}
-                                    	option += '<optgroup id="" label="'+response.sdg[i][3]+' '+nm_goals+'">';
-                                    	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
-                                    				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.sdg[i][0]+'---0---0">&nbsp;&nbsp;&nbsp;'+
-            			                            '<span style="vertical-align:middle">'+response.sdg[i][3]+' '+nm_goals+'</span>'+
-            			                      '</label><br/>';
-                                    	$.ajax({
-                                            url: urls + 'get-sdg-target',
-                                            data: {'id_role':idrole,'id_goals':response.sdg[i][0]},
-                                            type: 'get',
-                                            dataType: 'json',
-                                            cache: false,
-                                            async : false,
-                                            success: function (result) {
-                                            	for (var j = 0; j < result.content.length; j++) {
-                                            		var nm_target;
-                                            		var id_target=result.content[j][0];
-                                                	if($("#fs").is(':checked')){
-                                                		nm_target = result.content[j][1];
-                            						}else{
-                            							nm_target = result.content[j][2];
-                            						}
-                                                	option += '<optgroup id="" label="'+id_target+' '+nm_target+'">';
-                                                	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-                                                					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.sdg[i][0]+'---'+id_target+'---0">&nbsp;&nbsp;&nbsp;'+
-            							                            '<span style="vertical-align:middle">'+id_target+' '+nm_target+'</span>'+
-            							                      '</label><br/>';
-                                                	/* $.ajax({
-                                                        url: urls + 'list-sdgIndicator/'+response.sdg[i][0]+'/'+result.content[j].id,
-                                                        type: 'get',
-                                                        dataType: 'json',
-                                                        cache: false,
-                                                        async : false,
-                                                        success: function (result1) {
-                                                        	for (var k = 0; k < result1.content.length; k++) {
-                                                        		var nm_indicator;
-                                                        		var id_indicator=result1.content[k][0];
-                                                            	if($("#fs").is(':checked')){
-                                                            		nm_indicator = result1.content[k][4];
-                                        						}else{
-                                        							nm_indicator = result1.content[k][6];
-                                        						}
-                                                            	option += '<option value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
-                                                            	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-            								                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.sdg[i][0]+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-            								                            '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
-            								                      '</label><br/>';
-                                                        	}
-                                                        }
-                                                	}); */
-                                                	option += '</optgroup>';
-                                            	}
-                                            }
-                                    	});
-                                    	option += '</optgroup>';
-                            		}
-                            		cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
-                            		$('.accordion-inner').append(cekbok);
-                            	}
-                            });
-        	        }
-        	        
-        	        $('.accordion-inner').on('click', '.menu-master', function(){
-        	        	var id = $(this).data('id');
-        	        	if ($(this).is(":checked")) {
-        	                $(".accordion-inner").find('.menu'+id).prop("checked", true);
-        	            } else {
-        	            	 $(".accordion-inner").find('.menu'+id).prop("checked", false);
-        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
-        	            }
-        	        });
-        	        
-        	        $('.accordion-inner').on('click', '.menu-slave', function(){
-        	        	var id = $(this).data('id');
-        	        	var goals = $(this).data('goals');
-        	        	if ($(this).is(":checked")) {
-        	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
-        	            } else {
-        	            	 $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
-        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
-        	            }
-        	        	
-        	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
-        	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
-        	            } else {
-        	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
-        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
-        	            }
-        	        });
-        	        
-        	        $('.accordion-inner').on('click', '.menu-slave-1', function(){
-        	        	var id = $(this).data('id');
-        	        	var goals = $(this).data('goals');
-        	        	if ($(".menu-slave-1-"+id+":checked").length==$(".menu-slave-1-"+id).length) {
-        	                $(".accordion-inner").find('#submenu'+id).prop("checked", false);
-        	            } else {
-        	            	 $(".accordion-inner").find('#submenu'+id).prop("checked", false);
-        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
-        	            }
-        	        	
-        	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
-        	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
-        	            } else {
-        	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
-        	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
-        	            }
-        	        });
-        	        
-        	        $('.accordion-inner').on('change', '#all-sdg', function(){
-        	        	var status = this.checked;
-        	        	$('.accordion-inner').find("input[name='sdg_indicator']").each(function(){
-        	        		this.checked = status;
-        	        	});
-        	        });
         }
-        $('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
-        ambilData(0);	
-        ambilData_sum(0);
+        //ambilData(0);	
+        //ambilData_sum(0);
     });
     
     $('.accordion-inner').on('click', '#filter-sdg', function(){
@@ -517,7 +441,13 @@
         }else{
             sdg_indicator = '0';
         }
-        ambilData(sdg_indicator);	
+        
+        if($('#group').val() == "1"){
+        	 ambilData(sdg_indicator);
+    	}else{
+    		ambilDataIns(sdg_indicator);
+    	}
+       	
         ambilData_sum(sdg_indicator);	
     });
     
@@ -586,7 +516,7 @@
                                             var head6       = "Challenge and Learning";
                                         }
 
-                                        text += "<table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
+                                        text += "<table class='table table-striped table-bordered tabel-sdg' id='tbbest' width='100%'><thead>";
                                         text += "<tr style='font-size:80%;'>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span>"+head1+"</span></b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head2+"</b></th>";
@@ -595,6 +525,7 @@
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head4+"</b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head5+"</b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head6+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span class='disaggre_hide'>Action</span></b></th>";
                                         text += "</tr></thead>";
                                         $.ajax({
                                             url: urls + "getbest_level3/"+sdg_indicator,
@@ -656,6 +587,180 @@
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][11]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][12]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][13]+"</td>";
+                                                        var view = '<button data-id="'+array_level3[p][21]+'" type="button" title="view" class="btn btn-warning btn-mini view"><span class="lang_eng disaggre_hide" style="display:none">View Image</span><span class="lang_indo disaggre_hide">Lihat Gambar</span></button>';
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+view+"</td>";
+                                                        text += "</tr>";
+                                                        
+
+                                                    }
+                                                }
+                                            }
+                                        });
+                                        text += "</tbody></table>";
+                                    }
+                                }
+                            }
+                        });
+                        
+                    }
+                }
+                $("#total_detail").html("Total : "+jml)
+                console.log("jml = "+jml)
+            }
+        });
+        $("#indi").html(text);
+    }
+    
+    function ambilDataIns(sdg_indicator){
+        console.log("sdg = "+sdg_indicator);
+    	var monper = $("#periode").val().split("###");
+    	var id_monper   = monper[0];
+    	var year   = monper[1];
+        var idrole = $("#role").val();
+        var idprov = $("#daerah").val();
+        var cat = $("#role").find(":selected").data("cat");
+        var jml = 0;
+        $("#indi").html("");
+        var text="";
+        $.ajax({
+            url: urls + "getentryshowreport_best",
+            type: 'get',
+            data: { "id_monper":id_monper, "year":year},
+            dataType: 'json',
+            async:false,
+            success: function (result) {
+            	var array_level1 = result.content;
+                if (array_level1 != '') {
+                    for (i in array_level1) {
+                        //level1
+                        if($('#fs').is(':checked')){
+                            var prog_l_1 = "Tahun : "+array_level1[i][2];
+                        }else{
+                            var prog_l_1 = "Year : "+array_level1[i][2];
+                        }
+                        text += "<div >"+prog_l_1+"</div>";
+                        
+                        
+                        $.ajax({
+                            url: urls + "getbest_level2_ins/"+sdg_indicator,
+                            type: 'get',
+                            data: { "id_monper":array_level1[i][1], "year":array_level1[i][2], "id_role":idrole, "id_prov":idprov},
+                            dataType: 'json',
+                            async:false,
+                            success: function (result2) {
+                                var array_level2 = result2.content;
+                                console.log(result2);
+                                if (array_level2 != '') {
+                                    for (o in array_level2) {
+                                        //level2
+                                        text += "<div >"+array_level2[o][1]+"</div>";
+                                        
+                                        if($('#fs').is(':checked')){
+                                            var head1       = "Indikator";
+                                            var head2       = "Institusi";
+                                            var head3       = "Lokasi dan Waktu Aktivitas";
+                                            var head4       = "Latar Belakang";
+                                            var head5       = "Proses Implementasi";
+                                            var head6       = "Tantangan dan Pembelajaran";
+                                        }else{
+                                            var head1       = "Indicator";
+                                            var head2       = "Institution";
+                                            var head3       = "Location and Time of Activity";
+                                            var head4       = "Background";
+                                            var head5       = "Implementation Process";
+                                            var head6       = "Challenge and Learning";
+                                        }
+
+                                        text += "<table class='table table-striped table-bordered tabel-sdg' id='tbbest' width='100%'><thead>";
+                                        text += "<tr style='font-size:80%;'>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span>"+head1+"</span></b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head2+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Program</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head3+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head4+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head5+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head6+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span class='disaggre_hide'>Action</span></b></th>";
+                                        text += "</tr></thead>";
+                                        $.ajax({
+                                            url: urls + "getbest_level3_ins/"+sdg_indicator,
+                                            type: 'get',
+                                            data: { "id_monper":array_level1[i][1], "year":array_level1[i][2], "id_role":array_level2[o][0], "id_prov":idprov},
+                                            dataType: 'json',
+                                            async:false,
+                                            success: function (result3) {
+                                                var array_level3 = result3.content;
+                                                jml += parseInt(result3.content.length);
+                                                console.log('jumlah = '+result3.content.length);
+                                                
+                                                if (array_level3 != '') {
+                                                    for (p in array_level3) {
+                                                        if(array_level3[p][15] == null || array_level3[p][15] == '0'){
+                                                            var no_target = '';
+                                                        }else{
+                                                            var no_target = array_level3[p][15];
+                                                        }
+                                                        if(array_level3[p][16] == null || array_level3[p][16] == '0'){
+                                                            var isi_target = '';
+                                                        }else{
+                                                            var isi_target = array_level3[p][16];
+                                                        }
+                                                        if(array_level3[p][17] == null || array_level3[p][17] == '0'){
+                                                            var isi_target1 = '';
+                                                        }else{
+                                                            var isi_target1 = array_level3[p][17];
+                                                        }
+                                                        if(array_level3[p][18] == null || array_level3[p][18] == '0'){
+                                                            var no_indicator = '';
+                                                        }else{
+                                                            var no_indicator = array_level3[p][18];
+                                                        }
+                                                        if(array_level3[p][19] == null || array_level3[p][19] == '0'){
+                                                            var isi_indicator = '';
+                                                        }else{
+                                                            var isi_indicator = array_level3[p][19];
+                                                        }
+                                                        if(array_level3[p][20] == null || array_level3[p][20] == '0'){
+                                                            var isi_indicator1 = '';
+                                                        }else{
+                                                            var isi_indicator1 = array_level3[p][20];
+                                                        }
+                                                        if(array_level3[p][22] == null || array_level3[p][22] == '0'){
+                                                            var no_goal = '';
+                                                        }else{
+                                                            var no_goal = array_level3[p][22];
+                                                        }
+                                                        if(array_level3[p][23] == null || array_level3[p][23] == '0'){
+                                                            var isi_goal = '';
+                                                        }else{
+                                                            var isi_goal = array_level3[p][23];
+                                                        }
+                                                        if(array_level3[p][24] == null || array_level3[p][24] == '0'){
+                                                            var isi_goal1 = '';
+                                                        }else{
+                                                            var isi_goal1 = array_level3[p][24];
+                                                        }
+                                                        //level2
+                                                        if($('#fs').is(':checked')){
+                                                            var target      = no_target+" "+isi_target;
+                                                            var indicator   = no_indicator+" "+isi_indicator;
+                                                            var goal        = no_goal+" "+isi_goal;
+                                                        }else{
+                                                            var target      = no_target+" "+isi_target1;
+                                                            var indicator   = no_indicator+" "+isi_indicator1;
+                                                            var goal        = no_goal+" "+isi_goal1;
+                                                        }
+                                                        
+                                                        text += "<tr style='font-size:80%;border-style:ridge;'>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+goal+"<br/>"+target+"<br/>"+indicator+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][14]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][8]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][11]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][12]+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][13]+"</td>";
+                                                        var view = '<button data-id="'+array_level3[p][21]+'" type="button" title="view" class="btn btn-warning btn-mini view"><span class="lang_eng disaggre_hide" style="display:none">View Image</span><span class="lang_indo disaggre_hide">Lihat Gambar</span></button>';
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+view+"</td>";
                                                         text += "</tr>";
                                                         
 
@@ -867,17 +972,49 @@
 
     });
     
+    $('#best_prac').on('click', '.view', function(){
+        var id = $(this).attr('data-id');
+        $("#myModalgambar").modal("show");
+        $.ajax({
+            type: "GET",
+            url: urls+'get-all-foto/'+id,
+            success: function (resulthasil) {
+                var val2 = resulthasil.content;
+                console.log(val2);
+                var ht = "";
+                for(var i=0;i<val2.length;i++){
+                    ht += '<img class="img-responsive avatar-view" id="gambar-profil" src="data:image/jpg;base64,'+val2[i][2]+'" alt="Picture" style="width: 200px"/><br/><br/>';
+                }
+                $(".profile_img").html(ht);
+            }
+        });
+     });
+    
     var tableToExcel = (function() {
-    var uri = 'data:application/vnd.ms-excel;base64,'
-    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-    return function(table, name) {
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-    window.location.href = uri + base64(format(template, ctx))
-    }
-    })()
+     var uri = 'data:application/vnd.ms-excel;base64,'
+     , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+     , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+     , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+     return function(table, name) {
+     $('#best_prac').find('.disaggre_hide').hide();
+     if (!table.nodeType) table = document.getElementById(table)
+     var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+     window.location.href = uri + base64(format(template, ctx))
+     $('#best_prac').find('.disaggre_hide').show();
+     }
+     })()
+    
+//    var tableToExcel = (function() {
+//    var uri = 'data:application/vnd.ms-excel;base64,'
+//    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+//    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+//    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+//    return function(table, name) {
+//    if (!table.nodeType) table = document.getElementById(table)
+//    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+//    window.location.href = uri + base64(format(template, ctx))
+//    }
+//    })()
     
     
 </script>

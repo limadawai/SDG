@@ -107,6 +107,24 @@
 	            if(privilege == 'USER'){idrole=id_role_sess;}
 	            var textSdg = "";
 	            $('#indi').html(textSdg);
+	            var baseline = 'Dasar';
+	            var unit = 'Satuan';
+	            var bud = 'Alokasi Anggaran 5 Tahun';
+	            var fun = 'Funding Source';
+	            var actor = 'Pelaksana';
+	            if($("#fs").is(':checked')){
+	            	baseline = 'Baseline';
+	            	unit = 'Unit';
+	            	bud = '5 Years Budget Allocation';
+					fun = 'Funding Source';
+	            	actor = 'Actor';
+				}else{
+					baseline = 'Dasar';
+					unit = 'Satuan';
+					bud = 'Alokasi Anggaran 5 Tahun';
+	            	fun = 'Sumber Dana';
+					actor = 'Pelaksana';
+				}
 	            $.ajax({
 	                url: urls + "get-sdg-goals-report/"+sdg_indicator,
 	                data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper},
@@ -145,7 +163,7 @@
 	            	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	            	            			var row = hasilGoal1.progGov;
 	            	            			var id_program = row[a][0];
-	            	            			var kode_program = row[a][1];
+	            	            			var kode_program = row[a][4];
 	                            			var nm_program;
 	                            			var nm_activity;
 	                            			if($('#fs').is(':checked')){
@@ -166,14 +184,14 @@
 	                            	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 	                            	            			var row = hasilGoal2.progGov;
 	                            	            			var id_activity = row[b][0];
-	                            	            			var kode_activity = row[b][1];
+	                            	            			var kode_activity = row[b][4];
 	                                            			var nm_activity;
 	                                            			if($('#fs').is(':checked')){
 	                                            				nm_activity = row[b][2];
 	                    	                            	}else{
 	                    	                            		nm_activity = row[b][3];
 	                    	                            	}
-	                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
+	                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	                            	            			
 	                                            			$.ajax({
 	                                            	            url: urls + "get-mapping-goals-govIndicator",
@@ -186,14 +204,14 @@
 	                                            	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 	                                            	            			var row = hasilGoal3.progGov;
 	                                            	            			var id_gov_indicator = row[c][0];
-	                                            	            			var kode_indicator = row[c][1];
+	                                            	            			var kode_indicator = row[c][4];
 	                                                            			var nm_indicator;
 	                                                            			if($('#fs').is(':checked')){
 	                                                            				nm_indicator = row[c][2];
 	                                    	                            	}else{
 	                                    	                            		nm_indicator = row[c][3];
 	                                    	                            	}
-	                                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
+	                                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_program+"."+kode_activity+"."+kode_indicator+". "+nm_indicator+"</div>";
 	                                            	            			
 	                                                            			$.ajax({
 	                                                            	            url: urls + "get-mapping-goals-relisasi",
@@ -207,13 +225,13 @@
 	                                                            	            	if(row.length>0){
 	                                                            	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
 	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Unit</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Baseline</td>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>5 Years Budget Allocation</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actor</td></tr>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 	                                                                            		for(var y=monper_year[0];y<=monper_year[1];y++){
 	                                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -268,7 +286,7 @@
 	            	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	            	            			var row = hasilGoal1.progGov;
 	            	            			var id_program = row[a][0];
-	            	            			var kode_program = row[a][1];
+	            	            			var kode_program = row[a][4];
 	                            			var nm_program;
 	                            			var nm_activity;
 	                            			if($('#fs').is(':checked')){
@@ -289,14 +307,14 @@
 	                            	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 	                            	            			var row = hasilGoal2.progGov;
 	                            	            			var id_activity = row[b][0];
-	                            	            			var kode_activity = row[b][1];
+	                            	            			var kode_activity = row[b][4];
 	                                            			var nm_activity;
 	                                            			if($('#fs').is(':checked')){
 	                                            				nm_activity = row[b][2];
 	                    	                            	}else{
 	                    	                            		nm_activity = row[b][3];
 	                    	                            	}
-	                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
+	                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	                                            			
 	                                            			$.ajax({
 	                                            	            url: urls + "get-mapping-goals-nsaIndicator",
@@ -309,14 +327,14 @@
 	                                            	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 	                                            	            			var row = hasilGoal3.progGov;
 	                                            	            			var id_nsa_indicator = row[c][0];
-	                                            	            			var kode_indicator = row[c][1];
+	                                            	            			var kode_indicator = row[c][4];
 	                                                            			var nm_indicator;
 	                                                            			if($('#fs').is(':checked')){
 	                                                            				nm_indicator = row[c][2];
 	                                    	                            	}else{
 	                                    	                            		nm_indicator = row[c][3];
 	                                    	                            	}
-	                                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
+	                                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_program+"."+kode_activity+"."+kode_indicator+". "+nm_indicator+"</div>";
 	                                                            			
 	                                                            			$.ajax({
 	                                                            	            url: urls + "get-mapping-goals-nsarelisasi",
@@ -330,13 +348,13 @@
 	                                                            	            	if(row.length>0){
 	                                                            	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
 	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Unit</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Baseline</td>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>5 Years Budget Allocation</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actor</td></tr>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
+	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 	                                                                            		for(var y=monper_year[0];y<=monper_year[1];y++){
 	                                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -395,7 +413,7 @@
 	    							}else{
 	    								nm_target = hasilTarget.sdg[j][2];
 	    							}
-	    		            		textSdg += "<br/><br/><p style='font-size:90%;'><b><h4>SDG Targets "+kode_target+". "+nm_target+"</h4></b><p/>";
+	    		            		textSdg += "<br/><br/><p style='font-size:90%;'><b><h4>SDG Targets "+kode_goals	+"."+kode_target+". "+nm_target+"</h4></b><p/>";
 	    		            		
 	    		            		//TARGET GOVERNMENT PROGRAM
 	    		        			$.ajax({
@@ -410,7 +428,7 @@
 	    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	    		        	            			var row = hasilGoal1.progGov;
 	    		        	            			var id_program = row[a][0];
-	    		        	            			var kode_program = row[a][1];
+	    		        	            			var kode_program = row[a][4];
 	    		                        			var nm_program;
 	    		                        			var nm_activity;
 	    		                        			if($('#fs').is(':checked')){
@@ -431,14 +449,14 @@
 	    		                        	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 	    		                        	            			var row = hasilGoal2.progGov;
 	    		                        	            			var id_activity = row[b][0];
-	    		                        	            			var kode_activity = row[b][1];
+	    		                        	            			var kode_activity = row[b][4];
 	    		                                        			var nm_activity;
 	    		                                        			if($('#fs').is(':checked')){
 	    		                                        				nm_activity = row[b][2];
 	    		                	                            	}else{
 	    		                	                            		nm_activity = row[b][3];
 	    		                	                            	}
-	    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
+	    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	    		                                        			
 	    		                                        			$.ajax({
 	    		                                        	            url: urls + "get-mapping-target-govIndicator",
@@ -451,14 +469,14 @@
 	    		                                        	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 	    		                                        	            			var row = hasilGoal3.progGov;
 	    		                                        	            			var id_gov_indicator = row[c][0];
-	    		                                        	            			var kode_indicator = row[c][1];
+	    		                                        	            			var kode_indicator = row[c][4];
 	    		                                                        			var nm_indicator;
 	    		                                                        			if($('#fs').is(':checked')){
 	    		                                                        				nm_indicator = row[c][2];
 	    		                                	                            	}else{
 	    		                                	                            		nm_indicator = row[c][3];
 	    		                                	                            	}
-	    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
+	    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_program+"."+kode_activity+"."+kode_indicator+". "+nm_indicator+"</div>";
 	    		                                                        			
 	    		                                                        			$.ajax({
 	    	                                                            	            url: urls + "get-mapping-target-relisasi",
@@ -472,13 +490,13 @@
 	    	                                                            	            	if(row.length>0){
 	    	                                                            	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
 	    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Unit</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Baseline</td>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	    	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	    	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>5 Years Budget Allocation</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actor</td></tr>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 	    	                                                                            		for(var y=monper_year[0];y<=monper_year[1];y++){
 	    	                                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -533,7 +551,7 @@
 	    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	    		        	            			var row = hasilGoal1.progGov;
 	    		        	            			var id_program = row[a][0];
-	    		        	            			var kode_program = row[a][1];
+	    		        	            			var kode_program = row[a][4];
 	    		                        			var nm_program;
 	    		                        			var nm_activity;
 	    		                        			if($('#fs').is(':checked')){
@@ -554,14 +572,14 @@
 	    		                        	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 	    		                        	            			var row = hasilGoal2.progGov;
 	    		                        	            			var id_activity = row[b][0];
-	    		                        	            			var kode_activity = row[b][1];
+	    		                        	            			var kode_activity = row[b][4];
 	    		                                        			var nm_activity;
 	    		                                        			if($('#fs').is(':checked')){
 	    		                                        				nm_activity = row[b][2];
 	    		                	                            	}else{
 	    		                	                            		nm_activity = row[b][3];
 	    		                	                            	}
-	    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
+	    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	    		                                        			
 	    		                                        			$.ajax({
 	    		                                        	            url: urls + "get-mapping-target-nsaIndicator",
@@ -574,14 +592,14 @@
 	    		                                        	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 	    		                                        	            			var row = hasilGoal3.progGov;
 	    		                                        	            			var id_nsa_indicator = row[c][0];
-	    		                                        	            			var kode_indicator = row[c][1];
+	    		                                        	            			var kode_indicator = row[c][4];
 	    		                                                        			var nm_indicator;
 	    		                                                        			if($('#fs').is(':checked')){
 	    		                                                        				nm_indicator = row[c][2];
 	    		                                	                            	}else{
 	    		                                	                            		nm_indicator = row[c][3];
 	    		                                	                            	}
-	    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
+	    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_program+"."+kode_activity+"."+kode_indicator+". "+nm_indicator+"</div>";
 	    		                                                        			
 	    		                                                        			$.ajax({
 	    	                                                            	            url: urls + "get-mapping-target-nsarelisasi",
@@ -595,13 +613,13 @@
 	    	                                                            	            	if(row.length>0){
 	    	                                                            	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
 	    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Unit</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Baseline</td>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	    	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	    	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>5 Years Budget Allocation</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actor</td></tr>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
+	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 	    	                                                                            		for(var y=monper_year[0];y<=monper_year[1];y++){
 	    	                                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -659,7 +677,7 @@
 	    		    							}else{
 	    		    								nm_indicator = hasilIndicator.sdg[k][2];
 	    		    							}
-	    		    		            		textSdg += "<br/><br/><p style='font-size:90%;'><b><h5>SDG Indicators "+kode_indicator+". "+nm_indicator+"</h5></b><p/>";
+	    		    		            		textSdg += "<br/><br/><p style='font-size:90%;'><b><h5>SDG Indicators "+kode_goals+"."+kode_target+"."+kode_indicator+". "+nm_indicator+"</h5></b><p/>";
 	    		    		            		
 	    		    		            		$.ajax({
 	    		    		    		            url: urls + "get-disaggre-report",
@@ -678,7 +696,7 @@
 	    		    		    							}else{
 	    		    		    								nm_disagre = hasilDis.dis[l][4]+" "+hasilDis.dis[l][6];
 	    		    		    							}
-	    		    		    		            		textSdg += "<p style='font-size:90%;'><b>Disaggregation "+kode_dis+". "+nm_disagre+"</b><p/>";
+	    		    		    		            		textSdg += "<p style='font-size:90%;' class='disaggre_hide'><b>Disaggregation "+kode_goals+"."+kode_target+"."+kode_indicator+"."+kode_dis+". "+nm_disagre+"</b><p/>";
 	    		    		    		            	}
 	    		    		    		            }
 	    		    		            		});
@@ -696,7 +714,7 @@
 	    		    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	    		    		        	            			var row = hasilGoal1.progGov;
 	    		    		        	            			var id_program = row[a][0];
-	    		    		        	            			var kode_program = row[a][1];
+	    		    		        	            			var kode_program = row[a][4];
 	    		    		                        			var nm_program;
 	    		    		                        			var nm_activity;
 	    		    		                        			if($('#fs').is(':checked')){
@@ -717,14 +735,14 @@
 	    		    		                        	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 	    		    		                        	            			var row = hasilGoal2.progGov;
 	    		    		                        	            			var id_activity = row[b][0];
-	    		    		                        	            			var kode_activity = row[b][1];
+	    		    		                        	            			var kode_activity = row[b][4];
 	    		    		                                        			var nm_activity;
 	    		    		                                        			if($('#fs').is(':checked')){
 	    		    		                                        				nm_activity = row[b][2];
 	    		    		                	                            	}else{
 	    		    		                	                            		nm_activity = row[b][3];
 	    		    		                	                            	}
-	    		    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
+	    		    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	    		    		                        	            			
 	    		    		                                        			$.ajax({
 	    		    		                                        	            url: urls + "get-mapping-indicator-govIndicator",
@@ -737,14 +755,14 @@
 	    		    		                                        	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 	    		    		                                        	            			var row = hasilGoal3.progGov;
 	    		    		                                        	            			var id_gov_indicator = row[c][0];
-	    		    		                                        	            			var kode_indicator = row[c][1];
+	    		    		                                        	            			var kode_indicator = row[c][4];
 	    		    		                                                        			var nm_indicator;
 	    		    		                                                        			if($('#fs').is(':checked')){
 	    		    		                                                        				nm_indicator = row[c][2];
 	    		    		                                	                            	}else{
 	    		    		                                	                            		nm_indicator = row[c][3];
 	    		    		                                	                            	}
-	    		    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
+	    		    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_program+"."+kode_activity+"."+kode_indicator+". "+nm_indicator+"</div>";
 	    		    		                                        	            			
 	    		    		                                                        			$.ajax({
 	    		    	                                                            	            url: urls + "get-mapping-indicator-relisasi",
@@ -758,13 +776,13 @@
 	    		    	                                                            	            	if(row.length>0){
 	    		    	                                                            	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
 	    		    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Unit</td>";
-	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Baseline</td>";
+	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	    		    	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	    		    	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>5 Years Budget Allocation</td>";
-	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actor</td></tr>";
+	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
+	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	    		    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 	    		    	                                                                            		for(var y=monper_year[0];y<=monper_year[1];y++){
 	    		    	                                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -819,7 +837,7 @@
 	    		    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 	    		    		        	            			var row = hasilGoal1.progGov;
 	    		    		        	            			var id_program = row[a][0];
-	    		    		        	            			var kode_program = row[a][1];
+	    		    		        	            			var kode_program = row[a][4];
 	    		    		                        			var nm_program;
 	    		    		                        			var nm_activity;
 	    		    		                        			if($('#fs').is(':checked')){
@@ -840,14 +858,14 @@
 	    		    		                        	            		for (var b = 0; b < hasilGoal2.progGov.length; b++) {
 	    		    		                        	            			var row = hasilGoal2.progGov;
 	    		    		                        	            			var id_activity = row[b][0];
-	    		    		                        	            			var kode_activity = row[b][1];
+	    		    		                        	            			var kode_activity = row[b][4];
 	    		    		                                        			var nm_activity;
 	    		    		                                        			if($('#fs').is(':checked')){
 	    		    		                                        				nm_activity = row[b][2];
 	    		    		                	                            	}else{
 	    		    		                	                            		nm_activity = row[b][3];
 	    		    		                	                            	}
-	    		    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_activity+". "+nm_activity+"</div>";
+	    		    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	    		    		                                        			
 	    		    		                                        			$.ajax({
 	    		    		                                        	            url: urls + "get-mapping-indicator-nsaIndicator",
@@ -860,14 +878,14 @@
 	    		    		                                        	            		for (var c = 0; c < hasilGoal3.progGov.length; c++) {
 	    		    		                                        	            			var row = hasilGoal3.progGov;
 	    		    		                                        	            			var id_nsa_indicator = row[c][0];
-	    		    		                                        	            			var kode_indicator = row[c][1];
+	    		    		                                        	            			var kode_indicator = row[c][4];
 	    		    		                                                        			var nm_indicator;
 	    		    		                                                        			if($('#fs').is(':checked')){
 	    		    		                                                        				nm_indicator = row[c][2];
 	    		    		                                	                            	}else{
 	    		    		                                	                            		nm_indicator = row[c][3];
 	    		    		                                	                            	}
-	    		    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_indicator+". "+nm_indicator+"</div>";
+	    		    		                                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:20px'>Indicator</span>: "+kode_program+"."+kode_activity+"."+kode_indicator+". "+nm_indicator+"</div>";
 	    		    		                                        	            			
 	    		    		                                                        			$.ajax({
     			    	                                                            	            url: urls + "get-mapping-indicator-nsarelisasi",
@@ -882,13 +900,13 @@
     			    	                                                            	            	if(row.length>0){
     			    	                                                            	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
     			    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Unit</td>";
-    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Baseline</td>";
+    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
     			    	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
     			    	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>5 Years Budget Allocation</td>";
-    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actor</td></tr>";
+    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
+    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
     			    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
     			    	                                                                            		for(var y=monper_year[0];y<=monper_year[1];y++){
     			    	                                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -953,9 +971,11 @@
                  , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
                  , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
                  return function(table, name) {
+                	 $('#indi').find('.disaggre_hide').hide();
                  if (!table.nodeType) table = document.getElementById(table)
                  var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
                  window.location.href = uri + base64(format(template, ctx))
+                 $('#indi').find('.disaggre_hide').show();
                  }
                  })()
 		//});

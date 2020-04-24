@@ -333,7 +333,7 @@
 //                 console.log(datarow);
                 $('#'+uuid).DataTable({
                         responsive: true,
-                        sDom: 'lrtip',
+                        sDom: 'Brtip',
                         "retrieve": true,
                         "bLengthChange": false,
                         "cache": false,
@@ -342,6 +342,29 @@
                         "ordering": false,
                         "info":     false,
                         "searching": true,
+                        buttons: [
+        		        	{
+        		        	    extend: 'print',
+        		        	    text: 'Print',
+        		        	},
+        		        	{
+        		        		extend: 'excelHtml5',
+        		        		filename: 'Gov Program',
+        		        		text: 'Save as Excel',
+        		        		exportOptions: {
+        		        		    format: {
+        		        		        body: function(data, column, row) {
+        		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+        		        		            data = data.replace(/<.*?>/g, "");
+        		        		            data = data.replace("&amp;", "&");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            return data;
+        		        		        }
+        		        		    }
+        		        		}
+        		        	},
+        		        ],
                         "aaData" : allRow.content,
                         "aoColumns":data_column,
 //                        "data": datarow,
@@ -410,7 +433,7 @@
 //                 console.log(datarow);
                 $('#'+uuid).DataTable({
                         responsive: true,
-                        sDom: 'lrtip',
+                        sDom: 'Brtip',
                         "retrieve": true,
                         "bLengthChange": false,
                         "cache": false,
@@ -426,6 +449,29 @@
                         "searching": true,
                         "aaData" : allRow.content,
                         "aoColumns":data_column,
+                        buttons: [
+        		        	{
+        		        	    extend: 'print',
+        		        	    text: 'Print',
+        		        	},
+        		        	{
+        		        		extend: 'excelHtml5',
+        		        		filename: 'Gov Program',
+        		        		text: 'Save as Excel',
+        		        		exportOptions: {
+        		        		    format: {
+        		        		        body: function(data, column, row) {
+        		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+        		        		            data = data.replace(/<.*?>/g, "");
+        		        		            data = data.replace("&amp;", "&");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            return data;
+        		        		        }
+        		        		    }
+        		        		}
+        		        	},
+        		        ],
 //                        "data": datarow,
                         select: true
                     });
@@ -604,11 +650,35 @@
 	});
 	var table2 = $('#detailGri').DataTable({
                         responsive: true,
-                        sDom: 'lrtip',
+                        sDom: 'Brtip',
                         "bLengthChange": false,
                         "cache": false,
                         "autoWidth": true,
                         "responsive":true,
+                        buttons: [
+        		        	{
+        		        	    extend: 'print',
+        		        	    text: 'Print',
+        		        	},
+        		        	{
+        		        		extend: 'excelHtml5',
+        		        		filename: 'GRI/OJK',
+        		        		text: 'Save as Excel',
+        		        		exportOptions: {
+        		        		    format: {
+        		        		        body: function(data, column, row) {
+        		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+        		        		            data = data.replace(/<.*?>/g, "");
+        		        		            data = data.replace("&amp;", "&");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            data = data.replace("&nbsp;", "");
+        		        		            return data;
+        		        		        }
+        		        		    }
+        		        	,
+        		        		}
+        		        	},
+        		        ],
                         "ajax": {
                             "url": '/sdg/admin/get-report/gri-ojk',
                             dataSrc: 'content',
