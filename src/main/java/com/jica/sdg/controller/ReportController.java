@@ -573,7 +573,7 @@ public class ReportController {
     		@RequestParam("id_monper") String id_monper) {
     		
     	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT b.id, b.id_program, b.nm_program, b.nm_program_eng, b.id_monper,d.nm_prov FROM gov_program a\r\n" + 
+    	sqlBud.append("SELECT DISTINCT b.id, b.id_program, b.nm_program, b.nm_program_eng, b.id_monper,d.nm_prov,b.internal_code FROM gov_program a\r\n" + 
     			"RIGHT JOIN gov_program b on a.id = b.rel_prog_id\r\n" + 
     			"LEFT JOIN ran_rad c on b.id_monper = c.id_monper\r\n" + 
     			"LEFT JOIN ref_province d on c.id_prov = d.id_prov\r\n" + 
@@ -594,7 +594,7 @@ public class ReportController {
     		@RequestParam("id_monper") String id_monper) {
     		
     	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT a.id, a.id_program, a.nm_program, a.nm_program_eng, a.id_monper FROM gov_program a\r\n" + 
+    	sqlBud.append("SELECT DISTINCT a.id, a.id_program, a.nm_program, a.nm_program_eng, a.id_monper,'' as prov,a.internal_code FROM gov_program a\r\n" + 
     			"LEFT JOIN gov_program b on a.id = b.rel_prog_id\r\n" + 
     			"LEFT JOIN ran_rad c on b.id_monper = c.id_monper\r\n" + 
     			"LEFT JOIN ref_province d on c.id_prov = d.id_prov\r\n" + 
@@ -1660,7 +1660,7 @@ public class ReportController {
         //Indicator GOV
         StringBuilder sqlInd = new StringBuilder();
         sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
     		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
@@ -1812,7 +1812,7 @@ public class ReportController {
         //Indicator GOV
         StringBuilder sqlInd = new StringBuilder();
         sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
     		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
@@ -1913,7 +1913,7 @@ public class ReportController {
         //Indicator GOV
         StringBuilder sqlInd = new StringBuilder();
         sqlInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_gov_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
     		sqlInd.append("(select value from gov_target as target_"+i+" where target_"+i+".id_gov_indicator = a.id_gov_indicator and year = "+i+") as target_"+i+", ");
