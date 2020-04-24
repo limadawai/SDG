@@ -944,7 +944,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select gov_prog_bud from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_activity_eng, c.value as nilai_target, a.id, \n" +
                     "e.nm_program, e.nm_program_eng, e.id_program as id_prog, \n" +
-                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4 \n" +
+                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4, e.internal_code as intprog, a.internal_code as intact \n" +
                     "from gov_activity as a\n" +
                     "left join (select * from gov_program ) as e on a.id_program = e.id \n" +
                     "left join (select * from entry_gov_budget where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_gov_activity \n" +
@@ -1359,7 +1359,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select gov_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id ,\n" +
                     "d.nm_activity, d.nm_activity_eng, d.id_activity as id_acty, e.nm_program, e.nm_program_eng, e.id_program as id_prog, \n" +
-                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4 \n" +
+                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4, e.internal_code as intprog, d.internal_code as intact, a.internal_code as intind \n" +
                     "from gov_indicator as a \n" +
                     "left join (select * from gov_activity where id_role = :id_role ) as d on a.id_activity = d.id \n" +
                     "left join (select * from gov_program ) as e on a.id_program = e.id \n" +
@@ -1495,7 +1495,7 @@ public class DataEntryController {
                     "b.id as id_entrynsa, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select nsa_prog_bud from ran_rad where id_monper = :id_monper) as ket_ran_rad, a.nm_activity_eng, c.value as nilai_target, a.id, \n" +
                     "e.nm_program, e.nm_program_eng, e.id_program as id_prog, \n" +
-                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4 \n" +
+                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4, e.internal_code as intprog, a.internal_code as intact \n" +
                     "from nsa_activity as a\n" +
                     "left join (select * from nsa_program ) as e on a.id_program = e.id \n" +
                     "left join (select * from entry_nsa_budget where id_monper = :id_monper and year_entry = :tahun ) as b on a.id = b.id_nsa_activity\n" +
@@ -1740,7 +1740,7 @@ public class DataEntryController {
                     "b.id as id_entrygov, b.achievement1, b.achievement2, b.achievement3, b.achievement4, b.year_entry, b.id_monper, \n" +
                     "(select nsa_prog from ran_rad where id_monper = :id_monper ) as ket_ran_rad , a.nm_indicator_eng, c.value as nilai_target, a.id, \n" +
                     "d.nm_activity, d.nm_activity_eng, d.id_activity as id_acty, e.nm_program, e.nm_program_eng, e.id_program as id_prog, \n" +
-                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4 \n" +
+                    "b.new_value1, b.new_value2, b.new_value3, b.new_value4, e.internal_code as intprog, d.internal_code as intact, a.internal_code as intind \n" +
                     "from nsa_indicator as a\n" +
                     "left join (select * from nsa_activity where id_role = :id_role ) as d on a.id_activity = d.id \n" +
                     "left join (select * from nsa_program ) as e on a.id_program = e.id \n" +
