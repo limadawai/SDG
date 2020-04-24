@@ -906,6 +906,8 @@
                         //            var year                = tahun_1;
                                     var type                = "entry_best_practice";
                                     var text1 = "";
+                                    var sts = "";
+                                    var view1 = "";
                                     $.ajax({
                                         url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+year+'/'+type+'/1',
                                         type: 'get',
@@ -915,13 +917,26 @@
                                         success: function (result1) {
 //                                            alert('isi '+result1.content);
                                             if(result1.content == "1"){
+                                                if($("#fs").is(':checked')){
+                                                    sts += "<span class='label label-success'>Diterapkan</span>";
+                                                }else{
+                                                    sts += "<span class='label label-success'>Applied</span>";
+                                                }
+                                                view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 text1 += '';
 
                                             }else if(result1.content == "2"){
+                                                if($("#fs").is(':checked')){
+                                                    sts = "";
+                                                }else{
+                                                    sts = "";
+                                                }
+                                                view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 $('.appl').hide();
                                                 $('.unappl').hide();
-
+                                                text1 += '';
                                             }else if(result1.content == "3"){
+                                                view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 var detail = "";
 						var cat = $("#idrole").find(":selected").data("cat");
 						if(cat=="NSA"){
@@ -931,15 +946,18 @@
 						'<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-warning btn-mini update">Edit</button>'+detail+"</div>";
 
                                             }else if(result1.content == "4"){
+                                                view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 text1 += '';
 
                                             }else{
                                                 var detail = "";
                                                 var view = "";
+                                                
 						var cat = $("#idrole").find(":selected").data("cat");
 						if(cat=="NSA"){
                                                     detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
 						}
+                                                view1 += '';
                                                 view = '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
                                                 detail = '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button>';
 						text1 += "<div style='text-align:center;'>"+
@@ -985,11 +1003,11 @@
                                         },
                                     });
                                     if(cek1>0){
-                                    	return label;
+                                    	return sts+" "+label +"<br/><br/>"+view1;
                                     }else if(label){
-                                    	return label;
+                                    	return sts+" "+label +"<br/><br/>"+view1;
                                     }else{
-                                    	return text1;
+                                    	return sts+" "+text1+"<br/><br/>"+view1;
                                     }
                                     
                                 }}
