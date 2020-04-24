@@ -23,8 +23,8 @@
 								<a th:href="@{/admin/ran_rad/sdg/goals}" th:text="${goals.id_goals+' - '+goals.nm_goals_eng}" class="lang_eng" style="display:none"></a>
 							<br/>
 							Target : 
-							<a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${target.id_target+' - '+target.nm_target}" class="lang_indo"></a>
-							<a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${target.id_target+' - '+target.nm_target_eng}" class="lang_eng" style="display:none"></a>
+							<a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${goals.id_goals+'.'+target.id_target+' - '+target.nm_target}" class="lang_indo"></a>
+							<a th:href="@{'/admin/ran_rad/sdg/goals/'+${goals.id}+'/target'}" th:text="${goals.id_goals+'.'+target.id_target+' - '+target.nm_target_eng}" class="lang_eng" style="display:none"></a>
 					</div>
 				</div>
 			</div>
@@ -246,7 +246,7 @@
 							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row[1]+"</div>";
+							return "<div style='font-size:90%;'>"+[[${goals.id_goals}]]+"."+[[${target.id_target}]]+"."+row[1]+"</div>";
 						}},
 
 					{"data": function (row, data, index, display) {

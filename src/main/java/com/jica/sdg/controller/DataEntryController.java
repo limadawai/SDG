@@ -552,7 +552,7 @@ public class DataEntryController {
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng, "
     			+ "f.nm_role, d.nm_unit, e.value, h.achievement1, h.achievement2, h.achievement3, h.achievement4, "
     			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
-    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact "
+    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact, b.internal_code as intid_program, a.internal_code as intid_activity, c.internal_code as intid_gov_indicator "
     			+ "from gov_activity as a "
     			+ "left join gov_program b on a.id_program = b.id "
     			+ "left join gov_indicator c on a.id_program = c.id_program and a.id = c.id_activity "
@@ -583,7 +583,7 @@ public class DataEntryController {
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng, "
     			+ "f.nm_role, d.nm_unit, e.value, h.achievement1, h.achievement2, h.achievement3, h.achievement4, "
     			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
-    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact "
+    			+ "h.id, i.id as idbud, c.id as idind, a.id as idact, b.internal_code as intid_program, a.internal_code as intid_activity, c.internal_code as intid_nsa_indicator "
     			+ "from nsa_activity as a "
     			+ "left join nsa_program b on a.id_program = b.id "
     			+ "left join nsa_indicator c on a.id_program = c.id_program and a.id = c.id_activity "
@@ -614,7 +614,7 @@ public class DataEntryController {
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, '' as nm_indicator, '' as nm_indicator_eng, "
     			+ "f.nm_role, '' as nm_unit, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
     			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
-    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact "
+    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact, b.internal_code as inid_program, a.internal_code as inid_activity "
     			+ "from gov_activity as a "
     			+ "left join gov_program b on a.id_program = b.id "
     			+ "left join ref_role f on a.id_role = f.id_role "
@@ -641,7 +641,7 @@ public class DataEntryController {
     			+ "b.nm_program_eng, a.nm_activity, a.nm_activity_eng, '' as nm_indicator, '' as nm_indicator_eng, "
     			+ "f.nm_role, '' as nm_unit, '' as value, '' as achievement1, '' as achievement2, '' as achievement3, '' as achievement4, "
     			+ "i.achievement1 as achi1, i.achievement2 as achi2, i.achievement3 as achi3, i.achievement4 as achi4, "
-    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact "
+    			+ "'' as id, i.id as idbud, '' as idind, a.id as idact, b.internal_code as intid_program, a.internal_code as intid_activity "
     			+ "from nsa_activity as a "
     			+ "left join nsa_program b on a.id_program = b.id "
     			+ "left join ref_role f on a.id_role = f.id_role "
@@ -2097,6 +2097,18 @@ public class DataEntryController {
 //    		sql = "select a.* from ref_unit a left join ref_role b on a.id_role = b.id_role where b.id_prov = '"+id_prov+"' or a.id_role = 1";
 //    	}
         
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-entry/gri-ojk-list/{year}/{comp}")
+    public @ResponseBody Map<String, Object> Gri(@PathVariable("comp") String comp,@PathVariable("year") String year) {
+    	String tahun = year.equals("all")?"":" and year = '"+year+"'";
+    	String komp = comp.equals("all")?"":" and company_name = '"+comp+"'";
+    	String sql = "select * from entry_gri_ojk where 1=1 "+tahun+" "+komp;
         Query query = em.createNativeQuery(sql);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();

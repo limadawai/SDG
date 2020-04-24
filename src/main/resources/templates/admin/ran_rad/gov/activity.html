@@ -35,8 +35,8 @@
 				<div class="widget-box">
 					<div class="widget-content">
 						Program : 
-						<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program}" class="lang_indo"></a>
-						<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.id_program+' - '+govProg.nm_program_eng}" class="lang_eng" style="display:none"></a>
+						<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.internal_code+' - '+govProg.nm_program}" class="lang_indo"></a>
+						<a th:href="@{/admin/ran_rad/gov/program}" th:text="${govProg.internal_code+' - '+govProg.nm_program_eng}" class="lang_eng" style="display:none"></a>
 					</div>
 				</div>
 			</div>
@@ -312,7 +312,7 @@
 							return "<div style='font-size:90%;'>"+(row.id_activity?row.id_activity:'')+"</div>";
 						}},
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+(row.internal_code?row.internal_code:'')+"</div>";
+							return "<div style='font-size:90%;'>"+[[${govProg.internal_code}]]+"."+(row.internal_code?row.internal_code:'')+"</div>";
 					}},
 					{"data": function (row, data, index, display) {
 							var nama;
