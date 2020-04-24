@@ -468,17 +468,23 @@
                                                         var dataid          = x.split("###");
                                                         var lengthdataid    = dataid.length-1;
                                                         var htmlid = "";
+                                                        var goals="";
+                                                    	var target="";
+                                                    	var indicator="";
                                                             $.each(dataid,function(ii,xx){
                                                                 if(ii<lengthdataid){
-                                                                   if(ii==0){                                                               
-                                                                        htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                    }
-                                                                   if(ii==1){
-                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                    }
-                                                                   if(ii==2){
-                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                    } 
+                                                                	if(ii==0){ 
+                                                                 	   goals = xx;
+                                                                         htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                     }
+                                                                    if(ii==1){
+                                                                 	   target=goals+'.'+xx;
+                                                                        htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+target+'</span></label><br>';
+                                                                     }
+                                                                    if(ii==2){
+                                                                 	   indicator=target+'.'+xx;
+                                                                        htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+indicator+'</span></label><br>';
+                                                                     }
                                                                 }
                                                             });
                                                         grouphtml +=htmlid;
@@ -1275,17 +1281,23 @@
                                                     var dataid          = x.split("###");
                                                     var lengthdataid    = dataid.length-1;
                                                     var htmlid = "";
+                                                    var goals="";
+                                                	var target="";
+                                                	var indicator="";
                                                         $.each(dataid,function(ii,xx){
                                                             if(ii<lengthdataid){
-                                                               if(ii==0){                                                               
-                                                                    htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                }
-                                                               if(ii==1){
-                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                }
-                                                               if(ii==2){
-                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-                                                                } 
+                                                            	if(ii==0){ 
+                                                             	   goals = xx;
+                                                                     htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                 }
+                                                                if(ii==1){
+                                                             	   target=goals+'.'+xx;
+                                                                    htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+target+'</span></label><br>';
+                                                                 }
+                                                                if(ii==2){
+                                                             	   indicator=target+'.'+xx;
+                                                                    htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+indicator+'</span></label><br>';
+                                                                 }
                                                             }
                                                         });
                                                     grouphtml +=htmlid;
