@@ -146,7 +146,7 @@ public class AdminController {
             Map<String, Object> hasil = new HashMap<>();
             hasil.put("content",list);
             
-            String sql = "SELECT min(start_year) as awal_tahun, max(end_year) as akhir_tahun from ran_rad ";
+            String sql = "SELECT min(start_year) as awal_tahun, max(end_year) as akhir_tahun from ran_rad where status = 'on Going' and status = 'compleate'";
             Query list2 = em.createNativeQuery(sql);
             Map<String, Object> hasiltahun = new HashMap<>();            
             hasiltahun.put("tahunmap",list2.getResultList());
