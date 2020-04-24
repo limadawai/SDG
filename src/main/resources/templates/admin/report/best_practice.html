@@ -117,6 +117,24 @@
             </div>
         </div>
     </div>
+    <div id="myModalgambar"data-backdrop="static" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 class="lang_eng" style="display:none">Best Pactice Image</h3>
+            <h3 class="lang_indo">Praktik Terbaik Gambar</h3>
+        </div>
+        <div class="modal-body">
+            <div class="profile_img">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn tutup" data-dismiss="modal" aria-hidden="true">
+                <span class="lang_eng" style="display:none">Close</span>
+                <span class="lang_indo">Tutup</span>
+            </button>
+        </div>
+    </div>
+    
 </div>
 <div class="modal-loading-new"></div>
 <style th:inline="text">
@@ -498,7 +516,7 @@
                                             var head6       = "Challenge and Learning";
                                         }
 
-                                        text += "<table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
+                                        text += "<table class='table table-striped table-bordered tabel-sdg' id='tbbest' width='100%'><thead>";
                                         text += "<tr style='font-size:80%;'>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span>"+head1+"</span></b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head2+"</b></th>";
@@ -507,6 +525,7 @@
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head4+"</b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head5+"</b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head6+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span class='disaggre_hide'>Action</span></b></th>";
                                         text += "</tr></thead>";
                                         $.ajax({
                                             url: urls + "getbest_level3/"+sdg_indicator,
@@ -568,6 +587,8 @@
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][11]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][12]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][13]+"</td>";
+                                                        var view = '<button data-id="'+array_level3[p][21]+'" type="button" title="view" class="btn btn-warning btn-mini view"><span class="lang_eng disaggre_hide" style="display:none">View Image</span><span class="lang_indo disaggre_hide">Lihat Gambar</span></button>';
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+view+"</td>";
                                                         text += "</tr>";
                                                         
 
@@ -650,7 +671,7 @@
                                             var head6       = "Challenge and Learning";
                                         }
 
-                                        text += "<table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
+                                        text += "<table class='table table-striped table-bordered tabel-sdg' id='tbbest' width='100%'><thead>";
                                         text += "<tr style='font-size:80%;'>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span>"+head1+"</span></b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head2+"</b></th>";
@@ -659,6 +680,7 @@
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head4+"</b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head5+"</b></th>";
                                         text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+head6+"</b></th>";
+                                        text += "<th style='text-align:center;vertical-align:middle;border-style:ridge;'><b><span class='disaggre_hide'>Action</span></b></th>";
                                         text += "</tr></thead>";
                                         $.ajax({
                                             url: urls + "getbest_level3_ins/"+sdg_indicator,
@@ -720,6 +742,8 @@
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][11]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][12]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][13]+"</td>";
+                                                        var view = '<button data-id="'+array_level3[p][21]+'" type="button" title="view" class="btn btn-warning btn-mini view"><span class="lang_eng disaggre_hide" style="display:none">View Image</span><span class="lang_indo disaggre_hide">Lihat Gambar</span></button>';
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+view+"</td>";
                                                         text += "</tr>";
                                                         
 
@@ -931,17 +955,49 @@
 
     });
     
+    $('#best_prac').on('click', '.view', function(){
+        var id = $(this).attr('data-id');
+        $("#myModalgambar").modal("show");
+        $.ajax({
+            type: "GET",
+            url: urls+'get-all-foto/'+id,
+            success: function (resulthasil) {
+                var val2 = resulthasil.content;
+                console.log(val2);
+                var ht = "";
+                for(var i=0;i<val2.length;i++){
+                    ht += '<img class="img-responsive avatar-view" id="gambar-profil" src="data:image/jpg;base64,'+val2[i][2]+'" alt="Picture" style="width: 200px"/><br/><br/>';
+                }
+                $(".profile_img").html(ht);
+            }
+        });
+     });
+    
     var tableToExcel = (function() {
-    var uri = 'data:application/vnd.ms-excel;base64,'
-    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
-    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
-    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
-    return function(table, name) {
-    if (!table.nodeType) table = document.getElementById(table)
-    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
-    window.location.href = uri + base64(format(template, ctx))
-    }
-    })()
+     var uri = 'data:application/vnd.ms-excel;base64,'
+     , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+     , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+     , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+     return function(table, name) {
+     $('#best_prac').find('.disaggre_hide').hide();
+     if (!table.nodeType) table = document.getElementById(table)
+     var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+     window.location.href = uri + base64(format(template, ctx))
+     $('#best_prac').find('.disaggre_hide').show();
+     }
+     })()
+    
+//    var tableToExcel = (function() {
+//    var uri = 'data:application/vnd.ms-excel;base64,'
+//    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+//    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+//    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+//    return function(table, name) {
+//    if (!table.nodeType) table = document.getElementById(table)
+//    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+//    window.location.href = uri + base64(format(template, ctx))
+//    }
+//    })()
     
     
 </script>

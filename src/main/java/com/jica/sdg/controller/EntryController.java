@@ -2,6 +2,7 @@ package com.jica.sdg.controller;
 
 import com.jica.sdg.model.BestMap;
 import com.jica.sdg.model.BestPractice;
+import com.jica.sdg.model.BestPracticeFile;
 import com.jica.sdg.model.EntryBestPractice;
 import com.jica.sdg.model.EntryProblemIdentify;
 import com.jica.sdg.model.GovProgram;
@@ -14,11 +15,13 @@ import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.model.SdgIndicator;
 import com.jica.sdg.model.SdgTarget;
 import com.jica.sdg.model.Unit;
+import com.jica.sdg.model.UploadFileResponse;
 import com.jica.sdg.repository.BestPracticeRepository;
 import com.jica.sdg.repository.EntryProblemIdentifyRepository;
 import com.jica.sdg.service.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 import org.apache.commons.io.IOUtils;
@@ -49,6 +54,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+//import com.jica.sdg.service.FileStorageService;
 
 @Controller
 public class EntryController {
@@ -86,6 +94,9 @@ public class EntryController {
     IBestPracticeService bestService;
     
     @Autowired
+    IBestPracticeFileService bestFileService;
+    
+    @Autowired
     BestPracticeRepository bestRepo;
     
     @Autowired
@@ -93,6 +104,11 @@ public class EntryController {
     
     @Autowired
     IEntryBestPracticeService enbestService;
+    
+//    
+//    @Autowired
+//    private FileStorageService fileStorageService;
+    
     // ****************** Problem Identification & Follow Up ******************
     @GetMapping("admin/problem-identification")
      public String govprogram(Model model, HttpSession session) {
@@ -580,33 +596,62 @@ public class EntryController {
     @ResponseBody
     @Transactional
     @ResponseStatus(HttpStatus.OK)
-    public void saveFoto(@RequestParam("files") MultipartFile files, @RequestParam("idbest") int idbest) throws IOException {
-            BestPractice best = new BestPractice();
-            System.out.println("id ya = "+idbest);
-            System.out.println("file nya = "+IOUtils.toByteArray(files.getInputStream()));
+    public List<UploadFileResponse> saveFoto(@RequestParam("files") MultipartFile[] files, @RequestParam("idbest") String idbest, @RequestParam("idcek") String idcek, @RequestParam("isi_file") String isi_file)  {
+       
+        int idbes = Integer.valueOf(idbest);
+        if(isi_file.equals("")){
+                
+        }else{
+            bestFileService.deleteBestPracticeFile(idbes);
+        }
+            List<UploadFileResponse> list = Arrays.asList(files)
+                .stream()
+                .map(file -> uploadFile(file, idbes))
+                .collect(Collectors.toList());
+            System.out.println("file ya = "+files);
+        return list;
+    }
+    
+    @PostMapping("/uploadFilePegawai")
+    public UploadFileResponse uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("idbest") int idbest) {
+        String fileName = "";
+        String fileDownloadUri = "";
+        try {
+            
+            BestPracticeFile best = new BestPracticeFile();
             int idbes = Integer.valueOf(idbest);
             Optional<BestPractice> listbest = bestService.findOne(idbest);
-//            int id    = listbest.get().getId();
-            best.setId(listbest.get().getId());
-            best.setId_program(listbest.get().getId_program());
-            best.setId_activity(listbest.get().getId_activity());
-            best.setId_indicator(listbest.get().getId_indicator());
-            best.setId_role(listbest.get().getId_role());
-            best.setProgram(listbest.get().getProgram());
-            best.setLocation(listbest.get().getLocation());
-            best.setTime_activity(listbest.get().getTime_activity());
-            best.setBackground(listbest.get().getBackground());
-            best.setImplementation_process(listbest.get().getImplementation_process());
-            best.setChallenges_learning(listbest.get().getChallenges_learning());
-            best.setId_monper(listbest.get().getId_monper());
-            best.setYear(listbest.get().getYear());
-            if(!files.isEmpty()) {
-			best.setFoto_file(IOUtils.toByteArray(files.getInputStream()));
-//			pegawaiDao.save(t);
-			bestService.saveBestPractice(best);
-//                    em.createNativeQuery("update best_practice set foto_file = '"+IOUtils.toByteArray(files.getInputStream())+"' where id = '"+idbest+"' ").executeUpdate();
+    //            int id    = listbest.get().getId();
+            best.setId_best_practice(listbest.get().getId());
+            if(!file.isEmpty()) {
+    //			fileName = fileStorageService.storeFilePegawai(file, idpegawai.toString(),i);   
+    //			fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+    //	                .path("/downloadFile/")
+    //	                .path(fileName)
+    //	                .toUriString();
+                best.setFile(IOUtils.toByteArray(file.getInputStream()));
+                bestFileService.saveBestPracticeFile(best);
+
             }
+        
+        } catch (Exception e) {
+        }
+        
+        return new UploadFileResponse(fileName, fileDownloadUri,
+            file.getContentType(), file.getSize());
     }
+    
+    @GetMapping("admin/get-all-foto/{id}")
+    public @ResponseBody Map<String, Object> allfoto(@PathVariable("id") String id_best) {
+        String sql  = "select * from best_practice_file where id_best_practice = :id_best_practice ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_best_practice", id_best);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
 //    
 //    @PostMapping(path = "admin/save-best/{sdg_indicator}/{id_monper}/{id_prov}", consumes = "application/json", produces = "application/json")
 //    @ResponseBody
@@ -658,6 +703,7 @@ public class EntryController {
     public void delete_best_practice(@PathVariable("id") Integer id, @PathVariable("id_prov") Integer id_prov, @PathVariable("id_monper") Integer id_monper) {
         System.out.println("delete ya ");
         em.createNativeQuery("delete from best_practice where id = '"+id+"' ").executeUpdate();
+        bestFileService.deleteBestPracticeFile(id);
 //        em.createNativeQuery("delete from best_map where id_best_practice = '"+id+"' and id_prov = '"+id_prov+"' and id_monper = '"+id_monper+"' ").executeUpdate();
 //        em.createQuery(
 //          "DELETE FROM Transaction e WHERE e IN (:transactions)").

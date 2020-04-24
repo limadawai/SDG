@@ -234,10 +234,10 @@
                         <label class="lang_eng control-label" style="display:none">Upload</label>
                         <label class="lang_indo control-label">Upload</label>
                         <div class="profile_img">
-                            <div id="crop-avatar">
-                                <!-- Current avatar -->
+<!--                            <div id="crop-avatar">
+                                 Current avatar 
                                 <img class="img-responsive avatar-view" id="gambar-profil" th:src="@{/img/facebook.png}" alt="Picture" style="width: 200px"/>
-                            </div>
+                            </div>-->
                         </div>
                         <div class="controls">
                             <form id="form-data-pribadi" method="POST">
@@ -767,6 +767,7 @@
         	}else{
         		swal(titleMod,messMod,'error');
         	}
+                $("#file2").show();
                 $(".profile_img").hide();
         });
         
@@ -1280,24 +1281,15 @@
                         });
                         
                         //upload foto
+                        var isi_file = $("#file2").val();
                         var formElement = document.getElementById('form-data-pribadi');
                         var formData    = new FormData(formElement);
                         var idbest   = result.v_id;
                         console.log("isi id = "+result.v_id)
-                        console.log("isi file = "+document.getElementById('form-data-pribadi'))
+                        console.log("isi file = "+$("#file2").val())
                         formData.append('idbest', idbest);
-//                        $.ajax({
-//                            type: "POST",
-//                            url: urls+'save-govIndicatorBest/'+sdg_indicator+'/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
-//                            beforeSend : function(xhr){
-//                                xhr.setRequestHeader(header,token);
-//                            },
-//                            headers:{'Accept':'application/json','Content-Type':'application/json'},
-//                            data: data,
-//                            success: function (result12) {
-//                                
-//                            }
-//                        });
+                        formData.append('idcek', id);
+                        formData.append('isi_file', isi_file);
                         $.ajax({
                             beforeSend : function(xhr){
                                 xhr.setRequestHeader(header,token);
@@ -1319,6 +1311,15 @@
                                 );
                             }
                          });
+                        $('#id').val("");
+			$('#id_program').val("");
+			$('#location').val("");
+			$('#time_activity').val("");
+			$('#background').val("");
+			$('#implementation_process').val("");
+			$('#challenges_learning').val("");
+			$('#sdg_indicator').val("").trigger('change');
+			$('#file2').val("").trigger('change');
                     	table.ajax.url(urls+'list-best/'+id_role+'/'+id_monper+'/'+year).load();
                     	$('#myModal').modal('hide');
                     },
@@ -1411,11 +1412,25 @@
                     $('#background').val(val.background);
                     $('#implementation_process').val(val.implementation_process);
                     $('#challenges_learning').val(val.challenges_learning);
+                    $("#file2").show();
                     $(".profile_img").show();
-                    console.log("foto = "+val.foto_file);
-                    if(val.foto_file){
-                        $("#gambar-profil").attr("src","data:image/jpg;base64, "+val.foto_file);
-                    }
+                    $.ajax({
+                        type: "GET",
+                        url: urls+'get-all-foto/'+id,
+                        success: function (resulthasil) {
+                            var val2 = resulthasil.content;
+                            console.log(val2);
+                            var ht = "";
+                            for(var i=0;i<val2.length;i++){
+                                ht += '<img class="img-responsive avatar-view" id="gambar-profil" src="data:image/jpg;base64,'+val2[i][2]+'" alt="Picture" style="width: 200px"/><br/><br/>';
+                            }
+                            $(".profile_img").html(ht);
+                        }
+                    });
+//                    console.log("foto = "+val.foto_file);
+//                    if(val.foto_file){
+//                        $("#gambar-profil").attr("src","data:image/jpg;base64, "+val.foto_file);
+//                    }
                     $.ajax({
     					type: "GET",
                         url: urls+'list-getBestMapByGovInd/'+val.id,
@@ -1449,10 +1464,21 @@
                     $('#background').val(val.background);
                     $('#implementation_process').val(val.implementation_process);
                     $('#challenges_learning').val(val.challenges_learning);
+                    $("#file2").hide();
                     $(".profile_img").show();
-                    if(val.foto_file){
-                        $("#gambar-profil").attr("src","data:image/jpg;base64, "+val.foto_file);
-                    }
+                    $.ajax({
+                        type: "GET",
+                        url: urls+'get-all-foto/'+id,
+                        success: function (resulthasil) {
+                            var val2 = resulthasil.content;
+                            console.log(val2);
+                            var ht = "";
+                            for(var i=0;i<val2.length;i++){
+                                ht += '<img class="img-responsive avatar-view" id="gambar-profil" src="data:image/jpg;base64,'+val2[i][2]+'" alt="Picture" style="width: 200px"/><br/><br/>';
+                            }
+                            $(".profile_img").html(ht);
+                        }
+                    });
                     $.ajax({
                         type: "GET",
                         url: urls+'list-getBestMapByGovInd/'+val.id,

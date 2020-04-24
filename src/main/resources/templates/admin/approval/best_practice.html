@@ -419,6 +419,24 @@
 		    	</button>
 		  	</div>
         </div>
+        
+        <div id="myModalgambar"data-backdrop="static" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="lang_eng" style="display:none">Best Pactice Image</h3>
+                <h3 class="lang_indo">Praktik Terbaik Gambar</h3>
+            </div>
+            <div class="modal-body">
+                <div class="profile_img">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn tutup" data-dismiss="modal" aria-hidden="true">
+                    <span class="lang_eng" style="display:none">Close</span>
+                    <span class="lang_indo">Tutup</span>
+                </button>
+            </div>
+        </div>
     </div>
 
     <script th:inline="javascript" >
@@ -1619,7 +1637,7 @@
             $("#label_acti").html("Role : "+v_nmrole);
             $('#tabel-approve-gov-acty').html("");
                 var header = '';
-                header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;" width="15%"><span class="lang_eng" style="display:none">Name of Destination in TPB/SDGs</span><span class="lang_indo">Nama Tujuan TPB/SDGs</span></th> \n\
+                header += '<thead > <tr class="" > <th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Name of Destination in TPB/SDGs</span><span class="lang_indo">Nama Tujuan TPB/SDGs</span></th> \n\
                            ';
 
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements I</span> <span class="lang_indo">Pencapaian SDG I</span> </th> ';
@@ -1628,11 +1646,11 @@
 //                            
 //                            header +=   '<th style="text-align:center;font-size:80%;"> <span class="lang_eng" style="display:none">SDGs Achievements III</span> <span class="lang_indo">Pencapaian SDG III</span> </th>';
 //                            
-                header +=   '<th style="text-align:center;font-size:80%;" width="15%"><span class="lang_eng" style="display:none">Program Name</span><span class="lang_indo">Nama Program</span></th> ';
+                header +=   '<th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Program Name</span><span class="lang_indo">Nama Program</span></th> ';
 
-                header +=   '<th style="text-align:center;font-size:80%;" width="15%"><span class="lang_eng" style="display:none">Location and Time of Activity</span><span class="lang_indo">Lokasi dan Waktu Aktifitas</span></th> <th style="text-align:center;font-size:80%;" width="15%"><span class="lang_eng" style="display:none">Background</span><span class="lang_indo">Latar Belakang</span></th>';
+                header +=   '<th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Location and Time of Activity</span><span class="lang_indo">Lokasi dan Waktu Aktifitas</span></th> <th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Background</span><span class="lang_indo">Latar Belakang</span></th>';
 
-                header +=   '<th style="text-align:center;font-size:80%;" width="15%"><span class="lang_eng" style="display:none">Implementation Process<br/>(Strategy, Parties involved, beneficiaries etc)</span><span class="lang_indo">Proses Implementasi</span></th> <th style="text-align:center;font-size:80%;" width="15%"><span class="lang_eng" style="display:none">Challenges and Learning</span><span class="lang_indo">Tantangan dan Pembelajaran</span></th>';
+                header +=   '<th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Implementation Process<br/>(Strategy, Parties involved, beneficiaries etc)</span><span class="lang_indo">Proses Implementasi</span></th> <th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Challenges and Learning</span><span class="lang_indo">Tantangan dan Pembelajaran</span></th> <th style="text-align:center;font-size:80%;"><span class="lang_eng" style="display:none">Action</span><span class="lang_indo">Aksi</span></th>';
 //                header +=   '<th style="text-align:center;font-size:80%;" width="15%"><span class="lang_eng" style="display:none">Implementation Process<br/>(Strategy, Parties involved, beneficiaries etc)</span><span class="lang_indo">Proses Implementasi</span></th> <th style="text-align:center;font-size:80%;" width="15%"><span class="lang_eng" style="display:none">Challenges and Learning</span><span class="lang_indo">Tantangan dan Pembelajaran</span></th><th style="text-align:center;font-size:80%;" width="10%"><span class="lang_eng" style="display:none">Action</span><span class="lang_indo">Aksi</span></th>';
 
                 header +=   '</tr> </thead> <tbody id="tbody_entri-sdg"> </tbody> ';
@@ -1679,13 +1697,13 @@
                                                                 nm_target = (result1.content[k][4]?result1.content[k][4]:"");
                                                                 nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
                                                         }
-                                text += '<label style="display:inline-block;white-space:nowrap;">'+
+                                text += '<label style="">'+
                                                                         '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
                                                   '</label><br/>';
-                                    text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                    text += '<label style="margin-left:20px">'+
                                                                                 '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
                                                      '</label><br/>';
-                                     text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                                     text += '<label style="margin-left:40px">'+
                                                          '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
                                                    '</label><br/>';
                                 }
@@ -1714,13 +1732,13 @@
                                                                     nm_target = (result1.content[k][4]?result1.content[k][4]:"");
                                                                     nm_indicator = (result1.content[k][6]?result1.content[k][6]:"");
                                                             }
-                                    text += '<label style="display:inline-block;white-space:nowrap;">'+
+                                    text += '<label style="">'+
                                                                             '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
                                                       '</label><br/>';
-                                        text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                        text += '<label style="margin-left:20px">'+
                                                                                     '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
                                                          '</label><br/>';
-                                         text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                                         text += '<label style="margin-left:40px">'+
                                                              '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
                                                        '</label><br/>';
                                     }
@@ -1759,6 +1777,10 @@
                     }},
                     {"data": function (row, data, index, display) {
                             return "<div style='font-size:90%;'>"+row[7]+"</div>";
+                    }},
+                    {"data": function (row, data, index, display) {
+                            var view = '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><span class="lang_eng" style="display:none">View Image</span><span class="lang_indo">Lihat Gambar</span></button>';
+                            return view;
                     }},
 //                    {"data": function (row, data, index, display) {
 //                        var id_role             = $('#idrole').val();
@@ -2111,6 +2133,23 @@
                 });
             });
             
+        $('#tabel-approve-gov-acty').on('click', '.view', function(){
+            var id = $(this).attr('data-id');
+            $("#myModalgambar").modal("show");
+            $.ajax({
+                type: "GET",
+                url: urls+'get-all-foto/'+id,
+                success: function (resulthasil) {
+                    var val2 = resulthasil.content;
+                    console.log(val2);
+                    var ht = "";
+                    for(var i=0;i<val2.length;i++){
+                        ht += '<img class="img-responsive avatar-view" id="gambar-profil" src="data:image/jpg;base64,'+val2[i][2]+'" alt="Picture" style="width: 200px"/><br/><br/>';
+                    }
+                    $(".profile_img").html(ht);
+                }
+            });
+         });
             
     </script>
 </body>
