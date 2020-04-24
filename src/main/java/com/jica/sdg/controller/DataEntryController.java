@@ -2104,6 +2104,18 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/list-entry/gri-ojk-list/{year}/{comp}")
+    public @ResponseBody Map<String, Object> Gri(@PathVariable("comp") String comp,@PathVariable("year") String year) {
+    	String tahun = year.equals("all")?"":" and year = '"+year+"'";
+    	String komp = comp.equals("all")?"":" and company_name = '"+comp+"'";
+    	String sql = "select * from entry_gri_ojk where 1=1 "+tahun+" "+komp;
+        Query query = em.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/list-entry/gri-ojk/{year}")
     public @ResponseBody Map<String, Object> gri(HttpSession session,@PathVariable("year") String year) {
     	String tahun = year.equals("all")?"":" where year = '"+year+"'";

@@ -221,8 +221,7 @@ public class ReportBestController {
                             "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 \n" +
                             ")as z\n" +
-                            "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"' ) y on z.id_goals = y.id_old"+
-                            "join entry_approval d on z.id_monper = d.id_monper and d.year = '"+year+"' and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 ";
+                            "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"' ) y on z.id_goals = y.id_old";
                 }else{
                     sql  = "select distinct z.id_goals, y.id_goals as kode_goals, y.nm_goals, y.nm_goals_eng from\n" +
                             "(\n" +
