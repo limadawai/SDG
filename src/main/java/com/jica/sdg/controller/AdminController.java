@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -50,10 +51,13 @@ public class AdminController {
 	RoleService roleService;
 
 	@Autowired
-        UserService userService;
+    UserService userService;
         
-        @Autowired
+    @Autowired
 	private EntityManager em;
+        
+    @Autowired
+    private ServletContext context;
 
     //*********************** Menu Dari DB ***********************
     @Autowired
@@ -105,6 +109,7 @@ public class AdminController {
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
 		model.addAttribute("privilege", "guest");
+		model.addAttribute("context", context.getContextPath());
         return "req-user";
     }
 

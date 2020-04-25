@@ -175,7 +175,8 @@
     });
     
     var privilege = [[${privilege}]];
-    var id_prov = [[${id_prov}]]
+    var id_prov = [[${id_prov}]];
+    var context = [[${context}]]
     
     if(privilege=="guest"){
     	$(".notif").hide();
@@ -239,14 +240,16 @@
 				});
 			$.ajax({
 				type: "POST",
-                url: '/sdg/save-user-req',
+                url: context+'/save-user-req',
                 beforeSend : function(xhr){
                 	xhr.setRequestHeader(header,token);
                 },
                 headers:{'Accept':'application/json','Content-Type':'application/json'},
 				data: data,
                 success: function (result) {
-                	swal('Request User','Request User Successful','success');
+                	swal('Request User','Request User Successful','success').then((value) => {
+                		window.location.href = context+"/login";
+                	});
                 	clearForm();
                 },
             });
