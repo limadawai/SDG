@@ -197,6 +197,11 @@
 					"url": urls+'list-sdgGoals',
 					dataSrc: 'content',
 				},
+				"initComplete": function(settings, json) {
+					if(sessionStorage.goals_page){
+						table.page(parseInt(sessionStorage.goals_page)).draw(false);
+					}
+				},
 				"searching": true,
 				"columns": [
 					{"data": function (row, data, index, display) {
@@ -207,9 +212,9 @@
 						}},
 					{"data": function (row, data, index, display) {
 							if ($('#fs').is(':checked')) {
-								return "<div style='font-size:90%;'><a href='" + urls + "ran_rad/sdg/goals/" + row.id + "/target' class='target' data-id='" + row.id + "'>" +(row.nm_goals?row.nm_goals:row.nm_goals_eng) + "</a></div>";
+								return "<div style='font-size:90%;'><a onclick='setPage(); return true;' href='" + urls + "ran_rad/sdg/goals/" + row.id + "/target' class='target' data-id='" + row.id + "'>" +(row.nm_goals?row.nm_goals:row.nm_goals_eng) + "</a></div>";
 							} else {
-								return "<div style='font-size:90%;'><a href='" + urls + "ran_rad/sdg/goals/" + row.id + "/target' class='target' data-id='" + row.id + "'>" + (row.nm_goals_eng?row.nm_goals_eng:row.nm_goals) + "</a></div>";
+								return "<div style='font-size:90%;'><a onclick='setPage(); return true;' href='" + urls + "ran_rad/sdg/goals/" + row.id + "/target' class='target' data-id='" + row.id + "'>" + (row.nm_goals_eng?row.nm_goals_eng:row.nm_goals) + "</a></div>";
 							}
 						}},
 					{"data": function (row, data, index, display) {
@@ -223,6 +228,11 @@
 				],
 				select: true
 			});
+			
+			
+			function setPage(){
+				sessionStorage.goals_page = table.page.info().page;
+			}
 			
 			$('#text-cari').on( 'keyup', function () {
 				var val=$(this).val();

@@ -34,7 +34,16 @@
 	                            		<option value="" >--Pilih--</option>
 		                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
 		                            </select>
-		                            <select class="span3" id="level" name="level">
+	                            	<span class="help-block" id="error_nm_role"></span>
+	                            </div>
+	                        </div>
+	                        <div class="control-group">
+	                            <label class="control-label" for="nama_role">
+	                            	<span class="lang_eng" style="display:none">User Type</span>
+	                            	<span class="lang_indo">Tipe User</span>
+	                            </label>
+	                            <div class="controls">
+	                            	<select class="span3" id="level" name="level">
 		                            	<option value="" >--Pilih--</option>
 		                                <option value="government" >Government</option>
 		                                <option value="non_government" >Non Government</option>
