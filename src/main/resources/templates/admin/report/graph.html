@@ -22,6 +22,7 @@
                     </select>
                     <select id="selrole" name="role" class="form-control">
                         <option value="0" >-- Pilih Role --</option>
+                        <option value="111111" >All</option>
                     </select>
                     <select id="periode" name="periode" class="form-control">
                         <option value="0" >-- Pilih Periode --</option>
@@ -105,12 +106,14 @@
         
         // ********************** Content Div Kiri **********************
         
-        function getTarget(id) {
+        function getTarget(id, kd_goals) {
+            var valdaerah  = $("#daerah").val();
+            var valrole    = $("#selrole").val();
 //            var valperiode = $("#periode").val();
             var valperiode = sessionStorage.graph_idmonper;
         	$.ajax({
         		url: urls + "getalltarget",
-                        data: {'id_goals':id, 'id_monper':valperiode},
+                        data: {'id_goals':id, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
         		type: 'get',
         		dataType: 'json',
         		cache: false,
@@ -119,9 +122,9 @@
                             var isitarget = "<ul id='ultar"+id+"'>";
                             for (var i=0; i<restarget.length; i++) {
                                 if($('#fs').is(':checked')){
-                                    var prog_l = restarget[i][3]+" "+restarget[i][1];
+                                    var prog_l = kd_goals+"."+restarget[i][3]+" "+restarget[i][1];
                                 }else{
-                                    var prog_l = restarget[i][3]+" "+restarget[i][2];
+                                    var prog_l = kd_goals+"."+restarget[i][3]+" "+restarget[i][2];
                                 }
                                 var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
                                 var dat_goals = id+"##"+restarget[i][0]+"##null";
@@ -135,7 +138,7 @@
                                 
 //                                isiindi += " <a class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a>";
 //        				isitarget += "<li>"+restarget[i][1];
-                                getIndicator(id, restarget[i][0]);
+                                getIndicator(id, kd_goals, restarget[i][0], restarget[i][3]);
                                 isitarget += "</li>";
                             }
                             isitarget += "</ul>";
@@ -144,15 +147,16 @@
       	   	});
         }
         
-        function getIndicator(idgoals, idtarget) {
-            var combo_daerah = $("#daerah").val();
+        function getIndicator(idgoals, kd_goals, idtarget, kd_target) {
+            var valdaerah  = $("#daerah").val();
+            var valrole    = $("#selrole").val();
 //            var valperiode = $("#periode").val();
             var valperiode = sessionStorage.graph_idmonper;
             var combo_periode1 = '0';
             $.ajax({
                     url: urls + "getallindicator",
                     type: 'get',
-                    data: {'id_goals':idgoals, 'id_target':idtarget, 'id_monper':valperiode},
+                    data: {'id_goals':idgoals, 'id_target':idtarget, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
                     dataType: 'json',
                     cache: false,
                     success: function (resindi) {
@@ -161,9 +165,9 @@
 //                            $("#lili"+idgoals).html("");
                             for (var i=0; i<resindi.length; i++) {
                                 if($('#fs').is(':checked')){
-                                    var prog_l = resindi[i][3]+" "+resindi[i][1];
+                                    var prog_l = kd_goals+"."+kd_target+"."+resindi[i][3]+" "+resindi[i][1];
                                 }else{
-                                    var prog_l = resindi[i][3]+" "+resindi[i][2];
+                                    var prog_l = kd_goals+"."+kd_target+"."+resindi[i][3]+" "+resindi[i][2];
                                 }
 //                                $("#lili"+idgoals).html("");
                                 var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
@@ -432,7 +436,7 @@
                 	//console.log(resrole);
                 	$("#selrole").empty();
                 	$("#selrole").append("<option value='0'>-- Pilih Role --</option>");
-//                	$("#selrole").append("<option value='11111'>All</option>");
+                	$("#selrole").append("<option value='111111'>All</option>");
                 	for (var i=0; i<resrole.length; i++) {
                 		var opt = "<option value='"+resrole[i][0]+"'>"+resrole[i][1]+"</option>";
                 		$("#selrole").append(opt);
@@ -556,7 +560,7 @@
             var valperiode = sessionStorage.graph_idmonper;
             $.ajax({
             	url: urls + "getallgoals",
-                data: {'id_monper':valperiode},
+                data: {'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
                 type: 'get',
                 dataType: 'json',
                 cache: false,
@@ -579,7 +583,7 @@
                             }
                             
 //                            isi += "<li id='li"+resgoals[i][0]+"'>"+prog_l+"</li>";
-                            getTarget(resgoals[i][0]);
+                            getTarget(resgoals[i][0], resgoals[i][3]);
                     }
                     isi += "</ol>";
                     $("#divkiri").append(isi);
