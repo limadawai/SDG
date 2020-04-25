@@ -49,7 +49,7 @@
                                     <span class="lang_indo">Batal Tampil Laporan</span>
                                 </button>
                             </div>
-                            <div class="input-append">
+                            <div class="input-append" id="sum_add">
                                 <button id="showModal" class="btn btn-primary">
                                     <i class="icon-plus"></i> 
                                     <span class="lang_eng" style="display:none">Add Summary</span>
@@ -456,6 +456,7 @@
         grid_role();
         cek_show_report();
         grid_summary();
+        ceksummary();
         $('#time_activity').datepicker({
             autoclose: true,
             format: "yyyy-mm-dd"
@@ -521,6 +522,7 @@
             $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
             grid_role();
             grid_summary();
+            ceksummary();
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
         }
@@ -569,6 +571,7 @@
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
             grid_summary();
+            ceksummary();
         });
 //
 //        
@@ -622,6 +625,7 @@
             grid_role();
             cek_show_report();
             grid_summary();
+            ceksummary();
         });
 
 
@@ -635,6 +639,32 @@
                 swal(titleMod,messMod,'error');
             }
         });
+        
+        
+        function ceksummary(){
+            var v_idprov    = $("#id_prov").val();
+            var v_dataid1   = $("#periode").val();
+            var v_data_id   = v_dataid1.split("###");
+            var id_monper   = v_data_id[0];
+            var tahun       = v_data_id[1];
+            $.ajax({
+                type: "GET",
+                url: urls+'cek_sum_best_pract/'+v_idprov+'/'+id_monper+'/'+tahun,
+                success: function (result1) {
+                    var sts = result1.content;
+                    console.log('cek = '+sts);
+                    if(sts == '0'){
+                        $("#sum_add").show();
+//                        $("#unshow_report").hide();
+                    }else{
+                        $("#sum_add").hide();
+//                        $("#unshow_report").show();
+                    }
+                    
+//                        console.log(sts);
+                }
+            });
+        }
         
         //Indikator SDG untuk mapping
 	        
@@ -842,6 +872,7 @@
                     data: data,
                     success: function (result) {
                         grid_summary();
+                        ceksummary();
                         $('#myModal_tambah').modal('hide');
                     },
                 });
@@ -989,48 +1020,64 @@
                 //            var year                = tahun_1;
                             var type                = "entry_best_practice";
                             var text1 = "";
+                            
+                            var cekshow = "";
                             $.ajax({
-                                url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+year+'/'+type+'/1',
+                                url: urls+'getentryshowreport_bestpract/'+id_monper+'/'+year,
                                 type: 'get',
                                 dataType: 'json',
                                 cache: false,
                                 async : false,
-                                success: function (result1) {
-//                                            alert('isi '+result1.content);
-                                    if(result1.content == "1"){
-                                        text1 += '';
-
-                                    }else if(result1.content == "2"){
-                                        $('.appl').hide();
-                                        $('.unappl').hide();
-
-                                    }else if(result1.content == "3"){
-                                        var detail = "";
-                                        var cat = $("#idrole").find(":selected").data("cat");
-                                        if(cat=="NSA"){
-                                            detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
-                                        }
-                                        text1 += "<div style='text-align:center;'>"+
-                                        '<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-warning btn-mini update">Edit</button>'+detail+"</div>";
-
-                                    }else if(result1.content == "4"){
-                                        text1 += '';
-
-                                    }else{
-                                        var detail = "";
-                                        var view = "";
-                                        var cat = $("#idrole").find(":selected").data("cat");
-                                        if(cat=="NSA"){
-                                            detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
-                                        }
-                                        view = '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view_summary"><i class="icon-edit"></i></button>';
-                                        detail = '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete_summary"><i class="icon-trash"></i></button>';
-                                        text1 += "<div style='text-align:center;'>"+
-                                        '<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-primary btn-mini update_summary"><i class="icon-pencil"></i></button>'+view+detail+"</div>";
-
-                                    }
+                                success: function (resultcekshow) {
+                                    cekshow = resultcekshow.content;
                                 }
                             });
+                            if(cekshow >= 1){
+                                text1 += "";
+                            }else{
+                                $.ajax({
+                                    url: urls+'get-status-approve/'+id_role+'/'+id_monper+'/'+year+'/'+type+'/1',
+                                    type: 'get',
+                                    dataType: 'json',
+                                    cache: false,
+                                    async : false,
+                                    success: function (result1) {
+    //                                            alert('isi '+result1.content);
+                                        if(result1.content == "1"){
+                                            text1 += '';
+
+                                        }else if(result1.content == "2"){
+                                            $('.appl').hide();
+                                            $('.unappl').hide();
+
+                                        }else if(result1.content == "3"){
+                                            var detail = "";
+                                            var cat = $("#idrole").find(":selected").data("cat");
+                                            if(cat=="NSA"){
+                                                detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
+                                            }
+                                            text1 += "<div style='text-align:center;'>"+
+                                            '<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-warning btn-mini update">Edit</button>'+detail+"</div>";
+
+                                        }else if(result1.content == "4"){
+                                            text1 += '';
+
+                                        }else{
+                                            var detail = "";
+                                            var view = "";
+                                            var cat = $("#idrole").find(":selected").data("cat");
+                                            if(cat=="NSA"){
+                                                detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
+                                            }
+                                            view = '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view_summary"><i class="icon-edit"></i></button>';
+                                            detail = '<button data-id="'+row[0]+'" type="button" title="delete" class="btn btn-danger btn-mini delete_summary"><i class="icon-trash"></i></button>';
+                                            text1 += "<div style='text-align:center;'>"+
+                                            '<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-primary btn-mini update_summary"><i class="icon-pencil"></i></button>'+view+detail+"</div>";
+
+                                        }
+                                    }
+                                });
+                            }
                             return text1;
                         }}
                 ],
@@ -1207,6 +1254,7 @@
                                 var year        = id[1];
                                 var id_role     = $('#idrole').val();
                                 grid_summary();
+                                ceksummary();
                             },
                             error:function (result) {
 
@@ -1432,6 +1480,7 @@
 //                        $("#unshow_report").show();
                         grid_role();
                         cek_show_report();
+                        grid_summary();
                     },
                 });
             }, function (dismiss) {
@@ -1492,6 +1541,7 @@
 //                        $("#unshow_report").show();
                         grid_role();
                         cek_show_report();
+                        grid_summary();
                     },
                 });
             }, function (dismiss) {

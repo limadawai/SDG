@@ -4480,6 +4480,28 @@ public class ReportController {
         return hasil;
     }
     
+    @GetMapping("admin/getentryshowreport_bestpract/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> getentryshowreport_bestpract(@PathVariable("id_monper") String id_monper, @PathVariable("year") String year) {
+    	   System.out.println("masuk = "+id_monper);
+        Query query;
+//        999999###111111
+//        if(id_monper.equals("999999")){
+//            String sql = "select * from entry_show_report where type = 'entry_problem_identify' ";
+//            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_monper", id_monper);
+//            query.setParameter("year", year);
+//        }else{
+            String sql = "select count(*) as total from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_best_practice' ";
+            query = manager.createNativeQuery(sql);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+//        }
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     
     @GetMapping("admin/get_data_sdg")
     public @ResponseBody Map<String, Object> get_data_sdg(@RequestParam("id_monper") int idmonper, @RequestParam("id_indicator") int id_indicator, @RequestParam("id_prov") String id_prov, @RequestParam("tahun") int tahun, @RequestParam("role") String role) {

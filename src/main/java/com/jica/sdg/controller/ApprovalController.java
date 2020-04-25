@@ -301,6 +301,33 @@ public class ApprovalController {
         hasil.put("content",list);
         return hasil;
     }
+    
+    @GetMapping("admin/cek_sum_problem/{id_prov}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> cek_sum_problem(@PathVariable("id_prov") String id_prov, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year) {
+        String sql = "select count(*) as total from entry_problem_identify where id_prov = :id_prov and id_monper = :id_monper and year = :year and id_role = '999999' ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        query.setParameter("id_prov", id_prov);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/cek_sum_best_pract/{id_prov}/{id_monper}/{year}")
+    public @ResponseBody Map<String, Object> cek_sum_best_pract(@PathVariable("id_prov") String id_prov, @PathVariable("id_monper") String id_monper, @PathVariable("year") String year) {
+        String sql = "select count(*) as total from best_practice where id_monper = :id_monper and year = :year and id_role = '999999' ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+//        query.setParameter("id_prov", id_prov);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
 	
     @GetMapping("admin/list-get-cek-show-report/{id_monper}/{year}/{sts}/{type}/{period}")
     public @ResponseBody Map<String, Object> listcekshowreport(@PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("sts") String sts, @PathVariable("type") String type, @PathVariable("period") String period) {
