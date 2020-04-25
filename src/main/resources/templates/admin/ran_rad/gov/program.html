@@ -55,6 +55,10 @@
                     					<span class="lang_eng" style="display:none">Add Program</span>
                     					<span class="lang_indo">Tambah Program</span>
                     			</button>
+                    			<button type='button' id='export-all' class="btn btn-warning">
+                    					<span class="lang_eng" style="display:none">Export All</span>
+                    					<span class="lang_indo">Export Semua</span>
+                    			</button>
                     		</div>
                     	</div>
                     	<br/>
@@ -238,6 +242,10 @@
 	        	$('.nasional').hide();
 	        	$('.provinsi').show();
 	        }
+	        
+	        $('#export-all').on('click', function(){
+	        	window.location.href = urls+"ran_rad/preview-gov-program/"+id_prov+'/'+id_monper;
+	        });
 	        
 	        function cekStatusMonper(){
 	        	var status = "";

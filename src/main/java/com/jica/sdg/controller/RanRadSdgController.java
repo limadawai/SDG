@@ -499,6 +499,22 @@ public class RanRadSdgController {
         return hasil;
     }
     
+    @GetMapping("admin/ran_rad/preview-gov-program/{id_prov}/{id_monper}")
+    public String gov_program(Model model, HttpSession session,@PathVariable("id_monper") String id_monper,@PathVariable("id_prov") String id_prov) {
+    	Optional<Provinsi> list1 = prov.findOne(id_prov);
+    	Optional<RanRad> monper = monPerService.findOne(Integer.parseInt(id_monper));
+    	model.addAttribute("prov", list1.get().getNm_prov());
+    	model.addAttribute("monper", monper.get().getStart_year().toString()+"-"+monper.get().getEnd_year().toString());
+    	model.addAttribute("id_prov", id_prov);
+    	model.addAttribute("id_monper", id_monper);
+        model.addAttribute("title", "Define RAN/RAD/Government Program");
+        model.addAttribute("name", session.getAttribute("name"));
+        String bhs = (String) session.getAttribute("bahasa");
+        if (bhs == null) {bhs = "0";}
+        model.addAttribute("lang", bhs);
+        return "admin/ran_rad/gov/export";
+    }
+    
     @PostMapping(path = "admin/save-govProg")
 	@ResponseBody
 	@Transactional
@@ -638,6 +654,20 @@ public class RanRadSdgController {
     @GetMapping("admin/list-govActivity/{id_program}/{id_role}")
     public @ResponseBody Map<String, Object> govActivityList(@PathVariable("id_program") Integer id_program, @PathVariable("id_role") Integer id_role) {
         List<GovActivity> list = govActivityService.findAll(id_program, id_role);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-govActivity/{id_program}")
+    public @ResponseBody Map<String, Object> govActivityList(@PathVariable("id_program") Integer id_program) {
+    	String sql = "select a.id, a.nm_activity, a.nm_activity_eng, a.internal_code,b.nm_role "
+    			+ "from gov_activity a "
+    			+ "left join ref_role b on a.id_role = b.id_role "
+    			+ "where a.id_program=:id_program";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_program", id_program);
+        List list   = query.getResultList();
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
