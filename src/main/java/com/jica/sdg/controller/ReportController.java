@@ -770,7 +770,7 @@ public class ReportController {
     		@RequestParam("id_program") String id_program) {
     		
     	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code ");
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code, d.budget_allocation, g.nm_role ");
     	sqlBud.append(" FROM gov_map a\r\n" + 
     			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
     			" left join gov_activity d on c.id_activity = d.id\r\n" + 
@@ -835,7 +835,7 @@ public class ReportController {
     		@RequestParam("id_target") String id_target) {
     		
     	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code ");
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code, d.budget_allocation, g.nm_role ");
     	sqlBud.append(" FROM gov_map a\r\n" + 
     			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
     			" left join gov_activity d on c.id_activity = d.id\r\n" + 
@@ -868,7 +868,7 @@ public class ReportController {
     		@RequestParam("id_indicator") String id_indicator) {
     		
     	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code ");
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code, d.budget_allocation, g.nm_role ");
     	sqlBud.append(" FROM gov_map a\r\n" + 
     			" left join gov_indicator c on a.id_gov_indicator = c.id\r\n" + 
     			" left join gov_activity d on c.id_activity = d.id\r\n" + 
@@ -900,7 +900,7 @@ public class ReportController {
     		@RequestParam("id_program") String id_program) {
     		
     	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code ");
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code, d.budget_allocation, g.nm_role ");
     	sqlBud.append(" FROM nsa_map a\r\n" + 
     			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
     			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
@@ -931,7 +931,7 @@ public class ReportController {
     		@RequestParam("id_target") String id_target) {
     		
     	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code ");
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code, d.budget_allocation, g.nm_role ");
     	sqlBud.append(" FROM nsa_map a\r\n" + 
     			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
     			" left join nsa_activity d on c.id_activity = d.id\r\n" + 
@@ -964,7 +964,7 @@ public class ReportController {
     		@RequestParam("id_indicator") String id_indicator) {
     		
     	StringBuilder sqlBud = new StringBuilder();
-    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code ");
+    	sqlBud.append("SELECT DISTINCT d.id, d.id_activity, d.nm_activity, d.nm_activity_eng, d.internal_code, d.budget_allocation, g.nm_role ");
     	sqlBud.append(" FROM nsa_map a\r\n" + 
     			" left join nsa_indicator c on a.id_nsa_indicator = c.id\r\n" + 
     			" left join nsa_activity d on c.id_activity = d.id\r\n" + 

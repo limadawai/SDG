@@ -193,6 +193,17 @@
 	                    	                            	}
 	                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	                            	            			
+	                                            			textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+                                                    		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
+                                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+                                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
+                                                    		textSdg += "</thead><tbody>";
+                                                    		textSdg += "<tr style='font-size:80%;'>";
+                                                			textSdg += "<td>"+(row[b][5]?row[b][5]:'')+"</td>";
+                                                			textSdg += "<td>"+(row[b][6]?row[b][6]:'')+"</td>";
+                                                			textSdg += "</tr>";
+                                                			textSdg += "</tbody></table></div>";
+                                                			
 	                                            			$.ajax({
 	                                            	            url: urls + "get-mapping-goals-govIndicator",
 	                                            	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_program':id_program,'id_activity':id_activity},
@@ -229,7 +240,7 @@
 	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	                                                                            		//textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
 	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
 	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -251,7 +262,7 @@
 	                                                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[i][dinamis]!=null?row[i][dinamis]:'')+"</td>";
 	                                                                                        		dinamis = dinamis+1;
 	                                                                                			}
-	                                                                                			textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
+	                                                                                			//textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
 	                                                                                			textSdg += "<td>"+(row[i][10]?row[i][10]:'')+"</td>";
 	                                                                                			textSdg += "<td>"+row[i][dinamis]+"</td>";
 	                                                                                			textSdg += "</tr>";
@@ -316,6 +327,17 @@
 	                    	                            	}
 	                                            			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	                                            			
+	                                            			textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+                                                    		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
+                                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+                                                    		textSdg += "<td style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
+                                                    		textSdg += "</thead><tbody>";
+                                                    		textSdg += "<tr style='font-size:80%;'>";
+                                                			textSdg += "<td>"+(row[b][5]?row[b][5]:'')+"</td>";
+                                                			textSdg += "<td>"+(row[b][6]?row[b][6]:'')+"</td>";
+                                                			textSdg += "</tr>";
+                                                			textSdg += "</tbody></table></div>";
+	                                            			
 	                                            			$.ajax({
 	                                            	            url: urls + "get-mapping-goals-nsaIndicator",
 	                                            	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_program':id_program,'id_activity':id_activity},
@@ -352,7 +374,7 @@
 	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	                                                                            		//textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
 	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
 	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -374,7 +396,7 @@
 	                                                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[i][dinamis]!=null?row[i][dinamis]:'')+"</td>";
 	                                                                                        		dinamis = dinamis+1;
 	                                                                                			}
-	                                                                                			textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
+	                                                                                			//textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
 	                                                                                			textSdg += "<td>"+(row[i][10]?row[i][10]:'')+"</td>";
 	                                                                                			textSdg += "<td>"+row[i][dinamis]+"</td>";
 	                                                                                			textSdg += "</tr>";
@@ -458,6 +480,17 @@
 	    		                	                            	}
 	    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	    		                                        			
+	    		                                        			textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+	                                                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
+	                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
+	                                                        		textSdg += "</thead><tbody>";
+	                                                        		textSdg += "<tr style='font-size:80%;'>";
+	                                                    			textSdg += "<td>"+(row[b][5]?row[b][5]:'')+"</td>";
+	                                                    			textSdg += "<td>"+(row[b][6]?row[b][6]:'')+"</td>";
+	                                                    			textSdg += "</tr>";
+	                                                    			textSdg += "</tbody></table></div>";
+	    		                                        			
 	    		                                        			$.ajax({
 	    		                                        	            url: urls + "get-mapping-target-govIndicator",
 	    		                                        	            data: {'id_role':idrole,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_program':id_program,'id_activity':id_activity},
@@ -494,7 +527,7 @@
 	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	    	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	    	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	    	                                                                            		//textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
 	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
 	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -516,7 +549,7 @@
 	    	                                                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[i][dinamis]!=null?row[i][dinamis]:'')+"</td>";
 	    	                                                                                        		dinamis = dinamis+1;
 	    	                                                                                			}
-	    	                                                                                			textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
+	    	                                                                                			//textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
 	    	                                                                                			textSdg += "<td>"+(row[i][10]?row[i][10]:'')+"</td>";
 	    	                                                                                			textSdg += "<td>"+row[i][dinamis]+"</td>";
 	    	                                                                                			textSdg += "</tr>";
@@ -581,6 +614,17 @@
 	    		                	                            	}
 	    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	    		                                        			
+	    		                                        			textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+	                                                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
+	                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
+	                                                        		textSdg += "</thead><tbody>";
+	                                                        		textSdg += "<tr style='font-size:80%;'>";
+	                                                    			textSdg += "<td>"+(row[b][5]?row[b][5]:'')+"</td>";
+	                                                    			textSdg += "<td>"+(row[b][6]?row[b][6]:'')+"</td>";
+	                                                    			textSdg += "</tr>";
+	                                                    			textSdg += "</tbody></table></div>";
+	    		                                        			
 	    		                                        			$.ajax({
 	    		                                        	            url: urls + "get-mapping-target-nsaIndicator",
 	    		                                        	            data: {'id_role':idrole,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_program':id_program,'id_activity':id_activity},
@@ -617,7 +661,7 @@
 	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	    	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	    	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	    	                                                                            		//textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
 	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
 	    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -639,7 +683,7 @@
 	    	                                                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[i][dinamis]!=null?row[i][dinamis]:'')+"</td>";
 	    	                                                                                        		dinamis = dinamis+1;
 	    	                                                                                			}
-	    	                                                                                			textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
+	    	                                                                                			//textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
 	    	                                                                                			textSdg += "<td>"+(row[i][10]?row[i][10]:'')+"</td>";
 	    	                                                                                			textSdg += "<td>"+row[i][dinamis]+"</td>";
 	    	                                                                                			textSdg += "</tr>";
@@ -744,6 +788,17 @@
 	    		    		                	                            	}
 	    		    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	    		    		                        	            			
+	    		    		                                        			textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+	    		                                                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
+	    		                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	    		                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
+	    		                                                        		textSdg += "</thead><tbody>";
+	    		                                                        		textSdg += "<tr style='font-size:80%;'>";
+	    		                                                    			textSdg += "<td>"+(row[b][5]?row[b][5]:'')+"</td>";
+	    		                                                    			textSdg += "<td>"+(row[b][6]?row[b][6]:'')+"</td>";
+	    		                                                    			textSdg += "</tr>";
+	    		                                                    			textSdg += "</tbody></table></div>";
+	    		    		                                        			
 	    		    		                                        			$.ajax({
 	    		    		                                        	            url: urls + "get-mapping-indicator-govIndicator",
 	    		    		                                        	            data: {'id_role':idrole,'id_indicator':id_indicator,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_program':id_program,'id_activity':id_activity},
@@ -780,7 +835,7 @@
 	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 	    		    	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
 	    		    	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	    		    	                                                                            		//textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
 	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
 	    		    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
 	    		    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -802,7 +857,7 @@
 	    		    	                                                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[i][dinamis]!=null?row[i][dinamis]:'')+"</td>";
 	    		    	                                                                                        		dinamis = dinamis+1;
 	    		    	                                                                                			}
-	    		    	                                                                                			textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
+	    		    	                                                                                			//textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
 	    		    	                                                                                			textSdg += "<td>"+(row[i][10]?row[i][10]:'')+"</td>";
 	    		    	                                                                                			textSdg += "<td>"+row[i][dinamis]+"</td>";
 	    		    	                                                                                			textSdg += "</tr>";
@@ -867,6 +922,17 @@
 	    		    		                	                            	}
 	    		    		                                        			textSdg += "<div style='font-size:90%;'><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 	    		    		                                        			
+	    		    		                                        			textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
+	    		                                                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
+	    		                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+	    		                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
+	    		                                                        		textSdg += "</thead><tbody>";
+	    		                                                        		textSdg += "<tr style='font-size:80%;'>";
+	    		                                                    			textSdg += "<td>"+(row[b][5]?row[b][5]:'')+"</td>";
+	    		                                                    			textSdg += "<td>"+(row[b][6]?row[b][6]:'')+"</td>";
+	    		                                                    			textSdg += "</tr>";
+	    		                                                    			textSdg += "</tbody></table></div>";
+	    		    		                                        			
 	    		    		                                        			$.ajax({
 	    		    		                                        	            url: urls + "get-mapping-indicator-nsaIndicator",
 	    		    		                                        	            data: {'id_role':idrole,'id_indicator':id_indicator,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'id_program':id_program,'id_activity':id_activity},
@@ -904,7 +970,7 @@
     			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
     			    	                                                                            		var spantarget = monper_year[1]-monper_year[0]+1;
     			    	                                                                            		textSdg += "<td colspan='"+spantarget+"' style='text-align:center;vertical-align:middle'>Target</td>";
-    			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
+    			    	                                                                            		//textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+bud+"</td>";
     			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+fun+"</td>";
     			    	                                                                            		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr>";
     			    	                                                                            		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -926,7 +992,7 @@
     			    	                                                                                        		textSdg += "<td style='text-align:center;vertical-align:middle'>"+(row[i][dinamis]!=null?row[i][dinamis]:'')+"</td>";
     			    	                                                                                        		dinamis = dinamis+1;
     			    	                                                                                			}
-    			    	                                                                                			textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
+    			    	                                                                                			//textSdg += "<td>"+(row[i][12]?row[i][12]:'')+"</td>";
     			    	                                                                                			textSdg += "<td>"+(row[i][10]?row[i][10]:'')+"</td>";
     			    	                                                                                			textSdg += "<td>"+row[i][dinamis]+"</td>";
     			    	                                                                                			textSdg += "</tr>";
