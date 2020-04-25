@@ -556,6 +556,7 @@
                     var data = [];
                     no = 0;
                     $.each(result.content,function(ii,xx){
+                        
                         console.log(xx[8]+" "+xx[3]+"<br/>"+xx[9]+" "+xx[10]+"<br/>"+xx[12]+" "+xx[13])
                         if($('#fs').is(':checked')){
                             var dat_goal = xx[8]+" "+xx[3]+"<br/>"+xx[9]+" "+xx[10]+"<br/>"+xx[12]+" "+xx[13];
@@ -583,6 +584,7 @@
                               
                           }
                         }
+                        no +=(no+1);
                     });
                     $('#table'+uuid).DataTable({
                         responsive: true,
