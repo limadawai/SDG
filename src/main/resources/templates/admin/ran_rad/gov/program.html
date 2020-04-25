@@ -354,7 +354,7 @@
 	    							}else{
 	    								nm_program = array[i][3];
 	    							}
-	    							$('#rel_prog_id').append('<option value="'+array[i][0]+'">' +array[i][1]+'. '+nm_program+'</option>');
+	    							$('#rel_prog_id').append('<option value="'+array[i][0]+'">' +array[i][4]+'. '+nm_program+'</option>');
 	    						}
 	                        },
 	                    });
@@ -597,7 +597,6 @@
 						'rel_prov':rel_prov,
 						/* 'id_ministry':ministry, */
 						};
-					console.log(data)
 					$.ajax({
 						type: "POST",
 	                    url: urls+'save-govProg',
