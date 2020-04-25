@@ -172,6 +172,7 @@ public class AdminController {
             model.addAttribute("map",hasil);
             model.addAttribute("tahunmap",hasiltahun);
             model.addAttribute("filtersdg",filtersdg);
+            model.addAttribute("id_user",userData.get(0).getId_user());
          return "admin/dashboard";
     }
     

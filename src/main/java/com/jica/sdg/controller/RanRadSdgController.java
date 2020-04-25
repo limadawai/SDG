@@ -532,17 +532,11 @@ public class RanRadSdgController {
         	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
     		em.createNativeQuery("UPDATE gov_program set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
-    	em.createNativeQuery("delete from assign_related_program where id_program = '"+gov.getId()+"'").executeUpdate();
+    	em.createNativeQuery("delete from assign_related_program where id_program = '"+gov.getId()+"' and id_monper = '"+id_monper+"'").executeUpdate();
     	if(!rel_prov.equals("")) {
     		String[] prov = rel_prov.split(",");
     		for(int i=0;i<prov.length;i++) {
-    			String sql = "select id_monper from ran_rad where id_prov = '"+prov[i]+"' and status = 'on Going' ";
-    			Query query = em.createNativeQuery(sql);
-    			List list = query.getResultList();
-    			for (Iterator iterator = list.iterator(); iterator.hasNext();) {
-					Object object = (Object) iterator.next();
-					em.createNativeQuery("INSERT IGNORE INTO assign_related_program(id_program,id_monper,id_prov)VALUES('"+gov.getId()+"','"+object.toString()+"','"+prov[i]+"')").executeUpdate();
-				}
+    			em.createNativeQuery("INSERT IGNORE INTO assign_related_program(id_program,id_monper,id_prov)VALUES('"+gov.getId()+"','"+id_monper+"','"+prov[i]+"')").executeUpdate();
     		}
     	}
 	}
@@ -580,11 +574,13 @@ public class RanRadSdgController {
     
     @GetMapping("admin/get-relProg/{id_prov}/{id_monper}")
     public @ResponseBody Map<String, Object> getRel(@PathVariable("id_prov") String id_prov,@PathVariable("id_monper") String id_monper) {
-    	String sql = "select DISTINCT d.id, d.id_program, d.nm_program, d.nm_program_eng from assign_related_program a\r\n" + 
+    	Optional<RanRad> monper = monPerService.findOne(Integer.parseInt(id_monper));
+    	String sql = "select DISTINCT d.id, d.id_program, d.nm_program, d.nm_program_eng, d.internal_code from assign_related_program a\r\n" + 
     			"left join gov_activity b on a.id_program = b.id_program\r\n" + 
     			"left join ref_role c on b.id_role = c.id_role\r\n" +
-    			"left join gov_program d on a.id_program = d.id\r\n" +
-    			"where a.id_prov = '"+id_prov+"' and a.id_monper = '"+id_monper+"'";
+    			"left join gov_program d on a.id_program = d.id\r\n "+
+    			"left join ran_rad e on a.id_monper = e.id_monper " +
+    			"where a.id_prov = '"+id_prov+"' and (('"+monper.get().getStart_year()+"' between e.start_year and e.end_year) or ('"+monper.get().getEnd_year()+"' between e.start_year and e.end_year)) ";
 		Query query = em.createNativeQuery(sql);
 		List list = query.getResultList();
 		Map<String, Object> hasil = new HashMap<>();

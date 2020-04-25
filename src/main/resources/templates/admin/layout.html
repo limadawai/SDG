@@ -75,6 +75,94 @@
 </head>
 <body>
     <div th:fragment="menu">
+    	<div id="modal-ubah-password" class="modal hide fade" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h3 class="modal-title" id="exampleModalLabel"><i class="icon-cog"></i> 
+                    	<span class="lang_eng" style="display:none">Change Password</span>
+                        <span class="lang_indo">Ubah Password</span>
+                    </h3>
+                </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="control-group" style='display:none'>
+                                <label th:class="control-label" for="username">
+                                	<span class="lang_eng" style="display:none">Username</span>
+                            		<span class="lang_indo">Nama Pengguna</span>
+                                </label>
+                                <div class="controls">
+                                    <input class="input-block-level" id="ubah_username" type="text" name="ubah_username"/>
+                                    <input type="hidden" id="ubah_id_user" name="ubah_id_user"/>
+                                    <!--<input type="hidden" id="id_role" name="id_role"/>-->
+                                    <span class="help-block" id="error_username"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label th:class="control-label" for="nama">
+                                	<span class="lang_eng" style="display:none">Password</span>
+                            		<span class="lang_indo">Kata Sandi</span>
+                                </label>
+                                <div class="controls">
+                                    <input class="input-block-level" id="ubah_password" type="password" name="ubah_password" />
+                                    <span class="help-block" id="error_password"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label th:class="control-label" for="nama">
+                                	<span class="lang_eng" style="display:none">Name</span>
+                            		<span class="lang_indo">Nama Lengkap</span>
+                                </label>
+                                <div class="controls">
+                                    <input class="input-block-level" id="ubah_name" type="text" name="ubah_name" />
+                                    <span class="help-block" id="error_name"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label th:class="control-label" for="username">
+                                	<span>Email</span>
+                                </label>
+                                <div class="controls">
+                                    <input class="input-block-level" id="ubah_email" type="text" name="ubah_email"/>
+                                    <span class="help-block" id="error_email"></span>
+                                </div>
+                            </div>
+                            <div class="control-group" style='display:none'>
+                                <label th:class="control-label" for="nama">
+                                	<span class="lang_eng" style="display:none">Role</span>
+                            		<span class="lang_indo">Role</span>
+                                </label>
+                                <div class="controls">
+                                	<input id="ubah_id_role" name="ubah_id_role"/>
+                                	<input id="ubah_prov" name="ubah_prov"/>
+                                    <span class="help-block" id="error_id_role"></span>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label th:class="control-label" for="detail">Detail</label>
+                                <div class="controls">
+                                    <textarea class="input-block-level" id="ubah_detail" name="ubah_detail" rows="3"></textarea>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">
+				    		<span class="lang_eng" style="display:none">Close</span>
+				    		<span class="lang_indo">Tutup</span>
+				    	</button>
+				    	<button class="btn btn-primary" id="submit-change-password">
+				    		<span class="lang_eng" style="display:none">Submit</span>
+				    		<span class="lang_indo">Simpan</span>
+				    	</button>
+                    </div>
+            </div>
+        </div>
+    </div>
         <div id="header">
             <h3><a href="#">SDGs E-Monev</a></h3>
         </div>
@@ -91,6 +179,21 @@
                 <li class="notif" style="margin-top:10px;background:none;padding:10px;">
                     <span id="welcome" style="color:white;">Welcome Super</span>
                 </li>
+                <li class="notif lang_indo" style="margin-top:12px;background:none;padding:10px;">
+                    <form >
+                        <a href="#" class='ubah-pass' style="color:white;">
+                            <i style="color:white;" class="icon icon-cog icon-white"></i> Ubah Password
+                        </a>
+                    </form>
+                </li>
+                <li class="notif lang_eng" style="display:none;margin-top:12px;background:none;padding:10px;">
+                    <form >
+                        <a href="#" class='ubah-pass' style="color:white;">
+                            <i style="color:white;" class="icon icon-cog icon-white"></i> Change Password
+                        </a>
+                    </form>
+                </li>
+                
                 <li class="notif" style="margin-top:12px;background:none;padding:10px 30px;">
                     <form >
                         <a th:href="@{/admin/read-message}">
@@ -121,11 +224,80 @@
                 var urls = "/sdg/admin/";
                 var lang = [[${lang}]];
                 var name = [[${name}]];
+                var id_user = [[${id_user}]];
+                if(id_user){
+                	localStorage.id_user = id_user;
+                }
+                
                 $("#welcome").html("Welcome, "+name);
                 
                 if(name=="Guest"){
                 	$(".notif").hide();
                 }
+                
+                $('.ubah-pass').on('click', function(){
+            		var id = $(this).attr('data-id');
+            		$.ajax({
+            			type: "GET",
+                        url: urls+'manajemen/get-user/'+localStorage.id_user,
+                        success: function (result) {
+                        	var val = result.content;
+                        	$('#ubah_id_user').val(val.id_user);
+            				$('#ubah_username').val(val.userName);
+            				$('#ubah_password').val(val.password);
+            				$('#ubah_name').val(val.name);
+            				$('#ubah_detail').text(val.detail);
+            				$('#ubah_id_role').val(val.id_role);
+            				$('#ubah_email').val(val.email);
+            				$('body').find('#modal-ubah-password').modal('show');
+                        },
+                    })
+                 });
+                
+                $('#myModal').on('hidden.bs.modal',function(){
+                	$('#ubah_id_user').val("");
+    				$('#ubah_username').val("");
+    				$('#ubah_password').val("");
+    				$('#ubah_name').val("");
+    				$('#ubah_detail').text("");
+    				$('#ubah_id_role').val("");
+    				$('#ubah_email').val("");
+            	});
+                
+                $('#submit-change-password').on('click', function(){
+                	var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
+                	var id_user = ($('#ubah_id_user').val())?$('#ubah_id_user').val():null;
+            		var username = $('#ubah_username').val();
+            		var name = $('#ubah_name').val();
+            		var detail = $('#ubah_detail').val();
+            		var id_role = $('#ubah_id_role').val();
+            		var password = $('#ubah_password').val();
+            		var email = $('#ubah_email').val();
+                	var data = JSON.stringify({
+        				'id_user':id_user,
+        				'userName':username,
+        				'name':name,
+        				'detail':detail,
+        				'enabled':1,
+        				'id_role':id_role,
+        				'password':password,
+        				'email':email
+        				});
+        			$.ajax({
+        				type: "POST",
+                        url: urls+'manajemen/save-user',
+                        beforeSend : function(xhr){
+                        	xhr.setRequestHeader(header,token);
+                        },
+                        headers:{'Accept':'application/json','Content-Type':'application/json'},
+        				data: data,
+                        success: function (result) {
+                        	swal("Password","Success",'success');
+                        	$('#modal-ubah-password').modal('hide');
+                        },
+                    });
+                });
                 
                 //Get Jml Pesan Reject
 //                $.ajax({
@@ -197,6 +369,8 @@
                 var token = $("meta[name='_csrf']").attr("content");
                 $('#fs').change(function() {
                     if($(this).is(':checked')) {
+                    	$(".lang_indo").show();
+    	        		$(".lang_eng").hide();
                         $.ajax({
                             url: urls + "bahasa",
                             headers: {"X-CSRF-TOKEN": token},
@@ -209,6 +383,8 @@
                             }
                         });
                     } else {
+                    	$(".lang_indo").hide();
+    	        		$(".lang_eng").show();
                         $.ajax({
                             url: urls + "english",
                             headers: {"X-CSRF-TOKEN": token},
