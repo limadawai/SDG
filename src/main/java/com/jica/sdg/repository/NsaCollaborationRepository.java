@@ -14,6 +14,9 @@ public interface NsaCollaborationRepository extends CrudRepository<NsaCollaborat
     @Query(value = "select * from nsa_collaboration where id_nsa_profil = :id ",nativeQuery = true)
     public List<NsaCollaboration> findId(@Param("id") String id);
     
+    @Query(value = "select * from nsa_collaboration where id_program = :id",nativeQuery = true)
+    public List<NsaCollaboration> findByNsaProg(@Param("id") String id);
+    
     @Transactional
     @Modifying(clearAutomatically = true)
     @Query(value = "update nsa_collaboration set id_philanthropy = :id_philanthropy where id = :id ",nativeQuery = true)

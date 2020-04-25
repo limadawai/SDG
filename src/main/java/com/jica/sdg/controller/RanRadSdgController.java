@@ -954,7 +954,7 @@ public class RanRadSdgController {
     @PostMapping(path = "admin/save-nsaProg", consumes = "application/json", produces = "application/json")
 	@ResponseBody
 	@Transactional
-	public void savNsaProg(@RequestBody NsaProgram gov) {
+	public Map<String, Object> savNsaProg(@RequestBody NsaProgram gov) {
     	gov.setCreated_by(1);
     	gov.setDate_created(new Date());
     	nsaProgService.saveNsaProgram(gov);
@@ -966,6 +966,9 @@ public class RanRadSdgController {
         	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
     		em.createNativeQuery("UPDATE nsa_program set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
+    	Map<String, Object> hasil = new HashMap<>();
+        hasil.put("id_program",gov.getId());
+        return hasil;
 	}
     
     @GetMapping("admin/get-nsaProg/{id}")

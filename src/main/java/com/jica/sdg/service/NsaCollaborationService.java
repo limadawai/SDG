@@ -47,5 +47,10 @@ public class NsaCollaborationService implements INsaCollaborationService{
             nsaCollaborationRepo.deleteById(id);
 	}
 
+		@Override
+		public List<NsaCollaboration> findByProgram(String id) {
+			return (List<NsaCollaboration>) nsaCollaborationRepo.findByNsaProg(id);
+		}
+
         
 }

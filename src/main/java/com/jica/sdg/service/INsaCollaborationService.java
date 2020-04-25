@@ -10,6 +10,8 @@ public interface INsaCollaborationService {
     List<NsaCollaboration> findAll();
     
     List<NsaCollaboration> findId(String id);
+    
+    List<NsaCollaboration> findByProgram(String id);
 
     void saveNsaCollaboration(NsaCollaboration col);
     

@@ -130,44 +130,37 @@
 				    	<span class="help-block" id="error_nm_program"></span>
 				    </div>
 				  </div>
-				  <!-- <div class="control-group nasional">
-				    <label class="lang_eng control-label" style="display:none;text-align:left">Add Province Location</label>
-				    <label class="lang_indo control-label" style="text-align:left">Provinsi</label>
-				    <div class="controls">
-				    	<input type="checkbox" id="copy" name="copy"/>
-				    </div>
+				  <div class="card">
+  					<div class="card-body">
+  					<h5 class="card-title">Detail</h5>
+				  <div class="control-group">
+                     <label for="achievement" class="lang_indo">Sektor :</label>
+                     <label for="achievement" class="lang_eng" style="display: none">Sector :</label>
+                     <input name="sector" id="sector" type="text" class="input-block-level" >
+                     <input name="id_detail" id="id_detail" type="hidden" class="input-block-level" >
+                 </div>
+                 <div class="control-group">
+                     <label for="loc_inst" class="lang_indo">Lokasi :</label>
+                     <label for="loc_inst" class="lang_eng" style="display: none">Location:</label>
+                     <input name="location" id="location" type="text" class="input-block-level" >
+                 </div>
+                 <div class="control-group">
+                     <label for="beneficiaries" class="lang_indo">Penerima Manfaat :</label>
+                     <label for="beneficiaries" class="lang_eng" style="display: none">Beneficiaries :</label>
+                     <input name="beneficiaries" id="beneficiaries" type="text" class="input-block-level" >
+                 </div>
+                 <div class="control-group">
+                     <label for="year_impl" class="lang_indo">Manfaat yang Diharapkan :</label>
+                     <label for="year_impl" class="lang_eng" style="display: none">Expected Benefit :</label>
+                     <input name="ex_benefit" id="ex_benefit" type="text" class="input-block-level" >
+                 </div>
+                 <div class="control-group">
+                     <label for="major_part" class="lang_indo">Tantangan / Jenis Dukungan yang Dibutuhkan :</label>
+                     <label for="major_part" class="lang_eng" style="display: none">Challenges/ Types of Support Needed :</label>
+                     <input name="type_support" id="type_support" type="text" class="input-block-level" >
+                 </div>
 				  </div>
-				  <div class="control-group nasional">
-				    <div class="controls">
-                        <select name="prov" class="input-block-level">
-				    		<option value="">-- pilih --</option>
-	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
-	        			</select>
-				    </div>
 				  </div>
-				  <div class="control-group provinsi">
-				    <label class="lang_eng control-label" style="display:none;text-align:left">Add National Program</label>
-				    <label class="lang_indo control-label" style="text-align:left">Tambah Program Nasional</label>
-				    <div class="controls">
-				    	<input type="checkbox" id="copy" name="copy"/>
-				    </div>
-				  </div>
-				  <div class="control-group provinsi">
-				    <div class="controls">
-				    	<select name="role">
-				    		<option></option>
-	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
-	        			</select>
-				    </div>
-				  </div>
-				  <div class="control-group provinsi">
-				    <div class="controls">
-				    	<select name="rel_prog_id" id="rel_prog_id">
-				    		<option></option>
-	        				<option th:each="f:${prov}" th:value="${f.id_prov}" th:text="${f.nm_prov}"></option>
-	        			</select>
-				    </div>
-				  </div> -->
 				</form>
 			</div>
 			<div class="modal-footer">
@@ -388,6 +381,12 @@
 				$('#rel_prog_id').val("").removeAttr("readonly");
 				$('#created_by').val("").removeAttr("readonly");
 				$('#date_created').val("").removeAttr("readonly");
+				$('#id_detail').val("").removeAttr("readonly");
+				$('#sector').val("").removeAttr("readonly");
+                $('#location').val("").removeAttr("readonly");
+                $('#beneficiaries').val("").removeAttr("readonly");
+                $('#ex_benefit').val("").removeAttr("readonly");
+                $('#type_support').val("").removeAttr("readonly");
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 			}
@@ -451,6 +450,35 @@
 	                    success: function (result) {
 	                    	//table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	                    	table.ajax.reload( null, false );
+	                    	var id_detail       = ($('#id_detail').val())?$('#id_detail').val():null;
+	                    	var sector          = $('#sector').val();
+	                        var id_program      = result.id_program;
+	                        var location        = $('#location').val();
+	                        var beneficiaries   = $('#beneficiaries').val();
+	                        var ex_benefit      = $('#ex_benefit').val();
+	                        var type_support    = $('#type_support').val();
+	                        var id_philanthropy = ($('#id_philanthropy').val())?$('#id_philanthropy').val():null;
+	                        var data    = JSON.stringify({
+	                        	'id': id_detail,
+	                            'sector': sector,
+	                            'id_program': id_program,
+	                            'location': location,
+	                            'beneficiaries': beneficiaries,
+	                            'ex_benefit': ex_benefit,
+	                            'type_support': type_support,
+	                            'id_philanthropy': id_philanthropy
+	                        });
+	                        $.ajax({
+	                            type: "POST",
+	                            url: urls+'save-nsa-collaboration',
+	                            beforeSend : function(xhr){
+	                                xhr.setRequestHeader(header,token);
+	                            },
+	                            headers:{'Accept':'application/json','Content-Type':'application/json'},
+	                            data: data,
+	                            success: function (result) {
+	                            },
+	                        });
 	                    	$('#myModal').modal('hide');
 	                    },
 	                });
@@ -459,6 +487,20 @@
 			
 			$('#tbody-goals').on('click', '.update', function(){
 				var id = $(this).attr('data-id');
+				$.ajax({
+					type: "GET",
+                    url: urls+'get-nsaCollab/'+id,
+                    success: function (result) {
+                    	var val = result.content[0];
+                    	console.log(val);
+						$('#id_detail').val(val.id);
+                    	$('#sector').val(val.sector);
+                        $('#location').val(val.location);
+                        $('#beneficiaries').val(val.beneficiaries);
+                        $('#ex_benefit').val(val.ex_benefit);
+                        $('#type_support').val(val.type_support);
+                    },
+                });
 				$.ajax({
 					type: "GET",
                     url: urls+'get-nsaProg/'+id,
@@ -478,7 +520,7 @@
         	             }
 						$('#myModal').modal('show');
                     },
-                })
+                });
              }).on('click', '.detail', function(){
 				var id = $(this).attr('data-id');
 				$.ajax({

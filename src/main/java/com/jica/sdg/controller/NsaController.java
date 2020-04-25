@@ -55,6 +55,7 @@ import com.jica.sdg.model.Nsaprofile2;
 import com.jica.sdg.model.PhilanthropyCollaboration;
 import com.jica.sdg.model.Provinsi;
 import com.jica.sdg.model.Role;
+import com.jica.sdg.model.SdgGoals;
 import com.jica.sdg.service.IProvinsiService;
 import com.jica.sdg.service.IRoleService;
 import com.jica.sdg.service.InsProfileService;
@@ -1006,5 +1007,13 @@ public class NsaController {
 			return null;
 		}
 	}
+	
+	@GetMapping("admin/get-nsaCollab/{id}")
+    public @ResponseBody Map<String, Object> getSdgGoals(@PathVariable("id") String id) {
+        List<NsaCollaboration> list = nsaCollaborationService.findByProgram(id);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
 
 }
