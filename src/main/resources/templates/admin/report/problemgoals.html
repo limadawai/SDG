@@ -545,7 +545,7 @@
                var no = 0;
                $.each(result.group,function(i,x){
                    var uuid =  uuidv4();
-                   var data_column =[ { "title": "No"},
+                   var data_column =[ { "title": "Sdg Indicator"},
                                       { "title": "Category"},
                                       { "title": "Institution" },
                                       { "title": "Description" },
@@ -556,23 +556,29 @@
                     var data = [];
                     no = 0;
                     $.each(result.content,function(ii,xx){
+                        console.log(xx[8]+" "+xx[3]+"<br/>"+xx[9]+" "+xx[10]+"<br/>"+xx[12]+" "+xx[13])
+                        if($('#fs').is(':checked')){
+                            var dat_goal = xx[8]+" "+xx[3]+"<br/>"+xx[9]+" "+xx[10]+"<br/>"+xx[12]+" "+xx[13];
+                        }else{
+                            var dat_goal = xx[8]+" "+xx[15]+"<br/>"+xx[9]+" "+xx[11]+"<br/>"+xx[12]+" "+xx[14];
+                        }
                         
                         if(group=='1'){
                           if(x[0]==xx[0]){
-                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              var data2 = [dat_goal,xx[4],xx[5],xx[6],xx[7]]
                               data.push(data2);
                           }
                         }
                         if(group=='2'){
                           if(x[0]==xx[1]){
-                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              var data2 = [dat_goal,xx[4],xx[5],xx[6],xx[7]]
                               data.push(data2);
                           }
                         }
                         
                         if(group=='3'){
                           if(x[0]==xx[2]){
-                              var data2 = [(++no),xx[4],xx[5],xx[6],xx[7]]
+                              var data2 = [dat_goal,xx[4],xx[5],xx[6],xx[7]]
                               data.push(data2);
                               
                           }
