@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/layout :: header">
+</head>
+<title>Define RAN/RAD/Government Program</title>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Government Program</a></div>
+        </div>
+        <div class="container-fluid">
+        	
+        	<div class="row-fluid">
+        		<a class="btn btn-warning" href="#" onclick="tableToExcel('hasil', 'Government Program')">Excel</a><br/>
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5 class="lang_eng" style="display:none">Program</h5>
+                        <h5 class="lang_indo">Program</h5>
+                    </div>
+                    <div class="widget-content">
+                        <div class="row-fluid">
+                            <div class="span12">
+                            	<div id="hasil"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    <div th:include="admin/layout :: footer"></div>
+</body>
+<style>
+.swal2-container {
+  display: -webkit-box;
+  display: flex;
+  position: fixed;
+  z-index: 300000!important;
+</style>
+<script th:inline="javascript" >
+	// <![CDATA[
+		//$(document).ready(function (e) {
+			var token = $("meta[name='_csrf']").attr("content");
+	        var header = $("meta[name='_csrf_header']").attr("content");
+	        
+	        var prov = [[${prov}]];
+			var monper = [[${monper}]];
+			var id_prov = [[${id_prov}]];
+			var id_monper = [[${id_monper}]];
+			
+			$('#hasil').html("");
+			var text = "<div><b>"+prov+"</b></div><div><b>"+monper+"</b></div><br/>";
+			
+			$.ajax({
+				type: "GET",
+                url: urls+'list-govProg/'+id_monper,
+                async:false,
+                success: function (result) {
+                	var array = result.content;
+					for(i=0; i<array.length;i++){
+						var nm_program;
+						if($("#fs").is(':checked')){
+							nm_program = array[i].nm_program;
+						}else{
+							nm_program = array[i].nm_program_eng;
+						}
+						if(i>0){text +="<br/>";}
+						text += "<div>"+array[i].internal_code+" "+nm_program+"</div>";
+						
+						$.ajax({
+							type: "GET",
+			                url: urls+'list-govActivity/'+array[i].id,
+			                async:false,
+			                success: function (result1) {
+			                	var array1 = result1.content;
+								for(ii=0; ii<array1.length;ii++){
+									var nm_activity;
+									var id_activity = array1[ii][0];
+									var kode_activity = array1[ii][3];
+									var role_activity = array1[ii][4];
+									if($("#fs").is(':checked')){
+										nm_activity = array1[ii][1];
+									}else{
+										nm_activity = array1[ii][2];
+									}
+									if(ii>0){text +="<br/>";}
+									text += "<div style='margin-left:20px'>"+array[i].internal_code+'.'+kode_activity+" "+nm_activity+" "+role_activity+"</div>";
+								
+									$.ajax({
+										type: "GET",
+						                url: urls+'list-govIndicator/'+array[i].id+'/'+id_activity,
+						                async:false,
+						                success: function (result11) {
+						                	var array11 = result11.content;
+											for(iii=0; iii<array11.length;iii++){
+												var nm_indicator;
+												var id_indicator = array11[iii][0];
+												var kode_indicator = array11[iii][6];
+												if($("#fs").is(':checked')){
+													nm_indicator = array11[iii][2];
+												}else{
+													nm_indicator = array11[iii][5];
+												}
+												text += "<div style='margin-left:40px'>"+array[i].internal_code+'.'+kode_activity+"."+kode_indicator+" "+nm_indicator+"</div>";
+											
+											}
+						                }
+									});
+								}
+			                }
+						});
+					}
+                },
+            });
+			
+			$('#hasil').append(text);
+	        
+			var tableToExcel = (function() {
+			    var uri = 'data:application/vnd.ms-excel;base64,'
+			    , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>'
+			    , base64 = function(s) { return window.btoa(unescape(encodeURIComponent(s))) }
+			    , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
+			    return function(table, name) {
+			    if (!table.nodeType) table = document.getElementById(table)
+			    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+			    window.location.href = uri + base64(format(template, ctx))
+			    }
+			    })()
+	        
+		//});
+		// ]]>
+</script>
+</html>

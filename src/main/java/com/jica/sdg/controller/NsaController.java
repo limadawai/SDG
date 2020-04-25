@@ -526,7 +526,7 @@ public class NsaController {
     	String prov = "";
     	if(!id.equals("all")) {role=" and a.id_role = '"+id+"' ";}
     	if(!id_prov.equals("all")) {prov=" and d.id_prov = '"+id_prov+"' ";}
-    	String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id_program, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy, d.id_prov, a.nm_program_eng, e.nm_prov from nsa_program as a \n" +
+    	String sql  = "select b.sector, a.nm_program, b.location, b.beneficiaries, b.ex_benefit, b.type_support, c.nm_philanthropy, b.id as id_collaboration, b.id_philanthropy, a.id, c.type_support as type_support1, c.nm_pillar, c.loc_philanthropy, d.id_prov, a.nm_program_eng, e.nm_prov from nsa_program as a \n" +
                     "left join nsa_collaboration as b on a.id = b.id_program\n" +
                     "left join philanthropy_collaboration as c on b.id_philanthropy = c.id_philanthropy\n" +
                     "left join ref_role as d on a.id_role = d.id_role\n " +
