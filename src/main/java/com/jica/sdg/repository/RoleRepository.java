@@ -31,11 +31,11 @@ public interface RoleRepository extends CrudRepository<Role, Integer> {
 	@Query(value = "select * from ref_role where id_prov = :id_prov and id_role!=1 and cat_role != 'gri_ojk'",nativeQuery = true)
 	public List<Role> findByProvince(@Param("id_prov") String id_prov); 
 	
-	@Query(value = "select * from ref_role where id_prov = :id_prov and id_role!=1 and cat_role = :cat",nativeQuery = true)
-	public List<Role> findByProvince(@Param("id_prov") String id_prov, @Param("cat") String cat); 
+	@Query(value = "select * from ref_role where id_prov = :id_prov and id_role!=1 and cat_role = :cat and privilege = :prev",nativeQuery = true)
+	public List<Role> findByProvince(@Param("id_prov") String id_prov, @Param("cat") String cat,@Param("prev") String prev); 
 	
-	@Query(value = "select * from ref_role where id_role!=1 and cat_role = :cat",nativeQuery = true)
-	public List<Role> findByCat(@Param("cat") String cat); 
+	@Query(value = "select * from ref_role where id_role!=1 and cat_role = :cat and privilege = :prev",nativeQuery = true)
+	public List<Role> findByCat(@Param("cat") String cat,@Param("prev") String prev); 
 	
 	@Query(value = "select * from ref_role where id_role!=1",nativeQuery = true)
 	public List<Role> findAllGrid();
