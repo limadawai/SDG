@@ -103,10 +103,10 @@
                                                 <span class="lang_eng" style="display:none">Follow Up</span>
                                                 <span class="lang_indo">Solusi</span>
                                             </th>
-                                            <th style="text-align:center;font-size:80%;" >
+<!--                                            <th style="text-align:center;font-size:80%;" >
                                                 <span class="lang_eng" style="display:none">Status</span>
                                                 <span class="lang_indo">Status</span>
-                                            </th>
+                                            </th>-->
                                             <th style="text-align:center;font-size:80%;" >
                                                 <span class="lang_eng" style="display:none">Action</span>
                                                 <span class="lang_indo">Aksi</span>
@@ -499,43 +499,57 @@
                                         {"data": function (row, data, index, display) {
 							return "<div style='font-size:80%;'>"+row[15]+"</div>";
 					}},
-                                     {"data": function (row, data, index, display) {
-                                            
-                                             if(row[17]==1){
-                                                 return '<span class="label label-success">Apply</span>';
-                                             }else if(row[17]==2){
-                                                 return "<span class='label label-success'>Approved</span>";
-                                             }else if(row[17]==3){
-                                                 return "<span class='label label-important'>Rejected</span>";
-                                             }else if(row[17]==4){
-                                                 return "<span class='label label-info'>Show Report</span>";
-                                             }else if(row[17]==5){
-                                            	 return "<span class='label label-default'>No Action</span>";
-                                             }else{
-                                                 return ''
-                                             }
-                                     }},
+//                                     {"data": function (row, data, index, display) {
+//                                            
+//                                             if(row[17]==1){
+//                                                 return '<span class="label label-success">Apply</span>';
+//                                             }else if(row[17]==2){
+//                                                 return "<span class='label label-success'>Approved</span>";
+//                                             }else if(row[17]==3){
+//                                                 return "<span class='label label-important'>Rejected</span>";
+//                                             }else if(row[17]==4){
+//                                                 return "<span class='label label-info'>Show Report</span>";
+//                                             }else if(row[17]==5){
+//                                            	 return "<span class='label label-default'>No Action</span>";
+//                                             }else{
+//                                                 return ''
+//                                             }
+//                                     }},
                                      {"data": function (row, data, index, display) {
                                                 var data =  JSON.stringify(row).replace(/'/g, "&#39");
                                                 var id = row[16];
-							if(row[17]==1||row[17]==3){
-                                                           /*  $('#unapply_btn').show();
-                                                            $('#add_problem').hide();
-                                                            $('#apply_btn').hide(); */
-                                                            return '';
-                                                        }else if(row[17]==2||row[17]==4){
-                                                           /*  $('#unapply_btn').hide();
-                                                            $('#add_problem').hide();
-                                                            $('#apply_btn').hide(); */
-                                                            return '';
-                                                        }else{
-                                                            /* $('#apply_btn').show();
-                                                            $('#unapply_btn').hide(); 
-                                                            $('#add_problem').show(); */
-                                                           return "<div style='text-align:center;'>"+
+                                                if(row[17]==1){
+                                                     return '<span class="label label-success">Apply</span>';
+                                                 }else if(row[17]==2){
+                                                     return "<span class='label label-success'>Approved</span>";
+                                                 }else if(row[17]==3){
+                                                     return "<span class='label label-important'>Rejected</span>";
+                                                 }else if(row[17]==4){
+                                                     return "<span class='label label-info'>Show Report</span>";
+                                                 }else if(row[17]==5){
+                                                     return "<span class='label label-default'>No Action</span>";
+                                                 }else{
+                                                     return "<div style='text-align:center;'>"+
                                                             '<button data-id="'+id+'" type="button" title="update" class="btn btn-warning btn-mini update"><i class="icon-pencil"></i></button>'+
                                                             '<button data-id="'+id+'" type="button" title="delete" class="btn btn-danger btn-mini delete"><i class="icon-trash"></i></button></div>'; 
-                                                        }
+                                                     
+                                                 }
+//							if(row[17]==1||row[17]==3){
+//                                                           /*  $('#unapply_btn').show();
+//                                                            $('#add_problem').hide();
+//                                                            $('#apply_btn').hide(); */
+//                                                            return '';
+//                                                        }else if(row[17]==2||row[17]==4){
+//                                                           /*  $('#unapply_btn').hide();
+//                                                            $('#add_problem').hide();
+//                                                            $('#apply_btn').hide(); */
+//                                                            return '';
+//                                                        }else{
+//                                                            /* $('#apply_btn').show();
+//                                                            $('#unapply_btn').hide(); 
+//                                                            $('#add_problem').show(); */
+//                                                           
+//                                                        }
 					}}
 					
 				],
