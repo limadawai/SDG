@@ -406,6 +406,7 @@
            var periode          = $('#periode').val().split("###");           
            var year             = periode[1];
            periode              = periode[0];
+           var id_monper        = periode[0];
 //           console.log(year);return false;
            var ref_category     = $('#ref_category').val();
            var goals            = $('#goals').val();
@@ -414,96 +415,112 @@
            var group            = $('#group').val();
            if(id_prov!='0'){
         	$('#report').html("");
+                var cekshow = "";
+        	$.ajax({
+                    url: urls+'getentryshowreport_problemiden/'+id_monper+'/'+year,
+                    type: 'get',
+                    dataType: 'json',
+                    cache: false,
+                    async : false,
+                    success: function (resultcekshow) {
+                        cekshow = resultcekshow.content;
+                    }
+                });
+                console.log("show = "+cekshow);
+                if(cekshow >= 1){
+                    $('#report').html('<div><h3>Summary</h3></div><div><h4 id="totalSum"></h4></div><div><table class="table table-striped table-bordered" id="tabel-goals"></table></div>');
+                    var tabelSum = $('#tabel-goals').DataTable({
+                            responsive: true,
+                    sDom: 'lrtip',
+                    dom : '<"top"i>',
+                    "retrieve": true,
+                    "bLengthChange": false,
+                    "cache": false,
+                    "autoWidth": true,
+                    "responsive":true,
+                    "paging":   false,
+                    "ordering": true,
+                    "info":     false,
+                    "searching": true,
+                    "initComplete": function(settings, json) {
+                        $('#report').find("#totalSum").append("Total : "+json.content.length);
+                      },
+                                    "ajax": {
+                                            "url": urls+'list-problem/'+periode+'/'+year+'/999999',
+                                            dataSrc: 'content',
+                                    },
+                                            "columns": [
+                                                    {"title": "Code","data": function (row, data, index, display) {
+                                                                var grouphtml = "";
+                                                                if(row[23]!=null){
+                                                                    var data   = row[23].split(",");
+                                                                        $.each(data,function(i,x){
+                                                                            var dataid          = x.split("###");
+                                                                            var lengthdataid    = dataid.length-1;
+                                                                            var htmlid = "";
+                                                                                $.each(dataid,function(ii,xx){
+                                                                                    if(ii<lengthdataid){
+                                                                                       if(ii==0){                                                               
+                                                                                            htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                                        }
+                                                                                       if(ii==1){
+                                                                                           htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                                        }
+                                                                                       if(ii==2){
+                                                                                           htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                                        } 
+                                                                                    }
+                                                                                });
+                                                                            grouphtml +=htmlid;
+                                                                        })
+                                                                }
+
+                                                            return grouphtml;
+                                                            }},
+                                                    {"title": "Sdg Indicator","data": function (row, data, index, display) {
+                                                                var grouphtml = "";
+                                                                if(row[23]!=null){
+                                                                    var data   = row[23].split(",");
+                                                                    $.each(data,function(i,x){
+                                                                        var dataid          = x.split("###");
+                                                                        var lengthdataid    = dataid.length-1;
+                                                                        var dataur          = dataid[lengthdataid].split("##*##");
+                                                                        var htmlid = "";
+                                                                            $.each(dataur,function(ii,xx){
+                                                                                   if(ii==0){                                                               
+                                                                                        htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                                    }
+                                                                                   if(ii==1){
+                                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                                    }
+                                                                                   if(ii==2){
+                                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+                                                                                    } 
+                                                                            });
+                                                                        grouphtml +=htmlid;
+                                                                    })
+                                                                }
+
+                                                            return grouphtml;
+                                                    }},
+                                                        {"title": "Category","data": function (row, data, index, display) {
+                                                                    return "<div style='font-size:80%;'>"+row[13]+"</div>";
+                                                    }},
+                                                        {"title": "Problem Identify","data": function (row, data, index, display) {
+                                                                    return "<div style='font-size:80%;'>"+row[14]+"</div>";
+                                                    }},
+                                                        {"title": "Follow Up","data": function (row, data, index, display) {
+                                                                    return "<div style='font-size:80%;'>"+row[15]+"</div>";
+                                                    }},
+
+                                            ],
+                                            select: true
+                                    }        
+                            );
+                }else{
+                    $('#report').html('<div><h3>Summary</h3></div><div><h4 id="totalSum">0</h4></div><div><table class="table table-striped table-bordered" id="tabel-goals"></table></div>');
+                }
         	
-        	$('#report').html('<div><h3>Summary</h3></div><div><h4 id="totalSum"></h4></div><div><table class="table table-striped table-bordered" id="tabel-goals"></table></div>');
-        	var tabelSum = $('#tabel-goals').DataTable({
-        		responsive: true,
-                sDom: 'lrtip',
-                dom : '<"top"i>',
-                "retrieve": true,
-                "bLengthChange": false,
-                "cache": false,
-                "autoWidth": true,
-                "responsive":true,
-                "paging":   false,
-                "ordering": true,
-                "info":     false,
-                "searching": true,
-                "initComplete": function(settings, json) {
-                    $('#report').find("#totalSum").append("Total : "+json.content.length);
-                  },
-   				"ajax": {
-   					"url": urls+'list-problem/'+periode+'/'+year+'/999999',
-   					dataSrc: 'content',
-   				},
-        				"columns": [
-        					{"title": "Code","data": function (row, data, index, display) {
-        	                                            var grouphtml = "";
-        	                                            if(row[23]!=null){
-        	                                                var data   = row[23].split(",");
-        	                                                    $.each(data,function(i,x){
-        	                                                        var dataid          = x.split("###");
-        	                                                        var lengthdataid    = dataid.length-1;
-        	                                                        var htmlid = "";
-        	                                                            $.each(dataid,function(ii,xx){
-        	                                                                if(ii<lengthdataid){
-        	                                                                   if(ii==0){                                                               
-        	                                                                        htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-        	                                                                    }
-        	                                                                   if(ii==1){
-        	                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-        	                                                                    }
-        	                                                                   if(ii==2){
-        	                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-        	                                                                    } 
-        	                                                                }
-        	                                                            });
-        	                                                        grouphtml +=htmlid;
-        	                                                    })
-        	                                            }
-        						
-        						return grouphtml;
-        						}},
-        					{"title": "Sdg Indicator","data": function (row, data, index, display) {
-        	                                            var grouphtml = "";
-        	                                            if(row[23]!=null){
-        	                                                var data   = row[23].split(",");
-        	                                                $.each(data,function(i,x){
-        	                                                    var dataid          = x.split("###");
-        	                                                    var lengthdataid    = dataid.length-1;
-        	                                                    var dataur          = dataid[lengthdataid].split("##*##");
-        	                                                    var htmlid = "";
-        	                                                        $.each(dataur,function(ii,xx){
-        	                                                               if(ii==0){                                                               
-        	                                                                    htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-        	                                                                }
-        	                                                               if(ii==1){
-        	                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-        	                                                                }
-        	                                                               if(ii==2){
-        	                                                                   htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
-        	                                                                } 
-        	                                                        });
-        	                                                    grouphtml +=htmlid;
-        	                                                })
-        	                                            }
-        	                                            
-        						return grouphtml;
-        					}},
-        	                                    {"title": "Category","data": function (row, data, index, display) {
-        							return "<div style='font-size:80%;'>"+row[13]+"</div>";
-        					}},
-        	                                    {"title": "Problem Identify","data": function (row, data, index, display) {
-        							return "<div style='font-size:80%;'>"+row[14]+"</div>";
-        					}},
-        	                                    {"title": "Follow Up","data": function (row, data, index, display) {
-        							return "<div style='font-size:80%;'>"+row[15]+"</div>";
-        					}},
-        					
-        				],
-        				select: true
-        			}        
-        	        );
         	
             function getReport(selected) {
                              return $.ajax({

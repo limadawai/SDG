@@ -66,7 +66,7 @@
                         	<div class="span12">
                         		<div class="table-responsive">
                         			<b>Summary</b>
-                        			<table class="table table-striped table-bordered" id="tabel-goals" style="width:100%">
+                        			<table class="table table-striped table-bordered" id="tabel-goals-sum" style="width:100%">
 	                                    <thead>
 	                                        <tr>
 	                                            <th style="text-align:center;font-size:80%;" >
@@ -445,7 +445,7 @@
         var v_data_id   = v_dataid.split("###");
         var id_monper   = v_data_id[0];
         var tahun       = v_data_id[1];
-        var table = $('#tabel-goals').DataTable(
+        var table = $('#tabel-goals-sum').DataTable(
         {
 //			sDom: 'lrtip',
 			"bLengthChange": false,
@@ -1260,7 +1260,7 @@
             var v_nmrole    = nmrole;
 
             $("#label_acti").html("Role : "+v_nmrole);
-            $('#tabel-goals').DataTable().destroy();
+//            $('#tabel-goals').DataTable().destroy();
             $('#tabel-goals').DataTable(
             {
 				sDom: 'lrtip',
