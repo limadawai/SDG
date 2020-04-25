@@ -1095,6 +1095,22 @@ public class DataEntryController {
         return hasil;
     }
     
+    @GetMapping("admin/cek-show-report-problem/{id_monper}/{year}/{type}")
+    public @ResponseBody Map<String, Object> cekShowReportproblem(@PathVariable("id_monper") String id_monper, @PathVariable("year") String year, @PathVariable("type") String type) {
+    	List list;
+    	String sql  = " select "
+    			+ " (select count(id) from entry_show_report as a where a.id_monper = :id_monper and a.year = :year and a.type = :type ) as cek1 ";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        query.setParameter("year", year);
+        query.setParameter("type", type);
+
+        list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("cek",list);
+        return hasil;
+    }
+    
     @PostMapping(path = "admin/save-entry-gov_prog_indicator/{achiev}", consumes = "application/json", produces = "application/json")
     @ResponseBody
     @Transactional
