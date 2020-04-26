@@ -421,10 +421,11 @@
                                 "drawCallback": function( settings ) {
                                 	$('#tabel-entri-sdg thead').html(header);
                                 	if($("#fs").is(':checked')){
-                                    	$('#tabel-entri-sdg thead').find(".lang_indo").show();
+                                		$('#tabel-entri-sdg').find(".lang_indo").show();
+                                		$('#tabel-entri-sdg').find(".lang_eng").hide();
                     				}else{
-                    					alert('eng');
-                    					$('#tabel-entri-sdg thead').find(".lang_eng").hide();
+                    					$('#tabel-entri-sdg').find(".lang_indo").hide();
+                    					$('#tabel-entri-sdg').find(".lang_eng").show();
                     				}
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
                                     if(cektabel==0){
@@ -677,9 +678,11 @@
                                 "drawCallback": function( settings ) {
                                 	$('#tabel-entri-sdg thead').html(header);
                                 	if($("#fs").is(':checked')){
-                                    	$('#tabel-entri-sdg').find(".lang_indo").show();
+                                		$('#tabel-entri-sdg').find(".lang_indo").show();
+                                		$('#tabel-entri-sdg').find(".lang_eng").hide();
                     				}else{
-                    					$('#tabel-entri-sdg').find(".lang_eng").hide();
+                    					$('#tabel-entri-sdg').find(".lang_indo").hide();
+                    					$('#tabel-entri-sdg').find(".lang_eng").show();
                     				}
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
                                     if(cektabel==0){
@@ -1091,9 +1094,11 @@
                                 "drawCallback": function( settings ) {
                                 	$('#tabel-entri-sdg thead').html(header);
                                 	if($("#fs").is(':checked')){
-                                    	$('#tabel-entri-sdg').find(".lang_indo").show();
+                                		$('#tabel-entri-sdg').find(".lang_indo").show();
+                                		$('#tabel-entri-sdg').find(".lang_eng").hide();
                     				}else{
-                    					$('#tabel-entri-sdg').find(".lang_eng").hide();
+                    					$('#tabel-entri-sdg').find(".lang_indo").hide();
+                    					$('#tabel-entri-sdg').find(".lang_eng").show();
                     				}
                                     var cektabel = $('#tabel-entri-sdg > tbody').find('.dataTables_empty').length;
                                     if(cektabel==0){
