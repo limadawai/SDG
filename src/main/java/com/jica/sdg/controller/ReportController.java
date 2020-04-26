@@ -3994,6 +3994,26 @@ public class ReportController {
         return list;
     }
     
+    @GetMapping("admin/get_data_gri_pt")
+    public @ResponseBody Map<String, Object> get_data_gri_pt(@RequestParam("year") String year) {
+    	String sql = "SELECT id, company_name, file3 from entry_gri_ojk where year = '"+year+"' ";
+    	Query query = manager.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/get_data_gri_th")
+    public @ResponseBody Map<String, Object> get_data_gri_th(@RequestParam("company") String company) {
+    	String sql = "SELECT id, year, file3 from entry_gri_ojk where company_name = '"+company+"' ";
+    	Query query = manager.createNativeQuery(sql);
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/getgovtarget")
     public @ResponseBody List<Object> getgovtarget(@RequestParam("id_gov_indicator") int idgovindi, @RequestParam("year") int year) {
     	String sql = "SELECT value FROM gov_target WHERE id_gov_indicator = :id_gov_indicator AND year = :year";
