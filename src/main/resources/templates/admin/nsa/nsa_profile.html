@@ -498,7 +498,7 @@
             	tabel.ajax.url(urls+'list-nsa-profil-detail-jadi/'+$(this).val()+'/'+$('#id_prov').val()).load();
             });
             
-            if(id_role == '1'){
+            if(privilege == 'SUPER'){
                 
             }else{
                 $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);

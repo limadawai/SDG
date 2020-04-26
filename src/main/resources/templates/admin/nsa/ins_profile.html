@@ -172,7 +172,7 @@
             
             $(document).attr("title","Community Organization/Philantrophy Profile");
             
-            if(id_role == '1'){
+            if(privilege == 'SUPER'){
 //                alert('admin');
             }else{
 //                alert('bukan '+id_role);
@@ -221,7 +221,7 @@
                             	$("#tambah").hide();
                             }else if(id_role == id_role){
                                 $("#tambah").show();
-                            }else if(id_role == '1'){
+                            }else if(privilege == 'SUPER'){
                                 $("#tambah").show();
                             }else{
                                 $("#tambah").hide();
