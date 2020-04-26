@@ -791,6 +791,7 @@
                     "columns": [
                         {"title": header1,"data": function (row, data, index, display) {
                         	var disaggre = "";
+                        	console.log(row);
                         	if(row[25]){
                         		return "<div style='font-size:90%;'>"+row[15]+"."+row[17]+"."+row[19]+"."+row[25]+"</div>"
                         	}else{
@@ -870,7 +871,7 @@
                                 }
                             }
 							
-                            return (nilai)?'<button type="button" data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" class="'+color_sts+'">'+nilai+"</button>":"";
+                            return (nilai!=null && nilai!='' || nilai==0)?'<button type="button" data-id="'+row[2]+'###'+row[9]+'###'+row[10]+'###'+row[11]+'###'+row[12]+'###1'+'###'+row[14]+'" class="'+color_sts+'">'+nilai+"</button>":"";
                         }},
                         {"title": header6,"data": function (row, data, index, display) {
                         	var nilai="";
@@ -905,7 +906,7 @@
 							}else{
 								new_val_id=row[14];
 							}
-                             return "<input type='text' class='new_value' name='sdg[][new_val_nilai]' readonly='true' value='"+(nilai?nilai:'')+"'/>"+
+                             return "<input type='text' class='new_value' name='sdg[][new_val_nilai]' readonly='true' value='"+(nilai!=null && nilai!="" || nilai==0?nilai:'')+"'/>"+
                              "<input type='hidden' name='sdg[][new_val_id]' value='"+new_val_id+"' />"+
                              "<input type='hidden' name='sdg[][new_val_id_disaggre]' value='"+row[32]+"' />"+
                              "<input type='hidden' name='sdg[][new_val_period]' value='"+period+"' />";

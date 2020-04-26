@@ -423,6 +423,8 @@
            }
     });
     
+   
+    
     function ambilData(sdg_indicator){
     	var monper = $("#periode").val().split("###");
     	var id_monper = monper[0];
@@ -433,6 +435,33 @@
         var sts;
         var cekSdg;
         $("#indi").html("");
+        var goal = 'Nama Capaian';
+        var target = "Nama Target";
+        var code = 'Kode Indikator';
+        var nama = 'Nama Indikator';
+        var unit = 'Satuan';
+        var sdg_ach = 'Realisasi SDG';
+        var sumber = 'Sumber Data';
+        var baseline = 'Dasar';
+        if($("#fs").is(':checked')){
+        	goal = 'Nama Capaian';
+        	target = "Nama Target";
+        	code = 'Kode Indikator';
+        	nama = 'Nama Indikator';
+        	unit = 'Satuan';
+        	sdg_ach = 'Realisasi SDG';
+        	sumber = 'Sumber Data';
+        	baseline = 'Dasar';
+    	}else{
+    		goal = 'Goal Name';
+    		target = "Target Name ";
+    		code = 'Indicator Code';
+    		nama = 'Indicator Name';
+    		unit = 'Unit';
+    		sdg_ach = 'SDGs Achievements';
+    		sumber = 'Data Source';
+    		baseline = 'Baseline';
+    	}
         $.ajax({
             type: "GET",
             url: urls+'list-get-sts-monper/'+id_monper,
@@ -475,7 +504,7 @@
 						nm_goals = response.sdg[i][2];
 					}
                 	if(i>0){text += "<br/>";}
-                	text += "<div style=''><h4>Goal Name : "+kode_goals+". "+nm_goals+"</h4></div>";
+                	text += "<div style=''><h4>"+goal+" : "+kode_goals+". "+nm_goals+"</h4></div>";
                 	
                 	$.ajax({
                         url: urls + 'get-sdg-target/'+sdg_indicator,
@@ -495,7 +524,7 @@
         							nm_target = result.content[j][2];
         						}
                             	if(j>0){text += "<br/>";}
-                            	text += "<div style=''><h5>Target Name : "+kode_target+". "+nm_target+"</h5></div>";
+                            	text += "<div style=''><h5>"+target+" : "+kode_goals+'.'+kode_target+". "+nm_target+"</h5></div>";
                         		
                             	var spansdg;
                             	var colspan;
@@ -512,13 +541,13 @@
                             	}
                             	text += "<table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
                             	text += "<tr style='font-size:80%;border-style:ridge;'>";
-                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Indicator Code</b></th>";
-                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Indicator Name</b></th>";
-                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Data Source</b></th>";
-                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Unit</b></th>";
-                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Baseline</b></th>";
-                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Target SDGs for the current year</b></th>";
-                            	text += "<th colspan='"+colspan+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>SDGs Achievements for the current year</b></th>";
+                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+code+"</b></th>";
+                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+nama+"</b></th>";
+                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+sumber+"</b></th>";
+                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+unit+"</b></th>";
+                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+baseline+"</b></th>";
+                            	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Target</b></th>";
+                            	text += "<th colspan='"+colspan+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+sdg_ach+"</b></th>";
                             	text += "<th rowspan='"+spansdg+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Status</b></th>";
                             	text += "</tr>";
                             	if(sts == 'yearly'){
@@ -549,7 +578,7 @@
                     							nm_indicator = hasil.content[k][2];
                     						}
                                     		text += "<tr >";
-                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+kode_indicator+"</td>";
+                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+kode_goals+'.'+kode_target+'.'+kode_indicator+"</td>";
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+nm_indicator+"</td>";
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][17]?hasil.content[k][17]:'')+"</td>";
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][5]?hasil.content[k][5]:'')+"</td>";
@@ -749,6 +778,33 @@
         var idprov = $("#daerah").val();
         var cat = $("#role").find(":selected").data("cat");
         $("#indi").html("");
+        var goal = 'Nama Capaian';
+        var target = "Nama Target";
+        var code = 'Kode Indikator';
+        var nama = 'Nama Indikator';
+        var unit = 'Satuan';
+        var sdg_ach = 'Realisasi SDG';
+        var sumber = 'Sumber Data';
+        var baseline = 'Dasar';
+        if($("#fs").is(':checked')){
+        	goal = 'Nama Capaian';
+        	target = "Nama Target";
+        	code = 'Kode Indikator';
+        	nama = 'Nama Indikator';
+        	unit = 'Satuan';
+        	sdg_ach = 'Realisasi SDG';
+        	sumber = 'Sumber Data';
+        	baseline = 'Dasar';
+    	}else{
+    		goal = 'Goal Name';
+    		target = "Target Name ";
+    		code = 'Indicator Code';
+    		nama = 'Indicator Name';
+    		unit = 'Unit';
+    		sdg_ach = 'SDGs Achievements';
+    		sumber = 'Data Source';
+    		baseline = 'Baseline';
+    	}
         var idmonper = $("#periode").find(':selected').data('id');
         var hasilSts;
         $.ajax({
@@ -785,7 +841,7 @@
 						nm_goals = response.sdg[i][2];
 					}
                 	if(i>0){text += "<br/>";}
-                	text += "<div style='font-size:90%;width:100%;text-align:left;'><h4>Goal Name : "+kode_goals+". "+nm_goals+"</h4></div>";
+                	text += "<div style='font-size:90%;width:100%;text-align:left;'><h4>"+goal+" : "+kode_goals+". "+nm_goals+"</h4></div>";
                 	
                 	$.ajax({
                         url: urls + 'get-sdg-target/'+sdg_indicator,
@@ -805,17 +861,17 @@
         							nm_target = result.content[j][2];
         						}
                             	if(j>0){text += "<br/>";}
-                            	text += "<div style='font-size:90%;width:100%;text-align:left;'><h5>Target Name : "+kode_target+". "+nm_target+"</h5></div>";
+                            	text += "<div style='font-size:90%;width:100%;text-align:left;'><h5>"+target+" : "+kode_goals+'.'+kode_target+". "+nm_target+"</h5></div>";
                         		
                             	var spansdg;
                             	var colspan;
                             	text += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
                             	text += "<tr style='font-size:80%;'>";
-                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Indicator Code</b></td>";
-                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Indicator Name</b></td>";
-                            	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Data Source</b></td>":'';
-                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Unit</b></td>";
-                            	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Baseline</b></td>":'';
+                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+code+"</b></td>";
+                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+nama+"</b></td>";
+                            	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+sumber+"</b></td>":'';
+                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+unit+"</b></td>";
+                            	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+baseline+"</b></td>":'';
                             	
                             	for(var l=0; l < hasilSts.content.length; l++){
                             		var sts  = hasilSts.content[l][0];
@@ -855,7 +911,7 @@
                                     		}
                                     	}
                             			text += "<td rowspan='2' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Target</b></td>";
-                                    	text += "<td colspan='"+colspan+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>SDGs Achievements</td>";
+                                    	text += "<td colspan='"+colspan+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+sdg_ach+"</td>";
                                     }
                             	}
                             	text += "</tr><tr style='font-size:80%;'>";
@@ -895,7 +951,7 @@
                     							nm_indicator = hasil.content[k][2];
                     						}
                                     		text += "<tr style='border-style:ridge;'>";
-                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+kode_indicator+"</td>";
+                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+kode_goals+'.'+kode_target+'.'+kode_indicator+"</td>";
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+nm_indicator+"</td>";
                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][7]?hasil.content[k][7]:'')+"</td>":'';
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][5]?hasil.content[k][5]:'')+"</td>";
