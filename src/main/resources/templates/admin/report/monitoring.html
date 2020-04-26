@@ -522,6 +522,59 @@
         
         var tabelSdg = "";
         var textSdg = "";
+        
+        var goal = 'Capaian';
+        var target = "Target SDG";
+        var code = 'Kode Indikator';
+        var nama = 'Nama Indikator';
+        var unit = 'Satuan';
+        var sdg_ach = 'Realisasi';
+        var sumber = 'Sumber Data';
+        var baseline = 'Dasar';
+        var budget_bhs = 'Alokasi Anggaran';
+        var anggaran = 'Anggaran';
+        var fund = 'Sumber Dana';
+        var loc = "Lokasi";
+        var actor = "Pelaksana";
+        var gov_prog = 'Program Pemerintah';
+        var activity = 'Aktifitas';
+        var non_gov_prog = 'Program Non Pemerintah';
+        if($("#fs").is(':checked')){
+        	goal = 'Capaian';
+        	target = "Target SDG";
+        	code = 'Kode Indikator';
+        	nama = 'Nama Indikator';
+        	unit = 'Satuan';
+        	sdg_ach = 'Realisasi';
+        	sumber = 'Sumber Data';
+        	baseline = 'Dasar';
+        	budget_bhs = 'Alokasi Anggaran';
+        	anggaran = 'Anggaran';
+        	fund = 'Sumber Dana';
+        	loc = "Lokasi";
+        	actor = "Pelaksana";
+        	gov_prog = 'Program Pemerintah';
+        	activity = 'Aktifitas';
+        	non_gov_prog = 'Program Non Pemerintah';
+    	}else{
+    		goal = 'Goal';
+    		target = "SDG Targets";
+    		code = 'Indicator Code';
+    		nama = 'Indicator Name';
+    		unit = 'Unit';
+    		sdg_ach = 'Actual';
+    		sumber = 'Source of Data';
+    		baseline = 'Baseline';
+    		budget_bhs = 'Budget Allocation';
+    		anggaran = 'Budget';
+    		fund = 'Funding Source';
+    		loc = "Location";
+    		actor = "Actor";
+    		gov_prog = 'Government Program';
+    		activity = 'Activity';
+    		non_gov_prog = 'Non Government Program';
+    	}
+        
         //GOALS
         $.ajax({
             url: urls + "get-sdg-goals-report/"+sdg_indicator,
@@ -545,7 +598,7 @@
 						nm_goals = hasilGoal.sdg[i][2];
 					}
         			if(i>0){textSdg +='<br/><br/><br/><br/><br/><br/>';}
-        			textSdg += "<p ><div style='width:100%;padding:4px;text-align:left;background-color:#3EC1E9;display:block;'><b><h3>Goal "+kode_goals+". "+nm_goals+"</h3></b></div><p/>";
+        			textSdg += "<p ><div style='width:100%;padding:4px;text-align:left;background-color:#3EC1E9;display:block;'><b><h3>"+goal+" "+kode_goals+". "+nm_goals+"</h3></b></div><p/>";
             		
         			//GOALS GOVERNMENT PROGRAM
         			$.ajax({
@@ -556,7 +609,7 @@
         	            async : false,
         	            success: function (hasilGoal1) {
         	            	if(hasilGoal1.progGov.length>0){
-        	            		textSdg += "<div ><b><u>Government Program</u></b></div>";
+        	            		textSdg += "<div ><b><u>"+gov_prog+"</u></b></div>";
         	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
         	            			var row = hasilGoal1.progGov;
         	            			var id_program = row[a][0];
@@ -588,7 +641,7 @@
                 	                            	}else{
                 	                            		nm_activity = row[b][3];
                 	                            	}
-                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
+                                        			textSdg += "<div ><span style='margin-right:25px'>"+activity+" </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
                                         			$.ajax({
                                         	            url: urls + "get-mapping-goals-govBudget",
                                         	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -602,7 +655,7 @@
                                         	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
                                                     			textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
                                                         		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+budget_bhs+"</td>";
                                                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                                                             		if(stsGovBud == 'yearly'){
                                                             			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -618,15 +671,15 @@
                                                         		
                                                         		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
                                                         		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
                                                         		
                                                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                                                         			if(stsGovBud == 'yearly'){
-                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
                                                             		}else if(stsGovBud == 'semesterly'){
-                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
                                                             		}else if(stsGovBud == 'quarterly'){
-                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
                                                             		}
                                                             	}
                                                         		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -724,8 +777,8 @@
                                                         	            	if(row.length>0){
                                                         	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
                                                                         		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Baseline</td>";
+                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
                                                                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                                                                             		if(stsGovInd == 'yearly'){
                                                                             			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -739,20 +792,20 @@
                                                                             		
                                                                             	}
                                                                         		
-                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+fund+"</td>";
                                                                         		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
                                                                         		
                                                                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                                                                         			if(stsGovInd == 'yearly'){
                                                                         				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
                                                                             		}else if(stsGovInd == 'semesterly'){
                                                                             			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
                                                                             		}else if(stsGovInd == 'quarterly'){
                                                                             			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
                                                                             		}
                                                                             	}
                                                                         		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -897,7 +950,7 @@
         	            async : false,
         	            success: function (hasilGoal1) {
         	            	if(hasilGoal1.progGov.length>0){
-        	            		textSdg += "<br/><div><b><u>Non Government Program</u></b></div>";
+        	            		textSdg += "<br/><div><b><u>"+non_gov_prog+"</u></b></div>";
         	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
         	            			var row = hasilGoal1.progGov;
         	            			var id_program = row[a][0];
@@ -929,7 +982,7 @@
                 	                            	}else{
                 	                            		nm_activity = row[b][3];
                 	                            	}
-                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
+                                        			textSdg += "<div ><span style='margin-right:25px'>"+activity+" </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
                                         			$.ajax({
                                         	            url: urls + "get-mapping-goals-nsaBudget",
                                         	            data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -943,7 +996,7 @@
                                         	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
                                                     			textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
                                                         		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+budget_bhs+"</td>";
                                                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                                                             		if(stsGovBud == 'yearly'){
                                                             			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -959,15 +1012,15 @@
                                                         		
                                                         		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
                                                         		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
                                                         		
                                                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                                                         			if(stsGovBud == 'yearly'){
-                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
                                                             		}else if(stsGovBud == 'semesterly'){
-                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
                                                             		}else if(stsGovBud == 'quarterly'){
-                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
                                                             		}
                                                             	}
                                                         		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -1065,7 +1118,7 @@
                                                         	            	if(row.length>0){
                                                         	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
                                                                         		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
                                                                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                                                                             		if(stsGovInd == 'yearly'){
                                                                             			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -1079,20 +1132,20 @@
                                                                             		
                                                                             	}
                                                                         		
-                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+fund+"</td>";
+                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+loc+"</td>";
+                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
                                                                         		
                                                                         		for(var y=monper_year[0];y<=monper_year[1];y++){
                                                                         			if(stsGovInd == 'yearly'){
                                                                         				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
                                                                             		}else if(stsGovInd == 'semesterly'){
                                                                             			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
                                                                             		}else if(stsGovInd == 'quarterly'){
                                                                             			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
                                                                             		}
                                                                             	}
                                                                         		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -1193,7 +1246,7 @@
 							}else{
 								nm_target = hasilTarget.sdg[j][2];
 							}
-		            		textSdg += "<br/><br/><p ><b><h4>SDG Targets "+kode_goals+'.'+kode_target+". "+nm_target+"</h4></b><p/>";
+		            		textSdg += "<br/><br/><p ><b><h4>"+target+" "+kode_goals+'.'+kode_target+". "+nm_target+"</h4></b><p/>";
 		            		
 		            		//TARGET GOVERNMENT PROGRAM
 		        			$.ajax({
@@ -1204,7 +1257,7 @@
 		        	            async : false,
 		        	            success: function (hasilGoal1) {
 		        	            	if(hasilGoal1.progGov.length>0){
-		        	            		textSdg += "<div><b><u>Government Program</u></b></div>";
+		        	            		textSdg += "<div><b><u>"+gov_prog+"</u></b></div>";
 		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 		        	            			var row = hasilGoal1.progGov;
 		        	            			var id_program = row[a][0];
@@ -1236,7 +1289,7 @@
 		                	                            	}else{
 		                	                            		nm_activity = row[b][3];
 		                	                            	}
-		                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
+		                                        			textSdg += "<div ><span style='margin-right:25px'>"+activity+" </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 		                                        			$.ajax({
 		                                        	            url: urls + "get-mapping-target-govBudget",
 		                                        	            data: {'id_role':idrole,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -1250,7 +1303,7 @@
 		                                        	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
 		                                                    			textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+budget_bhs+"</td>";
 		                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                                                            		if(stsGovBud == 'yearly'){
 		                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -1266,15 +1319,15 @@
 		                                                        		
 		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
 		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		                                                        		
 		                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                                                        			if(stsGovBud == 'yearly'){
-		                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		                                                            		}else if(stsGovBud == 'semesterly'){
-		                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		                                                            		}else if(stsGovBud == 'quarterly'){
-		                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		                                                            		}
 		                                                            	}
 		                                                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -1372,8 +1425,8 @@
 		                                                        	            	if(row.length>0){
 		                                                        	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
 		                                                                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Baseline</td>";
+		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 		                                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                                                                            		if(stsGovInd == 'yearly'){
 		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -1387,20 +1440,20 @@
 		                                                                            		
 		                                                                            	}
 		                                                                        		
-		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+fund+"</td>";
 		                                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		                                                                        		
 		                                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                                                                        			if(stsGovInd == 'yearly'){
 		                                                                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		                                                                            		}else if(stsGovInd == 'semesterly'){
 		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		                                                                            		}else if(stsGovInd == 'quarterly'){
 		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		                                                                            		}
 		                                                                            	}
 		                                                                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -1545,7 +1598,7 @@
 		        	            async : false,
 		        	            success: function (hasilGoal1) {
 		        	            	if(hasilGoal1.progGov.length>0){
-		        	            		textSdg += "<br/><div><b><u>Non Government Program</u></b></div>";
+		        	            		textSdg += "<br/><div><b><u>"+non_gov_prog+"</u></b></div>";
 		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 		        	            			var row = hasilGoal1.progGov;
 		        	            			var id_program = row[a][0];
@@ -1577,7 +1630,7 @@
 		                	                            	}else{
 		                	                            		nm_activity = row[b][3];
 		                	                            	}
-		                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
+		                                        			textSdg += "<div ><span style='margin-right:25px'>"+activity+" </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 		                                        			$.ajax({
 		                                        	            url: urls + "get-mapping-target-nsaBudget",
 		                                        	            data: {'id_role':idrole,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -1591,7 +1644,7 @@
 		                                        	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
 		                                                    			textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+budget_bhs+"</td>";
 		                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                                                            		if(stsGovBud == 'yearly'){
 		                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -1607,15 +1660,15 @@
 		                                                        		
 		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
 		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		                                                        		
 		                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                                                        			if(stsGovBud == 'yearly'){
-		                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		                                                            		}else if(stsGovBud == 'semesterly'){
-		                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		                                                            		}else if(stsGovBud == 'quarterly'){
-		                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		                                                            		}
 		                                                            	}
 		                                                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -1713,7 +1766,7 @@
 		                                                        	            	if(row.length>0){
 		                                                        	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
 		                                                                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
+		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
 		                                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                                                                            		if(stsGovInd == 'yearly'){
 		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -1727,20 +1780,20 @@
 		                                                                            		
 		                                                                            	}
 		                                                                        		
-		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+fund+"</td>";
+		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+loc+"</td>";
+		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		                                                                        		
 		                                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		                                                                        			if(stsGovInd == 'yearly'){
 		                                                                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		                                                                            		}else if(stsGovInd == 'semesterly'){
 		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		                                                                            		}else if(stsGovInd == 'quarterly'){
 		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+		                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		                                                                            		}
 		                                                                            	}
 		                                                                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -1834,11 +1887,11 @@
 		    		            	if(hasilIndicator.sdg.length>0){
 		    		            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered'><thead>";
 		        	            		textSdg += "<tr style='font-size:80%;'>";
-		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Indicator Code</b></td>";
-		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Indicator Name</b></td>";
-		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Source of Data</b></td>";
-		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Unit</b></td>";
-		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>Baseline</b></td>";
+		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>"+code+"</b></td>";
+		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>"+nama+"</b></td>";
+		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>"+sumber+"</b></td>";
+		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>"+unit+"</b></td>";
+		        	            		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'><b>"+baseline+"</b></td>";
 		        	                	
 		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
 		        	                		if(sts == 'yearly'){
@@ -1855,14 +1908,14 @@
 		        	                	for(var y=monper_year[0];y<=monper_year[1];y++){
 		        	                    	if(sts == 'yearly'){
 		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
-		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>"+sdg_ach+"</b></td>";
 		        	                    	}else if(sts == 'semesterly'){
 		        	                    		textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
-		        	                    		textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		        	                    		textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+sdg_ach+"</b></td>";
 		        	                    	}
 		        	                		else if(sts == 'quarterly'){
 		        	                			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'><b>Target</b></td>";
-		        	                			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>Actual</b></td>";
+		        	                			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'><b>"+sdg_ach+"</b></td>";
 		        	                    	}
 		        	                	}
 		        	                	textSdg += "</tr><tr>";
@@ -2225,7 +2278,7 @@
 		    		        	            async : false,
 		    		        	            success: function (hasilGoal1) {
 		    		        	            	if(hasilGoal1.progGov.length>0){
-		    		        	            		textSdg += "<div><b><u>Government Program</u></b></div>";
+		    		        	            		textSdg += "<div><b><u>"+gov_prog+"</u></b></div>";
 		    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 		    		        	            			var row = hasilGoal1.progGov;
 		    		        	            			var id_program = row[a][0];
@@ -2258,7 +2311,7 @@
 		    		                	                            	}else{
 		    		                	                            		nm_activity = row[b][3];
 		    		                	                            	}
-		    		                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
+		    		                                        			textSdg += "<div ><span style='margin-right:25px'>"+activity+" </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 		    		                                        			$.ajax({
 		    		                                        	            url: urls + "get-mapping-indicator-govBudget",
 		    		                                        	            data: {'id_role':idrole,'id_indicator':id_indicator,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -2272,7 +2325,7 @@
 		    		                                        	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
 		    		                                                    			textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-		    		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+		    		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+budget_bhs+"</td>";
 		    		                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                                                            		if(stsGovBud == 'yearly'){
 		    		                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -2288,15 +2341,15 @@
 		    		                                                        		
 		    		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
 		    		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-		    		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                                                        		
 		    		                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                                                        			if(stsGovBud == 'yearly'){
-		    		                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		    		                                                            		}else if(stsGovBud == 'semesterly'){
-		    		                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		    		                                                            		}else if(stsGovBud == 'quarterly'){
-		    		                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		    		                                                            		}
 		    		                                                            	}
 		    		                                                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -2394,8 +2447,8 @@
 		    		                                                        	            	if(row.length>0){
 		    		                                                        	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-ind-goal'><thead>";
 		    		                                                                        		textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
-		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Baseline</td>";
+		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+unit+"</td>";
+		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+baseline+"</td>";
 		    		                                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                                                                            		if(stsGovInd == 'yearly'){
 		    		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -2409,20 +2462,20 @@
 		    		                                                                            		
 		    		                                                                            	}
 		    		                                                                        		
-		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
+		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+fund+"</td>";
 		    		                                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                                                                        		
 		    		                                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                                                                        			if(stsGovInd == 'yearly'){
 		    		                                                                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		    		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		    		                                                                            		}else if(stsGovInd == 'semesterly'){
 		    		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		    		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		    		                                                                            		}else if(stsGovInd == 'quarterly'){
 		    		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		    		                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		    		                                                                            		}
 		    		                                                                            	}
 		    		                                                                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -2567,7 +2620,7 @@
 		    		        	            async : false,
 		    		        	            success: function (hasilGoal1) {
 		    		        	            	if(hasilGoal1.progGov.length>0){
-		    		        	            		textSdg += "<br/><div><b><u>Non Government Program</u></b></div>";
+		    		        	            		textSdg += "<br/><div><b><u>"+non_gov_prog+"</u></b></div>";
 		    		        	            		for (var a = 0; a < hasilGoal1.progGov.length; a++) {
 		    		        	            			var row = hasilGoal1.progGov;
 		    		        	            			var id_program = row[a][0];
@@ -2599,7 +2652,7 @@
 		    		                	                            	}else{
 		    		                	                            		nm_activity = row[b][3];
 		    		                	                            	}
-		    		                                        			textSdg += "<div ><span style='margin-right:25px'>Activity </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
+		    		                                        			textSdg += "<div ><span style='margin-right:25px'>"+activity+" </span>: "+kode_program+"."+kode_activity+". "+nm_activity+"</div>";
 		    		                                        			$.ajax({
 		    		                                        	            url: urls + "get-mapping-indicator-nsaBudget",
 		    		                                        	            data: {'id_role':idrole,'id_indicator':id_indicator,'id_target':id_target,'id_prov':idprov,'id_monper':id_monper,'id_goals':id_goals,'start_year':monper_year[0],'end_year':monper_year[1],'id_activity':id_activity},
@@ -2613,7 +2666,7 @@
 		    		                                        	            		textSdg += "<div style='overflow-x:auto;'><table border='1' class='table table-striped table-bordered tabel-gov-bud-goal'><thead>";
 		    		                                                    			textSdg += "<tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Unit</td>";
-		    		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Budget Allocation</td>";
+		    		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+budget_bhs+"</td>";
 		    		                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                                                            		if(stsGovBud == 'yearly'){
 		    		                                                            			textSdg += "<td style='text-align:center;vertical-align:middle'><b>"+y+"</b></td>";
@@ -2629,15 +2682,15 @@
 		    		                                                        		
 		    		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
 		    		                                                        		//textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-		    		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                                                        		
 		    		                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                                                        			if(stsGovBud == 'yearly'){
-		    		                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		    		                                                            		}else if(stsGovBud == 'semesterly'){
-		    		                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		    		                                                            		}else if(stsGovBud == 'quarterly'){
-		    		                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual Budget</td>";
+		    		                                                  	          			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+" "+anggaran+"</td>";
 		    		                                                            		}
 		    		                                                            	}
 		    		                                                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
@@ -2749,20 +2802,20 @@
 		    		                                                                            		
 		    		                                                                            	}
 		    		                                                                        		
-		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Funding Source</td>";
-		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Location</td>";
-		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>Actor</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
+		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+fund+"</td>";
+		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+loc+"</td>";
+		    		                                                                        		textSdg += "<td rowspan='3' style='text-align:center;vertical-align:middle'>"+actor+"</td></tr><tr style='font-size:80%;color:white;background-color:blue;'>";
 		    		                                                                        		
 		    		                                                                        		for(var y=monper_year[0];y<=monper_year[1];y++){
 		    		                                                                        			if(stsGovInd == 'yearly'){
 		    		                                                                        				textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		    		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		    		                                                                            		}else if(stsGovInd == 'semesterly'){
 		    		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		    		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                                                                            			textSdg += "<td colspan='2' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		    		                                                                            		}else if(stsGovInd == 'quarterly'){
 		    		                                                                            			textSdg += "<td rowspan='2' style='text-align:center;vertical-align:middle'>Target</td>";
-		    		                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>Actual</td>";
+		    		                                                                            			textSdg += "<td colspan='4' style='text-align:center;vertical-align:middle'>"+sdg_ach+"</td>";
 		    		                                                                            		}
 		    		                                                                            	}
 		    		                                                                        		textSdg += "</tr><tr style='font-size:80%;color:white;background-color:blue;'>";
