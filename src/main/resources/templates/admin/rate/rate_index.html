@@ -322,7 +322,9 @@
                 url: urls+'list-get-option-role-sub/'+id_prov,
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
-                    $("#idrole").html('<option value="999999" >All</option>');
+                    $("#idrole").append('<option value="999999" >All</option>');
+                    $("#idrole").append('<option value="9999991" >All Government</option>');
+                    $("#idrole").append('<option value="9999992" >All Non Government</option>');
                     var array = result.content;
                     if (array != '') {
                         for (i in array) {
@@ -373,6 +375,8 @@
                 success: function (result) {
                     $("#idrole").html('<option value="0" >-- Pilih --</option>');
                     $("#idrole").html('<option value="999999" >All</option>');
+                    $("#idrole").append('<option value="9999991" >All Government</option>');
+                    $("#idrole").append('<option value="9999992" >All Non Government</option>');
                     var array = result.content;
                     if (array != '') {
                         for (i in array) {
@@ -430,7 +434,7 @@
             });
 
             if(tipe == 'budget'){
-                if(role == '999999'){
+                if(role == '999999' || role == '9999991' || role == '9999992'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
@@ -481,7 +485,7 @@
                 }
                 
             }else if(tipe == 'indicator'){
-                if(role == '999999'){
+                if(role == '999999' || role == '9999991' || role == '9999992'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
@@ -553,7 +557,7 @@
             });
 
             if(tipe == 'budget'){
-                if(role == '999999'){
+                if(role == '999999' || role == '9999991' || role == '9999992'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
@@ -604,7 +608,7 @@
                 }
                 
             }else if(tipe == 'indicator'){
-                if(role == '999999'){
+                if(role == '999999' || role == '9999991' || role == '9999992'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
@@ -676,7 +680,7 @@
             });
 
             if(tipe == 'budget'){
-                if(role == '999999'){
+                if(role == '999999' || role == '9999991' || role == '9999992'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
@@ -727,7 +731,7 @@
                 }
                 
             }else if(tipe == 'indicator'){
-                if(role == '999999'){
+                if(role == '999999' || role == '9999991' || role == '9999992'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{

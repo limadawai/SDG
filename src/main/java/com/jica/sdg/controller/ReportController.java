@@ -3428,37 +3428,37 @@ public class ReportController {
         Optional<RanRad> monper = radService.findOne(id_monper);
     	String status = monper.get().getStatus();
         String sql = "";
-        if(id_role.equals("111111")){
-            if(status.equals("completed")) {
-//                System.out.println("comple - "+id_monper);
-                sql = "select distinct a.id_goals, b.nm_goals, b.nm_goals_eng, b.id_goals as kode_goals from assign_sdg_indicator a\n" +
-                    "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"') b on a.id_goals = b.id_old\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' ";
-            }else{
-                System.out.println("no");
-                sql = "select distinct a.id_goals, b.nm_goals, b.nm_goals_eng, b.id_goals as kode_goals from assign_sdg_indicator a\n" +
-                    "left join sdg_goals b on a.id_goals = b.id\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' ";
-            }
-        }else{
-            if(status.equals("completed")) {
-//                System.out.println("comple - "+id_monper);
-                sql = "select a.id_goals, b.nm_goals, b.nm_goals_eng, b.id_goals as kode_goals from assign_sdg_indicator a\n" +
-                    "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"') b on a.id_goals = b.id_old\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and a.id_role = '"+id_role+"' ";
-            }else{
-                System.out.println("role no mon: "+id_monper+" ,prov: "+id_prov+" ,role: "+id_role);
-                sql = "select a.id_goals, b.nm_goals, b.nm_goals_eng, b.id_goals as kode_goals from assign_sdg_indicator a\n" +
-                    "left join sdg_goals b on a.id_goals = b.id\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and a.id_role = '"+id_role+"' ";
-            }
-        }
-//        if(status.equals("completed")) {
-//            System.out.println("comple - "+id_monper);
-//            sql = "SELECT distinct id_old, nm_goals, nm_goals_eng, id_goals FROM history_sdg_goals where id_monper = '"+id_monper+"' ORDER BY id ASC";
+//        if(id_role.equals("111111")){
+//            if(status.equals("completed")) {
+////                System.out.println("comple - "+id_monper);
+//                sql = "select distinct a.id_goals, b.nm_goals, b.nm_goals_eng, b.id_goals as kode_goals from assign_sdg_indicator a\n" +
+//                    "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"') b on a.id_goals = b.id_old\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' ";
+//            }else{
+//                System.out.println("no");
+//                sql = "select distinct a.id_goals, b.nm_goals, b.nm_goals_eng, b.id_goals as kode_goals from assign_sdg_indicator a\n" +
+//                    "left join sdg_goals b on a.id_goals = b.id\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' ";
+//            }
 //        }else{
-//            sql = "SELECT distinct id, nm_goals, nm_goals_eng, id_goals FROM sdg_goals ORDER BY id ASC";
+//            if(status.equals("completed")) {
+////                System.out.println("comple - "+id_monper);
+//                sql = "select a.id_goals, b.nm_goals, b.nm_goals_eng, b.id_goals as kode_goals from assign_sdg_indicator a\n" +
+//                    "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"') b on a.id_goals = b.id_old\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and a.id_role = '"+id_role+"' ";
+//            }else{
+//                System.out.println("role no mon: "+id_monper+" ,prov: "+id_prov+" ,role: "+id_role);
+//                sql = "select a.id_goals, b.nm_goals, b.nm_goals_eng, b.id_goals as kode_goals from assign_sdg_indicator a\n" +
+//                    "left join sdg_goals b on a.id_goals = b.id\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and a.id_role = '"+id_role+"' ";
+//            }
 //        }
+        if(status.equals("completed")) {
+            System.out.println("comple - "+id_monper);
+            sql = "SELECT distinct id_old, nm_goals, nm_goals_eng, id_goals FROM history_sdg_goals where id_monper = '"+id_monper+"' ORDER BY id ASC";
+        }else{
+            sql = "SELECT distinct id, nm_goals, nm_goals_eng, id_goals FROM sdg_goals ORDER BY id ASC";
+        }
     	Query query = manager.createNativeQuery(sql);
         List list = query.getResultList();
         return list;
@@ -3469,38 +3469,38 @@ public class ReportController {
         Optional<RanRad> monper = radService.findOne(id_monper);
     	String status = monper.get().getStatus();
         String sql="";
-        if(id_role.equals("111111")){
-            if(status.equals("completed")) {
-//                System.out.println("comple - "+id_monper);
-                sql = "select distinct a.id_target, b.nm_target, b.nm_target_eng, b.id_target as kode_target from assign_sdg_indicator a\n" +
-                    "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') b on a.id_target = b.id_old\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' ";
-            }else{
-                sql = "select distinct a.id_target, b.nm_target, b.nm_target_eng, b.id_target as kode_target from assign_sdg_indicator a\n" +
-                    "left join sdg_target b on a.id_target = b.id\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' ";
-            }
-        }else{
-            if(status.equals("completed")) {
-//                System.out.println("comple - "+id_monper);
-                sql = "select a.id_target, b.nm_target, b.nm_target_eng, b.id_target as kode_target from assign_sdg_indicator a\n" +
-                    "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') b on a.id_target = b.id_old\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and a.id_role = '"+id_role+"' ";
-            }else{
-                System.out.println("role no mon: "+id_monper+" ,prov: "+id_prov+" ,role: "+id_role+" ,goal: "+id_goals);
-                sql = "select a.id_target, b.nm_target, b.nm_target_eng, b.id_target as kode_target from assign_sdg_indicator a\n" +
-                    "left join sdg_target b on a.id_target = b.id\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and a.id_role = '"+id_role+"' ";
-            }
-        }
-        
-//        if(status.equals("completed")) {
-//            sql = "SELECT distinct id_old, nm_target, nm_target_eng, id_target FROM history_sdg_target WHERE id_goals = :id_goals and id_monper = '"+id_monper+"' ORDER BY id ASC";
+//        if(id_role.equals("111111")){
+//            if(status.equals("completed")) {
+////                System.out.println("comple - "+id_monper);
+//                sql = "select distinct a.id_target, b.nm_target, b.nm_target_eng, b.id_target as kode_target from assign_sdg_indicator a\n" +
+//                    "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') b on a.id_target = b.id_old\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' ";
+//            }else{
+//                sql = "select distinct a.id_target, b.nm_target, b.nm_target_eng, b.id_target as kode_target from assign_sdg_indicator a\n" +
+//                    "left join sdg_target b on a.id_target = b.id\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' ";
+//            }
 //        }else{
-//            sql = "SELECT distinct id, nm_target, nm_target_eng, id_target FROM sdg_target WHERE id_goals = :id_goals ORDER BY id ASC";
+//            if(status.equals("completed")) {
+////                System.out.println("comple - "+id_monper);
+//                sql = "select a.id_target, b.nm_target, b.nm_target_eng, b.id_target as kode_target from assign_sdg_indicator a\n" +
+//                    "left join (select * from history_sdg_target where id_monper = '"+id_monper+"') b on a.id_target = b.id_old\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and a.id_role = '"+id_role+"' ";
+//            }else{
+//                System.out.println("role no mon: "+id_monper+" ,prov: "+id_prov+" ,role: "+id_role+" ,goal: "+id_goals);
+//                sql = "select a.id_target, b.nm_target, b.nm_target_eng, b.id_target as kode_target from assign_sdg_indicator a\n" +
+//                    "left join sdg_target b on a.id_target = b.id\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and a.id_role = '"+id_role+"' ";
+//            }
 //        }
+//        
+        if(status.equals("completed")) {
+            sql = "SELECT distinct id_old, nm_target, nm_target_eng, id_target FROM history_sdg_target WHERE id_goals = :id_goals and id_monper = '"+id_monper+"' ORDER BY id ASC";
+        }else{
+            sql = "SELECT distinct id, nm_target, nm_target_eng, id_target FROM sdg_target WHERE id_goals = :id_goals ORDER BY id ASC";
+        }
     	Query query = manager.createNativeQuery(sql);
-//        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_goals", id_goals);
         List list = query.getResultList();
         return list;
     }
@@ -3510,39 +3510,39 @@ public class ReportController {
     	Optional<RanRad> monper = radService.findOne(id_monper);
     	String status = monper.get().getStatus();
         String sql="";
-        if(id_role.equals("111111")){
-            if(status.equals("completed")) {
-//                System.out.println("comple - "+id_monper);
-                sql = "select distinct a.id_indicator, b.nm_indicator, b.nm_indicator_eng, b.id_indicator as kode_indicator from assign_sdg_indicator a\n" +
-                    "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') b on a.id_indicator = b.id_old\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and b.id_target = '"+id_target+"'  ";
-            }else{
-                sql = "select distinct a.id_indicator, b.nm_indicator, b.nm_indicator_eng, b.id_indicator as kode_indicator from assign_sdg_indicator a\n" +
-                    "left join sdg_indicator b on a.id_indicator = b.id\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and b.id_target = '"+id_target+"'  ";
-            }
-        }else{
-            if(status.equals("completed")) {
-//                System.out.println("comple - "+id_monper);
-                sql = "select a.id_indicator, b.nm_indicator, b.nm_indicator_eng, b.id_indicator as kode_indicator from assign_sdg_indicator a\n" +
-                    "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') b on a.id_indicator = b.id_old\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and b.id_target = '"+id_target+"' and a.id_role = '"+id_role+"'  ";
-            }else{
-                sql = "select a.id_indicator, b.nm_indicator, b.nm_indicator_eng, b.id_indicator as kode_indicator from assign_sdg_indicator a\n" +
-                    "left join sdg_indicator b on a.id_indicator = b.id\n" +
-                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and b.id_target = '"+id_target+"' and a.id_role = '"+id_role+"' ";
-            }
-        }
-//        if(status.equals("completed")) {
-//            sql = "SELECT distinct id_old, nm_indicator, nm_indicator_eng, id_indicator FROM history_sdg_indicator WHERE id_goals = :id_goals AND "
-//    			+ "id_target = :id_target and id_monper = '"+id_monper+"' GROUP BY id, id_goals, id_target ORDER BY id ASC";
+//        if(id_role.equals("111111")){
+//            if(status.equals("completed")) {
+////                System.out.println("comple - "+id_monper);
+//                sql = "select distinct a.id_indicator, b.nm_indicator, b.nm_indicator_eng, b.id_indicator as kode_indicator from assign_sdg_indicator a\n" +
+//                    "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') b on a.id_indicator = b.id_old\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and b.id_target = '"+id_target+"'  ";
+//            }else{
+//                sql = "select distinct a.id_indicator, b.nm_indicator, b.nm_indicator_eng, b.id_indicator as kode_indicator from assign_sdg_indicator a\n" +
+//                    "left join sdg_indicator b on a.id_indicator = b.id\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and b.id_target = '"+id_target+"'  ";
+//            }
 //        }else{
-//            sql = "SELECT distinct id, nm_indicator, nm_indicator_eng, id_indicator FROM sdg_indicator WHERE id_goals = :id_goals AND "
-//    			+ "id_target = :id_target GROUP BY id, id_goals, id_target ORDER BY id ASC";
+//            if(status.equals("completed")) {
+////                System.out.println("comple - "+id_monper);
+//                sql = "select a.id_indicator, b.nm_indicator, b.nm_indicator_eng, b.id_indicator as kode_indicator from assign_sdg_indicator a\n" +
+//                    "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') b on a.id_indicator = b.id_old\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and b.id_target = '"+id_target+"' and a.id_role = '"+id_role+"'  ";
+//            }else{
+//                sql = "select a.id_indicator, b.nm_indicator, b.nm_indicator_eng, b.id_indicator as kode_indicator from assign_sdg_indicator a\n" +
+//                    "left join sdg_indicator b on a.id_indicator = b.id\n" +
+//                    "where a.id_monper = '"+id_monper+"' and a.id_prov = '"+id_prov+"' and b.id_goals = '"+id_goals+"' and b.id_target = '"+id_target+"' and a.id_role = '"+id_role+"' ";
+//            }
 //        }
+        if(status.equals("completed")) {
+            sql = "SELECT distinct id_old, nm_indicator, nm_indicator_eng, id_indicator FROM history_sdg_indicator WHERE id_goals = :id_goals AND "
+    			+ "id_target = :id_target and id_monper = '"+id_monper+"' GROUP BY id, id_goals, id_target ORDER BY id ASC";
+        }else{
+            sql = "SELECT distinct id, nm_indicator, nm_indicator_eng, id_indicator FROM sdg_indicator WHERE id_goals = :id_goals AND "
+    			+ "id_target = :id_target GROUP BY id, id_goals, id_target ORDER BY id ASC";
+        }
     	Query query = manager.createNativeQuery(sql);
-//        query.setParameter("id_goals", id_goals);
-//        query.setParameter("id_target", id_target);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
         List list = query.getResultList();
         return list;
     }

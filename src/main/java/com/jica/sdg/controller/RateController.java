@@ -153,6 +153,32 @@ public class RateController {
             query.setParameter("period", period);
             query.setParameter("id_monper", id_monper);
             query.setParameter("year", year);
+        }else if(id_role.equals("9999991")){
+            String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select distinct a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
+                        "from ref_role a\n" +
+                        "inner join gov_activity as m on a.id_role = m.id_role \n" +
+                        "where a.cat_role = 'Government' and a.id_role <> '1' and a.id_prov = :id_prov \n";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("period", period);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+        }else if(id_role.equals("9999992")){
+            String sql  = "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_nsa_indicator' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select distinct a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
+                        "from ref_role a\n" +
+                        "inner join nsa_activity as m on a.id_role = m.id_role \n" +
+                        "where a.cat_role = 'NSA' and a.id_role <> '1' and a.id_prov = :id_prov ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("period", period);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
         }else{
             String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
                         "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_indicator' and period = :period) as show_report \n" +
@@ -195,6 +221,32 @@ public class RateController {
                         "where a.cat_role = 'Government' and a.id_role <> '1' and a.id_prov = :id_prov \n" +
                         "union all\n" +
                         "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_nsa_budget' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select distinct a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
+                        "from ref_role a\n" +
+                        "inner join nsa_activity as m on a.id_role = m.id_role \n" +
+                        "where a.cat_role = 'NSA' and a.id_role <> '1' and a.id_prov = :id_prov ";
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("period", period);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+        }else if(id_role.equals("9999991")){
+            String sql  = "select '00000' as id_role, 'Government' as nm_role, 'Government' as cat_role, '1' as kode, \n" +
+                        "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_gov_budget' and period = :period) as show_report \n" +
+                        "union all\n" +
+                        "select distinct a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report\n" +
+                        "from ref_role a\n" +
+                        "inner join gov_activity as m on a.id_role = m.id_role \n" +
+                        "where a.cat_role = 'Government' and a.id_role <> '1' and a.id_prov = :id_prov \n" ;
+            query = em.createNativeQuery(sql);
+            query.setParameter("id_prov", id_prov);
+            query.setParameter("period", period);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("year", year);
+        }else if(id_role.equals("9999992")){
+            String sql  = "select '11111' as id, 'Non Government' as nm, 'NSA' as ket, '1' as kode, \n" +
                         "(select count(*) as nn from entry_show_report where id_monper = :id_monper and year = :year and type = 'entry_nsa_budget' and period = :period) as show_report \n" +
                         "union all\n" +
                         "select distinct a.id_role, a.nm_role, a.cat_role, '2' as kode, '111' as show_report \n" +
