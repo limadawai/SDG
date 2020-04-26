@@ -6,6 +6,7 @@
     <title th:text="Manajemen Role"></title>
 </head>
 <body>
+	<title>Report / GRI/OJK</title>
     <div th:include="admin/layout :: menu"></div>
 
     <div id="content">  
@@ -351,8 +352,9 @@
           templateResult: formatResult,
         });  
     
-    $('#company').on('change',function(){
+   /*  $('#company').on('change',function(){
         var id = $(this).val();
+        alert(id);
             if(id==0){
                 console.log("ALL");
                  $("#year").select2({
@@ -371,7 +373,7 @@
 //            $('#year').select2('data', null);
             $('#year').empty().trigger("change");
         }
-    });
+    }); */
     
    $("#year").select2({
             placeholder: 'Select an option',

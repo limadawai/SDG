@@ -448,11 +448,16 @@ public class AdministrasiController {
         for (int i = 0 ; i < c.length(); i++) {
         	JSONObject obj = c.getJSONObject(i);
         	String 	id_program = obj.getString("id");
+        	String 	id_activity = obj.getString("id_activity");
         	String 	id_role = obj.getString("id_role");
         	
         	if(!id_role.equals("")) {
-        		nsaProgService.updateRole(Integer.parseInt(id_role), Integer.parseInt(id_program));
-        		nsaActivityService.updateRole(Integer.parseInt(id_role), Integer.parseInt(id_program));
+        		if(!id_program.equals("")) {
+        			nsaProgService.updateRole(Integer.parseInt(id_role), Integer.parseInt(id_program));
+        		}
+        		if(!id_activity.equals("")) {
+        			nsaActivityService.updateRole(Integer.parseInt(id_role), Integer.parseInt(id_activity));
+        		}
         	}
         }
 	}

@@ -281,6 +281,14 @@
         	hideBtn();
         	$('.btnsdg').show();
         	$('#id_monper').hide();
+        	$('#detail').empty();
+            var detail="<table><tbody>";
+            detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+	            'Assign All Sdgs Indicator : <select class="select-kakek-program">'+roleGov()+'</select></td>'+
+	      '<td style="width:50%">'+
+	      ''+
+	      '</td>'+
+	      '<tr/>';
             $.ajax({
                 url: urls + 'list-sdgGoals',
                 type: 'get',
@@ -288,8 +296,6 @@
                 cache: false,
                 async : false,
                 success: function (response) {
-                    $('#detail').empty();
-                    var detail="<table><tbody>";
                     var idGoals;
                     for (var i = 0; i < response.content.length; i++) {
                     	idGoals = response.content[i].id;
@@ -404,6 +410,18 @@
         	$('#detail').find('.select-cucu-sdg'+idGoals).val(value);
         });
         
+        $('#detail').on('change','.select-kakek-program',function(){
+        	var value = $(this).val();
+        	var idGoals = $(this).data('id');
+        	$('#detail').find('.select-bapak-sdg').val(value).trigger('change');
+        });
+        
+        $('#detail').on('change','.select-kakek-activity',function(){
+        	var value = $(this).val();
+        	var idGoals = $(this).data('id');
+        	$('#detail').find('.select-anak-sdg').val(value);
+        });
+        
         $('#detail').on('change','.select-anak-sdg',function(){
         	var value = $(this).val();
         	var idGoals = $(this).data('id');
@@ -435,6 +453,8 @@
         	hideBtn();
         	$('.btngov').show();
                 $('#id_monper').show();
+                $('#detail').empty();
+                var detail="<table><tbody>";
             $.ajax({
                 url: urls + 'list-govProg/'+$('#id_monper').val(),
                 type: 'get',
@@ -442,8 +462,6 @@
                 cache: false,
                 async : false,
                 success: function (response) {
-                    $('#detail').empty();
-                    var detail="<table><tbody>";
                     var nama;
                     var idProgram;
                     for (var i = 0; i < response.content.length; i++) {
@@ -542,7 +560,16 @@
         	id_klik = '#non-gov';
         	hideBtn();
         	$('.btnnongov').show();
-                $('#id_monper').show();
+            $('#id_monper').show();
+            $('#detail').empty();
+            var detail="<table><tbody>";
+            detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+	            'Assign All Program : <select class="select-kakek-program">'+roleNsa()+'</select></td>'+
+	      '<td style="width:50%">'+
+	      ''+
+	      'Assign All Activity : <select class="select-kakek-activity">'+roleNsa()+'</select>'+
+	      '</td>'+
+	      '<tr/>';
             $.ajax({
                 url: urls + 'list-nsaProg-assign/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
                 type: 'get',
@@ -550,8 +577,8 @@
                 cache: false,
                 async : false,
                 success: function (response) {
-                    $('#detail').empty();
-                    var detail="<table><tbody>";
+                    
+                    
                     var nama;
                     var idProgram;
                     for (var i = 0; i < response.content.length; i++) {
@@ -566,7 +593,8 @@
 				                  '</label></td>'+
 				                  '<td style="width:50%">'+
 				                  '<input type="hidden" name="nsa[][id]" value="'+idProgram+'"/>'+
-				                  '<select data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(response.content[i].id_role)+'</select></td>'+
+				                  '<input type="hidden" name="nsa[][id_activity]" value=""/>'+
+				                  '<select class="select-bapak-sdg" data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(response.content[i].id_role)+'</select></td>'+
 				                  '<tr/>';
                     	$.ajax({
                             url: urls + 'list-nsaActivity/'+idProgram,
@@ -587,7 +615,11 @@
   			                            	'<span style="vertical-align:middle">'+result.content[j].id_activity+' '+nama+'</span>'+
   			                      			'</label>'+
   			                           '</td>'+
-  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'"></td>'+
+  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'">'+
+  			                         		'<input type="hidden" name="nsa[][id]" value=""/>'+
+  					                  		'<input type="hidden" name="nsa[][id_activity]" value="'+result.content[j].id+'"/>'+
+  					                  		'<select class="select-anak-sdg select-anak-sdg'+idProgram+'" data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(result.content[j].id_role)+'</select>'+
+  			                           '</td>'+
   			                      	'<tr/>';
                                 	$.ajax({
                                         url: urls + 'list-nsaIndicator/'+idProgram+'/'+result.content[j].id,
@@ -619,6 +651,7 @@
                 }
             });
         });
+        
         $('.btnnongov').on('click', function(){
         	var nsa =  $('#form-detail').serializeObject();
         	var len = nsa.nsa.length;
