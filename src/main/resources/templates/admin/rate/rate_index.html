@@ -66,6 +66,9 @@
                                 <span class="lang_indo">Cari</span>
                                 <span class="lang_eng">Submit</span>
                             </a>
+                            <button type="button" style="margin-left: 10px;" class="btn btn-default pull-right" onclick="printJS('tabel-entri-sdg', 'html')">
+							    PDF
+							 </button>
                             <a class="btn btn-warning pull-right" href="#" onclick="tableToExcel('tabel-entri-sdg', 'Report Best Practice')">Excel</a><br/>
 <!--                            <div class="input-append pull-right">
                                 <input placeholder="Search..." class="span10" id="text-cari" type="text"/>
@@ -2436,6 +2439,7 @@
                     "bDestroy": true,
                     "ordering": false,
                     "paging": false,
+                    
                     "ajax": {
                         "url": link1,
                         dataSrc: 'content',
