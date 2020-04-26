@@ -1034,6 +1034,14 @@ public class RanRadSdgController {
         return hasil;
     }
     
+    @GetMapping("admin/list-nsaActivity/{id_program}")
+    public @ResponseBody Map<String, Object> nsaActivityListByProg(@PathVariable("id_program") Integer id_program) {
+        List<NsaActivity> list = nsaActivityService.findAll(id_program);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
     @GetMapping("admin/count-nsaActivity/{id_program}")
     public @ResponseBody Map<String, Object> countnsaActivity(@PathVariable("id_program") Integer id_program) {
         Integer list = nsaActivityService.countNsaActivity(id_program);

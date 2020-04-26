@@ -8,6 +8,8 @@ import java.util.Optional;
 public interface INsaActivityService {
 
     List<NsaActivity> findAll(Integer id, Integer id_role);
+    
+    List<NsaActivity> findAll(Integer id);
 
     void saveNsaActivity(NsaActivity gov);
     

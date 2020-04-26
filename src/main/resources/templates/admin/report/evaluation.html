@@ -458,7 +458,6 @@
             data: {'id_role': idrole,'id_monper':id_monper},
             type: 'get',
             dataType: 'json',
-            async : false,
             beforeSend : function(xhr){
             	$('body').addClass("loading"); 
             },
@@ -740,9 +739,10 @@
                         }
                 	});
             	}
+            	$("#indi").html(text);
             }
         });
-        $("#indi").html(text);
+        
     }
     function ambilDataAll(sdg_indicator){
         var idrole = $("#role").val();
@@ -768,7 +768,12 @@
             data: {'id_role': idrole,'id_monper':idmonper},
             type: 'get',
             dataType: 'json',
-            async : false,
+            beforeSend : function(xhr){
+            	$('body').addClass("loading"); 
+            },
+           complete: function(){
+            	$('body').removeClass("loading");
+            },
             success: function (response) {
             	for (var i = 0; i < response.sdg.length; i++) {
         			var nm_goals;
@@ -1168,9 +1173,10 @@
                         }
                 	});
             	}
+            	$("#indi").html(text);
             }
         });
-        $("#indi").html(text);
+        
         /* $('#indi').find(".tabel-sdg").DataTable({
     		"scrollX": true,
     		"searching": false,

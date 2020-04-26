@@ -16,9 +16,12 @@ public interface NsaActivityRepository extends CrudRepository<NsaActivity, Integ
 	@Query(value = "select * from nsa_activity where id_program = :id_program and id_role = :id_role",nativeQuery = true)
 	public List<NsaActivity> findAllGovActivity(@Param("id_program") Integer id_program,@Param("id_role") Integer id_role); 
 	
+	@Query(value = "select * from nsa_activity where id_program = :id_program",nativeQuery = true)
+	public List<NsaActivity> findAllGovActivity(@Param("id_program") Integer id_program); 
+	
 	@Transactional
     @Modifying(clearAutomatically = true)
-    @Query(value = "update nsa_activity set id_role = :id_role where id_program = :id",nativeQuery = true)
+    @Query(value = "update nsa_activity set id_role = :id_role where id = :id",nativeQuery = true)
     void UpdateRole(@Param("id_role") Integer id_role, @Param("id") Integer id);
 	
 	@Query(value = "select * from nsa_activity where id_program = :id_program",nativeQuery = true)

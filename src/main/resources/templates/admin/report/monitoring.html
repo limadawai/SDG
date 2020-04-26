@@ -528,7 +528,6 @@
             data: {'id_role':idrole,'id_prov':idprov,'id_monper':id_monper},
             type: 'get',
             dataType: 'json',
-            async : false,
             beforeSend : function(xhr){
             	$('body').addClass("loading"); 
             },
@@ -2852,10 +2851,12 @@
 		            	}
 		            }
         			});
+        			
             	}
+            	$("#indi").append(textSdg);
             }
         });
-      	$("#indi").append(textSdg);
+      	
     }
     
     /* function loadData(sdg_indicator){
