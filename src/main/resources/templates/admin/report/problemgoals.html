@@ -20,54 +20,42 @@
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
-                <div class="widget-box">
-                    <div class="widget-title lang_eng" id="judul-eng" style="display: none">
-                        <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Problem Identification form & follow up </h5>
-                    </div>
-                    <div class="widget-title lang_indo" id="judul-indo">
-                        <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5>Tabel Identifikasi Masalah dan Solusi</h5>
-                    </div>
+            	<div class="pull-left" style="width:100%">
+                    <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
+                        <option value="0" >-- Pilih --</option>
+                        <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
+                    </select>
+                    <select id="idrole" name="idrole" class="form-control">
+                        <option value="0" >-- Pilih --</option>
+                        <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
+                    </select>
                     
-                   
-                    <div class="widget-content">
-                        <div class="pull-left" style="width:100%">
-                            <select th:field="*{listprov}" class="span3" id="id_prov" name="id_prov">
-                                <option value="0" >-- Pilih --</option>
-                                <option th:each="list : ${listprov}" th:value="${list.id_prov}" th:text="${list.acronym}"></option>
-                            </select>
-                            <select id="idrole" name="idrole" class="form-control">
-                                <option value="0" >-- Pilih --</option>
-                                <option th:each="f:${listNsaProfile}" th:value="${f.id_role}" th:text="${f.nm_role}"></option>
-                            </select>
-                            
 <!--                            <div class="lang_indo"><span> Periode</span></div>
                             <div class="lang_eng"><span> Period</span></div>-->
-                            <select id="periode" name="periode" class="form-control">
-                                <option value="0" >-- Pilih --</option>
-                                <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
-                            </select>
-                            <select id="ref_category" name="ref_category" class="form-control">
-                                <option value="0" >-- Pilih --</option>
-                                <option value="*" >ALL</option>
-                                <option th:each="f:${refcategory.content}" th:value="${f.id_cat}" th:text="${f.nm_cat}"></option>
-                            </select>
-                        </div>
+                    <select id="periode" name="periode" class="form-control">
+                        <option value="0" >-- Pilih --</option>
+                        <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
+                    </select>
+                    <select id="ref_category" name="ref_category" class="form-control">
+                        <option value="0" >-- Pilih --</option>
+                        <option value="*" >ALL</option>
+                        <option th:each="f:${refcategory.content}" th:value="${f.id_cat}" th:text="${f.nm_cat}"></option>
+                    </select>
+                </div>
                         <div class="pull-left" style="width:100%">
-                            <select class="span3" id="goals" name="goals">
+                            <!-- <select class="span3" id="goals" name="goals">
                                 <option value="0" >-- Pilih --</option>
                             </select>
                             <select id="target" name="target" class="form-control">
                                 <option value="0" >-- Pilih --</option>
                             </select>
                             
-<!--                            <div class="lang_indo"><span> Periode</span></div>
-                            <div class="lang_eng"><span> Period</span></div>-->
+                           <div class="lang_indo"><span> Periode</span></div>
+                            <div class="lang_eng"><span> Period</span></div>
                             <select id="indicator" name="indicator" class="form-control">
                                 <option value="0" >-- Pilih --</option>
-                                <!--<option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>-->
-                            </select>
+                                <option id="monper" th:each="f:${listranrad}" th:value="${f.id_monper}" th:text="${f.start_year}+' - '+${f.end_year}"></option>
+                            </select> -->
                             <select id="group" name="group" class="form-control">
                                 <option value="1" selected='true' >Category</option>
                                 <option value="2" >Goals</option>
@@ -78,7 +66,41 @@
                             </button>
                             <a class="btn btn-warning pull-right" href="#" onclick="tableToExcel('report', 'Report Evaluation')">Excel</a><br/>
                         </div>
-           
+                        <div class="pull-left" style="width:100%">
+                       <div class="control-group">
+					    <div class="controls">
+							<div class="accordion" id="accordion2">
+								<div class="accordion-group">
+								    <div class="accordion-heading">
+								      <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
+								        <label class="lang_eng control-label" style="display:none">Choose SDGs Goals/Target</label>
+					    				<label class="lang_indo control-label">Pilih Goals/Target SDG</label>
+								      </a>
+								    </div>
+								    <div id="collapseOne" class="accordion-body collapse">
+								      <div class="accordion-inner">
+								      </div>
+								    </div>
+								  </div>
+							</div>
+					    	<!-- <select name="sdg_indicator" id="sdg_indicator" class=" input-block-level"  multiple="multiple" style="width:100%">
+					    		<option value="0">--select--</option>
+		        				<option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
+		        			</select> -->
+						    <span class="help-block" id="error_unit"></span>
+					    </div>
+					  </div>
+					  </div>
+                <div class="widget-box">
+                    <div class="widget-title lang_eng" id="judul-eng" style="display: none">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>Problem Identification form & follow up </h5>
+                    </div>
+                    <div class="widget-title lang_indo" id="judul-indo">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5>Tabel Identifikasi Masalah dan Solusi</h5>
+                    </div>
+                    <div class="widget-content">
                         <div class="row-fluid" id='report'>
                            
                         </div>
@@ -219,10 +241,145 @@
                     }
                 }); 
             }
-               
-            
+             /* SDG INDICATOR */
+             //Indikator SDG untuk mapping
+         	    	var year   = tahun;
+         	        var cekbok = "";
+         	        $.ajax({
+         	            url: urls + "get-sdg-goals-best",
+         	            data: {'id_monper':id_monper},
+         	            type: 'get',
+         	            dataType: 'json',
+         	            async : false,
+         	            success: function (response) {
+         	        		$('.accordion-inner').html(cekbok);
+         	        		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
+         	        				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
+         	                        '<span style="vertical-align:middle">ALL</span>'+
+         	                  '</label><br/>';
+         	            	for (var i = 0; i < response.sdg.length; i++) {
+         	        			var nm_goals;
+         	        			var id_goals=response.sdg[i][0];
+         	        			var kode_goals=response.sdg[i][3];
+         	                	if($("#fs").is(':checked')){
+         	                		nm_goals = response.sdg[i][1];
+         						}else{
+         							nm_goals = response.sdg[i][2];
+         						}
+         	                	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
+         	                				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator_goals" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+id_goals+'">&nbsp;&nbsp;&nbsp;'+
+         		                            '<span style="vertical-align:middle">'+kode_goals+" "+nm_goals+'</span>'+
+         		                      '</label><br/>';
+         	                  $.ajax({
+         	                      url: urls + 'get-sdg-target-best',
+         	                      type: 'get',
+         	                      data: {'id_goals':id_goals,'id_monper':id_monper},
+         	                      dataType: 'json',
+         	                      cache: false,
+         	                      async : false,
+         	                      success: function (result) {
+         	                      	for (var j = 0; j < result.content.length; j++) {
+         	                      		var nm_target;
+         	                      		var id_target=result.content[j][0];
+         	                      		var kode_target=result.content[j][3];
+         	                          	if($("#fs").is(':checked')){
+         	                          		nm_target = result.content[j][1];
+         	      						}else{
+         	      							nm_target = result.content[j][2];
+         	      						}
+         	                          	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+         	            					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator_target" style="vertical-align:middle"  value="'+id_target+'">&nbsp;&nbsp;&nbsp;'+
+         		                            '<span style="vertical-align:middle">'+kode_target+" "+nm_target+'</span>'+
+         		                      '</label><br/>';
+         		                      
+         	                          	$.ajax({
+         	                               url: urls + 'get-sdg-indicator-utama/0',
+         	                               type: 'get',
+         	                               data: {'id_role':id_role,'id_goals':id_goals,'id_target':id_target,'id_monper':id_monper,'id_prov':id_prov},
+         	                               dataType: 'json',
+         	                               cache: false,
+         	                               async : false,
+         	                               success: function (hasil) {
+         	                               	for (var k = 0; k < hasil.content.length; k++) {
+         	                               		var nm_indicator;
+         	                               		var id_indicator=hasil.content[k][0];
+         	                               		var kode_indicator=hasil.content[k][3];
+         	                                   	if($("#fs").is(':checked')){
+         	                                   		nm_indicator = hasil.content[k][1];
+         	               						}else{
+         	               							nm_indicator = hasil.content[k][2];
+         	               						}
+         	                                   	
+         	                                   	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+         	 				                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+id_indicator+'">&nbsp;&nbsp;&nbsp;'+
+         	 				                            '<span style="vertical-align:middle">'+kode_indicator+" "+nm_indicator+'</span>'+
+         	 				                      '</label><br/>';
+         	                               	}
+         	                               }
+         	 	                      });
+         	                      	}
+         	                      }
+         	                  });
+         	            	}
+         	            }
+         	        });
+         	        cekbok += "<hr/><button type='button' id='filter-sdg' class='btn btn-success'>Apply</button>";
+         			$('.accordion-inner').append(cekbok);
+         	    	$('.accordion-inner').find('#all-sdg').prop( "checked", true ).trigger("change");
+         	    	
         });
-        
+        $('.accordion-inner').on('change', '#all-sdg', function(){
+	        	var status = this.checked;
+	        	$('.accordion-inner').find("input[name='sdg_indicator_goals'],input[name='sdg_indicator_target'],input[name='sdg_indicator_indicator']").each(function(){
+	        		this.checked = status;
+	        	});
+	        });
+	        
+	        $('.accordion-inner').on('click', '.menu-master', function(){
+	        	var id = $(this).data('id');
+	        	if ($(this).is(":checked")) {
+	                $(".accordion-inner").find('.menu'+id).prop("checked", true);
+	            } else {
+	            	 $(".accordion-inner").find('.menu'+id).prop("checked", false);
+	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+	            }
+	        });
+	        
+	        $('.accordion-inner').on('click', '.menu-slave', function(){
+	        	var id = $(this).data('id');
+	        	var goals = $(this).data('goals');
+	        	if ($(this).is(":checked")) {
+	                $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+	            } else {
+	            	 $(".accordion-inner").find('.menu-slave'+id).prop("checked", false);
+	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+	            }
+	        	
+	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+	            } else {
+	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+	            }
+	        });
+	        
+	        $('.accordion-inner').on('click', '.menu-slave-1', function(){
+	        	var id = $(this).data('id');
+	        	var goals = $(this).data('goals');
+	        	if ($(".menu-slave-1-"+id+":checked").length==$(".menu-slave-1-"+id).length) {
+	                $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+	            } else {
+	            	 $(".accordion-inner").find('#submenu'+id).prop("checked", false);
+	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+	            }
+	        	
+	        	if ($(".menu"+goals+":checked").length==$(".menu"+goals).length) {
+	                $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+	            } else {
+	            	 $(".accordion-inner").find('#menu'+goals).prop("checked", false);
+	            	 $('.accordion-inner').find('#all-sdg').prop( "checked", false );
+	            }
+	        });  
         
         $("#ref_category").on('click', function(e){
             var data_id             = $("#periode").val().split("###");
@@ -399,6 +556,258 @@
                
             }
        
+       $('.accordion-inner').on('click', '#filter-sdg', function(){
+    	   	var sdg_indicator_goals;
+	   		var sdg_indicator_goals_val = [];
+	           $.each($("input[name='sdg_indicator_goals']:checked"), function(){
+	        	   sdg_indicator_goals_val.push($(this).val());
+	           });
+	   		if(sdg_indicator_goals_val.length>0){
+	   			sdg_indicator_goals = sdg_indicator_goals_val.toString();
+	   		}else{
+	   			sdg_indicator_goals = '0';
+	   		}
+	   		
+	   		var sdg_indicator_target;
+	   		var sdg_indicator_target_val = [];
+	           $.each($("input[name='sdg_indicator_target']:checked"), function(){
+	        	   sdg_indicator_target_val.push($(this).val());
+	           });
+	   		if(sdg_indicator_target_val.length>0){
+	   			sdg_indicator_target = sdg_indicator_target_val.toString();
+	   		}else{
+	   			sdg_indicator_target = '0';
+	   		}
+	   		
+	   		var sdg_indicator_indicator;
+	   		var sdg_indicator_indicator_val = [];
+	           $.each($("input[name='sdg_indicator_indicator']:checked"), function(){
+	        	   sdg_indicator_indicator_val.push($(this).val());
+	           });
+	   		if(sdg_indicator_indicator_val.length>0){
+	   			sdg_indicator_indicator = sdg_indicator_indicator_val.toString();
+	   		}else{
+	   			sdg_indicator_indicator = '0';
+	   		}
+	   		
+	   		if($('.accordion-inner').find('#all-sdg').is(":checked")){
+	   			sdg_indicator_indicator = '0';
+	   			sdg_indicator_target = '0';
+	   			sdg_indicator_goals = '0';
+	   		}
+	   		
+	   		var id_prov          = $('#id_prov').val();
+	           var idrole           = $('#idrole').val();
+	           var periode          = $('#periode').val().split("###");           
+	           var year             = periode[1];
+	           periode              = periode[0];
+	           var id_monper        = periode[0];
+//	           console.log(year);return false;
+	           var ref_category     = $('#ref_category').val();
+	           //var goals            = $('#goals').val();
+	           //var target           = $('#target').val();
+	           //var indicator        = $('#indicator').val();
+	           
+	           var goals            = sdg_indicator_goals;
+	           var target           = sdg_indicator_target;
+	           var indicator        = sdg_indicator_indicator;
+	           var group            = $('#group').val();
+	           if(id_prov!='0'){
+	        	$('#report').html("");
+	                var cekshow = "";
+	        	$.ajax({
+	                    url: urls+'getentryshowreport_problemiden/'+id_monper+'/'+year,
+	                    type: 'get',
+	                    dataType: 'json',
+	                    cache: false,
+	                    async : false,
+	                    success: function (resultcekshow) {
+	                        cekshow = resultcekshow.content;
+	                    }
+	                });
+	                console.log("show = "+cekshow);
+	                if(cekshow >= 1){
+	                    $('#report').html('<div><h3>Summary</h3></div><div><h4 id="totalSum"></h4></div><div><table class="table table-striped table-bordered" id="tabel-goals"></table></div>');
+	                    var tabelSum = $('#tabel-goals').DataTable({
+	                            responsive: true,
+	                    sDom: 'lrtip',
+	                    dom : '<"top"i>',
+	                    "retrieve": true,
+	                    "bLengthChange": false,
+	                    "cache": false,
+	                    "autoWidth": true,
+	                    "responsive":true,
+	                    "paging":   false,
+	                    "ordering": true,
+	                    "info":     false,
+	                    "searching": true,
+	                    "initComplete": function(settings, json) {
+	                        $('#report').find("#totalSum").append("Total : "+json.content.length);
+	                      },
+	                                    "ajax": {
+	                                            "url": urls+'list-problem/'+periode+'/'+year+'/999999',
+	                                            dataSrc: 'content',
+	                                    },
+	                                            "columns": [
+	                                                    {"title": "Code","data": function (row, data, index, display) {
+	                                                                var grouphtml = "";
+	                                                                if(row[23]!=null){
+	                                                                    var data   = row[23].split(",");
+	                                                                        $.each(data,function(i,x){
+	                                                                            var dataid          = x.split("###");
+	                                                                            var lengthdataid    = dataid.length-1;
+	                                                                            var htmlid = "";
+	                                                                                $.each(dataid,function(ii,xx){
+	                                                                                    if(ii<lengthdataid){
+	                                                                                       if(ii==0){                                                               
+	                                                                                            htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+	                                                                                        }
+	                                                                                       if(ii==1){
+	                                                                                           htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+	                                                                                        }
+	                                                                                       if(ii==2){
+	                                                                                           htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+	                                                                                        } 
+	                                                                                    }
+	                                                                                });
+	                                                                            grouphtml +=htmlid;
+	                                                                        })
+	                                                                }
+
+	                                                            return grouphtml;
+	                                                            }},
+	                                                    {"title": "Sdg Indicator","data": function (row, data, index, display) {
+	                                                                var grouphtml = "";
+	                                                                if(row[23]!=null){
+	                                                                    var data   = row[23].split(",");
+	                                                                    $.each(data,function(i,x){
+	                                                                        var dataid          = x.split("###");
+	                                                                        var lengthdataid    = dataid.length-1;
+	                                                                        var dataur          = dataid[lengthdataid].split("##*##");
+	                                                                        var htmlid = "";
+	                                                                            $.each(dataur,function(ii,xx){
+	                                                                                   if(ii==0){                                                               
+	                                                                                        htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+	                                                                                    }
+	                                                                                   if(ii==1){
+	                                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:20px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+	                                                                                    }
+	                                                                                   if(ii==2){
+	                                                                                       htmlid+=  '<label style="display:inline-block;white-space:nowrap;margin-left:40px;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
+	                                                                                    } 
+	                                                                            });
+	                                                                        grouphtml +=htmlid;
+	                                                                    })
+	                                                                }
+
+	                                                            return grouphtml;
+	                                                    }},
+	                                                        {"title": "Category","data": function (row, data, index, display) {
+	                                                                    return "<div style='font-size:80%;'>"+row[13]+"</div>";
+	                                                    }},
+	                                                        {"title": "Problem Identify","data": function (row, data, index, display) {
+	                                                                    return "<div style='font-size:80%;'>"+row[14]+"</div>";
+	                                                    }},
+	                                                        {"title": "Follow Up","data": function (row, data, index, display) {
+	                                                                    return "<div style='font-size:80%;'>"+row[15]+"</div>";
+	                                                    }},
+
+	                                            ],
+	                                            select: true
+	                                    }        
+	                            );
+	                }else{
+	                    $('#report').html('<div><h3>Summary</h3></div><div><h4 id="totalSum">0</h4></div><div><table class="table table-striped table-bordered" id="tabel-goals"></table></div>');
+	                }
+	        	
+	        	
+	            function getReport(selected) {
+	                             return $.ajax({
+	                                 url: urls+'generate-report/problem-identify/'+id_prov+'/'+idrole+'/'+periode+'/'+ref_category+'/'+goals+'/'+target+'/'+indicator+'/'+group+'/'+year,
+	                                 data: {
+	                                     issession: 1,
+	                                     selector: selector
+	                                 },
+	                                 // dataType: "json",
+	                                 async: false,
+	                                 error: function () {
+	                                     alert("Error occured");
+	                                 }
+	                             });
+	                         }
+	                        var selector = !0;
+	                        var ajaxObj = getReport(selector);
+	                        var result= JSON.parse(ajaxObj.responseText);
+	               
+	               var divtotalall = '<br/><br/><div><h3>Total All Data : '+result.content.length+'</h3></div>';
+	               $('#report').append(divtotalall);
+	               var no = 0;
+	               $.each(result.group,function(i,x){
+	                   var uuid =  uuidv4();
+	                   var data_column =[ { "title": "Sdg Indicator"},
+	                                      { "title": "Category"},
+	                                      { "title": "Institution" },
+	                                      { "title": "Description" },
+	                                      { "title": "Follow up Plan" }];
+	                   
+	                    var divtable = `<div><h3>`+(x[2]?x[2]:'')+" "+x[1]+`</h3><div id="total`+uuid+`"></div><table class="table table-striped table-bordered" id="table`+uuid+`"></table></div>`;
+	                   	$('#report').append(divtable);
+	                    var data = [];
+	                    no = 0;
+	                    $.each(result.content,function(ii,xx){
+	                        
+	                        console.log(xx[8]+" "+xx[3]+"<br/>"+xx[9]+" "+xx[10]+"<br/>"+xx[12]+" "+xx[13])
+	                        if($('#fs').is(':checked')){
+	                            var dat_goal = xx[8]+" "+xx[3]+"<br/>"+xx[9]+" "+xx[10]+"<br/>"+xx[12]+" "+xx[13];
+	                        }else{
+	                            var dat_goal = xx[8]+" "+xx[15]+"<br/>"+xx[9]+" "+xx[11]+"<br/>"+xx[12]+" "+xx[14];
+	                        }
+	                        
+	                        if(group=='1'){
+	                          if(x[0]==xx[0]){
+	                              var data2 = [dat_goal,xx[4],xx[5],xx[6],xx[7]]
+	                              data.push(data2);
+	                          }
+	                        }
+	                        if(group=='2'){
+	                          if(x[0]==xx[1]){
+	                              var data2 = [dat_goal,xx[4],xx[5],xx[6],xx[7]]
+	                              data.push(data2);
+	                          }
+	                        }
+	                        
+	                        if(group=='3'){
+	                          if(x[0]==xx[2]){
+	                              var data2 = [dat_goal,xx[4],xx[5],xx[6],xx[7]]
+	                              data.push(data2);
+	                              
+	                          }
+	                        }
+	                        no +=1;
+	                    });
+	                    $('#table'+uuid).DataTable({
+	                        responsive: true,
+	                        sDom: 'lrtip',
+	                        dom : '<"top"i>',
+	                        "retrieve": true,
+	                        "bLengthChange": false,
+	                        "cache": false,
+	                        "autoWidth": true,
+	                        "responsive":true,
+	                        "paging":   false,
+	                        "ordering": true,
+	                        "info":     false,
+	                        "searching": true,
+	                        "aaData" : data,
+	                        "aoColumns":data_column,
+//	                        "data": datarow,
+	                        select: true
+	                    });
+	                    	var divtotal = '<div><h4>Total : '+no+'</h4></div>';
+	                        $('#report').find('#total'+uuid).append(divtotal);
+	               })
+	           }
+       });
        
        $('#show_report').on('click',function(){
            var id_prov          = $('#id_prov').val();
@@ -409,9 +818,13 @@
            var id_monper        = periode[0];
 //           console.log(year);return false;
            var ref_category     = $('#ref_category').val();
-           var goals            = $('#goals').val();
-           var target           = $('#target').val();
-           var indicator        = $('#indicator').val();
+           //var goals            = $('#goals').val();
+           //var target           = $('#target').val();
+           //var indicator        = $('#indicator').val();
+           
+           var goals            = 0;
+           var target           = 0;
+           var indicator        = 0;
            var group            = $('#group').val();
            if(id_prov!='0'){
         	$('#report').html("");

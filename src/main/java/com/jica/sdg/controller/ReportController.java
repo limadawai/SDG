@@ -2539,7 +2539,7 @@ public class ReportController {
     	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = (monper.isPresent())?monper.get().getStatus():"";
     	String role;
-    	if(id_role.equals("all")) {
+    	if(id_role.equals("all") || id_role.equals("*")) {
     		role = "";
     	}else if(id_role.equals("unassign")) {
     		role = " and a.id_role is null ";
@@ -5610,15 +5610,15 @@ public class ReportController {
           whereidcategory = " AND c.id_cat =  '"+id_category+"'";  
         }        
         if(!id_goals.equals("*")&&!id_goals.equals("0")){
-          whereidgoals = "  and a.id_goals =  '"+id_goals+"'";  
+          whereidgoals = "  and a.id_goals in ('"+id_goals+"')";  
         }
 
         if(!id_target.equals("*")&&!id_target.equals("0")){
-          whereidtarget = "and a.id_target =  '"+id_target+"'";  
+          whereidtarget = "and a.id_target in ('"+id_target+"')";  
         }
         
         if(!id_indicator.equals("*")&&!id_indicator.equals("0")){
-          whereidindicator = "and a.id_indicator =  '"+id_indicator+"'";  
+          whereidindicator = "and a.id_indicator in ('"+id_indicator+"')";  
         }
         
         Optional<RanRad> monper = ranRadService.findOne(Integer.parseInt(id_monper));

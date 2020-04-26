@@ -83,4 +83,9 @@ public class RoleService implements IRoleService{
 		return (List<Role>) role.findByCat(cat,prev);
 	}
 
+	@Override
+	public List<Role> findAllNonSuper() {
+		return (List<Role>) role.findAllNonSuper();
+	}
+
 }

@@ -11,6 +11,8 @@ public interface IRoleService {
     
     List<Role> findAll();
     
+    List<Role> findAllNonSuper();
+    
     Optional<Role> findOne(Integer id);
     
     List<Role> findByProvince(String id_prov);

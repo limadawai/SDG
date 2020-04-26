@@ -12,15 +12,13 @@ import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.ExceptionTranslationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+
 import javax.sql.DataSource;
-import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
@@ -28,6 +26,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
 
     @Autowired
     private DataSource dataSource;
+    
+    @Bean
+    public javax.servlet.Filter ajaxTimeOutRedirectFilter() {
+        AjaxTimeoutRedirectFilter f = new AjaxTimeoutRedirectFilter();
+        //f.setCustomSessionExpiredErrorCode(901);
+        return f;
+    }
     
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
@@ -41,7 +46,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
-        http.authorizeRequests()
+        http.addFilterAfter(ajaxTimeOutRedirectFilter(), ExceptionTranslationFilter.class)
+        .authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("SUPER","ADMIN","USER")
                 .anyRequest().authenticated()
