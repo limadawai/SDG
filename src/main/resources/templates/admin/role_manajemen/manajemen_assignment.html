@@ -455,12 +455,6 @@
                 $('#id_monper').show();
                 $('#detail').empty();
                 var detail="<table><tbody>";
-                detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
-    	            'Assign All Activity : <select class="select-kakek-activity">'+roleGov()+'</select></td>'+
-    	      '<td style="width:50%">'+
-    	      ''+
-    	      '</td>'+
-    	      '<tr/>';
             $.ajax({
                 url: urls + 'list-govProg/'+$('#id_monper').val(),
                 type: 'get',
