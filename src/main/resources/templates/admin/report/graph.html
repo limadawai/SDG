@@ -240,6 +240,34 @@
             });
         }
         
+        function getGovActivity_pertama(valda, valrole, combo_periode, idprogram, codeprogram) {
+//            var valdaerah  = $("#daerah").val();
+//            var valrole    = $("#selrole").val();
+//            var valperiode = $("#periode").val();
+            $.ajax({
+                    url: urls + "getallgovactivity_pertama",
+                    type: 'get',
+                    data: {'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode, 'id_prog':idprogram },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (resactivity) {
+                            //console.log(resactivity);
+                            var isiactivity = "<ul id='ulact"+idprogram+"'>";
+                            for (var i=0; i<resactivity.length; i++) {
+                                if($('#fs').is(':checked')){
+                                    var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][1];
+                                }else{
+                                    var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
+                                }
+                                isiactivity += "<li id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                getGovIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
+                            }
+                            isiactivity += "</ul>";
+                            $("#lilili"+idprogram).append(isiactivity);
+                    }
+            });
+        }
+        
         function getGovIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram, idactivity, codeactivity) {
         	$.ajax({
         		url: urls + "getallgovindi",
@@ -256,7 +284,31 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+$("#periode").val()+","+2+")'>"+prog_l+"</li>";
+                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+")'>"+prog_l+"</li>";
+        			}
+        			isiindicator += "</ul>";
+        			$("#li2"+idactivity).append(isiindicator);
+        		}
+      	   	});
+        }
+        
+        function getGovIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, idactivity, codeactivity) {
+        	$.ajax({
+        		url: urls + "getallgovindi_pertama",
+        		type: 'get',
+        		data: {'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode, 'id_prog':idprogram, 'id_activity':idactivity},
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resgovindicator) {
+        			//console.log(resgovindicator);
+        			var isiindicator = "<ul id='ulindi"+idprogram+"'>";
+        			for (var i=0; i<resgovindicator.length; i++) {
+                                    if($('#fs').is(':checked')){
+                                        var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][1];
+                                    }else{
+                                        var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
+                                    }
+                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+")'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#li2"+idactivity).append(isiindicator);
@@ -291,6 +343,34 @@
                     }
             });
         }
+        
+        function getNsaActivity_pertama(valda, valrole, combo_periode, idprogram, codeprogram) {
+//            var valdaerah  = $("#daerah").val();
+//            var valrole    = $("#selrole").val();
+//            var valperiode = $("#periode").val();
+            $.ajax({
+                    url: urls + "getallnsaactivity_pertama",
+                    type: 'get',
+                    data: {'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode, 'id_prog':idprogram },
+                    dataType: 'json',
+                    cache: false,
+                    success: function (resactivity) {
+                            //console.log(resactivity);
+                            var isiactivity = "<ul id='ulactnsa"+idprogram+"'>";
+                            for (var i=0; i<resactivity.length; i++) {
+                                if($('#fs').is(':checked')){
+                                    var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][1];
+                                }else{
+                                    var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
+                                }
+                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                getNsaIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
+                            }
+                            isiactivity += "</ul>";
+                            $("#lilinsa"+idprogram).append(isiactivity);
+                    }
+            });
+        }
      	
      	function getNsaIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram, idactivity, codeactivity) {
         	$.ajax({
@@ -308,7 +388,31 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+$("#periode").val()+","+3+")'>"+prog_l+"</li>";
+                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+")'>"+prog_l+"</li>";
+        			}
+        			isiindicator += "</ul>";
+        			$("#lilililinsa"+idactivity).append(isiindicator);
+        		}
+      	   	});
+        }
+     	
+     	function getNsaIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, idactivity, codeactivity) {
+        	$.ajax({
+        		url: urls + "getallnsaindi_pertama",
+        		type: 'get',
+        		data: {'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode, 'idprog':idprogram, 'idactivity':idactivity },
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resnsaindicator) {
+        			//console.log(resnsaindicator);
+        			var isiindicator = "<ul id='ulindinsa"+idprogram+"'>";
+        			for (var i=0; i<resnsaindicator.length; i++) {
+                                    if($('#fs').is(':checked')){
+                                        var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][1];
+                                    }else{
+                                        var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
+                                    }
+                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+")'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#lilililinsa"+idactivity).append(isiindicator);
@@ -527,6 +631,35 @@
             });
         }
         
+        function show_gov_prog_pertama(){
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+            $.ajax({
+                url: urls + "getallgovprogram_pertama",
+                type: 'get',
+                data: { 'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode },
+                dataType: 'json',
+                cache: false,
+                success: function (resprog) {
+                        //console.log(resprog);
+                        $("#kananatas").empty();
+                        var isi = "<ol id='olprog'>";
+                        for (var i=0; i<resprog.length; i++) {
+                            if($('#fs').is(':checked')){
+                                var prog_l = resprog[i][3]+" "+resprog[i][1];
+                            }else{
+                                var prog_l = resprog[i][3]+" "+resprog[i][2];
+                            }
+                            isi += "<li id='lilili"+resprog[i][0]+"'>"+prog_l+"</li>";
+                            getGovActivity_pertama(valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
+                    }
+                    isi += "</ol>";
+                    $("#kananatas").append(isi);
+                }
+            });
+        }
+        
         function show_non_gov_prog(idgoals, idtarget, idindicator, valda, valrole, combo_periode){
             $.ajax({
             	url: urls + "getallnsaprogram",
@@ -545,7 +678,37 @@
                                 var prog_l = resprog[i][3]+" "+resprog[i][2];
                             }
                             isi += "<li id='lilinsa"+resprog[i][0]+"'>"+prog_l+"</li>";
+                            
                             getNsaActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0], resprog[i][3])
+                    }
+                    isi += "</ol>";
+                    $("#kananbawah").append(isi);
+                }
+            });
+        }
+        
+        function show_non_gov_prog_pertama(){
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+            $.ajax({
+            	url: urls + "getallnsaprogram_pertama",
+                type: 'get',
+                data: {'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode },
+                dataType: 'json',
+                cache: false,
+                success: function (resprog) {
+                	//console.log(resprog);
+                	$("#kananbawah").empty();
+                	var isi = "<ol id='olprog'>";
+               		for (var i=0; i<resprog.length; i++) {
+                            if($('#fs').is(':checked')){
+                                var prog_l = resprog[i][3]+" "+resprog[i][1];
+                            }else{
+                                var prog_l = resprog[i][3]+" "+resprog[i][2];
+                            }
+                            isi += "<li id='lilinsa"+resprog[i][0]+"'>"+prog_l+"</li>";
+                            getNsaActivity_pertama(valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
                     }
                     isi += "</ol>";
                     $("#kananbawah").append(isi);
@@ -595,16 +758,24 @@
         	//$("#lisdg").css({"cursor":"pointer","color":"#7F7FFF"});
         }
 
-        function cucukanan(idgoals, idtarget, idindicator, idprog, idacty, idindi, idmon, flag) {
+        function cucukanan(idgoals, idtarget, idindicator, idprog, idacty, idindi, role, flag) {
             //alert(idsdg+" "+idtar+" "+idindi+" "+idmon+" "+flag);
             var valda           = $("#daerah").val();
             var valrole         = $("#selrole").val();
             var combo_periode   = $("#periode").val();
 //                alert('monper '+combo_periode);
             $cek = 0;
-            if (valrole == '0'){	
+            if (role == '0'){	
                 if($('#fs').is(':checked')){
                     swal("Anda harus memilih tipe Role");
+                }else{
+                    swal("You must Choose Role");
+                }
+                $cek += 1;
+            }
+            if (role == '111111'){	
+                if($('#fs').is(':checked')){
+                    swal("Anda harus memilih Role");
                 }else{
                     swal("You must Choose Role");
                 }
@@ -620,7 +791,7 @@
             }
             if ($cek == 0)
             {
-                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+valrole;
+                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role;
             //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
             }
         }
@@ -641,6 +812,14 @@
 //                alert('monper '+combo_periode);
             $cek = 0;
             if (valrole == '0'){	
+                if($('#fs').is(':checked')){
+                    swal("Anda harus memilih tipe Role");
+                }else{
+                    swal("You must Choose Role");
+                }
+                $cek += 1;
+            }
+            if (valrole == '111111'){	
                 if($('#fs').is(':checked')){
                     swal("Anda harus memilih tipe Role");
                 }else{
@@ -751,6 +930,8 @@
             {
 //                grid_gov_nongov_tampil();
                 show_sdg_goal();
+                show_gov_prog_pertama();
+                show_non_gov_prog_pertama();
 //                alert("report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+valda+"/"+valrole+"/"+combo_periode);
                 
 //                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+combo_periode+"/"+flag+"/"+valda+"/"+valrole;

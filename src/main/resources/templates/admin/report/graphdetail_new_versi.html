@@ -34,6 +34,7 @@
                                     <option value="0">-- Pilih Jenis Grafik --</option>
                                     <option value="graf1">Grafik Line</option>
                                     <option value="graf3">Grafik Combination</option>
+                                    <option value="graf4">Grafik Stack</option>
                             </select>
                             <!--<button id="btnexport" class="btn btn-success" style="margin-right:4px; margin-top: -10px"><span class="lang_eng" style="display: none">Export Excel</span><span class="lang_indo">Ekspor Excel</span></button>-->
                             <a class="btn btn-warning pull-right" style="margin-left:4px;" href="#" onclick="tableToExcel('hasil', 'Report Graph')">Excel</a><br/>
@@ -3528,6 +3529,27 @@
                             },
 
                         );
+                    }else if(pil_graf == 'graf4'){
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'column',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'column',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+
+                        );
                     }else{}
                     
                     for (var i=0; i<pnjg; i++) {
@@ -3987,6 +4009,18 @@
                             },
 
                         );
+                    }else if(pil_graf == 'graf4'){
+                        ser.push({
+                                name: 'Realisasi I SDGS',
+                                type: 'column',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+
+                        );
                     }else{}
                     
                     for (var i=0; i<pnjg; i++) {
@@ -4070,6 +4104,57 @@
                             {
                                 name: 'Realisasi I SDGS',
                                 type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II SDGS',
+                                type: 'column',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                        );
+                    }else if(pil_graf == 'graf3'){
+                        console.log("graf3")
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II SDGS',
+                                type: 'column',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                        );
+                    }else if(pil_graf == 'graf4'){
+                        console.log("graf3")
+                        ser.push({
+                                name: 'Realisasi I SDGS',
+                                type: 'column',
                                 data: valreal_sdg1,
                                 yAxis: 1,
                                 tooltip: {
@@ -4896,6 +4981,7 @@
             
             var a=$(this).val();
             var b=$("#dualaxes").highcharts();
+            console.log(b);
                 if(a=='graf1')
                         {
                         b.series[0].update(
@@ -4966,6 +5052,64 @@
                                 type:'spline'
                         }
                         );
+                        b.series[1].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[2].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[3].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[4].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                    }else{}
+                        
+                }
+                
+                if(a=='graf4'){
+                    if (monper_sdgs == "yearly") {
+//                        b.series[0].update(
+//                                {
+//                                type:'spline'
+//                        }
+//                        );
+                        b.series[1].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                    }else if (monper_sdgs == "semesterly") {
+//                        b.series[0].update(
+//                                {
+//                                type:'spline'
+//                        }
+//                        );
+                        b.series[1].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                        b.series[2].update(
+                                {
+                                type:'column'
+                        }
+                        );
+                    }else if (monper_sdgs == "quarterly") {
+//                        b.series[0].update(
+//                                {
+//                                type:'spline'
+//                        }
+//                        );
                         b.series[1].update(
                                 {
                                 type:'column'
