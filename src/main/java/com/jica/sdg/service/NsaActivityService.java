@@ -18,8 +18,8 @@ public class NsaActivityService implements INsaActivityService{
 	NsaActivityRepository nsaActivityRepo;
 	
 	@Override
-	public List<NsaActivity> findAll(Integer id_program) {
-		return (List<NsaActivity>) nsaActivityRepo.findAllGovActivity(id_program);
+	public List<NsaActivity> findAll(Integer id_program, Integer id_role) {
+		return (List<NsaActivity>) nsaActivityRepo.findAllGovActivity(id_program,id_role);
 	}
 	
 	@Override

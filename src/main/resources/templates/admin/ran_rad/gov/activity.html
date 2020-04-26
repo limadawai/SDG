@@ -345,7 +345,7 @@
 	        });
 	        
 	        $('#showModal').on('click', function(){
-	        	if($('#id_prov').val() && $('#id_monper').val() && $('#id_role').val()){
+	        	if($('#id_prov').val() && $('#id_monper').val() && $('#id_role').val()!=0){
 	        		$("#myModal").modal("show");
 	        	}else{
 	        		swal(titleMod,messMod,'error');

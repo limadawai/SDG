@@ -984,28 +984,51 @@ public class RanRadSdgController {
 	public void deleteNsaProg(@PathVariable("id") Integer id) {
     	nsaProgService.deleteNsaProgram(id);
 	}
-    
+
     @GetMapping("admin/ran_rad/non-gov/program/{id_program}/activity")
-    public String nsa_kegiatan(Model model, @PathVariable("id_program") Integer id_program, HttpSession session) {
+    public String nongov_kegiatan(Model model, @PathVariable("id_program") Integer id_program, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
+    	//Integer id_role = list.get().getId_role();
+    	
+    	//Optional<Role> role = roleService.findOne(id_role);
     	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
-    	Optional<Role> roleDrop = roleService.findOne(list.get().getId_role());
-    	Optional<Provinsi> provin = prov.findOne(roleDrop.get().getId_prov());
+    	String sql = "select * from ref_role where id_prov = :id_prov and cat_role='NSA' and id_role!=1";
+    	Query query = em.createNativeQuery(sql);
+        query.setParameter("id_prov", role.get().getId_prov());
+        List<Object[]> rows = query.getResultList();
+        List<Role> result = new ArrayList<>(rows.size());
+        for (Object[] row : rows) {
+        	result.add(
+        				new Role((Integer)row[0]
+                                , (String)row[1]
+                                , (String) row[2]
+                                , (String) row[3]
+                                , (String) row[4]
+                                , (String) row[5]
+                                , (String) row[6]
+                                , (String) row[7]
+                                , (String) row[8])
+        			);
+        }
+    	//List<Role> roleList = roleService.findRoleGov(role.get().getId_prov());
+    	Optional<RanRad> ranrad = monPeriodService.findOne(list.get().getId_monper());
+    	Optional<Provinsi> provin = prov.findOne(ranrad.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
-        monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
-        roleDrop.ifPresent(foundUpdateObject -> model.addAttribute("role", foundUpdateObject));
+    	monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
+    	model.addAttribute("role", result);
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
         model.addAttribute("privilege", role.get().getPrivilege());
+        model.addAttribute("id_role", session.getAttribute("id_role"));
         return "admin/ran_rad/non-gov/activity";
     }
     
-    @GetMapping("admin/list-nsaActivity/{id_program}")
-    public @ResponseBody Map<String, Object> nsaActivityList(@PathVariable("id_program") Integer id_program) {
-        List<NsaActivity> list = nsaActivityService.findAll(id_program);
+    @GetMapping("admin/list-nsaActivity/{id_program}/{id_role}")
+    public @ResponseBody Map<String, Object> nsaActivityList(@PathVariable("id_program") Integer id_program,@PathVariable("id_role") Integer id_role) {
+        List<NsaActivity> list = nsaActivityService.findAll(id_program,id_role);
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;

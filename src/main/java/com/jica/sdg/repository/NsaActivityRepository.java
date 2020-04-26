@@ -13,8 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface NsaActivityRepository extends CrudRepository<NsaActivity, Integer> {
-	@Query(value = "select * from nsa_activity where id_program = :id_program",nativeQuery = true)
-	public List<NsaActivity> findAllGovActivity(@Param("id_program") Integer id_program); 
+	@Query(value = "select * from nsa_activity where id_program = :id_program and id_role = :id_role",nativeQuery = true)
+	public List<NsaActivity> findAllGovActivity(@Param("id_program") Integer id_program,@Param("id_role") Integer id_role); 
 	
 	@Transactional
     @Modifying(clearAutomatically = true)
