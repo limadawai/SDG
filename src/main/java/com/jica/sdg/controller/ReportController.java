@@ -3632,6 +3632,7 @@ public class ReportController {
         return list;
     }
     
+    
     @GetMapping("admin/getallgovactivity")
     public @ResponseBody List<Object> getallgovactivity(@RequestParam("id_goals") String id_goals, @RequestParam("id_target") String id_target, @RequestParam("id_indicator") String id_indicator, @RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("idprog") String idprog) {
     	Query query = em.createNativeQuery("");
@@ -3767,6 +3768,183 @@ public class ReportController {
             }
         }
         List list = query.getResultList();
+        return list;
+    }
+    
+    
+    @GetMapping("admin/getallgovprogram_pertama")
+    public @ResponseBody List<Object> getallgovprogram_pertama(@RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper) {
+    	Query query = em.createNativeQuery("");
+        if(id_role.equals("111111")){
+            String sql  = "SELECT distinct b.id as id_prg, b.nm_program, b.nm_program_eng, b.internal_code FROM gov_activity as a \n" +
+                        "left join gov_program as b on a.id_program = b.id\n" +
+                        "inner join gov_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE b.id_monper = :id_monper ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+//            query.setParameter("id_role", id_role);
+        }else{
+            String sql  = "SELECT distinct b.id as id_prg, b.nm_program, b.nm_program_eng, b.internal_code FROM gov_activity as a \n" +
+                        "left join gov_program as b on a.id_program = b.id\n" +
+                        "inner join gov_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_role", id_role);
+        }
+
+        List list   = query.getResultList();
+        return list;
+    }
+    
+    
+    @GetMapping("admin/getallgovactivity_pertama")
+    public @ResponseBody List<Object> getallgovactivity_pertama(@RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("id_prog") String id_prog) {
+    	Query query = em.createNativeQuery("");
+        if(id_role.equals("111111")){
+            String sql  = "SELECT distinct a.id as id_act, a.nm_activity, a.nm_activity_eng, a.internal_code FROM gov_activity as a \n" +
+                        "left join gov_program as b on a.id_program = b.id\n" +
+                        "inner join gov_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE b.id_monper = :id_monper and a.id_program = :id_prog ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prog", id_prog);
+        }else{
+            String sql  = "SELECT distinct a.id as id_act, a.nm_activity, a.nm_activity_eng, a.internal_code FROM gov_activity as a \n" +
+                        "left join gov_program as b on a.id_program = b.id\n" +
+                        "inner join gov_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and a.id_program = :id_prog ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prog", id_prog);
+            query.setParameter("id_role", id_role);
+        }
+
+        List list   = query.getResultList();
+        return list;
+    }
+    
+    
+    @GetMapping("admin/getallgovindi_pertama")
+    public @ResponseBody List<Object> getallgovindi_pertama(@RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("id_prog") String id_prog, @RequestParam("id_activity") String id_activity) {
+    	Query query = em.createNativeQuery("");
+        if(id_role.equals("111111")){
+            String sql  = "SELECT c.id as id_act, c.nm_indicator, c.nm_indicator_eng, c.internal_code, a.id_role FROM gov_activity as a \n" +
+                        "left join gov_program as b on a.id_program = b.id\n" +
+                        "inner join gov_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prog", id_prog);
+            query.setParameter("id_activity", id_activity);
+        }else{
+            String sql  = "SELECT c.id as id_act, c.nm_indicator, c.nm_indicator_eng, c.internal_code, a.id_role FROM gov_activity as a \n" +
+                        "left join gov_program as b on a.id_program = b.id\n" +
+                        "inner join gov_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prog", id_prog);
+            query.setParameter("id_activity", id_activity);
+            query.setParameter("id_role", id_role);
+        }
+
+        List list   = query.getResultList();
+        return list;
+    }
+    
+    
+    
+    @GetMapping("admin/getallnsaprogram_pertama")
+    public @ResponseBody List<Object> getallnsaprogram_pertama(@RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper) {
+    	Query query = em.createNativeQuery("");
+        if(id_role.equals("111111")){
+            String sql  = "SELECT distinct b.id as id_prg, b.nm_program, b.nm_program_eng, b.internal_code FROM nsa_activity as a \n" +
+                        "left join nsa_program as b on a.id_program = b.id\n" +
+                        "inner join nsa_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE b.id_monper = :id_monper ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+//            query.setParameter("id_role", id_role);
+        }else{
+            String sql  = "SELECT distinct b.id as id_prg, b.nm_program, b.nm_program_eng, b.internal_code FROM nsa_activity as a \n" +
+                        "left join nsa_program as b on a.id_program = b.id\n" +
+                        "inner join nsa_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_role", id_role);
+        }
+
+        List list   = query.getResultList();
+        return list;
+    }
+    
+    
+    @GetMapping("admin/getallnsaactivity_pertama")
+    public @ResponseBody List<Object> getallnsaactivity_pertama(@RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("id_prog") String id_prog) {
+    	Query query = em.createNativeQuery("");
+        if(id_role.equals("111111")){
+            String sql  = "SELECT distinct a.id as id_act, a.nm_activity, a.nm_activity_eng, a.internal_code FROM nsa_activity as a \n" +
+                        "left join nsa_program as b on a.id_program = b.id\n" +
+                        "inner join nsa_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE b.id_monper = :id_monper and a.id_program = :id_prog ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prog", id_prog);
+        }else{
+            String sql  = "SELECT distinct a.id as id_act, a.nm_activity, a.nm_activity_eng, a.internal_code FROM nsa_activity as a \n" +
+                        "left join nsa_program as b on a.id_program = b.id\n" +
+                        "inner join nsa_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and a.id_program = :id_prog ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prog", id_prog);
+            query.setParameter("id_role", id_role);
+        }
+
+        List list   = query.getResultList();
+        return list;
+    }
+    
+    
+    @GetMapping("admin/getallnsaindi_pertama")
+    public @ResponseBody List<Object> getallnsaindi_pertama(@RequestParam("id_prov") String idprov, @RequestParam("id_role") String id_role, @RequestParam("id_monper") String id_monper, @RequestParam("id_prog") String id_prog, @RequestParam("id_activity") String id_activity) {
+    	Query query = em.createNativeQuery("");
+        if(id_role.equals("111111")){
+            String sql  = "SELECT c.id as id_act, c.nm_indicator, c.nm_indicator_eng, c.internal_code, a.id_role FROM nsa_activity as a \n" +
+                        "left join nsa_program as b on a.id_program = b.id\n" +
+                        "inner join nsa_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prog", id_prog);
+            query.setParameter("id_activity", id_activity);
+        }else{
+            String sql  = "SELECT c.id as id_act, c.nm_indicator, c.nm_indicator_eng, c.internal_code, a.id_role FROM nsa_activity as a \n" +
+                        "left join nsa_program as b on a.id_program = b.id\n" +
+                        "inner join nsa_indicator as c on a.id = c.id_activity\n" +
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity ";
+            query = manager.createNativeQuery(sql);
+//            query.setParameter("id_prov", idprov);
+            query.setParameter("id_monper", id_monper);
+            query.setParameter("id_prog", id_prog);
+            query.setParameter("id_activity", id_activity);
+            query.setParameter("id_role", id_role);
+        }
+
+        List list   = query.getResultList();
         return list;
     }
     
