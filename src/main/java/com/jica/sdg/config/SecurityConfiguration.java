@@ -27,13 +27,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     @Autowired
     private DataSource dataSource;
     
-    @Bean
-    public javax.servlet.Filter ajaxTimeOutRedirectFilter() {
-        AjaxTimeoutRedirectFilter f = new AjaxTimeoutRedirectFilter();
-        //f.setCustomSessionExpiredErrorCode(901);
-        return f;
-    }
-    
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
@@ -46,8 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues());
-        http.addFilterAfter(ajaxTimeOutRedirectFilter(), ExceptionTranslationFilter.class)
-        .authorizeRequests()
+        http.authorizeRequests()
                 .antMatchers("/login").permitAll()
                 .antMatchers("/admin/**").hasAnyAuthority("SUPER","ADMIN","USER")
                 .anyRequest().authenticated()
@@ -62,7 +54,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter implemen
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                 .logoutSuccessUrl("/login")
                 .invalidateHttpSession(true)
-                .deleteCookies("JSESSIONID");
+                .deleteCookies("JSESSIONID")
+                .and().exceptionHandling().authenticationEntryPoint(new AjaxAwareAuthenticationEntryPoint("/login"));
 //        http.sessionManagement().maximumSessions(1).expiredUrl("/login?session-expired=true");
     }
     

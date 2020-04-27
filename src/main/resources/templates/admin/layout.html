@@ -232,7 +232,11 @@
                 if(id_user){
                 	localStorage.id_user = id_user;
                 }
-                
+                $(document).ajaxError(function (e, xhr, options) {
+                    if (xhr.status == 403) {
+                        window.location.href = 'login';
+                    }
+                });
                 $("#welcome").html("Welcome, "+name);
                 
                 if(name=="Guest"){
