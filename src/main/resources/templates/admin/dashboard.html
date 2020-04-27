@@ -42,8 +42,10 @@
                             <input id="legend6" value="60" type="text" style="width:30px; margin-top: 10px">
                             <span> - </span>
                             <input id="legend7" value="80" type="text" style="width:30px; margin-top: 10px">
-                             <span>> </span>
+                             <span>> </span>                             
                             <input id="legend8" value="80" type="text" style="width:30px; margin-top: 10px">
+                            <input type="checkbox" id="calculation"  />
+                             <span>Calculation</span>
                              <button class="btn btn-primary" type="button" id="show_map">
                                  <i class="icon-search"></i>
                              </button>
@@ -216,6 +218,11 @@
            var legend6      = $('#legend6').val();
            var legend7      = $('#legend7').val();
            var legend8      = $('#legend8').val();
+           var calculation  = 0;
+           if($('#calculation').is(":checked")){
+               calculation = 1
+           }
+           console.log(calculation);
            var data = JSON.stringify({
                             'tahun':tahun,
                             'indicator':indicator
@@ -230,11 +237,35 @@
                         var indicator;
                         var subtitle ;
                         $.each(result.content,function(i,x){
-                            var total = (x[2]/x[1])*100;
-                            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11]})
-                            goal        = x[7];
-                            target      = x[8];
-                            indicator   = x[9];
+                            var notcalculation ;
+                            if(calculation==1){
+                                console.log("ini calculasi")
+                                var total = (x[2]/x[1])*100;
+                                data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11]})
+                                goal        = x[7];
+                                target      = x[8];
+                                indicator   = x[9];
+                            }else{
+                                if(x[12]!=0){
+                                    notcalculation = x[12];
+                                }
+                                if(x[13]!=0){
+                                    notcalculation = x[13];
+                                }
+                                if(x[14]!=0){
+                                    notcalculation = x[14];
+                                }
+                                if(x[15]!=0){
+                                    notcalculation = x[15];
+                                }
+                                
+                                var total = (notcalculation/x[1])*100;
+                                data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':notcalculation,'value':total,'gov':x[10],'non_gov':x[11]})
+                                goal        = x[7];
+                                target      = x[8];
+                                indicator   = x[9];
+                            }
+                            
         //            console.log(x[1]);
                         });
                         if(typeof(goal)!=='undefined'){

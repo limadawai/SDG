@@ -138,7 +138,7 @@ public class AdminController {
                                             "    ,f.nm_target\n" +
                                             "    ,e.nm_indicator\n"+
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
-                                            "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
+                                            "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +                                            
                                             "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                             "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                             "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
@@ -183,7 +183,7 @@ public class AdminController {
                 where = "AND b.id_sdg_indicator = '"+indicator+"'";
             }
         Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
-                                            "    , (a.achievement1+a.achievement2+a.achievement3+a.achievement4) AS realisasi \n" +
+                                            "    ,(IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) AS realisasi \n" +
                                             "    ,c.id_prov \n" +
                                             "    ,d.id_map \n" +
                                             "    ,d.nm_prov \n" +
@@ -193,6 +193,7 @@ public class AdminController {
                                             "    ,e.nm_indicator\n"+
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
+                                            "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
                                             "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                             "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                             "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
