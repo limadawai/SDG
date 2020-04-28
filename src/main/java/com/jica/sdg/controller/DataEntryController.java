@@ -1864,13 +1864,14 @@ public class DataEntryController {
         return hasil;
     }
     
-    @GetMapping("admin/get-sdgTargetIndicator/{id_indicator}/{id_role}/{year}")
-    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_indicator") String id_indicator, @PathVariable("id_role") String id_role, @PathVariable("year") String year) {
-        String sql  = "select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_sdg_indicator = :id_indicator and id_role = :id_role and year = :year";
+    @GetMapping("admin/get-sdgTargetIndicator/{id_indicator}/{id_role}/{year}/{id_monper}")
+    public @ResponseBody Map<String, Object> getSdgTarget(@PathVariable("id_monper") String id_monper, @PathVariable("id_indicator") String id_indicator, @PathVariable("id_role") String id_role, @PathVariable("year") String year) {
+        String sql  = "select id_sdg_indicator, id_role, year, value from sdg_indicator_target where id_monper = :id_monper and id_sdg_indicator = :id_indicator and id_role = :id_role and year = :year";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_role", id_role);
         query.setParameter("id_indicator", id_indicator);
         query.setParameter("year", year);
+        query.setParameter("id_monper", id_monper);
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);

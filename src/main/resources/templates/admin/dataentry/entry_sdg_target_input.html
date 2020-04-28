@@ -246,7 +246,7 @@
                 	var nilai="";
 		        	$.ajax({
     					type: "GET",
-                        url: urls+'get-sdgTargetIndicator/'+id_indicator_1+'/'+id_role_1+'/'+($.trim(i)),
+                        url: urls+'get-sdgTargetIndicator/'+id_indicator_1+'/'+id_role_1+'/'+($.trim(i))+'/'+monper_1,
                         async:false,
                         success: function (hasil) {
                         		var val = hasil.content;
