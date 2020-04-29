@@ -185,7 +185,7 @@ public class AdministrasiController {
     	if(id_prov.equals("all")) {
     		listRole = roleService.findAll();
     	}else {
-    		listRole = roleService.findByProvince(id_prov);
+    		listRole = roleService.findByProvinceUserForm(id_prov);
     	}
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content", listRole);

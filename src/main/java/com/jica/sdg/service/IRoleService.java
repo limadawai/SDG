@@ -17,6 +17,8 @@ public interface IRoleService {
     
     List<Role> findByProvince(String id_prov);
     
+    List<Role> findByProvinceUserForm(String id_prov);
+    
     List<Role> findByProvince(String id_prov, String cat, String prev);
     
     List<Role> findByCat(String cat,String prev);

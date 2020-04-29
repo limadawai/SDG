@@ -2012,7 +2012,7 @@ public class ReportController {
         
     	StringBuilder sqlNsaInd = new StringBuilder();
         sqlNsaInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
     		sqlNsaInd.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
@@ -2109,7 +2109,7 @@ public class ReportController {
         
     	StringBuilder sqlNsaInd = new StringBuilder();
         sqlNsaInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
     		sqlNsaInd.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
@@ -2209,7 +2209,7 @@ public class ReportController {
         
     	StringBuilder sqlNsaInd = new StringBuilder();
         sqlNsaInd.append("SELECT DISTINCT f.id_program, d.id_activity, c.id_nsa_indicator, f.nm_program,\r\n" + 
-    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,\r\n");
+    			"f.nm_program_eng, d.nm_activity, d.nm_activity_eng, c.nm_indicator, c.nm_indicator_eng,h.nm_unit,i.funding_source,i.baseline,\r\n");
     	for(int i = start_year; i<=end_year;i++) {
     		//target
     		sqlNsaInd.append("(select value from nsa_target as target_"+i+" where target_"+i+".id_nsa_indicator = a.id_nsa_indicator and year = "+i+") as target_"+i+", ");
