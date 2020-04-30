@@ -3461,7 +3461,6 @@
                      
             var monper_sdgs = $("#monper_sdg").val();   
             var pil_graf = $("#pilgrafik").val();
-            console.log("pilgafik val " + pil_graf + " per " + periode + " monper " + monper_sdgs);
             if (periode == "yearly") {
                 if (flag == "2") {
                     var nm_gov = "Government";
@@ -3478,7 +3477,6 @@
                 ];
                 
                 var pnjg = $('#panjang_aggre').val();
-                console.log("pnjg " + pnjg);
                 var ser  = [];
                 if (monper_sdgs == "yearly") {
                     var valreal_sdg1 = [
@@ -3510,7 +3508,7 @@
                             },
 
                         );
-                    } else if(pil_graf == 'graf3'){
+                    }else if(pil_graf == 'graf3'){
                         ser.push({
                                 name: 'Target SDGS',
                                 type: 'column',
@@ -3531,7 +3529,7 @@
                             },
 
                         );
-                    } else if(pil_graf == 'graf4'){
+                    }else if(pil_graf == 'graf4'){
                         ser.push({
                                 name: 'Target SDGS',
                                 type: 'column',
@@ -3552,8 +3550,7 @@
                             },
 
                         );
-                    } else {
-                    }
+                    }else{}
                     
                     for (var i=0; i<pnjg; i++) {
                         var valanggre1 = [
@@ -3663,7 +3660,6 @@
 
                     }
                 }else if (monper_sdgs == "quarterly") {
-                    console.log("pilgafik val querter");
                     var valreal_sdg1 = [
                         parseInt($("#colsdg7").text(), 10),
                         parseInt($("#colsdg11").text(), 10),
@@ -4537,7 +4533,6 @@
                 ];
                 
                 var pnjg = $('#panjang_aggre').val();
-                console.log("pnjg " + pnjg + " monper " + monper_sdgs);
                 var ser  = [];
                 if (monper_sdgs == "yearly") {
                     var valreal_sdg1 = [
@@ -4749,10 +4744,100 @@
                             }
                         },
                     );
-                    
+
+                    if (pil_graf != 'graf4') {
+
+                        for (var i=0; i<pnjg; i++) {
+                            var valanggre1 = [
+                                parseInt($("#colagg8_"+i).text(), 10),
+                                parseInt($("#colagg12_"+i).text(), 10),
+                                parseInt($("#colagg16_"+i).text(), 10),
+                                parseInt($("#colagg20_"+i).text(), 10),
+                                parseInt($("#colagg24_"+i).text(), 10)
+                            ];
+                            ser.push({
+                                    name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                    type: 'spline',
+                                    data: valanggre1,
+                                    yAxis: 1,
+                                    tooltip: {
+        //                          valueSuffix: '%'
+                                    }
+
+                            },);
+        //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                        }
+                        for (var i=0; i<pnjg; i++) {
+                            var valanggre2 = [
+                                parseInt($("#colagg9_"+i).text(), 10),
+                                parseInt($("#colagg13_"+i).text(), 10),
+                                parseInt($("#colagg17_"+i).text(), 10),
+                                parseInt($("#colagg21_"+i).text(), 10),
+                                parseInt($("#colagg25_"+i).text(), 10)
+                            ];
+                            ser.push({
+                                    name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                                    type: 'spline',
+                                    data: valanggre2,
+                                    yAxis: 1,
+                                    tooltip: {
+        //                          valueSuffix: '%'
+                                    }
+
+                            },);
+        //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                        }
+                        for (var i=0; i<pnjg; i++) {
+                            var valanggre3 = [
+                                parseInt($("#colagg10_"+i).text(), 10),
+                                parseInt($("#colagg14_"+i).text(), 10),
+                                parseInt($("#colagg18_"+i).text(), 10),
+                                parseInt($("#colagg22_"+i).text(), 10),
+                                parseInt($("#colagg26_"+i).text(), 10)
+                            ];
+                            ser.push({
+                                    name: 'Realisasi III SDGS Disaggregasi '+(i+1),
+                                    type: 'spline',
+                                    data: valanggre3,
+                                    yAxis: 1,
+                                    tooltip: {
+        //                          valueSuffix: '%'
+                                    }
+
+                            },);
+        //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                        }
+                        for (var i=0; i<pnjg; i++) {
+                            var valanggre4 = [
+                                parseInt($("#colagg11_"+i).text(), 10),
+                                parseInt($("#colagg15_"+i).text(), 10),
+                                parseInt($("#colagg19_"+i).text(), 10),
+                                parseInt($("#colagg23_"+i).text(), 10),
+                                parseInt($("#colagg27_"+i).text(), 10)
+                            ];
+                            ser.push({
+                                    name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
+                                    type: 'spline',
+                                    data: valanggre4,
+                                    yAxis: 1,
+                                    tooltip: {
+        //                          valueSuffix: '%'
+                                    }
+
+                            },);
+        //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
+
+                        }
+                        
+
+                    }
+
                 }else{}
                 
-                if(pil_graf != 'graf4'){
+                if (pil_graf != 'graf4') {
                     ser.push({
                             name: 'Target '+nm_gov,
                             type: 'spline',
@@ -4804,7 +4889,6 @@
                         }
                     );
                 }
-
                 
                  var options4 ={
                     chart: {
