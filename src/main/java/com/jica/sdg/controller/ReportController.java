@@ -4447,7 +4447,7 @@ public class ReportController {
         model.addAttribute("flag", flag);
         model.addAttribute("valdaerah", valdaerah);
         model.addAttribute("valrole", valrole);
-        return "admin/report/graphdetail_new_versi";
+        return "admin/report/graphdetail_new_versi_bangyos";
     }
     
     @GetMapping("admin/getprov")
