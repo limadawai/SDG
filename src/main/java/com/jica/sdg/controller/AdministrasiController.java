@@ -183,9 +183,9 @@ public class AdministrasiController {
     public @ResponseBody Map<String, Object> rolesUser(HttpSession session, @PathVariable("id_prov") String id_prov) {
     	List<Role> listRole;
     	if(id_prov.equals("all")) {
-    		listRole = roleService.findAllNonSuper();
+    		listRole = roleService.findAll();
     	}else {
-    		listRole = roleService.findByProvince(id_prov);
+    		listRole = roleService.findByProvinceUserForm(id_prov);
     	}
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content", listRole);

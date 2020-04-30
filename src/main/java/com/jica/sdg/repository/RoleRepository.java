@@ -29,9 +29,12 @@ public interface RoleRepository extends CrudRepository<Role, Integer> {
     public List<Role> findRoleInstitusi();
     
 	@Query(value = "select * from ref_role where id_prov = :id_prov and cat_role != 'gri_ojk' and privilege != 'SUPER'",nativeQuery = true)
-	public List<Role> findByProvince(@Param("id_prov") String id_prov); 
+	public List<Role> findByProvince(@Param("id_prov") String id_prov);
 	
-	@Query(value = "select * from ref_role where id_prov = :id_prov and id_role!=1 and cat_role = :cat and privilege = :prev",nativeQuery = true)
+	@Query(value = "select * from ref_role where id_prov = :id_prov and cat_role != 'gri_ojk'",nativeQuery = true)
+	public List<Role> findByProvinceUserForm(@Param("id_prov") String id_prov);
+	
+	@Query(value = "select * from ref_role where id_prov = :id_prov and privilege != 'SUPER' and cat_role = :cat and privilege = :prev",nativeQuery = true)
 	public List<Role> findByProvince(@Param("id_prov") String id_prov, @Param("cat") String cat,@Param("prev") String prev); 
 	
 	@Query(value = "select * from ref_role where id_role!=1 and cat_role = :cat and privilege = :prev",nativeQuery = true)

@@ -88,4 +88,9 @@ public class RoleService implements IRoleService{
 		return (List<Role>) role.findAllNonSuper();
 	}
 
+	@Override
+	public List<Role> findByProvinceUserForm(String id_prov) {
+		return role.findByProvinceUserForm(id_prov);
+	}
+
 }
