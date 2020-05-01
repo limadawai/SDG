@@ -487,17 +487,26 @@ public class AdministrasiController {
     	if(ok.equals("1")) {
     		if(privilege.equals("SUPER")) {
     			//list = userReqService.findAllNew();
-    			String sql = "select * from user_request_list a left join ref_province b on a.id_prov = b.id_prov where a.status = 'new'";
+    			String sql = "select b.acronym, a.date, a.level, a.type, a.institution, a.name, a.contact, a.status, a.id, a.detail from user_request_list a left join ref_province b on a.id_prov = b.id_prov where a.status = 'new'";
     	        Query query = em.createNativeQuery(sql);
     	        list   = query.getResultList();
     		}else {
-    			list = userReqService.findAllNewProv(id_prov);
+    			//list = userReqService.findAllNewProv(id_prov);
+    			String sql = "select b.acronym, a.date, a.level, a.type, a.institution, a.name, a.contact, a.status, a.id, a.detail from user_request_list a left join ref_province b on a.id_prov = b.id_prov where a.status = 'new' and a.id_prov = '"+id_prov+"' ";
+    	        Query query = em.createNativeQuery(sql);
+    	        list   = query.getResultList();
     		}
     	}else {
     		if(privilege.equals("SUPER")) {
-    			list = userReqService.findAll();
+    			//list = userReqService.findAll();
+    			String sql = "select b.acronym, a.date, a.level, a.type, a.institution, a.name, a.contact, a.status, a.id, a.detail from user_request_list a left join ref_province b on a.id_prov = b.id_prov ";
+    	        Query query = em.createNativeQuery(sql);
+    	        list   = query.getResultList();
     		}else {
-    			list = userReqService.findAllProv(id_prov);
+    			//list = userReqService.findAllProv(id_prov);
+    			String sql = "select b.acronym, a.date, a.level, a.type, a.institution, a.name, a.contact, a.status, a.id, a.detail from user_request_list a left join ref_province b on a.id_prov = b.id_prov where a.id_prov = '"+id_prov+"' ";
+    	        Query query = em.createNativeQuery(sql);
+    	        list   = query.getResultList();
     		}
     	}
         Map<String, Object> hasil = new HashMap<>();
