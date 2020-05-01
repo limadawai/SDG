@@ -2363,6 +2363,75 @@
 
 		console.log(ser);
 
+
+		for (t = 0; t < kl; t++) {
+			var tar = [
+                            parseInt($("#tar_"+i + "_0").text(), 10),
+                            parseInt($("#tar_"+i + "_1").text(), 10),
+                            parseInt($("#tar_"+i + "_2").text(), 10),
+                            parseInt($("#tar_"+i + "_3").text(), 10),
+                            parseInt($("#tar_"+i + "_4").text(), 10)
+                        ];
+			ser.push({
+                        name: 'Target Disagregasi',
+                        type: 'spline',
+                        data: tar
+			});
+
+			var rel0 = [
+                            parseInt($("#arel_"+i + "_0").text(), 10),
+                            parseInt($("#arel_"+i + "_4").text(), 10),
+                            parseInt($("#arel_"+i + "_8").text(), 10),
+                            parseInt($("#arel_"+i + "_12").text(), 10),
+							parseInt($("#arel_"+i + "_16").text(), 10),
+                        ];
+			ser.push({
+                        name: 'Realisasi Disagregasi Q1',
+                        type: 'column',
+                        data: rel0,
+			});			
+
+			var rel1 = [
+                            parseInt($("#arel_"+i + "_1").text(), 10),
+                            parseInt($("#arel_"+i + "_5").text(), 10),
+                            parseInt($("#arel_"+i + "_9").text(), 10),
+                            parseInt($("#arel_"+i + "_13").text(), 10),
+							parseInt($("#arel_"+i + "_17").text(), 10),
+                        ];
+			ser.push({
+                        name: 'Realisasi Disagregasi Q2',
+                        type: 'column',
+                        data: rel1,
+			});					
+
+			var rel2 = [
+                            parseInt($("#arel_"+i + "_2").text(), 10),
+                            parseInt($("#arel_"+i + "_6").text(), 10),
+                            parseInt($("#arel_"+i + "_10").text(), 10),
+                            parseInt($("#arel_"+i + "_14").text(), 10),
+							parseInt($("#arel_"+i + "_18").text(), 10),
+                        ];
+			ser.push({
+                        name: 'Realisasi Disagregasi Q3',
+                        type: 'column',
+                        data: rel2,
+			});			
+
+			var rel3 = [
+                            parseInt($("#arel_"+i + "_3").text(), 10),
+                            parseInt($("#arel_"+i + "_7").text(), 10),
+                            parseInt($("#arel_"+i + "_11").text(), 10),
+                            parseInt($("#arel_"+i + "_15").text(), 10),
+							parseInt($("#arel_"+i + "_19").text(), 10),
+                        ];
+			ser.push({
+                        name: 'Realisasi Disagregasi Q4',
+                        type: 'column',
+                        data: rel3,
+			});									
+
+		}
+
 		var chart4;
 		var options4 ={
 			chart: {
