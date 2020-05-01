@@ -437,11 +437,11 @@
             });
 
             if(tipe == 'budget'){
-                if(role == '999999' || role == '9999991' || role == '9999992'){
+                if(role == '999999'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
-                    if(catrole == 'Government'){
+                    if(catrole == 'Government' || role == '9999991'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-gov/'+data[0],
@@ -461,7 +461,7 @@
                                 }
                             }
                         });
-                    }else if(catrole == 'NSA'){
+                    }else if(catrole == 'NSA'|| role == '9999992'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-nongov/'+data[0],
@@ -488,11 +488,11 @@
                 }
                 
             }else if(tipe == 'indicator'){
-                if(role == '999999' || role == '9999991' || role == '9999992'){
+                if(role == '999999'  ){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
-                    if(catrole == 'Government'){
+                    if(catrole == 'Government' || role == '9999991'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-gov_act/'+data[0],
@@ -512,7 +512,7 @@
                                 }
                             }
                         });
-                    }else if(catrole == 'NSA'){
+                    }else if(catrole == 'NSA' || role == '9999992'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-nongov_act/'+data[0],
@@ -560,11 +560,11 @@
             });
 
             if(tipe == 'budget'){
-                if(role == '999999' || role == '9999991' || role == '9999992'){
+                if(role == '999999'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
-                    if(catrole == 'Government'){
+                    if(catrole == 'Government' || role == '9999991'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-gov/'+data[0],
@@ -584,7 +584,7 @@
                                 }
                             }
                         });
-                    }else if(catrole == 'NSA'){
+                    }else if(catrole == 'NSA' || role == '9999992'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-nongov/'+data[0],
@@ -611,11 +611,11 @@
                 }
                 
             }else if(tipe == 'indicator'){
-                if(role == '999999' || role == '9999991' || role == '9999992'){
+                if(role == '999999'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
-                    if(catrole == 'Government'){
+                    if(catrole == 'Government' || role == '9999991'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-gov_act/'+data[0],
@@ -635,7 +635,7 @@
                                 }
                             }
                         });
-                    }else if(catrole == 'NSA'){
+                    }else if(catrole == 'NSA' || role == '9999992'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-nongov_act/'+data[0],
@@ -683,11 +683,11 @@
             });
 
             if(tipe == 'budget'){
-                if(role == '999999' || role == '9999991' || role == '9999992'){
+                if(role == '999999'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
-                    if(catrole == 'Government'){
+                    if(catrole == 'Government' || role == '9999991'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-gov/'+data[0],
@@ -707,7 +707,7 @@
                                 }
                             }
                         });
-                    }else if(catrole == 'NSA'){
+                    }else if(catrole == 'NSA' || role == '9999992'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-nongov/'+data[0],
@@ -734,11 +734,11 @@
                 }
                 
             }else if(tipe == 'indicator'){
-                if(role == '999999' || role == '9999991' || role == '9999992'){
+                if(role == '999999'){
                     var s_html = '<option value="0" >-- Pilih --</option><option value="1" >Quarter 1</option><option value="2" >Quarter 2<option value="3" >Quarter 3</option><option value="4" >Quarter 4</option>';
                     $("#period").html(s_html);
                 }else{
-                    if(catrole == 'Government'){
+                    if(catrole == 'Government' || role == '9999991'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-gov_act/'+data[0],
@@ -758,7 +758,7 @@
                                 }
                             }
                         });
-                    }else if(catrole == 'NSA'){
+                    }else if(catrole == 'NSA' || role == '9999992'){
                         $.ajax({
                             type: "GET",
                             url: urls+'list-get-sts-monper-nongov_act/'+data[0],

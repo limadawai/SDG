@@ -310,7 +310,13 @@
 				table.search(val).draw();
 			});
 			
+			if(sessionStorage.role_non_gov_activity){
+				$('#id_role').val(sessionStorage.role_non_gov_activity);
+				table.ajax.url(urls+'list-nsaActivity/'+id_program+'/'+$('#id_role').val()).load();
+			}
+			
 			$('#id_role').on('change', function(){
+				sessionStorage.role_non_gov_activity = $('#id_role').val();
 				table.ajax.url(urls+'list-nsaActivity/'+id_program+'/'+$('#id_role').val()).load();
 			});
 			
