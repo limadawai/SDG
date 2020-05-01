@@ -36,6 +36,9 @@
                                                 	<span class="lang_indo">Tanggal Permintaan</span>
                                                 </th>
                                                 <th style="text-align:center;font-size:80%;">
+                                                	Level
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">User Type</span>
                                                 	<span class="lang_indo">Tipe User</span>
                                                 </th>
@@ -136,6 +139,7 @@
                 return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";}
             },
             {"data": function (row, data, index, display) {
+            	console.log(row);
                 return "<div style='font-size:90%;'>"+(row.date)+"</div>";}
             },
             {"data": function (row, data, index, display) {

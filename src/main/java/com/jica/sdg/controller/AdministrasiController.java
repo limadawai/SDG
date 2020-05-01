@@ -471,7 +471,6 @@ public class AdministrasiController {
 
     @GetMapping("level")
     public @ResponseBody Map<String, Object> requestLevel() {
-        System.out.println("lala");
         List list = provinsiService.findAllProvinsi();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content", list);
@@ -487,7 +486,10 @@ public class AdministrasiController {
     	String id_prov = listRole.get().getId_prov();
     	if(ok.equals("1")) {
     		if(privilege.equals("SUPER")) {
-    			list = userReqService.findAllNew();
+    			//list = userReqService.findAllNew();
+    			String sql = "select * from user_request_list a left join ref_province b on a.id_prov = b.id_prov where a.status = 'new'";
+    	        Query query = em.createNativeQuery(sql);
+    	        list   = query.getResultList();
     		}else {
     			list = userReqService.findAllNewProv(id_prov);
     		}
@@ -529,7 +531,6 @@ public class AdministrasiController {
     @GetMapping("admin/manajemen/menu")
     public @ResponseBody void menusubmenu() {
         List<Menu> listMenu = menuService.findAllMenu();
-        System.out.println(listMenu.size());
     }
     
     
