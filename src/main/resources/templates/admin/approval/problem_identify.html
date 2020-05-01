@@ -696,7 +696,7 @@
                                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                         data: data,
                                     success: function (result) {
-                                        ceksummary();
+                                        //ceksummary();
                                        table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole).load();
                                         $('#myModalSum').modal('hide');
                                     },
@@ -753,7 +753,7 @@
                     var id_monper   = v_data_id[0];
                     var tahun       = v_data_id[1];
                     table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/999999').load();
-                    ceksummary();
+                    //ceksummary();
                 }
             });
 
@@ -806,7 +806,7 @@
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
-            ceksummary();
+            //ceksummary();
             var v_dataid    = $("#periode").val();
             var v_data_id   = v_dataid.split("###");
             var id_monper   = v_data_id[0];
@@ -864,7 +864,7 @@
             $("#tabel-approve-gov-indicator").hide();
             grid_role();
             cek_show_report();
-            ceksummary();
+            //ceksummary();
             var v_dataid    = $("#periode").val();
             var v_data_id   = v_dataid.split("###");
             var id_monper   = v_data_id[0];
@@ -950,16 +950,11 @@
                 url: urls+'cek_sum_problem/'+v_idprov+'/'+id_monper+'/'+tahun,
                 success: function (result1) {
                     var sts = result1.content;
-                    console.log('cek = '+sts);
                     if(sts == '0'){
-                        $("#sum_add").show();
-//                        $("#unshow_report").hide();
+                        //$("#sum_add").show();
                     }else{
-                        $("#sum_add").hide();
-//                        $("#unshow_report").show();
+                        //$("#sum_add").hide();
                     }
-                    
-//                        console.log(sts);
                 }
             });
         }
@@ -1051,9 +1046,11 @@
                     if(sts == '0'){
                         $("#show_report").show();
                         $("#unshow_report").hide();
+                        $('#add_problem').show();
                     }else{
                         $("#show_report").hide();
                         $("#unshow_report").show();
+                        $('#add_problem').hide();
                     }
                     
 //                        console.log(sts);
@@ -1335,6 +1332,7 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"bDestroy": true,
 				"ajax": {
 					"url": urls+'list-problem/'+v_id_monper+'/'+v_tahun+'/'+v_idrole,
 					dataSrc: 'content',
@@ -1802,7 +1800,7 @@
                             var id_monper   = v_data_id[0];
                             var tahun       = v_data_id[1];
                             table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/999999').load();
-                            ceksummary();
+                            //ceksummary();
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

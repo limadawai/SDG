@@ -456,7 +456,7 @@
         grid_role();
         cek_show_report();
         grid_summary();
-        ceksummary();
+        //ceksummary();
         $('#time_activity').datepicker({
             autoclose: true,
             format: "yyyy-mm-dd"
@@ -522,7 +522,7 @@
             $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
             grid_role();
             grid_summary();
-            ceksummary();
+            //ceksummary();
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
         }
@@ -571,7 +571,7 @@
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
             grid_summary();
-            ceksummary();
+            //ceksummary();
         });
 //
 //        
@@ -625,7 +625,7 @@
             grid_role();
             cek_show_report();
             grid_summary();
-            ceksummary();
+            //ceksummary();
         });
 
 
@@ -654,10 +654,10 @@
                     var sts = result1.content;
                     console.log('cek = '+sts);
                     if(sts == '0'){
-                        $("#sum_add").show();
+                       // $("#sum_add").show();
 //                        $("#unshow_report").hide();
                     }else{
-                        $("#sum_add").hide();
+                       // $("#sum_add").show();
 //                        $("#unshow_report").show();
                     }
                     
@@ -872,7 +872,7 @@
                     data: data,
                     success: function (result) {
                         grid_summary();
-                        ceksummary();
+                        //ceksummary();
                         $('#myModal_tambah').modal('hide');
                     },
                 });
@@ -927,10 +927,10 @@
                                                                                 '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
                                                           '</label><br/>';
                                             text += '<label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-                                                                                        '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+                                                                                        '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][7]+"."+result1.content[k][8]:"")+" "+nm_target+'</span>'+
                                                              '</label><br/>';
                                              text += '<label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-                                                                 '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+                                                                 '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][7]+"."+result1.content[k][8]+"."+result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
                                                            '</label><br/>';
                                         }
                                 }
@@ -960,9 +960,9 @@
                                                                     }
                                             text += '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
                                                               '<br/>';
-                                                text += '<span style="vertical-align:middle;margin-left:20px">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+                                                text += '<span style="vertical-align:middle;margin-left:20px">'+(result1.content[k][8]?result1.content[k][7]+"."+result1.content[k][8]:"")+" "+nm_target+'</span>'+
                                                                  '<br/>';
-                                                 text += '<span style="vertical-align:middle;margin-left:40px">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+                                                 text += '<span style="vertical-align:middle;margin-left:40px">'+(result1.content[k][9]?result1.content[k][7]+"."+result1.content[k][8]+"."+result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
                                                                '<br/>';
 //                                                    text += '<label style="display:inline-block;white-space:nowrap;">'+
 //                                                                                            '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
@@ -1254,7 +1254,7 @@
                                 var year        = id[1];
                                 var id_role     = $('#idrole').val();
                                 grid_summary();
-                                ceksummary();
+                                //ceksummary();
                             },
                             error:function (result) {
 
@@ -1382,9 +1382,31 @@
                             return "<div style='text-align:center;'>"+
                             '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unapprove">UnApprove</button></div>';
                         }else if(row[3]==3){
-                            warna = "btn-danger";
-                            return "<div style='text-align:center;'>"+
-                            '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unreject">UnReject</button></div>';
+//                            var v_dataid    = $("#periode").val();
+//                            var v_period    = '1';
+//                            var v_data_id   = v_dataid.split("###");
+//                            var id_monper   = v_data_id[0];
+//                            var tahun       = v_data_id[1];
+//                            var v_type      = 'entry_best_practice';
+                            var sts ;	
+                            $.ajax({
+                                type: "GET",
+                                url: urls+'list-get-cek-show-report/'+id_monper+'/'+tahun+'/1/'+v_type+'/'+v_period,
+                                dataType: 'json',
+                                async:false,
+                                success: function (result1) {
+                                    sts = result1.content;
+                                }
+                            });
+                            console.log("isi sts "+sts);
+                            if(sts == '0'){
+                                warna = "btn-danger";
+                                return "<div style='text-align:center;'>"+
+                                '<button data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unreject">UnReject</button></div>';
+                            }else{
+                                warna = "";
+                                return "";
+                            }
                         }else if(row[3]==1){
                             warna = "btn-primary";
                             return "<div style='text-align:center;'>"+
@@ -1418,12 +1440,12 @@
                     if(sts == '0'){
                         $("#show_report").show();
                         $("#unshow_report").hide();
+                        $('#sum_add').show();
                     }else{
                         $("#show_report").hide();
                         $("#unshow_report").show();
+                        $('#sum_add').hide();
                     }
-                    
-//                        console.log(sts);
                 }
             });
         }
@@ -1751,10 +1773,10 @@
                                                                         '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
                                                   '</label><br/>';
                                     text += '<label style="margin-left:20px">'+
-                                                                                '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+                                                                                '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][7]+"."+result1.content[k][8]:"")+" "+nm_target+'</span>'+
                                                      '</label><br/>';
                                      text += '<label style="margin-left:40px">'+
-                                                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+                                                         '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][7]+"."+result1.content[k][8]+"."+result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
                                                    '</label><br/>';
                                 }
                         }
@@ -1786,10 +1808,10 @@
                                                                             '<span style="vertical-align:middle">'+(result1.content[k][7]?result1.content[k][7]:"")+" "+nm_goals+'</span>'+
                                                       '</label><br/>';
                                         text += '<label style="margin-left:20px">'+
-                                                                                    '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][8]:"")+" "+nm_target+'</span>'+
+                                                                                    '<span style="vertical-align:middle">'+(result1.content[k][8]?result1.content[k][7]+"."+result1.content[k][8]:"")+" "+nm_target+'</span>'+
                                                          '</label><br/>';
                                          text += '<label style="margin-left:40px">'+
-                                                             '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
+                                                             '<span style="vertical-align:middle">'+(result1.content[k][9]?result1.content[k][7]+"."+result1.content[k][8]+"."+result1.content[k][9]:"")+" "+nm_indicator+'</span>'+
                                                        '</label><br/>';
                                     }
                             }

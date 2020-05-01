@@ -372,10 +372,10 @@ public class ReportController {
     	if(sdg.equals("0")) {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
     		String sql;
-            if(status.equals("completed")) {sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals order by a.id_old";
+            if(status.equals("completed")) {sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals order by a.id_target";
     			query = manager.createNativeQuery(sql);
     			query.setParameter("id_goals", id_goals);
-            }else {sql = "SELECT distinct a.id, a.nm_target, a.nm_target_eng, a.id_target FROM sdg_target a where a.id_goals = :id_goals order by a.id";
+            }else {sql = "SELECT distinct a.id, a.nm_target, a.nm_target_eng, a.id_target FROM sdg_target a where a.id_goals = :id_goals order by a.id_target";
     			query = manager.createNativeQuery(sql);
     			query.setParameter("id_goals", id_goals);
             }
@@ -422,11 +422,11 @@ public class ReportController {
 
             String sql;
             if(status.equals("completed")) {
-            	sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals "+tarOld+" order by a.id_old";
+            	sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals "+tarOld+" order by a.id_target";
     			query = manager.createNativeQuery(sql);
     			query.setParameter("id_goals", id_goals);
             }else {
-            	sql = "SELECT distinct a.id, a.nm_target, a.nm_target_eng, a.id_target FROM sdg_target a where a.id_goals = :id_goals "+tar+" order by a.id";
+            	sql = "SELECT distinct a.id, a.nm_target, a.nm_target_eng, a.id_target FROM sdg_target a where a.id_goals = :id_goals "+tar+" order by a.id_target";
             	query = manager.createNativeQuery(sql);
             	query.setParameter("id_goals", id_goals);
             }
@@ -5627,7 +5627,7 @@ public class ReportController {
      	String sql;
      	
      	if(status.equals("completed")) {
-     		sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id, j.id_target, j.nm_target, j.nm_target_eng, k.id_indicator, k.nm_indicator, k.nm_indicator_eng,f.nm_goals_eng  FROM entry_problem_identify_map a\n" +
+     		sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id, concat(f.id_goals,'.',j.id_target), j.nm_target, j.nm_target_eng, concat(f.id_goals,'.',j.id_target,'.',k.id_indicator), k.nm_indicator, k.nm_indicator_eng,f.nm_goals_eng  FROM entry_problem_identify_map a\n" +
                     "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
                     "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
                     "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +
@@ -5640,7 +5640,7 @@ public class ReportController {
             + " where a.id_prov = :id_prov  "+whereidrole+wheremonper+whereidcategory+whereidgoals+whereidtarget+whereidindicator;
     
      	}else {
-     		sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id, j.id_target, j.nm_target, j.nm_target_eng, k.id_indicator, k.nm_indicator, k.nm_indicator_eng,f.nm_goals_eng  FROM entry_problem_identify_map a\n" +
+     		sql  =   "       SELECT  DISTINCT c.id_cat,a.id_goals,d.id_role,f.nm_goals,c.nm_cat,d.nm_role,b.problem,b.follow_up,f.id_goals as kode_id, concat(f.id_goals,'.',j.id_target), j.nm_target, j.nm_target_eng, concat(f.id_goals,'.',j.id_target,'.',k.id_indicator), k.nm_indicator, k.nm_indicator_eng,f.nm_goals_eng  FROM entry_problem_identify_map a\n" +
                     "	LEFT JOIN entry_problem_identify b ON a.id_relation_entry_problem_identify = b.id_relation\n" +
                     "	LEFT JOIN ref_category c ON b.id_cat = c.id_cat \n" +
                     "	LEFT JOIN ref_role d ON b.id_role = d.id_role\n" +

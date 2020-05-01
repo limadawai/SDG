@@ -32,9 +32,13 @@
                                             <tr>
                                                 <th style="text-align:center;font-size:80%;width:5%;">No.</th>
                                                 <th style="text-align:center;font-size:80%;">
+                                                	Level
+                                                </th>
+                                                <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">Request Date</span>
                                                 	<span class="lang_indo">Tanggal Permintaan</span>
                                                 </th>
+                                                
                                                 <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">User Type</span>
                                                 	<span class="lang_indo">Tipe User</span>
@@ -56,6 +60,9 @@
                                                 	<span class="lang_indo">Kontak</span>
                                                 </th>
                                                 <th style="text-align:center;font-size:80%;">Status</th>
+                                                <th style="text-align:center;font-size:80%;">
+                                                	Detail
+                                                </th>
                                                 <th style="text-align:center;font-size:80%;">
                                                 	<span class="lang_eng" style="display:none">Action</span>
                                                 	<span class="lang_indo">Aksi</span>
@@ -136,39 +143,46 @@
                 return "<div style='font-size:90%;text-align:center;'>"+(display.row+1)+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.date)+"</div>";}
+                return "<div style='font-size:90%;'>"+(row[0])+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.level?row.level:'')+"</div>";}
+            	console.log(row);
+                return "<div style='font-size:90%;'>"+(row[1])+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.type?row.type:'')+"</div>";}
+                return "<div style='font-size:90%;'>"+(row[2]?row[2]:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.institution?row.institution:'')+"</div>";}
+                return "<div style='font-size:90%;'>"+(row[3]?row[3]:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.name?row.name:'')+"</div>";}
+                return "<div style='font-size:90%;'>"+(row[4]?row[4]:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
-                return "<div style='font-size:90%;'>"+(row.contact?row.contact:'')+"</div>";}
+                return "<div style='font-size:90%;'>"+(row[5]?row[5]:'')+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+                return "<div style='font-size:90%;'>"+(row[6]?row[6]:'')+"</div>";}
             },
             {"data": function (row, data, index, display) {
             	var status="";
-            	if(row.status=='new'){
+            	if(row[7]=='new'){
             		status = "<span class='label label-default'>new</span>";
-            	}else if(row.status=='reject'){
+            	}else if(row[7]=='reject'){
             		status = "<span class='label label-important'>reject</span>";
-            	}else if(row.status=='approve'){
+            	}else if(row[7]=='approve'){
             		status = "<span class='label label-success'>approve</span>";
             	}
                 return "<div style='font-size:90%;'>"+status+"</div>";}
             },
             {"data": function (row, data, index, display) {
-            	if(row.status=='new'){
+                return "<div style='font-size:90%;'>"+(row[9]?row[9]:'')+"</div>";}
+            },
+            {"data": function (row, data, index, display) {
+            	if(row[7]=='new'){
             		return "<div style='text-align:center;'>"+
-                     '<button data-id="'+row.id+'" data-status="approve" type="button" title="approve" class="btn btn-warning btn-mini aksi"><i class="icon-ok"></i></button>&nbsp;&nbsp;'+
-                    '<button data-id="'+row.id+'" data-status="reject" type="button" title="reject" class="btn btn-danger btn-mini aksi"><i class="icon-remove"></i></button></div>';
+                     '<button data-id="'+row[8]+'" data-status="approve" type="button" title="approve" class="btn btn-warning btn-mini aksi"><i class="icon-ok"></i></button>&nbsp;&nbsp;'+
+                    '<button data-id="'+row[8]+'" data-status="reject" type="button" title="reject" class="btn btn-danger btn-mini aksi"><i class="icon-remove"></i></button></div>';
             	}else{
             		return "";
             	}

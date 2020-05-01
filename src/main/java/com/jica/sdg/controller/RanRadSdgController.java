@@ -988,35 +988,13 @@ public class RanRadSdgController {
     @GetMapping("admin/ran_rad/non-gov/program/{id_program}/activity")
     public String nongov_kegiatan(Model model, @PathVariable("id_program") Integer id_program, HttpSession session) {
     	Optional<NsaProgram> list = nsaProgService.findOne(id_program);
-    	//Integer id_role = list.get().getId_role();
-    	
-    	//Optional<Role> role = roleService.findOne(id_role);
-    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
-    	String sql = "select * from ref_role where id_prov = :id_prov and cat_role='NSA' and id_role!=1";
-    	Query query = em.createNativeQuery(sql);
-        query.setParameter("id_prov", role.get().getId_prov());
-        List<Object[]> rows = query.getResultList();
-        List<Role> result = new ArrayList<>(rows.size());
-        for (Object[] row : rows) {
-        	result.add(
-        				new Role((Integer)row[0]
-                                , (String)row[1]
-                                , (String) row[2]
-                                , (String) row[3]
-                                , (String) row[4]
-                                , (String) row[5]
-                                , (String) row[6]
-                                , (String) row[7]
-                                , (String) row[8])
-        			);
-        }
-    	//List<Role> roleList = roleService.findRoleGov(role.get().getId_prov());
     	Optional<RanRad> ranrad = monPeriodService.findOne(list.get().getId_monper());
     	Optional<Provinsi> provin = prov.findOne(ranrad.get().getId_prov());
     	Optional<RanRad> monper = monPeriodService.findOne(list.get().getId_monper());
+    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
     	provin.ifPresent(foundUpdateObject -> model.addAttribute("prov", foundUpdateObject));
     	monper.ifPresent(foundUpdateObject -> model.addAttribute("monPer", foundUpdateObject));
-    	model.addAttribute("role", result);
+    	model.addAttribute("role", roleService.findRoleNonGov(ranrad.get().getId_prov()));
         model.addAttribute("title", "Define RAN/RAD/Government Program");
         list.ifPresent(foundUpdateObject -> model.addAttribute("govProg", foundUpdateObject));
         model.addAttribute("lang", session.getAttribute("bahasa"));

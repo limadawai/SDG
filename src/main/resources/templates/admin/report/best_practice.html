@@ -572,11 +572,11 @@
                                                         }
                                                         //level2
                                                         if($('#fs').is(':checked')){
-                                                            var target      = no_target+" "+isi_target;
-                                                            var indicator   = no_indicator+" "+isi_indicator;
+                                                            var target      = array_level2[o][1]+"."+no_target+" "+isi_target;
+                                                            var indicator   = array_level2[o][1]+"."+no_target+"."+no_indicator+" "+isi_indicator;
                                                         }else{
-                                                            var target      = no_target+" "+isi_target1;
-                                                            var indicator   = no_indicator+" "+isi_indicator1;
+                                                            var target      = array_level2[o][1]+"."+no_target+" "+isi_target1;
+                                                            var indicator   = array_level2[o][1]+"."+no_target+"."+no_indicator+" "+isi_indicator1;
                                                         }
                                                         
                                                         text += "<tr style='font-size:80%;border-style:ridge;'>";
@@ -742,12 +742,12 @@
                                                         }
                                                         //level2
                                                         if($('#fs').is(':checked')){
-                                                            var target      = no_target+" "+isi_target;
-                                                            var indicator   = no_indicator+" "+isi_indicator;
+                                                            var target      = no_goal+"."+no_target+" "+isi_target;
+                                                            var indicator   = no_goal+"."+no_target+"."+no_indicator+" "+isi_indicator;
                                                             var goal        = no_goal+" "+isi_goal;
                                                         }else{
-                                                            var target      = no_target+" "+isi_target1;
-                                                            var indicator   = no_indicator+" "+isi_indicator1;
+                                                            var target      = no_goal+"."+no_target+" "+isi_target1;
+                                                            var indicator   = no_goal+"."+no_target+"."+no_indicator+" "+isi_indicator1;
                                                             var goal        = no_goal+" "+isi_goal1;
                                                         }
                                                         
@@ -873,11 +873,11 @@
                                                     for (p in array_level3) {
                                                         //level2
                                                         if($('#fs').is(':checked')){
-                                                            var target      = array_level3[p][15]+" "+array_level3[p][16];
-                                                            var indicator   = array_level3[p][18]+" "+array_level3[p][19];
+                                                            var target      = array_level2[o][1]+"."+array_level3[p][15]+" "+array_level3[p][16];
+                                                            var indicator   = array_level2[o][1]+"."+array_level3[p][15]+" "+array_level3[p][18]+" "+array_level3[p][19];
                                                         }else{
-                                                            var target      = array_level3[p][15]+" "+array_level3[p][17];
-                                                            var indicator   = array_level3[p][18]+" "+array_level3[p][20];
+                                                            var target      = array_level2[o][1]+"."+array_level3[p][15]+" "+array_level3[p][17];
+                                                            var indicator   = array_level2[o][1]+"."+array_level3[p][15]+" "+array_level3[p][18]+" "+array_level3[p][20];
                                                         }
                                                         
                                                         text += "<tr style='font-size:80%;border-style:ridge;'>";

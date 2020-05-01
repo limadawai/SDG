@@ -780,6 +780,74 @@
                         "autoWidth": true,
                         "responsive":true,
                         "bDestroy": true,
+                        "drawCallback": function( settings ) {
+                        	var id_role             = $('#idrole').val();
+                            var v_dataid            = $("#periode").val();
+                            var v_data_id           = v_dataid.split("###");;
+                            var id_monper           = v_data_id[0];
+                            var year                = v_data_id[1];
+                            var cektabel = $('#tabel-practice > tbody').find('.dataTables_empty').length;
+                            if(cektabel==0){
+                            	var tabel = $('#tabel-practice > tbody').find('tr:last');
+                            	var btnApply1='';
+                            	$.ajax({
+                					type: "GET",
+                                    url: urls+'get-approve/entry_best_practice/'+year+'/'+id_monper+'/1'+'/'+id_role,
+                                    async:false,
+                                    success: function (result) {
+                                    	apply = result.content;
+                                    	if(apply.length>0){
+                                    		if(apply[0][1]=="1"){
+                                    			if($("#fs").is(':checked')){
+                                    				btnApply1 = "<span class='label label-success'>Diterapkan</span>";
+                    							}else{
+                    								btnApply1 = "<span class='label label-success'>Applied</span>";
+                    							}
+                                    		}else if(apply[0][1]=="2"){
+                                    			if($("#fs").is(':checked')){
+                                    				btnApply1 = "<span class='label label-success'>Disetujui</span>";
+                    							}else{
+                    								btnApply1 = "<span class='label label-success'>Approved</span>";
+                    							}
+                                    		}else if(apply[0][1]=="4"){
+                                    			if($("#fs").is(':checked')){
+                                    				btnApply1 = "<span class='label label-info'>Tampil Laporan</span>";
+                    							}else{
+                    								btnApply1 = "<span class='label label-info'>Show Report</span>";
+                    							}
+                                    		}else if(apply[0][1]=="3"){
+                                    			var label;
+                                    			if($("#fs").is(':checked')){
+                                    				btnApply1 = "<span class='label label-important'>Ditolak</span>";
+                    							}else{
+                    								btnApply1 = "<span class='label label-important'>Rejected</span>";
+                    							}
+                                    			
+                                    		}else if(apply[0][1]=="5"){
+                                    			if($("#fs").is(':checked')){
+                                    				btnApply1 = "<span class='label label-default'>Tidak ada aksi</span>";
+                    							}else{
+                    								btnApply1 = "<span class='label label-important'>No Action</span>";
+                    							}
+                                    			
+                                    		}
+                                    	}
+                                    },
+                                });
+                            	
+                                tabel.after(
+                                		'<tr>'+
+                                			'<td></td>'+
+                                			'<td></td>'+
+                                			'<td></td>'+
+                                			'<td></td>'+
+                                			'<td></td>'+
+                                			'<td></td>'+
+                                			'<td>'+btnApply1+'</td>'+
+                                		'</tr>'
+                                		); 
+                            }
+                        },
 			"ajax": {
 				"url": urls+'list-best/0/0/0',
 				dataSrc: 'content',
@@ -943,8 +1011,7 @@
 						if(cat=="NSA"){
                                                     detail = '<a data-id="'+row[0]+'" href="'+urls+'best-practice/detail/'+row[0]+'" title="detail" class="btn btn-success btn-mini">Detail</a></div>';
 						}
-						text1 += "<div style='text-align:center;'>"+
-						'<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-warning btn-mini update">Edit</button>'+detail+"</div>";
+						//text1 += "<div style='text-align:center;'>"+'<button data-id="'+row[0]+'" type="button" title="edit" class="btn btn-warning btn-mini update">Edit</button>'+detail+"</div>";
 
                                             }else if(result1.content == "4"){
                                                 view1 += '<button data-id="'+row[0]+'" type="button" title="view" class="btn btn-warning btn-mini view"><i class="icon-edit"></i></button>';
@@ -967,48 +1034,11 @@
                                             }
                                         }
                                     });
-                                    var label="";
-                                    $.ajax({
-                    					type: "GET",
-                                        url: urls+'get-approve/entry_best_practice/'+year+'/'+id_monper+'/1'+'/'+id_role,
-                                        async:false,
-                                        success: function (result) {
-                                        	apply = result.content;
-                                        	if(apply.length>0){
-                                        		if(apply[0][1]=="2"){
-                                        			if($("#fs").is(':checked')){
-                                        				label = "<span class='label label-success'>Disetujui</span>";
-                        							}else{
-                        								label = "<span class='label label-success'>Approved</span>";
-                        							}
-                                        		}else if(apply[0][1]=="4"){
-                                        			if($("#fs").is(':checked')){
-                                        				label = "<span class='label label-info'>Tampil Laporan</span>";
-                        							}else{
-                        								label = "<span class='label label-info'>Show Report</span>";
-                        							}
-                                        		}else if(apply[0][1]=="3"){
-                                        			if($("#fs").is(':checked')){
-                                        				label = "<span class='label label-important'>Ditolak</span>";
-                        							}else{
-                        								label = "<span class='label label-important'>Rejected</span>";
-                        							}
-                                        		}else if(apply[0][1]=="5"){
-                                        			if($("#fs").is(':checked')){
-                                        				label = "<span class='label label-default'>Tidak ada aksi</span>";
-                        							}else{
-                        								label = "<span class='label label-default'>No Action</span>";
-                        							}
-                                        		}
-                                        	}
-                                        },
-                                    });
+                                    
                                     if(cek1>0){
-                                    	return sts+" "+label +"<br/><br/>"+view1;
-                                    }else if(label){
-                                    	return sts+" "+label +"<br/><br/>"+view1;
+                                    	return view1;
                                     }else{
-                                    	return sts+" "+text1+"<br/><br/>"+view1;
+                                    	return text1+"<br/><br/>"+view1;
                                     }
                                     
                                 }}

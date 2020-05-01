@@ -615,7 +615,7 @@
                 success: function (resprog) {
                         //console.log(resprog);
                         $("#kananatas").empty();
-                        var isi = "<ol id='olprog'>";
+                        var isi = "<ul id='olprog'>";
                         for (var i=0; i<resprog.length; i++) {
                             if($('#fs').is(':checked')){
                                 var prog_l = resprog[i][3]+" "+resprog[i][1];
@@ -625,7 +625,7 @@
                             isi += "<li id='lilili"+resprog[i][0]+"'>"+prog_l+"</li>";
                             getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
                     }
-                    isi += "</ol>";
+                    isi += "</ul>";
                     $("#kananatas").append(isi);
                 }
             });
@@ -644,7 +644,7 @@
                 success: function (resprog) {
                         //console.log(resprog);
                         $("#kananatas").empty();
-                        var isi = "<ol id='olprog'>";
+                        var isi = "<ul id='olprog'>";
                         for (var i=0; i<resprog.length; i++) {
                             if($('#fs').is(':checked')){
                                 var prog_l = resprog[i][3]+" "+resprog[i][1];
@@ -654,7 +654,7 @@
                             isi += "<li id='lilili"+resprog[i][0]+"'>"+prog_l+"</li>";
                             getGovActivity_pertama(valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
                     }
-                    isi += "</ol>";
+                    isi += "</ul>";
                     $("#kananatas").append(isi);
                 }
             });
@@ -670,7 +670,7 @@
                 success: function (resprog) {
                 	//console.log(resprog);
                 	$("#kananbawah").empty();
-                	var isi = "<ol id='olprog'>";
+                	var isi = "<ul id='olprog'>";
                		for (var i=0; i<resprog.length; i++) {
                             if($('#fs').is(':checked')){
                                 var prog_l = resprog[i][3]+" "+resprog[i][1];
@@ -681,7 +681,7 @@
                             
                             getNsaActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0], resprog[i][3])
                     }
-                    isi += "</ol>";
+                    isi += "</ul>";
                     $("#kananbawah").append(isi);
                 }
             });
@@ -700,7 +700,7 @@
                 success: function (resprog) {
                 	//console.log(resprog);
                 	$("#kananbawah").empty();
-                	var isi = "<ol id='olprog'>";
+                	var isi = "<ul id='olprog'>";
                		for (var i=0; i<resprog.length; i++) {
                             if($('#fs').is(':checked')){
                                 var prog_l = resprog[i][3]+" "+resprog[i][1];
@@ -710,7 +710,7 @@
                             isi += "<li id='lilinsa"+resprog[i][0]+"'>"+prog_l+"</li>";
                             getNsaActivity_pertama(valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
                     }
-                    isi += "</ol>";
+                    isi += "</ul>";
                     $("#kananbawah").append(isi);
                 }
             });
@@ -730,7 +730,7 @@
                 success: function (resgoals) {
                 	console.log("goal = "+resgoals.length);
                 	$("#divkiri").empty();
-                	var isi = "<ol id='olgoals'>";
+                	var isi = "<ul id='olgoals'>";
                		for (var i=0; i<resgoals.length; i++) {
                             if($('#fs').is(':checked')){
                                 var prog_l = resgoals[i][3]+" "+resgoals[i][1];
@@ -748,7 +748,7 @@
 //                            isi += "<li id='li"+resgoals[i][0]+"'>"+prog_l+"</li>";
                             getTarget(resgoals[i][0], resgoals[i][3]);
                     }
-                    isi += "</ol>";
+                    isi += "</ul>";
                     $("#divkiri").append(isi);
                 }
             });
