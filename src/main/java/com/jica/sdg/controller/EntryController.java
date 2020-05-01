@@ -351,7 +351,7 @@ public class EntryController {
     				"                        ,f.id_indicator,f.id_old AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
     				"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
     				"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
-    				                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
+    				                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,concat(b.id_goals,'.',c.id_target),concat(b.id_goals,'.',c.id_target,'.',d.id_indicator),CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
     				                            "LEFT JOIN history_sdg_goals b ON g.id_goals = b.id_old and b.id_monper = '"+id_monper+"' \n" +
     				                            "LEFT JOIN history_sdg_target c ON g.id_target = c.id_old and c.id_monper = '"+id_monper+"' \n" +
     				                            "LEFT JOIN history_sdg_indicator d ON g.id_indicator = d.id_old and d.id_monper = '"+id_monper+"'  \n" +
@@ -369,7 +369,7 @@ public class EntryController {
     				"                        ,f.id_indicator,f.id AS id_sdg_indicator,f.nm_indicator,f.nm_indicator_eng \n" +
     				"                        ,b.id_cat,b.nm_cat,a.problem,a.follow_up,a.id,c.approval,a.id_monper,a.year,a.id_role,a.id_relation \n" +
     				"                        ,( SELECT GROUP_CONCAT(id_sdgs) FROM entry_problem_identify_map g WHERE g.id_relation_entry_problem_identify = a.id_relation )  AS id_sdgs"
-    				                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,c.id_target,d.id_indicator,CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
+    				                      + ",( SELECT GROUP_CONCAT(CONCAT_WS('###',b.id_goals,concat(b.id_goals,'.',c.id_target),concat(b.id_goals,'.',c.id_target,'.',d.id_indicator),CONCAT_WS('##*##',b.nm_goals,c.nm_target,d.nm_indicator))) AS sdgs FROM entry_problem_identify_map g\n" +
     				                            "LEFT JOIN sdg_goals b ON g.id_goals = b.id \n" +
     				                            "LEFT JOIN sdg_target c ON g.id_target = c.id\n" +
     				                            "LEFT JOIN sdg_indicator d ON g.id_indicator = d.id \n" +
