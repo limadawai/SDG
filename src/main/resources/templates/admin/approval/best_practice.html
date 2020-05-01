@@ -456,7 +456,7 @@
         grid_role();
         cek_show_report();
         grid_summary();
-        ceksummary();
+        //ceksummary();
         $('#time_activity').datepicker({
             autoclose: true,
             format: "yyyy-mm-dd"
@@ -522,7 +522,7 @@
             $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
             grid_role();
             grid_summary();
-            ceksummary();
+            //ceksummary();
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
         }
@@ -571,7 +571,7 @@
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
             grid_summary();
-            ceksummary();
+            //ceksummary();
         });
 //
 //        
@@ -625,7 +625,7 @@
             grid_role();
             cek_show_report();
             grid_summary();
-            ceksummary();
+            //ceksummary();
         });
 
 
@@ -654,10 +654,10 @@
                     var sts = result1.content;
                     console.log('cek = '+sts);
                     if(sts == '0'){
-                        $("#sum_add").show();
+                       // $("#sum_add").show();
 //                        $("#unshow_report").hide();
                     }else{
-                        $("#sum_add").show();
+                       // $("#sum_add").show();
 //                        $("#unshow_report").show();
                     }
                     
@@ -872,7 +872,7 @@
                     data: data,
                     success: function (result) {
                         grid_summary();
-                        ceksummary();
+                        //ceksummary();
                         $('#myModal_tambah').modal('hide');
                     },
                 });
@@ -1254,7 +1254,7 @@
                                 var year        = id[1];
                                 var id_role     = $('#idrole').val();
                                 grid_summary();
-                                ceksummary();
+                                //ceksummary();
                             },
                             error:function (result) {
 
@@ -1440,12 +1440,12 @@
                     if(sts == '0'){
                         $("#show_report").show();
                         $("#unshow_report").hide();
+                        $('#sum_add').show();
                     }else{
                         $("#show_report").hide();
                         $("#unshow_report").show();
+                        $('#sum_add').hide();
                     }
-                    
-//                        console.log(sts);
                 }
             });
         }
