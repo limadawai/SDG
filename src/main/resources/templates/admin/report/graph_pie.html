@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    <head th:include="admin/layout :: header">
+    <title th:text="SDG Report Graph"></title>
+</head>
+<body>
+    <div th:include="admin/layout :: menu"></div>
+    <div id="content">
+        <div id="content-header">
+            <div id="breadcrumb" class="lang_indo"> <a href="#" title="Ke Home" class="tip-bottom"><i class="icon-home"></i>Laporan / Grafik</a></div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid">
+                <button id="back" class="btn btn-warning">Kembali</button>
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon"><i class="icon-tasks"></i></span>
+                        <h5 id="title">Grafik Hasil Pelaporan</h5>
+                    </div>
+                    <div class="widget-content" style="background:#FFFFFF;">
+                        <div class="row-fluid">
+                            <div id="divkiri" class="span12"></div>
+                        </div>
+                    </div>                    
+                </div>
+                <div class="widget-title">
+                    <span class="icon"><i class="icon-tasks"></i></span>
+                    <h5 class="lang_indo">Chart</h5>
+                    <h5 class="lang_eng" style="display:none">Chart</h5>
+                </div>
+				<div class="row-fluid">
+					<div class="span12">
+						<div id="dualaxes"></div>
+					</div>
+				</div>
+            </div>		                
+            </div>
+        </div>
+    </div>
+    <div th:include="admin/layout :: footer"></div>
+    <script th:inline="javascript">
+
+        var valperiode = [[${idmonper}]];
+        var valdaerah = [[${valdaerah}]];
+        var valrole = [[${valrole}]];
+
+        var lang = [[${lang}]];
+        if (lang == null ) {lang = "0";};
+        var name = [[${name}]];
+        var idrole = [[${idrole}]];
+        $("#welcome").html("Welcome, "+name);
+
+        indo();
+        
+        var id_role     = [[${id_role}]];
+        var id_prov     = [[${id_prov}]];
+        var privilege   = [[${privilege}]];
+        
+
+        if (lang == "0") {
+            indo();
+        } else {
+            inggris();
+        }
+
+        show_sdg_goal();
+
+        $('#fs').on('change', function(){
+            if($(this).is(':checked')){
+                indo();
+                $(".lang_indo").show("");
+                $(".lang_eng").hide("");
+//                show_gov_prog();
+//                show_non_gov_prog();
+                show_sdg_goal();
+                //grid_gov_nongov_tampil();
+            } else {
+                inggris();
+                $(".lang_indo").hide("");
+                $(".lang_eng").show("");
+//                show_gov_prog();
+//                show_non_gov_prog();
+                show_sdg_goal();
+                //grid_gov_nongov_tampil();
+            }
+        });
+
+        function indo() {
+            $("#title").text("Grafik hasil Pelaporan");
+            $("#patas").text("Pemerintah");
+            $("#pbawah").text("Non-Pemerintah");
+            $("#back").text("Kembali");
+        }
+
+        function inggris() {
+            $("#title").text("Monitoring Graph");
+            $("#patas").text("Government");
+            $("#pbawah").text("Non-Government");
+            $("#back").text("Kembali"); f
+        }
+        
+        // ********************** Content Div Kiri **********************
+        
+        function getIndicator(idgoals, kd_goals, idtarget, kd_target) {
+            var valdaerah  = $("#daerah").val();
+            var valrole    = $("#selrole").val();
+//            var valperiode = $("#periode").val();
+            var valperiode = sessionStorage.graph_idmonper;
+            var combo_periode1 = '0';
+            $.ajax({
+                    url: urls + "getallindicator",
+                    type: 'get',
+                    data: {'id_goals':idgoals, 'id_target':idtarget, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+                    dataType: 'json',
+                    cache: false,
+                    success: function (resindi) {
+                            
+                            var isiindi = "<ul id='ulindi"+idgoals+"'>";
+//                            $("#lili"+idgoals).html("");
+                            for (var i=0; i<resindi.length; i++) {
+                                if($('#fs').is(':checked')){
+                                    var prog_l = kd_goals+"."+kd_target+"."+resindi[i][3]+" "+resindi[i][1];
+                                }else{
+                                    var prog_l = kd_goals+"."+kd_target+"."+resindi[i][3]+" "+resindi[i][2];
+                                }
+//                                $("#lili"+idgoals).html("");
+                                var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+                                var dat_goals = idgoals+"##"+idtarget+"##"+resindi[i][0];
+                                console.log("re "+ses_goals);
+                                if(ses_goals == dat_goals){
+//                                    isiindi += "<li id='lisdg' style='cursor:pointer; color:#7F7FFF;' onclick='grid_gov_nongov("+idgoals+", "+idtarget+", "+resindi[i][0]+")'>"+prog_l+"</li>";
+//                                    isiindi += "<li style='color:#7F7FFF;'> <a class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a> </li>";
+                                    isiindi += " <li ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a></li>";
+                                }else{
+                                    isiindi += " <li ><a style='color:black;' class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a></li>";
+//                                    isiindi += "<li style='color:black;'> <a class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a> </li>";
+//                                    isiindi += "<li id='lisdg' style='cursor:pointer; color:black;' onclick='grid_gov_nongov("+idgoals+", "+idtarget+", "+resindi[i][0]+")'>"+prog_l+"</li>";
+                                }
+                                
+                                
+//                                getDisaggre(idgoals, resindi[i][0]);
+                            }
+                            isiindi += "</ul>";
+                            $("#lili"+idgoals).append(isiindi);
+                    }
+            });
+        }
+        
+        function getDisaggre(idgoals, idindicator) {
+        	$.ajax({
+        		url: urls + "getalldisaggre",
+        		type: 'get',
+        		data: 'id_indicator='+idindicator,
+        		dataType: 'json',
+        		cache: false,
+        		success: function (resdis) {
+        			//console.log(resdis);
+        			var isidis = "<ul style='list-style:none;margin-left:-4px;'>";
+        			for (var i=0; i<resdis.length; i++) {
+        				isidis += "<li><p>Jenis Agregasi : "+resdis[i][1]+"</p><p>"+resdis[i][3]+"</p><p>"+resdis[i][4]+"</p></li>";
+        			}
+        			isidis += "</ul>";
+        			$("#ulindi"+idgoals).append(isidis);
+        		}
+        	});
+        }
+        
+        
+        
+        
+        function show_gov_prog(idgoals, idtarget, idindicator, valda, valrole, combo_periode){
+            $.ajax({
+                url: urls + "getallgovprogram",
+                type: 'get',
+                data: {'id_goals': idgoals, 'id_target': idtarget, 'id_indicator': idindicator, 'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode },
+                dataType: 'json',
+                cache: false,
+                success: function (resprog) {
+                        //console.log(resprog);
+                        $("#kananatas").empty();
+                        var isi = "<ul id='olprog'>";
+                        for (var i=0; i<resprog.length; i++) {
+                            if($('#fs').is(':checked')){
+                                var prog_l = resprog[i][3]+" "+resprog[i][1];
+                            }else{
+                                var prog_l = resprog[i][3]+" "+resprog[i][2];
+                            }
+                            isi += "<li id='lilili"+resprog[i][0]+"'>"+prog_l+"</li>";
+                            getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
+                    }
+                    isi += "</ul>";
+                    $("#kananatas").append(isi);
+                }
+            });
+        }
+        
+        function show_gov_prog_pertama(){
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+            $.ajax({
+                url: urls + "getallgovprogram_pertama",
+                type: 'get',
+                data: { 'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode },
+                dataType: 'json',
+                cache: false,
+                success: function (resprog) {
+                        //console.log(resprog);
+                        $("#kananatas").empty();
+                        var isi = "<ul id='olprog'>";
+                        for (var i=0; i<resprog.length; i++) {
+                            if($('#fs').is(':checked')){
+                                var prog_l = resprog[i][3]+" "+resprog[i][1];
+                            }else{
+                                var prog_l = resprog[i][3]+" "+resprog[i][2];
+                            }
+                            isi += "<li id='lilili"+resprog[i][0]+"'>"+prog_l+"</li>";
+                            getGovActivity_pertama(valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
+                    }
+                    isi += "</ul>";
+                    $("#kananatas").append(isi);
+                }
+            });
+        }
+        
+        function show_non_gov_prog(idgoals, idtarget, idindicator, valda, valrole, combo_periode){
+            $.ajax({
+            	url: urls + "getallnsaprogram",
+                type: 'get',
+                data: {'id_goals': idgoals, 'id_target': idtarget, 'id_indicator': idindicator, 'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode },
+                dataType: 'json',
+                cache: false,
+                success: function (resprog) {
+                	//console.log(resprog);
+                	$("#kananbawah").empty();
+                	var isi = "<ul id='olprog'>";
+               		for (var i=0; i<resprog.length; i++) {
+                            if($('#fs').is(':checked')){
+                                var prog_l = resprog[i][3]+" "+resprog[i][1];
+                            }else{
+                                var prog_l = resprog[i][3]+" "+resprog[i][2];
+                            }
+                            isi += "<li id='lilinsa"+resprog[i][0]+"'>"+prog_l+"</li>";
+                            
+                            getNsaActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, resprog[i][0], resprog[i][3])
+                    }
+                    isi += "</ul>";
+                    $("#kananbawah").append(isi);
+                }
+            });
+        }
+        
+        function show_non_gov_prog_pertama(){
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+            $.ajax({
+            	url: urls + "getallnsaprogram_pertama",
+                type: 'get',
+                data: {'id_prov': valda, 'id_role':valrole, 'id_monper':combo_periode },
+                dataType: 'json',
+                cache: false,
+                success: function (resprog) {
+                	//console.log(resprog);
+                	$("#kananbawah").empty();
+                	var isi = "<ul id='olprog'>";
+               		for (var i=0; i<resprog.length; i++) {
+                            if($('#fs').is(':checked')){
+                                var prog_l = resprog[i][3]+" "+resprog[i][1];
+                            }else{
+                                var prog_l = resprog[i][3]+" "+resprog[i][2];
+                            }
+                            isi += "<li id='lilinsa"+resprog[i][0]+"'>"+prog_l+"</li>";
+                            getNsaActivity_pertama(valda, valrole, combo_periode, resprog[i][0], resprog[i][3]);
+                    }
+                    isi += "</ul>";
+                    $("#kananbawah").append(isi);
+                }
+            });
+        }
+        
+        function show_sdg_goal(){
+            //var valdaerah  = $("#daerah").val();
+            //var valrole    = $("#selrole").val();
+//            var valperiode = $("#periode").val();
+            //var valperiode = sessionStorage.graph_idmonper;
+            $.ajax({
+            	url: urls + "getallgoals",
+                data: {'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                success: function (resgoals) {
+                	console.log("goal = "+resgoals.length);
+                	$("#divkiri").empty();
+                	var isi = "<ul id='olgoals'>";
+               		for (var i=0; i<resgoals.length; i++) {
+                            if($('#fs').is(':checked')){
+                                var prog_l = resgoals[i][3]+" "+resgoals[i][1];
+                            }else{
+                                var prog_l = resgoals[i][3]+" "+resgoals[i][2];
+                            }
+                            var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+                            var dat_goals = resgoals[i][0]+"##null##null";
+                            if(ses_goals == dat_goals){
+                                isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                            }else{
+                                isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                            }
+                            
+                    }
+                    isi += "</ul>";
+                    $("#divkiri").append(isi);
+                }
+            });
+        }
+        var valprov = $("#daerah option:selected").val();
+        if (valprov == "000") {
+        	//$("#lisdg").css({"cursor":"pointer","color":"#7F7FFF"});
+        }
+        
+        $('#divkiri').on('click', ".lisdg", function(e){
+            var idgoals         = $(this).data("idgoals");
+            var idtarget        = $(this).data("idtarget");
+            var idindicator     = $(this).data("idindicator");
+            var nm              = $(this).text();
+
+            $.ajax({
+            	url: urls + "getpievalue",
+                data: {'idmonper':valperiode, 'idgoal':idgoals, 'idprov':valdaerah},
+                type: 'get',
+                dataType: 'json',
+                cache: false,
+                success: function (resgoals) {
+                	console.log("goal = "+resgoals.length);
+                    a(resgoals, nm);
+                    
+                }
+            });
+
+        });
+        
+        function a(res, name) {
+
+            var ser = [];
+            ser.push(
+                {
+                    name: 'Number of',
+                    data: res,
+                    type: 'pie',
+                },
+            );				
+
+
+            var chart4;
+            var options4 ={
+                chart: {
+                        renderTo: 'dualaxes'
+                },
+
+                title: {
+                            text: name
+                },
+                credits: {
+                            enabled: false
+                },
+                tooltip: {
+                            shared: true
+                },
+                legend: {
+                        layout: 'vertical',
+                        align: 'left',
+                        x: 0,
+                        verticalAlign: 'top',
+                        y: 55,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                    },                
+                plotOptions: {
+                    pie: {
+                            allowPointSelect: true,
+                            cursor: 'pointer',
+                  
+                            dataLabels: {
+                                enabled: false           
+                            },
+                    },
+                    showInLegend: true,
+                },
+                        series: ser,
+                        colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                                return {
+                                    radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
+                                    stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
+                                };
+                            })
+                }
+                chart4=new Highcharts.Chart(options4);		
+
+        }
+        
+        $("#back").on("click", function(){
+            location.href = urls+"report-graph";
+        });
+    </script>
+</body>
+</html>

@@ -29,6 +29,7 @@
                     </select>
                 </div>
                 <button id="cari" class="btn btn-primary"><span class="lang_indo">Cari</span><span class="lang_eng" style="display: none">Search</span></button>
+                <button id="chart" class="btn btn-warning"><span class="lang_indo">Tampilkan Chart</span><span class="lang_eng" style="display: none">Show Chart</span></button>
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-tasks"></i></span>
@@ -939,6 +940,13 @@
             }
         });
 
+        $('#chart').on('click', function(e){
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+
+            location.href = urls+"report-graph-pie/"+valda+"/"+valrole+"/"+combo_periode;
+        });
     </script>
 </body>
 </html>

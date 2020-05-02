@@ -4449,6 +4449,43 @@ public class ReportController {
         model.addAttribute("valrole", valrole);
         return "admin/report/graphdetail_new_versi_bangyos";
     }
+
+
+    @GetMapping("admin/report-graph-pie/{valdaerah}/{valrole}/{idmonper}")
+    public String grafikdetail(Model model, HttpSession session,  @PathVariable("idmonper") int idmonper, @PathVariable("valdaerah") String valdaerah, @PathVariable("valrole") String valrole) {
+        model.addAttribute("title", "Report Graphic Pie");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("idmonper", idmonper);
+        model.addAttribute("valdaerah", valdaerah);
+        model.addAttribute("valrole", valrole);
+        return "admin/report/graph_pie";
+    }	
+
+    @GetMapping("admin/getpievalue")
+    public @ResponseBody List<Object> isinsamap(@RequestParam("idprov") String idProv, @RequestParam("idmonper") int idMonper, @RequestParam("idgoal") int idGoal) {
+        String sql = "Select e.nm_role, count(a.id_goals) from gov_map a " +
+						"Left join sdg_goals b on a.id_goals = b.id " +
+						"join gov_indicator c on a.id_gov_indicator = c.id " +
+						"Left join gov_activity d on c.id_activity = d.id " +
+						"Left join ref_role e on d.id_role = e.id_role " +
+						"where a.id_prov = :idProv and a.id_monper = :idMonper and a.id_goals = :idGoal " +
+						"GROUP BY e.nm_role " +
+						"UNION " +
+						"Select e.nm_role, count(a.id_goals) from nsa_map a " +
+						"Left join sdg_goals b on a.id_goals = b.id " +
+						"join nsa_indicator c on a.id_nsa_indicator = c.id " +
+						"Left join nsa_activity d on c.id_activity = d.id " +
+						"Left join ref_role e on d.id_role = e.id_role " +
+						"where a.id_prov = :idProv and a.id_monper = :idMonper and a.id_goals = :idGoal " +
+						"GROUP BY e.nm_role";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("idProv", idProv);
+		query.setParameter("idMonper", idMonper);
+		query.setParameter("idGoal", idGoal);
+        List list = query.getResultList();
+        return list;
+    }	
     
     @GetMapping("admin/getprov")
     public @ResponseBody List<Object> getprov(@RequestParam("valdaerah") String val) {
