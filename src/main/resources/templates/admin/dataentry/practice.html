@@ -239,12 +239,20 @@
                                 <img class="img-responsive avatar-view" id="gambar-profil" th:src="@{/img/facebook.png}" alt="Picture" style="width: 200px"/>
                             </div>-->
                         </div>
-                        <div class="controls">
-                            <form id="form-data-pribadi" method="POST">
-                                <input type="file" id="file2" name="files" class="form-control" multiple/>
-                            </form>
-                            <span class="help-block" id="error_upload"></span>
-                        </div>
+		                    <div class="col-sm-12">
+		                        <a class="btn btn-danger btn-sm hapusTembusan jarak-kanan" title="Hapus"><i class="icon-trash"></i></a>
+		                        <a class="btn btn-success btn-sm" id="tambah-tembusan" title="Tambah Tembusan"><i class="icon-plus"></i>Upload</a><br>
+		                    </div>
+                        <form id="form-data-pribadi" method="POST">
+                        <table id="table_tembusan" class="table table-bordered">
+	                        <tbody>
+	                        	<tr data-id="0">
+	                        		<td></td>
+	                        		<td><input type="file" id="file2" name="files" class="form-control" multiple/></td>
+	                        	</tr>
+	                        </tbody>
+	                    </table>
+                    </form>
                     </div>
 <!--<form id="form-rencana">
                                     <label for="name">Upload</label>
@@ -270,6 +278,28 @@
 </body>
 <script th:inline="javascript">
  // <![CDATA[
+	 
+	 	/* START TEMBUSAN */
+		$('#tambah-tembusan').click(function(){
+			var tabel	= $('#table_tembusan > tbody').find('tr:last');
+			var newId	= (tabel.length > 0)?parseInt(tabel.data('id'))+1:1;
+			$('#table_tembusan').append(
+				'<tr data-id="'+newId+'">' +
+				'<td class="text-center"><input type="checkbox" name="chk_del_tembusan[]" class="hRow" id="chk_del_tembusan'+newId+'" value="'+newId+'"></td>'+
+				'<td><input type="file" id="file2" name="files" class="form-control" multiple/></td>' +
+				'</tr>'
+			);
+		});
+	
+		$(".hapusTembusan").click(function(){
+			var tabel 	= $("#table_tembusan");
+			tabel.find(".hRow:checked").each(function(k, v){
+				var idnya = $(v).val();
+				tabel.find("tr[data-id='"+idnya+"']").remove();
+			});
+		});
+		/* END TEMBUSAN */
+	 	
         var lang = [[${lang}]];
         var name = [[${name}]];
         var privilege = [[${privilege}]];
@@ -1389,6 +1419,7 @@
 			$(".accordion-inner").find('.sdg-indikator').prop("checked", false);
 			$(".accordion-inner").find('.sdg-indikator').removeAttr("disabled");
 			$('.control-group').removeClass('error');
+			$('#table_tembusan > tbody > tr').html("");
 			$('.help-block').text("");
 		}
         
