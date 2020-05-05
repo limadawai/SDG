@@ -194,7 +194,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                        <button type="button" class="close tutup" data-dismiss="modal" aria-label="Close" style="float:right">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h3 class="modal-title lang_indo" id="exampleModalLabel">Ubah Nilai Realisasi</h3>
@@ -300,9 +300,9 @@
         </div>
         <div id="myModalSum"data-backdrop="static" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:1000px!important;left:35%!important">
 			<div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 class="lang_eng" style="display:none">Add Disaggregation</h3>
-			    <h3 class="lang_indo">Tambah Disaggregation</h3>
+			    <button type="button" class="close tutup" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 class="lang_eng" style="display:none">Add Summary</h3>
+			    <h3 class="lang_indo">Tambah Kesimpulan</h3>
 		  	</div>
 			<div class="modal-body">
 				<form>
@@ -438,7 +438,7 @@
         grid_role();
         cek_show_report();
       	
-      	$('#closeModalSum').on('click', function(){
+      	$('#closeModalSum, .tutup').on('click', function(){
       		clearForm();
       	});
         
