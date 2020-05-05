@@ -381,7 +381,7 @@
 							}else if(row[3]==4){
 								statusApp = 1;
 							}
-							return "<div style='font-size:90%;'><a class='id_role' data-id='"+row[1]+"' data-statusApp='"+statusApp+"' data-period='"+row[6]+"' href='#'>"+(row[2]?row[2]:'Unassign')+"</a></div>";
+							return "<div style='font-size:90%;'><a class='id_role' data-id='"+(row[1]?row[1]:'unassign')+"' data-statusApp='"+statusApp+"' data-period='"+row[6]+"' href='#'>"+(row[2]?row[2]:'Unassign')+"</a></div>";
 						}},
 						{"data": function (row, data, index, display) {
 	                        if(row[3] == '1'){
