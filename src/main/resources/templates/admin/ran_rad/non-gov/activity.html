@@ -379,7 +379,7 @@
                     $("#error_nm_activity").text(required);
                     cek += 1;
                 } */
-				if(!$.isNumeric(budget_allocation)){
+				if(!$.isNumeric(budget_allocation) && budget_allocation!=""){
 					$("#error_budget").parents(".control-group").first().addClass("error");
                     $("#error_budget").text(number);
                     cek += 1;
