@@ -697,9 +697,13 @@ public class RanRadSdgController {
     	gov.setDate_created(new Date());
     	govActivityService.saveGovActivity(gov);
     	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
-    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no from gov_activity a left join gov_program b on a.id_program = b.id where b.id_monper = :id_monper";
+    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no "
+    				+ "from gov_activity a "
+    				+ "left join gov_program b on a.id_program = b.id "
+    				+ "where b.id_monper = :id_monper and a.id_program =:id_program ";
         	Query query = em.createNativeQuery(sql);
         	query.setParameter("id_monper", id_monper);
+        	query.setParameter("id_program", gov.getId_program());
         	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
     		em.createNativeQuery("UPDATE gov_activity set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
@@ -812,9 +816,13 @@ public class RanRadSdgController {
     	gov.setDate_created(new Date());
     	govIndicatorService.saveGovIndicator(gov);
     	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
-    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no from gov_indicator a left join gov_program b on a.id_program = b.id where b.id_monper = :id_monper";
+    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no "
+    				+ "from gov_indicator a "
+    				+ "left join gov_program b on a.id_program = b.id "
+    				+ "where b.id_monper = :id_monper and a.id_activity = :id_activity ";
         	Query query = em.createNativeQuery(sql);
         	query.setParameter("id_monper", id_monper);
+        	query.setParameter("id_activity", gov.getId_activity());
         	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
     		em.createNativeQuery("UPDATE gov_indicator set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
@@ -910,12 +918,6 @@ public class RanRadSdgController {
     @RequestMapping(path = "admin/export-govProgram/{id_monper}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getFileGovProgram(@PathVariable("id_monper") String id_monper, HttpServletResponse response,HttpSession session) throws FileNotFoundException {
         
-    	
-    	
-    	
-    	
-    	
-    	
     	String a = System.getProperty("user.dir"); 
         String path = System.getProperty("user.home");
         String sql = "select * from ran_rad where id_monper = '"+id_monper+"'";
@@ -1036,9 +1038,12 @@ public class RanRadSdgController {
     	gov.setDate_created(new Date());
     	nsaActivityService.saveNsaActivity(gov);
     	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
-    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no from nsa_activity a left join nsa_program b on a.id_program = b.id where b.id_monper = :id_monper";
+    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no "
+    				+ "from nsa_activity a left join nsa_program b on a.id_program = b.id "
+    				+ "where b.id_monper = :id_monper and a.id_program = :id_program ";
         	Query query = em.createNativeQuery(sql);
         	query.setParameter("id_monper", id_monper);
+        	query.setParameter("id_program", gov.getId_program());
         	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
     		em.createNativeQuery("UPDATE nsa_activity set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}
@@ -1128,9 +1133,13 @@ public class RanRadSdgController {
     	gov.setDate_created(new Date());
     	nsaIndicatorService.saveNsaIndicator(gov);
     	if(gov.getInternal_code()==null || gov.getInternal_code()==0) {
-    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no from nsa_indicator a left join nsa_program b on a.id_program = b.id where b.id_monper = :id_monper";
+    		String sql = "select IFNULL(max(a.internal_code)+1,1) as no "
+    				+ "from nsa_indicator a "
+    				+ "left join nsa_program b on a.id_program = b.id "
+    				+ "where b.id_monper = :id_monper and a.id_activity = :id_activity ";
         	Query query = em.createNativeQuery(sql);
         	query.setParameter("id_monper", id_monper);
+        	query.setParameter("id_activity", gov.getId_activity());
         	Integer no = ((BigInteger) query.getResultList().get(0)).intValue();
     		em.createNativeQuery("UPDATE nsa_indicator set internal_code = '"+no+"' where id ='"+gov.getId()+"'").executeUpdate();
     	}

@@ -44,8 +44,12 @@
                             <input id="legend7" value="80" type="text" style="width:30px; margin-top: 10px">
                              <span>> </span>                             
                             <input id="legend8" value="80" type="text" style="width:30px; margin-top: 10px">
-                            <input type="checkbox" id="calculation"  />
-                             <span>Calculation</span>
+                            <select id="calculation">
+                            	<option selected="true" value="0">Period</option>
+                            	<option value="1">Calculation</option>
+                            </select>
+                            <!-- <input type="checkbox" id="calculation"  />
+                             <span>Calculation</span> -->
                              <button class="btn btn-primary" type="button" id="show_map">
                                  <i class="icon-search"></i>
                              </button>
@@ -218,10 +222,10 @@
            var legend6      = $('#legend6').val();
            var legend7      = $('#legend7').val();
            var legend8      = $('#legend8').val();
-           var calculation  = 0;
-           if($('#calculation').is(":checked")){
+           var calculation  = $('#calculation').val();
+           /* if($('#calculation').is(":checked")){
                calculation = 1
-           }
+           } */
            console.log(calculation);
            var data = JSON.stringify({
                             'tahun':tahun,
