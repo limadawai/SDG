@@ -1419,7 +1419,7 @@
 			$(".accordion-inner").find('.sdg-indikator').prop("checked", false);
 			$(".accordion-inner").find('.sdg-indikator').removeAttr("disabled");
 			$('.control-group').removeClass('error');
-			$('#table_tembusan > tbody > tr').html("");
+			$('#table_tembusan > tbody').html('<tr data-id="0"><td></td><td><input type="file" id="file2" name="files" class="form-control" multiple/></td></tr>');
 			$('.help-block').text("");
 		}
         
