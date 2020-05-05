@@ -660,11 +660,16 @@ public class RanRadSdgController {
     }
     
     @GetMapping("admin/list-govActivity/{id_program}")
-    public @ResponseBody Map<String, Object> govActivityList(@PathVariable("id_program") Integer id_program) {
+    public @ResponseBody Map<String, Object> govActivityList(@PathVariable("id_program") Integer id_program, HttpSession session) {
+    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
+    	String id_role="";
+    	if(role.get().getPrivilege().equals("USER")) {
+    		id_role = " and a.id_role = '"+role.get().getId_role()+"'";
+    	}
     	String sql = "select a.id, a.nm_activity, a.nm_activity_eng, a.internal_code,b.nm_role "
     			+ "from gov_activity a "
     			+ "left join ref_role b on a.id_role = b.id_role "
-    			+ "where a.id_program=:id_program";
+    			+ "where a.id_program=:id_program "+id_role;
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_program", id_program);
         List list   = query.getResultList();
