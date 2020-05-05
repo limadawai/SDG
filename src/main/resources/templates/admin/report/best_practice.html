@@ -494,9 +494,9 @@
                                     for (o in array_level2) {
                                         //level2
                                         if($('#fs').is(':checked')){
-                                            var prog_l = "Capaian : "+array_level2[o][1]+" "+array_level2[o][2];
+                                            var prog_l = "Capaian : "+(array_level2[o][1]?array_level2[o][1]:'')+" "+(array_level2[o][2]?array_level2[o][2]:'Tidak termapping');
                                         }else{
-                                            var prog_l = "Goals : "+array_level2[o][1]+" "+array_level2[o][3];
+                                            var prog_l = "Goals : "+(array_level2[o][1]?array_level2[o][1]:'')+" "+(array_level2[o][3]?array_level2[o][3]:'Unmapped');
                                         }
                                         text += "<div >"+prog_l+"</div>";
                                         
@@ -580,7 +580,7 @@
                                                         }
                                                         
                                                         text += "<tr style='font-size:80%;border-style:ridge;'>";
-                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+target+"<br/>"+indicator+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+(array_level2[o][0]?target:'')+"<br/>"+(array_level2[o][0]?indicator:'')+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][14]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][8]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
