@@ -154,7 +154,7 @@
 				    <label class="lang_indo control-label">Alokasi Anggaran</label>
 				    <div class="controls">
 				    	<input type="text" id="budget_allocation" name="budget_allocation" class=" input-xlarge input-block-level"/>
-				    	<span class="help-block" id="error_nm_activity"></span>
+				    	<span class="help-block" id="error_budget"></span>
 				    </div>
 				  </div>
 				</form>
@@ -201,6 +201,7 @@
 	        var titleMod = "Maaf";
 	        var messMod = "Semua pilihan harus dipilih";
 	        var messCode = "Kode sudah ada!";
+	        var number = "Hanya angka";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -216,6 +217,7 @@
 	    	        titleMod = "Maaf";
 	    	        messMod = "Semua pilihan harus dipilih";
 	    	        messCode = "Kode sudah ada!";
+	    	        number = "Hanya angka";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -230,6 +232,7 @@
 	    	        titleMod = "Sorry";
 	    	        messMod = "All dropdownlists must be selected";
 	    	        messCode = "Code already exist!";
+	    	        number = "Only number";
 	        	}
 	        }
 	        if(lang){
@@ -427,6 +430,8 @@
 				/* if(internal_code==""){
 					internal_code = id_activity;
 				} */
+				
+				
 				$('.control-group').removeClass('error');
 				$('.help-block').text("");
 				var cek = 0;
@@ -435,6 +440,11 @@
                     $("#error_id_activity").text(required);
                     cek += 1;
                 }
+				if(!$.isNumeric(budget_allocation)){
+					$("#error_budget").parents(".control-group").first().addClass("error");
+                    $("#error_budget").text(number);
+                    cek += 1;
+				}
 				/* if (nm_activity == ""){
                     $("#error_nm_activity").parents(".control-group").first().addClass("error");
                     $("#error_nm_activity").text(required);
