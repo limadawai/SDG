@@ -333,7 +333,7 @@
                                     <option value="0">--select--</option>
                                     <option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
                             </select> -->
-                            <span class="help-block" id="error_unit"></span>
+                            <span class="help-block" id="error_sdg_indicator"></span>
                         </div>
                     </div>
 <!--				<div class="control-group">
@@ -863,6 +863,11 @@
                 $("#error_unit").text(required);
                 cek += 1;
             } */
+            if (sdg_indicator == "0" || sdg_indicator == ""){
+                $("#error_sdg_indicator").parents(".control-group").first().addClass("error");
+                $("#error_sdg_indicator").text(required);
+                cek += 1;
+            } 
             if(cek==0){
                 var data = JSON.stringify({
                         'id':id,
