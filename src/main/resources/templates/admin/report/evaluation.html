@@ -330,7 +330,7 @@
       						}
                           	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
             					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+id_goals+'---'+id_target+'---0">&nbsp;&nbsp;&nbsp;'+
-	                            '<span style="vertical-align:middle">'+kode_target+" "+nm_target+'</span>'+
+	                            '<span style="vertical-align:middle">'+kode_goals+"."+kode_target+" "+nm_target+'</span>'+
 	                      '</label><br/>';
 	                      
 	                      $.ajax({
@@ -353,7 +353,7 @@
                                   	
                                   	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
 				                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+id_goals+'---'+id_target+'---'+id_indicator+'">&nbsp;&nbsp;&nbsp;'+
-				                            '<span style="vertical-align:middle">'+kode_indicator+" "+nm_indicator+'</span>'+
+				                            '<span style="vertical-align:middle">'+kode_goals+"."+kode_target+"."+kode_indicator+" "+nm_indicator+'</span>'+
 				                      '</label><br/>';
                               	}
                               }
