@@ -104,8 +104,8 @@
         <div id="myModal" data-backdrop="static"class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 			<div class="modal-header">
 			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 class="lang_eng" style="display:none">Add Government Activity</h3>
-			    <h3 class="lang_indo">Tambah Kegiatan Pemerintah</h3>
+			    <h3 class="lang_eng" style="display:none">Add Non Government Activity</h3>
+			    <h3 class="lang_indo">Tambah Kegiatan Non Pemerintah</h3>
 		  	</div>
 			<div class="modal-body">
 				<form>
@@ -156,7 +156,7 @@
 				    <label class="lang_indo control-label">Alokasi Anggaran</label>
 				    <div class="controls">
 				    	<input type="text" id="budget_allocation" name="budget_allocation" class=" input-xlarge input-block-level"/>
-				    	<span class="help-block" id="error_nm_activity"></span>
+				    	<span class="help-block" id="error_budget"></span>
 				    </div>
 				  </div>
 				</form>
@@ -194,6 +194,7 @@
 	        var messDelBiasa = "Menghapus Data?";
 	        var titleMod = "Maaf";
 	        var messMod = "Semua pilihan harus dipilih";
+	        var number = "Hanya angka";
 	        function bhs(cek){
 				if(cek){
 					$(".lang_indo").show();
@@ -208,6 +209,7 @@
 	    	        messDelBiasa = "Menghapus Data?";
 	    	       	titleMod = "Maaf";
 	    	        messMod = "Semua pilihan harus dipilih";
+	    	        number = "Hanya angka";
 	        	}else{	    	        
 	    	        $(".lang_indo").hide();
 	        		$(".lang_eng").show();
@@ -221,6 +223,7 @@
 	    	        messDelBiasa = "Delete this data?";
 	    	        titleMod = "Sorry";
 	    	        messMod = "All dropdownlists must be selected";
+	    	        number = "Only number";
 	        	}
 	        }
 	        if(lang){
@@ -376,6 +379,11 @@
                     $("#error_nm_activity").text(required);
                     cek += 1;
                 } */
+				if(!$.isNumeric(budget_allocation) && budget_allocation!=""){
+					$("#error_budget").parents(".control-group").first().addClass("error");
+                    $("#error_budget").text(number);
+                    cek += 1;
+				}
 				if(cek==0){
 					var data = JSON.stringify({
 						'id':id,

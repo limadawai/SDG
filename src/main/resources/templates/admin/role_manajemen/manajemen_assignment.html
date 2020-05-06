@@ -283,12 +283,19 @@
         	$('#id_monper').hide();
         	$('#detail').empty();
             var detail="<table><tbody>";
-            detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+            var nama_hide="";
+        	if($("#fs").is(':checked')){
+        		nama_hide="Tampil Semua";
+			}else{
+				nama_hide="Show All";
+			}
+            detail += '<tr><td><button type="button" class="btn btn-success show-all-button">'+nama_hide+'</button></td></tr>';
+            /* detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
 	            'Assign All Sdgs Indicator : <select class="select-kakek-program">'+roleGov()+'</select></td>'+
 	      '<td style="width:50%">'+
 	      ''+
 	      '</td>'+
-	      '<tr/>';
+	      '<tr/>'; */
             $.ajax({
                 url: urls + 'list-sdgGoals',
                 type: 'get',
@@ -325,11 +332,11 @@
             							nm_target = result.content[j].nm_target_eng;
             						}
                                 	detail += '<tr>'+
-                                				'<td style="width:50%;display:none" class="toogle-sdg-anak sdg-anak'+idGoals+'" data-id="'+idGoals+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                                				'<td style="width:50%;display:none" class="toogle-sdg-anak sdg-anak'+idGoals+' show-all" data-id="'+idGoals+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
         			                            	'<span style="vertical-align:middle">'+result.content[j].id_target+' '+nm_target+'</span>'+
         			                      			'</label>'+
         			                           '</td>'+
-        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+'"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+roleGov('')+'</select></td>'+
+        			                           '<td style="width:50%;display:none" class="sdg-anak'+idGoals+' show-all"><select class="select-anak-sdg'+idGoals+' select-anak-sdg" data-id="'+idGoals+'">'+roleGov('')+'</select></td>'+
         			                      	'<tr/>';
 //                                        console.log(response.content[i].id_goals+'/'+result.content[j].id_target);
                                 	$.ajax({
@@ -346,7 +353,7 @@
                         						}else{
                         							nm_indicator = result.content[k][6];
                         						}
-                                            	detail += '<tr><td class="sdg-cucu'+idGoals+'" data-id="'+idGoals+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                                            	detail += '<tr><td class="sdg-cucu'+idGoals+' show-all" data-id="'+idGoals+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
                     			                            '<span style="vertical-align:middle">'+result.content[k][1]+' '+nm_indicator+'</span>'+
                     			                      '</label></td>';
                     			                var id;
@@ -362,7 +369,7 @@
                     			                    	id= result.content;
                     			                        }
                     			                }); 
-                    			                detail += '<td class="sdg-cucu'+idGoals+'" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+roleGov(id)+'</select>'+
+                    			                detail += '<td class="sdg-cucu'+idGoals+' show-all" style="width:50%;display:none"><select class="select-cucu-sdg'+idGoals+'" name="sdg[][id_role]">'+roleGov(id)+'</select>'+
                     			               				'<input type="hidden" name="sdg[][id_goals]" value="'+result.content[k][2]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_target]" value="'+result.content[k][3]+'"/>'+
                     			               				'<input type="hidden" name="sdg[][id_indicator]" value="'+result.content[k][0]+'"/>'+
@@ -379,6 +386,10 @@
                     $('#detail').append(detail+'</tbody></table>');
                 }
             });
+        });
+        
+        $('#detail').on('click', '.show-all-button', function(){
+        	$('#detail').find('.show-all').slideToggle("slow");
         });
         
         $('#detail').on('click','.toogle-sdg-bapak',function(){
@@ -455,6 +466,13 @@
                 $('#id_monper').show();
                 $('#detail').empty();
                 var detail="<table><tbody>";
+                var nama_hide="";
+            	if($("#fs").is(':checked')){
+            		nama_hide="Tampil Semua";
+    			}else{
+    				nama_hide="Show All";
+    			}
+                detail += '<tr><td><button type="button" class="btn btn-success show-all-button">'+nama_hide+'</button></td></tr>';
             $.ajax({
                 url: urls + 'list-govProg/'+$('#id_monper').val(),
                 type: 'get',
@@ -496,11 +514,11 @@
         								nama = result.content[j].nm_activity_eng;
         							}
       			                   detail += '<tr>'+
-                          				'<td style="width:50%;display:none" class="toogle-sdg-anak sdg-anak'+idProgram+'" data-id="'+idProgram+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                          				'<td style="width:50%;display:none" class="show-all toogle-sdg-anak sdg-anak'+idProgram+'" data-id="'+idProgram+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
   			                            	'<span style="vertical-align:middle">'+result.content[j].id_activity+' '+nama+'</span>'+
   			                      			'</label>'+
   			                           '</td>'+
-  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'">'+
+  			                           '<td style="width:50%;display:none" class="show-all sdg-anak'+idProgram+'">'+
   			                         		'<input type="hidden" name="gov[][id]" value="'+result.content[j].id+'"/>'+
   			                           		'<select name="gov[][id_role]" class="select-anak-sdg'+idProgram+' select-anak-sdg" data-id="'+idProgram+'">'+
   			                           		roleGov(result.content[j].id_role)+
@@ -520,10 +538,10 @@
                     							}else{
                     								nama = result.content[k][5];
                     							}
-                                            	detail += '<tr><td class="sdg-anak'+idProgram+'" data-id="'+idProgram+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+                                            	detail += '<tr><td class="show-all sdg-anak'+idProgram+'" data-id="'+idProgram+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
 		        			                            '<span style="vertical-align:middle">'+result.content[k][1]+' '+nama+'</span>'+
 		        			                      '</label></td>';
-                    			               	detail += '<td class="sdg-anak'+idProgram+'" style="width:50%;display:none">'+
+                    			               	detail += '<td class="show-all sdg-anak'+idProgram+'" style="width:50%;display:none">'+
         			               				'</td><tr/>';
                                             }
                                         }
@@ -563,13 +581,20 @@
             $('#id_monper').show();
             $('#detail').empty();
             var detail="<table><tbody>";
-            detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
+            var nama_hide="";
+        	if($("#fs").is(':checked')){
+        		nama_hide="Tampil Semua";
+			}else{
+				nama_hide="Show All";
+			}
+            detail += '<tr><td><button type="button" class="btn btn-success show-all-button">'+nama_hide+'</button></td></tr>';
+           /*  detail += '<tr><td style="width:50%"><label style="display:inline-block;white-space:nowrap">'+
 	            'Assign All Program : <select class="select-kakek-program">'+roleNsa()+'</select></td>'+
 	      '<td style="width:50%">'+
 	      ''+
 	      'Assign All Activity : <select class="select-kakek-activity">'+roleNsa()+'</select>'+
 	      '</td>'+
-	      '<tr/>';
+	      '<tr/>'; */
             $.ajax({
                 url: urls + 'list-nsaProg-assign/'+$('#id_monper').val()+'/'+$('#id_prov').val(),
                 type: 'get',
@@ -611,11 +636,11 @@
         								nama = result.content[j].nm_activity_eng;
         							}
       			                   detail += '<tr>'+
-                          				'<td style="width:50%;display:none" class="toogle-sdg-anak sdg-anak'+idProgram+'" data-id="'+idProgram+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
+                          				'<td style="width:50%;display:none" class="show-all toogle-sdg-anak sdg-anak'+idProgram+'" data-id="'+idProgram+'"><label style="display:inline-block;white-space:nowrap;margin-left:20px">'+
   			                            	'<span style="vertical-align:middle">'+result.content[j].id_activity+' '+nama+'</span>'+
   			                      			'</label>'+
   			                           '</td>'+
-  			                           '<td style="width:50%;display:none" class="sdg-anak'+idProgram+'">'+
+  			                           '<td style="width:50%;display:none" class="show-all sdg-anak'+idProgram+'">'+
   			                         		'<input type="hidden" name="nsa[][id]" value=""/>'+
   					                  		'<input type="hidden" name="nsa[][id_activity]" value="'+result.content[j].id+'"/>'+
   					                  		'<select class="select-anak-sdg select-anak-sdg'+idProgram+'" data-id="'+idProgram+'" name="nsa[][id_role]">'+roleNsa(result.content[j].id_role)+'</select>'+
@@ -635,10 +660,10 @@
 	                  							}else{
 	                  								nama = result.content[k][5];
 	                  							}
-	                                          	detail += '<tr><td class="sdg-anak'+idProgram+'" data-id="'+idProgram+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+	                                          	detail += '<tr><td class="show-all sdg-anak'+idProgram+'" data-id="'+idProgram+'" style="width:50%;display:none"><label style="display:inline-block;white-space:nowrap;margin-left:40px">'+
 			        			                            '<span style="vertical-align:middle">'+result.content[k][1]+' '+nama+'</span>'+
 			        			                      '</label></td>';
-	                  			               	detail += '<td class="sdg-anak'+idProgram+'" style="width:50%;display:none">'+
+	                  			               	detail += '<td class="show-all sdg-anak'+idProgram+'" style="width:50%;display:none">'+
 	      			               				'</td><tr/>';
                                             }
                                         }
