@@ -340,9 +340,11 @@
 	        	table.ajax.url(urls+'list-nsaProg/'+$('#id_role').val()+'/'+$('#id_monper').val()).load();
 	        	//table.ajax.reload( null, false );
 	        });
-	        if(sessionStorage.provinsi_non_gov_prog){
-            	$("#id_prov").val(sessionStorage.provinsi_non_gov_prog).trigger('change');
-            }
+	        
+	        $("#id_prov").val(sessionStorage.provinsi_non_gov_prog).trigger('change');
+	        $("#id_role").val(sessionStorage.role_non_gov_prog);
+	        $("#id_monper").val(sessionStorage.monper_non_gov_prog);
+	       
 	        $('#id_role, #id_monper').on('change', function(){
 	        	sessionStorage.monper_non_gov_prog  = $('#id_monper').val();
 	        	sessionStorage.role_non_gov_prog  = $('#id_role').val();
@@ -376,8 +378,6 @@
 				$('#id_program').val("").removeAttr("readonly");
 				$('#nm_program').val("").removeAttr("readonly");
 				$('#nm_program_eng').val("").removeAttr("readonly");
-				$('#id_role').val("").removeAttr("readonly");
-				$('#id_monper').val("").removeAttr("readonly");
 				$('#rel_prog_id').val("").removeAttr("readonly");
 				$('#created_by').val("").removeAttr("readonly");
 				$('#date_created').val("").removeAttr("readonly");

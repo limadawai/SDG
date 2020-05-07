@@ -171,7 +171,6 @@
     
     $('#fs').on('change', function(e){
     	bhs($(this).is(':checked'));
-    	loadMenuSelect();
     });
     
     var privilege = [[${privilege}]];
@@ -256,86 +255,5 @@
 		}
 	});
 	
-	$('#tbody-role').on('click', '.update', function(){
-		var id = $(this).attr('data-id');
-		$.ajax({
-			type: "GET",
-            url: urls+'manajemen/get-role/'+id,
-            success: function (result) {
-            	var val = result.content;
-            	$('#id_role').val(val.id_role);
-				$('#nm_role').val(val.nm_role);
-				$('#desc_role').val(val.desc_role);
-				$('#cat_role').val(val.cat_role);
-				$('#privilege').val(val.privilege);
-				$('#prov').val(val.id_prov);
-				var menu = val.menu.split(',');
-				for(i=0;i<menu.length;i++){
-					$('#menu'+menu[i]).prop('checked', true);
-				}
-				var submenu = val.submenu.split(',');
-				for(i=0;i<submenu.length;i++){
-					$('#submenu'+submenu[i]).prop('checked', true);
-				}
-				$('#myModal').modal('show');
-            },
-        })
-     }).on('click', '.detail', function(){
-		var id = $(this).attr('data-id');
-		$.ajax({
-			type: "GET",
-            url: urls+'manajemen/get-role/'+id,
-            success: function (result) {
-            	var val = result.content;
-            	$('#id_role').val(val.id_role);
-				$('#nm_role').val(val.nm_role).attr("readonly",true);
-				$('#desc_role').val(val.desc_role).attr("readonly",true);
-				$('#cat_role').val(val.cat_role).attr("disabled",true);
-				$('#privilege').val(val.privilege).attr("disabled",true);
-				$('#prov').val(val.id_prov).attr("disabled",true);
-				var menu = val.menu.split(',');
-				for(i=0;i<menu.length;i++){
-					$('#menu'+menu[i]).prop('checked', true);
-				}
-				var submenu = val.submenu.split(',');
-				for(i=0;i<submenu.length;i++){
-					$('#submenu'+submenu[i]).prop('checked', true);
-				}
-				$("input[name='menu']").attr("disabled",true);
-				$("input[name='submenu']").attr("disabled",true);
-				$('#myModal').modal('show');
-            },
-        })
-     }).on('click', '.delete', function(){
-		var id = $(this).attr('data-id');
-		swal({
-            title: titleDel,
-            text: messDel,
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: buttDel
-        }).then(function () {
-        	$.ajax({
-				type: "DELETE",
-                url: urls+'manajemen/delete-role/'+id,
-                beforeSend : function(xhr){
-                	xhr.setRequestHeader(header,token);
-                },
-                success: function (result) {
-                	swal(titleOk,messOk,'success');
-                	table.ajax.url(urls+'manajemen/list-role/'+$('#id_prov').val()+'/'+$('#cat_role_filter').val()).load();
-                },
-                error:function (result) {
-                	swal(titleOk,messNOk,'error');
-                },
-            })
-            
-        }, function (dismiss) {
-            if (dismiss === 'cancel') {
-            }
-        })
-     });
 </script>
 </html>

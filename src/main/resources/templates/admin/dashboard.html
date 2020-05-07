@@ -30,22 +30,32 @@
                         <div class="row-fluid">
                             <span>< </span>
                             <input id="legend1" value="20"   type="text" style="width:30px; margin-top: 10px">
-                            <span>from - to</span>
+                            <span style="margin-right: 10px;margin-left: 10px"> || </span>
+                            <!-- <span>from - to</span> -->
                             <input id="legend2" value="20"  type="text" style="width:30px; margin-top: 10px">
                             <span> - </span>
                             <input id="legend3" value="40" type="text" style="width:30px; margin-top: 10px">
-                            <span>from - to</span>
+                            <!-- <span>from - to</span> -->
+                           <span style="margin-right: 10px;margin-left: 10px"> || </span>
+                            <span> > </span>
                             <input id="legend4" value="40" type="text" style="width:30px; margin-top: 10px">
                             <span> - </span>
                             <input id="legend5" value="60" type="text" style="width:30px; margin-top: 10px">
-                            <span>from - to</span>
+                            <!-- <span>from - to</span> -->
+                            <span style="margin-right: 10px;margin-left: 10px"> || </span>
+                            <span> > </span>
                             <input id="legend6" value="60" type="text" style="width:30px; margin-top: 10px">
                             <span> - </span>
                             <input id="legend7" value="80" type="text" style="width:30px; margin-top: 10px">
+                            <span style="margin-right: 10px;margin-left: 10px"> || </span>
                              <span>> </span>                             
                             <input id="legend8" value="80" type="text" style="width:30px; margin-top: 10px">
-                            <input type="checkbox" id="calculation"  />
-                             <span>Calculation</span>
+                            <select id="calculation" style=" margin-top: 10px">
+                            	<option selected="true" value="0">Last Period</option>
+                            	<option value="1">Summary</option>
+                            </select>
+                            <!-- <input type="checkbox" id="calculation"  />
+                             <span>Calculation</span> -->
                              <button class="btn btn-primary" type="button" id="show_map">
                                  <i class="icon-search"></i>
                              </button>
@@ -218,10 +228,10 @@
            var legend6      = $('#legend6').val();
            var legend7      = $('#legend7').val();
            var legend8      = $('#legend8').val();
-           var calculation  = 0;
-           if($('#calculation').is(":checked")){
+           var calculation  = $('#calculation').val();
+           /* if($('#calculation').is(":checked")){
                calculation = 1
-           }
+           } */
            console.log(calculation);
            var data = JSON.stringify({
                             'tahun':tahun,

@@ -194,7 +194,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                        <button type="button" class="close tutup" data-dismiss="modal" aria-label="Close" style="float:right">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h3 class="modal-title lang_indo" id="exampleModalLabel">Ubah Nilai Realisasi</h3>
@@ -300,9 +300,9 @@
         </div>
         <div id="myModalSum"data-backdrop="static" class="modal hide fade modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="width:1000px!important;left:35%!important">
 			<div class="modal-header">
-			    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-			    <h3 class="lang_eng" style="display:none">Add Disaggregation</h3>
-			    <h3 class="lang_indo">Tambah Disaggregation</h3>
+			    <button type="button" class="close tutup" data-dismiss="modal" aria-hidden="true">×</button>
+			    <h3 class="lang_eng" style="display:none">Add Summary</h3>
+			    <h3 class="lang_indo">Tambah Kesimpulan</h3>
 		  	</div>
 			<div class="modal-body">
 				<form>
@@ -438,7 +438,7 @@
         grid_role();
         cek_show_report();
       	
-      	$('#closeModalSum').on('click', function(){
+      	$('#closeModalSum, .tutup').on('click', function(){
       		clearForm();
       	});
         
@@ -476,16 +476,13 @@
                                                             $.each(dataid,function(ii,xx){
                                                                 if(ii<lengthdataid){
                                                                 	if(ii==0){ 
-                                                                 	   goals = xx;
                                                                          htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
                                                                      }
                                                                     if(ii==1){
-                                                                 	   target=goals+'.'+xx;
-                                                                        htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+target+'</span></label><br>';
+                                                                        htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
                                                                      }
                                                                     if(ii==2){
-                                                                 	   indicator=target+'.'+xx;
-                                                                        htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+indicator+'</span></label><br>';
+                                                                        htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
                                                                      }
                                                                 }
                                                             });
@@ -696,7 +693,7 @@
                                     headers:{'Accept':'application/json','Content-Type':'application/json'},
                                                         data: data,
                                     success: function (result) {
-                                        ceksummary();
+                                        //ceksummary();
                                        table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/'+v_idrole).load();
                                         $('#myModalSum').modal('hide');
                                     },
@@ -753,7 +750,7 @@
                     var id_monper   = v_data_id[0];
                     var tahun       = v_data_id[1];
                     table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/999999').load();
-                    ceksummary();
+                    //ceksummary();
                 }
             });
 
@@ -806,7 +803,7 @@
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
-            ceksummary();
+            //ceksummary();
             var v_dataid    = $("#periode").val();
             var v_data_id   = v_dataid.split("###");
             var id_monper   = v_data_id[0];
@@ -864,7 +861,7 @@
             $("#tabel-approve-gov-indicator").hide();
             grid_role();
             cek_show_report();
-            ceksummary();
+            //ceksummary();
             var v_dataid    = $("#periode").val();
             var v_data_id   = v_dataid.split("###");
             var id_monper   = v_data_id[0];
@@ -950,16 +947,11 @@
                 url: urls+'cek_sum_problem/'+v_idprov+'/'+id_monper+'/'+tahun,
                 success: function (result1) {
                     var sts = result1.content;
-                    console.log('cek = '+sts);
                     if(sts == '0'){
-                        $("#sum_add").show();
-//                        $("#unshow_report").hide();
+                        //$("#sum_add").show();
                     }else{
-                        $("#sum_add").hide();
-//                        $("#unshow_report").show();
+                        //$("#sum_add").hide();
                     }
-                    
-//                        console.log(sts);
                 }
             });
         }
@@ -1051,9 +1043,11 @@
                     if(sts == '0'){
                         $("#show_report").show();
                         $("#unshow_report").hide();
+                        $('#add_problem').show();
                     }else{
                         $("#show_report").hide();
                         $("#unshow_report").show();
+                        $('#add_problem').hide();
                     }
                     
 //                        console.log(sts);
@@ -1335,6 +1329,7 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"bDestroy": true,
 				"ajax": {
 					"url": urls+'list-problem/'+v_id_monper+'/'+v_tahun+'/'+v_idrole,
 					dataSrc: 'content',
@@ -1354,16 +1349,13 @@
                                                         $.each(dataid,function(ii,xx){
                                                             if(ii<lengthdataid){
                                                             	if(ii==0){ 
-                                                             	   goals = xx;
                                                                      htmlid+= '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
                                                                  }
                                                                 if(ii==1){
-                                                             	   target=goals+'.'+xx;
-                                                                    htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+target+'</span></label><br>';
+                                                                    htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
                                                                  }
                                                                 if(ii==2){
-                                                             	   indicator=target+'.'+xx;
-                                                                    htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+indicator+'</span></label><br>';
+                                                                    htmlid+=  '<label style="display:inline-block;white-space:nowrap;font-size:80%;"><span style="vertical-align:middle">'+xx+'</span></label><br>';
                                                                  }
                                                             }
                                                         });
@@ -1802,7 +1794,7 @@
                             var id_monper   = v_data_id[0];
                             var tahun       = v_data_id[1];
                             table.ajax.url(urls+'list-problem/'+id_monper+'/'+tahun+'/999999').load();
-                            ceksummary();
+                            //ceksummary();
                         },
                         error:function (result) {
                         	swal(titleOk,messNOk,'error');

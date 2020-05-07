@@ -178,7 +178,7 @@
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="float:right">
+                        <button type="button" class="close tutup" data-dismiss="modal" aria-label="Close" style="float:right">
                             <span aria-hidden="true">&times;</span>
                         </button>
                         <h3 class="modal-title lang_indo" id="exampleModalLabel">Ubah Nilai Realisasi</h3>
@@ -220,7 +220,7 @@
                             </div>
                         </div>
                         <div class="modal-footer" id="simpan_">
-                            <button type="button" class="btn btn-secondary lang_indo" data-dismiss="modal">Tutup</button>
+                            <button type="button" class="btn btn-secondary lang_indo tutup" data-dismiss="modal">Tutup</button>
                             <button type="button" class="btn btn-secondary lang_eng" data-dismiss="modal" style="display: none">Close</button>
                             <button type="button" id="simpan" class="btn btn-success lang_indo">Simpan</button>
                             <button type="button" id="simpan" class="btn btn-success lang_eng" style="display: none">Submit</button>
@@ -284,9 +284,9 @@
         </div>
         <div id="myModal_tambah"data-backdrop="static" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="lang_eng" style="display:none">Add Best Pactice</h3>
-                <h3 class="lang_indo">Tambah Praktik Terbaik</h3>
+                <button type="button" class="close tutup" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 class="lang_eng" style="display:none">Add Summary Best Pactice</h3>
+                <h3 class="lang_indo">Tambah Kesimpulan Praktik Terbaik</h3>
             </div>
             <div class="modal-body">
                 <form id="form-sdgGoals">
@@ -333,7 +333,7 @@
                                     <option value="0">--select--</option>
                                     <option th:each="f:${sdgIndicator}" th:value="${f.id_goals}+'---'+${f.id_target}+'---'+${f.id_indicator}" th:text="${f.nm_indicator}"></option>
                             </select> -->
-                            <span class="help-block" id="error_unit"></span>
+                            <span class="help-block" id="error_sdg_indicator"></span>
                         </div>
                     </div>
 <!--				<div class="control-group">
@@ -456,7 +456,7 @@
         grid_role();
         cek_show_report();
         grid_summary();
-        ceksummary();
+        //ceksummary();
         $('#time_activity').datepicker({
             autoclose: true,
             format: "yyyy-mm-dd"
@@ -522,7 +522,7 @@
             $("#id_prov").val(id_prov).trigger("change").attr('disabled',true);
             grid_role();
             grid_summary();
-            ceksummary();
+            //ceksummary();
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
         }
@@ -571,7 +571,7 @@
             $("#tabel-approve-gov-indicator").hide();
             cek_show_report();
             grid_summary();
-            ceksummary();
+            //ceksummary();
         });
 //
 //        
@@ -625,7 +625,7 @@
             grid_role();
             cek_show_report();
             grid_summary();
-            ceksummary();
+            //ceksummary();
         });
 
 
@@ -654,10 +654,10 @@
                     var sts = result1.content;
                     console.log('cek = '+sts);
                     if(sts == '0'){
-                        $("#sum_add").show();
+                       // $("#sum_add").show();
 //                        $("#unshow_report").hide();
                     }else{
-                        $("#sum_add").show();
+                       // $("#sum_add").show();
 //                        $("#unshow_report").show();
                     }
                     
@@ -688,7 +688,7 @@
                         option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
                         cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
                                                 '<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
-                                            '<span style="vertical-align:middle">'+nm_goals+'</span>'+
+                                            '<span style="vertical-align:middle">'+response.content[i].id_goals+' '+nm_goals+'</span>'+
                                       '</label><br/>';
                         $.ajax({
                         url: urls + 'list-sdgTarget/'+response.content[i].id,
@@ -708,7 +708,7 @@
                                 option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
                                 cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
                                                                 '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-                                                                            '<span style="vertical-align:middle">'+nm_target+'</span>'+
+                                                                            '<span style="vertical-align:middle">'+response.content[i].id_goals+'.'+result.content[j].id_target+" "+nm_target+'</span>'+
                                                                       '</label><br/>';
                                 $.ajax({
                                     url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
@@ -728,7 +728,7 @@
                                                 option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
                                                 cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
                                                                                     '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-                                                                                    '<span style="vertical-align:middle">'+nm_indicator+'</span>'+
+                                                                                    '<span style="vertical-align:middle">'+response.content[i].id_goals+'.'+result.content[j].id_target+"."+result1.content[k][1]+" "+nm_indicator+'</span>'+
                                                                               '</label><br/>';
                                         }
                                     }
@@ -798,6 +798,23 @@
             console.log(sdg_indicator);
         });
         
+        function clearForm(){
+			$('#id').val("");
+			$('#id_program').val("").removeAttr("readonly");
+			$('#location').val("").removeAttr("readonly");
+			$('#time_activity').val("").removeAttr("readonly");
+			$('#background').val("").removeAttr("readonly");
+			$('#implementation_process').val("").removeAttr("readonly");
+			$('#challenges_learning').val("").removeAttr("readonly");
+			$('#sdg_indicator').val("").trigger('change');
+			$('#sdg_indicator').removeAttr("disabled");
+			$(".accordion-inner").find('.sdg-indikator').prop("checked", false);
+			$(".accordion-inner").find('.sdg-indikator').removeAttr("disabled");
+			$('.control-group').removeClass('error');
+			$('#table_tembusan > tbody').html('<tr data-id="0"><td></td><td><input type="file" id="file2" name="files" class="form-control" multiple/></td></tr>');
+			$('.help-block').text("");
+		}
+        
         $('#submit_summary').on('click', function(){
             var id = $('#id').val();
             var id_prog = $('#id_program').val();
@@ -846,6 +863,11 @@
                 $("#error_unit").text(required);
                 cek += 1;
             } */
+            if (sdg_indicator == "0" || sdg_indicator == ""){
+                $("#error_sdg_indicator").parents(".control-group").first().addClass("error");
+                $("#error_sdg_indicator").text(required);
+                cek += 1;
+            } 
             if(cek==0){
                 var data = JSON.stringify({
                         'id':id,
@@ -872,11 +894,16 @@
                     data: data,
                     success: function (result) {
                         grid_summary();
-                        ceksummary();
+                        //ceksummary();
                         $('#myModal_tambah').modal('hide');
+                        clearForm();
                     },
                 });
 			}
+		});
+        
+        $('.tutup').on('click', function(){
+			clearForm();
 		});
         
         
@@ -1254,7 +1281,7 @@
                                 var year        = id[1];
                                 var id_role     = $('#idrole').val();
                                 grid_summary();
-                                ceksummary();
+                                //ceksummary();
                             },
                             error:function (result) {
 
@@ -1440,12 +1467,12 @@
                     if(sts == '0'){
                         $("#show_report").show();
                         $("#unshow_report").hide();
+                        $('#sum_add').show();
                     }else{
                         $("#show_report").hide();
                         $("#unshow_report").show();
+                        $('#sum_add').hide();
                     }
-                    
-//                        console.log(sts);
                 }
             });
         }

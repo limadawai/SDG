@@ -542,6 +542,12 @@ public class ReportBestController {
         System.out.println("id_monper = "+id_monper+" year = "+year+" id_prov = "+id_prov+" id_role = "+id_role);
         Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
     	String status = monper.get().getStatus();
+    	String goals = "";
+    	if(id_goals.equals("null")) {
+    		goals = " and a.id_goals is null ";
+    	}else {
+    		goals = " and a.id_goals = '"+id_goals+"' ";
+    	}
         
 //        String sqlcek  = "select count(*) as total from entry_approval where id_role = '8' and id_monper = '1' and year = '2020' and type = 'entry_best_practice' and periode = '1' and approval = '3'";
         
@@ -562,7 +568,7 @@ public class ReportBestController {
                             "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n "+
                             " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals order by c.nm_role";
+                            goals+" order by c.nm_role";
                 }else{
                     sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
@@ -576,13 +582,12 @@ public class ReportBestController {
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
                             " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals order by c.nm_role";
+                            goals+" order by c.nm_role";
                 }
                 query = manager.createNativeQuery(sql);
                 query.setParameter("id_monper", id_monper);
                 query.setParameter("year", year);
                 query.setParameter("id_prov", id_prov);
-                query.setParameter("id_goals", id_goals);
             }else{
                 if(status.equals("completed")) {
                     sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
@@ -597,7 +602,7 @@ public class ReportBestController {
                             "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
                             " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals ";
+                            goals+" ";
                 }else{
                     sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
@@ -611,14 +616,13 @@ public class ReportBestController {
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
                             " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals ";
+                            goals+" ";
                 }
                 query = manager.createNativeQuery(sql);
                 query.setParameter("id_monper", id_monper);
                 query.setParameter("year", year);
                 query.setParameter("id_role", id_role);
                 query.setParameter("id_prov", id_prov);
-                query.setParameter("id_goals", id_goals);
     //            System.out.println("sql nya = "+sql);
             }
     	}else {
@@ -664,7 +668,7 @@ public class ReportBestController {
                             "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
                             " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals "+tar;
+                            goals+" "+tar;
                 }else{
                     sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
@@ -678,13 +682,12 @@ public class ReportBestController {
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
                             " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals "+tar;
+                            goals+" "+tar;
                 }
                 query = manager.createNativeQuery(sql);
                 query.setParameter("id_monper", id_monper);
                 query.setParameter("year", year);
                 query.setParameter("id_prov", id_prov);
-                query.setParameter("id_goals", id_goals);
             }else{
                 if(status.equals("completed")) {
                     sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
@@ -699,7 +702,7 @@ public class ReportBestController {
                             "left join (select * from history_sdg_indicator where id_monper = '"+id_monper+"') e on a.id_indicator = e.id_old\n" +
                             " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals "+tar;
+                            goals+" "+tar;
                 }else{
                     sql  = "select a.id as id_best_map, a.id_prov, a.id_monper, a.id_goals, a.id_target, a.id_indicator, a.id_best_practice, \n" +
                             "b.id_role, b.program, b.location, b.time_activity, b.background, b.implementation_process,\n" +
@@ -713,14 +716,13 @@ public class ReportBestController {
                             "left join sdg_indicator e on a.id_indicator = e.id\n" +
                             " join entry_approval f on b.id_monper = f.id_monper and f.year = b.year and f.type = 'entry_best_practice' and f.periode = '1' and b.id_role = f.id_role and f.approval != 3 " +
                             "where a.id_prov = :id_prov and a.id_monper = :id_monper "+
-                            "and a.id_goals = :id_goals "+tar;
+                            goals+" "+tar;
                 }
                 query = manager.createNativeQuery(sql);
                 query.setParameter("id_monper", id_monper);
                 query.setParameter("year", year);
                 query.setParameter("id_role", id_role);
                 query.setParameter("id_prov", id_prov);
-                query.setParameter("id_goals", id_goals);
     //            System.out.println("sql nya = "+sql);
             }
         }

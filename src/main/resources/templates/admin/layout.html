@@ -229,6 +229,8 @@
                 var lang = [[${lang}]];
                 var name = [[${name}]];
                 var id_user = [[${id_user}]];
+                var privilege = [[${privilege}]];
+                
                 if(id_user){
                 	localStorage.id_user = id_user;
                 }
@@ -239,7 +241,7 @@
                 });
                 $("#welcome").html("Welcome, "+name);
                 
-                if(name=="Guest"){
+                if(privilege=="guest"){
                 	$(".notif").hide();
                 }
                 
@@ -322,56 +324,38 @@
 //	            });
                 
                 //Copy RANRAN next periode
-                var today = new Date();
-				var dd = String(today.getDate()).padStart(2, '0');
-				var mm = String(today.getMonth() + 1).padStart(2, '0');
-				if(dd=="31" && mm=="03"){
-			    	$.ajax({
-		                url: urls + "copy-period",
-		                type: 'get',
-		                success: function(result) {
-		                }
-			            });
-			    }
-                
-                $.ajaxSetup({
-                    error: function (x, status, error){
-                    	console.log(x);
-                       /*  if (x.status == 403) {
-                            alert("Sorry, your session has expired. Please login again to continue");
-                            window.location.href ="/login";
+                if(privilege!="guest"){
+                	var today = new Date();
+    				var dd = String(today.getDate()).padStart(2, '0');
+    				var mm = String(today.getMonth() + 1).padStart(2, '0');
+    				if(dd=="31" && mm=="03"){
+    			    	$.ajax({
+    		                url: urls + "copy-period",
+    		                type: 'get',
+    		                success: function(result) {
+    		                }
+    			            });
+    			    }
+    				bahasa();
+    				if (lang == "1") {
+                        english();
+                        if (!localStorage.getItem("reload")) {
+                            localStorage.setItem("reload", "true");
+                            location.reload();
+                        } else {
+                            localStorage.removeItem("reload");
                         }
-                        else {
-                            alert("An error occurred: " + status + "nError: " + error);
-                        } */
-                    }
-                });
-                
-                bahasa();
-                if (lang == "1") {
-                    english();
-                    if (!localStorage.getItem("reload")) {
-                        localStorage.setItem("reload", "true");
-                        location.reload();
-                    } else {
-                        localStorage.removeItem("reload");
-                    }
-                } else if (lang == "0") {
-                    bahasa();
-                    if (!localStorage.getItem("reload")) {
-                        localStorage.setItem("reload", "true");
-                        location.reload();
-                    } else {
-                        localStorage.removeItem("reload");
+                    } else if (lang == "0") {
+                        bahasa();
+                        if (!localStorage.getItem("reload")) {
+                            localStorage.setItem("reload", "true");
+                            location.reload();
+                        } else {
+                            localStorage.removeItem("reload");
+                        }
                     }
                 }
-                // else if(!lang){
-                //     if($('#fs').is(':checked')){
-                //         bahasa();
-                //     }else{
-                //         english();
-                //     }
-                // }
+                
 
                 //********************************* Switch Language *********************************
                 var token = $("meta[name='_csrf']").attr("content");
@@ -387,7 +371,9 @@
                             dataType: "text",
                             cache: "false",
                             success: function(data) {
-                                bahasa();
+                            	if(name!="Guest"){
+                            		bahasa();
+                            	}
                             }
                         });
                     } else {
@@ -401,7 +387,9 @@
                             dataType: "text",
                             cache: "false",
                             success: function(data) {
-                                english();
+                            	if(name!="Guest"){
+                            		english();
+                            	}
                             }
                         });
                     }
@@ -430,6 +418,7 @@
                 	sessionStorage.removeItem("role_non_gov_prog");
                 	sessionStorage.removeItem("monper_non_gov_prog");
                 	sessionStorage.removeItem("goals_page");
+                	sessionStorage.removeItem("role_non_gov_activity");
                 }
 
                 //===== Fungsi Bahasa Indonesia ======
