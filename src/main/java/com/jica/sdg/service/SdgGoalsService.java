@@ -17,7 +17,7 @@ public class SdgGoalsService implements ISdgGoalsService{
 	
 	@Override
 	public List<SdgGoals> findAll() {
-		return (List<SdgGoals>) sdgGoalsRepo.findAll();
+		return (List<SdgGoals>) sdgGoalsRepo.findAllOrder();
 	}
 	
 	@Override
