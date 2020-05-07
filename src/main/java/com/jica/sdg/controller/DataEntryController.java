@@ -443,7 +443,7 @@ public class DataEntryController {
         			"left join sdg_ranrad_disaggre_detail as j on j.id_disaggre = i.id \r\n" + 
         			"left join entry_sdg_detail as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail and k.year_entry = :year and k.id_monper = :id_monper\r\n" + 
         			"left join ref_role as l on a.id_role = l.id_role \r\n" + 
-        			"ORDER BY 1,2,3,31,32";
+        			"ORDER BY CAST(kode_goals AS UNSIGNED),CAST(kode_target AS UNSIGNED),CAST(kode_indicator AS UNSIGNED),31,32";
 	        query = em.createNativeQuery(sql);
 	        query.setParameter("id_prov", id_prov);
 	        query.setParameter("id_monper", id_monper);
@@ -492,7 +492,7 @@ public class DataEntryController {
         			"left join entry_sdg_detail as k on j.id_disaggre = k.id_disaggre and j.id = k.id_disaggre_detail and k.year_entry = :year and k.id_monper = :id_monper \r\n" + 
         			"left join ref_role as l on a.id_role = l.id_role \r\n" + 
         			"where l."+role+ " "+
-        			"ORDER BY 1,2,3,31,32";
+        			"ORDER BY CAST(kode_goals AS UNSIGNED),CAST(kode_target AS UNSIGNED),CAST(kode_indicator AS UNSIGNED),31,32";
 	        query = em.createNativeQuery(sql);
 	        query.setParameter("id_prov", id_prov);
 	        query.setParameter("id_monper", id_monper);
@@ -1814,7 +1814,7 @@ public class DataEntryController {
                 + " left join ref_unit as j on b.unit = j.id_unit "
                 + " left join ran_rad as k on k.id_monper = :id_monper "
                 +"  left join sdg_funding as l on b.id = l.id_sdg_indicator and l.id_monper = k.id_monper "
-    			+ " WHERE 1=1 "+role+" order by b.id";
+    			+ " WHERE 1=1 "+role+" order by CAST(h.id_goals AS UNSIGNED),CAST(i.id_target AS UNSIGNED),CAST(b.id_indicator AS UNSIGNED)";
     	Query query = em.createNativeQuery(sql);
         query.setParameter("id_prov", id_prov);
         query.setParameter("id_monper", id_monper);
