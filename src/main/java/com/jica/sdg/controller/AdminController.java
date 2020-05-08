@@ -158,12 +158,14 @@ public class AdminController {
             hasiltahun.put("tahunmap",list2.getResultList());
             
             
-            Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+            Query query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text,CONCAT(a.id_goals,'.0','.0') AS id_sort  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                                                 "UNION \n" +
-                                                "SELECT DISTINCT  b.id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target) AS id_text FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "SELECT DISTINCT  b.id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.0') AS id_sort FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
                                                 "UNION \n" +
-                                                "SELECT DISTINCT  c.id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'-',b.id_target,'-',c.id_indicator) AS id_text  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
-                                                "ORDER BY id_parent");
+                                                "SELECT DISTINCT  c.id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_sort  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                                                "ORDER BY cast(substring_index(id_sort,'.',1) as unsigned),\r\n" + 
+                                                "cast(substring_index(substring_index(id_sort,'.',2),'.',-1) as unsigned),\r\n" + 
+                                                "cast(substring_index(substring_index(id_sort,'.',3),'.',-1) as unsigned)");
         
             List list3 =  query3.getResultList();
             Map<String, Object> filtersdg = new HashMap<>();
