@@ -266,6 +266,8 @@
     });
     $("#role").on("change", function(){
         var idrole = $(this).val();
+        var id_monper   = $("#periode").val();
+        var idprov = $("#daerah").val();
         if (idrole != "0") {
             /* $.ajax({
                 url: urls + "getdatarole",
@@ -285,7 +287,8 @@
             //Indikator SDG untuk mapping
         	        //if(idrole=="all"){
         	        	$.ajax({
-        	                url: urls + 'list-sdgGoals',
+        	        		url: urls + "get-sdg-goals/0",
+        	                data: {'id_role': idrole,'id_monper':id_monper},
         	                type: 'get',
         	                dataType: 'json',
         	                cache: false,
@@ -298,21 +301,22 @@
 		                    				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
 				                            '<span style="vertical-align:middle">ALL</span>'+
 				                      '</label><br/>';
-        	                		for (var i = 0; i < response.content.length; i++) {
+        	                		for (var i = 0; i < response.sdg.length; i++) {
         	                			var nm_goals;
-        	                			var id_goals=response.content[i].id;
+        	                			var id_goals=response.sdg[i][0];
+        	                			var kode_goals=response.sdg[i][3];
         	                        	if($("#fs").is(':checked')){
-        	                        		nm_goals = response.content[i].nm_goals;
+        	                        		nm_goals = response.sdg[i][1];
         	    						}else{
-        	    							nm_goals = response.content[i].nm_goals_eng;
+        	    							nm_goals = response.sdg[i][2];
         	    						}
-        	                        	option += '<optgroup id="" label="'+response.content[i].id_goals+' '+nm_goals+'">';
         	                        	cekbok += '<label for="menu'+id_goals +'" style="display:inline-block;white-space:nowrap;">'+
-        	                        				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+response.content[i].id+'---0---0">&nbsp;&nbsp;&nbsp;'+
-        				                            '<span style="vertical-align:middle">'+response.content[i].id_goals+". "+nm_goals+'</span>'+
+        	                        				'<input class="menu-master sdg-indikator" id="menu'+id_goals+'" name="sdg_indicator" data-id="'+id_goals+'" type="checkbox" style="vertical-align:middle" value="'+id_goals+'---0---0">&nbsp;&nbsp;&nbsp;'+
+        				                            '<span style="vertical-align:middle">'+kode_goals+". "+nm_goals+'</span>'+
         				                      '</label><br/>';
         	                        	$.ajax({
-        	                                url: urls + 'list-sdgTarget/'+response.content[i].id,
+        	                        		url: urls + 'get-sdg-target/0',
+        	                        		data: {'id_role':idrole,'id_goals':id_goals,'id_monper':id_monper},
         	                                type: 'get',
         	                                dataType: 'json',
         	                                cache: false,
@@ -320,41 +324,41 @@
         	                                success: function (result) {
         	                                	for (var j = 0; j < result.content.length; j++) {
         	                                		var nm_target;
-        	                                		var id_target=result.content[j].id;
+        	                                		var id_target=result.content[j][0];
+        	                                		var kode_target=result.content[j][3];
         	                                    	if($("#fs").is(':checked')){
-        	                                    		nm_target = result.content[j].nm_target;
+        	                                    		nm_target = result.content[j][1];
         	                						}else{
-        	                							nm_target = result.content[j].nm_target_eng;
+        	                							nm_target = result.content[j][2];
         	                						}
-        	                                    	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
         	                                    	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
-        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+id_goals+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-        								                            '<span style="vertical-align:middle">'+response.content[i].id_goals+'.'+result.content[j].id_target+". "+nm_target+'</span>'+
+        	                                    					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+id_goals+'---'+id_target+'---0">&nbsp;&nbsp;&nbsp;'+
+        								                            '<span style="vertical-align:middle">'+kode_goals+'.'+kode_target+". "+nm_target+'</span>'+
         								                      '</label><br/>';
         	                                    	$.ajax({
-        	                                            url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
+        	                                    		url: urls + 'get-sdg-indicator-utama/0',
+        	                                    		data: {'id_role':idrole,'id_goals':id_goals,'id_target':id_target,'id_monper':id_monper,'id_prov':idprov},
         	                                            type: 'get',
         	                                            dataType: 'json',
         	                                            cache: false,
         	                                            async : false,
-        	                                            success: function (result1) {
-        	                                            	for (var k = 0; k < result1.content.length; k++) {
+        	                                            success: function (hasil) {
+        	                                            	for (var k = 0; k < hasil.content.length; k++) {
         	                                            		var nm_indicator;
-        	                                            		var id_indicator=result1.content[k][0];
+        	                                            		var id_indicator=hasil.content[k][0];
+        	                                              		var kode_indicator=hasil.content[k][3];
         	                                                	if($("#fs").is(':checked')){
-        	                                                		nm_indicator = result1.content[k][4];
+        	                                                		nm_indicator = hasil.content[k][1];
         	                            						}else{
-        	                            							nm_indicator = result1.content[k][6];
+        	                            							nm_indicator = hasil.content[k][2];
         	                            						}
-        	                                                	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
         	                                                	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
-        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+id_goals+'---'+id_target+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-        									                            '<span style="vertical-align:middle">'+response.content[i].id_goals+'.'+result.content[j].id_target+'.'+result1.content[k][1]+". "+nm_indicator+'</span>'+
+        									                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+id_goals+'---'+id_target+'---'+id_indicator+'">&nbsp;&nbsp;&nbsp;'+
+        									                            '<span style="vertical-align:middle">'+kode_goals+'.'+kode_target+'.'+kode_indicator+". "+nm_indicator+'</span>'+
         									                      '</label><br/>';
         	                                            	}
         	                                            }
         	                                    	});
-        	                                    	option += '</optgroup>';
         	                                	}
         	                                }
         	                        	});

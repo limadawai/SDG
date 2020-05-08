@@ -488,7 +488,6 @@
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
         var cat = $("#role").find(":selected").data("cat");
-        var sts;
         var cekSdg;
         $("#indi").html("");
 		$("#dualaxes").html("");
@@ -1806,6 +1805,7 @@
         var cat = $("#role").find(":selected").data("cat");
         $("#indi").html("");
 		$("#dualaxes").html("");
+		var sts = "";
         var goal = 'Nama Capaian';
         var target = "Nama Target";
         var code = 'Kode Indikator';
@@ -2282,13 +2282,14 @@
             	$("#indi").html(text);
 				$("#dualaxes").html("");
 
-				b(ks, kl);
+				b(ks, kl, hasilSts);
             }
         });
     }	
 
-	function b(ks, kl) {
-		console.log('b => ' + ks + ' ' + kl);
+	function b(ks, kl, hasilSts) {
+		console.log('b => ' + ks + ' ' + kl + ' ' + hasilSts.content[0][0]);
+		var sts = hasilSts.content[0][0];
 		var ser = [];
 		var tahun = [$("#tahun0").text(),$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text()];
 		console.log(tahun);
@@ -2314,11 +2315,26 @@
                             parseInt($("#rel_"+t + "_12").text(), 10),
 							parseInt($("#rel_"+t + "_16").text(), 10),
                         ];
-			ser.push({
+			if (sts == 'yearly') {
+				ser.push({
+                        name: 'Realisasi SDGS',
+                        type: 'column',
+                        data: rel0,
+				});			
+			} else if (sts == 'semesterly') {
+				ser.push({
+                        name: 'Realisasi SDGS S1',
+                        type: 'column',
+                        data: rel0,
+				});			
+			} else {
+				ser.push({
                         name: 'Realisasi SDGS Q1',
                         type: 'column',
                         data: rel0,
-			});			
+				});							
+			}
+
 
 			var rel1 = [
                             parseInt($("#rel_"+t + "_1").text(), 10),
@@ -2327,11 +2343,20 @@
                             parseInt($("#rel_"+t + "_13").text(), 10),
 							parseInt($("#rel_"+t + "_17").text(), 10),
                         ];
-			ser.push({
+			if (sts == 'yearly') {
+			} else if (sts == 'semesterly') {
+				ser.push({
+                        name: 'Realisasi SDGS S2',
+                        type: 'column',
+                        data: rel1,
+				});			
+			} else {
+				ser.push({
                         name: 'Realisasi SDGS Q2',
                         type: 'column',
                         data: rel1,
-			});					
+				});							
+			}						
 
 			var rel2 = [
                             parseInt($("#rel_"+t + "_2").text(), 10),
@@ -2340,11 +2365,16 @@
                             parseInt($("#rel_"+t + "_14").text(), 10),
 							parseInt($("#rel_"+t + "_18").text(), 10),
                         ];
-			ser.push({
+
+			if (sts == 'yearly') {
+			} else if (sts == 'semesterly') {
+			} else {
+				ser.push({
                         name: 'Realisasi SDGS Q3',
                         type: 'column',
                         data: rel2,
-			});			
+				});							
+			}						
 
 			var rel3 = [
                             parseInt($("#rel_"+t + "_3").text(), 10),
@@ -2353,11 +2383,16 @@
                             parseInt($("#rel_"+t + "_15").text(), 10),
 							parseInt($("#rel_"+t + "_19").text(), 10),
                         ];
-			ser.push({
+			
+			if (sts == 'yearly') {
+			} else if (sts == 'semesterly') {
+			} else {
+				ser.push({
                         name: 'Realisasi SDGS Q4',
                         type: 'column',
                         data: rel3,
-			});									
+				});							
+			}						
 
 		}
 
@@ -2385,12 +2420,26 @@
                             parseInt($("#arel_"+t + "_12").text(), 10),
 							parseInt($("#arel_"+t + "_16").text(), 10),
                         ];
-			ser.push({
+
+			if (sts == 'yearly') {
+				ser.push({
+                        name: 'Realisasi Disagregasi',
+                        type: 'spline',
+                        data: rel0,
+				});			
+			} else if (sts == 'semesterly') {
+				ser.push({
+                        name: 'Realisasi Disagregasi S1',
+                        type: 'spline',
+                        data: rel0,
+				});			
+			} else {
+				ser.push({
                         name: 'Realisasi Disagregasi Q1',
                         type: 'spline',
                         data: rel0,
-			});			
-
+				});							
+			}						
 			var rel1 = [
                             parseInt($("#arel_"+t + "_1").text(), 10),
                             parseInt($("#arel_"+t + "_5").text(), 10),
@@ -2398,11 +2447,21 @@
                             parseInt($("#arel_"+t + "_13").text(), 10),
 							parseInt($("#arel_"+t + "_17").text(), 10),
                         ];
-			ser.push({
+
+			if (sts == 'yearly') {
+			} else if (sts == 'semesterly') {
+				ser.push({
+                        name: 'Realisasi Disagregasi S2',
+                        type: 'spline',
+                        data: rel1,
+				});			
+			} else {
+				ser.push({
                         name: 'Realisasi Disagregasi Q2',
                         type: 'spline',
                         data: rel1,
-			});					
+				});							
+			}												
 
 			var rel2 = [
                             parseInt($("#arel_"+t + "_2").text(), 10),
@@ -2411,11 +2470,16 @@
                             parseInt($("#arel_"+t + "_14").text(), 10),
 							parseInt($("#arel_"+t + "_18").text(), 10),
                         ];
-			ser.push({
+
+			if (sts == 'yearly') {
+			} else if (sts == 'semesterly') {
+			} else {
+				ser.push({
                         name: 'Realisasi Disagregasi Q3',
                         type: 'spline',
                         data: rel2,
-			});			
+				});							
+			}																		
 
 			var rel3 = [
                             parseInt($("#arel_"+t + "_3").text(), 10),
@@ -2424,11 +2488,16 @@
                             parseInt($("#arel_"+t + "_15").text(), 10),
 							parseInt($("#arel_"+t + "_19").text(), 10),
                         ];
-			ser.push({
+
+			if (sts == 'yearly') {
+			} else if (sts == 'semesterly') {
+			} else {
+				ser.push({
                         name: 'Realisasi Disagregasi Q4',
                         type: 'spline',
                         data: rel3,
-			});									
+				});							
+			}																		
 
 		}
 

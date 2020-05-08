@@ -304,7 +304,7 @@ public class ReportController {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
     		String sql;
     		if(status.equals("completed")) {
-    			sql = "SELECT distinct a.id_old, a.nm_goals, a.nm_goals_eng, a.id_goals FROM history_sdg_goals a order by CAST(a.id_goals AS UNSIGNED)";
+    			sql = "SELECT distinct a.id_old, a.nm_goals, a.nm_goals_eng, a.id_goals FROM history_sdg_goals a where a.id_monper = '"+id_monper+"' order by CAST(a.id_goals AS UNSIGNED)";
     			query = manager.createNativeQuery(sql);
     		}else {
     			sql = "SELECT distinct a.id, a.nm_goals, a.nm_goals_eng, a.id_goals FROM sdg_goals a order by CAST(a.id_goals AS UNSIGNED)";
@@ -339,12 +339,12 @@ public class ReportController {
     		}
     		String hasilgoals = (goals.length()==0)?"":goals.substring(0, goals.length() - 1);
     		//String gol = (hasilgoals.equals(""))?"":" and a.id_goals in("+hasilgoals+") ";
-    		String golOld = (hasilgoals.equals(""))?"":" where a.id_old in("+hasilgoals+") ";
+    		String golOld = (hasilgoals.equals(""))?"":" and a.id_old in("+hasilgoals+") ";
     		String gol = (hasilgoals.equals(""))?"":" where a.id in("+hasilgoals+") ";
             String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
             String sql;
             if(status.equals("completed")) {
-    			sql = "SELECT distinct a.id_old, a.nm_goals, a.nm_goals_eng, a.id_goals FROM history_sdg_goals a "+golOld+" order by a.id_old";
+    			sql = "SELECT distinct a.id_old, a.nm_goals, a.nm_goals_eng, a.id_goals FROM history_sdg_goals a where a.id_monper = '"+id_monper+"' "+golOld+" order by a.id_old";
     			query = manager.createNativeQuery(sql);
             }else {
     			sql = "SELECT distinct a.id, a.nm_goals, a.nm_goals_eng, a.id_goals FROM sdg_goals a "+gol+" order by a.id";
@@ -372,7 +372,7 @@ public class ReportController {
     	if(sdg.equals("0")) {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
     		String sql;
-            if(status.equals("completed")) {sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals order by CAST(a.id_target AS UNSIGNED)";
+            if(status.equals("completed")) {sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals and a.id_monper = '"+id_monper+"' order by CAST(a.id_target AS UNSIGNED)";
     			query = manager.createNativeQuery(sql);
     			query.setParameter("id_goals", id_goals);
             }else {sql = "SELECT distinct a.id, a.nm_target, a.nm_target_eng, a.id_target FROM sdg_target a where a.id_goals = :id_goals order by CAST(a.id_target AS UNSIGNED)";
@@ -422,7 +422,7 @@ public class ReportController {
 
             String sql;
             if(status.equals("completed")) {
-            	sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals "+tarOld+" order by CAST(a.id_target AS UNSIGNED)";
+            	sql = "SELECT distinct a.id_old, a.nm_target, a.nm_target_eng, a.id_target FROM history_sdg_target a where a.id_goals = :id_goals and a.id_monper = '"+id_monper+"' "+tarOld+" order by CAST(a.id_target AS UNSIGNED)";
     			query = manager.createNativeQuery(sql);
     			query.setParameter("id_goals", id_goals);
             }else {
@@ -453,7 +453,7 @@ public class ReportController {
     	if(sdg.equals("0")) {
     		String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
     		String sql;
-            if(status.equals("completed")) {sql = "SELECT distinct a.id_old, a.nm_indicator, a.nm_indicator_eng, a.id_indicator FROM history_sdg_indicator a WHERE a.id_goals = :id_goals and a.id_target = :id_target order by CAST(a.id_indicator AS UNSIGNED)";
+            if(status.equals("completed")) {sql = "SELECT distinct a.id_old, a.nm_indicator, a.nm_indicator_eng, a.id_indicator FROM history_sdg_indicator a WHERE a.id_goals = :id_goals and a.id_target = :id_target and a.id_monper = '"+id_monper+"' order by CAST(a.id_indicator AS UNSIGNED)";
         			query = manager.createNativeQuery(sql);
         			query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -493,7 +493,7 @@ public class ReportController {
     		String ind = (hasilindicator.equals(""))?"":" and a.id in("+hasilindicator+") ";
             String role=(!id_role.equals("all"))?" and d.id_role = '"+id_role+"'":"";
             String sql;
-            if(status.equals("completed")) {sql = "SELECT distinct a.id_old, a.nm_indicator, a.nm_indicator_eng, a.id_indicator FROM history_sdg_indicator a WHERE a.id_goals = :id_goals and a.id_target = :id_target "+indOld+" order by CAST(a.id_indicator AS UNSIGNED)";
+            if(status.equals("completed")) {sql = "SELECT distinct a.id_old, a.nm_indicator, a.nm_indicator_eng, a.id_indicator FROM history_sdg_indicator a WHERE a.id_goals = :id_goals and a.id_target = :id_target and a.id_monper = '"+id_monper+"' "+indOld+" order by CAST(a.id_indicator AS UNSIGNED)";
         			query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -2952,7 +2952,7 @@ public class ReportController {
         			+ " left join history_sdg_ranrad_disaggre_detail h on g.id_old = h.id_disaggre "
         			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id_old = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
         			+ " left join ref_role i on a.id_role = i.id_role "
-        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator "+role+" order by b.id_old";
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator and b.id_monper='"+id_monper+"' "+role+" order by b.id_old";
     	}else {
     		sql = "SELECT distinct b.id as id, b.nm_indicator, "
         			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
@@ -3035,7 +3035,7 @@ public class ReportController {
         			+ " right join history_sdg_ranrad_disaggre g on g.id_monper = '"+id_monper+"' and b.id_old = g.id_indicator "
         			+ " left join history_sdg_ranrad_disaggre_detail h on h.id_monper = '"+id_monper+"' and g.id_old = h.id_disaggre "
         			+ " left join ref_role i on a.id_role = i.id_role "
-        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator "+role+" order by b.id_old";
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator and and b.id_monper='"+id_monper+"' "+role+" order by b.id_old";
             query = manager.createNativeQuery(sql);
             query.setParameter("id_goals", id_goals);
             query.setParameter("id_target", id_target);
@@ -3125,7 +3125,7 @@ public class ReportController {
         			+ " left join history_sdg_ranrad_disaggre_detail h on g.id_old = h.id_disaggre "
         			+ " left join entry_sdg_detail f on h.id_disaggre = f.id_disaggre and h.id_old = f.id_disaggre_detail and a.id_role = f.id_role and f.year_entry = :year and f.id_monper = :id_monper "
         			+ " left join ref_role i on a.id_role = i.id_role "
-        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator and g.id_old = :id_dis and h.id_old = :id_dis_detail "+role+" order by b.id_old";
+        			+ " WHERE b.id_goals = :id_goals and b.id_target = :id_target and b.id_old = :id_indicator and g.id_old = :id_dis and h.id_old = :id_dis_detail and and b.id_monper='"+id_monper+"' "+role+" order by b.id_old";
     	}else {
     		sql = "SELECT distinct b.id, b.nm_indicator, "
         			+ " b.nm_indicator_eng, b.id_indicator, b.increment_decrement, c.nm_unit, "
@@ -4515,7 +4515,7 @@ public class ReportController {
     			+ "FROM history_sdg_indicator a LEFT JOIN "
     			+ "(select * from history_sdg_goals where id_monper = '"+id_monper+"') b ON b.id_old = a.id_goals LEFT JOIN "
     			+ "(select * from history_sdg_target where id_monper = '"+id_monper+"') c ON c.id_old = a.id_target "
-    			+ "WHERE a.id_old = :id_indicator";
+    			+ "WHERE a.id_old = :id_indicator and and a.id_monper='"+id_monper+"'";
         }else{
             sql = "SELECT a.id AS idindicator, a.nm_indicator, a.nm_indicator_eng, b.id AS idgoals, b.nm_goals, b.nm_goals_eng, "
     			+ "c.id AS idtarget, c.nm_target, c.nm_target_eng, a.id_indicator, b.id_goals, c.id_target "
