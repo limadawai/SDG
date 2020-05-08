@@ -159,22 +159,24 @@ public class AdminController {
             
             String start_year;
             String status = "";
+            String id_monper = "";
             List<Object[]> rows = list2.getResultList();
             start_year = rows.get(0)[0].toString();
-            String sqlran = "SELECT status,start_year FROM ran_rad WHERE '"+start_year+"' BETWEEN start_year and end_year and id_prov = 000 limit 1";
+            String sqlran = "SELECT status,id_monper FROM ran_rad WHERE '"+start_year+"' BETWEEN start_year and end_year and id_prov = 000 limit 1";
             Query listran = em.createNativeQuery(sqlran);
             List<Object[]> rowsran = listran.getResultList();
             if(!rowsran.isEmpty()) {
             	status = rowsran.get(0)[0].toString();
+            	id_monper = rowsran.get(0)[1].toString();
             }
-            
+
             Query query3;
             if(status.equals("completed")) {
-            	query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text,CONCAT(a.id_goals,'.0','.0') AS id_sort  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+            	query3 = em.createNativeQuery("SELECT DISTINCT a.id_old,a.nm_goals AS nm,LPAD(a.id_old,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text,CONCAT(a.id_goals,'.0','.0') AS id_sort  FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"' \n" +
                         "UNION \n" +
-                        "SELECT DISTINCT  b.id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.0') AS id_sort FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                        "SELECT DISTINCT  b.id_old,b.nm_target AS nm,CONCAT(LPAD(a.id_old,3,'0'),'.',LPAD(b.id_old,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.0') AS id_sort FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"'\n" +
                         "UNION \n" +
-                        "SELECT DISTINCT  c.id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_sort  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                        "SELECT DISTINCT  c.id_old,c.nm_indicator AS nm,CONCAT(LPAD(a.id_old,3,'0') ,'.',LPAD(b.id_old,3,'0'),'.',LPAD(c.id_old,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_sort  FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"'\n" +
                         "ORDER BY cast(substring_index(id_sort,'.',1) as unsigned),\r\n" + 
                         "cast(substring_index(substring_index(id_sort,'.',2),'.',-1) as unsigned),\r\n" + 
                         "cast(substring_index(substring_index(id_sort,'.',3),'.',-1) as unsigned)");
@@ -200,36 +202,136 @@ public class AdminController {
          return "admin/dashboard";
     }
     
+    @GetMapping("admin/dashboard/get-sdg-map/{tahun}")
+    public @ResponseBody Map<String, Object> getSdgMap(@PathVariable("tahun") String tahun) {
+    	String sqlran = "SELECT status,id_monper FROM ran_rad WHERE '"+tahun+"' BETWEEN start_year and end_year and id_prov = 000 limit 1";
+        Query listran = em.createNativeQuery(sqlran);
+        String status = "";
+        String id_monper = "";
+        List<Object[]> rowsran = listran.getResultList();
+        if(!rowsran.isEmpty()) {
+        	status = rowsran.get(0)[0].toString();
+        	id_monper = rowsran.get(0)[1].toString();
+        }
+
+        Query query3;
+        Query query4;
+        if(status.equals("completed")) {
+        	query3 = em.createNativeQuery("SELECT DISTINCT a.id_old,a.nm_goals AS nm,LPAD(a.id_old,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text,CONCAT(a.id_goals,'.0','.0') AS id_sort  FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"' \n" +
+                    "UNION \n" +
+                    "SELECT DISTINCT  b.id_old,b.nm_target AS nm,CONCAT(LPAD(a.id_old,3,'0'),'.',LPAD(b.id_old,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.0') AS id_sort FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"'\n" +
+                    "UNION \n" +
+                    "SELECT DISTINCT  c.id_old,c.nm_indicator AS nm,CONCAT(LPAD(a.id_old,3,'0') ,'.',LPAD(b.id_old,3,'0'),'.',LPAD(c.id_old,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_sort  FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"'\n" +
+                    "ORDER BY cast(substring_index(id_sort,'.',1) as unsigned),\r\n" + 
+                    "cast(substring_index(substring_index(id_sort,'.',2),'.',-1) as unsigned),\r\n" + 
+                    "cast(substring_index(substring_index(id_sort,'.',3),'.',-1) as unsigned)");
+        	query4 = em.createNativeQuery("SELECT DISTINCT a.id_old,a.nm_goals_eng AS nm,LPAD(a.id_old,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text,CONCAT(a.id_goals,'.0','.0') AS id_sort  FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"' \n" +
+                    "UNION \n" +
+                    "SELECT DISTINCT  b.id_old,b.nm_target_eng AS nm,CONCAT(LPAD(a.id_old,3,'0'),'.',LPAD(b.id_old,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.0') AS id_sort FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"'\n" +
+                    "UNION \n" +
+                    "SELECT DISTINCT  c.id_old,c.nm_indicator_eng AS nm,CONCAT(LPAD(a.id_old,3,'0') ,'.',LPAD(b.id_old,3,'0'),'.',LPAD(c.id_old,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_sort  FROM history_sdg_goals a JOIN history_sdg_target b ON a.id_old = b.id_goals and a.id_monper = b.id_monper JOIN history_sdg_indicator c ON b.id_old = c.id_target and b.id_monper = c.id_monper where a.id_monper = '"+id_monper+"'\n" +
+                    "ORDER BY cast(substring_index(id_sort,'.',1) as unsigned),\r\n" + 
+                    "cast(substring_index(substring_index(id_sort,'.',2),'.',-1) as unsigned),\r\n" + 
+                    "cast(substring_index(substring_index(id_sort,'.',3),'.',-1) as unsigned)");
+        }else {
+        	query3 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text,CONCAT(a.id_goals,'.0','.0') AS id_sort  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                    "UNION \n" +
+                    "SELECT DISTINCT  b.id,b.nm_target AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.0') AS id_sort FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                    "UNION \n" +
+                    "SELECT DISTINCT  c.id,c.nm_indicator AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_sort  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                    "ORDER BY cast(substring_index(id_sort,'.',1) as unsigned),\r\n" + 
+                    "cast(substring_index(substring_index(id_sort,'.',2),'.',-1) as unsigned),\r\n" + 
+                    "cast(substring_index(substring_index(id_sort,'.',3),'.',-1) as unsigned)");
+        	query4 = em.createNativeQuery("SELECT DISTINCT a.id,a.nm_goals_eng AS nm,LPAD(a.id,3,'0') AS id_parent,'1' AS LEVEL ,a.id_goals AS id_text,CONCAT(a.id_goals,'.0','.0') AS id_sort  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                    "UNION \n" +
+                    "SELECT DISTINCT  b.id,b.nm_target_eng AS nm,CONCAT(LPAD(a.id,3,'0'),'.',LPAD(b.id,3,'0')) AS id_parent,'2' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.0') AS id_sort FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                    "UNION \n" +
+                    "SELECT DISTINCT  c.id,c.nm_indicator_eng AS nm,CONCAT(LPAD(a.id,3,'0') ,'.',LPAD(b.id,3,'0'),'.',LPAD(c.id,3,'0')) AS id_parent,'3' AS LEVEL ,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_text,CONCAT(a.id_goals,'.',b.id_target,'.',c.id_indicator) AS id_sort  FROM sdg_goals a JOIN sdg_target b ON a.id = b.id_goals JOIN sdg_indicator c ON b.id = c.id_target\n" +
+                    "ORDER BY cast(substring_index(id_sort,'.',1) as unsigned),\r\n" + 
+                    "cast(substring_index(substring_index(id_sort,'.',2),'.',-1) as unsigned),\r\n" + 
+                    "cast(substring_index(substring_index(id_sort,'.',3),'.',-1) as unsigned)");
+        }
+        List list =  query3.getResultList();
+        List listEng =  query4.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        hasil.put("contentEng",listEng);
+        return hasil;
+}
+    
        @GetMapping("admin/dashboard/get-map/{tahun}/{indicator}")
         public @ResponseBody Map<String, Object> getUnit(@PathVariable("tahun") String tahun,@PathVariable("indicator") String indicator) {
         String where = "";
-            if(!indicator.equals("0")){
-                where = "AND b.id_sdg_indicator = '"+indicator+"'";
-            }
-        Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
-                                            "    ,(IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) AS realisasi \n" +
-                                            "    ,c.id_prov \n" +
-                                            "    ,d.id_map \n" +
-                                            "    ,d.nm_prov \n" +
-                                            "    ,b.year \n" +
-                                            "    ,g.nm_goals\n" +
-                                            "    ,f.nm_target\n" +
-                                            "    ,e.nm_indicator\n"+
-                                            "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
-                                            "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
-                                            "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
-                                            "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
-                                            "     JOIN ref_role c ON a.id_role = c.id_role \n" +
-                                            "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
-                                            "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
-                                            "     JOIN sdg_target f ON e.id_target = f.id\n" +
-                                            "     JOIN sdg_goals g ON f.id_goals = g.id\n"
-                                          + "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
-                                            "     WHERE b.year = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
-            List list =  query.getResultList();
-            Map<String, Object> hasil = new HashMap<>();
-            hasil.put("content",list);
-            return hasil;
+        
+        String sqlran = "SELECT status,id_monper FROM ran_rad WHERE '"+tahun+"' BETWEEN start_year and end_year and id_prov = 000 limit 1";
+        Query listran = em.createNativeQuery(sqlran);
+        String status = "";
+        String id_monper = "";
+        Query query;
+        List<Object[]> rowsran = listran.getResultList();
+        if(!rowsran.isEmpty()) {
+        	status = rowsran.get(0)[0].toString();
+        	id_monper = rowsran.get(0)[1].toString();
+        }
+        if(!indicator.equals("0")){
+            where = "AND b.id_sdg_indicator = '"+indicator+"'";
+        }
+        if(status.equals("completed")) {
+            query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
+                                                "    ,(IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) AS realisasi \n" +
+                                                "    ,c.id_prov \n" +
+                                                "    ,d.id_map \n" +
+                                                "    ,d.nm_prov \n" +
+                                                "    ,b.year \n" +
+                                                "    ,g.nm_goals\n" +
+                                                "    ,f.nm_target\n" +
+                                                "    ,e.nm_indicator\n"+
+                                                "    ,g.nm_goals_eng\n" +
+                                                "    ,f.nm_target_eng\n" +
+                                                "    ,e.nm_indicator_eng\n"+
+                                                "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
+                                                "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
+                                                "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
+                                                "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                                "     JOIN ref_role c ON a.id_role = c.id_role \n" +
+                                                "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
+                                                "     JOIN history_sdg_indicator e ON a.id_sdg_indicator = e.id_old and e.id_monper = '"+id_monper+"'\n" +
+                                                "     JOIN history_sdg_target f ON e.id_target = f.id_old and f.id_monper = '"+id_monper+"'\n" +
+                                                "     JOIN history_sdg_goals g ON f.id_goals = g.id_old and g.id_monper = '"+id_monper+"'\n"
+                                              + "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
+                                                "     WHERE b.year = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
+            
+        }else {
+            query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
+                                                "    ,(IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) AS realisasi \n" +
+                                                "    ,c.id_prov \n" +
+                                                "    ,d.id_map \n" +
+                                                "    ,d.nm_prov \n" +
+                                                "    ,b.year \n" +
+                                                "    ,g.nm_goals\n" +
+                                                "    ,f.nm_target\n" +
+                                                "    ,e.nm_indicator\n"+
+                                                "    ,g.nm_goals_eng\n" +
+                                                "    ,f.nm_target_eng\n" +
+                                                "    ,e.nm_indicator_eng\n"+
+                                                "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
+                                                "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
+                                                "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
+                                                "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                                "     JOIN ref_role c ON a.id_role = c.id_role \n" +
+                                                "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
+                                                "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
+                                                "     JOIN sdg_target f ON e.id_target = f.id\n" +
+                                                "     JOIN sdg_goals g ON f.id_goals = g.id\n"
+                                              + "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
+                                                "     WHERE b.year = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
+           
+        }
+        
+        List list =  query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
 	}
 
     @PostMapping("admin/bahasa")
