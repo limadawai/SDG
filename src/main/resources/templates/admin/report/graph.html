@@ -27,6 +27,13 @@
                     <select id="periode" name="periode" class="form-control">
                         <option value="0" >-- Pilih Periode --</option>
                     </select>
+                    <select id="tipe_periode" name="tipe_periode" class="form-control">
+                        <!--<option value="0" >-- Pilih Periode --</option>-->
+                        <option value="1" >Each Period</option>
+                        <option value="2" >Total + Each Period</option>
+                        <option value="3" >Total Within The Year Only</option>
+                        <option value="4" >Last Period Of The Year Only</option>
+                    </select>
                 </div>
                 <button id="cari" class="btn btn-primary"><span class="lang_indo">Cari</span><span class="lang_eng" style="display: none">Search</span></button>
                 <button id="chart" class="btn btn-warning"><span class="lang_indo">Tampilkan Chart</span><span class="lang_eng" style="display: none">Show Chart</span></button>
@@ -764,6 +771,7 @@
             var valda           = $("#daerah").val();
             var valrole         = $("#selrole").val();
             var combo_periode   = $("#periode").val();
+            var tipe_periode   = $("#tipe_periode").val();
 //                alert('monper '+combo_periode);
             $cek = 0;
             if (role == '0'){	
@@ -792,7 +800,7 @@
             }
             if ($cek == 0)
             {
-                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role;
+                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role+"/"+tipe_periode;
             //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
             }
         }
