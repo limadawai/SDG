@@ -4430,10 +4430,10 @@ public class ReportController {
 
     //====================== Grafik Detail ======================
     
-    @GetMapping("admin/report-graph-detail/{idgoals}/{idtarget}/{idindicator}/{idprog}/{idacty}/{idindi}/{idmonper}/{flag}/{valdaerah}/{valrole}")
+    @GetMapping("admin/report-graph-detail/{idgoals}/{idtarget}/{idindicator}/{idprog}/{idacty}/{idindi}/{idmonper}/{flag}/{valdaerah}/{valrole}/{tipe_periode}")
     public String grafikdetail(Model model, HttpSession session, @PathVariable("idgoals") String idgoals, @PathVariable("idtarget") String idtarget, @PathVariable("idindicator") String idindicator, @PathVariable("idprog") int idprog, @PathVariable("idacty") int idacty,
         @PathVariable("idindi") int idindi, @PathVariable("idmonper") int idmonper, 
-        @PathVariable("flag") int flag, @PathVariable("valdaerah") String valdaerah, @PathVariable("valrole") String valrole) {
+        @PathVariable("flag") int flag, @PathVariable("valdaerah") String valdaerah, @PathVariable("valrole") String valrole, @PathVariable("tipe_periode") String tipe_periode) {
         model.addAttribute("title", "Report Graphic Detail");
         model.addAttribute("lang", session.getAttribute("bahasa"));
         model.addAttribute("name", session.getAttribute("name"));
@@ -4447,6 +4447,7 @@ public class ReportController {
         model.addAttribute("flag", flag);
         model.addAttribute("valdaerah", valdaerah);
         model.addAttribute("valrole", valrole);
+        model.addAttribute("tipe_periode", tipe_periode);
         return "admin/report/graphdetail_new_versi_bangyos";
     }
 
@@ -4948,6 +4949,45 @@ public class ReportController {
 //            query.setParameter("tahun", tahun);
             query.setParameter("role", role);
         }
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/cek_total_unit")
+    public @ResponseBody Map<String, Object> cek_total_unit(@RequestParam("id_indicator") String id_indicator) {
+        Query query;
+        String sql = "SELECT calculation FROM ref_unit WHERE id_unit = (SELECT unit FROM sdg_indicator WHERE id = :id_indicator)";
+        query = manager.createNativeQuery(sql);
+        query.setParameter("id_indicator", id_indicator);
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/cek_total_unit_gov")
+    public @ResponseBody Map<String, Object> cek_total_unit_gov(@RequestParam("id_indicator") String id_indicator) {
+        Query query;
+        String sql = "SELECT calculation FROM ref_unit WHERE id_unit = (SELECT unit FROM gov_indicator WHERE id = :id_indicator)";
+        query = manager.createNativeQuery(sql);
+        query.setParameter("id_indicator", id_indicator);
+        
+        List list   = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/cek_total_unit_non_gov")
+    public @ResponseBody Map<String, Object> cek_total_unit_non_gov(@RequestParam("id_indicator") String id_indicator) {
+        Query query;
+        String sql = "SELECT calculation FROM ref_unit WHERE id_unit = (SELECT unit FROM nsa_indicator WHERE id = :id_indicator)";
+        query = manager.createNativeQuery(sql);
+        query.setParameter("id_indicator", id_indicator);
+        
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
