@@ -268,7 +268,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                isiactivity += "<li  id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+2+",1)' href='#'>"+prog_l+"</a></li>";
+//                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
@@ -319,7 +320,8 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)'>"+prog_l+"</li>";
+                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)' href='#'>"+prog_l+"</a></li>";
+//                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#li2"+idactivity).append(isiindicator);
@@ -346,7 +348,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                isiactivity += "<li  id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' href='#'>"+prog_l+"</a></li>";
+//                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a>"+prog_l+"</li>";
                                 getNsaIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
@@ -374,7 +377,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+3+",1)' id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+3+",1)'  href='#'>"+prog_l+"</a></li>";
                                 getNsaIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
@@ -399,7 +402,8 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)'>"+prog_l+"</li>";
+                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)' href='#'>"+prog_l+"</a></li>";
+//                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#lilililinsa"+idactivity).append(isiindicator);
@@ -423,7 +427,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+",2)'>"+prog_l+"</li>";
+                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+",2)' href='#'>"+prog_l+"</a></li>";
         			}
         			isiindicator += "</ul>";
         			$("#lilililinsa"+idactivity).append(isiindicator);
