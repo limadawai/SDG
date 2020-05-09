@@ -292,20 +292,26 @@
                                 console.log("ini calculasi")
                                 var total = (x[2]/x[1])*100;
                                 data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11]})
-                                goal        = x[7];
-                                target      = x[8];
-                                indicator   = x[9];
+                                if($("#fs").is(':checked')){
+                                	goal        = x[7];
+                                    target      = x[8];
+                                    indicator   = x[9];
+                	        	}else{
+                	        		goal        = x[10];
+                                    target      = x[11];
+                                    indicator   = x[12];
+                	        	}
                             }else{
-                                if(x[12]!=0){
+                                if(x[12]!=''){
                                     notcalculation = x[12];
                                 }
-                                if(x[13]!=0){
+                                if(x[13]!=''){
                                     notcalculation = x[13];
                                 }
-                                if(x[14]!=0){
+                                if(x[14]!=''){
                                     notcalculation = x[14];
                                 }
-                                if(x[15]!=0){
+                                if(x[15]!=''){
                                     notcalculation = x[15];
                                 }
                                 

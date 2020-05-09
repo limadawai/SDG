@@ -2058,11 +2058,16 @@ public class DataEntryController {
     		Optional<Provinsi> list1 = provinsiService.findOne(id_prov);
     		list1.ifPresent(foundUpdateObject1 -> model.addAttribute("listprov", foundUpdateObject1));
     	}
+    	String sql = "select distinct company_name from entry_gri_ojk";
+    	Query query = em.createNativeQuery(sql);
+        List listcompany   = query.getResultList();
+    	
         model.addAttribute("lang", session.getAttribute("bahasa"));
 		model.addAttribute("name", session.getAttribute("name"));
 		model.addAttribute("id_prov", id_prov);
 		model.addAttribute("privilege", privilege);
 		model.addAttribute("id_role", id_role);
+		model.addAttribute("company_name", listcompany);
         return "admin/dataentry/gri_ojk";
         
     }
