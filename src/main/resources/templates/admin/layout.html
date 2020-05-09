@@ -28,7 +28,7 @@
     <link rel="stylesheet" th:href="@{/css/jquery.dataTables10.min.css}" />
     <link rel="stylesheet" th:href="@{/css/buttons.dataTables.min.css}" />
     <link rel="stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css" />
-    
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   
     
 
@@ -369,7 +369,6 @@
                             type: "post",
                             data: {"bhs": "0"},
                             dataType: "text",
-                            cache: "false",
                             success: function(data) {
                             	if(name!="Guest"){
                             		bahasa();
@@ -385,7 +384,6 @@
                             type: "post",
                             data: {"bhs": "1"},
                             dataType: "text",
-                            cache: "false",
                             success: function(data) {
                             	if(name!="Guest"){
                             		english();
@@ -430,7 +428,6 @@
                         url: urls + 'menu',
                         type: 'get',
                         dataType: 'json',
-                        cache: false,
                         success: function (response) {
                             $('#menuatas').empty();
                             for (var i = 0; i < response.length; i++) {
@@ -458,7 +455,6 @@
                                         type: 'get',
                                         data: 'id=' + $(this).attr('id'),
                                         dataType: 'json',
-                                        cache: false,
                                         success: function (result) {
                                             $("li.aktif > ul").empty();
                                             for (var j = 0; j < result.length; j++) {
@@ -481,7 +477,6 @@
                         url: urls + 'menu',
                         type: 'get',
                         dataType: 'json',
-                        cache: false,
                         success: function (response) {
                             $('#menuatas').empty();
                             for (var i = 0; i < response.length; i++) {
@@ -509,7 +504,6 @@
                                         type: 'get',
                                         data: 'id=' + $(this).attr('id'),
                                         dataType: 'json',
-                                        cache: false,
                                         success: function (result) {
                                             $("li.aktif > ul").empty();
                                             for (var j = 0; j < result.length; j++) {

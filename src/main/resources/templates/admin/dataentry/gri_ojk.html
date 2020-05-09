@@ -210,8 +210,7 @@
     var privilege = [[${privilege}]];
     var id_prov = [[${id_prov}]];
     var id_role = [[${id_role}]];
-    
-    console.log(id_role);
+    var company_name = [[${company_name}]];
     
     if((privilege=="SUPER" || privilege=="ADMIN") && id_prov=="000"){
     	$('#addNew').show();
@@ -226,6 +225,10 @@
     if(privilege=="ADMIN"){
       $("#privilege option[value='ADMIN']").remove();
     }
+    
+    $("#company_name").autocomplete({
+        source: company_name
+      });
     
 //    $('#id_prov').on('change', function(){
 //    	var id = $(this).val();

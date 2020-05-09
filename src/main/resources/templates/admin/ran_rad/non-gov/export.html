@@ -4,22 +4,22 @@
       xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/layout :: header">
 </head>
-<title>Define RAN/RAD/Government Program</title>
+<title>Define RAN/RAD/Non Government Program</title>
 <body>
     <div th:include="admin/layout :: menu"></div>
     <div id="content">
         <div id="content-header">
-            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Government Program</a></div>
+            <div id="breadcrumb"> <a href="#" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Define RAN/RAD/Non Government Program</a></div>
         </div>
         <div class="container-fluid">
         	
         	<div class="row-fluid">
-        		<a class="btn btn-warning" href="#" onclick="tableToExcel('hasil', 'Government Program')">Excel</a><br/>
+        		<a class="btn btn-warning" href="#" onclick="tableToExcel('hasil', 'Non Government Program')">Excel</a><br/>
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-tasks"></i></span>
-                        <h5 class="lang_eng" style="display:none">Government Program</h5>
-                        <h5 class="lang_indo">Program Pemerintah</h5>
+                        <h5 class="lang_eng" style="display:none">Non Government Program</h5>
+                        <h5 class="lang_indo">Program Non Pemerintah</h5>
                     </div>
                     <div class="widget-content">
                         <div class="row-fluid">
@@ -57,23 +57,23 @@
 			
 			$.ajax({
 				type: "GET",
-                url: urls+'list-govProg/'+id_monper,
+                url: urls+'list-nsaProgram/'+id_monper,
                 async:false,
                 success: function (result) {
                 	var array = result.content;
 					for(i=0; i<array.length;i++){
 						var nm_program;
 						if($("#fs").is(':checked')){
-							nm_program = array[i].nm_program;
+							nm_program = array[i][1];
 						}else{
-							nm_program = array[i].nm_program_eng;
+							nm_program = array[i][2];
 						}
 						if(i>0){text +="<br/>";}
-						text += "<div>"+array[i].internal_code+" "+nm_program+"</div>";
+						text += "<div>"+array[i][3]+" "+nm_program+" "+array[i][4]+"</div>";
 						
 						$.ajax({
 							type: "GET",
-			                url: urls+'list-govActivity/'+array[i].id,
+			                url: urls+'list-nsaActivityExp/'+array[i][0],
 			                async:false,
 			                success: function (result1) {
 			                	var array1 = result1.content;
@@ -88,11 +88,11 @@
 										nm_activity = array1[ii][2];
 									}
 									if(ii>0){text +="<br/>";}
-									text += "<div style='margin-left:20px'>"+array[i].internal_code+'.'+kode_activity+" "+nm_activity+" "+role_activity+"</div>";
+									text += "<div style='margin-left:20px'>"+array[i][3]+'.'+kode_activity+" "+nm_activity+" "+role_activity+"</div>";
 								
 									$.ajax({
 										type: "GET",
-						                url: urls+'list-govIndicator/'+array[i].id+'/'+id_activity,
+						                url: urls+'list-nsaIndicator/'+array[i][0]+'/'+id_activity,
 						                async:false,
 						                success: function (result11) {
 						                	var array11 = result11.content;
@@ -105,7 +105,7 @@
 												}else{
 													nm_indicator = array11[iii][5];
 												}
-												text += "<div style='margin-left:40px'>"+array[i].internal_code+'.'+kode_activity+"."+kode_indicator+" "+nm_indicator+"</div>";
+												text += "<div style='margin-left:40px'>"+array[i][3]+'.'+kode_activity+"."+kode_indicator+" "+nm_indicator+"</div>";
 											
 											}
 						                }

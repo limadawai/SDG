@@ -69,7 +69,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row-fluid">
+            <!-- <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
                         <h5>Data Graph</h5>
@@ -85,9 +85,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
-            <div class="row-fluid">
+            <!-- <div class="row-fluid">
                 <div class="widget-box">
                     <div class="widget-title"><span class="icon"><i class="icon-tasks"></i></span>
                         <h5>Site Analytics</h5>
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 
@@ -216,6 +216,45 @@
             return item.text
           },
           templateResult: formatResult,
+        }).on('change', function(){
+        	var tahun = $(this).val();
+        	 $.ajax({
+                 type: "GET",
+                 url: urls+'dashboard/get-sdg-map/'+tahun,
+                 success: function (result) {
+                	 var data;
+                	 if($("#fs").is(':checked')){
+                		 data = result.content;
+     	        	}else{
+     	        		data = result.contentEng;
+     	        	}
+                	 var data_filter = [{'id':'0','text':'ALL','level':'1'}]
+                     $.each(data,function(i,x){
+                         var obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3]}
+                         if(x[3]==1||x[3]==2){
+                             obj = {'id':x[0],'text':x[4]+' '+x[1],'level':x[3],disabled:true}
+                         }
+                        data_filter.push(obj)
+                    });
+                	 $("#filter_sdg").html("");
+                	 $("#filter_sdg").select2({
+                         placeholder: 'Select an option',
+                         width: "70%",
+                         data: data_filter,
+                         formatSelection: function(item) {
+                           return item.text
+                         },
+                         formatResult: function(item) {
+                           return item.text
+                         },
+                         templateResult: formatResult,
+                       });
+                 }
+        	 });
+        });
+        
+        $('#fs').on('change', function(e){
+        	$("#tahun_map").trigger('change');
         });
         
         $('#show_map').on("click",function(){
@@ -253,28 +292,41 @@
                                 console.log("ini calculasi")
                                 var total = (x[2]/x[1])*100;
                                 data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11]})
-                                goal        = x[7];
-                                target      = x[8];
-                                indicator   = x[9];
+                                if($("#fs").is(':checked')){
+                                	goal        = x[7];
+                                    target      = x[8];
+                                    indicator   = x[9];
+                	        	}else{
+                	        		goal        = x[10];
+                                    target      = x[11];
+                                    indicator   = x[12];
+                	        	}
                             }else{
-                                if(x[12]!=0){
+                                if(x[12]!=''){
                                     notcalculation = x[12];
                                 }
-                                if(x[13]!=0){
+                                if(x[13]!=''){
                                     notcalculation = x[13];
                                 }
-                                if(x[14]!=0){
+                                if(x[14]!=''){
                                     notcalculation = x[14];
                                 }
-                                if(x[15]!=0){
+                                if(x[15]!=''){
                                     notcalculation = x[15];
                                 }
                                 
                                 var total = (notcalculation/x[1])*100;
                                 data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':notcalculation,'value':total,'gov':x[10],'non_gov':x[11]})
-                                goal        = x[7];
-                                target      = x[8];
-                                indicator   = x[9];
+                                if($("#fs").is(':checked')){
+                                	goal        = x[7];
+                                    target      = x[8];
+                                    indicator   = x[9];
+                	        	}else{
+                	        		goal        = x[10];
+                                    target      = x[11];
+                                    indicator   = x[12];
+                	        	}
+                                
                             }
                             
         //            console.log(x[1]);
@@ -305,23 +357,30 @@
                             colorAxis: {
                                dataClasses: [{
 //                                   from: 0,
+									name: '< '+legend1,
                                    to: legend1,
                                    color: 'rgba(245,0,0,1)',
+                                   
                                    }, {
                                        from: legend2,
+                                       name: legend2+' =<  < '+legend3,
                                        to: legend3,
-                                       color:'rgba(233, 255, 36, 1)'
+                                       color:'rgba(233, 255, 36, 1)',
+                                       
                                    }, {
                                        from: legend4,
                                        to: legend5,
+                                       name: legend4+' =<  < '+legend5,
                                        color: 'rgba(63,182,191,1)'
                                    }, {
                                        from: legend6,
                                        to: legend7,
+                                       name: legend6+' =<  < '+legend7,
                                        color: 'rgba(24,0,245,1)'
                                    },{
                                        from: legend8,
 //                                       to: 100,
+										name: legend8+' =<',
                                        color: 'rgba(20,245,0,1)'
                                    }]
                            },
@@ -423,22 +482,27 @@
                 dataClasses: [{
 //                                   from: 0,
                                    to: 20,
+                                   name: '< 20',
                                    color: 'rgba(245,0,0,1)',
                                    }, {
                                        from: 20,
                                        to: 40,
+                                       name: '20 =<  < 40',
                                        color:'rgba(233, 255, 36, 1)'
                                    }, {
                                        from: 40,
                                        to: 60,
+                                       name: '40 =<  < 60',
                                        color: 'rgba(63,182,191,1)'
                                    }, {
                                        from: 60,
                                        to: 80,
+                                       name: '60 =<  < 80',
                                        color: 'rgba(24,0,245,1)'
                                    },{
                                        from: 80,
 //                                       to: 100,
+										name: '80 =<',
                                        color: 'rgba(20,245,0,1)'
                                    }]
             },

@@ -74,10 +74,6 @@
 	                                    <thead>
 	                                        <tr>
 	                                            <th style="text-align:center;font-size:80%;" width="5%">
-	                                            	<span class="lang_eng" style="display:none">No</span>
-													<span class="lang_indo">No</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" width="5%">
 	                                            	<span class="lang_eng" style="display:none">SDG E-Monev Code</span>
 	                                            	<span class="lang_indo">Kode SDG E-Monev</span>
 	                                            </th>
@@ -469,6 +465,7 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"ordering": false,
 				"drawCallback": function( settings ) {
 					if(cekStatusMonper()=="completed"){
 		        		$('#showModal').hide();
@@ -484,9 +481,6 @@
 				},
 				"searching": true,
 				"columns": [
-					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-						}},
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+[[${govProg.internal_code}]]+"."+[[${govActivity.internal_code}]]+"."+row[6]+"</div>";
 						}},

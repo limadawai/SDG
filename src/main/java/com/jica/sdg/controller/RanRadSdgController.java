@@ -515,6 +515,22 @@ public class RanRadSdgController {
         return "admin/ran_rad/gov/export";
     }
     
+    @GetMapping("admin/ran_rad/preview-non_gov-program/{id_prov}/{id_monper}")
+    public String nonGov_program(Model model, HttpSession session,@PathVariable("id_monper") String id_monper,@PathVariable("id_prov") String id_prov) {
+    	Optional<Provinsi> list1 = prov.findOne(id_prov);
+    	Optional<RanRad> monper = monPerService.findOne(Integer.parseInt(id_monper));
+    	model.addAttribute("prov", list1.get().getNm_prov());
+    	model.addAttribute("monper", monper.get().getStart_year().toString()+"-"+monper.get().getEnd_year().toString());
+    	model.addAttribute("id_prov", id_prov);
+    	model.addAttribute("id_monper", id_monper);
+        model.addAttribute("title", "Define RAN/RAD/Non Government Program");
+        model.addAttribute("name", session.getAttribute("name"));
+        String bhs = (String) session.getAttribute("bahasa");
+        if (bhs == null) {bhs = "0";}
+        model.addAttribute("lang", bhs);
+        return "admin/ran_rad/non-gov/export";
+    }
+    
     @PostMapping(path = "admin/save-govProg")
 	@ResponseBody
 	@Transactional
@@ -669,7 +685,7 @@ public class RanRadSdgController {
     	String sql = "select a.id, a.nm_activity, a.nm_activity_eng, a.internal_code,b.nm_role "
     			+ "from gov_activity a "
     			+ "left join ref_role b on a.id_role = b.id_role "
-    			+ "where a.id_program=:id_program "+id_role;
+    			+ "where a.id_program=:id_program "+id_role+" order by CAST(a.internal_code AS UNSIGNED)";
         Query query = em.createNativeQuery(sql);
         query.setParameter("id_program", id_program);
         List list   = query.getResultList();
@@ -1014,6 +1030,44 @@ public class RanRadSdgController {
     @GetMapping("admin/list-nsaActivity/{id_program}/{id_role}")
     public @ResponseBody Map<String, Object> nsaActivityList(@PathVariable("id_program") Integer id_program,@PathVariable("id_role") Integer id_role) {
         List<NsaActivity> list = nsaActivityService.findAll(id_program,id_role);
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-nsaProgram/{id_monper}")
+    public @ResponseBody Map<String, Object> nsaProgListMon(@PathVariable("id_monper") String id_monper, HttpSession session) {
+    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
+    	String id_role="";
+    	if(role.get().getPrivilege().equals("USER")) {
+    		id_role = " and a.id_role = '"+role.get().getId_role()+"'";
+    	}
+    	String sql = "select a.id, a.nm_program, a.nm_program_eng, a.internal_code,b.nm_role "
+    			+ "from nsa_program a "
+    			+ "left join ref_role b on a.id_role = b.id_role "
+    			+ "where a.id_monper=:id_monper "+id_role+" order by CAST(a.internal_code AS UNSIGNED)";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_monper", id_monper);
+        List list   = query.getResultList();
+		Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",list);
+        return hasil;
+    }
+    
+    @GetMapping("admin/list-nsaActivityExp/{id_program}")
+    public @ResponseBody Map<String, Object> nsaActivityList(@PathVariable("id_program") Integer id_program, HttpSession session) {
+    	Optional<Role> role = roleService.findOne((Integer) session.getAttribute("id_role"));
+    	String id_role="";
+    	if(role.get().getPrivilege().equals("USER")) {
+    		id_role = " and a.id_role = '"+role.get().getId_role()+"'";
+    	}
+    	String sql = "select a.id, a.nm_activity, a.nm_activity_eng, a.internal_code,b.nm_role "
+    			+ "from nsa_activity a "
+    			+ "left join ref_role b on a.id_role = b.id_role "
+    			+ "where a.id_program=:id_program "+id_role+" order by CAST(a.internal_code AS UNSIGNED)";
+        Query query = em.createNativeQuery(sql);
+        query.setParameter("id_program", id_program);
+        List list   = query.getResultList();
 		Map<String, Object> hasil = new HashMap<>();
         hasil.put("content",list);
         return hasil;
