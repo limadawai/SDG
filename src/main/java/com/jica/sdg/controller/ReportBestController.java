@@ -311,7 +311,7 @@ public class ReportBestController {
                             "from best_map a\n" +
                             "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
                             "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 \n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 "+tar+" \n" +
                             ")as z\n" +
                             "left join (select * from history_sdg_goals where id_monper = '"+id_monper+"' ) y on z.id_goals = y.id_old";
                 }else{
@@ -323,7 +323,7 @@ public class ReportBestController {
                             "from best_map a\n" +
                             "left join best_practice b on b.id_role <> '999999' and b.id_monper = :id_monper and b.year = :year and a.id_best_practice = b.id\n" +
                             "left join entry_approval d on b.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and b.id_role = d.id_role "+
-                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 \n" +
+                            "where a.id_prov = :id_prov and a.id_monper = :id_monper and d.approval != 3 "+tar+"\n" +
                             ")as z\n" +
                             "left join sdg_goals y on z.id_goals = y.id";
                 }
