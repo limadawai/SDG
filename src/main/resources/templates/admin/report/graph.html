@@ -239,8 +239,9 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
-                                getGovIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
+                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a></li>";
+//                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                getGovIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
                             $("#lilili"+idprogram).append(isiactivity);
@@ -267,7 +268,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
@@ -292,7 +293,9 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+")'>"+prog_l+"</li>";
+                                    
+                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)' href='#'>"+prog_l+"</a></li>";
+//                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#li2"+idactivity).append(isiindicator);
@@ -316,7 +319,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+")'>"+prog_l+"</li>";
+                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#li2"+idactivity).append(isiindicator);
@@ -343,8 +346,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
-                                getNsaIndicator(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
+                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                getNsaIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
                             $("#lilinsa"+idprogram).append(isiactivity);
@@ -371,7 +374,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
+                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+3+",1)' id='lilililinsa"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getNsaIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
@@ -396,7 +399,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+")'>"+prog_l+"</li>";
+                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#lilililinsa"+idactivity).append(isiindicator);
@@ -420,7 +423,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+")'>"+prog_l+"</li>";
+                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
         			$("#lilililinsa"+idactivity).append(isiindicator);
@@ -766,8 +769,8 @@
         	//$("#lisdg").css({"cursor":"pointer","color":"#7F7FFF"});
         }
 
-        function cucukanan(idgoals, idtarget, idindicator, idprog, idacty, idindi, role, flag) {
-            //alert(idsdg+" "+idtar+" "+idindi+" "+idmon+" "+flag);
+        function cucukanan(idgoals, idtarget, idindicator, idprog, idacty, idindi, role, flag, kode_bud) {
+//            alert(idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role+"/"+tipe_periode+"/"+kode_bud);
             var valda           = $("#daerah").val();
             var valrole         = $("#selrole").val();
             var combo_periode   = $("#periode").val();
@@ -782,14 +785,14 @@
                 }
                 $cek += 1;
             }
-            if (role == '111111'){	
-                if($('#fs').is(':checked')){
-                    swal("Anda harus memilih Role");
-                }else{
-                    swal("You must Choose Role");
-                }
-                $cek += 1;
-            }
+//            if (role == '111111'){	
+//                if($('#fs').is(':checked')){
+//                    swal("Anda harus memilih Role");
+//                }else{
+//                    swal("You must Choose Role");
+//                }
+//                $cek += 1;
+//            }
             if (combo_periode == '0'){					
                 if($('#fs').is(':checked')){
                     swal("Anda harus memilih Periode");
@@ -800,7 +803,46 @@
             }
             if ($cek == 0)
             {
-                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role+"/"+tipe_periode;
+                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role+"/"+tipe_periode+"/"+kode_bud;
+            //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
+            }
+        }
+        
+        function cucukanan_bud(idgoals, idtarget, idindicator, idprog, idacty, idindi, role, flag, kode_bud) {
+//            alert(idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role+"/"+tipe_periode+"/"+kode_bud);
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+            var tipe_periode   = $("#tipe_periode").val();
+//                alert('monper '+combo_periode);
+            $cek = 0;
+            if (role == '0'){	
+                if($('#fs').is(':checked')){
+                    swal("Anda harus memilih tipe Role");
+                }else{
+                    swal("You must Choose Role");
+                }
+                $cek += 1;
+            }
+//            if (role == '111111'){	
+//                if($('#fs').is(':checked')){
+//                    swal("Anda harus memilih Role");
+//                }else{
+//                    swal("You must Choose Role");
+//                }
+//                $cek += 1;
+//            }
+            if (combo_periode == '0'){					
+                if($('#fs').is(':checked')){
+                    swal("Anda harus memilih Periode");
+                }else{
+                    swal("You must Choose Period");
+                }
+                $cek += 1;
+            }
+            if ($cek == 0)
+            {
+                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role+"/"+tipe_periode+"/"+kode_bud;
             //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
             }
         }
@@ -828,14 +870,14 @@
                 }
                 $cek += 1;
             }
-            if (valrole == '111111'){	
-                if($('#fs').is(':checked')){
-                    swal("Anda harus memilih tipe Role");
-                }else{
-                    swal("You must Choose Role");
-                }
-                $cek += 1;
-            }
+//            if (valrole == '111111'){	
+//                if($('#fs').is(':checked')){
+//                    swal("Anda harus memilih tipe Role");
+//                }else{
+//                    swal("You must Choose Role");
+//                }
+//                $cek += 1;
+//            }
             if (combo_periode == '0'){					
                 if($('#fs').is(':checked')){
                     swal("Anda harus memilih Periode");
