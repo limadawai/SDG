@@ -168,30 +168,86 @@ public class ReportBestController {
     public @ResponseBody Map<String, Object> getbest_level2_ins(@RequestParam("id_monper") String id_monper, @RequestParam("year") String year, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @PathVariable("sdg") String sdg) {
     	Query query;
         String sql = "";
-        if(id_role.equals("131313")){
-        	sql  = "select DISTINCT c.id_role, c.nm_role " +
-                    "from best_map a " +
-                    "join best_practice b on a.id_best_practice = b.id and b.id_role <> '999999' and b.id_monper = a.id_monper and b.year = :year "+
-                    "join entry_approval d on a.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 " +
-                    "left join ref_role c on c.id_role = d.id_role "+
-                    "where a.id_prov = :id_prov and a.id_monper = :id_monper ";
-        	query = manager.createNativeQuery(sql);
-            query.setParameter("id_monper", id_monper);
-            query.setParameter("year", year);
-            query.setParameter("id_prov", id_prov);
+        if(sdg.equals("0")) {
+        	if(id_role.equals("131313")){
+            	sql  = "select DISTINCT c.id_role, c.nm_role " +
+                        "from best_map a " +
+                        "join best_practice b on a.id_best_practice = b.id and b.id_role <> '999999' and b.id_monper = a.id_monper and b.year = :year "+
+                        "join entry_approval d on a.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 " +
+                        "left join ref_role c on c.id_role = d.id_role "+
+                        "where a.id_prov = :id_prov and a.id_monper = :id_monper ";
+            	query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+                query.setParameter("id_prov", id_prov);
+            }else {
+            	sql  = "select DISTINCT c.id_role, c.nm_role " +
+                        "from best_map a " +
+                        "join best_practice b on a.id_best_practice = b.id and b.id_role =:id_role and b.id_role <> '999999' and b.id_monper = a.id_monper and b.year = :year "+
+                        "join entry_approval d on a.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 " +
+                        "left join ref_role c on c.id_role = d.id_role " +
+                        "where a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role ";
+            	query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+                query.setParameter("id_role", id_role);
+                query.setParameter("id_prov", id_prov);
+            }
         }else {
-        	sql  = "select DISTINCT c.id_role, c.nm_role " +
-                    "from best_map a " +
-                    "join best_practice b on a.id_best_practice = b.id and b.id_role =:id_role and b.id_role <> '999999' and b.id_monper = a.id_monper and b.year = :year "+
-                    "join entry_approval d on a.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 " +
-                    "left join ref_role c on c.id_role = d.id_role " +
-                    "where a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role ";
-        	query = manager.createNativeQuery(sql);
-            query.setParameter("id_monper", id_monper);
-            query.setParameter("year", year);
-            query.setParameter("id_role", id_role);
-            query.setParameter("id_prov", id_prov);
+        	String[] arrOfStr = sdg.split(","); 
+            StringBuffer target = new StringBuffer();
+            if(arrOfStr.length>0) {
+                for (int i = 0; i < arrOfStr.length; i++) {
+                    String[] arrOfStr1 = arrOfStr[i].split("---");
+                    int cek=1;
+                    for(int j=0;j<arrOfStr1.length;j++) {
+                        cek = (cek==4)?1:cek;
+                        if(!arrOfStr1[j].equals("0") && cek==1) {
+                            target.append("'"+arrOfStr1[j]+"',");
+                        }
+                        cek = cek+1;
+                    }
+                }
+            }else{
+                String[] arrOfStr1 = sdg.split("---");
+                int cek=1;
+                for(int j=0;j<arrOfStr1.length;j++) {
+                    cek = (cek==4)?1:cek;
+                    if(!arrOfStr1[j].equals("0") && cek==1) {
+                        target.append("'"+arrOfStr1[j]+"',");
+                    }
+                    cek = cek+1;
+                }
+            }
+            String hasiltarget = (target.length()==0)?"":target.substring(0, target.length() - 1);
+
+            String tar = (hasiltarget.equals(""))?"":" and a.id_goals in("+hasiltarget+") ";
+        	if(id_role.equals("131313")){
+            	sql  = "select DISTINCT c.id_role, c.nm_role " +
+                        "from best_map a " +
+                        "join best_practice b on a.id_best_practice = b.id and b.id_role <> '999999' and b.id_monper = a.id_monper and b.year = :year "+
+                        "join entry_approval d on a.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 " +
+                        "left join ref_role c on c.id_role = d.id_role "+
+                        "where a.id_prov = :id_prov and a.id_monper = :id_monper "+tar;
+            	query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+                query.setParameter("id_prov", id_prov);
+            }else {
+            	sql  = "select DISTINCT c.id_role, c.nm_role " +
+                        "from best_map a " +
+                        "join best_practice b on a.id_best_practice = b.id and b.id_role =:id_role and b.id_role <> '999999' and b.id_monper = a.id_monper and b.year = :year "+
+                        "join entry_approval d on a.id_monper = d.id_monper and d.year = b.year and d.type = 'entry_best_practice' and d.periode = '1' and d.approval != 3 " +
+                        "left join ref_role c on c.id_role = d.id_role " +
+                        "where a.id_prov = :id_prov and a.id_monper = :id_monper and c.id_role = :id_role "+tar;
+            	query = manager.createNativeQuery(sql);
+                query.setParameter("id_monper", id_monper);
+                query.setParameter("year", year);
+                query.setParameter("id_role", id_role);
+                query.setParameter("id_prov", id_prov);
+            }
         }
+        
         
         List list   = query.getResultList();
         Map<String, Object> hasil = new HashMap<>();
