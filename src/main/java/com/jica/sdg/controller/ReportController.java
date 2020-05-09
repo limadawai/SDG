@@ -290,6 +290,31 @@ public class ReportController {
         return hasil;
     }
     
+    @GetMapping("admin/get-sdg-indicator-best")
+    public @ResponseBody Map<String, Object> getSdgIndicatorBest(
+    		@RequestParam("id_monper") String id_monper,
+    		@RequestParam("id_target") String id_target) {
+    	Query query;
+    	Optional<RanRad> monper = radService.findOne(Integer.parseInt(id_monper));
+    	String status = (monper.isPresent())?monper.get().getStatus():"";
+    	
+    	String sql;
+		if(status.equals("completed")) {
+			sql = "SELECT distinct b.id_old, b.nm_indicator, b.nm_indicator_eng, b.id_indicator "
+    				+ " FROM history_sdg_indicator b "
+        			+ " WHERE b.id_monper = '"+id_monper+"' and b.id_target= '"+id_target+"' order by CAST(b.id_indicator AS UNSIGNED)";
+		}else {
+			sql = "SELECT distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator "
+    				+ " FROM sdg_indicator b where b.id_target= '"+id_target+"' order by CAST(b.id_indicator AS UNSIGNED)";
+		}
+        query = manager.createNativeQuery(sql);
+    	
+        List listSdg = query.getResultList();
+        Map<String, Object> hasil = new HashMap<>();
+        hasil.put("content",listSdg);
+        return hasil;
+    }
+    
     @GetMapping("admin/get-sdg-goals-report/{sdg}")
     public @ResponseBody Map<String, Object> getSdgGoalMon(
     		@RequestParam("id_role") String id_role,

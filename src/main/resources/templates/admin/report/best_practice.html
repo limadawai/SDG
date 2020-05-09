@@ -307,7 +307,7 @@
     	            success: function (response) {
     	        		$('.accordion-inner').html(cekbok);
     	        		cekbok += '<label style="display:inline-block;white-space:nowrap;">'+
-    	        				'<input class="menu-master sdg-indikator" name="sdg_indicator" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
+    	        				'<input class="menu-master sdg-indikator" name="sdg_indicator_all" id="all-sdg" type="checkbox" style="vertical-align:middle" value="0">&nbsp;&nbsp;&nbsp;'+
     	                        '<span style="vertical-align:middle">ALL</span>'+
     	                  '</label><br/>';
     	            	for (var i = 0; i < response.sdg.length; i++) {
@@ -345,6 +345,31 @@
     		                            '<span style="vertical-align:middle">'+kode_goals+"."+kode_target+" "+nm_target+'</span>'+
     		                      '</label><br/>';
     		                      
+    	                          	$.ajax({
+    	      	                      url: urls + 'get-sdg-indicator-best',
+    	      	                      type: 'get',
+    	      	                      data: {'id_target':id_target,'id_monper':id_monper},
+    	      	                      dataType: 'json',
+    	      	                      cache: false,
+    	      	                      async : false,
+    	      	                      success: function (result1) {
+    	      	                      	for (var k = 0; k < result1.content.length; k++) {
+    	      	                      		var nm_indicator;
+    	      	                      		var id_indicator=result1.content[k][0];
+    	      	                      		var kode_indicator=result1.content[k][3];
+    	      	                          	if($("#fs").is(':checked')){
+    	      	                          		nm_indicator = result1.content[k][1];
+    	      	      						}else{
+    	      	      							nm_indicator = result1.content[k][2];
+    	      	      						}
+    	      	                          	cekbok += '<label for="submenu'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
+    	      	            					'<input data-goals="'+id_goals+'" data-id="'+id_indicator+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+id_goals+'---'+id_target+'---'+id_indicator+'">&nbsp;&nbsp;&nbsp;'+
+    	      		                            '<span style="vertical-align:middle">'+kode_goals+"."+kode_target+"."+kode_indicator+" "+nm_indicator+'</span>'+
+    	      		                      '</label><br/>';
+    	      		                      
+    	      	                      	}
+    	      	                      }
+    	      	                  });
     	                      	}
     	                      }
     	                  });
@@ -436,7 +461,10 @@
         $.each($("input[name='sdg_indicator']:checked"), function(){
             sdg_indicator_val.push($(this).val());
         });
-        if(sdg_indicator_val.length>0){
+        if($('.accordion-inner').find("input[name='sdg_indicator_all']").is(':checked')){
+        	sdg_indicator = '0';
+        	console.log(sdg_indicator);
+        }else if(sdg_indicator_val.length>0){
             sdg_indicator = sdg_indicator_val.toString();
         }else{
             sdg_indicator = '0';
@@ -452,7 +480,6 @@
     });
     
     function ambilData(sdg_indicator){
-        console.log("sdg = "+sdg_indicator);
     	var monper = $("#periode").val().split("###");
     	var id_monper   = monper[0];
     	var year   = monper[1];
@@ -489,7 +516,6 @@
                             async:false,
                             success: function (result2) {
                                 var array_level2 = result2.content;
-                                console.log(result2);
                                 if (array_level2 != '') {
                                     for (o in array_level2) {
                                         //level2
@@ -542,7 +568,6 @@
                                             success: function (result3) {
                                                 var array_level3 = result3.content;
                                                 jml += parseInt(result3.content.length);
-                                                console.log('jumlah = '+result3.content.length);
                                                 
                                                 if (array_level3 != '') {
                                                     for (p in array_level3) {
@@ -586,7 +611,7 @@
                                                         }
                                                         
                                                         text += "<tr style='font-size:80%;border-style:ridge;'>";
-                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+(array_level2[o][0]?target:'')+"<br/>"+(array_level2[o][0]?indicator:'')+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+(no_target?target:'')+"<br/>"+(no_indicator?indicator:'')+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][14]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][8]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
@@ -611,14 +636,12 @@
                     }
                 }
                 $("#total_detail").html("Total : "+jml)
-                console.log("jml = "+jml)
             }
         });
         $("#indi").html(text);
     }
     
     function ambilDataIns(sdg_indicator){
-        console.log("sdg = "+sdg_indicator);
     	var monper = $("#periode").val().split("###");
     	var id_monper   = monper[0];
     	var year   = monper[1];
@@ -655,7 +678,6 @@
                             async:false,
                             success: function (result2) {
                                 var array_level2 = result2.content;
-                                console.log(result2);
                                 if (array_level2 != '') {
                                     for (o in array_level2) {
                                         //level2
@@ -697,7 +719,6 @@
                                             success: function (result3) {
                                                 var array_level3 = result3.content;
                                                 jml += parseInt(result3.content.length);
-                                                console.log('jumlah = '+result3.content.length);
                                                 
                                                 if (array_level3 != '') {
                                                     for (p in array_level3) {
@@ -758,7 +779,7 @@
                                                         }
                                                         
                                                         text += "<tr style='font-size:80%;border-style:ridge;'>";
-                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+goal+"<br/>"+target+"<br/>"+indicator+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+goal+"<br/>"+(no_target?target:'')+"<br/>"+(no_indicator?indicator:'')+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][14]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][8]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
@@ -783,14 +804,12 @@
                     }
                 }
                 $("#total_detail").html("Total : "+jml)
-                console.log("jml = "+jml)
             }
         });
         $("#indi").html(text);
     }
     
     function ambilData_sum(sdg_indicator){
-        console.log("sdg = "+sdg_indicator);
     	var monper = $("#periode").val().split("###");
     	var id_monper   = monper[0];
     	var year   = monper[1];
@@ -827,7 +846,6 @@
                             async:false,
                             success: function (result2) {
                                 var array_level2 = result2.content;
-                                console.log(result2);
                                 if (array_level2 != '') {
                                     for (o in array_level2) {
                                         //level2
@@ -873,21 +891,20 @@
                                             success: function (result3) {
                                                 var array_level3 = result3.content;
                                                 jml += parseInt(result3.content.length);
-                                                console.log(result3);
                                                 
                                                 if (array_level3 != '') {
                                                     for (p in array_level3) {
                                                         //level2
                                                         if($('#fs').is(':checked')){
                                                             var target      = array_level2[o][1]+"."+array_level3[p][15]+" "+array_level3[p][16];
-                                                            var indicator   = array_level2[o][1]+"."+array_level3[p][15]+" "+array_level3[p][18]+" "+array_level3[p][19];
+                                                            var indicator   = array_level2[o][1]+"."+array_level3[p][15]+"."+array_level3[p][18]+" "+array_level3[p][19];
                                                         }else{
                                                             var target      = array_level2[o][1]+"."+array_level3[p][15]+" "+array_level3[p][17];
-                                                            var indicator   = array_level2[o][1]+"."+array_level3[p][15]+" "+array_level3[p][18]+" "+array_level3[p][20];
+                                                            var indicator   = array_level2[o][1]+"."+array_level3[p][15]+"."+array_level3[p][18]+" "+array_level3[p][20];
                                                         }
                                                         
                                                         text += "<tr style='font-size:80%;border-style:ridge;'>";
-                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+target+"<br/>"+indicator+"</td>";
+                                                        text += "<td style='font-size:80%;border-style:ridge;'>"+(array_level3[p][15]?target:'')+"<br/>"+(array_level3[p][18]?indicator:'')+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'></td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][8]+"</td>";
                                                         text += "<td style='font-size:80%;border-style:ridge;'>"+array_level3[p][9]+" "+array_level3[p][10]+"</td>";
@@ -986,7 +1003,6 @@
             url: urls+'get-all-foto/'+id,
             success: function (resulthasil) {
                 var val2 = resulthasil.content;
-                console.log(val2);
                 var ht = "";
                 for(var i=0;i<val2.length;i++){
                     ht += '<img class="img-responsive avatar-view" id="gambar-profil" src="data:image/jpg;base64,'+val2[i][2]+'" alt="Picture" style="width: 200px"/><br/><br/>';
