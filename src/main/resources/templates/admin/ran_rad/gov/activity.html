@@ -71,10 +71,9 @@
 	                                <table class="table table-bordered table-striped" id="tabel-target">
 	                                    <thead>
 	                                        <tr>
-	                                            <th style="text-align:center;font-size:80%;">No.</th>
-	                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Code" data-lang_indo="Kode">
+	                                        	<th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="SDG E-Monev Code" data-lang_indo="Kode SDG E-Monev">
 	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="SDG E-Monev Code" data-lang_indo="Kode SDG E-Monev">
+	                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Code" data-lang_indo="Kode">
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Activity" data-lang_indo="Kegiatan">
 	                                            	<span class="lang_eng" style="display:none"></span>
@@ -263,6 +262,7 @@
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"ordering": false,
 				"drawCallback": function( settings ) {
 					if(cekStatusMonper()=="completed"){
 		        		$('#showModal').hide();
@@ -278,7 +278,7 @@
 		        	    text: 'Print',
 		        	    messageTop: 'Program Name '+[[${govProg.id_program}]]+'. '+program_name,
 		        	    exportOptions: {
-		        	        columns: [ 0,1,2,3 ]
+		        	        columns: [ 0,1,2 ]
 		        	    }
 		        	},
 		        	{
@@ -298,7 +298,7 @@
 		        		        }
 		        		    }
 		        	,
-        		    columns: [ 0,1,2,3 ]
+        		    columns: [ 0,1,2 ]
 		        		}
 		        	},
 		        ],
@@ -309,13 +309,10 @@
 				"searching": true,
 				"columns": [
 					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-						}},
+						return "<div style='font-size:90%;'>"+[[${govProg.internal_code}]]+"."+(row.internal_code?row.internal_code:'')+"</div>";
+					}},
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+(row.id_activity?row.id_activity:'')+"</div>";
-						}},
-					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+[[${govProg.internal_code}]]+"."+(row.internal_code?row.internal_code:'')+"</div>";
 					}},
 					{"data": function (row, data, index, display) {
 							var nama;

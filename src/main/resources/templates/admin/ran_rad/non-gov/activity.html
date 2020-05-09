@@ -72,18 +72,15 @@
 	                                <table class="table table-bordered table-striped" id="tabel-target">
 	                                    <thead>
 	                                        <tr>
-	                                            <th style="text-align:center;font-size:80%;">No.</th>
 	                                            <!-- <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">Code</span>
 	                                            	<span class="lang_indo">Kode</span>
 	                                            </th> -->
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	<span class="lang_eng" style="display:none">SDG E-Monev Code</span>
-	                                            	<span class="lang_indo">Kode SDG E-Monev</span>
-	                                            </th>
-	                                            <th style="text-align:center;font-size:80%;">
-	                                            	<span class="lang_eng" style="display:none">Activity</span>
-	                                            	<span class="lang_indo">Kegiatan</span>
+	                                            <th style="text-align:center;font-size:80%;"  class="head-tabel" data-lang_eng="SDG E-Monev Code" data-lang_indo="Kode SDG E-Monev">
+                                            	</th>
+	                                            <th style="text-align:center;font-size:80%;" class="head-tabel" data-lang_eng="Activity" data-lang_indo="Kegiatan">
+	                                            	<span class="lang_eng" style="display:none"></span>
+	                                            	<span class="lang_indo"></span>
 	                                            </th>
 	                                            <th style="text-align:center;font-size:80%;">
 	                                            	<span class="lang_eng" style="display:none">Action</span>
@@ -231,9 +228,23 @@
 	        }else{
 	        	bhs($('#fs').is(':checked'));
 	        }
+	        function headtabel(){
+	        	var text;
+	        	if($("#fs").is(':checked')){
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_indo'));
+        			});
+	        	}else{
+	        		$.each( $(".head-tabel"), function( key, value ) {
+	        			$(this).text($(this).data('lang_eng'));
+        			});
+	        	}
+	        }
+	        headtabel();
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-nsaActivity/'+id_program+'/'+$('#id_role').val()).load();
+	        	headtabel();
 	        	//table.ajax.reload( null, false );
 	        });
 	        
@@ -258,11 +269,40 @@
 	        
 			var table = $('#tabel-target').DataTable({
 				responsive: true,
-				sDom: 'lrtip',
+				sDom: 'Brtip',
 				"bLengthChange": false,
 				"cache": false,
 				"autoWidth": true,
 				"responsive":true,
+				"ordering": false,
+				buttons: [
+		        	{
+		        	    extend: 'print',
+		        	    text: 'Print',
+		        	    exportOptions: {
+		        	        columns: [ 0,1 ]
+		        	    }
+		        	},
+		        	{
+		        		extend: 'excelHtml5',
+		        		filename: 'Non Gov Program',
+		        		text: 'Save as Excel',
+		        		exportOptions: {
+		        		    format: {
+		        		        body: function(data, column, row) {
+		        		        	data = data.replace(/<br\s*\/?>/ig, '\r\n');
+		        		            data = data.replace(/<.*?>/g, "");
+		        		            data = data.replace("&amp;", "&");
+		        		            data = data.replace("&nbsp;", "");
+		        		            data = data.replace("&nbsp;", "");
+		        		            return data;
+		        		        }
+		        		    }
+		        	,
+        		    columns: [ 0,1 ]
+		        		}
+		        	},
+		        ],
 				"drawCallback": function( settings ) {
 					if(cekStatusMonper()=="completed"){
 		        		$('#showModal').hide();
@@ -278,12 +318,7 @@
 				},
 				"searching": true,
 				"columns": [
-					{"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+(display.row+1)+"</div>";
-						}},
-					/* {"data": function (row, data, index, display) {
-							return "<div style='font-size:90%;'>"+row.id_activity+"</div>";
-						}}, */
+					
 					{"data": function (row, data, index, display) {
 							return "<div style='font-size:90%;'>"+[[${govProg.internal_code}]]+"."+(row.internal_code?row.internal_code:'')+"</div>";
 					}},
