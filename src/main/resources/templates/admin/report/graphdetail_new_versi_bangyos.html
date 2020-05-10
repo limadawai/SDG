@@ -275,33 +275,69 @@
         
         function label_atas(){
 //            alert('gov = '+idprog+', '+idacty+', '+idindi);
-            $("#divgoals").html(""); 
-            $.ajax({
-            	url: urls + "getprogov",
-                type: 'get',
-                data: {'id_program':idprog,'id_activity':idacty,'id_indicator':idindi},
-                dataType: 'json',
-                cache: false,
-                async: false,
-                success: function (goal) {
-//                	console.log(goal);
-                        if($('#fs').is(':checked')){
-                            //indo
-                            var isihead1 = "<b><span class=''>Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
-                            isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
-                            isihead1 += "<b><span>Kegiatan : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
-                            isihead1 += "<b><span>Indikator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
-                        }else{
-                            //eng
-                            var isihead1 = "<b><span class=''>Government</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
-                            isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
-                            isihead1 += "<b><span>Activity : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
-                            isihead1 += "<b><span>Indicator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
-                        }
-                	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
-                	$("#divgoals").html(isihead1); 
-                }
-            });
+            var indicator_gov;
+            if(idindi == 'null'){
+                indicator_gov = '99999999';
+                $("#divgoals").html(""); 
+                $.ajax({
+                    url: urls + "getprogov_kosong",
+                    type: 'get',
+                    data: {'id_program':idprog,'id_activity':idacty,'id_indicator':indicator_gov},
+                    dataType: 'json',
+                    cache: false,
+                    async: false,
+                    success: function (goal) {
+                        
+                    	console.log("ke atas");
+                    	console.log(goal);
+                            if($('#fs').is(':checked')){
+                                //indo
+                                var isihead1 = "<b><span class=''>Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
+                                isihead1 += "<b><span>Program : "+goal[0][6]+" "+goal[0][1]+"</span></b><br>";
+                                isihead1 += "<b><span>Kegiatan : "+goal[0][6]+"."+goal[0][7]+" "+goal[0][7]+"</span></b><br>";
+                            }else{
+                                //eng
+                                var isihead1 = "<b><span class=''>Government</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
+                                isihead1 += "<b><span>Program : "+goal[0][6]+" "+goal[0][4]+"</span></b><br>";
+                                isihead1 += "<b><span>Activity : "+goal[0][6]+"."+goal[0][7]+" "+goal[0][5]+"</span></b><br>";
+                            }
+                            /* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
+                            $("#divgoals").html(isihead1); 
+                    }
+                });
+            }else{
+                indicator_gov = idindi;
+                $("#divgoals").html(""); 
+                $.ajax({
+                    url: urls + "getprogov",
+                    type: 'get',
+                    data: {'id_program':idprog,'id_activity':idacty,'id_indicator':indicator_gov},
+                    dataType: 'json',
+                    cache: false,
+                    async: false,
+                    success: function (goal) {
+                        console.log("ke bawah");
+                    	console.log(goal);
+    //                	console.log(goal);
+                            if($('#fs').is(':checked')){
+                                //indo
+                                var isihead1 = "<b><span class=''>Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
+                                isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
+                                isihead1 += "<b><span>Kegiatan : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                                isihead1 += "<b><span>Indikator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
+                            }else{
+                                //eng
+                                var isihead1 = "<b><span class=''>Government</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Government</span></b><br>";
+                                isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
+                                isihead1 += "<b><span>Activity : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                                isihead1 += "<b><span>Indicator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
+                            }
+                            /* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
+                            $("#divgoals").html(isihead1); 
+                    }
+                });
+            }
+            
             
             $("#divdaerah").html(""); 
             if(idindicator == "null"){
@@ -385,32 +421,66 @@
         
         function label_atas_nsa(){
 //            alert('gov = '+idprog+', '+idacty+', '+idindi);
-            $("#divgoals").html(""); 
-            $.ajax({
-            	url: urls + "getpronsa",
-                type: 'get',
-                data: {'id_program':idprog,'id_activity':idacty,'id_indicator':idindi},
-                dataType: 'json',
-                cache: false,
-                async: false,
-                success: function (goal) {
-                    if($('#fs').is(':checked')){
-                        //indo
-                        var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
-                        isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
-                        isihead1 += "<b><span>Kegiatan : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
-                        isihead1 += "<b><span>Indikator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
-                    }else{
-                        //eng
-                        var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
-                        isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
-                        isihead1 += "<b><span>Activity : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
-                        isihead1 += "<b><span>Indicator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
+
+            var indicator_gov;
+            if(idindi == 'null'){
+                indicator_gov = '99999999';
+                $("#divgoals").html(""); 
+                $.ajax({
+                    url: urls + "getpronsa_kosong",
+                    type: 'get',
+                    data: {'id_program':idprog,'id_activity':idacty,'id_indicator':indicator_gov},
+                    dataType: 'json',
+                    cache: false,
+                    async: false,
+                    success: function (goal) {
+                        
+                    	console.log("ke atas");
+                    	console.log(goal);
+                            if($('#fs').is(':checked')){
+                                //indo
+                                var isihead1 = "<b><span class=''>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
+                                isihead1 += "<b><span>Program : "+goal[0][6]+" "+goal[0][1]+"</span></b><br>";
+                                isihead1 += "<b><span>Kegiatan : "+goal[0][6]+"."+goal[0][7]+" "+goal[0][7]+"</span></b><br>";
+                            }else{
+                                //eng
+                                var isihead1 = "<b><span class=''>Non Government</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
+                                isihead1 += "<b><span>Program : "+goal[0][6]+" "+goal[0][4]+"</span></b><br>";
+                                isihead1 += "<b><span>Activity : "+goal[0][6]+"."+goal[0][7]+" "+goal[0][5]+"</span></b><br>";
+                            }
+                            /* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
+                            $("#divgoals").html(isihead1); 
                     }
-                	/* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
-                	$("#divgoals").html(isihead1); 
-                }
-            });
+                });
+            }else{
+                indicator_gov = idindi;
+                $("#divgoals").html(""); 
+                $.ajax({
+                    url: urls + "getpronsa",
+                    type: 'get',
+                    data: {'id_program':idprog,'id_activity':idacty,'id_indicator':idindi},
+                    dataType: 'json',
+                    cache: false,
+                    async: false,
+                    success: function (goal) {
+                        if($('#fs').is(':checked')){
+                            //indo
+                            var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
+                            isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][4]+"</span></b><br>";
+                            isihead1 += "<b><span>Kegiatan : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][7]+"</span></b><br>";
+                            isihead1 += "<b><span>Indikator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][1]+"</span></b><br>";
+                        }else{
+                            //eng
+                            var isihead1 = "<b><span class='lang_indo'>Non Pemerintah</span></b> <span style='display: none'>/</span> <b><span class='lang_eng' style='display: none'>Non Government</span></b><br>";
+                            isihead1 += "<b><span>Program : "+goal[0][10]+" "+goal[0][5]+"</span></b><br>";
+                            isihead1 += "<b><span>Activity : "+goal[0][10]+"."+goal[0][11]+" "+goal[0][8]+"</span></b><br>";
+                            isihead1 += "<b><span>Indicator : "+goal[0][10]+"."+goal[0][11]+"."+goal[0][9]+" "+goal[0][2]+"</span></b><br>";
+                        }
+                            /* isihead += "<b><span>Disagregasi : "+goal[0]10]+"</span></b><br>"; */
+                            $("#divgoals").html(isihead1); 
+                    }
+                });
+            }
             
             $("#divdaerah").html(""); 
             if(idindicator == "null"){
@@ -6233,8 +6303,14 @@
                 }
             });
         } else if (flag == "2") {
+            var link_url;
+            if(kode_bud == '1'){
+                link_url = urls + "cekgmonper_bud";
+            }else{
+                link_url = urls + "cekgmonper";
+            }
             $.ajax({
-                url: urls + "cekgmonper",
+                url: link_url,
                 type: 'get',
                 data: {'id_monper':idmonper, 'id_prov':valdaerah},
                 cache: false,
@@ -6255,7 +6331,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -6338,9 +6414,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                         	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                         	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -6357,7 +6437,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -6470,8 +6550,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -6488,7 +6573,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -6661,8 +6746,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -6682,7 +6772,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -6766,8 +6856,13 @@
                                                 var unit = array[i][2];
                                             }
 
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -6784,7 +6879,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -6897,8 +6992,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -6915,7 +7015,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -7088,8 +7188,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col30" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2+real1_3+real1_4)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col31" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2+real2_3+real2_4)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col32" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2+real3_3+real3_4)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col33" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2+real4_3+real4_4)+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col34" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2+real5_3+real5_4)+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col30" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2+real1_3+real1_4)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col31" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2+real2_3+real2_4)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col32" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2+real3_3+real3_4)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col33" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2+real4_3+real4_4)+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col34" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2+real5_3+real5_4)+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col30" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2+real1_3+real1_4)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col31" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2+real2_3+real2_4)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col32" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2+real3_3+real3_4)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col33" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2+real4_3+real4_4)+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col34" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2+real5_3+real5_4)+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -7109,7 +7214,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -7193,7 +7298,12 @@
                                                 var unit = array[i][2];
                                             }
                                             
-                                            var cek_unit;
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var cek_unit;
                                             $.ajax({
                                                 url: urls + "cek_total_unit_gov",
                                                 type: 'get',
@@ -7217,6 +7327,7 @@
                                             }
 //                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -7233,7 +7344,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -7359,6 +7470,23 @@
                                                 }
                                             });
 
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var cek_unit;
+                                            $.ajax({
+                                                url: urls + "cek_total_unit_gov",
+                                                type: 'get',
+                                                data: {'id_indicator':idsdgindikator},
+                                                cache: false,
+                                                async: false,
+                                                success: function (data_cek_unit) {
+                                                    cek_unit = data_cek_unit.content;
+                                                }
+                                            });
+
                                             if(cek_unit == '1'){
                                                 var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             
@@ -7372,6 +7500,7 @@
                                             
 //                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -7388,7 +7517,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -7561,7 +7690,12 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var cek_unit;
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2+real1_3+real1_4)+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2+real2_3+real2_4)+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2+real3_3+real3_4)+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2+real4_3+real4_4)+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2+real5_3+real5_4)+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var cek_unit;
                                             $.ajax({
                                                 url: urls + "cek_total_unit_gov",
                                                 type: 'get',
@@ -7584,8 +7718,9 @@
                                             
                                             }
                                             
-//                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+//                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -7605,7 +7740,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -7689,8 +7824,13 @@
                                                 var unit = array[i][2];
                                             }
 
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -7707,7 +7847,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -7820,8 +7960,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -7838,7 +7983,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -8011,8 +8156,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -8036,9 +8186,15 @@
 //                
             
         } else if (flag == "3") {
+            var link_url;
+            if(kode_bud == '1'){
+                link_url = urls + "ceknongmonper_bud";
+            }else{
+                link_url = urls + "ceknongmonper";
+            }
             label_atas_nsa();
             $.ajax({
-                url: urls + "ceknongmonper",
+                url: link_url,
                 type: 'get',
                 data: {'id_monper':idmonper, 'id_prov':valdaerah},
                 cache: false,
@@ -8057,7 +8213,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -8140,8 +8296,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                         	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                         	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -8158,7 +8319,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -8271,8 +8432,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -8289,7 +8455,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -8462,8 +8628,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -8483,7 +8654,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -8567,8 +8738,13 @@
                                                 var unit = array[i][2];
                                             }
 
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -8585,7 +8761,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -8698,8 +8874,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -8716,7 +8897,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -8889,8 +9070,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col30" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2+real1_3+real1_4)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col31" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2+real2_3+real2_4)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col32" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2+real3_3+real3_4)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col33" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2+real4_3+real4_4)+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col34" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2+real5_3+real5_4)+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col30" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2+real1_3+real1_4)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col31" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2+real2_3+real2_4)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col32" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2+real3_3+real3_4)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col33" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2+real4_3+real4_4)+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col34" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2+real5_3+real5_4)+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1_1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real1_3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col30" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2+real1_3+real1_4)+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real2_1+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col13" style="font-size:80%;border-style:ridge;">'+real2_3+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col31" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2+real2_3+real2_4)+'</td><td id="col15" style="font-size:80%;border-style:ridge;">'+real3_1+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+real3_3+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col32" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2+real3_3+real3_4)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+real4_1+'</td><td id="col20" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col21" style="font-size:80%;border-style:ridge;">'+real4_3+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col33" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2+real4_3+real4_4)+'</td><td id="col23" style="font-size:80%;border-style:ridge;">'+real5_1+'</td><td id="col24" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col25" style="font-size:80%;border-style:ridge;">'+real5_3+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col34" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2+real5_3+real5_4)+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -8909,7 +9095,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -8992,8 +9178,12 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             
-                                            var cek_unit;
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var cek_unit;
                                             $.ajax({
                                                 url: urls + "cek_total_unit_non_gov",
                                                 type: 'get',
@@ -9006,18 +9196,18 @@
                                             });
 
                                             if(cek_unit == '1'){
-                                                var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             
                                             }else if(cek_unit == '2'){
-                                                var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             
                                             }else{
-                                                var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                                var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             
                                             }
-                                            
-//                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+//                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -9034,7 +9224,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -9148,7 +9338,12 @@
                                                 var unit = array[i][2];
                                             }
                                             
-                                            var cek_unit;
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2)+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2)+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2)+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2)+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2)+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var cek_unit;
                                             $.ajax({
                                                 url: urls + "cek_total_unit_non_gov",
                                                 type: 'get',
@@ -9173,6 +9368,7 @@
                                             
 //                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -9189,7 +9385,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -9362,8 +9558,12 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+(real1_1+real1_2+real1_3+real1_4)+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+(real2_1+real2_2+real2_3+real2_4)+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+(real3_1+real3_2+real3_3+real3_4)+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+(real4_1+real4_2+real4_3+real4_4)+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+(real5_1+real5_2+real5_3+real5_4)+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             
-                                            var cek_unit;
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var cek_unit;
                                             $.ajax({
                                                 url: urls + "cek_total_unit_non_gov",
                                                 type: 'get',
@@ -9386,8 +9586,9 @@
                                             
                                             }
                                             
-//                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+//                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
                                             $("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -9406,7 +9607,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -9489,8 +9690,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col7" style="font-size:80%;border-style:ridge;">'+real1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real2+'</td><td id="col9" style="font-size:80%;border-style:ridge;">'+real3+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real4+'</td><td id="col11" style="font-size:80%;border-style:ridge;">'+real5+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -9507,7 +9713,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -9620,8 +9826,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col8" style="font-size:80%;border-style:ridge;">'+real1_2+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real2_2+'</td><td id="col12" style="font-size:80%;border-style:ridge;">'+real3_2+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real4_2+'</td><td id="col16" style="font-size:80%;border-style:ridge;">'+real5_2+'</td><td id="col17" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col19" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -9638,7 +9849,7 @@
                             $.ajax({
                                 url: urls + "get_data_show_non_gov",
                                 type: 'get',
-                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud},
+                                data: {'id_monper':idmonper,'id_indicator':idsdgindikator,'id_prov':valdaerah,'tahun':monper[1],'role':valrole,'kode_bud':kode_bud,'idacty':idacty},
                                 cache: false,
                                 async: false,
                                 success: function (data_gov) {
@@ -9811,8 +10022,13 @@
                                             }else{
                                                 var unit = array[i][2];
                                             }
-                                            var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
-                                            $("#tabgrafik > tbody").append(tb_gov);
+                                            if(kode_bud == '1'){
+						var tb_gov = '<tr> <td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }else{
+						var tb_gov = '<tr> <td id="col1" style="font-size:80%;border-style:ridge;">'+unit+'</td><td id="col2" style="font-size:80%;border-style:ridge;">'+target1+'</td><td id="col3" style="font-size:80%;border-style:ridge;">'+target2+'</td><td id="col4" style="font-size:80%;border-style:ridge;">'+target3+'</td><td id="col5" style="font-size:80%;border-style:ridge;">'+target4+'</td><td id="col6" style="font-size:80%;border-style:ridge;">'+target5+'</td><td id="col10" style="font-size:80%;border-style:ridge;">'+real1_4+'</td><td id="col14" style="font-size:80%;border-style:ridge;">'+real2_4+'</td><td id="col18" style="font-size:80%;border-style:ridge;">'+real3_4+'</td><td id="col22" style="font-size:80%;border-style:ridge;">'+real4_4+'</td><td id="col26" style="font-size:80%;border-style:ridge;">'+real5_4+'</td><td id="col27" style="font-size:80%;border-style:ridge;">'+ket1+'</td><td id="col29" style="font-size:80%;border-style:ridge;">'+array[i][1]+'</td> </tr>';
+                                            	$("#tabgrafik > tbody").append(tb_gov);
+					    }
                                         }
                                     }
                                 }
@@ -10184,37 +10400,68 @@
         }
         
         function headyearly() {
-            var th = "<tr>";
+            if(kode_bud == '1'){
+                var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-//            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
-            th += "</tr>";
-            th += "<tr class='trtarget'>";
-            th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "<th id='tahun2' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "<th id='tahun3' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "<th id='tahun4' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "<th id='tahun5' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "</tr>";
-            th += "<tr class='trreal'>";
-            th += "<th id='tahun11' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
-            th += "<th id='tahun12' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
-            th += "<th id='tahun13' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
-            th += "<th id='tahun14' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
-            th += "<th id='tahun15' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
-            th += "</tr>";
-            th += "<tr>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "</tr>";
-            $("#tabgrafik > thead").append(th);
+//                th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+                th += "<th id='th_target3111' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
+                th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span></th>";
+//                th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+    //            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+                th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+                th += "</tr>";
+                th += "<tr class='trtarget'>";
+//                th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "</tr>";
+                th += "<tr class='trreal'>";
+                th += "<th id='tahun11' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun12' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun13' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun14' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun15' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "</tr>";
+                th += "<tr>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "</tr>";
+                $("#tabgrafik > thead").append(th);
+            }else{
+                var th = "<tr>";
+//            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
+                th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+                th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+                th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span></th>";
+                th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+    //            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+                th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+                th += "</tr>";
+                th += "<tr class='trtarget'>";
+                th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "<th id='tahun2' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "<th id='tahun3' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "<th id='tahun4' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "<th id='tahun5' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "</tr>";
+                th += "<tr class='trreal'>";
+                th += "<th id='tahun11' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun12' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun13' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun14' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun15' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+                th += "</tr>";
+                th += "<tr>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "</tr>";
+                $("#tabgrafik > thead").append(th);
+            }
+            
 //            var row = "<tr>";
 //            for (var i=1; i<=15; i++) {
 //            	row += "<td style='text-align:center;' id='col"+i+"'></td>";
@@ -10225,7 +10472,43 @@
         }
         
         function headyearly_total() {
-            var th = "<tr>";
+            if(kode_bud == '1'){
+
+		var th = "<tr>";
+//            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
+//                th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+                th += "<th id='th_target3111' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
+                th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='10'><span class='lang_indo'>Realisasi per Tahun</span><span class='lang_eng' style='display:none'>Anually Realization</span></th>";
+//                th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+    //            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+                th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+                th += "</tr>";
+                th += "<tr class='trtarget'>";
+//                th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "</tr>";
+            th += "<tr class='trreal'>";
+            th += "<th id='tahun11' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+            th += "</tr>";
+            th += "<tr>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "</tr>";
+            $("#tabgrafik > thead").append(th);
+
+            }else{
+                var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
@@ -10261,6 +10544,7 @@
             th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
+            }
 //            var row = "<tr>";
 //            for (var i=1; i<=15; i++) {
 //            	row += "<td style='text-align:center;' id='col"+i+"'></td>";
@@ -10271,7 +10555,35 @@
         }
         
         function headlastperiod() {
-            var th = "<tr>";
+            if(kode_bud == '1'){
+                var th = "<tr>";
+//            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
+            th += "<th id='th_target3111' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Periode Terakhir</span><span class='lang_eng' style='display:none'>Last Period</span></th>";
+            //th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+//            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+            th += "</tr>";
+            th += "<tr class='trtarget'>";
+            th += "</tr>";
+            th += "<tr class='trreal'>";
+            th += "<th id='tahun11' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "</tr>";
+            th += "<tr>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "</tr>";
+            $("#tabgrafik > thead").append(th);
+
+            }else{
+                var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
@@ -10302,6 +10614,7 @@
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
+            }
 //            var row = "<tr>";
 //            for (var i=1; i<=15; i++) {
 //            	row += "<td style='text-align:center;' id='col"+i+"'></td>";
@@ -10312,7 +10625,35 @@
         }
         
         function headlastperiod_total() {
-            var th = "<tr>";
+            if(kode_bud == '1'){
+                var th = "<tr>";
+//            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
+            th += "<th id='th_target3111' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Total Setahun</span><span class='lang_eng' style='display:none'>Total Within The Year Only</span></th>";
+            //th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+//            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+            th += "</tr>";
+            th += "<tr class='trtarget'>";
+            th += "</tr>";
+            th += "<tr class='trreal'>";
+            th += "<th id='tahun11' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='1' style='font-size:80%;border-style:ridge;'></th>";
+            th += "</tr>";
+            th += "<tr>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "</tr>";
+            $("#tabgrafik > thead").append(th);
+
+            }else{
+                var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
@@ -10343,6 +10684,7 @@
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
+            }
 //            var row = "<tr>";
 //            for (var i=1; i<=15; i++) {
 //            	row += "<td style='text-align:center;' id='col"+i+"'></td>";
@@ -10546,42 +10888,81 @@
 //            $("#col19").text(name);
         }
         function headsemesterly() {
-            var th = "<tr>";
+            if(kode_bud == '1'){
+                
+                
+                var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
-            th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
-            th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
-            th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
-//            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
-            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
-            th += "</tr>";
-            th += "<tr class='trtarget'>";
-            th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "<th id='tahun2' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "<th id='tahun3' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "<th id='tahun4' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "<th id='tahun5' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
-            th += "</tr>";
-            th += "<tr class='trreal'>";
-            th += "<th id='tahun11' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
-            th += "<th id='tahun12' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
-            th += "<th id='tahun13' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
-            th += "<th id='tahun14' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
-            th += "<th id='tahun15' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
-            th += "</tr>";
-            th += "<tr>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "</tr>";
-            $("#tabgrafik > thead").append(th);
+//                th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+                th += "<th id='th_target3qwqw' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
+                th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
+//                th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+    //            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+                th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+                th += "</tr>";
+                th += "<tr class='trtarget'>";
+//                th += "<th id='tahun10101' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "</tr>";
+                th += "<tr class='trreal'>";
+                th += "<th id='tahun11' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun12' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun13' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun14' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun15' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "</tr>";
+                th += "<tr>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "</tr>";
+                $("#tabgrafik > thead").append(th);
+            }else{
+                var th = "<tr>";
+//            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
+                th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+                th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
+                th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='10'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
+                th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+    //            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+                th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+                th += "</tr>";
+                th += "<tr class='trtarget'>";
+                th += "<th id='tahun1' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "<th id='tahun2' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "<th id='tahun3' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "<th id='tahun4' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "<th id='tahun5' style='vertical-align:middle;border-style:ridge;' rowspan='3'></th>";
+                th += "</tr>";
+                th += "<tr class='trreal'>";
+                th += "<th id='tahun11' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun12' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun13' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun14' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "<th id='tahun15' colspan='2' style='font-size:80%;border-style:ridge;'></th>";
+                th += "</tr>";
+                th += "<tr>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+                th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+                th += "</tr>";
+                $("#tabgrafik > thead").append(th);
+            }
+            
+            
 //            var row = "<tr>";
 //            for (var i=1; i<=20; i++) {
 //            	row += "<td style='text-align:center;' id='col"+i+"'></td>";
@@ -10592,7 +10973,46 @@
         }
         
         function headsemesterly_total() {
-            var th = "<tr>";
+            if(kode_bud == '1'){
+                var th = "<tr>";
+//            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
+            //th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target3111' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='15'><span class='lang_indo'>Realisasi Per Semester</span><span class='lang_eng' style='display:none'>Semesterly Realization</span></th>";
+            //th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+//            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+            th += "</tr>";
+            th += "<tr class='trtarget'>";
+            th += "</tr>";
+            th += "<tr class='trreal'>";
+            th += "<th id='tahun11' colspan='3' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='3' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='3' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='3' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='3' style='font-size:80%;border-style:ridge;'></th>";
+            th += "</tr>";
+            th += "<tr>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "</tr>";
+            $("#tabgrafik > thead").append(th);
+
+            }else{
+                var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
@@ -10633,6 +11053,7 @@
             th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
+            }
 //            var row = "<tr>";
 //            for (var i=1; i<=20; i++) {
 //            	row += "<td style='text-align:center;' id='col"+i+"'></td>";
@@ -10814,7 +11235,51 @@
 //            $("#col29").text(name);
         }
         function headquarterly() {
-            var th = "<tr>";
+            if(kode_bud == '1'){
+                var th = "<tr>";
+//            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
+            //th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target3111' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='20'><span class='lang_indo'>Realisasi Per Quarter</span><span class='lang_eng' style='display:none'>Quarterly Realization</span></th>";
+            //th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+//            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+            th += "</tr>";
+            th += "<tr class='trtarget'>";
+            th += "</tr>";
+            th += "<tr class='trreal'>";
+            th += "<th id='tahun11' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='4' style='font-size:80%;border-style:ridge;'></th>";
+            th += "</tr>";
+            th += "<tr>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "</tr>";
+            $("#tabgrafik > thead").append(th);
+
+            }else{
+                var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
@@ -10860,6 +11325,7 @@
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
+            }
 //            var row = "<tr>";
 //            for (var i=1; i<=30; i++) {
 //            	row += "<td style='text-align:center;' id='col"+i+"'></td>";
@@ -10870,7 +11336,56 @@
         }
         
         function headquarterly_total() {
-            var th = "<tr>";
+            if(kode_bud == '1'){
+                var th = "<tr>";
+//            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
+            //th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
+            th += "<th id='th_target3111' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='25'><span class='lang_indo'>Realisasi Per Quarter</span><span class='lang_eng' style='display:none'>Quarterly Realization</span></th>";
+            //th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
+//            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
+            th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
+            th += "</tr>";
+            th += "<tr class='trtarget'>";
+            th += "</tr>";
+            th += "<tr class='trreal'>";
+            th += "<th id='tahun11' colspan='5' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun12' colspan='5' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun13' colspan='5' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun14' colspan='5' style='font-size:80%;border-style:ridge;'></th>";
+            th += "<th id='tahun15' colspan='5' style='font-size:80%;border-style:ridge;'></th>";
+            th += "</tr>";
+            th += "<tr>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
+            th += "</tr>";
+            $("#tabgrafik > thead").append(th);
+
+            }else{
+                var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
@@ -10921,6 +11436,7 @@
             th += "<th style='font-size:80%;border-style:ridge;'>Total</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
+            }
 //            var row = "<tr>";
 //            for (var i=1; i<=30; i++) {
 //            	row += "<td style='text-align:center;' id='col"+i+"'></td>";
