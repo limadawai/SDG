@@ -3480,9 +3480,9 @@ public class ReportController {
 //        }
         if(status.equals("completed")) {
             System.out.println("comple - "+id_monper);
-            sql = "SELECT distinct id_old, nm_goals, nm_goals_eng, id_goals FROM history_sdg_goals where id_monper = '"+id_monper+"' ORDER BY id ASC";
+            sql = "SELECT distinct id_old, nm_goals, nm_goals_eng, id_goals FROM history_sdg_goals where id_monper = '"+id_monper+"' ORDER BY CAST(id_goals AS UNSIGNED)";
         }else{
-            sql = "SELECT distinct id, nm_goals, nm_goals_eng, id_goals FROM sdg_goals ORDER BY id ASC";
+            sql = "SELECT distinct id, nm_goals, nm_goals_eng, id_goals FROM sdg_goals ORDER BY CAST(id_goals AS UNSIGNED)";
         }
     	Query query = manager.createNativeQuery(sql);
         List list = query.getResultList();
@@ -3520,9 +3520,9 @@ public class ReportController {
 //        }
 //        
         if(status.equals("completed")) {
-            sql = "SELECT distinct id_old, nm_target, nm_target_eng, id_target FROM history_sdg_target WHERE id_goals = :id_goals and id_monper = '"+id_monper+"' ORDER BY id ASC";
+            sql = "SELECT distinct id_old, nm_target, nm_target_eng, id_target FROM history_sdg_target WHERE id_goals = :id_goals and id_monper = '"+id_monper+"' ORDER BY CAST(id_target AS UNSIGNED)";
         }else{
-            sql = "SELECT distinct id, nm_target, nm_target_eng, id_target FROM sdg_target WHERE id_goals = :id_goals ORDER BY id ASC";
+            sql = "SELECT distinct id, nm_target, nm_target_eng, id_target FROM sdg_target WHERE id_goals = :id_goals ORDER BY CAST(id_target AS UNSIGNED)";
         }
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_goals", id_goals);
@@ -3560,10 +3560,10 @@ public class ReportController {
 //        }
         if(status.equals("completed")) {
             sql = "SELECT distinct id_old, nm_indicator, nm_indicator_eng, id_indicator FROM history_sdg_indicator WHERE id_goals = :id_goals AND "
-    			+ "id_target = :id_target and id_monper = '"+id_monper+"' GROUP BY id, id_goals, id_target ORDER BY id ASC";
+    			+ "id_target = :id_target and id_monper = '"+id_monper+"' GROUP BY id, id_goals, id_target ORDER BY CAST(id_indicator AS UNSIGNED)";
         }else{
             sql = "SELECT distinct id, nm_indicator, nm_indicator_eng, id_indicator FROM sdg_indicator WHERE id_goals = :id_goals AND "
-    			+ "id_target = :id_target GROUP BY id, id_goals, id_target ORDER BY id ASC";
+    			+ "id_target = :id_target GROUP BY id, id_goals, id_target ORDER BY CAST(id_indicator AS UNSIGNED)";
         }
     	Query query = manager.createNativeQuery(sql);
         query.setParameter("id_goals", id_goals);
