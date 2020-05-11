@@ -286,11 +286,14 @@
                         var target;
                         var indicator;
                         var subtitle ;
+                        var target;
                         $.each(result.content,function(i,x){
                             var notcalculation ;
+                            var target = x[1];
                             if(calculation==1){
                                 console.log("ini calculasi")
-                                var total = (x[2]/x[1])*100;
+                                //var total = (x[2]/x[1])*100;
+                                var total = x[2];
                                 data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11]})
                                 if($("#fs").is(':checked')){
                                 	goal        = x[7];
@@ -315,7 +318,8 @@
                                     notcalculation = x[15];
                                 }
                                 
-                                var total = (notcalculation/x[1])*100;
+                                //var total = (notcalculation/x[1])*100;
+                                var total = notcalculation;
                                 data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':notcalculation,'value':total,'gov':x[10],'non_gov':x[11]})
                                 if($("#fs").is(':checked')){
                                 	goal        = x[7];

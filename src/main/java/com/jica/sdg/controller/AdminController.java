@@ -139,14 +139,14 @@ public class AdminController {
                                             "    ,e.nm_indicator\n"+
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +                                            
-                                            "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                            "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                             "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                             "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
                                             "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
                                             "     JOIN sdg_target f ON e.id_target = f.id\n" +
                                             "     JOIN sdg_goals g ON f.id_goals = g.id\n" +
                                             "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
-                                            " WHERE b.year = YEAR(NOW()) AND (h.approval = '2' OR  h.approval = '4')");
+                                            " WHERE a.year_entry = YEAR(NOW()) AND (h.approval = '2' OR  h.approval = '4')");
         
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
@@ -292,14 +292,14 @@ public class AdminController {
                                                 "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
                                                 "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
                                                 "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
-                                                "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                                "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                                 "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                                 "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
                                                 "     JOIN history_sdg_indicator e ON a.id_sdg_indicator = e.id_old and e.id_monper = '"+id_monper+"'\n" +
                                                 "     JOIN history_sdg_target f ON e.id_target = f.id_old and f.id_monper = '"+id_monper+"'\n" +
                                                 "     JOIN history_sdg_goals g ON f.id_goals = g.id_old and g.id_monper = '"+id_monper+"'\n"
                                               + "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
-                                                "     WHERE b.year = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
+                                                "     WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
             
         }else {
             query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
@@ -317,14 +317,14 @@ public class AdminController {
                                                 "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
                                                 "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
                                                 "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
-                                                "     FROM entry_sdg a JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                                "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                                 "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                                 "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
                                                 "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
                                                 "     JOIN sdg_target f ON e.id_target = f.id\n" +
                                                 "     JOIN sdg_goals g ON f.id_goals = g.id\n"
                                               + "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
-                                                "     WHERE b.year = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
+                                                "     WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
            
         }
         
