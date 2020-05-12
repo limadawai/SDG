@@ -60,6 +60,27 @@
             </div>
         </div>
     </div>
+    <div class="modal-loading-new"></div>
+<style th:inline="text">
+			.modal-loading-new {
+				opacity: 0.4!important;
+				display:    none;
+				position:   fixed;
+				z-index:    1000;
+				top:        0;
+				left:       0;
+				height:     100%;
+				width:      100%;
+				background: #333 url([[@{/img/loading.gif}]]) 50% 50% no-repeat;
+			}
+			/* When the body has the loading class, we turn the scrollbar off with overflow:hidden */
+			body.loading {
+				overflow: hidden;   
+			}
+			body.loading .modal-loading-new {
+				display: block;
+			}
+		</style>
     <div th:include="admin/layout :: footer"></div>
     <script th:inline="javascript">
         var lang = [[${lang}]];
@@ -739,7 +760,12 @@
                 data: {'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
                 type: 'get',
                 dataType: 'json',
-                async : false,
+                beforeSend : function(xhr){
+                	$('body').addClass("loading"); 
+                },
+               complete: function(){
+                	$('body').removeClass("loading");
+                },
                 success: function (resgoals) {
                 	console.log("goal = "+resgoals.length);
                 	$("#divkiri").empty();
@@ -758,8 +784,62 @@
                                 isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
                             }
                             
-//                            isi += "<li id='li"+resgoals[i][0]+"'>"+prog_l+"</li>";
-                            getTarget(resgoals[i][0], resgoals[i][3]);
+                            //getTarget(resgoals[i][0], resgoals[i][3]);
+                            $.ajax({
+                        		url: urls + "getalltarget",
+                                data: {'id_goals':resgoals[i][0], 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+                        		type: 'get',
+                        		dataType: 'json',
+                        		async : false,
+                        		success: function (restarget) {
+                                            isi += "<ul id='ultar"+resgoals[i][0]+"'>";
+                                            for (var ii=0; ii<restarget.length; ii++) {
+                                                if($('#fs').is(':checked')){
+                                                    var prog_l = resgoals[i][3]+"."+restarget[ii][3]+" "+restarget[ii][1];
+                                                }else{
+                                                    var prog_l = resgoals[i][3]+"."+restarget[ii][3]+" "+restarget[ii][2];
+                                                }
+                                                var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+                                                var dat_goals = resgoals[i][0]+"##"+restarget[ii][0]+"##null";
+                                                if(ses_goals == dat_goals){
+                                                	isi += "<li id='lili"+resgoals[i][0]+"' ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='"+restarget[ii][0]+"' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                                }else{
+                                                	isi += "<li id='lili"+resgoals[i][0]+"' ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='"+restarget[ii][0]+"' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                                }
+                                                
+                                                //getIndicator(id, kd_goals, restarget[i][0], restarget[i][3]);
+                                                $.ajax({
+								                    url: urls + "getallindicator",
+								                    type: 'get',
+								                    data: {'id_goals':resgoals[i][0], 'id_target':restarget[ii][0], 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+								                    dataType: 'json',
+								                    async : false,
+								                    success: function (resindi) {
+								                            isi += "<ul id='ulindi"+resgoals[i][0]+"'>";
+								                            for (var iii=0; iii<resindi.length; iii++) {
+								                                if($('#fs').is(':checked')){
+								                                    var prog_l = resgoals[i][3]+"."+restarget[ii][3]+"."+resindi[iii][3]+" "+resindi[iii][1];
+								                                }else{
+								                                    var prog_l = resgoals[i][3]+"."+restarget[ii][3]+"."+resindi[iii][3]+" "+resindi[iii][2];
+								                                }
+								//                                $("#lili"+idgoals).html("");
+								                                var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+								                                var dat_goals = resgoals[i][0]+"##"+restarget[ii][0]+"##"+resindi[iii][0];
+								                                if(ses_goals == dat_goals){
+								                                	isi += " <li ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='"+restarget[ii][0]+"' data-idindicator='"+resindi[iii][0]+"' href='#'>"+prog_l+"</a></li>";
+								                                }else{
+								                                    isi += " <li ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='"+restarget[ii][0]+"' data-idindicator='"+resindi[iii][0]+"' href='#'>"+prog_l+"</a></li>";
+								                            	}
+								                            }
+								                            isi += "</ul>";
+								                    }
+								            });
+                                                isi += "</li>";
+                                            }
+                                            isi += "</ul>";
+                        		}
+                      	   	});
+                            
                     }
                     isi += "</ul>";
                     $("#divkiri").append(isi);
