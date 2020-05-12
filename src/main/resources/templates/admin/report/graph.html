@@ -122,10 +122,9 @@
             var valperiode = sessionStorage.graph_idmonper;
         	$.ajax({
         		url: urls + "getalltarget",
-                        data: {'id_goals':id, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+                data: {'id_goals':id, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
         		type: 'get',
         		dataType: 'json',
-        		cache: false,
         		success: function (restarget) {
                             console.log("yo "+id+" jumlah = "+restarget.length);
                             var isitarget = "<ul id='ultar"+id+"'>";
@@ -167,9 +166,7 @@
                     type: 'get',
                     data: {'id_goals':idgoals, 'id_target':idtarget, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
                     dataType: 'json',
-                    cache: false,
                     success: function (resindi) {
-                            
                             var isiindi = "<ul id='ulindi"+idgoals+"'>";
 //                            $("#lili"+idgoals).html("");
                             for (var i=0; i<resindi.length; i++) {
@@ -742,7 +739,7 @@
                 data: {'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
                 type: 'get',
                 dataType: 'json',
-                cache: false,
+                async : false,
                 success: function (resgoals) {
                 	console.log("goal = "+resgoals.length);
                 	$("#divkiri").empty();
