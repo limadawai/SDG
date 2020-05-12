@@ -138,7 +138,11 @@ public class AdminController {
                                             "    ,f.nm_target\n" +
                                             "    ,e.nm_indicator\n"+
                                             "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
-                                            "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +                                            
+                                            "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +   
+                                            "    ,case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\n "+
+                                            "    ,case when b.value is not null then (IFNULL(a.achievement2,0)/b.value)*100 else '' end as persen2\n "+
+                                            "    ,case when b.value is not null then (IFNULL(a.achievement3,0)/b.value)*100 else '' end as persen3\n "+
+                                            "    ,case when b.value is not null then (IFNULL(a.achievement4,0)/b.value)*100 else '' end as persen4\n "+
                                             "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                             "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                             "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
@@ -291,7 +295,12 @@ public class AdminController {
                                                 "    ,e.nm_indicator_eng\n"+
                                                 "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
                                                 "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
-                                                "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
+                                                "    ,IFNULL(a.achievement1,''),IFNULL(a.achievement2,''),IFNULL(a.achievement3,''),IFNULL(a.achievement4,'')"+
+                                                "    ,case when b.value is not null then ((IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0))/b.value)*100 else '' end as persenTotal\n "+
+                                                "    ,case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\n "+
+                                                "    ,case when b.value is not null then (IFNULL(a.achievement2,0)/b.value)*100 else '' end as persen2\n "+
+                                                "    ,case when b.value is not null then (IFNULL(a.achievement3,0)/b.value)*100 else '' end as persen3\n "+
+                                                "    ,case when b.value is not null then (IFNULL(a.achievement4,0)/b.value)*100 else '' end as persen4\n "+
                                                 "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                                 "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                                 "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
@@ -317,6 +326,11 @@ public class AdminController {
                                                 "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
                                                 "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
                                                 "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
+                                                "    ,case when b.value is not null then ((IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0))/b.value)*100 else '' end as persenTotal\n "+
+                                                "    ,case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\n "+
+                                                "    ,case when b.value is not null then (IFNULL(a.achievement2,0)/b.value)*100 else '' end as persen2\n "+
+                                                "    ,case when b.value is not null then (IFNULL(a.achievement3,0)/b.value)*100 else '' end as persen3\n "+
+                                                "    ,case when b.value is not null then (IFNULL(a.achievement4,0)/b.value)*100 else '' end as persen4\n "+
                                                 "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
                                                 "     JOIN ref_role c ON a.id_role = c.id_role \n" +
                                                 "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
