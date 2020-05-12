@@ -44,6 +44,13 @@
                         <h5 id="title">Grafik Hasil Pelaporan</h5>
                     </div>
                     <div class="widget-content" style="background:#FFFFFF;">
+                    	<div class="row-fluid">
+                    		<button id="show_tabel" class="btn btn-primary">
+                        		<span class="lang_indo">Tampilkan Tabel</span>
+                        		<span class="lang_eng" style="display: none">Show Table</span>
+                        	</button>
+                    	</div>
+                    	<br/>
                         <div class="row-fluid">
                             <div id="divkiri" class="span6"></div>
                             <div id="divkanan" class="span6">
@@ -60,6 +67,27 @@
             </div>
         </div>
     </div>
+    <div class="modal-loading-new"></div>
+<style th:inline="text">
+			.modal-loading-new {
+				opacity: 0.4!important;
+				display:    none;
+				position:   fixed;
+				z-index:    1000;
+				top:        0;
+				left:       0;
+				height:     100%;
+				width:      100%;
+				background: #333 url([[@{/img/loading.gif}]]) 50% 50% no-repeat;
+			}
+			/* When the body has the loading class, we turn the scrollbar off with overflow:hidden */
+			body.loading {
+				overflow: hidden;   
+			}
+			body.loading .modal-loading-new {
+				display: block;
+			}
+		</style>
     <div th:include="admin/layout :: footer"></div>
     <script th:inline="javascript">
         var lang = [[${lang}]];
@@ -122,10 +150,9 @@
             var valperiode = sessionStorage.graph_idmonper;
         	$.ajax({
         		url: urls + "getalltarget",
-                        data: {'id_goals':id, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+                data: {'id_goals':id, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
         		type: 'get',
         		dataType: 'json',
-        		cache: false,
         		success: function (restarget) {
                             console.log("yo "+id+" jumlah = "+restarget.length);
                             var isitarget = "<ul id='ultar"+id+"'>";
@@ -167,9 +194,7 @@
                     type: 'get',
                     data: {'id_goals':idgoals, 'id_target':idtarget, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
                     dataType: 'json',
-                    cache: false,
                     success: function (resindi) {
-                            
                             var isiindi = "<ul id='ulindi"+idgoals+"'>";
 //                            $("#lili"+idgoals).html("");
                             for (var i=0; i<resindi.length; i++) {
@@ -221,6 +246,43 @@
         }
         
         // ********************** Content Div Kanan Atas **********************
+        sessionStorage.graph_prog_idindicator = "";
+        sessionStorage.graph_prog_idactivity = "";
+        sessionStorage.graph_prog_idprogram = "";
+        sessionStorage.graph_act4 = "";
+        sessionStorage.graph_flag = "";
+        sessionStorage.graph_role = "";
+        $('#divkanan').on('click','.prog_bud', function(e){
+        	e.preventDefault();
+        	$('#divkanan a').css("color", ""); 
+        	$(this).css("color", "red");
+        	var val = $(this).data('id');
+        	var prog = $(this).data('id_prog');
+        	var act4 = $(this).data('act4');
+        	var flag = $(this).data('flag');
+        	sessionStorage.graph_prog_idactivity = val;
+        	sessionStorage.graph_prog_idprogram = prog;
+        	sessionStorage.graph_prog_idindicator = "";
+        	sessionStorage.graph_act4 = act4;
+        	sessionStorage.graph_flag = flag;
+        });
+        
+        $('#divkanan').on('click','.prog_ind', function(e){
+        	e.preventDefault();
+        	$('#divkanan a').css("color", ""); 
+        	$(this).css("color", "red");
+        	var val = $(this).data('id');
+        	var prog = $(this).data('id_prog');
+        	var act = $(this).data('id_activity');
+        	var flag = $(this).data('flag');
+        	var role = $(this).data('role');
+        	sessionStorage.graph_prog_idindicator = val;
+        	sessionStorage.graph_prog_idactivity = act;
+        	sessionStorage.graph_prog_idprogram = prog;
+        	sessionStorage.graph_flag = flag;
+        	sessionStorage.graph_role = role;
+        });
+        
         function getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram) {
 //            var valdaerah  = $("#daerah").val();
 //            var valrole    = $("#selrole").val();
@@ -240,7 +302,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='2' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                //isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='prog_bud' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
@@ -269,7 +332,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li  id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)' href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='2' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                //isiactivity += "<li  id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)' href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
@@ -295,8 +359,8 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    
-                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)' href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-flag='2' data-role='"+valrole+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
@@ -321,7 +385,8 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)' href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-flag='2' data-role='"+resgovindicator[i][4]+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
@@ -349,7 +414,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li  id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='3' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                //isiactivity += "<li  id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a>"+prog_l+"</li>";
                                 getNsaIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
@@ -378,7 +444,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='3' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                //isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)'  href='#'>"+prog_l+"</a></li>";
                                 getNsaIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
@@ -403,7 +470,8 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)' href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-flag='3' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resnsaindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
@@ -428,7 +496,8 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+",2)' href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-flag='3' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resnsaindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+",2)' href='#'>"+prog_l+"</a></li>";
         			}
         			isiindicator += "</ul>";
         			$("#lilililinsa"+idactivity).append(isiindicator);
@@ -742,7 +811,12 @@
                 data: {'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
                 type: 'get',
                 dataType: 'json',
-                cache: false,
+                beforeSend : function(xhr){
+                	$('body').addClass("loading"); 
+                },
+               complete: function(){
+                	$('body').removeClass("loading");
+                },
                 success: function (resgoals) {
                 	console.log("goal = "+resgoals.length);
                 	$("#divkiri").empty();
@@ -756,13 +830,67 @@
                             var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
                             var dat_goals = resgoals[i][0]+"##null##null";
                             if(ses_goals == dat_goals){
-                                isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:red;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
                             }else{
                                 isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
                             }
                             
-//                            isi += "<li id='li"+resgoals[i][0]+"'>"+prog_l+"</li>";
-                            getTarget(resgoals[i][0], resgoals[i][3]);
+                            //getTarget(resgoals[i][0], resgoals[i][3]);
+                            $.ajax({
+                        		url: urls + "getalltarget",
+                                data: {'id_goals':resgoals[i][0], 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+                        		type: 'get',
+                        		dataType: 'json',
+                        		async : false,
+                        		success: function (restarget) {
+                                            isi += "<ul id='ultar"+resgoals[i][0]+"'>";
+                                            for (var ii=0; ii<restarget.length; ii++) {
+                                                if($('#fs').is(':checked')){
+                                                    var prog_l = resgoals[i][3]+"."+restarget[ii][3]+" "+restarget[ii][1];
+                                                }else{
+                                                    var prog_l = resgoals[i][3]+"."+restarget[ii][3]+" "+restarget[ii][2];
+                                                }
+                                                var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+                                                var dat_goals = resgoals[i][0]+"##"+restarget[ii][0]+"##null";
+                                                if(ses_goals == dat_goals){
+                                                	isi += "<li id='lili"+resgoals[i][0]+"' ><a style='color:red;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='"+restarget[ii][0]+"' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                                }else{
+                                                	isi += "<li id='lili"+resgoals[i][0]+"' ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='"+restarget[ii][0]+"' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                                }
+                                                
+                                                //getIndicator(id, kd_goals, restarget[i][0], restarget[i][3]);
+                                                $.ajax({
+								                    url: urls + "getallindicator",
+								                    type: 'get',
+								                    data: {'id_goals':resgoals[i][0], 'id_target':restarget[ii][0], 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+								                    dataType: 'json',
+								                    async : false,
+								                    success: function (resindi) {
+								                            isi += "<ul id='ulindi"+resgoals[i][0]+"'>";
+								                            for (var iii=0; iii<resindi.length; iii++) {
+								                                if($('#fs').is(':checked')){
+								                                    var prog_l = resgoals[i][3]+"."+restarget[ii][3]+"."+resindi[iii][3]+" "+resindi[iii][1];
+								                                }else{
+								                                    var prog_l = resgoals[i][3]+"."+restarget[ii][3]+"."+resindi[iii][3]+" "+resindi[iii][2];
+								                                }
+								//                                $("#lili"+idgoals).html("");
+								                                var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+								                                var dat_goals = resgoals[i][0]+"##"+restarget[ii][0]+"##"+resindi[iii][0];
+								                                if(ses_goals == dat_goals){
+								                                	isi += " <li ><a style='color:red;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='"+restarget[ii][0]+"' data-idindicator='"+resindi[iii][0]+"' href='#'>"+prog_l+"</a></li>";
+								                                }else{
+								                                    isi += " <li ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='"+restarget[ii][0]+"' data-idindicator='"+resindi[iii][0]+"' href='#'>"+prog_l+"</a></li>";
+								                            	}
+								                            }
+								                            isi += "</ul>";
+								                    }
+								            });
+                                                isi += "</li>";
+                                            }
+                                            isi += "</ul>";
+                        		}
+                      	   	});
+                            
                     }
                     isi += "</ul>";
                     $("#divkiri").append(isi);
@@ -852,6 +980,34 @@
             }
         }
         
+        $('#show_tabel').on('click', function(){
+        	var valda = sessionStorage.graph_idprov;
+        	var valrole = sessionStorage.graph_role;
+        	var combo_periode = sessionStorage.graph_idmonper;
+        	var idgoals = sessionStorage.graph_idgoals;
+        	var idtarget = sessionStorage.graph_idtarget;
+        	var idindicator = sessionStorage.graph_idindicator;
+        	
+        	var prog_idprogram = sessionStorage.graph_prog_idprogram;
+        	var prog_idindicator = sessionStorage.graph_prog_idindicator;
+        	var prog_idactivity = sessionStorage.graph_prog_idactivity;
+        	var act4 = sessionStorage.graph_act4;
+        	var flag = sessionStorage.graph_flag;
+        	
+        	if(idgoals && prog_idactivity && !prog_idindicator){
+        		cucukanan_bud(idgoals,idtarget,idindicator,prog_idprogram,prog_idactivity,null,act4,flag,1)
+        	}else if(idgoals && prog_idindicator){
+        		cucukanan(idgoals,idtarget,idindicator,prog_idprogram,prog_idactivity,prog_idindicator,valrole,flag,2)
+        	}else{
+        		if($('#fs').is(':checked')){
+                    swal("Anda harus memilih SDG & Program");
+                }else{
+                    swal("You must Choose SDG & Program");
+                }
+        	}
+        	
+        });
+        
         $('#divkiri').on('click', ".lisdg", function(e){
             var valda           = $("#daerah").val();
             var valrole         = $("#selrole").val();
@@ -865,6 +1021,11 @@
             sessionStorage.graph_idgoals  = idgoals;
             sessionStorage.graph_idtarget  = idtarget;
             sessionStorage.graph_idindicator  = idindicator;
+            
+            e.preventDefault();
+        	$('#divkiri a').css("color", "black"); 
+        	$(this).css("color", "red");
+        	
 //                alert('monper '+combo_periode);
             $cek = 0;
             if (valrole == '0'){	
@@ -875,6 +1036,7 @@
                 }
                 $cek += 1;
             }
+            
 //            if (valrole == '111111'){	
 //                if($('#fs').is(':checked')){
 //                    swal("Anda harus memilih tipe Role");
@@ -890,6 +1052,9 @@
                     swal("You must Choose Period");
                 }
                 $cek += 1;
+            }
+			if(sessionStorage.graph_prog_idindicator || sessionStorage.graph_prog_idactivity){
+				$cek += 1;
             }
             if ($cek == 0)
             {
