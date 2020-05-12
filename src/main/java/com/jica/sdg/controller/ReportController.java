@@ -4808,7 +4808,7 @@ public class ReportController {
         model.addAttribute("idmonper", idmonper);
         model.addAttribute("valdaerah", valdaerah);
         model.addAttribute("valrole", valrole);
-        return "admin/report/graph_pie";
+        return "admin/report/graph_pie_2";
     }	
 
     @GetMapping("admin/getpievalue")
