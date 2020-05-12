@@ -250,6 +250,8 @@
         sessionStorage.graph_prog_idactivity = "";
         sessionStorage.graph_prog_idprogram = "";
         sessionStorage.graph_act4 = "";
+        sessionStorage.graph_flag = "";
+        sessionStorage.graph_role = "";
         $('#divkanan').on('click','.prog_bud', function(e){
         	e.preventDefault();
         	$('#divkanan a').css("color", ""); 
@@ -257,10 +259,12 @@
         	var val = $(this).data('id');
         	var prog = $(this).data('id_prog');
         	var act4 = $(this).data('act4');
+        	var flag = $(this).data('flag');
         	sessionStorage.graph_prog_idactivity = val;
         	sessionStorage.graph_prog_idprogram = prog;
         	sessionStorage.graph_prog_idindicator = "";
         	sessionStorage.graph_act4 = act4;
+        	sessionStorage.graph_flag = flag;
         });
         
         $('#divkanan').on('click','.prog_ind', function(e){
@@ -270,9 +274,13 @@
         	var val = $(this).data('id');
         	var prog = $(this).data('id_prog');
         	var act = $(this).data('id_activity');
+        	var flag = $(this).data('flag');
+        	var role = $(this).data('role');
         	sessionStorage.graph_prog_idindicator = val;
         	sessionStorage.graph_prog_idactivity = act;
         	sessionStorage.graph_prog_idprogram = prog;
+        	sessionStorage.graph_flag = flag;
+        	sessionStorage.graph_role = role;
         });
         
         function getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram) {
@@ -294,7 +302,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='2' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
                                 //isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='prog_bud' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
@@ -324,7 +332,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='2' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
                                 //isiactivity += "<li  id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)' href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
@@ -351,7 +359,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-flag='2' data-role='"+valrole+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
                                     //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)'>"+prog_l+"</li>";
         			}
@@ -377,7 +385,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-flag='2' data-role='"+resgovindicator[i][4]+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
                                     //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)'>"+prog_l+"</li>";
         			}
@@ -406,7 +414,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li  id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='3' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                //isiactivity += "<li  id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a>"+prog_l+"</li>";
                                 getNsaIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
@@ -435,7 +444,8 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='3' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                //isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)'  href='#'>"+prog_l+"</a></li>";
                                 getNsaIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
                             isiactivity += "</ul>";
@@ -460,7 +470,8 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)' href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-flag='3' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resnsaindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)'>"+prog_l+"</li>";
         			}
         			isiindicator += "</ul>";
@@ -485,7 +496,8 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+",2)' href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-flag='3' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resnsaindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+",2)' href='#'>"+prog_l+"</a></li>";
         			}
         			isiindicator += "</ul>";
         			$("#lilililinsa"+idactivity).append(isiindicator);
@@ -970,7 +982,7 @@
         
         $('#show_tabel').on('click', function(){
         	var valda = sessionStorage.graph_idprov;
-        	var valrole = sessionStorage.graph_idrole;
+        	var valrole = sessionStorage.graph_role;
         	var combo_periode = sessionStorage.graph_idmonper;
         	var idgoals = sessionStorage.graph_idgoals;
         	var idtarget = sessionStorage.graph_idtarget;
@@ -979,12 +991,13 @@
         	var prog_idprogram = sessionStorage.graph_prog_idprogram;
         	var prog_idindicator = sessionStorage.graph_prog_idindicator;
         	var prog_idactivity = sessionStorage.graph_prog_idactivity;
-        	var act4 = sessionStorage.graph_act4
+        	var act4 = sessionStorage.graph_act4;
+        	var flag = sessionStorage.graph_flag;
         	
         	if(idgoals && prog_idactivity && !prog_idindicator){
-        		cucukanan_bud(idgoals,idtarget,idindicator,prog_idprogram,prog_idactivity,null,act4,2,1)
+        		cucukanan_bud(idgoals,idtarget,idindicator,prog_idprogram,prog_idactivity,null,act4,flag,1)
         	}else if(idgoals && prog_idindicator){
-        		cucukanan(idgoals,idtarget,idindicator,prog_idprogram,prog_idactivity,prog_idindicator,valrole,2,2)
+        		cucukanan(idgoals,idtarget,idindicator,prog_idprogram,prog_idactivity,prog_idindicator,valrole,flag,2)
         	}else{
         		if($('#fs').is(':checked')){
                     swal("Anda harus memilih SDG & Program");
