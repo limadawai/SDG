@@ -510,7 +510,9 @@
         }
 
         // ********************** Fungsi pilih select option **********************
-        
+        $("#selrole").on('change', function(){
+        	sessionStorage.graph_idrole = $(this).val();
+        });
         if(id_role == '1'){
 
         }else{
