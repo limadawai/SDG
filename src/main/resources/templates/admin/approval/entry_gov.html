@@ -406,7 +406,6 @@
         });
         
         $("#period").on('change', function(e){
-            
             grid_role();
             $("#tabel-approve-gov-activity").hide();
             $("#tabel-approve-gov-indicator").hide();
@@ -577,8 +576,22 @@
                             return "<div style='text-align:center;'>"+
                             '<button data-id_role="'+row[1]+'" data-nama="'+row[2]+'" data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unapprove">UnApprove</button></div>';
                         }else if(row[3]==3){
+                        	var hide="";
+                        	$.ajax({
+                                type: "GET",
+                                async:false,
+                                url: urls+'list-get-cek-show-report/'+id_monper+'/'+v_year+'/1/'+v_type+'/'+v_period,
+                                success: function (result1) {
+                                    var sts = result1.content;
+                                    if(sts == '0'){
+                                    	hide="";
+                                    }else{
+                                    	hide="display:none;";
+                                    }
+                                }
+                            });
                             warna = "btn-danger";
-                            return "<div style='text-align:center;'>"+
+                            return "<div style='text-align:center;"+hide+"' >"+
                             '<button data-id_role="'+row[1]+'" data-nama="'+row[2]+'" data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" data-periode="'+row[6]+'" type="button" title="approve" class="btn '+warna+' unreject">UnReject</button></div>';
                         }else if(row[3]==1){
                             warna = "btn-primary";
@@ -613,9 +626,11 @@
                     if(sts == '0'){
                         $("#show_report").show();
                         $("#unshow_report").hide();
+                        $('#tabel-role').find('.unreject').show();
                     }else{
                         $("#show_report").hide();
                         $("#unshow_report").show();
+                        $('#tabel-role').find('.unreject').hide();
                     }
                     
 //                        console.log(sts);
