@@ -656,7 +656,7 @@
                 		$("#periode").append(opt);
                 	}
                         $("#periode").val(sessionStorage.graph_idmonper).trigger("change");
-                        if(sessionStorage.graph_idmonper!="0" && sessionStorage.graph_idmonper){
+                        if(sessionStorage.graph_idmonper!="0" && sessionStorage.graph_idmonper && $("#periode").val() != "0"){
                         	$("#cari").trigger('click');
                         }
                         
