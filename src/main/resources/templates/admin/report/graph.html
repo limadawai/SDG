@@ -522,6 +522,7 @@
                 type: 'get',
                 data: {'id_prov': id_prov},
                 dataType: 'json',
+                async:false,
                 success: function (resrole) {
                     //console.log(resrole);
                     $("#selrole").empty();
@@ -622,6 +623,7 @@
                 type: 'get',
                 data: {'id_prov':valdaerah},
                 dataType: 'json',
+                async:false,
                 success: function (resrole) {
                 	//console.log(resrole);
                 	$("#selrole").empty();
