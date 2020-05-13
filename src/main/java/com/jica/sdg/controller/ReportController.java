@@ -4808,7 +4808,7 @@ public class ReportController {
         model.addAttribute("idmonper", idmonper);
         model.addAttribute("valdaerah", valdaerah);
         model.addAttribute("valrole", valrole);
-        return "admin/report/graph_pie";
+        return "admin/report/graph_pie_2";
     }	
 
     @GetMapping("admin/getpievalue")
@@ -4835,6 +4835,31 @@ public class ReportController {
         List list = query.getResultList();
         return list;
     }	
+
+    @GetMapping("admin/getpievalueind")
+    public @ResponseBody List<Object> isinsamap2(@RequestParam("idprov") String idProv, @RequestParam("idmonper") int idMonper, @RequestParam("idind") int idInd) {
+        String sql = "Select e.nm_role, count(a.id_gov_indicator) from gov_map a " +
+						"Left join sdg_goals b on a.id_goals = b.id " +
+						"join gov_indicator c on a.id_gov_indicator = c.id " +
+						"Left join gov_activity d on c.id_activity = d.id " +
+						"Left join ref_role e on d.id_role = e.id_role " +
+						"where a.id_prov = :idProv and a.id_monper = :idMonper and a.id_gov_indicator = :idGoal " +
+						"GROUP BY e.nm_role " +
+						"UNION " +
+						"Select e.nm_role, count(a.id_nsa_indicator) from nsa_map a " +
+						"Left join sdg_goals b on a.id_goals = b.id " +
+						"join nsa_indicator c on a.id_nsa_indicator = c.id " +
+						"Left join nsa_activity d on c.id_activity = d.id " +
+						"Left join ref_role e on d.id_role = e.id_role " +
+						"where a.id_prov = :idProv and a.id_monper = :idMonper and a.id_nsa_indicator = :idGoal " +
+						"GROUP BY e.nm_role";
+        Query query = manager.createNativeQuery(sql);
+        query.setParameter("idProv", idProv);
+		query.setParameter("idMonper", idMonper);
+		query.setParameter("idGoal", idInd);
+        List list = query.getResultList();
+        return list;
+    }	    
     
     @GetMapping("admin/getprov")
     public @ResponseBody List<Object> getprov(@RequestParam("valdaerah") String val) {

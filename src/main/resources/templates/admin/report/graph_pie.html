@@ -68,6 +68,7 @@
         }
 
         show_sdg_goal();
+        grid_gov_nongov_tampil();
 
         $('#fs').on('change', function(){
             if($(this).is(':checked')){
@@ -77,7 +78,7 @@
 //                show_gov_prog();
 //                show_non_gov_prog();
                 show_sdg_goal();
-                //grid_gov_nongov_tampil();
+                grid_gov_nongov_tampil();
             } else {
                 inggris();
                 $(".lang_indo").hide("");
@@ -85,7 +86,7 @@
 //                show_gov_prog();
 //                show_non_gov_prog();
                 show_sdg_goal();
-                //grid_gov_nongov_tampil();
+                grid_gov_nongov_tampil();
             }
         });
 
@@ -102,8 +103,58 @@
             $("#pbawah").text("Non-Government");
             $("#back").text("Kembali"); f
         }
+
+        function grid_gov_nongov_tampil() {
+            var valda           = $("#daerah").val();
+            var valrole         = $("#selrole").val();
+            var combo_periode   = $("#periode").val();
+            
+            show_gov_prog(sessionStorage.graph_idgoals, sessionStorage.graph_idtarget, sessionStorage.graph_idindicator, valda, valrole, combo_periode);
+            show_non_gov_prog(sessionStorage.graph_idgoals, sessionStorage.graph_idtarget, sessionStorage.graph_idindicator, valda, valrole, combo_periode);
+        }        
         
         // ********************** Content Div Kiri **********************
+
+        function getTarget(id, kd_goals) {
+            var valdaerah  = $("#daerah").val();
+            var valrole    = $("#selrole").val();
+//            var valperiode = $("#periode").val();
+            var valperiode = sessionStorage.graph_idmonper;
+        	$.ajax({
+        		url: urls + "getalltarget",
+                        data: {'id_goals':id, 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+        		type: 'get',
+        		dataType: 'json',
+        		cache: false,
+        		success: function (restarget) {
+                            console.log("yo "+id+" jumlah = "+restarget.length);
+                            var isitarget = "<ul id='ultar"+id+"'>";
+                            for (var i=0; i<restarget.length; i++) {
+                                if($('#fs').is(':checked')){
+                                    var prog_l = kd_goals+"."+restarget[i][3]+" "+restarget[i][1];
+                                }else{
+                                    var prog_l = kd_goals+"."+restarget[i][3]+" "+restarget[i][2];
+                                }
+                                var ses_goals = sessionStorage.graph_idgoals+"##"+sessionStorage.graph_idtarget+"##"+sessionStorage.graph_idindicator;
+                                var dat_goals = id+"##"+restarget[i][0]+"##null";
+                                if(ses_goals == dat_goals){
+                                    isitarget += "<li id='lili"+id+"' ><a style='color:#7F7FFF;' class='lisdg' data-idgoals='"+id+"' data-idtarget='"+restarget[i][0]+"' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                }else{
+                                    isitarget += "<li id='lili"+id+"' ><a style='color:black;' class='lisdg' data-idgoals='"+id+"' data-idtarget='"+restarget[i][0]+"' data-idindicator='null' href='#'>"+prog_l+"</a>";
+                                }
+//                                isitarget += "<li id='lili"+id+"'>"+prog_l;
+//                                isitarget += "<li id='lili"+id+"' style='cursor:pointer; color:black;' onclick='grid_gov_nongov("+id+", "+restarget[i][0]+", null)'>"+prog_l;
+                                
+//                                isiindi += " <a class='lisdg' data-idgoals='"+idgoals+"' data-idtarget='"+idtarget+"' data-idindicator='"+resindi[i][0]+"' href='#'>"+prog_l+"</a>";
+//        				isitarget += "<li>"+restarget[i][1];
+                                getIndicator(id, kd_goals, restarget[i][0], restarget[i][3]);
+                                isitarget += "</li>";
+                            }
+                            isitarget += "</ul>";
+                            $("#li"+id).append(isitarget);
+        		}
+      	   	});
+        }        
         
         function getIndicator(idgoals, kd_goals, idtarget, kd_target) {
             var valdaerah  = $("#daerah").val();
@@ -311,6 +362,8 @@
                             }else{
                                 isi += "<li id='li"+resgoals[i][0]+"' ><a style='color:black;' class='lisdg' data-idgoals='"+resgoals[i][0]+"' data-idtarget='null' data-idindicator='null' href='#'>"+prog_l+"</a>";
                             }
+
+                            getTarget(resgoals[i][0], resgoals[i][3]);
                             
                     }
                     isi += "</ul>";
