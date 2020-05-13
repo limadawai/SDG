@@ -4838,25 +4838,24 @@ public class ReportController {
 
     @GetMapping("admin/getpievalueind")
     public @ResponseBody List<Object> isinsamap2(@RequestParam("idprov") String idProv, @RequestParam("idmonper") int idMonper, @RequestParam("idind") int idInd) {
-        String sql = "Select e.nm_role, count(a.id_gov_indicator) from gov_map a " +
-						"Left join sdg_goals b on a.id_goals = b.id " +
-						"join gov_indicator c on a.id_gov_indicator = c.id " +
-						"Left join gov_activity d on c.id_activity = d.id " +
-						"Left join ref_role e on d.id_role = e.id_role " +
-						"where a.id_prov = :idProv and a.id_monper = :idMonper and a.id_gov_indicator = :idGoal " +
-						"GROUP BY e.nm_role " +
-						"UNION " +
-						"Select e.nm_role, count(a.id_nsa_indicator) from nsa_map a " +
-						"Left join sdg_goals b on a.id_goals = b.id " +
-						"join nsa_indicator c on a.id_nsa_indicator = c.id " +
-						"Left join nsa_activity d on c.id_activity = d.id " +
-						"Left join ref_role e on d.id_role = e.id_role " +
-						"where a.id_prov = :idProv and a.id_monper = :idMonper and a.id_nsa_indicator = :idGoal " +
-						"GROUP BY e.nm_role";
+        String sql = "Select e.nm_role, count(a.id_indicator) " +
+        "from gov_map a Left join sdg_indicator b on a.id_indicator = b.id " +
+        "join gov_indicator c on a.id_gov_indicator = c.id " + 
+        "Left join gov_activity d on c.id_activity = d.id " +
+        "Left join ref_role e on d.id_role = e.id_role " +
+        "where a.id_prov = :idProv and a.id_monper = :idMonper and a.id_indicator = :idInd " +
+        "GROUP BY e.nm_role UNION " +
+        "Select e.nm_role, count(a.id_indicator) " +
+        "from nsa_map a Left join sdg_indicator b on a.id_indicator = b.id " +
+        "join nsa_indicator c on a.id_nsa_indicator = c.id " +
+        "Left join nsa_activity d on c.id_activity = d.id " +
+        "Left join ref_role e on d.id_role = e.id_role " +
+        "where a.id_prov = :idProv and a.id_monper = :idMonper and a.id_indicator = :idInd "+
+        "GROUP BY e.nm_role";
         Query query = manager.createNativeQuery(sql);
         query.setParameter("idProv", idProv);
 		query.setParameter("idMonper", idMonper);
-		query.setParameter("idGoal", idInd);
+		query.setParameter("idInd", idInd);
         List list = query.getResultList();
         return list;
     }	    

@@ -16,6 +16,7 @@
         </div>
         <div class="container-fluid">
             <div class="row-fluid">
+                <button id="back" class="btn btn-warning">Kembali</button>
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-tasks"></i></span>
@@ -90,12 +91,14 @@
             $("#title").text("Grafik hasil Pelaporan");
             $("#patas").text("Pemerintah");
             $("#pbawah").text("Non-Pemerintah");
+            $("#back").text("Kembali");
         }
 
         function inggris() {
             $("#title").text("Monitoring Graph");
             $("#patas").text("Government");
             $("#pbawah").text("Non-Government");
+            $("#back").text("Back");
         }
 
 
@@ -1044,6 +1047,10 @@
                 chart4=new Highcharts.Chart(options4);		
 
         }        
+
+        $("#back").on("click", function(){
+            location.href = urls+"report-graph";
+        });
     </script>
 </body>
 </html>
