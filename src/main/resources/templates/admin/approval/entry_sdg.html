@@ -419,6 +419,19 @@
     							}
 								warna = "btn-danger";
 								kelas = "unapprove";
+								$.ajax({
+	                                type: "GET",
+	                                async:false,
+	                                url: urls+'list-get-cek-show-report/'+$("#periode").val().split("###")[0]+'/'+$("#periode").val().split("###")[1]+'/1/entry_sdg/'+$("#period").val().split("###")[2],
+	                                success: function (result1) {
+	                                    var sts = result1.content;
+	                                    if(sts == '0'){
+	                                    	hide="";
+	                                    }else{
+	                                    	hide="display:none;";
+	                                    }
+	                                }
+	                            });
 							}else if(row[3]==4){
 								hide = 'display:none';
 								kelas = "approve";
@@ -431,18 +444,7 @@
 								warna = "btn-default";
 								kelas = "approve";
 							}
-							$.ajax({
-                                type: "GET",
-                                url: urls+'list-get-cek-show-report/'+$("#periode").val().split("###")[0]+'/'+$("#periode").val().split("###")[1]+'/1/entry_sdg/'+$("#period").val().split("###")[2],
-                                success: function (result1) {
-                                    var sts = result1.content;
-                                    if(sts == '0'){
-                                    	hide="";
-                                    }else{
-                                    	hide="display:none;";
-                                    }
-                                }
-                            });
+							
 							return "<div style='text-align:center;"+hide+"'>"+
 							'<button data-id_role="'+row[1]+'" data-nama="'+(row[2]?row[2]:'Unassign')+'" data-id="'+row[0]+'" data-approval="'+row[3]+'" data-description="'+row[5]+'" type="button" title="approve" class="btn '+warna+' '+kelas+' ">'+text+'</div>';
 						}},

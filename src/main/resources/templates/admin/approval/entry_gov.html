@@ -579,6 +579,7 @@
                         	var hide="";
                         	$.ajax({
                                 type: "GET",
+                                async:false,
                                 url: urls+'list-get-cek-show-report/'+id_monper+'/'+v_year+'/1/'+v_type+'/'+v_period,
                                 success: function (result1) {
                                     var sts = result1.content;
