@@ -650,6 +650,10 @@
                 		$("#periode").append(opt);
                 	}
                         $("#periode").val(sessionStorage.graph_idmonper).trigger("change");
+                        if(sessionStorage.graph_idmonper!="0"){
+                        	$("#cari").trigger('click');
+                        }
+                        
                 }
             });
             
