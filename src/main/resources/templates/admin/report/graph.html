@@ -33,7 +33,7 @@
                         <option value="1" >Each Period</option>
                         <option value="2" >Total + Each Period</option>
                         <option value="3" >Total Within The Year Only</option>
-                        <option value="4" >Last Period Of The Year Only</option>
+                        <!-- <option value="4" >Last Period Of The Year Only</option> -->
                     </select>
                 </div>
                 <button id="cari" class="btn btn-primary"><span class="lang_indo">Cari</span><span class="lang_eng" style="display: none">Search</span></button>
@@ -522,7 +522,7 @@
                 type: 'get',
                 data: {'id_prov': id_prov},
                 dataType: 'json',
-                cache: false,
+                async:false,
                 success: function (resrole) {
                     //console.log(resrole);
                     $("#selrole").empty();
@@ -547,7 +547,6 @@
                 type: 'get',
                 data: {'id_prov': id_prov},
                 dataType: 'json',
-                cache: false,
                 success: function (resmonper) {
                 	//console.log(resmonper);
                 	$("#periode").empty();
@@ -581,7 +580,6 @@
                 type: 'get',
                 data: {'id_prov':id_prov},
                 dataType: 'json',
-                cache: false,
                 success: function (resrole) {
                 	//console.log(resrole);
                 	$("#selrole").empty();
@@ -598,7 +596,6 @@
                 type: 'get',
                 data: {'id_prov':id_prov},
                 dataType: 'json',
-                cache: false,
                 success: function (resmonper) {
                 	//console.log(resmonper);
                 	$("#periode").empty();
@@ -626,7 +623,7 @@
                 type: 'get',
                 data: {'id_prov':valdaerah},
                 dataType: 'json',
-                cache: false,
+                async:false,
                 success: function (resrole) {
                 	//console.log(resrole);
                 	$("#selrole").empty();
@@ -644,7 +641,6 @@
                 type: 'get',
                 data: {'id_prov':valdaerah},
                 dataType: 'json',
-                cache: false,
                 success: function (resmonper) {
                 	//console.log(resmonper);
                 	$("#periode").empty();
@@ -656,7 +652,7 @@
                 		$("#periode").append(opt);
                 	}
                         $("#periode").val(sessionStorage.graph_idmonper).trigger("change");
-                        if(sessionStorage.graph_idmonper!="0" && sessionStorage.graph_idmonper){
+                        if(sessionStorage.graph_idmonper!="0" && sessionStorage.graph_idmonper && $("#periode").val() != "0"){
                         	$("#cari").trigger('click');
                         }
                         
@@ -946,7 +942,7 @@
             }
             if ($cek == 0)
             {
-                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role+"/"+tipe_periode+"/"+kode_bud;
+                location.href = urls+"report-graph-detail-ind/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+idprog+"/"+idacty+"/"+idindi+"/"+combo_periode+"/"+flag+"/"+valda+"/"+role+"/"+tipe_periode+"/"+kode_bud;
             //window.open(urls+"report-graph-detail/"+idsdg+"/"+idtar+"/"+idindi+"/"+idmon+"/"+flag+"/"+valda, "_blank");
             }
         }

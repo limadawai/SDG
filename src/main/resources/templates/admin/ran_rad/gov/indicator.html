@@ -371,7 +371,7 @@
                                     	option += '<optgroup id="" label="'+result.content[j].id_target+' '+nm_target+'">';
                                     	cekbok += '<label for="submenu'+id_target+'" style="display:inline-block;white-space:nowrap;margin-left:20px">'+
                                     					'<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave" id="submenu'+id_target+'" type="checkbox" name="sdg_indicator" style="vertical-align:middle"  value="'+response.content[i].id+'---'+result.content[j].id+'---0">&nbsp;&nbsp;&nbsp;'+
-							                            '<span style="vertical-align:middle">'+id_goals+'.'+result.content[j].id_target+". "+nm_target+'</span>'+
+							                            '<span style="vertical-align:middle">'+response.content[i].id_goals+'.'+result.content[j].id_target+". "+nm_target+'</span>'+
 							                      '</label><br/>';
                                     	$.ajax({
                                             url: urls + 'list-sdgIndicator/'+response.content[i].id+'/'+result.content[j].id,
@@ -391,7 +391,7 @@
                                                 	option += '<option value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">'+result1.content[k][1]+' '+nm_indicator+'</option>';
                                                 	cekbok += '<label for="submenu1'+id_indicator+'" style="display:inline-block;white-space:nowrap;margin-left:40px">'+
 								                            '<input data-goals="'+id_goals+'" data-id="'+id_target+'" class="sdg-indikator menu'+id_goals+' menu-slave'+id_target+' menu-slave-1 menu-slave-1-'+id_target+'" id="submenu1'+id_indicator+'" type="checkbox" name="sdg_indicator" id="sdg_indicator" style="vertical-align:middle" value="'+response.content[i].id+'---'+result.content[j].id+'---'+result1.content[k][0]+'">&nbsp;&nbsp;&nbsp;'+
-								                            '<span style="vertical-align:middle">'+id_goals+'.'+id_target+'.'+result1.content[k][1]+". "+nm_indicator+'</span>'+
+								                            '<span style="vertical-align:middle">'+response.content[i].id_goals+'.'+result.content[j].id_target+'.'+result1.content[k][1]+". "+nm_indicator+'</span>'+
 								                      '</label><br/>';
                                             	}
                                             }

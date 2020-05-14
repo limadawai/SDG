@@ -51,10 +51,10 @@
                             <span style="margin-right: 10px;"> , </span>                     
                             <input id="legend8" value="80" type="text" style="width:30px; margin-top: 10px">
                             <span style="margin-left: 10px"> =< </span>
-                            <select id="calculation" style=" margin-top: 10px">
+                            <!-- <select id="calculation" style=" margin-top: 10px">
                             	<option selected="true" value="0">Last Period</option>
                             	<option value="1">Summary</option>
-                            </select>
+                            </select> -->
                             <!-- <input type="checkbox" id="calculation"  />
                              <span>Calculation</span> -->
                              <button class="btn btn-primary" type="button" id="show_map">
@@ -282,11 +282,11 @@
            var legend6      = $('#legend6').val();
            var legend7      = $('#legend7').val();
            var legend8      = $('#legend8').val();
-           var calculation  = $('#calculation').val();
+           //var calculation  = $('#calculation').val();
            /* if($('#calculation').is(":checked")){
                calculation = 1
            } */
-           console.log(calculation);
+           //console.log(calculation);
            var data = JSON.stringify({
                             'tahun':tahun,
                             'indicator':indicator
@@ -305,7 +305,7 @@
                             var notcalculation ;
                             var persen;
                             var target = x[1];
-                            if(calculation==1){
+                            //if(calculation==1){
                                 console.log("ini calculasi")
                                 //var total = (x[2]/x[1])*100;
                                 var total = x[2];
@@ -319,7 +319,7 @@
                                     target      = x[11];
                                     indicator   = x[12];
                 	        	}
-                            }else{
+                            /* }else{
                                 if(x[12]!=''){
                                     notcalculation = x[12];
                                     persen = x[17];
@@ -350,7 +350,7 @@
                                     indicator   = x[12];
                 	        	}
                                 
-                            }
+                            } */
                             
         //            console.log(x[1]);
                         });
@@ -420,8 +420,8 @@
                //                    '</span></span> {point.name}<br>' +
                //                    '<span style="font-size:30px">{point.value}/km²</span>',
                                pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
-                                               <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
-                                               <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.persen}%</td></tr>\n\
+                                               <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th></tr>\n\
+                                               <tr><td>{point.target}</td><td>{point.realisasi}</td></tr>\n\
                                                <tr><td colspan="2">Program Pemerintah</td><td>{point.gov}<td></td></tr>\n\
                                                <tr><td colspan="2">Program Non Pemerintah</td><td>{point.non_gov}<td></td></tr></table></div>',
                //                positioner: function () {
@@ -542,8 +542,8 @@
 //                    '</span></span> {point.name}<br>' +
 //                    '<span style="font-size:30px">{point.value}/km²</span>',
                 pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
-                                               <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th><th>Persentase</th></tr>\n\
-                                               <tr><td>{point.target}</td><td>{point.realisasi}</td><td>{point.persen} %</td></tr>\n\
+                                               <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th></tr>\n\
+                                               <tr><td>{point.target}</td><td>{point.realisasi}</td></tr>\n\
                                                <tr><td colspan="2">Program Pemerintah</td><td>{point.gov}<td></td></tr>\n\
                                                <tr><td colspan="2">Program Non Pemerintah</td><td>{point.non_gov}<td></td></tr></table></div>',
 //                positioner: function () {
