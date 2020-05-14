@@ -4799,6 +4799,28 @@ public class ReportController {
         return "admin/report/graphdetail_new_versi_bangyos";
     }
 
+    @GetMapping("admin/report-graph-detail-ind/{idgoals}/{idtarget}/{idindicator}/{idprog}/{idacty}/{idindi}/{idmonper}/{flag}/{valdaerah}/{valrole}/{tipe_periode}/{kode_bud}")
+    public String grafikdetailind(Model model, HttpSession session, @PathVariable("idgoals") String idgoals, @PathVariable("idtarget") String idtarget, @PathVariable("idindicator") String idindicator, @PathVariable("idprog") String idprog, @PathVariable("idacty") String idacty,
+        @PathVariable("idindi") String idindi, @PathVariable("idmonper") int idmonper, 
+        @PathVariable("flag") int flag, @PathVariable("valdaerah") String valdaerah, @PathVariable("valrole") String valrole, @PathVariable("tipe_periode") String tipe_periode, @PathVariable("kode_bud") String kode_bud) {
+        model.addAttribute("title", "Report Graphic Detail");
+        model.addAttribute("lang", session.getAttribute("bahasa"));
+        model.addAttribute("name", session.getAttribute("name"));
+        model.addAttribute("idgoals", idgoals);
+        model.addAttribute("idtarget", idtarget);
+        model.addAttribute("idindicator", idindicator);
+        model.addAttribute("idprog", idprog);
+        model.addAttribute("idacty", idacty);
+        model.addAttribute("idindi", idindi);
+        model.addAttribute("idmonper", idmonper);
+        model.addAttribute("flag", flag);
+        model.addAttribute("valdaerah", valdaerah);
+        model.addAttribute("valrole", valrole);
+        model.addAttribute("tipe_periode", tipe_periode);
+        model.addAttribute("kode_bud", kode_bud);
+        return "admin/report/graphdetail_new_versi_indikator";
+    }    
+
 
     @GetMapping("admin/report-graph-pie/{valdaerah}/{valrole}/{idmonper}")
     public String grafikdetail(Model model, HttpSession session,  @PathVariable("idmonper") int idmonper, @PathVariable("valdaerah") String valdaerah, @PathVariable("valrole") String valrole) {
