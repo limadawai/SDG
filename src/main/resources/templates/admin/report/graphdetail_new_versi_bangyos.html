@@ -13822,80 +13822,215 @@
                     }
                 }else if (monper_sdgs == "quarterly") {
                     var valreal_sdg1 = [
-                        parseInt($("#colsdg7").text(), 10),
-                        parseInt($("#colsdg11").text(), 10),
-                        parseInt($("#colsdg15").text(), 10),
-                        parseInt($("#colsdg19").text(), 10),
-                        parseInt($("#colsdg23").text(), 10)
+                        parseInt($("#col7").text(), 10),
+                        parseInt($("#col11").text(), 10),
+                        parseInt($("#col15").text(), 10),
+                        parseInt($("#col19").text(), 10),
+                        parseInt($("#col23").text(), 10)
                     ];
                     var valreal_sdg2 = [
-                        parseInt($("#colsdg8").text(), 10),
-                        parseInt($("#colsdg12").text(), 10),
-                        parseInt($("#colsdg16").text(), 10),
-                        parseInt($("#colsdg20").text(), 10),
-                        parseInt($("#colsdg24").text(), 10)
+                        parseInt($("#col8").text(), 10),
+                        parseInt($("#col12").text(), 10),
+                        parseInt($("#col16").text(), 10),
+                        parseInt($("#col20").text(), 10),
+                        parseInt($("#col24").text(), 10)
                     ];
                     var valreal_sdg3 = [
-                        parseInt($("#colsdg9").text(), 10),
-                        parseInt($("#colsdg13").text(), 10),
-                        parseInt($("#colsdg17").text(), 10),
-                        parseInt($("#colsdg21").text(), 10),
-                        parseInt($("#colsdg25").text(), 10)
+                        parseInt($("#col9").text(), 10),
+                        parseInt($("#col13").text(), 10),
+                        parseInt($("#col17").text(), 10),
+                        parseInt($("#col21").text(), 10),
+                        parseInt($("#col25").text(), 10)
                     ];
                     var valreal_sdg4 = [
-                        parseInt($("#colsdg10").text(), 10),
-                        parseInt($("#colsdg14").text(), 10),
-                        parseInt($("#colsdg18").text(), 10),
-                        parseInt($("#colsdg22").text(), 10),
-                        parseInt($("#colsdg26").text(), 10)
+                        parseInt($("#col10").text(), 10),
+                        parseInt($("#col14").text(), 10),
+                        parseInt($("#col18").text(), 10),
+                        parseInt($("#col22").text(), 10),
+                        parseInt($("#col26").text(), 10)
                     ];
                     
-                    ser.push({
-                            name: 'Target SDGS',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi I SDGS',
-                            type: 'spline',
-                            data: valreal_sdg1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi II SDGS',
-                            type: 'spline',
-                            data: valreal_sdg2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi III SDGS',
-                            type: 'spline',
-                            data: valreal_sdg3,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi IV SDGS',
-                            type: 'spline',
-                            data: valreal_sdg4,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                    );
+                    if (pil_graf == "graf1") {
+                            ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I Budget',
+                                type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II Budget',
+                                type: 'spline',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi III Budget',
+                                type: 'spline',
+                                data: valreal_sdg3,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi IV Budget',
+                                type: 'spline',
+                                data: valreal_sdg4,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                        );
+                    } else if (pil_graf == "graf3") {
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I Budget',
+                                type: 'column',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II Budget',
+                                type: 'column',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi III Budget',
+                                type: 'column',
+                                data: valreal_sdg3,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi IV Budget',
+                                type: 'column',
+                                data: valreal_sdg4,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I Budget',
+                                type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II Budget',
+                                type: 'spline',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi III Budget',
+                                type: 'spline',
+                                data: valreal_sdg3,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi IV Budget',
+                                type: 'spline',
+                                data: valreal_sdg4,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },                            
+                        );                        
+
+                    } else if (pil_graf == "graf4") {
+
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I Budget',
+                                type: 'column',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II Budget',
+                                type: 'column',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi III Budget',
+                                type: 'column',
+                                data: valreal_sdg3,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi IV Budget',
+                                type: 'column',
+                                data: valreal_sdg4,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                        );
+
+                    }
 
                     if (pil_graf != 'graf4') {
 
@@ -13907,16 +14042,16 @@
                                 parseInt($("#colagg20_"+i).text(), 10),
                                 parseInt($("#colagg24_"+i).text(), 10)
                             ];
-                            ser.push({
-                                    name: 'Realisasi I SDGS Disaggregasi '+(i+1),
-                                    type: 'spline',
-                                    data: valanggre1,
-                                    yAxis: 1,
-                                    tooltip: {
+                            //ser.push({
+                            //        name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                            //        type: 'spline',
+                            //        data: valanggre1,
+                            //        yAxis: 1,
+                            //        tooltip: {
         //                          valueSuffix: '%'
-                                    }
+                            //        }
 
-                            },);
+                            //},);
         //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
 
                         }
@@ -13928,16 +14063,16 @@
                                 parseInt($("#colagg21_"+i).text(), 10),
                                 parseInt($("#colagg25_"+i).text(), 10)
                             ];
-                            ser.push({
-                                    name: 'Realisasi II SDGS Disaggregasi '+(i+1),
-                                    type: 'spline',
-                                    data: valanggre2,
-                                    yAxis: 1,
-                                    tooltip: {
+                            //ser.push({
+                            //        name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                            //        type: 'spline',
+                            //        data: valanggre2,
+                            //        yAxis: 1,
+                            //        tooltip: {
         //                          valueSuffix: '%'
-                                    }
+                            //        }
 
-                            },);
+                            //},);
         //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
 
                         }
@@ -13949,16 +14084,16 @@
                                 parseInt($("#colagg22_"+i).text(), 10),
                                 parseInt($("#colagg26_"+i).text(), 10)
                             ];
-                            ser.push({
-                                    name: 'Realisasi III SDGS Disaggregasi '+(i+1),
-                                    type: 'spline',
-                                    data: valanggre3,
-                                    yAxis: 1,
-                                    tooltip: {
+                            //ser.push({
+                            //        name: 'Realisasi III SDGS Disaggregasi '+(i+1),
+                            //        type: 'spline',
+                            //        data: valanggre3,
+                            //        yAxis: 1,
+                            //        tooltip: {
         //                          valueSuffix: '%'
-                                    }
+                            //        }
 
-                            },);
+                            //},);
         //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
 
                         }
@@ -13970,16 +14105,16 @@
                                 parseInt($("#colagg23_"+i).text(), 10),
                                 parseInt($("#colagg27_"+i).text(), 10)
                             ];
-                            ser.push({
-                                    name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
-                                    type: 'spline',
-                                    data: valanggre4,
-                                    yAxis: 1,
-                                    tooltip: {
+                            //ser.push({
+                            //        name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
+                            //        type: 'spline',
+                            //        data: valanggre4,
+                            //        yAxis: 1,
+                            //        tooltip: {
         //                          valueSuffix: '%'
-                                    }
+                            //        }
 
-                            },);
+                            //},);
         //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
 
                         }
