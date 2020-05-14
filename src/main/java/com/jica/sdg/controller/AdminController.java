@@ -129,7 +129,7 @@ public class AdminController {
         model.addAttribute("name", session.getAttribute("name"));
         
          Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \r\n" + 
-         		",Case when j.calculation = '1' Then (IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) else COALESCE(a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
+         		",Case when j.calculation = '1' Then (COALESCE(a.new_value1,a.achievement1,0)+COALESCE(a.new_value2,a.achievement2,0)+COALESCE(a.new_value3,a.achievement3,0)+COALESCE(a.new_value4,a.achievement4,0)) else COALESCE(a.new_value4,a.new_value3,a.new_value2,a.new_value1,a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
          		",d.id_prov \r\n" + 
          		",d.id_map \r\n" + 
          		",d.nm_prov \r\n" + 
@@ -290,7 +290,7 @@ public class AdminController {
         }
         if(status.equals("completed")) {
             query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
-            		",Case when j.calculation = '1' Then (IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) else COALESCE(a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
+            		",Case when j.calculation = '1' Then (COALESCE(a.new_value1,a.achievement1,0)+COALESCE(a.new_value2,a.achievement2,0)+COALESCE(a.new_value3,a.achievement3,0)+COALESCE(a.new_value4,a.achievement4,0)) else COALESCE(a.new_value4,a.new_value3,a.new_value2,a.new_value1,a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
                                                 "    ,d.id_prov \n" +
                                                 "    ,d.id_map \n" +
                                                 "    ,d.nm_prov \n" +
@@ -323,7 +323,7 @@ public class AdminController {
             
         }else {
             query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \r\n" + 
-                                                		",Case when j.calculation = '1' Then (IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) else COALESCE(a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
+            		",Case when j.calculation = '1' Then (COALESCE(a.new_value1,a.achievement1,0)+COALESCE(a.new_value2,a.achievement2,0)+COALESCE(a.new_value3,a.achievement3,0)+COALESCE(a.new_value4,a.achievement4,0)) else COALESCE(a.new_value4,a.new_value3,a.new_value2,a.new_value1,a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
                                                 		",d.id_prov \r\n" + 
                                                 		",d.id_map \r\n" + 
                                                 		",d.nm_prov \r\n" + 
