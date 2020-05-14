@@ -3734,7 +3734,7 @@ public class ReportController {
                                 "from gov_map as a\n" +
                                 "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                                 "left join (select * from gov_activity where id_program = :idprog ) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.id_activity AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -3748,7 +3748,7 @@ public class ReportController {
                                 "from gov_map as a\n" +
                                 "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                                 "left join (select * from gov_activity where id_program = :idprog) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.id_activity AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -3764,7 +3764,7 @@ public class ReportController {
                                 "from gov_map as a\n" +
                                 "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                                 "left join (select * from gov_activity where id_program = :idprog) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.id_activity AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -3778,7 +3778,7 @@ public class ReportController {
                                 "from gov_map as a\n" +
                                 "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                                 "left join (select * from gov_activity where id_program = :idprog) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.id_activity AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -3796,7 +3796,7 @@ public class ReportController {
                                 "from gov_map as a\n" +
                                 "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                                 "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.id_activity AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -3810,7 +3810,7 @@ public class ReportController {
                                 "from gov_map as a\n" +
                                 "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                                 "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.id_activity AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -3826,7 +3826,7 @@ public class ReportController {
                                 "from gov_map as a\n" +
                                 "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                                 "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.id_activity AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -3840,7 +3840,7 @@ public class ReportController {
                                 "from gov_map as a\n" +
                                 "left join gov_indicator as b on a.id_gov_indicator = b.id\n" +
                                 "left join (select * from gov_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.id_activity AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -3866,7 +3866,7 @@ public class ReportController {
                     String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                                 "from gov_map as a\n" +
                                 "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL order by CAST(b.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -3880,7 +3880,7 @@ public class ReportController {
                     String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                                 "from gov_map as a\n" +
                                 "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL order by CAST(b.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -3896,7 +3896,7 @@ public class ReportController {
                     String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                                 "from gov_map as a\n" +
                                 "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL order by CAST(b.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -3910,7 +3910,7 @@ public class ReportController {
                     String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                                 "from gov_map as a\n" +
                                 "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL order by CAST(b.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -3928,7 +3928,7 @@ public class ReportController {
                     String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                                 "from gov_map as a\n" +
                                 "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL order by CAST(b.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -3942,7 +3942,7 @@ public class ReportController {
                     String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                                 "from gov_map as a\n" +
                                 "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL order by CAST(b.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -3958,7 +3958,7 @@ public class ReportController {
                     String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                                 "from gov_map as a\n" +
                                 "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL order by CAST(b.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -3972,7 +3972,7 @@ public class ReportController {
                     String sql  = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.internal_code\n" +
                                 "from gov_map as a\n" +
                                 "left join (select * from gov_indicator where id_program = :idprog and id_activity = :idactivity) as b on a.id_gov_indicator = b.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and b.id IS NOT NULL order by CAST(b.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -4025,7 +4025,7 @@ public class ReportController {
             String sql  = "SELECT distinct a.id as id_act, a.nm_activity, a.nm_activity_eng, a.internal_code, a.id_role FROM gov_activity as a \n" +
                         "left join gov_program as b on a.id_program = b.id\n" +
                         "inner join gov_indicator as c on a.id = c.id_activity\n" +
-                        "WHERE b.id_monper = :id_monper and a.id_program = :id_prog ";
+                        "WHERE b.id_monper = :id_monper and a.id_program = :id_prog order by CAST(a.internal_code AS UNSIGNED)";
             query = manager.createNativeQuery(sql);
 //            query.setParameter("id_prov", idprov);
             query.setParameter("id_monper", id_monper);
@@ -4034,7 +4034,7 @@ public class ReportController {
             String sql  = "SELECT distinct a.id as id_act, a.nm_activity, a.nm_activity_eng, a.internal_code, a.id_role FROM gov_activity as a \n" +
                         "left join gov_program as b on a.id_program = b.id\n" +
                         "inner join gov_indicator as c on a.id = c.id_activity\n" +
-                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and a.id_program = :id_prog ";
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and a.id_program = :id_prog order by CAST(a.internal_code AS UNSIGNED)";
             query = manager.createNativeQuery(sql);
 //            query.setParameter("id_prov", idprov);
             query.setParameter("id_monper", id_monper);
@@ -4054,7 +4054,7 @@ public class ReportController {
             String sql  = "SELECT c.id as id_act, c.nm_indicator, c.nm_indicator_eng, c.internal_code, a.id_role FROM gov_activity as a \n" +
                         "left join gov_program as b on a.id_program = b.id\n" +
                         "inner join gov_indicator as c on a.id = c.id_activity\n" +
-                        "WHERE b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity ";
+                        "WHERE b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity order by CAST(c.internal_code AS UNSIGNED)";
             query = manager.createNativeQuery(sql);
 //            query.setParameter("id_prov", idprov);
             query.setParameter("id_monper", id_monper);
@@ -4064,7 +4064,7 @@ public class ReportController {
             String sql  = "SELECT c.id as id_act, c.nm_indicator, c.nm_indicator_eng, c.internal_code, a.id_role FROM gov_activity as a \n" +
                         "left join gov_program as b on a.id_program = b.id\n" +
                         "inner join gov_indicator as c on a.id = c.id_activity\n" +
-                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity ";
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity order by CAST(c.internal_code AS UNSIGNED)";
             query = manager.createNativeQuery(sql);
 //            query.setParameter("id_prov", idprov);
             query.setParameter("id_monper", id_monper);
@@ -4114,7 +4114,7 @@ public class ReportController {
             String sql  = "SELECT distinct a.id as id_act, a.nm_activity, a.nm_activity_eng, a.internal_code, a.id_role FROM nsa_activity as a \n" +
                         "left join nsa_program as b on a.id_program = b.id\n" +
                         "inner join nsa_indicator as c on a.id = c.id_activity\n" +
-                        "WHERE b.id_monper = :id_monper and a.id_program = :id_prog ";
+                        "WHERE b.id_monper = :id_monper and a.id_program = :id_prog order by CAST(a.internal_code AS UNSIGNED)";
             query = manager.createNativeQuery(sql);
 //            query.setParameter("id_prov", idprov);
             query.setParameter("id_monper", id_monper);
@@ -4123,7 +4123,7 @@ public class ReportController {
             String sql  = "SELECT distinct a.id as id_act, a.nm_activity, a.nm_activity_eng, a.internal_code, a.id_role FROM nsa_activity as a \n" +
                         "left join nsa_program as b on a.id_program = b.id\n" +
                         "inner join nsa_indicator as c on a.id = c.id_activity\n" +
-                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and a.id_program = :id_prog ";
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and a.id_program = :id_prog order by CAST(a.internal_code AS UNSIGNED)";
             query = manager.createNativeQuery(sql);
 //            query.setParameter("id_prov", idprov);
             query.setParameter("id_monper", id_monper);
@@ -4143,7 +4143,7 @@ public class ReportController {
             String sql  = "SELECT c.id as id_act, c.nm_indicator, c.nm_indicator_eng, c.internal_code, a.id_role FROM nsa_activity as a \n" +
                         "left join nsa_program as b on a.id_program = b.id\n" +
                         "inner join nsa_indicator as c on a.id = c.id_activity\n" +
-                        "WHERE b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity ";
+                        "WHERE b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity order by CAST(c.internal_code AS UNSIGNED)";
             query = manager.createNativeQuery(sql);
 //            query.setParameter("id_prov", idprov);
             query.setParameter("id_monper", id_monper);
@@ -4153,7 +4153,7 @@ public class ReportController {
             String sql  = "SELECT c.id as id_act, c.nm_indicator, c.nm_indicator_eng, c.internal_code, a.id_role FROM nsa_activity as a \n" +
                         "left join nsa_program as b on a.id_program = b.id\n" +
                         "inner join nsa_indicator as c on a.id = c.id_activity\n" +
-                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity ";
+                        "WHERE a.id_role = :id_role and b.id_monper = :id_monper and c.id_program = :id_prog and c.id_activity = :id_activity order by CAST(c.internal_code AS UNSIGNED)";
             query = manager.createNativeQuery(sql);
 //            query.setParameter("id_prov", idprov);
             query.setParameter("id_monper", id_monper);
@@ -4311,7 +4311,7 @@ public class ReportController {
                                 "from nsa_map as a\n" +
                                 "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                                 "left join (select * from nsa_activity where id_program = :idprog) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -4325,7 +4325,7 @@ public class ReportController {
                                 "from nsa_map as a\n" +
                                 "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                                 "left join (select * from nsa_activity where id_program = :idprog) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -4341,7 +4341,7 @@ public class ReportController {
                                 "from nsa_map as a\n" +
                                 "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                                 "left join (select * from nsa_activity where id_program = :idprog) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -4355,7 +4355,7 @@ public class ReportController {
                                 "from nsa_map as a\n" +
                                 "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                                 "left join (select * from nsa_activity where id_program = :idprog) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -4373,7 +4373,7 @@ public class ReportController {
                                 "from nsa_map as a\n" +
                                 "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                                 "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -4387,7 +4387,7 @@ public class ReportController {
                                 "from nsa_map as a\n" +
                                 "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                                 "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                                "where a.id_goals = :id_goals and a.id_target is null and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
     //                query.setParameter("id_target", id_target);
@@ -4403,7 +4403,7 @@ public class ReportController {
                                 "from nsa_map as a\n" +
                                 "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                                 "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is null and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);
@@ -4417,7 +4417,7 @@ public class ReportController {
                                 "from nsa_map as a\n" +
                                 "left join nsa_indicator as b on a.id_nsa_indicator = b.id\n" +
                                 "left join (select * from nsa_activity where id_program = :idprog and id_role = :id_role) as c on b.id_activity = c.id\n" +
-                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL ";
+                                "where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator = :id_indicator and a.id_prov = :id_prov and a.id_monper = :id_monper and c.id IS NOT NULL order by CAST(c.internal_code AS UNSIGNED)";
                     query = manager.createNativeQuery(sql);
                     query.setParameter("id_goals", id_goals);
                     query.setParameter("id_target", id_target);

@@ -128,29 +128,37 @@ public class AdminController {
         model.addAttribute("lang", bhs);
         model.addAttribute("name", session.getAttribute("name"));
         
-         Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
-                                            "    , (a.achievement1+a.achievement2+a.achievement3+a.achievement4) AS realisasi \n" +
-                                            "    ,c.id_prov \n" +
-                                            "    ,d.id_map \n" +
-                                            "    ,d.nm_prov \n" +
-                                            "    ,b.year \n" +
-                                            "    ,g.nm_goals\n" +
-                                            "    ,f.nm_target\n" +
-                                            "    ,e.nm_indicator\n"+
-                                            "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
-                                            "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +   
-                                            "    ,case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\n "+
-                                            "    ,case when b.value is not null then (IFNULL(a.achievement2,0)/b.value)*100 else '' end as persen2\n "+
-                                            "    ,case when b.value is not null then (IFNULL(a.achievement3,0)/b.value)*100 else '' end as persen3\n "+
-                                            "    ,case when b.value is not null then (IFNULL(a.achievement4,0)/b.value)*100 else '' end as persen4\n "+
-                                            "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
-                                            "     JOIN ref_role c ON a.id_role = c.id_role \n" +
-                                            "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
-                                            "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
-                                            "     JOIN sdg_target f ON e.id_target = f.id\n" +
-                                            "     JOIN sdg_goals g ON f.id_goals = g.id\n" +
-                                            "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
-                                            " WHERE a.year_entry = YEAR(NOW()) AND (h.approval = '2' OR  h.approval = '4')");
+         Query query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \r\n" + 
+         		",Case when j.calculation = '1' Then (COALESCE(a.new_value1,a.achievement1,0)+COALESCE(a.new_value2,a.achievement2,0)+COALESCE(a.new_value3,a.achievement3,0)+COALESCE(a.new_value4,a.achievement4,0)) else COALESCE(a.new_value4,a.new_value3,a.new_value2,a.new_value1,a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
+         		",d.id_prov \r\n" + 
+         		",d.id_map \r\n" + 
+         		",d.nm_prov \r\n" + 
+         		",a.year_entry \r\n" + 
+         		",g.nm_goals\r\n" + 
+         		",f.nm_target\r\n" + 
+         		",e.nm_indicator\r\n" + 
+         		",g.nm_goals_eng\r\n" + 
+         		",f.nm_target_eng\r\n" + 
+         		",e.nm_indicator_eng\r\n" + 
+         		",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = i.id_prov) AS gov   \r\n" + 
+         		",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = i.id_prov) AS non_gov \r\n" + 
+         		",IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)\r\n" + 
+         		",case when b.value is not null then ((IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0))/b.value)*100 else '' end as persenTotal \r\n" + 
+         		",case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\r\n" + 
+         		",case when b.value is not null then (IFNULL(a.achievement2,0)/b.value)*100 else '' end as persen2\r\n" + 
+         		",case when b.value is not null then (IFNULL(a.achievement3,0)/b.value)*100 else '' end as persen3\r\n" + 
+         		",case when b.value is not null then (IFNULL(a.achievement4,0)/b.value)*100 else '' end as persen4\r\n" + 
+         		"FROM entry_sdg a \r\n" + 
+         		"left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \r\n" + 
+         		"left JOIN ref_role c ON a.id_role = c.id_role \r\n" + 
+         		"left JOIN ran_rad i on a.id_monper = i.id_monper\r\n" + 
+         		"left JOIN ref_province d ON i.id_prov = d.id_prov \r\n" + 
+         		"JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\r\n" + 
+         		"JOIN sdg_target f ON e.id_target = f.id\r\n" + 
+         		"JOIN sdg_goals g ON f.id_goals = g.id\r\n" + 
+         		"JOIN entry_approval h on (CASE WHEN a.id_role is null THEN h.id_role is null ELSE a.id_role = h.id_role END) and a.id_monper = h.id_monper and h.type='entry_sdg' and a.year_entry = h.year\r\n" + 
+         		"left join ref_unit j on e.unit = j.id_unit "+
+         		"WHERE a.year_entry = YEAR(NOW()) AND (h.approval = '2' OR  h.approval = '4')");
         
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
@@ -278,15 +286,15 @@ public class AdminController {
         	id_monper = rowsran.get(0)[1].toString();
         }
         if(!indicator.equals("0")){
-            where = "AND b.id_sdg_indicator = '"+indicator+"'";
+            where = "AND a.id_sdg_indicator = '"+indicator+"'";
         }
         if(status.equals("completed")) {
             query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
-                                                "    ,(IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) AS realisasi \n" +
-                                                "    ,c.id_prov \n" +
+            		",Case when j.calculation = '1' Then (COALESCE(a.new_value1,a.achievement1,0)+COALESCE(a.new_value2,a.achievement2,0)+COALESCE(a.new_value3,a.achievement3,0)+COALESCE(a.new_value4,a.achievement4,0)) else COALESCE(a.new_value4,a.new_value3,a.new_value2,a.new_value1,a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
+                                                "    ,d.id_prov \n" +
                                                 "    ,d.id_map \n" +
                                                 "    ,d.nm_prov \n" +
-                                                "    ,b.year \n" +
+                                                "    ,a.year_entry \n" +
                                                 "    ,g.nm_goals\n" +
                                                 "    ,f.nm_target\n" +
                                                 "    ,e.nm_indicator\n"+
@@ -301,44 +309,50 @@ public class AdminController {
                                                 "    ,case when b.value is not null then (IFNULL(a.achievement2,0)/b.value)*100 else '' end as persen2\n "+
                                                 "    ,case when b.value is not null then (IFNULL(a.achievement3,0)/b.value)*100 else '' end as persen3\n "+
                                                 "    ,case when b.value is not null then (IFNULL(a.achievement4,0)/b.value)*100 else '' end as persen4\n "+
-                                                "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
-                                                "     JOIN ref_role c ON a.id_role = c.id_role \n" +
-                                                "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
+                                                "     FROM entry_sdg a "
+                                                + "   left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
+                                                "     left JOIN ref_role c ON a.id_role = c.id_role \n" +
+                                                "	  left JOIN ran_rad i on a.id_monper = i.id_monper\r\n" + 
+                                                "     JOIN ref_province d ON i.id_prov = d.id_prov \n" +
                                                 "     JOIN history_sdg_indicator e ON a.id_sdg_indicator = e.id_old and e.id_monper = '"+id_monper+"'\n" +
                                                 "     JOIN history_sdg_target f ON e.id_target = f.id_old and f.id_monper = '"+id_monper+"'\n" +
                                                 "     JOIN history_sdg_goals g ON f.id_goals = g.id_old and g.id_monper = '"+id_monper+"'\n"
-                                              + "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
-                                                "     WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
+                                              + "     JOIN entry_approval h on (CASE WHEN a.id_role is null THEN h.id_role is null ELSE a.id_role = h.id_role END) and a.id_monper = h.id_monper and h.type='entry_sdg' and a.year_entry = h.year " +
+                                              "left join ref_unit j on e.unit = j.id_unit "+ 
+                                              "     WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
             
         }else {
-            query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \n" +
-                                                "    ,(IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0)) AS realisasi \n" +
-                                                "    ,c.id_prov \n" +
-                                                "    ,d.id_map \n" +
-                                                "    ,d.nm_prov \n" +
-                                                "    ,b.year \n" +
-                                                "    ,g.nm_goals\n" +
-                                                "    ,f.nm_target\n" +
-                                                "    ,e.nm_indicator\n"+
-                                                "    ,g.nm_goals_eng\n" +
-                                                "    ,f.nm_target_eng\n" +
-                                                "    ,e.nm_indicator_eng\n"+
-                                                "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
-                                                "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
-                                                "    ,IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)"+
-                                                "    ,case when b.value is not null then ((IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0))/b.value)*100 else '' end as persenTotal\n "+
-                                                "    ,case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\n "+
-                                                "    ,case when b.value is not null then (IFNULL(a.achievement2,0)/b.value)*100 else '' end as persen2\n "+
-                                                "    ,case when b.value is not null then (IFNULL(a.achievement3,0)/b.value)*100 else '' end as persen3\n "+
-                                                "    ,case when b.value is not null then (IFNULL(a.achievement4,0)/b.value)*100 else '' end as persen4\n "+
-                                                "     FROM entry_sdg a left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \n" +
-                                                "     JOIN ref_role c ON a.id_role = c.id_role \n" +
-                                                "     JOIN ref_province d ON c.id_prov = d.id_prov \n" +
-                                                "     JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\n" +
-                                                "     JOIN sdg_target f ON e.id_target = f.id\n" +
-                                                "     JOIN sdg_goals g ON f.id_goals = g.id\n"
-                                              + "     JOIN entry_approval h on a.id_role = h.id_role and a.id_monper = h.id_monper and h.type='entry_sdg' " +
-                                                "     WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
+            query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \r\n" + 
+            		",Case when j.calculation = '1' Then (COALESCE(a.new_value1,a.achievement1,0)+COALESCE(a.new_value2,a.achievement2,0)+COALESCE(a.new_value3,a.achievement3,0)+COALESCE(a.new_value4,a.achievement4,0)) else COALESCE(a.new_value4,a.new_value3,a.new_value2,a.new_value1,a.achievement4,a.achievement3,a.achievement2,a.achievement1) end AS realisasi \r\n" + 
+                                                		",d.id_prov \r\n" + 
+                                                		",d.id_map \r\n" + 
+                                                		",d.nm_prov \r\n" + 
+                                                		",a.year_entry \r\n" + 
+                                                		",g.nm_goals\r\n" + 
+                                                		",f.nm_target\r\n" + 
+                                                		",e.nm_indicator\r\n" + 
+                                                		",g.nm_goals_eng\r\n" + 
+                                                		",f.nm_target_eng\r\n" + 
+                                                		",e.nm_indicator_eng\r\n" + 
+                                                		",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = i.id_prov) AS gov   \r\n" + 
+                                                		",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = i.id_prov) AS non_gov \r\n" + 
+                                                		",IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)\r\n" + 
+                                                		",case when b.value is not null then ((IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0))/b.value)*100 else '' end as persenTotal \r\n" + 
+                                                		",case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\r\n" + 
+                                                		",case when b.value is not null then (IFNULL(a.achievement2,0)/b.value)*100 else '' end as persen2\r\n" + 
+                                                		",case when b.value is not null then (IFNULL(a.achievement3,0)/b.value)*100 else '' end as persen3\r\n" + 
+                                                		",case when b.value is not null then (IFNULL(a.achievement4,0)/b.value)*100 else '' end as persen4\r\n" + 
+                                                		"FROM entry_sdg a \r\n" + 
+                                                		"left JOIN sdg_indicator_target b ON a.id_monper = b.id_monper and a.id_sdg_indicator = b.id_sdg_indicator AND a.id_role = b.id_role AND a.year_entry = b.year  \r\n" + 
+                                                		"left JOIN ref_role c ON a.id_role = c.id_role \r\n" + 
+                                                		"left JOIN ran_rad i on a.id_monper = i.id_monper\r\n" + 
+                                                		"left JOIN ref_province d ON i.id_prov = d.id_prov \r\n" + 
+                                                		"JOIN sdg_indicator e ON a.id_sdg_indicator = e.id\r\n" + 
+                                                		"JOIN sdg_target f ON e.id_target = f.id\r\n" + 
+                                                		"JOIN sdg_goals g ON f.id_goals = g.id\r\n" + 
+                                                		"JOIN entry_approval h on (CASE WHEN a.id_role is null THEN h.id_role is null ELSE a.id_role = h.id_role END) and a.id_monper = h.id_monper and h.type='entry_sdg' and a.year_entry = h.year\r\n" + 
+                                                		"left join ref_unit j on e.unit = j.id_unit "+
+                                                		"WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4')");
            
         }
         
