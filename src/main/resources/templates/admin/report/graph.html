@@ -31,8 +31,8 @@
                     <select id="tipe_periode" name="tipe_periode" class="form-control">
                         <!--<option value="0" >-- Pilih Periode --</option>-->
                         <option value="1" >Each Period</option>
-                        <option value="2" >Total + Each Period</option>
-                        <option value="3" >Total Within The Year Only</option>
+                        <option value="2" > Value Of the year + Each Period</option>
+                        <option value="3" >Value Of the year</option>
                         <!-- <option value="4" >Last Period Of The Year Only</option> -->
                     </select>
                 </div>
@@ -116,7 +116,7 @@
                 $(".lang_eng").hide("");
 //                show_gov_prog();
 //                show_non_gov_prog();
-                show_sdg_goal();
+                show_sdg_goal(0,0,"");
                 grid_gov_nongov_tampil();
             } else {
                 inggris();
@@ -124,7 +124,7 @@
                 $(".lang_eng").show("");
 //                show_gov_prog();
 //                show_non_gov_prog();
-                show_sdg_goal();
+                show_sdg_goal(0,0,"");
                 grid_gov_nongov_tampil();
             }
         });
@@ -264,11 +264,16 @@
         	var prog = $(this).data('id_prog');
         	var act4 = $(this).data('act4');
         	var flag = $(this).data('flag');
+        	var jenis = $(this).data('jenis');
         	sessionStorage.graph_prog_idactivity = val;
         	sessionStorage.graph_prog_idprogram = prog;
         	sessionStorage.graph_prog_idindicator = "";
         	sessionStorage.graph_act4 = act4;
         	sessionStorage.graph_flag = flag;
+        	
+        	if(!sessionStorage.graph_idgoals || sessionStorage.graph_idgoals=="undefined"){
+        		show_sdg_goal(val,0,jenis);
+        	}
         });
         
         $('#divkanan').on('click','.prog_ind', function(e){
@@ -280,11 +285,16 @@
         	var act = $(this).data('id_activity');
         	var flag = $(this).data('flag');
         	var role = $(this).data('role');
+        	var jenis = $(this).data('jenis');
         	sessionStorage.graph_prog_idindicator = val;
         	sessionStorage.graph_prog_idactivity = act;
         	sessionStorage.graph_prog_idprogram = prog;
         	sessionStorage.graph_flag = flag;
         	sessionStorage.graph_role = role;
+        	if(!sessionStorage.graph_idgoals || sessionStorage.graph_idgoals=="undefined"){
+        		show_sdg_goal(0,val,jenis);
+        	}
+        	
         });
         
         function getGovActivity(idgoals, idtarget, idindicator, valda, valrole, combo_periode, idprogram, codeprogram) {
@@ -306,7 +316,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='2' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a data-jenis='gov' style='color:#7F7FFF;' data-flag='2' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
                                 //isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='prog_bud' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
@@ -336,7 +346,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='2' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='li2"+resactivity[i][0]+"'><a data-jenis='gov' style='color:#7F7FFF;' data-flag='2' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
                                 //isiactivity += "<li  id='li2"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)' href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+valrole+","+2+",1)' id='li2"+resactivity[i][0]+"'>"+prog_l+"</li>";
                                 getGovIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
@@ -363,7 +373,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a data-flag='2' data-role='"+valrole+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-jenis='gov' data-flag='2' data-role='"+valrole+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
                                     //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resgovindicator[i][0]+","+valrole+","+2+",2)'>"+prog_l+"</li>";
         			}
@@ -389,7 +399,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resgovindicator[i][3]+" "+resgovindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a data-flag='2' data-role='"+resgovindicator[i][4]+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-jenis='gov' data-flag='2' data-role='"+resgovindicator[i][4]+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resgovindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
                                     //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resgovindicator[i][0]+","+resgovindicator[i][4]+","+2+",2)'>"+prog_l+"</li>";
         			}
@@ -418,7 +428,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='3' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a data-jenis='nsa' style='color:#7F7FFF;' data-flag='3' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
                                 //isiactivity += "<li  id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' href='#'>"+prog_l+"</a></li>";
 //                                isiactivity += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)' id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+2+",1)'  href='#'>"+prog_l+"</a>"+prog_l+"</li>";
                                 getNsaIndicator(idgoals, idtarget, idindicator, valda, resactivity[i][4], combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
@@ -448,7 +458,7 @@
                                 }else{
                                     var prog_l = codeprogram+"."+resactivity[i][3]+" "+resactivity[i][2];
                                 }
-                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' data-flag='3' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
+                                isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a data-jenis='nsa' style='color:#7F7FFF;' data-flag='3' data-act4='"+resactivity[i][4]+"' data-id_prog='"+idprogram+"' data-id='"+resactivity[i][0]+"' class='prog_bud'  href='#'>"+prog_l+"</a></li>";
                                 //isiactivity += "<li id='lilililinsa"+resactivity[i][0]+"'><a style='color:#7F7FFF;' class='' onclick='cucukanan_bud(null,null,null,"+idprogram+","+resactivity[i][0]+",null,"+resactivity[i][4]+","+3+",1)'  href='#'>"+prog_l+"</a></li>";
                                 getNsaIndicator_pertama(valda, valrole, combo_periode, idprogram, codeprogram, resactivity[i][0], resactivity[i][3]);
                             }
@@ -474,7 +484,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a data-flag='3' data-role='"+valrole+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resnsaindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-jenis='nsa' data-flag='3' data-role='"+valrole+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resnsaindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
                                     //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)' href='#'>"+prog_l+"</a></li>";
 //                                    isiindicator += "<li style='cursor:pointer;color:#7F7FFF;' onclick='cucukanan("+idgoals+","+idtarget+","+idindicator+","+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+valrole+","+3+",2)'>"+prog_l+"</li>";
         			}
@@ -500,7 +510,7 @@
                                     }else{
                                         var prog_l = codeprogram+"."+codeactivity+"."+resnsaindicator[i][3]+" "+resnsaindicator[i][2];
                                     }
-                                    isiindicator += "<li ><a data-flag='3' data-role='"+resgovindicator[i][4]+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resnsaindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
+                                    isiindicator += "<li ><a data-jenis='nsa' data-flag='3' data-role='"+resgovindicator[i][4]+"' data-id_activity='"+idactivity+"' data-id_prog='"+idprogram+"' data-id='"+resnsaindicator[i][0]+"' style='color:#7F7FFF;' class='prog_ind'  href='#'>"+prog_l+"</a></li>";
                                     //isiindicator += "<li ><a style='color:#7F7FFF;' class='' onclick='cucukanan(null,null,null,"+idprogram+","+idactivity+","+resnsaindicator[i][0]+","+resnsaindicator[i][4]+","+3+",2)' href='#'>"+prog_l+"</a></li>";
         			}
         			isiindicator += "</ul>";
@@ -807,14 +817,14 @@
             });
         }
         
-        function show_sdg_goal(){
+        function show_sdg_goal(id_activity,id_indicator,jenis){
             var valdaerah  = $("#daerah").val();
             var valrole    = $("#selrole").val();
 //            var valperiode = $("#periode").val();
             var valperiode = sessionStorage.graph_idmonper;
             $.ajax({
-            	url: urls + "getallgoals",
-                data: {'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+            	url: urls + "getallgoals_graph",
+                data: {'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah,'id_activity':id_activity,'id_indicator':id_indicator,'jenis':jenis},
                 type: 'get',
                 dataType: 'json',
                 beforeSend : function(xhr){
@@ -843,8 +853,8 @@
                             
                             //getTarget(resgoals[i][0], resgoals[i][3]);
                             $.ajax({
-                        		url: urls + "getalltarget",
-                                data: {'id_goals':resgoals[i][0], 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+                        		url: urls + "getalltarget_graph",
+                                data: {'id_goals':resgoals[i][0], 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah,'id_activity':id_activity,'id_indicator':id_indicator,'jenis':jenis},
                         		type: 'get',
                         		dataType: 'json',
                         		async : false,
@@ -866,9 +876,9 @@
                                                 
                                                 //getIndicator(id, kd_goals, restarget[i][0], restarget[i][3]);
                                                 $.ajax({
-								                    url: urls + "getallindicator",
+								                    url: urls + "getallindicator_graph",
 								                    type: 'get',
-								                    data: {'id_goals':resgoals[i][0], 'id_target':restarget[ii][0], 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah},
+								                    data: {'id_goals':resgoals[i][0], 'id_target':restarget[ii][0], 'id_monper':valperiode, 'id_role':valrole, 'id_prov':valdaerah,'id_activity':id_activity,'id_indicator':id_indicator,'jenis':jenis},
 								                    dataType: 'json',
 								                    async : false,
 								                    success: function (resindi) {
@@ -1065,7 +1075,7 @@
             if ($cek == 0)
             {
                 grid_gov_nongov_tampil();
-                show_sdg_goal();
+                show_sdg_goal(0,0,"");
 //                alert("report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+valda+"/"+valrole+"/"+combo_periode);
                 
 //                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+combo_periode+"/"+flag+"/"+valda+"/"+valrole;
@@ -1105,7 +1115,7 @@
             if ($cek == 0)
             {
                 grid_gov_nongov_tampil();
-                show_sdg_goal();
+                show_sdg_goal(0,0,"");
 //                alert("report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+valda+"/"+valrole+"/"+combo_periode);
                 
 //                location.href = urls+"report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+combo_periode+"/"+flag+"/"+valda+"/"+valrole;
@@ -1156,7 +1166,7 @@
             if ($cek == 0)
             {
 //                grid_gov_nongov_tampil();
-                show_sdg_goal();
+                show_sdg_goal(0,0,"");
                 show_gov_prog_pertama();
                 show_non_gov_prog_pertama();
 //                alert("report-graph-detail/"+idgoals+"/"+idtarget+"/"+idindicator+"/"+valda+"/"+valrole+"/"+combo_periode);
