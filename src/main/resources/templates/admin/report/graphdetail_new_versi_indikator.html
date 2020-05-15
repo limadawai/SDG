@@ -12530,7 +12530,7 @@
                 ,parseInt($("#colsdg5").text(), 10)
                 ,parseInt($("#colsdg6").text(), 10)
             ];
-                     
+            
             var monper_sdgs = $("#monper_sdg").val();   
             var pil_graf = $("#pilgrafik").val();
             if (periode == "yearly") {
@@ -13910,6 +13910,7 @@
                 }else{}
                 
                 if (pil_graf != 'graf4') {
+                    var nnm = 'Realisasi';
                     ser.push({
                             name: 'Target '+nm_gov,
                             type: 'spline',
@@ -13920,7 +13921,7 @@
                             }
                         },
                         {
-                            name: 'Semester I '+nm_gov,
+                            name: nnm + ' 1 '+nm_gov,
                             type: 'spline',
 
                             yAxis: 1,
@@ -13930,7 +13931,7 @@
                                 }
                         },
                         {
-                          name: 'Semester II '+nm_gov,
+                          name: nnm + ' 2 '+nm_gov,
                           type: 'spline',
                           yAxis: 1,
                           data: valreal2,
@@ -13940,7 +13941,7 @@
 //                          data: valreal2
                         },
                         {
-                          name: 'Semester III '+nm_gov,
+                          name: nnm + ' 3 '+nm_gov,
                           type: 'spline',
                           yAxis: 1,
                           data: valreal3,
@@ -13950,7 +13951,7 @@
 //                          data: valreal2
                         },
                         {
-                          name: 'Semester IV '+nm_gov,
+                          name: nnm + ' 4 '+nm_gov,
                           type: 'spline',
                           yAxis: 1,
                           data: valreal4,
