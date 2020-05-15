@@ -12533,6 +12533,7 @@
             
             var monper_sdgs = $("#monper_sdg").val();   
             var pil_graf = $("#pilgrafik").val();
+            console.log('-----> ' + periode + ' ' + monper_sdgs + ' ' + tipe_periode);
             if (periode == "yearly") {
                 if (flag == "2") {
                     var nm_gov = "Government";
@@ -13603,6 +13604,14 @@
                     parseInt($("#col22").text(), 10),
                     parseInt($("#col26").text(), 10)
                 ];
+
+                var valofyear = [
+                    parseInt($("#col30").text(), 10),
+                    parseInt($("#col31").text(), 10),
+                    parseInt($("#col32").text(), 10),
+                    parseInt($("#col33").text(), 10),
+                    parseInt($("#col34").text(), 10)
+                ];                
                 
                 var pnjg = $('#panjang_aggre').val();
                 var ser  = [];
@@ -13655,49 +13664,114 @@
 
                     }
                 }else if (monper_sdgs == "semesterly") {
-                    var valreal_sdg1 = [
-                        parseInt($("#colsdg7").text(), 10),
-                        parseInt($("#colsdg9").text(), 10),
-                        parseInt($("#colsdg11").text(), 10),
-                        parseInt($("#colsdg13").text(), 10),
-                        parseInt($("#colsdg15").text(), 10)
-                    ];
-                    var valreal_sdg2 = [
-                        parseInt($("#colsdg8").text(), 10),
-                        parseInt($("#colsdg10").text(), 10),
-                        parseInt($("#colsdg12").text(), 10),
-                        parseInt($("#colsdg14").text(), 10),
-                        parseInt($("#colsdg16").text(), 10)
-                    ];
-                    
-                    ser.push({
-                            name: 'Target SDGS',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi I SDGS',
-                            type: 'spline',
-                            data: valreal_sdg1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi II SDGS',
-                            type: 'spline',
-                            data: valreal_sdg2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                    );
+                    if (tipe_periode == 3) {
+
+                        var valreal_sdg1 = [
+                            parseInt($("#colsdg8").text(), 10),
+                            parseInt($("#colsdg9").text(), 10),
+                            parseInt($("#colsdg10").text(), 10),
+                            parseInt($("#colsdg11").text(), 10),
+                            parseInt($("#colsdg12").text(), 10)
+                        ];
+                        var valreal_sdg2 = [
+                            parseInt($("#colsdg8").text(), 10),
+                            parseInt($("#colsdg10").text(), 10),
+                            parseInt($("#colsdg12").text(), 10),
+                            parseInt($("#colsdg14").text(), 10),
+                            parseInt($("#colsdg16").text(), 10)
+                        ];
+
+                        var valofyear_sdg = [
+                            parseInt($("#colsdg20").text(), 10),
+                            parseInt($("#colsdg21").text(), 10),
+                            parseInt($("#colsdg22").text(), 10),
+                            parseInt($("#colsdg23").text(), 10),
+                            parseInt($("#colsdg24").text(), 10)
+                        ];
+                        
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Value of the Year SDGs',
+                                type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                        );
+
+                    } else {
+                        var valreal_sdg1 = [
+                            parseInt($("#colsdg7").text(), 10),
+                            parseInt($("#colsdg9").text(), 10),
+                            parseInt($("#colsdg11").text(), 10),
+                            parseInt($("#colsdg13").text(), 10),
+                            parseInt($("#colsdg15").text(), 10)
+                        ];
+                        var valreal_sdg2 = [
+                            parseInt($("#colsdg8").text(), 10),
+                            parseInt($("#colsdg10").text(), 10),
+                            parseInt($("#colsdg12").text(), 10),
+                            parseInt($("#colsdg14").text(), 10),
+                            parseInt($("#colsdg16").text(), 10)
+                        ];
+
+                        var valofyear_sdg = [
+                            parseInt($("#colsdg20").text(), 10),
+                            parseInt($("#colsdg21").text(), 10),
+                            parseInt($("#colsdg22").text(), 10),
+                            parseInt($("#colsdg23").text(), 10),
+                            parseInt($("#colsdg24").text(), 10)
+                        ];
+                        
+                        ser.push({
+                                name: 'Target SDGS',
+                                type: 'spline',
+                                data: tahun1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi I SDGS',
+                                type: 'spline',
+                                data: valreal_sdg1,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Realisasi II SDGS',
+                                type: 'spline',
+                                data: valreal_sdg2,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: 'Value of the Year SDGs',
+                                type: 'spline',
+                                data: valofyear_sdg,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },                        
+                        );
+                    }
+
                     for (var i=0; i<pnjg; i++) {
                         var valanggre1 = [
                             parseInt($("#colagg8_"+i).text(), 10),
@@ -13911,58 +13985,112 @@
                 
                 if (pil_graf != 'graf4') {
                     var nnm = 'Realisasi';
-                    ser.push({
-                            name: 'Target '+nm_gov,
-                            type: 'spline',
-                            yAxis: 1,
-                            data: valtarget,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: nnm + ' 1 '+nm_gov,
-                            type: 'spline',
+                    if (tipe_periode == 3) {
 
-                            yAxis: 1,
-                            data: valreal1,
-                            tooltip: {
-    //                            valueSuffix: ' %'
+                        var valofyear = [
+                            parseInt($("#col10").text(), 10),
+                            parseInt($("#col14").text(), 10),
+                            parseInt($("#col18").text(), 10),
+                            parseInt($("#col22").text(), 10),
+                            parseInt($("#col26").text(), 10)
+                        ];                                        
+
+                        ser.push({
+                                name: 'Target '+nm_gov,
+                                type: 'spline',
+                                yAxis: 1,
+                                data: valtarget,
+                                tooltip: {
+    //                          valueSuffix: '%'
                                 }
-                        },
-                        {
-                          name: nnm + ' 2 '+nm_gov,
-                          type: 'spline',
-                          yAxis: 1,
-                          data: valreal2,
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-//                          data: valreal2
-                        },
-                        {
-                          name: nnm + ' 3 '+nm_gov,
-                          type: 'spline',
-                          yAxis: 1,
-                          data: valreal3,
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-//                          data: valreal2
-                        },
-                        {
-                          name: nnm + ' 4 '+nm_gov,
-                          type: 'spline',
-                          yAxis: 1,
-                          data: valreal4,
-                          tooltip: {
-//                                 valueSuffix: ' %'
-                          },
-//                          data: valreal2
-                        }
-                    );
+                            },
+                            {
+                            name: 'Value of the Year ' +nm_gov,
+                            type: 'spline',
+                            yAxis: 1,
+                            data: valofyear,
+                            tooltip: {
+    //                                 valueSuffix: ' %'
+                            },
+    //                          data: valreal2
+                            }                        
+                        );
+
+                    } else {
+
+                        ser.push({
+                                name: 'Target '+nm_gov,
+                                type: 'spline',
+                                yAxis: 1,
+                                data: valtarget,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },
+                            {
+                                name: nnm + ' 1 '+nm_gov,
+                                type: 'spline',
+
+                                yAxis: 1,
+                                data: valreal1,
+                                tooltip: {
+        //                            valueSuffix: ' %'
+                                    }
+                            },
+                            {
+                            name: nnm + ' 2 '+nm_gov,
+                            type: 'spline',
+                            yAxis: 1,
+                            data: valreal2,
+                            tooltip: {
+    //                                 valueSuffix: ' %'
+                            },
+    //                          data: valreal2
+                            },
+                            {
+                            name: nnm + ' 3 '+nm_gov,
+                            type: 'spline',
+                            yAxis: 1,
+                            data: valreal3,
+                            tooltip: {
+    //                                 valueSuffix: ' %'
+                            },
+    //                          data: valreal2
+                            },
+                            {
+                            name: nnm + ' 4 '+nm_gov,
+                            type: 'spline',
+                            yAxis: 1,
+                            data: valreal4,
+                            tooltip: {
+    //                                 valueSuffix: ' %'
+                            },
+    //                          data: valreal2
+                            },
+                            {
+                            name: 'Value of the Year ' +nm_gov,
+                            type: 'spline',
+                            yAxis: 1,
+                            data: valofyear,
+                            tooltip: {
+    //                                 valueSuffix: ' %'
+                            },
+    //                          data: valreal2
+                            }                        
+                        );                        
+
+                    }
+
+
                 }
                 
+                var sb = 'Combination Chart';
+                if (pil_graf == 'graf1') {
+                    sb = 'Line Chart';
+                } else if (pil_graf == 'graf4') {
+                    sb = 'Stack Chart';
+                }
+
                  var options4 ={
                     chart: {
                         zoomType: 'xy',
@@ -13977,7 +14105,7 @@
                         enabled: false
                       },
                     subtitle: {
-                        text: 'Combination chart'
+                        text: sb
                     },
                     xAxis: [{
                         categories: tahun

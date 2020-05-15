@@ -12658,7 +12658,7 @@
                     ];
                     
                     ser.push({
-                            name: 'Target Budget',
+                            name: 'Budget Allocation',
                             type: 'spline',
                             data: tahun1,
                             yAxis: 1,
@@ -13667,10 +13667,17 @@
                         parseInt($("#col14").text(), 10),
                         parseInt($("#col16").text(), 10)
                     ];
+                    var valreal_sdg3 = [
+                        parseInt($("#col21").text(), 10),
+                        parseInt($("#col22").text(), 10),
+                        parseInt($("#col23").text(), 10),
+                        parseInt($("#col24").text(), 10),
+                        parseInt($("#col25").text(), 10)
+                    ];
 
                     if (pil_graf == "graf1") {
                         ser.push({
-                            name: 'Target Budget',
+                            name: 'Budget Allocation',
                             type: 'spline',
                             data: tahun1,
                             yAxis: 1,
@@ -13690,88 +13697,108 @@
                         {
                             name: 'Realisasi Budget Semester II ',
                             type: 'spline',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Value of the Year Budget',
+                            type: 'spline',
+                            data: valreal_sdg3,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        }                        
+                    );
+                    } else if (pil_graf == 'graf3') {
+                        ser.push({
+                            name: 'Budget Allocation',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                            {
+                            name: 'Realisasi Budget Semester I ',
+                            type: 'column',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi Budget Semester II ',
+                            type: 'column',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Value of the Year Budget',
+                            type: 'spline',
+                            data: valreal_sdg3,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+
+                        {
+                            name: 'Realisasi Budget Semester I ',
+                            type: 'spline',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi Budget Semester II ',
+                            type: 'spline',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        }                        
+                        );                                            
+                    } else {
+                        ser.push({
+                            name: 'Budget Allocation',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                            {
+                            name: 'Realisasi Budget Semester I ',
+                            type: 'column',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi Budget Semester II ',
+                            type: 'column',
                             data: valreal_sdg2,
                             yAxis: 1,
                             tooltip: {
 //                          valueSuffix: '%'
                             }
                         }
-                    );
-                    } else if (pil_graf == 'graf3') {
-                        ser.push({
-                            name: 'Target Budget',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                            {
-                            name: 'Realisasi Budget Semester I ',
-                            type: 'column',
-                            data: valreal_sdg1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi Budget Semester II ',
-                            type: 'column',
-                            data: valreal_sdg2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi Budget Semester I ',
-                            type: 'spline',
-                            data: valreal_sdg1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi Budget Semester II ',
-                            type: 'spline',
-                            data: valreal_sdg2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },                        
-                        );                                            
-                    } else {
-                        ser.push({
-                            name: 'Target Budget',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                            {
-                            name: 'Realisasi Budget Semester I ',
-                            type: 'column',
-                            data: valreal_sdg1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi Budget Semester II ',
-                            type: 'column',
-                            data: valreal_sdg2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        }); 
+                        ); 
                     }
 
                     for (var i=0; i<pnjg; i++) {
@@ -14179,6 +14206,13 @@
                     */
                 }
                 
+                var sb = 'Combination Chart';
+                if (pil_graf == 'graf1') {
+                    sb = 'Line Chart';
+                } else if (pil_graf == 'graf4') {
+                    sb = 'Stack Chart';
+                }
+
                  var options4 ={
                     chart: {
                         zoomType: 'xy',
@@ -14193,7 +14227,7 @@
                         enabled: false
                       },
                     subtitle: {
-                        text: 'Combination chart'
+                        text: sb
                     },
                     xAxis: [{
                         categories: tahun
