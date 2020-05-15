@@ -3489,6 +3489,150 @@ public class ReportController {
         return list;
     }
     
+    @GetMapping("admin/getallgoals_graph")
+    public @ResponseBody List<Object> getallgoals(@RequestParam("id_monper") int id_monper, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @RequestParam("id_activity") String id_activity,@RequestParam("id_indicator") String id_indicator,@RequestParam("jenis") String jenis) {
+        System.out.println("monper = "+id_monper);
+        Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql = "";
+        if(id_activity.equals("0") && id_indicator.equals("0")) {
+        	if(status.equals("completed")) {
+                sql = "SELECT distinct id_old, nm_goals, nm_goals_eng, id_goals FROM history_sdg_goals where id_monper = '"+id_monper+"' ORDER BY CAST(id_goals AS UNSIGNED)";
+            }else{
+                sql = "SELECT distinct id, nm_goals, nm_goals_eng, id_goals FROM sdg_goals ORDER BY CAST(id_goals AS UNSIGNED)";
+            }
+        }else if(!id_indicator.equals("0")) {
+        	if(status.equals("completed")) {
+                if(jenis.equals("gov")) {
+            		sql = "select distinct b.id_old, b.nm_goals, b.nm_goals_eng, b.id_goals from gov_map a  join history_sdg_goals b on a.id_goals = b.id_old and b.id_monper = '"+id_monper+"' where a.id_gov_indicator = '"+id_indicator+"' ORDER BY CAST(b.id_goals AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id_old, b.nm_goals, b.nm_goals_eng, b.id_goals from nsa_map a  join history_sdg_goals b on a.id_goals = b.id_old and b.id_monper = '"+id_monper+"' where a.id_nsa_indicator = '"+id_indicator+"' ORDER BY CAST(b.id_goals AS UNSIGNED)";
+            	}
+        	}else{
+            	if(jenis.equals("gov")) {
+            		sql = "select distinct b.id, b.nm_goals, b.nm_goals_eng, b.id_goals from gov_map a  join sdg_goals b on a.id_goals = b.id where a.id_gov_indicator = '"+id_indicator+"' ORDER BY CAST(b.id_goals AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id, b.nm_goals, b.nm_goals_eng, b.id_goals from nsa_map a  join sdg_goals b on a.id_goals = b.id where a.id_nsa_indicator = '"+id_indicator+"' ORDER BY CAST(b.id_goals AS UNSIGNED)";
+            	}
+            }
+        }else{
+        	if(status.equals("completed")) {
+                if(jenis.equals("gov")) {
+            		sql = "select distinct b.id_old, b.nm_goals, b.nm_goals_eng, b.id_goals from gov_map a  join history_sdg_goals b on a.id_goals = b.id_old and b.id_monper = '"+id_monper+"' join gov_indicator c on a.id_gov_indicator = c.id where c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_goals AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id_old, b.nm_goals, b.nm_goals_eng, b.id_goals from nsa_map a  join history_sdg_goals b on a.id_goals = b.id_old and b.id_monper = '"+id_monper+"' join nsa_indicator c on a.id_nsa_indicator = c.id where c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_goals AS UNSIGNED)";
+            	}
+        	}else{
+            	if(jenis.equals("gov")) {
+            		sql = "select distinct b.id, b.nm_goals, b.nm_goals_eng, b.id_goals from gov_map a  join sdg_goals b on a.id_goals = b.id join gov_indicator c on a.id_gov_indicator = c.id where c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_goals AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id, b.nm_goals, b.nm_goals_eng, b.id_goals from nsa_map a  join sdg_goals b on a.id_goals = b.id join nsa_indicator c on a.id_nsa_indicator = c.id where c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_goals AS UNSIGNED)";
+            	}
+            }
+        }
+        
+    	Query query = manager.createNativeQuery(sql);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getalltarget_graph")
+    public @ResponseBody List<Object> getalltarget(@RequestParam("id_goals") int id_goals, @RequestParam("id_monper") int id_monper, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @RequestParam("id_activity") String id_activity,@RequestParam("id_indicator") String id_indicator,@RequestParam("jenis") String jenis) {
+        Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql="";
+        if(id_activity.equals("0") && id_indicator.equals("0")) {
+        	if(status.equals("completed")) {
+                sql = "SELECT distinct id_old, nm_target, nm_target_eng, id_target FROM history_sdg_target WHERE id_goals = :id_goals and id_monper = '"+id_monper+"' ORDER BY CAST(id_target AS UNSIGNED)";
+            }else{
+                sql = "SELECT distinct id, nm_target, nm_target_eng, id_target FROM sdg_target WHERE id_goals = :id_goals ORDER BY CAST(id_target AS UNSIGNED)";
+            }
+        }else if(!id_indicator.equals("0")){
+        	if(status.equals("completed")) {
+                if(jenis.equals("gov")) {
+            		sql = "select distinct b.id_old, b.nm_target, b.nm_target_eng, b.id_target from gov_map a  join history_sdg_target b on a.id_target = b.id_old and b.id_monper = '"+id_monper+"' where a.id_gov_indicator = '"+id_indicator+"' and a.id_goals = :id_goals and a.id_target is not null ORDER BY CAST(b.id_target AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id_old, b.nm_target, b.nm_target_eng, b.id_target from nsa_map a  join history_sdg_target b on a.id_target = b.id_old and b.id_monper = '"+id_monper+"' where a.id_nsa_indicator = '"+id_indicator+"' and a.id_goals = :id_goals and a.id_target is not null ORDER BY CAST(b.id_target AS UNSIGNED)";
+            	}
+        	}else{
+        		if(jenis.equals("gov")) {
+            		sql = "select distinct b.id, b.nm_target, b.nm_target_eng, b.id_target from gov_map a  join sdg_target b on a.id_target = b.id where a.id_gov_indicator = '"+id_indicator+"' and a.id_goals = :id_goals and a.id_target is not null ORDER BY CAST(b.id_target AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id, b.nm_target, b.nm_target_eng, b.id_target from nsa_map a  join sdg_target b on a.id_target = b.id where a.id_nsa_indicator = '"+id_indicator+"' and a.id_goals = :id_goals and a.id_target is not null ORDER BY CAST(b.id_target AS UNSIGNED)";
+            	}
+            }
+        }else{
+        	if(status.equals("completed")) {
+                if(jenis.equals("gov")) {
+            		sql = "select distinct b.id_old, b.nm_target, b.nm_target_eng, b.id_target from gov_map a  join history_sdg_target b on a.id_target = b.id_old and b.id_monper = '"+id_monper+"' join gov_indicator c on a.id_gov_indicator = c.id where a.id_goals = :id_goals and a.id_target is not null and c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_target AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id_old, b.nm_target, b.nm_target_eng, b.id_target from nsa_map a  join history_sdg_target b on a.id_target = b.id_old and b.id_monper = '"+id_monper+"' join nsa_indicator c on a.id_nsa_indicator = c.id where a.id_goals = :id_goals and a.id_target is not null and c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_target AS UNSIGNED)";
+            	}
+        	}else{
+            	if(jenis.equals("gov")) {
+            		sql = "select distinct b.id, b.nm_target, b.nm_target_eng, b.id_target from gov_map a  join sdg_target b on a.id_target = b.id join gov_indicator c on a.id_gov_indicator = c.id where a.id_goals = :id_goals and a.id_target is not null and c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_target AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id, b.nm_target, b.nm_target_eng, b.id_target from nsa_map a  join sdg_target b on a.id_target = b.id join nsa_indicator c on a.id_nsa_indicator = c.id where a.id_goals = :id_goals and a.id_target is not null and c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_target AS UNSIGNED)";
+            	}
+            }
+        }
+        
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_goals", id_goals);
+        List list = query.getResultList();
+        return list;
+    }
+    
+    @GetMapping("admin/getallindicator_graph")
+    public @ResponseBody List<Object> getallindicator(@RequestParam("id_goals") int id_goals, @RequestParam("id_target") int id_target, @RequestParam("id_monper") int id_monper, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov, @RequestParam("id_activity") String id_activity,@RequestParam("id_indicator") String id_indicator,@RequestParam("jenis") String jenis) {
+    	Optional<RanRad> monper = radService.findOne(id_monper);
+    	String status = monper.get().getStatus();
+        String sql="";
+        if(id_activity.equals("0") && id_indicator.equals("0")) {
+        	if(status.equals("completed")) {
+                sql = "SELECT distinct id_old, nm_indicator, nm_indicator_eng, id_indicator FROM history_sdg_indicator WHERE id_goals = :id_goals AND "
+        			+ "id_target = :id_target and id_monper = '"+id_monper+"' GROUP BY id, id_goals, id_target ORDER BY CAST(id_indicator AS UNSIGNED)";
+            }else{
+                sql = "SELECT distinct id, nm_indicator, nm_indicator_eng, id_indicator FROM sdg_indicator WHERE id_goals = :id_goals AND "
+        			+ "id_target = :id_target GROUP BY id, id_goals, id_target ORDER BY CAST(id_indicator AS UNSIGNED)";
+            }
+        }else if(!id_indicator.equals("0")){
+        	if(status.equals("completed")) {
+                if(jenis.equals("gov")) {
+            		sql = "select distinct b.id_old, b.nm_indicator, b.nm_indicator_eng, b.id_indicator from gov_map a  join history_sdg_indicator b on a.id_indicator = b.id_old and b.id_monper = '"+id_monper+"' where a.id_gov_indicator = '"+id_indicator+"' and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is not null ORDER BY CAST(b.id_indicator AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id_old, b.nm_indicator, b.nm_indicator_eng, b.id_indicator from nsa_map a  join history_sdg_indicator b on a.id_indicator = b.id_old and b.id_monper = '"+id_monper+"' where a.id_nsa_indicator = '"+id_indicator+"' and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is not null ORDER BY CAST(b.id_indicator AS UNSIGNED)";
+            	}
+        	}else{
+        		if(jenis.equals("gov")) {
+            		sql = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator from gov_map a  join sdg_indicator b on a.id_indicator = b.id where a.id_gov_indicator = '"+id_indicator+"' and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is not null ORDER BY CAST(b.id_indicator AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator from nsa_map a  join sdg_indicator b on a.id_indicator = b.id where a.id_nsa_indicator = '"+id_indicator+"' and a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is not null ORDER BY CAST(b.id_indicator AS UNSIGNED)";
+            	}
+            }
+        }else{
+        	if(status.equals("completed")) {
+                if(jenis.equals("gov")) {
+            		sql = "select distinct b.id_old, b.nm_indicator, b.nm_indicator_eng, b.id_indicator from gov_map a  join history_sdg_indicator b on a.id_indicator = b.id_old and b.id_monper = '"+id_monper+"' join gov_indicator c on a.id_gov_indicator = c.id where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is not null and c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_indicator AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id_old, b.nm_indicator, b.nm_indicator_eng, b.id_indicator from nsa_map a  join history_sdg_indicator b on a.id_indicator = b.id_old and b.id_monper = '"+id_monper+"' join nsa_indicator c on a.id_nsa_indicator = c.id where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is not null and c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_indicator AS UNSIGNED)";
+            	}
+        	}else{
+            	if(jenis.equals("gov")) {
+            		sql = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator from gov_map a  join sdg_indicator b on a.id_indicator = b.id join gov_indicator c on a.id_gov_indicator = c.id where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is not null and c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_indicator AS UNSIGNED)";
+            	}else {
+            		sql = "select distinct b.id, b.nm_indicator, b.nm_indicator_eng, b.id_indicator from nsa_map a  join sdg_indicator b on a.id_indicator = b.id join nsa_indicator c on a.id_nsa_indicator = c.id where a.id_goals = :id_goals and a.id_target = :id_target and a.id_indicator is not null and c.id_activity = '"+id_activity+"' ORDER BY CAST(b.id_indicator AS UNSIGNED)";
+            	}
+            }
+        }
+        
+    	Query query = manager.createNativeQuery(sql);
+        query.setParameter("id_goals", id_goals);
+        query.setParameter("id_target", id_target);
+        List list = query.getResultList();
+        return list;
+    }
+    
     @GetMapping("admin/getalltarget")
     public @ResponseBody List<Object> getalltarget(@RequestParam("id_goals") int id_goals, @RequestParam("id_monper") int id_monper, @RequestParam("id_role") String id_role, @RequestParam("id_prov") String id_prov) {
         Optional<RanRad> monper = radService.findOne(id_monper);
