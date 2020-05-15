@@ -174,7 +174,7 @@
             if(x[15]!=''){
                 persen = x[15];
             }
-            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11],'persen':persen})
+            data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[13],'non_gov':x[14],'persen':persen})
 //            console.log(x[1]);
         });
         
@@ -309,7 +309,7 @@
                                 console.log("ini calculasi")
                                 //var total = (x[2]/x[1])*100;
                                 var total = x[2];
-                                data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[10],'non_gov':x[11],'persen':x[16]})
+                                data_map.push({'hc-key':x[4],'name':x[5],'target':x[1],'realisasi':x[2],'value':total,'gov':x[13],'non_gov':x[14],'persen':x[16]})
                                 if($("#fs").is(':checked')){
                                 	goal        = x[7];
                                     target      = x[8];
@@ -419,11 +419,12 @@
                //                pointFormat: '<span class="f32"><span class="flag {point.properties.hc-key}">' +
                //                    '</span></span> {point.name}<br>' +
                //                    '<span style="font-size:30px">{point.value}/km²</span>',
-                               pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
-                                               <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th></tr>\n\
-                                               <tr><td>{point.target}</td><td>{point.realisasi}</td></tr>\n\
-                                               <tr><td colspan="2">Program Pemerintah</td><td>{point.gov}<td></td></tr>\n\
-                                               <tr><td colspan="2">Program Non Pemerintah</td><td>{point.non_gov}<td></td></tr></table></div>',
+                               pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">'+
+                                               '<tr><th colspan="2">{point.name}</th></tr>'+
+                                               '<tr><td>Target</td><td>{point.target}</td></tr>'+
+                                               '<tr><td>Realisasi</td><td>{point.realisasi}</td></tr>'+
+                                               '<tr><td>Program Pemerintah</td><td>{point.gov}</td></tr>'+
+                                               '<tr><td>Program Non Pemerintah</td><td>{point.non_gov}</td></tr></table></div>',
                //                positioner: function () {
                //                    return { x: 0, y: 250 };
                //                }
@@ -541,11 +542,12 @@
 //                pointFormat: '<span class="f32"><span class="flag {point.properties.hc-key}">' +
 //                    '</span></span> {point.name}<br>' +
 //                    '<span style="font-size:30px">{point.value}/km²</span>',
-                pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">\n\
-                                               <tr><th colspan="4">{point.name}</th></th></tr><tr><th>Target</th><th>Realisasi</th></tr>\n\
-                                               <tr><td>{point.target}</td><td>{point.realisasi}</td></tr>\n\
-                                               <tr><td colspan="2">Program Pemerintah</td><td>{point.gov}<td></td></tr>\n\
-                                               <tr><td colspan="2">Program Non Pemerintah</td><td>{point.non_gov}<td></td></tr></table></div>',
+                pointFormat:'<div style="background-color:blue;color:white;padding:1px"><table border="1">'+
+                                               '<tr><th colspan="2">{point.name}</th></tr>'+
+                                               '<tr><td>Target</td><td>{point.target}</td></tr>'+
+                                               '<tr><td>Realisasi</td><td>{point.realisasi}</td></tr>'+
+                                               '<tr><td>Program Pemerintah</td><td>{point.gov}</td></tr>'+
+                                               '<tr><td>Program Non Pemerintah</td><td>{point.non_gov}</td></tr></table></div>',
 //                positioner: function () {
 //                    return { x: 0, y: 250 };
 //                }
