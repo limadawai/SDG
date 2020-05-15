@@ -140,8 +140,8 @@ public class AdminController {
          		",g.nm_goals_eng\r\n" + 
          		",f.nm_target_eng\r\n" + 
          		",e.nm_indicator_eng\r\n" + 
-         		",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = i.id_prov) AS gov   \r\n" + 
-         		",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = i.id_prov) AS non_gov \r\n" + 
+         		",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = i.id_prov and id_monper = a.id_monper) AS gov   \r\n" + 
+         		",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = i.id_prov and id_monper = a.id_monper) AS non_gov \r\n" + 
          		",IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)\r\n" + 
          		",case when b.value is not null then ((IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0))/b.value)*100 else '' end as persenTotal \r\n" + 
          		",case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\r\n" + 
@@ -158,7 +158,7 @@ public class AdminController {
          		"JOIN sdg_goals g ON f.id_goals = g.id\r\n" + 
          		"JOIN entry_approval h on (CASE WHEN a.id_role is null THEN h.id_role is null ELSE a.id_role = h.id_role END) and a.id_monper = h.id_monper and h.type='entry_sdg' and a.year_entry = h.year\r\n" + 
          		"left join ref_unit j on e.unit = j.id_unit "+
-         		"WHERE a.year_entry = YEAR(NOW()) AND (h.approval = '2' OR  h.approval = '4')");
+         		"WHERE a.year_entry = YEAR(NOW()) AND (h.approval = '4')");
         
             List list =  query.getResultList();
             Map<String, Object> hasil = new HashMap<>();
@@ -301,8 +301,8 @@ public class AdminController {
                                                 "    ,g.nm_goals_eng\n" +
                                                 "    ,f.nm_target_eng\n" +
                                                 "    ,e.nm_indicator_eng\n"+
-                                                "    ,(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = c.id_prov) AS gov   " +
-                                                "    ,(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = c.id_prov) AS non_gov \n" +
+                                                ",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = i.id_prov and id_monper = a.id_monper and id_indicator = a.id_sdg_indicator) AS gov   \r\n" + 
+                                         		",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = i.id_prov and id_monper = a.id_monper and id_indicator = a.id_sdg_indicator) AS non_gov \r\n" + 
                                                 "    ,IFNULL(a.achievement1,''),IFNULL(a.achievement2,''),IFNULL(a.achievement3,''),IFNULL(a.achievement4,'')"+
                                                 "    ,case when b.value is not null then ((IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0))/b.value)*100 else '' end as persenTotal\n "+
                                                 "    ,case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\n "+
@@ -319,7 +319,7 @@ public class AdminController {
                                                 "     JOIN history_sdg_goals g ON f.id_goals = g.id_old and g.id_monper = '"+id_monper+"'\n"
                                               + "     JOIN entry_approval h on (CASE WHEN a.id_role is null THEN h.id_role is null ELSE a.id_role = h.id_role END) and a.id_monper = h.id_monper and h.type='entry_sdg' and a.year_entry = h.year " +
                                               "left join ref_unit j on e.unit = j.id_unit "+ 
-                                              "     WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4') ");
+                                              "     WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '4') ");
             
         }else {
             query = em.createNativeQuery("SELECT a.id_sdg_indicator,b.value AS target  \r\n" + 
@@ -334,8 +334,8 @@ public class AdminController {
                                                 		",g.nm_goals_eng\r\n" + 
                                                 		",f.nm_target_eng\r\n" + 
                                                 		",e.nm_indicator_eng\r\n" + 
-                                                		",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = i.id_prov) AS gov   \r\n" + 
-                                                		",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = i.id_prov) AS non_gov \r\n" + 
+                                                		",(SELECT COUNT(*) FROM (SELECT * FROM gov_map)  AS tgovmap WHERE id_prov = i.id_prov and id_monper = a.id_monper and id_indicator = a.id_sdg_indicator) AS gov   \r\n" + 
+                                                 		",(SELECT COUNT(*) FROM (SELECT * FROM nsa_map) AS tnsa_map WHERE id_prov = i.id_prov and id_monper = a.id_monper and id_indicator = a.id_sdg_indicator) AS non_gov \r\n" +
                                                 		",IFNULL(a.achievement1,0),IFNULL(a.achievement2,0),IFNULL(a.achievement3,0),IFNULL(a.achievement4,0)\r\n" + 
                                                 		",case when b.value is not null then ((IFNULL(a.achievement1,0)+IFNULL(a.achievement2,0)+IFNULL(a.achievement3,0)+IFNULL(a.achievement4,0))/b.value)*100 else '' end as persenTotal \r\n" + 
                                                 		",case when b.value is not null then (IFNULL(a.achievement1,0)/b.value)*100 else '' end as persen1\r\n" + 
@@ -352,7 +352,7 @@ public class AdminController {
                                                 		"JOIN sdg_goals g ON f.id_goals = g.id\r\n" + 
                                                 		"JOIN entry_approval h on (CASE WHEN a.id_role is null THEN h.id_role is null ELSE a.id_role = h.id_role END) and a.id_monper = h.id_monper and h.type='entry_sdg' and a.year_entry = h.year\r\n" + 
                                                 		"left join ref_unit j on e.unit = j.id_unit "+
-                                                		"WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '2' OR  h.approval = '4')");
+                                                		"WHERE a.year_entry = '"+tahun+"' "+where+" AND (h.approval = '4')");
            
         }
         
