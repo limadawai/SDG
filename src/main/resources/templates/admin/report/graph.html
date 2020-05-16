@@ -1132,10 +1132,18 @@
             show_non_gov_prog(sessionStorage.graph_idgoals, sessionStorage.graph_idtarget, sessionStorage.graph_idindicator, valda, valrole, combo_periode);
         }
         
+        $("#tipe_periode").on('change', function(){
+        	var tipe_periode    = $("#tipe_periode").val();
+        	sessionStorage.graph_tipe_periode  = tipe_periode;
+        })
+        
+        $("#tipe_periode").val(sessionStorage.graph_tipe_periode);
+        
         $('#cari').on('click', function(e){
             var valda           = $("#daerah").val();
             var valrole         = $("#selrole").val();
             var combo_periode   = $("#periode").val();
+            var tipe_periode    = $("#tipe_periode").val();
             var idgoals         = $(this).data("idgoals");
             var idtarget        = $(this).data("idtarget");
             var idindicator     = $(this).data("idindicator");
@@ -1145,6 +1153,7 @@
             sessionStorage.graph_idgoals  = idgoals;
             sessionStorage.graph_idtarget  = idtarget;
             sessionStorage.graph_idindicator  = idindicator;
+            sessionStorage.graph_tipe_periode  = tipe_periode;
 //                alert('monper '+combo_periode);
             $cek = 0;
             if (valrole == '0'){	
