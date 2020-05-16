@@ -13701,7 +13701,7 @@
                             {
                                 name: 'Value of the Year SDGs',
                                 type: 'spline',
-                                data: valreal_sdg1,
+                                data: valreal_sdg2,
                                 yAxis: 1,
                                 tooltip: {
     //                          valueSuffix: '%'
@@ -13843,6 +13843,14 @@
                         parseInt($("#colsdg22").text(), 10),
                         parseInt($("#colsdg26").text(), 10)
                     ];
+
+                    var valofyear_sdg = [
+                            parseInt($("#colsdg30").text(), 10),
+                            parseInt($("#colsdg31").text(), 10),
+                            parseInt($("#colsdg32").text(), 10),
+                            parseInt($("#colsdg33").text(), 10),
+                            parseInt($("#colsdg34").text(), 10)
+                        ];                    
                     
                     ser.push({
                             name: 'Target SDGS',
@@ -13889,6 +13897,15 @@
 //                          valueSuffix: '%'
                             }
                         },
+                        {
+                                name: 'Value of the Year SDGs',
+                                type: 'spline',
+                                data: valofyear_sdg,
+                                yAxis: 1,
+                                tooltip: {
+    //                          valueSuffix: '%'
+                                }
+                            },                                                
                     );
 
                     if (pil_graf != 'graf4') {
@@ -13901,7 +13918,15 @@
                                 parseInt($("#colagg20_"+i).text(), 10),
                                 parseInt($("#colagg24_"+i).text(), 10)
                             ];
-                            ser.push({
+                            var valofy1 = [
+                                parseInt($("#colagg31_"+i).text(), 10),
+                                parseInt($("#colagg32_"+i).text(), 10),
+                                parseInt($("#colagg33_"+i).text(), 10),
+                                parseInt($("#colagg34_"+i).text(), 10),
+                                parseInt($("#colagg34_"+i).text(), 10)
+                            ];
+                            ser.push(
+                                {
                                     name: 'Realisasi I SDGS Disaggregasi '+(i+1),
                                     type: 'spline',
                                     data: valanggre1,
@@ -13910,7 +13935,9 @@
         //                          valueSuffix: '%'
                                     }
 
-                            },);
+                                },
+                                
+                            );
         //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
 
                         }
@@ -13977,8 +14004,23 @@
         //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
 
                         }
-                        
+                        var valofy1 = [
+                                parseInt($("#colagg31_"+i).text(), 10),
+                                parseInt($("#colagg32_"+i).text(), 10),
+                                parseInt($("#colagg33_"+i).text(), 10),
+                                parseInt($("#colagg34_"+i).text(), 10),
+                                parseInt($("#colagg34_"+i).text(), 10)
+                            ];                        
+                        ser.push({
+                                    name: 'Value of the Year SDGS Disaggregasi',
+                                    type: 'spline',
+                                    data: valofy1,
+                                    yAxis: 1,
+                                    tooltip: {
+        //                          valueSuffix: '%'
+                                    }
 
+                        },);
                     }
 
                 }else{}
