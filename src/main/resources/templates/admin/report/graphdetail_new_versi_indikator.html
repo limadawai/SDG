@@ -13850,7 +13850,11 @@
                             parseInt($("#colsdg32").text(), 10),
                             parseInt($("#colsdg33").text(), 10),
                             parseInt($("#colsdg34").text(), 10)
-                        ];                    
+                        ];         
+                    var nmx = "Realisasi";
+                    if (tipe_periode == "3") {
+                        nmx = "Value of the Year";
+                    }           
                     
                     ser.push({
                             name: 'Target SDGS',
@@ -13862,7 +13866,7 @@
                             }
                         },
                         {
-                            name: 'Realisasi I SDGS',
+                            name: nmx + ' I SDGS',
                             type: 'spline',
                             data: valreal_sdg1,
                             yAxis: 1,
@@ -13871,7 +13875,7 @@
                             }
                         },
                         {
-                            name: 'Realisasi II SDGS',
+                            name: nmx + ' II SDGS',
                             type: 'spline',
                             data: valreal_sdg2,
                             yAxis: 1,
@@ -13880,7 +13884,7 @@
                             }
                         },
                         {
-                            name: 'Realisasi III SDGS',
+                            name: nmx + ' III SDGS',
                             type: 'spline',
                             data: valreal_sdg3,
                             yAxis: 1,
@@ -13889,7 +13893,7 @@
                             }
                         },
                         {
-                            name: 'Realisasi IV SDGS',
+                            name: nmx + ' IV SDGS',
                             type: 'spline',
                             data: valreal_sdg4,
                             yAxis: 1,
@@ -13897,6 +13901,9 @@
 //                          valueSuffix: '%'
                             }
                         },
+                    );
+                    if (tipe_periode == "2" || tipe_periode == "3") {
+                        ser.push(
                         {
                                 name: 'Value of the Year SDGs',
                                 type: 'spline',
@@ -13905,8 +13912,10 @@
                                 tooltip: {
     //                          valueSuffix: '%'
                                 }
-                            },                                                
-                    );
+                            },         
+                        );                                       
+
+                    }
 
                     if (pil_graf != 'graf4') {
 
@@ -13927,7 +13936,7 @@
                             ];
                             ser.push(
                                 {
-                                    name: 'Realisasi I SDGS Disaggregasi '+(i+1),
+                                    name: nmx + ' I SDGS Disaggregasi '+(i+1),
                                     type: 'spline',
                                     data: valanggre1,
                                     yAxis: 1,
@@ -13950,7 +13959,7 @@
                                 parseInt($("#colagg25_"+i).text(), 10)
                             ];
                             ser.push({
-                                    name: 'Realisasi II SDGS Disaggregasi '+(i+1),
+                                    name: nmx  + ' II SDGS Disaggregasi '+(i+1),
                                     type: 'spline',
                                     data: valanggre2,
                                     yAxis: 1,
@@ -13971,7 +13980,7 @@
                                 parseInt($("#colagg26_"+i).text(), 10)
                             ];
                             ser.push({
-                                    name: 'Realisasi III SDGS Disaggregasi '+(i+1),
+                                    name: nmx  + ' III SDGS Disaggregasi '+(i+1),
                                     type: 'spline',
                                     data: valanggre3,
                                     yAxis: 1,
@@ -13992,7 +14001,7 @@
                                 parseInt($("#colagg27_"+i).text(), 10)
                             ];
                             ser.push({
-                                    name: 'Realisasi IV SDGS Disaggregasi '+(i+1),
+                                    name: nmx + ' IV SDGS Disaggregasi '+(i+1),
                                     type: 'spline',
                                     data: valanggre4,
                                     yAxis: 1,
@@ -14004,14 +14013,15 @@
         //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
 
                         }
-                        var valofy1 = [
+                        if (tipe_periode == "2" || tipe_periode == "3") {
+                            var valofy1 = [
                                 parseInt($("#colagg31_"+i).text(), 10),
                                 parseInt($("#colagg32_"+i).text(), 10),
                                 parseInt($("#colagg33_"+i).text(), 10),
                                 parseInt($("#colagg34_"+i).text(), 10),
                                 parseInt($("#colagg34_"+i).text(), 10)
                             ];                        
-                        ser.push({
+                            ser.push({
                                     name: 'Value of the Year SDGS Disaggregasi',
                                     type: 'spline',
                                     data: valofy1,
@@ -14020,13 +14030,16 @@
         //                          valueSuffix: '%'
                                     }
 
-                        },);
+                            },);
+                        }
+
                     }
 
                 }else{}
                 
                 if (pil_graf != 'graf4') {
                     var nnm = 'Realisasi';
+                    
                     if (tipe_periode == 3) {
 
                         var valofyear = [
@@ -14109,18 +14122,23 @@
                             },
     //                          data: valreal2
                             },
-                            {
-                            name: 'Value of the Year ' +nm_gov,
-                            type: 'spline',
-                            yAxis: 1,
-                            data: valofyear,
-                            tooltip: {
-    //                                 valueSuffix: ' %'
-                            },
-    //                          data: valreal2
-                            }                        
-                        );                        
 
+                        );        
+                        if (tipe_periode == "2" || tipe_periode == "3") {
+                            ser.push(
+                                {
+                                name: 'Value of the Year ' +nm_gov,
+                                type: 'spline',
+                                yAxis: 1,
+                                data: valofyear,
+                                tooltip: {
+        //                                 valueSuffix: ' %'
+                                },
+        //                          data: valreal2
+                                }                  
+                            );      
+                        }
+                                    
                     }
 
 
