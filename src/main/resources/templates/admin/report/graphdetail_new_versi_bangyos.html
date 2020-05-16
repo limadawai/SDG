@@ -165,24 +165,24 @@
                     $("#th_realisasi_tahun").text("Realisasi per Kwartal");
                 }
             }else if(tipe_periode == '3'){
-                //Total Within The Year Only
+                //Value of the Year
                 if (periode == "yearly") {
-                    $("#th_realisasi_tahun").text("Total Setahun");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 } else if (periode == "semesterly") {
-                    $("#th_realisasi_tahun").text("Total Setahun");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 } else if (periode == "quarterly") {
-                    $("#th_realisasi_tahun").text("Total Setahun");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 }
             }else if(tipe_periode == '4'){
                 if (periode == "yearly") {
                     //$("#th_realisasi_tahun").text("Periode Terakhir");
-                	$("#th_realisasi_tahun").text("Value Of The Year");
+                	$("#th_realisasi_tahun").text("Value of the Year");
                 } else if (periode == "semesterly") {
                     //$("#th_realisasi_tahun").text("Periode Terakhir");
-                    $("#th_realisasi_tahun").text("Value Of The Year");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 } else if (periode == "quarterly") {
                     //$("#th_realisasi_tahun").text("Periode Terakhir");
-                	$("#th_realisasi_tahun").text("Value Of The Year");
+                	$("#th_realisasi_tahun").text("Value of the Year");
                 }
             }else{}
             
@@ -228,21 +228,21 @@
                     $("#th_realisasi_tahun").text("Quarterly Realization");
                 }
             }else if(tipe_periode == '3'){
-                //Total Within The Year Only
+                //Value of the Year
                 if (periode == "yearly") {
-                    $("#th_realisasi_tahun").text("Total Within The Year Only");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 } else if (periode == "semesterly") {
-                    $("#th_realisasi_tahun").text("Total Within The Year Only");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 } else if (periode == "quarterly") {
-                    $("#th_realisasi_tahun").text("Total Within The Year Only");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 }
             }else if(tipe_periode == '4'){
                 if (periode == "yearly") {
-                    $("#th_realisasi_tahun").text("Value Of The Year");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 } else if (periode == "semesterly") {
-                    $("#th_realisasi_tahun").text("Value Of The Year");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 } else if (periode == "quarterly") {
-                    $("#th_realisasi_tahun").text("Value Of The Year");
+                    $("#th_realisasi_tahun").text("Value of the Year");
                 }
             }else{}
             
@@ -3447,7 +3447,7 @@
 
                         }else{}
                     }else if(tipe_periode == '3'){
-                        //Total Within The Year Only
+                        //Value of the Year
                         
                         if (monper[0] == "yearly") {
                             $("#monper_sdg").val(monper[0]);
@@ -10962,15 +10962,15 @@
             th += "</tr>";
             th += "<tr>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "</tr>";
             $("#tabsdg_disagre > thead").append(th);
 //            var row = "<tr>";
@@ -11028,7 +11028,7 @@
             th += "<th id='th_disagre' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan1' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target1' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun1' style='vertical-align:middle;border-style:ridge;' colspan='5'> <span class='lang_indo'>Total Setahun</span><span class='lang_eng' style='display:none'>Total Within The Year Only</span> </th>";
+            th += "<th id='th_realisasi_tahun1' style='vertical-align:middle;border-style:ridge;' colspan='5'> <span class='lang_indo'>Value of the Year</span><span class='lang_eng' style='display:none'>Value of the Year</span> </th>";
             th += "<th id='th_realisasi_anggaran1' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Baseline</th>";
 //            th += "<th id='th_sumber1' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
             th += "<th id='th_pelaku1' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
@@ -11131,15 +11131,15 @@
             th += "</tr>";
             th += "<tr>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "</tr>";
             $("#tabsdg > thead").append(th);
 //            var row = "<tr>";
@@ -11197,7 +11197,7 @@
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan2' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target2' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun2' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Total Setahun</span><span class='lang_eng' style='display:none'>Total Within The Year Only</span></th>";
+            th += "<th id='th_realisasi_tahun2' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Value of the Year</span><span class='lang_eng' style='display:none'>Value of the Year</span></th>";
             th += "<th id='th_realisasi_anggaran2' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
 //            th += "<th id='th_sumber2' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
             th += "<th id='th_pelaku2' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
@@ -11329,15 +11329,15 @@
             th += "</tr>";
             th += "<tr>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
 
@@ -11367,15 +11367,15 @@
             th += "</tr>";
             th += "<tr>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
             }
@@ -11463,7 +11463,7 @@
                 var th = "<tr>";
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_target3111' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Target</th>";
-            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Total Setahun</span><span class='lang_eng' style='display:none'>Total Within The Year Only</span></th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Value of the Year</span><span class='lang_eng' style='display:none'>Value of the Year</span></th>";
             //th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
 //            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
             th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
@@ -11491,7 +11491,7 @@
 //            th += "<th id='th_disagre' style='vertical-align:middle;width:10%;' rowspan='4'>Disaggregasi</th>";
             th += "<th id='th_satuan3' style='vertical-align:middle;width:10%;border-style:ridge;' rowspan='4'>Satuan</th>";
             th += "<th id='th_target3' style='vertical-align:middle;border-style:ridge;' colspan='5'>Target per Tahun</th>";
-            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Total Setahun</span><span class='lang_eng' style='display:none'>Total Within The Year Only</span></th>";
+            th += "<th id='th_realisasi_tahun3' style='vertical-align:middle;border-style:ridge;' colspan='5'><span class='lang_indo'>Value of the Year</span><span class='lang_eng' style='display:none'>Value of the Year</span></th>";
             th += "<th id='th_realisasi_anggaran3' style='vertical-align:middle;word-wrap:break-word;max-width:100px;border-style:ridge;' rowspan='4'>Realisasi Anggaran<br>Tahun Berjalan<br>(juta)</th>";
 //            th += "<th id='th_sumber3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Sumber Pendanaan</th>";
             th += "<th id='th_pelaku3' style='vertical-align:middle;border-style:ridge;' rowspan='4'>Pelaku</th>";
@@ -11590,19 +11590,19 @@
             });
 	    if(cek_unit == '1'){
             	if($("#fs").is(':checked')){
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }else{
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }
 	    }else if(cek_unit == '2'){
-	    	label_total = "Value Of The Year";
+	    	label_total = "Value of the Year";
 		if($("#fs").is(':checked')){
 //                    label_total = "Total";
                 }else{
 //                    label_total = "Total";
                 }
             }else{
-            	label_total = "Value Of The Year";
+            	label_total = "Value of the Year";
 		if($("#fs").is(':checked')){
 //                    label_total = "Total";
                 }else{
@@ -11709,7 +11709,7 @@
         function headsemesterly_sdg_total() {
             
             var cek_unit;
-	    var label_total = "Value Of The Year";
+	    var label_total = "Value of the Year";
 //            $.ajax({
 //            	url: urls + "cek_total_unit",
 //                type: 'get',
@@ -11722,19 +11722,19 @@
 //            });
 //	    if(cek_unit == '1'){
 //            	if($("#fs").is(':checked')){
-//                    label_total = "Value Of The Year";
+//                    label_total = "Value of the Year";
 //                }else{
-//                    label_total = "Value Of The Year";
+//                    label_total = "Value of the Year";
 //                }
 //	    }else if(cek_unit == '2'){
-//	    	label_total = "Value Of The Year";
+//	    	label_total = "Value of the Year";
 //		if($("#fs").is(':checked')){
 //                    //label_total = "Periode Terakhir";
 //                }else{
 //                    //label_total = "Last Period";
 //                }
 //            }else{
-//            	label_total = "Value Of The Year";
+//            	label_total = "Value of the Year";
 //		if($("#fs").is(':checked')){
 //                    //label_total = "Periode Terakhir";
 //                }else{
@@ -11899,19 +11899,19 @@
             th += "<tr>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
 
@@ -11942,19 +11942,19 @@
             th += "<tr>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
             }
@@ -12038,21 +12038,21 @@
             });
 	    if(cek_unit == '1'){
             	if($("#fs").is(':checked')){
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }else{
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }
 	    }else if(cek_unit == '2'){
 		if($("#fs").is(':checked')){
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }else{
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }
             }else{
 		if($("#fs").is(':checked')){
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }else{
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }
             }
             
@@ -12187,21 +12187,21 @@
             });
 	    if(cek_unit == '1'){
             	if($("#fs").is(':checked')){
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }else{
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }
 	    }else if(cek_unit == '2'){
 		if($("#fs").is(':checked')){
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }else{
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }
             }else{
 		if($("#fs").is(':checked')){
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }else{
-                    label_total = "Value Of The Year";
+                    label_total = "Value of the Year";
                 }
             }
             
@@ -12391,27 +12391,27 @@
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
 
@@ -12444,27 +12444,27 @@
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>I</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>II</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>III</th>";
             th += "<th style='font-size:80%;border-style:ridge;'>IV</th>";
-            th += "<th style='font-size:80%;border-style:ridge;'>Value Of The Year</th>";
+            th += "<th style='font-size:80%;border-style:ridge;'>Value of the Year</th>";
             th += "</tr>";
             $("#tabgrafik > thead").append(th);
             }
@@ -12658,7 +12658,7 @@
                     ];
                     
                     ser.push({
-                            name: 'Target Budget',
+                            name: 'Budget Allocation',
                             type: 'spline',
                             data: tahun1,
                             yAxis: 1,
@@ -13667,10 +13667,17 @@
                         parseInt($("#col14").text(), 10),
                         parseInt($("#col16").text(), 10)
                     ];
+                    var valreal_sdg3 = [
+                        parseInt($("#col21").text(), 10),
+                        parseInt($("#col22").text(), 10),
+                        parseInt($("#col23").text(), 10),
+                        parseInt($("#col24").text(), 10),
+                        parseInt($("#col25").text(), 10)
+                    ];
 
                     if (pil_graf == "graf1") {
                         ser.push({
-                            name: 'Target Budget',
+                            name: 'Budget Allocation',
                             type: 'spline',
                             data: tahun1,
                             yAxis: 1,
@@ -13690,88 +13697,108 @@
                         {
                             name: 'Realisasi Budget Semester II ',
                             type: 'spline',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Value of the Year Budget',
+                            type: 'spline',
+                            data: valreal_sdg3,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        }                        
+                    );
+                    } else if (pil_graf == 'graf3') {
+                        ser.push({
+                            name: 'Budget Allocation',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                            {
+                            name: 'Realisasi Budget Semester I ',
+                            type: 'column',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi Budget Semester II ',
+                            type: 'column',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Value of the Year Budget',
+                            type: 'spline',
+                            data: valreal_sdg3,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+
+                        {
+                            name: 'Realisasi Budget Semester I ',
+                            type: 'spline',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi Budget Semester II ',
+                            type: 'spline',
+                            data: valreal_sdg2,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        }                        
+                        );                                            
+                    } else {
+                        ser.push({
+                            name: 'Budget Allocation',
+                            type: 'spline',
+                            data: tahun1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                            {
+                            name: 'Realisasi Budget Semester I ',
+                            type: 'column',
+                            data: valreal_sdg1,
+                            yAxis: 1,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Realisasi Budget Semester II ',
+                            type: 'column',
                             data: valreal_sdg2,
                             yAxis: 1,
                             tooltip: {
 //                          valueSuffix: '%'
                             }
                         }
-                    );
-                    } else if (pil_graf == 'graf3') {
-                        ser.push({
-                            name: 'Target Budget',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                            {
-                            name: 'Realisasi Budget Semester I ',
-                            type: 'column',
-                            data: valreal_sdg1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi Budget Semester II ',
-                            type: 'column',
-                            data: valreal_sdg2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi Budget Semester I ',
-                            type: 'spline',
-                            data: valreal_sdg1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi Budget Semester II ',
-                            type: 'spline',
-                            data: valreal_sdg2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },                        
-                        );                                            
-                    } else {
-                        ser.push({
-                            name: 'Target Budget',
-                            type: 'spline',
-                            data: tahun1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                            {
-                            name: 'Realisasi Budget Semester I ',
-                            type: 'column',
-                            data: valreal_sdg1,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        },
-                        {
-                            name: 'Realisasi Budget Semester II ',
-                            type: 'column',
-                            data: valreal_sdg2,
-                            yAxis: 1,
-                            tooltip: {
-//                          valueSuffix: '%'
-                            }
-                        }); 
+                        ); 
                     }
 
                     for (var i=0; i<pnjg; i++) {
@@ -14179,6 +14206,13 @@
                     */
                 }
                 
+                var sb = 'Combination Chart';
+                if (pil_graf == 'graf1') {
+                    sb = 'Line Chart';
+                } else if (pil_graf == 'graf4') {
+                    sb = 'Stack Chart';
+                }
+
                  var options4 ={
                     chart: {
                         zoomType: 'xy',
@@ -14193,7 +14227,7 @@
                         enabled: false
                       },
                     subtitle: {
-                        text: 'Combination chart'
+                        text: sb
                     },
                     xAxis: [{
                         categories: tahun
