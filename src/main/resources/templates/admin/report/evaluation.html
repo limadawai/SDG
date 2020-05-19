@@ -1325,7 +1325,7 @@
 
 
     function ambilDataChart(sdg_indicator){
-		xtype = 1;
+		xtype = 2;
 		var ser  = [];
     	var monper = $("#periode").val().split("###");
     	var id_monper = monper[0];
@@ -2840,7 +2840,7 @@
 	$("#pilgrafik").on("change", function() {
 		var pil_graf = $("#pilgrafik").val();
 		console.log('me change ' + pil_graf + ' ' + xtype);
-		if (xtype == 1) {
+		if (xtype == 2) {
 			a(xyear, pil_graf);
 		} else {
 			console.log(xhasilSts);
