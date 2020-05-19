@@ -75,8 +75,16 @@
                 </select>
                 <select id="indikator" name="indikator" class="form-control">
                     <option value="0" >-- Pilih Indikator --</option>
-                </select> -->
-            <a class="btn btn-warning pull-right" href="#" onclick="tableToExcel('indi', 'Report Evaluation')">Excel</a><br/>
+				</select> -->
+			<div class="pull-right" style="width:auto;">
+				<select id="pilgrafik">
+						<option value="0">-- Pilih Jenis Grafik --</option>
+						<option value="graf1">Grafik Line</option>
+						<option value="graf3">Grafik Combination</option>
+						<option value="graf4">Grafik Stack</option>
+				</select>	
+				<a class="btn btn-warning pull-right" href="#" onclick="tableToExcel('indi', 'Report Evaluation')">Excel</a><br/>
+			</div>
            
             <div class="widget-box">
                 <div class="widget-title">
@@ -154,6 +162,9 @@
 <div th:include="admin/layout :: footer"></div>
 <script th:inline="javascript">
 	//$('#goals').select2();
+
+	$('#pilgrafik').prop('disabled', true);
+
 	$("#goals").select2({
         width: "30%",
       });
@@ -170,6 +181,11 @@
     if (lang == null) lang = "0";
     var name = [[${name}]];
     var role = [[${role}]];
+	var xtype = 1;
+	var ks, kl = 0;
+	var xhasilSts;
+	var xyear;
+
     $("#welcome").html("Welcome, "+name);
 
     var token = $("meta[name='_csrf']").attr("content");
@@ -392,6 +408,7 @@
     		ambilData(sdg_indicator);	
     	}
 	}).on('click', '#show-chart', function(){
+		$('#pilgrafik').prop('selectedIndex', 0);
     	var sdg_indicator;
 		var sdg_indicator_val = [];
         $.each($("input[name='sdg_indicator']:checked"), function(){
@@ -478,6 +495,7 @@
 		   $('#show-chart').prop('disabled', false);
 	   } else {
 		   $('#show-chart').prop('disabled', true);
+		   $('#pilgrafik').prop('disabled', true);
 	   }
    }
     
@@ -864,7 +882,6 @@
     		baseline = 'Baseline';
     	}
         var idmonper = $("#periode").find(':selected').data('id');
-        var hasilSts;
         $.ajax({
             url: urls + 'list-get-sts-monper-all/'+idprov+'/'+idmonper,
             type: 'get',
@@ -1289,6 +1306,7 @@
             	}
             	$("#indi").html(text);
 				$("#dualaxes").html("");
+				$('#pilgrafik').prop('disabled', false);
             }
         });
 
@@ -1307,10 +1325,12 @@
 
 
     function ambilDataChart(sdg_indicator){
+		xtype = 1;
 		var ser  = [];
     	var monper = $("#periode").val().split("###");
     	var id_monper = monper[0];
     	var year   = monper[1];
+		xyear = year;
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
         var cat = $("#role").find(":selected").data("cat");
@@ -1653,13 +1673,13 @@
             	}
             	$("#indi").html(text);
 				$("#dualaxes").html("");
-
-				a(year);
+				$('#pilgrafik').prop('disabled', false);
             }
         });
     }
 
-	function a(year) {
+	function a(year, pil_graf) {
+		console.log('func a' + year);
 		var ser = [];
 		var target = [ 
 				parseInt($('#tar').text(), 10),
@@ -1681,13 +1701,36 @@
 
             ];	
 
-        ser.push(
-        	{
-				name: 'Realisasi Q1',
-				data: rel0,
-				type:'column',
-        	},
-		);						
+			if (pil_graf == 'graf1') {
+				ser.push(
+					{
+						name: 'Realisasi Q1',
+						data: rel0,
+						type:'spline',
+					},
+				);						
+			} else if (pil_graf == 'graf4') {
+				ser.push(
+					{
+						name: 'Realisasi Q1',
+						data: rel0,
+						type:'column',
+					},
+				);						
+			} else {
+				ser.push(
+					{
+						name: 'Realisasi Q1',
+						data: rel0,
+						type:'column',
+					},
+					{
+						name: 'Realisasi Q1',
+						data: rel0,
+						type:'spline',
+					},					
+				);						
+			}
 
 		var rel1 = [ 
 				null,
@@ -1695,13 +1738,36 @@
 
             ];	
 
-        ser.push(
-        	{
-				name: 'Realisasi Q2',
-				data: rel1,
-				type:'column',
-        	},
-		);								
+			if (pil_graf == 'graf1') {
+				ser.push(
+					{
+						name: 'Realisasi Q2',
+						data: rel1,
+						type:'spline',
+					},
+				);								
+			} else if (pil_graf == 'graf4') {
+				ser.push(
+					{
+						name: 'Realisasi Q2',
+						data: rel1,
+						type:'column',
+					},
+				);								
+			} else {
+				ser.push(
+					{
+						name: 'Realisasi Q2',
+						data: rel1,
+						type:'column',
+					},
+					{
+						name: 'Realisasi Q2',
+						data: rel1,
+						type:'spline',
+					},					
+				);								
+			}
 
 		var rel2 = [ 
 				null,
@@ -1709,27 +1775,73 @@
 
             ];	
 
-        ser.push(
-        	{
-				name: 'Realisasi Q3',
-				data: rel2,
-				type:'column',
-        	},
-		);						
-
+			if (pil_graf == 'graf1') {
+				ser.push(
+					{
+						name: 'Realisasi Q3',
+						data: rel2,
+						type:'spline',
+					},
+				);	
+			} else if (pil_graf == 'graf4') {
+				ser.push(
+					{
+						name: 'Realisasi Q3',
+						data: rel2,
+						type:'column',
+					},
+				);	
+			} else {
+				ser.push(
+					{
+						name: 'Realisasi Q3',
+						data: rel2,
+						type:'column',
+					},
+					{
+						name: 'Realisasi Q3',
+						data: rel2,
+						type:'spline',
+					},					
+				);	
+			}
+					
 		var rel3 = [ 
 				null,
 				parseInt($('#rel3').text(), 10),
 
             ];	
 
-        ser.push(
-        	{
-				name: 'Realisasi Q4',
-				data: rel3,
-				type:'column',
-        	},
-		);						
+			if (pil_graf == 'graf1') {
+				ser.push(
+					{
+						name: 'Realisasi Q4',
+						data: rel3,
+						type:'spline',
+					},
+				);						
+			} else if (pil_graf == 'graf4') {
+				ser.push(
+					{
+						name: 'Realisasi Q4',
+						data: rel3,
+						type:'column',
+					},
+				);						
+			} else {
+				ser.push(
+					{
+						name: 'Realisasi Q4',
+						data: rel3,
+						type:'column',
+					},
+					{
+						name: 'Realisasi Q4',
+						data: rel3,
+						type:'spline',
+					},
+				);						
+			}
 
 		var tahun = year;
 		var chart4;
@@ -1798,8 +1910,8 @@
 	}
 
     function ambilDataAllChart(sdg_indicator){
+		xtype = 1;
 		var ser  = [];
-		var ks, kl = 0;
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
         var cat = $("#role").find(":selected").data("cat");
@@ -1843,6 +1955,7 @@
             async : false,
             success: function (hasil) {
             	hasilSts = hasil;
+				xhasilSts = hasil;
             }
         });
         
@@ -2281,13 +2394,12 @@
             	}
             	$("#indi").html(text);
 				$("#dualaxes").html("");
-
-				b(ks, kl, hasilSts);
+				$('#pilgrafik').prop('disabled', false);
             }
         });
     }	
 
-	function b(ks, kl, hasilSts) {
+	function b(ks, kl, hasilSts, pil_graf) {
 		console.log('b => ' + ks + ' ' + kl + ' ' + hasilSts.content[0][0]);
 		var sts = hasilSts.content[0][0];
 		var ser = [];
@@ -2316,23 +2428,88 @@
 							parseInt($("#rel_"+t + "_16").text(), 10),
                         ];
 			if (sts == 'yearly') {
-				ser.push({
+				if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS',
+                        type: 'spline',
+                        data: rel0,
+					});								
+				} else if (pil_graf == 'graf4') {
+					ser.push({
                         name: 'Realisasi SDGS',
                         type: 'column',
                         data: rel0,
-				});			
+					});								
+				} else {
+					ser.push(
+						{
+                        name: 'Realisasi SDGS',
+                        type: 'column',
+                        data: rel0,
+						},
+						{
+                        name: 'Realisasi SDGS',
+                        type: 'spline',
+                        data: rel0,
+						},						
+					);								
+				}
+
 			} else if (sts == 'semesterly') {
-				ser.push({
+				if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS S1',
+                        type: 'spline',
+                        data: rel0,
+					});			
+				} else if (pil_graf == 'graf4') {
+					ser.push({
                         name: 'Realisasi SDGS S1',
                         type: 'column',
                         data: rel0,
-				});			
+					});			
+				} else {
+					ser.push(
+						{
+                        name: 'Realisasi SDGS S1',
+                        type: 'column',
+                        data: rel0,
+						},
+						{
+                        name: 'Realisasi SDGS S1',
+                        type: 'spline',
+                        data: rel0,
+						},						
+					);			
+				}
 			} else {
-				ser.push({
+				if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS Q1',
+                        type: 'spline',
+                        data: rel0,
+					});							
+				} else if (pil_graf == 'graf4') {
+					ser.push({
                         name: 'Realisasi SDGS Q1',
                         type: 'column',
                         data: rel0,
-				});							
+					});							
+				} else {
+					ser.push(
+						{
+                        name: 'Realisasi SDGS Q1',
+                        type: 'column',
+                        data: rel0,
+						},
+						{
+                        name: 'Realisasi SDGS Q1',
+                        type: 'spline',
+                        data: rel0,
+						},						
+						);							
+				}				
+
 			}
 
 
@@ -2345,17 +2522,61 @@
                         ];
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
-				ser.push({
+				if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS S2',
+                        type: 'spline',
+                        data: rel1,
+					});			
+				} else if (pil_graf == 'graf4') {
+					ser.push({
                         name: 'Realisasi SDGS S2',
                         type: 'column',
                         data: rel1,
-				});			
+					});			
+				} else {
+					ser.push(
+						{
+                        name: 'Realisasi SDGS S2',
+                        type: 'column',
+                        data: rel1,
+						},
+						{
+                        name: 'Realisasi SDGS S2',
+                        type: 'spline',
+                        data: rel1,
+						},						
+					);			
+				}				
+
 			} else {
-				ser.push({
+				if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS Q2',
+                        type: 'spline',
+                        data: rel1,
+					});							
+				} else if (pil_graf == 'graf4') {
+					ser.push({
                         name: 'Realisasi SDGS Q2',
                         type: 'column',
                         data: rel1,
-				});							
+					});							
+				} else {
+					ser.push(
+						{
+                        name: 'Realisasi SDGS Q2',
+                        type: 'column',
+                        data: rel1,
+						},
+						{
+                        name: 'Realisasi SDGS Q2',
+                        type: 'spline',
+                        data: rel1,
+						},						
+					);							
+				}								
+
 			}						
 
 			var rel2 = [
@@ -2369,11 +2590,32 @@
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 			} else {
-				ser.push({
+				if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS Q3',
+                        type: 'spline',
+                        data: rel2,
+					});							
+				} else if (pil_graf == 'graf4') {
+					ser.push({
                         name: 'Realisasi SDGS Q3',
                         type: 'column',
                         data: rel2,
-				});							
+					});							
+				} else {
+					ser.push(
+						{
+                        name: 'Realisasi SDGS Q3',
+                        type: 'column',
+                        data: rel2,
+						},
+						{
+                        name: 'Realisasi SDGS Q3',
+                        type: 'spline',
+                        data: rel2,
+						},						
+					);							
+				}
 			}						
 
 			var rel3 = [
@@ -2387,11 +2629,32 @@
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 			} else {
-				ser.push({
+				if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS Q4',
+                        type: 'spline',
+                        data: rel3,
+					});							
+				} else if (pil_graf == 'graf4') {
+					ser.push({
                         name: 'Realisasi SDGS Q4',
                         type: 'column',
                         data: rel3,
-				});							
+					});							
+				} else {
+					ser.push(
+						{
+							name: 'Realisasi SDGS Q4',
+							type: 'column',
+							data: rel3,
+						},
+						{
+							name: 'Realisasi SDGS Q4',
+							type: 'spline',
+							data: rel3,
+						},						
+					);							
+				}				
 			}						
 
 		}
@@ -2501,6 +2764,13 @@
 
 		}
 
+		var sb = 'Combination Chart';
+                if (pil_graf == 'graf1') {
+                    sb = 'Line Chart';
+                } else if (pil_graf == 'graf4') {
+                    sb = 'Stack Chart';
+                }
+
 		var chart4;
 		var options4 ={
 			chart: {
@@ -2515,7 +2785,7 @@
                         enabled: false
             },
             subtitle: {
-                        text: 'Combination chart'
+                        text: sb
         	},
             xAxis: [{
                         categories: tahun
@@ -2566,6 +2836,17 @@
             }
             chart4=new Highcharts.Chart(options4);				
 	}
+
+	$("#pilgrafik").on("change", function() {
+		var pil_graf = $("#pilgrafik").val();
+		console.log('me change ' + pil_graf + ' ' + xtype);
+		if (xtype == 1) {
+			a(xyear, pil_graf);
+		} else {
+			console.log(xhasilSts);
+			b(ks, kl, xhasilSts, pil_graf);
+		}
+	});
     
     var tableToExcel = (function() {
     var uri = 'data:application/vnd.ms-excel;base64,'
