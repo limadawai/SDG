@@ -185,6 +185,10 @@
 	var ks, kl = 0;
 	var xhasilSts;
 	var xyear;
+	var xxt;
+	var tth = [];
+	var ttr = [];
+	var 
 
     $("#welcome").html("Welcome, "+name);
 
@@ -1913,6 +1917,7 @@
     function ambilDataAllChart(sdg_indicator){
 		xtype = 1;
 		kl = 0;
+		tth = [];
 		var ser  = [];
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
@@ -1948,6 +1953,7 @@
     		baseline = 'Baseline';
     	}
         var idmonper = $("#periode").find(':selected').data('id');
+		console.log('idmonper ' + idmonper);
         var hasilSts;
         $.ajax({
             url: urls + 'list-get-sts-monper-all/'+idprov+'/'+idmonper,
@@ -2036,6 +2042,7 @@
 										xt++;
                             		}
                             	}
+								xxt = xt;
                             	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Status</b></td>":'';
                             	text += "</tr><tr style='font-size:80%;'>";
                             	for(var l=0; l < hasilSts.content.length; l++){
@@ -2136,6 +2143,11 @@
                                                         	for (var m = 0; m < hasilInd.content.length; m++) {
                                                         		text += "<td style='font-size:80%;border-style:ridge;' id='tar_"+ k +"_" + xyy +"'>"+(hasilInd.content[m][7]?hasilInd.content[m][7]:'')+"</td>";
 																xyy++;
+																if (hasilInd.content[m][7]) {
+																	tth[year] = hasilInd.content[m][7];
+																} else {
+																	tth[year] = 0;
+																}
                                                         		var nilai1=(hasilInd.content[m][12])?hasilInd.content[m][12]:hasilInd.content[m][8];
                                                         		var nilai2=(hasilInd.content[m][13])?hasilInd.content[m][13]:hasilInd.content[m][9];
                                                         		var nilai3=(hasilInd.content[m][14])?hasilInd.content[m][14]:hasilInd.content[m][10];
@@ -2154,15 +2166,18 @@
                                                         		
                                                         		
                                                         		if(sts == 'yearly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rely_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+																	if (nilai1sdg != null) {
+																		console.log('year ' + year + ' ' + nilai1sdg);
+																	}
 																	xyz++;
                                                        				if(nilai1sdg){
                                                            				achive = nilai1sdg;
                                                            			}	
                                                         		}else if(sts == 'semesterly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rels_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rels_"+ k +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
 																	xyz++;
                                                         			if(nilai1sdg || nilai2sdg){
                                                         				if(hasilInd.content[m][16]=="2"){
@@ -2171,16 +2186,22 @@
                                                                				achive = nilai1sdg+nilai2sdg;
                                                             			}
                                                         			}
+																	if (nilai1sdg != null) {
+																	}
+																	if (nilai2sdg != null) {
+																	}	
+																	console.log('year ' + year + ' ' + tth[year]);																
                                                             	}
                                                         		else if(sts == 'quarterly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='relq_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='relq_"+ k +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='relq_"+ k +"_" + xyz +"'>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='relq_"+ k +"_" + xyz +"'>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
 																	xyz++;
+																	console.log('year ' + year + ' ' + nilai1sdg + ' ' + nilai2sdg + ' ' + nilai3sdg);
                                                         			if(nilai1sdg || nilai2sdg || nilai3sdg || nilai4sdg){
                                                         				if(hasilInd.content[m][16]=="2"){
                                                         					if(nilai4sdg){
@@ -2402,13 +2423,20 @@
     }	
 
 	function b(ks, kl, hasilSts, pil_graf) {
-		console.log('b => ' + ks + ' ' + kl + ' ' + hasilSts.content[0][0]);
+		console.log('b => ' + ks + ' ' + kl + ' ' + hasilSts.content[0][0] + ' ' + xxt);
+		console.log('bb ' + tth['2021']);
 		var sts = hasilSts.content[0][0];
 		var ser = [];
-		var tahun = [$("#tahun0").text(),$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text()];
+		var tahun = [];
+
+		for (i = 0; i < xxt; i++) {
+			tahun.push($('#tahun' + i).text());
+		}
+
 		console.log(tahun);
 
 		for (t = 0; t < ks; t++) {
+			/*
 			var tar = [
                             parseInt($("#tar_"+t + "_0").text(), 10),
                             parseInt($("#tar_"+t + "_1").text(), 10),
@@ -2416,6 +2444,13 @@
                             parseInt($("#tar_"+t + "_3").text(), 10),
                             parseInt($("#tar_"+t + "_4").text(), 10)
                         ];
+			*/
+			var tar = [];
+			for (i = 0; i < xxt; i++) {
+				var yr = $('#tahun' + i).text();
+				var y = tth[yr];
+				tar[i] = y;
+			}
 			ser.push({
                         name: 'Target SDGS',
                         type: 'spline',
