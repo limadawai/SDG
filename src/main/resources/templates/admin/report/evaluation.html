@@ -971,6 +971,7 @@
                             		}
                             	}
                             	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Status</b></td>":'';
+                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>TOTAL</b></td>";
                             	text += "</tr><tr style='font-size:80%;'>";
                             	for(var l=0; l < hasilSts.content.length; l++){
                             		var sts  = hasilSts.content[l][0];
@@ -1035,7 +1036,10 @@
                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][7]?hasil.content[k][7]:'')+"</td>":'';
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][5]?hasil.content[k][5]:'')+"</td>";
                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][6]?hasil.content[k][6]:'')+"</td>":'';
-											
+                                    		var achive = 0;
+                                            var achiveSum = 0;
+                                            var achiveLast = 0;
+                                            var achivehasil;
                                     		for(var l=0; l < hasilSts.content.length; l++){
                                         		var sts  = hasilSts.content[l][0];
                                         		var id_monper = hasilSts.content[l][1];
@@ -1054,7 +1058,7 @@
                                                     }
                                                 });
                                                 var color_sts="";
-                                                var achive = "";
+                                                
                                         		for(var year = start_year; year <= end_year; year++){
                                         			$.ajax({
                                                         url: urls + 'get-sdg-indicator-slave',
@@ -1085,50 +1089,64 @@
                                                         		
                                                         		if(sts == 'yearly'){
                                                         			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
-                                                       				if(nilai1sdg){
+                                                       				if(nilai1sdg!=''){
                                                            				achive = nilai1sdg;
                                                            			}	
+                                                       				achiveLast = (achive!=0)?achive:achiveLast;
+                                                       				achiveSum += achive;
                                                         		}else if(sts == 'semesterly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
-                                                        			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
-                                                        			if(nilai1sdg || nilai2sdg){
+                                                        			if(nilai1sdg!='' || nilai2sdg!=''){
                                                         				if(hasilInd.content[m][16]=="2"){
-                                                               				achive = (nilai2sdg)?nilai2sdg:nilai1sdg;
+                                                               				achive = (nilai2sdg!='')?nilai2sdg:nilai1sdg;
+                                                               				achiveLast = (achive!=0)?achive:achiveLast;
                                                             			}else{
-                                                               				achive = nilai1sdg+nilai2sdg;
+                                                               				achive = parseInt(nilai1sdg)+parseInt(nilai2sdg);
+                                                               				achiveSum += achive;
                                                             			}
                                                         			}
-                                                            	}
-                                                        		else if(sts == 'quarterly'){
+                                                        			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+                                                        			
+                                                            	}else if(sts == 'quarterly'){
+                                                        			if(nilai1sdg!='' || nilai2sdg!='' || nilai3sdg!='' || nilai4sdg!=''){
+                                                        				if(hasilInd.content[m][16]=="2"){
+                                                        					if(nilai4sdg!=''){
+                                                        						achive = nilai4sdg;
+                                                        					}else if(nilai3sdg!=''){
+                                                        						achive = nilai3sdg;
+                                                        					}else if(nilai2sdg!=''){
+                                                        						achive = nilai2sdg;
+                                                        					}else if(nilai1sdg!=''){
+                                                        						achive = nilai1sdg;
+                                                        					}
+                                                        					achiveLast = (achive!=0)?achive:achiveLast;
+                                                        				}else{
+                                                        					achive = parseInt(nilai1sdg?nilai1sdg:0)+parseInt(nilai2sdg?nilai2sdg:0)+parseInt(nilai3sdg?nilai3sdg:0)+parseInt(nilai4sdg?nilai4sdg:0);	
+                                                        					achiveSum += achive;
+                                                        				}
+                                                        			}
+                                                        			
                                                         			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
                                                         			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
                                                         			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
                                                         			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
-                                                        			if(nilai1sdg || nilai2sdg || nilai3sdg || nilai4sdg){
-                                                        				if(hasilInd.content[m][16]=="2"){
-                                                        					if(nilai4sdg){
-                                                        						achive = nilai4sdg;
-                                                        					}else if(nilai3sdg){
-                                                        						achive = nilai3sdg;
-                                                        					}else if(nilai2sdg){
-                                                        						achive = nilai2sdg;
-                                                        					}else{
-                                                        						achive = nilai1sdg;
-                                                        					}
-                                                        				}else{
-                                                        					achive = nilai1sdg+nilai2sdg+nilai3sdg+nilai4sdg;	
-                                                        				}
-                                                        			}
+                                                        			
                                                             	}
-                                                        		if(achive){
+                                                        		
+                                                        		if(hasilInd.content[m][16]=="2"){
+                                                        			achivehasil = achiveLast;
+                                                        		}else{
+                                                        			achivehasil = achiveSum;
+                                                        		}
+                                                        		if(achivehasil){
                                                         			if(hasilInd.content[m][4] == 'Increment'){
-                                                                        if((achive >= hasilInd.content[m][7])){
+                                                                        if((achivehasil >= hasilInd.content[m][7])){
                                                                             color_sts = '<span class="dotOk"></span>';
                                                                         }else{
                                                                             color_sts = '<span class="dotNok"></span>';
                                                                         }
                                                                     }else{
-                                                                        if((achive <= hasilInd.content[m][7])){
+                                                                        if((achivehasil <= hasilInd.content[m][7])){
                                                                             color_sts = '<span class="dotOk"></span>';
                                                                         }else{
                                                                             color_sts = '<span class="dotNok"></span>';
@@ -1141,7 +1159,8 @@
                                         		}
                                         		
                                         	}
-                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td></tr>":'</tr>';
+                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td>":'';
+                                    		text += "<td style='text-align:center;border-style:ridge;'>"+achivehasil+"</td></tr>";
                                     		
                                     		$.ajax({
                                                 url: urls + 'get-sdg-disaggre-utama',
@@ -1171,7 +1190,10 @@
                                                     		
                                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'></td>":'';
                                                     		text += "<td style='font-size:80%;border-style:ridge;'></td>";
-                                                    		
+                                                    		var achive = 0;
+                                                            var achiveSum = 0;
+                                                            var achiveLast = 0;
+                                                            var achivehasil;
                                                     		for(var z=0; z < hasilSts.content.length; z++){
                                                         		var sts  = hasilSts.content[z][0];
                                                         		var id_monper = hasilSts.content[z][1];
@@ -1223,50 +1245,62 @@
                                                                             		
                                                                             		if(sts == 'yearly'){
                                                                             			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
-                                                                            			if(nilai1sdgDetail){
-                                                                            				achive = nilai1sdgDetail;
+                                                                            			if(nilai1sdgDetail!=''){
+                                                                            				achive = nilai1sdgDetail?nilai1sdgDetail:0;
                                                                             			}
+                                                                            			achiveLast = (achive!=0)?achive:achiveLast;
+                                                                            			achiveSum += achive;
                                                                             		}else if(sts == 'semesterly'){
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
-                                                                            			if(nilai1sdgDetail || nilai2sdgDetail){
-                                                                            				if(hasil.content[k][20]=="2"){
+                                                                            			
+                                                                            			if(nilai1sdgDetail!='' || nilai2sdgDetail!=''){
+                                                                            				if(hasildis.content[n][20]=="2"){
                                                                                    				achive = (nilai2sdgDetail)?nilai2sdgDetail:nilai1sdgDetail;
+                                                                                   				achiveLast = (achive!=0)?achive:achiveLast;
                                                                                 			}else{
-                                                                                   				achive = nilai1sdgDetail+nilai2sdgDetail;
+                                                                                   				achive = parseInt(nilai1sdgDetail?nilai1sdgDetail:0)+parseInt(nilai2sdgDetail?nilai2sdgDetail:0);
+                                                                                   				achiveSum += achive;
                                                                                 			}
                                                                             			}
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
                                                                                 	}
                                                                             		else if(sts == 'quarterly'){
+                                                                            			if(nilai1sdgDetail!='' || nilai2sdgDetail!='' || nilai3sdgDetail!='' || nilai4sdgDetail!=''){
+                                                                            				if(hasildis.content[n][20]=="2"){
+                                                                            					if(nilai4sdgDetail!=''){
+                                                                            						achive = nilai4sdgDetail;
+                                                                            					}else if(nilai3sdgDetail!=''){
+                                                                            						achive = nilai3sdgDetail;
+                                                                            					}else if(nilai2sdgDetail!=''){
+                                                                            						achive = nilai2sdgDetail;
+                                                                            					}else if(nilai1sdgDetail!=''){
+                                                                            						achive = nilai1sdgDetail;
+                                                                            					}
+                                                                            					achiveLast = (achive!=0)?achive:achiveLast;
+                                                                            				}else{
+                                                                            					achive = parseInt(nilai1sdgDetail?nilai1sdgDetail:0)+parseInt(nilai2sdgDetail?nilai2sdgDetail:0)+parseInt(nilai3sdgDetail?nilai3sdgDetail:0)+parseInt(nilai4sdgDetail?nilai4sdgDetail:0);	
+                                                                            					achiveSum += achive;
+                                                                            				}
+                                                                            			}
                                                                             			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
                                                                             			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
                                                                             			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai3sdgDetail!=null?nilai3sdgDetail:'')+"</td>";
                                                                             			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai4sdgDetail!=null?nilai4sdgDetail:'')+"</td>";
-                                                                            			if(nilai1sdgDetail || nilai2sdgDetail || nilai3sdgDetail || nilai4sdgDetail){
-                                                                            				if(hasil.content[k][20]=="2"){
-                                                                            					if(nilai4sdgDetail){
-                                                                            						achive = nilai4sdgDetail;
-                                                                            					}else if(nilai3sdgDetail){
-                                                                            						achive = nilai3sdgDetail;
-                                                                            					}else if(nilai2sdgDetail){
-                                                                            						achive = nilai2sdgDetail;
-                                                                            					}else{
-                                                                            						achive = nilai1sdgDetail;
-                                                                            					}
-                                                                            				}else{
-                                                                            					achive = nilai1sdgDetail+nilai2sdgDetail+nilai3sdgDetail+nilai4sdgDetail;	
-                                                                            				}
-                                                                            			}
                                                                                 	}
-                                                                            		if(achive){
+                                                                            		if(hasildis.content[n][20]=="2"){
+                                                                            			achivehasil = achiveLast;
+                                                                            		}else{
+                                                                            			achivehasil = achiveSum;
+                                                                            		}
+                                                                            		if(achivehasil){
                                                                             			if(hasildis.content[n][4] == 'Increment'){
-                                                                                            if(achive >= hasildis.content[n][7]){
+                                                                                            if(achivehasil >= hasildis.content[n][7]){
                                                                                                 color_sts = '<span class="dotOk"></span>';
                                                                                             }else{
                                                                                                 color_sts = '<span class="dotNok"></span>';
                                                                                             }
                                                                                         }else{
-                                                                                            if(achive <= hasildis.content[n][7]){
+                                                                                            if(achivehasil <= hasildis.content[n][7]){
                                                                                                 color_sts = '<span class="dotOk"></span>';
                                                                                             }else{
                                                                                                 color_sts = '<span class="dotNok"></span>';
@@ -1295,7 +1329,8 @@
                                                         			
                                                         		}
                                                     		}
-                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' ></td></tr>":'</tr>';
+                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' ></td>":'';
+                                                    		text += "<td style='text-align:center;border-style:ridge;' >"+achivehasil+"</td></tr>";
                                                     	}
                                                 	}
                                                 }
