@@ -964,10 +964,11 @@
                                     		}
                                     	}
                             			text += "<td colspan='"+colspan+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+tahun+"</b></td>";
+                            			text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>TOTAL</b></td>";
                             		}
+                            		
                             	}
                             	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Status</b></td>":'';
-                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>TOTAL</b></td>";
                             	text += "</tr><tr style='font-size:80%;'>";
                             	for(var l=0; l < hasilSts.content.length; l++){
                             		var sts  = hasilSts.content[l][0];
@@ -1032,10 +1033,7 @@
                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][7]?hasil.content[k][7]:'')+"</td>":'';
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][5]?hasil.content[k][5]:'')+"</td>";
                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][6]?hasil.content[k][6]:'')+"</td>":'';
-                                    		var achive = 0;
-                                            var achiveSum = 0;
-                                            var achiveLast = 0;
-                                            var achivehasil;
+                                    		
                                     		for(var l=0; l < hasilSts.content.length; l++){
                                         		var sts  = hasilSts.content[l][0];
                                         		var id_monper = hasilSts.content[l][1];
@@ -1064,6 +1062,10 @@
                                                         cache: false,
                                                         async : false,
                                                         success: function (hasilInd) {
+                                                        	var achive = 0;
+                                                            var achiveSum = 0;
+                                                            var achiveLast = 0;
+                                                            var achivehasil;
                                                         	for (var m = 0; m < hasilInd.content.length; m++) {
                                                         		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilInd.content[m][7]?hasilInd.content[m][7]:'')+"</td>";
                                                         		var nilai1=(hasilInd.content[m][12])?hasilInd.content[m][12]:hasilInd.content[m][8];
@@ -1150,13 +1152,16 @@
                                                                     }
                                                         		}                                                        		
                                                         	}
+                                                        	text += "<td style='text-align:center;border-style:ridge;'>"+achivehasil+"</td>";
                                                         }
                                         			});
+                                        			
                                         		}
                                         		
+                                        		
                                         	}
-                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td>":'';
-                                    		text += "<td style='text-align:center;border-style:ridge;'>"+achivehasil+"</td></tr>";
+                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td></tr>":'</tr>';
+                                    		
                                     		
                                     		$.ajax({
                                                 url: urls + 'get-sdg-disaggre-utama',
@@ -1186,10 +1191,7 @@
                                                     		
                                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'></td>":'';
                                                     		text += "<td style='font-size:80%;border-style:ridge;'></td>";
-                                                    		var achive = 0;
-                                                            var achiveSum = 0;
-                                                            var achiveLast = 0;
-                                                            var achivehasil;
+                                                    		
                                                     		for(var z=0; z < hasilSts.content.length; z++){
                                                         		var sts  = hasilSts.content[z][0];
                                                         		var id_monper = hasilSts.content[z][1];
@@ -1219,6 +1221,10 @@
                                                                         cache: false,
                                                                         async : false,
                                                                         success: function (hasildis) {
+                                                                        	var achive = 0;
+                                                                            var achiveSum = 0;
+                                                                            var achiveLast = 0;
+                                                                            var achivehasil;
                                                                         	if(hasildis.content.length>0){
                                                                         		for (var n = 0; n < hasildis.content.length; n++) {
                                                                             		//text += "<td>"+(hasildis.content[n][7]?hasildis.content[n][7]:'')+"</td>";
@@ -1319,14 +1325,13 @@
                                                                         			text += "<td style='font-size:80%;border-style:ridge;'></td>";
                                                                             	}
                                                                         	}
-                                                                        	
+                                                                        	text += "<td style='text-align:center;border-style:ridge;' >"+achivehasil+"</td>";
                                                                         }
                                                         			});
                                                         			
                                                         		}
                                                     		}
-                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' ></td>":'';
-                                                    		text += "<td style='text-align:center;border-style:ridge;' >"+achivehasil+"</td></tr>";
+                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' ></td></tr>":'</tr>';
                                                     	}
                                                 	}
                                                 }
