@@ -2975,9 +2975,9 @@
 				for (i = 0; i < 4; i++) {
 					var y = '#rel_' + yr + '_' + i;
 					var vl = $(y);
-					console.log('vl ' + vl + ' ' + y);
-					if (vl != undefined && vl != NaN && vl != false) {
-						console.log('vl ' + parseInt($(y).text(), 10));
+					console.log('vla ' + vl + ' ' + y);
+					if ($(y).length) {
+						console.log('vlb ' + parseInt($(y).text(), 10));
 						sum += parseInt($(y).text(), 10);
 					}					
 				}
@@ -3040,8 +3040,7 @@
 				var yr = $('#tahun' + j).text();
 				for (i = 0; i < 4; i++) {
 					var y = '#arel_' + yr + '_' + t + '_' + i;
-					var vl = $(y);
-					if (vl != undefined && vl != NaN && vl != false) {
+					if ($(y).length) {
 						console.log('vl ' + parseInt($(y).text(), 10));
 						sum += parseInt($(y).text(), 10);
 					}					
