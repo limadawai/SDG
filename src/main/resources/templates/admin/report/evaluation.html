@@ -184,6 +184,7 @@
 	var xtype = 1;
 	var ks, kl = 0;
 	var xhasilSts;
+	var xidt;
 	var xyear;
 	var xxt;
 	var tth = [];
@@ -2149,6 +2150,7 @@
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][5]?hasil.content[k][5]:'')+"</td>";
                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][6]?hasil.content[k][6]:'')+"</td>":'';
 											
+											var idt = 0;
                                     		for(var l=0; l < hasilSts.content.length; l++){
                                         		var sts  = hasilSts.content[l][0];
                                         		var id_monper = hasilSts.content[l][1];
@@ -2168,7 +2170,6 @@
                                                 });
                                                 var color_sts="";
                                                 var achive = "";
-												var xyz = 0;
 												var xyy = 0;
                                         		for(var year = start_year; year <= end_year; year++){
                                         			$.ajax({
@@ -2179,8 +2180,9 @@
                                                         cache: false,
                                                         async : false,
                                                         success: function (hasilInd) {
+															var xyz = 0;
                                                         	for (var m = 0; m < hasilInd.content.length; m++) {
-                                                        		text += "<td style='font-size:80%;border-style:ridge;' id='tar_"+ k +"_" + xyy +"'>"+(hasilInd.content[m][7]?hasilInd.content[m][7]:'')+"</td>";
+                                                        		text += "<td style='font-size:80%;border-style:ridge;' id='tar_"+ year +"_" + xyy +"'>"+(hasilInd.content[m][7]?hasilInd.content[m][7]:'')+"</td>";
 																xyy++;
 																if (hasilInd.content[m][7]) {
 																	tth[year] = hasilInd.content[m][7];
@@ -2205,7 +2207,7 @@
                                                         		
                                                         		
                                                         		if(sts == 'yearly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rely_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
 																	if (nilai1sdg != null) {
 																		console.log('year ' + year + ' ' + nilai1sdg);
 																	}
@@ -2214,9 +2216,9 @@
                                                            				achive = nilai1sdg;
                                                            			}	
                                                         		}else if(sts == 'semesterly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rels_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rels_"+ k +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
 																	xyz++;
                                                         			if(nilai1sdg || nilai2sdg){
                                                         				if(hasilInd.content[m][16]=="2"){
@@ -2232,13 +2234,13 @@
 																	console.log('year ' + year + ' ' + tth[year]);																
                                                             	}
                                                         		else if(sts == 'quarterly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='relq_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='relq_"+ k +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='relq_"+ k +"_" + xyz +"'>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='relq_"+ k +"_" + xyz +"'>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
 																	xyz++;
 																	console.log('year ' + year + ' ' + nilai1sdg + ' ' + nilai2sdg + ' ' + nilai3sdg);
                                                         			if(nilai1sdg || nilai2sdg || nilai3sdg || nilai4sdg){
@@ -2264,7 +2266,7 @@
                                                                         }else{
                                                                             color_sts = '<span class="dotNok"></span>';
                                                                         }
-                                                                    }else{
+
                                                                         if((achive <= hasilInd.content[m][7])){
                                                                             color_sts = '<span class="dotOk"></span>';
                                                                         }else{
@@ -2276,8 +2278,9 @@
                                                         }
                                         			});
                                         		}
-                                        		
+                                        		idt++;
                                         	}
+											xidt = idt;
                                     		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td></tr>":'</tr>';
                                     		
                                     		$.ajax({
@@ -2330,7 +2333,6 @@
 
                                                                 var color_sts="";
                                                                 var achive = "";
-																var xyz = 0;
                                                         		for(var year = start_year; year <= end_year; year++){
                                                         			$.ajax({
                                                                         url: urls + 'get-sdg-disaggre-slave',
@@ -2340,6 +2342,7 @@
                                                                         cache: false,
                                                                         async : false,
                                                                         success: function (hasildis) {
+																			var xyz = 0;
                                                                         	if(hasildis.content.length>0){
                                                                         		for (var n = 0; n < hasildis.content.length; n++) {
                                                                             		//text += "<td>"+(hasildis.content[n][7]?hasildis.content[n][7]:'')+"</td>";
@@ -2361,15 +2364,15 @@
                                                                             		}
                                                                             		
                                                                             		if(sts == 'yearly'){
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
 																						xyz++;
                                                                             			if(nilai1sdgDetail){
                                                                             				achive = nilai1sdgDetail;
                                                                             			}
                                                                             		}else if(sts == 'semesterly'){
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
 																						xyz++;
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
 																						xyz++;
                                                                             			if(nilai1sdgDetail || nilai2sdgDetail){
                                                                             				if(hasil.content[k][20]=="2"){
@@ -2380,13 +2383,13 @@
                                                                             			}
                                                                                 	}
                                                                             		else if(sts == 'quarterly'){
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
 																						xyz++;
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
 																						xyz++;
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai3sdgDetail!=null?nilai3sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai3sdgDetail!=null?nilai3sdgDetail:'')+"</td>";
 																						xyz++;
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai4sdgDetail!=null?nilai4sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai4sdgDetail!=null?nilai4sdgDetail:'')+"</td>";
 																						xyz++;
                                                                             			if(nilai1sdgDetail || nilai2sdgDetail || nilai3sdgDetail || nilai4sdgDetail){
                                                                             				if(hasil.content[k][20]=="2"){
@@ -2485,10 +2488,14 @@
                         ];
 			*/
 			var tar = [];
+			var rel0 = [];
+			var rel1 = [];
+			var rel2 = [];
+			var rel3 = [];			
 			for (i = 0; i < xxt; i++) {
 				var yr = $('#tahun' + i).text();
-				var y = tth[yr];
-				tar[i] = y;
+				var y = '#tar_' + yr + '_' + i;
+				tar[i] = parseInt($(y).text(), 10);
 			}
 			ser.push({
                         name: 'Target SDGS',
@@ -2496,13 +2503,44 @@
                         data: tar
 			});
 
-			var rel0 = [
-                            parseInt($("#rel_"+t + "_0").text(), 10),
-                            parseInt($("#rel_"+t + "_4").text(), 10),
-                            parseInt($("#rel_"+t + "_8").text(), 10),
-                            parseInt($("#rel_"+t + "_12").text(), 10),
-							parseInt($("#rel_"+t + "_16").text(), 10),
-                        ];
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#rel_' + yr + '_0';
+				var vl = $(y);
+				console.log('vl ' + vl + ' ' + y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					console.log('vl ' + parseInt($(y).text(), 10));
+					rel0[j] = parseInt($(y).text(), 10);
+				}
+			}
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#rel_' + yr + '_1';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel1[j] = parseInt($(y).text(), 10);
+				}
+			}			
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#rel_' + yr + '_2';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel2[j] = parseInt($(y).text(), 10);
+				}
+			}
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#rel_' + yr + '_3';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel3[j] = parseInt($(y).text(), 10);
+				}
+			}									
+
 			if (sts == 'yearly') {
 				if (pil_graf == 'graf1') {
 					ser.push({
@@ -2588,14 +2626,6 @@
 
 			}
 
-
-			var rel1 = [
-                            parseInt($("#rel_"+t + "_1").text(), 10),
-                            parseInt($("#rel_"+t + "_5").text(), 10),
-                            parseInt($("#rel_"+t + "_9").text(), 10),
-                            parseInt($("#rel_"+t + "_13").text(), 10),
-							parseInt($("#rel_"+t + "_17").text(), 10),
-                        ];
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 				if (pil_graf == 'graf1') {
@@ -2655,14 +2685,6 @@
 
 			}						
 
-			var rel2 = [
-                            parseInt($("#rel_"+t + "_2").text(), 10),
-                            parseInt($("#rel_"+t + "_6").text(), 10),
-                            parseInt($("#rel_"+t + "_10").text(), 10),
-                            parseInt($("#rel_"+t + "_14").text(), 10),
-							parseInt($("#rel_"+t + "_18").text(), 10),
-                        ];
-
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 			} else {
@@ -2694,14 +2716,6 @@
 				}
 			}						
 
-			var rel3 = [
-                            parseInt($("#rel_"+t + "_3").text(), 10),
-                            parseInt($("#rel_"+t + "_7").text(), 10),
-                            parseInt($("#rel_"+t + "_11").text(), 10),
-                            parseInt($("#rel_"+t + "_15").text(), 10),
-							parseInt($("#rel_"+t + "_19").text(), 10),
-                        ];
-			
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 			} else {
@@ -2737,8 +2751,13 @@
 
 		console.log(ser);
 
-
 		for (t = 0; t < kl; t++) {
+
+			tar = [];
+			rel0 = [];
+			rel1 = [];
+			rel2 = [];
+			rel3 = [];			
 			var tar = [
                             parseInt($("#tar_"+t + "_0").text(), 10),
                             parseInt($("#tar_"+t + "_1").text(), 10),
@@ -2752,13 +2771,43 @@
                         data: tar
 			});
 
-			var rel0 = [
-                            parseInt($("#arel_"+t + "_0").text(), 10),
-                            parseInt($("#arel_"+t + "_4").text(), 10),
-                            parseInt($("#arel_"+t + "_8").text(), 10),
-                            parseInt($("#arel_"+t + "_12").text(), 10),
-							parseInt($("#arel_"+t + "_16").text(), 10),
-                        ];
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#arel_' + yr + '_' + t + '_0';
+				var vl = $(y);
+				console.log('vl ' + vl + ' ' + y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					console.log('vl ' + parseInt($(y).text(), 10));
+					rel0[j] = parseInt($(y).text(), 10);
+				}
+			}
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#arel_' + yr + '_' + t + '_1';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel1[j] = parseInt($(y).text(), 10);
+				}
+			}			
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#arel_' + yr + '_' + t + '_2';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel2[j] = parseInt($(y).text(), 10);
+				}
+			}
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#arel_' + yr + '_' + t + '_3';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel3[j] = parseInt($(y).text(), 10);
+				}
+			}									
 
 			if (sts == 'yearly') {
 				ser.push({
@@ -2779,13 +2828,6 @@
                         data: rel0,
 				});							
 			}						
-			var rel1 = [
-                            parseInt($("#arel_"+t + "_1").text(), 10),
-                            parseInt($("#arel_"+t + "_5").text(), 10),
-                            parseInt($("#arel_"+t + "_9").text(), 10),
-                            parseInt($("#arel_"+t + "_13").text(), 10),
-							parseInt($("#arel_"+t + "_17").text(), 10),
-                        ];
 
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
@@ -2802,14 +2844,6 @@
 				});							
 			}												
 
-			var rel2 = [
-                            parseInt($("#arel_"+t + "_2").text(), 10),
-                            parseInt($("#arel_"+t + "_6").text(), 10),
-                            parseInt($("#arel_"+t + "_10").text(), 10),
-                            parseInt($("#arel_"+t + "_14").text(), 10),
-							parseInt($("#arel_"+t + "_18").text(), 10),
-                        ];
-
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 			} else {
@@ -2819,14 +2853,6 @@
                         data: rel2,
 				});							
 			}																		
-
-			var rel3 = [
-                            parseInt($("#arel_"+t + "_3").text(), 10),
-                            parseInt($("#arel_"+t + "_7").text(), 10),
-                            parseInt($("#arel_"+t + "_11").text(), 10),
-                            parseInt($("#arel_"+t + "_15").text(), 10),
-							parseInt($("#arel_"+t + "_19").text(), 10),
-                        ];
 
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
@@ -2913,15 +2939,211 @@
             chart4=new Highcharts.Chart(options4);				
 	}
 
+
+	function c(ks, kl, hasilSts, pil_graf) {
+		console.log('c => ' + ks + ' ' + kl + ' ' + hasilSts.content[0][0] + ' ' + xxt);
+		var sts = hasilSts.content[0][0];
+		var ser = [];
+		var tahun = [];
+
+		for (i = 0; i < xxt; i++) {
+			tahun.push($('#tahun' + i).text());
+		}
+
+		console.log(tahun);
+
+		for (t = 0; t < ks; t++) {
+			var tar = [];
+			var rel0 = [];
+			var rel1 = [];
+			var rel2 = [];
+			var rel3 = [];			
+			for (i = 0; i < xxt; i++) {
+				var yr = $('#tahun' + i).text();
+				var y = '#tar_' + yr + '_' + i;
+				tar[i] = parseInt($(y).text(), 10);
+			}
+			ser.push({
+                        name: 'Target SDGS',
+                        type: 'spline',
+                        data: tar
+			});
+
+			for (j = 0; j < xxt; j++) {
+				var sum = 0;
+				var yr = $('#tahun' + j).text();
+				for (i = 0; i < 4; i++) {
+					var y = '#rel_' + yr + '_' + i;
+					var vl = $(y);
+					console.log('vl ' + vl + ' ' + y);
+					if (vl != undefined && vl != NaN && vl != false) {
+						console.log('vl ' + parseInt($(y).text(), 10));
+						sum += parseInt($(y).text(), 10);
+					}					
+				}
+				rel0[j] = sum;
+			}
+
+			if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS',
+                        type: 'spline',
+                        data: rel0,
+					});								
+				} else if (pil_graf == 'graf4') {
+					ser.push({
+                        name: 'Realisasi SDGS',
+                        type: 'column',
+                        data: rel0,
+					});								
+				} else {
+					ser.push(
+						{
+                        name: 'Realisasi SDGS',
+                        type: 'column',
+                        data: rel0,
+						},
+						{
+                        name: 'Realisasi SDGS',
+                        type: 'spline',
+                        data: rel0,
+						},						
+					);								
+				}			
+
+		}
+
+		console.log(ser);
+
+		for (t = 0; t < kl; t++) {
+
+			tar = [];
+			rel0 = [];
+			rel1 = [];
+			rel2 = [];
+			rel3 = [];			
+			var tar = [
+                            parseInt($("#tar_"+t + "_0").text(), 10),
+                            parseInt($("#tar_"+t + "_1").text(), 10),
+                            parseInt($("#tar_"+t + "_2").text(), 10),
+                            parseInt($("#tar_"+t + "_3").text(), 10),
+                            parseInt($("#tar_"+t + "_4").text(), 10)
+                        ];
+			ser.push({
+                        name: 'Target Disagregasi ' + (t + 1),
+                        type: 'spline',
+                        data: tar
+			});
+
+			for (j = 0; j < xxt; j++) {
+				var sum = 0;
+				var yr = $('#tahun' + j).text();
+				for (i = 0; i < 4; i++) {
+					var y = '#arel_' + yr + '_' + t + '_' + i;
+					var vl = $(y);
+					if (vl != undefined && vl != NaN && vl != false) {
+						console.log('vl ' + parseInt($(y).text(), 10));
+						sum += parseInt($(y).text(), 10);
+					}					
+				}
+				rel0[j] = sum;
+			}									
+
+			ser.push({
+                        name: 'Realisasi Disagregasi ' + (t + 1),
+                        type: 'spline',
+                        data: rel0,
+				});			
+
+		}
+
+		var sb = 'Combination Chart';
+                if (pil_graf == 'graf1') {
+                    sb = 'Line Chart';
+                } else if (pil_graf == 'graf4') {
+                    sb = 'Stack Chart';
+                }
+
+		var chart4;
+		var options4 ={
+			chart: {
+                        zoomType: 'xy',
+                        renderTo: 'dualaxes'
+            },
+
+            title: {
+                        text: 'Komparasi Target dan Realisasi '
+            },
+            credits: {
+                        enabled: false
+            },
+            subtitle: {
+                        text: sb
+        	},
+            xAxis: [{
+                        categories: tahun
+            }],
+            yAxis: [{ // Primary yAxis
+                        labels: {
+                            format: '{value}',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        min: 0,
+                        //max:100,
+                        title: {
+                            text: '',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },opposite: false
+                    }],
+                    tooltip: {
+                        shared: true
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        x: 0,
+                        verticalAlign: 'top',
+                        y: 55,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: ser,
+                    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                            return {
+                                radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
+                                stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
+                            };
+                        })
+            }
+            chart4=new Highcharts.Chart(options4);				
+	}	
+
 	$("#pilgrafik").on("change", function() {
 		var pil_graf = $("#pilgrafik").val();
-		console.log('me change ' + pil_graf + ' ' + xtype);
-		if (xtype == 2) {
-			a(xyear, pil_graf);
+		var per = $("#periode").val();
+		console.log('me change ' + pil_graf + ' ' + xtype + ' ' + per);
+		if (per == 'all') {
+			c(ks, kl, xhasilSts, pil_graf);
 		} else {
-			console.log(xhasilSts);
-			b(ks, kl, xhasilSts, pil_graf);
+			if (xtype == 2) {
+				a(xyear, pil_graf);
+			} else {
+				b(ks, kl, xhasilSts, pil_graf);
+			}
 		}
+
 	});
     
     var tableToExcel = (function() {
