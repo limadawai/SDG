@@ -49,4 +49,9 @@ public class AssignSdgIndicatorService implements IAssignSdgIndicatorService{
 		int id_role = repo.idRole(id_goals, id_target, id_indicator, id_monper, id_prov);
 		return id_role;
 	}
+
+	@Override
+	public void deleteAssign(String id_prov) {
+		repo.deleteAssign(id_prov);
+	}
 }
