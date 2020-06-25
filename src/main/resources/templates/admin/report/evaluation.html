@@ -184,7 +184,11 @@
 	var xtype = 1;
 	var ks, kl = 0;
 	var xhasilSts;
+	var xidt;
 	var xyear;
+	var xxt;
+	var tth = [];
+	var ttr = [];
 
     $("#welcome").html("Welcome, "+name);
 
@@ -964,7 +968,7 @@
                                     		}
                                     	}
                             			text += "<td colspan='"+colspan+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+tahun+"</b></td>";
-                            			text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>TOTAL</b></td>";
+                            			//text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>TOTAL</b></td>";
                             		}
                             		
                             	}
@@ -1152,7 +1156,7 @@
                                                                     }
                                                         		}                                                        		
                                                         	}
-                                                        	text += "<td style='text-align:center;border-style:ridge;'>"+achivehasil+"</td>";
+                                                        	//text += "<td style='text-align:center;border-style:ridge;'>"+achivehasil+"</td>";
                                                         }
                                         			});
                                         			
@@ -1325,7 +1329,7 @@
                                                                         			text += "<td style='font-size:80%;border-style:ridge;'></td>";
                                                                             	}
                                                                         	}
-                                                                        	text += "<td style='text-align:center;border-style:ridge;' >"+achivehasil+"</td>";
+                                                                        	//text += "<td style='text-align:center;border-style:ridge;' >"+achivehasil+"</td>";
                                                                         }
                                                         			});
                                                         			
@@ -1950,9 +1954,10 @@
         		
 	}
 
-    function ambilDataAllChart(sdg_indicator){
+    function ambilDataAllChartx(sdg_indicator){
 		xtype = 1;
 		kl = 0;
+		tth = [];
 		var ser  = [];
         var idrole = $("#role").val();
         var idprov = $("#daerah").val();
@@ -1988,6 +1993,7 @@
     		baseline = 'Baseline';
     	}
         var idmonper = $("#periode").find(':selected').data('id');
+		console.log('idmonper ' + idmonper);
         var hasilSts;
         $.ajax({
             url: urls + 'list-get-sts-monper-all/'+idprov+'/'+idmonper,
@@ -2076,6 +2082,7 @@
 										xt++;
                             		}
                             	}
+								xxt = xt;
                             	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Status</b></td>":'';
                             	text += "</tr><tr style='font-size:80%;'>";
                             	for(var l=0; l < hasilSts.content.length; l++){
@@ -2143,6 +2150,7 @@
                                     		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][5]?hasil.content[k][5]:'')+"</td>";
                                     		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][6]?hasil.content[k][6]:'')+"</td>":'';
 											
+											var idt = 0;
                                     		for(var l=0; l < hasilSts.content.length; l++){
                                         		var sts  = hasilSts.content[l][0];
                                         		var id_monper = hasilSts.content[l][1];
@@ -2162,7 +2170,6 @@
                                                 });
                                                 var color_sts="";
                                                 var achive = "";
-												var xyz = 0;
 												var xyy = 0;
                                         		for(var year = start_year; year <= end_year; year++){
                                         			$.ajax({
@@ -2173,9 +2180,15 @@
                                                         cache: false,
                                                         async : false,
                                                         success: function (hasilInd) {
+															var xyz = 0;
                                                         	for (var m = 0; m < hasilInd.content.length; m++) {
-                                                        		text += "<td style='font-size:80%;border-style:ridge;' id='tar_"+ k +"_" + xyy +"'>"+(hasilInd.content[m][7]?hasilInd.content[m][7]:'')+"</td>";
+                                                        		text += "<td style='font-size:80%;border-style:ridge;' id='tar_"+ year +"_" + xyy +"'>"+(hasilInd.content[m][7]?hasilInd.content[m][7]:'')+"</td>";
 																xyy++;
+																if (hasilInd.content[m][7]) {
+																	tth[year] = hasilInd.content[m][7];
+																} else {
+																	tth[year] = 0;
+																}
                                                         		var nilai1=(hasilInd.content[m][12])?hasilInd.content[m][12]:hasilInd.content[m][8];
                                                         		var nilai2=(hasilInd.content[m][13])?hasilInd.content[m][13]:hasilInd.content[m][9];
                                                         		var nilai3=(hasilInd.content[m][14])?hasilInd.content[m][14]:hasilInd.content[m][10];
@@ -2194,15 +2207,18 @@
                                                         		
                                                         		
                                                         		if(sts == 'yearly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+																	if (nilai1sdg != null) {
+																		console.log('year ' + year + ' ' + nilai1sdg);
+																	}
 																	xyz++;
                                                        				if(nilai1sdg){
                                                            				achive = nilai1sdg;
                                                            			}	
                                                         		}else if(sts == 'semesterly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
 																	xyz++;
                                                         			if(nilai1sdg || nilai2sdg){
                                                         				if(hasilInd.content[m][16]=="2"){
@@ -2211,16 +2227,22 @@
                                                                				achive = nilai1sdg+nilai2sdg;
                                                             			}
                                                         			}
+																	if (nilai1sdg != null) {
+																	}
+																	if (nilai2sdg != null) {
+																	}	
+																	console.log('year ' + year + ' ' + tth[year]);																
                                                             	}
                                                         		else if(sts == 'quarterly'){
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
 																	xyz++;
-                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ k +"_" + xyz +"'>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
 																	xyz++;
+																	console.log('year ' + year + ' ' + nilai1sdg + ' ' + nilai2sdg + ' ' + nilai3sdg);
                                                         			if(nilai1sdg || nilai2sdg || nilai3sdg || nilai4sdg){
                                                         				if(hasilInd.content[m][16]=="2"){
                                                         					if(nilai4sdg){
@@ -2244,7 +2266,7 @@
                                                                         }else{
                                                                             color_sts = '<span class="dotNok"></span>';
                                                                         }
-                                                                    }else{
+
                                                                         if((achive <= hasilInd.content[m][7])){
                                                                             color_sts = '<span class="dotOk"></span>';
                                                                         }else{
@@ -2256,8 +2278,9 @@
                                                         }
                                         			});
                                         		}
-                                        		
+                                        		idt++;
                                         	}
+											xidt = idt;
                                     		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td></tr>":'</tr>';
                                     		
                                     		$.ajax({
@@ -2310,7 +2333,6 @@
 
                                                                 var color_sts="";
                                                                 var achive = "";
-																var xyz = 0;
                                                         		for(var year = start_year; year <= end_year; year++){
                                                         			$.ajax({
                                                                         url: urls + 'get-sdg-disaggre-slave',
@@ -2320,6 +2342,7 @@
                                                                         cache: false,
                                                                         async : false,
                                                                         success: function (hasildis) {
+																			var xyz = 0;
                                                                         	if(hasildis.content.length>0){
                                                                         		for (var n = 0; n < hasildis.content.length; n++) {
                                                                             		//text += "<td>"+(hasildis.content[n][7]?hasildis.content[n][7]:'')+"</td>";
@@ -2341,15 +2364,15 @@
                                                                             		}
                                                                             		
                                                                             		if(sts == 'yearly'){
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
 																						xyz++;
                                                                             			if(nilai1sdgDetail){
                                                                             				achive = nilai1sdgDetail;
                                                                             			}
                                                                             		}else if(sts == 'semesterly'){
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
 																						xyz++;
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
 																						xyz++;
                                                                             			if(nilai1sdgDetail || nilai2sdgDetail){
                                                                             				if(hasil.content[k][20]=="2"){
@@ -2360,13 +2383,13 @@
                                                                             			}
                                                                                 	}
                                                                             		else if(sts == 'quarterly'){
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
 																						xyz++;
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
 																						xyz++;
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai3sdgDetail!=null?nilai3sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai3sdgDetail!=null?nilai3sdgDetail:'')+"</td>";
 																						xyz++;
-                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + l + "_" + xyz +"'>"+(nilai4sdgDetail!=null?nilai4sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;' id='arel_" + year + "_" + l + "_" + xyz +"'>"+(nilai4sdgDetail!=null?nilai4sdgDetail:'')+"</td>";
 																						xyz++;
                                                                             			if(nilai1sdgDetail || nilai2sdgDetail || nilai3sdgDetail || nilai4sdgDetail){
                                                                             				if(hasil.content[k][20]=="2"){
@@ -2441,14 +2464,538 @@
         });
     }	
 
+    function ambilDataAllChart(sdg_indicator){
+		xtype = 1;
+		kl = 0;
+        var idrole = $("#role").val();
+        var idprov = $("#daerah").val();
+        var cat = $("#role").find(":selected").data("cat");
+        $("#indi").html("");
+		$("#dualaxes").html("");
+        var goal = 'Nama Capaian';
+        var target = "Nama Target";
+        var code = 'Kode Indikator';
+        var nama = 'Nama Indikator';
+        var unit = 'Satuan';
+        var sdg_ach = 'Realisasi SDG';
+        var sumber = 'Sumber Data';
+        var baseline = 'Dasar';
+        if($("#fs").is(':checked')){
+        	goal = 'Nama Capaian';
+        	target = "Nama Target";
+        	code = 'Kode Indikator';
+        	nama = 'Nama Indikator';
+        	unit = 'Satuan';
+        	sdg_ach = 'Realisasi SDG';
+        	sumber = 'Sumber Data';
+        	baseline = 'Dasar';
+    	}else{
+    		goal = 'Goal Name';
+    		target = "Target Name ";
+    		code = 'Indicator Code';
+    		nama = 'Indicator Name';
+    		unit = 'Unit';
+    		sdg_ach = 'SDGs Achievements';
+    		sumber = 'Data Source';
+    		baseline = 'Baseline';
+    	}
+        var idmonper = $("#periode").find(':selected').data('id');
+        $.ajax({
+            url: urls + 'list-get-sts-monper-all/'+idprov+'/'+idmonper,
+            type: 'get',
+            dataType: 'json',
+            cache: false,
+            async : false,
+            success: function (hasil) {
+            	hasilSts = hasil;
+				xhasilSts = hasil;
+            }
+        });
+        
+        var text="";
+        $.ajax({
+            url: urls + "get-sdg-goals/"+sdg_indicator,
+            data: {'id_role': idrole,'id_monper':idmonper},
+            type: 'get',
+            dataType: 'json',
+            beforeSend : function(xhr){
+            	$('body').addClass("loading"); 
+            },
+           complete: function(){
+            	$('body').removeClass("loading");
+            },
+            success: function (response) {
+            	for (var i = 0; i < response.sdg.length; i++) {
+        			var nm_goals;
+        			var id_goals=response.sdg[i][0];
+        			var kode_goals=response.sdg[i][3];
+                	if($("#fs").is(':checked')){
+                		nm_goals = response.sdg[i][1];
+					}else{
+						nm_goals = response.sdg[i][2];
+					}
+                	if(i>0){text += "<br/>";}
+                	text += "<div style='font-size:90%;width:100%;text-align:left;'><h4>"+goal+" : "+kode_goals+". "+nm_goals+"</h4></div>";
+                	
+                	$.ajax({
+                        url: urls + 'get-sdg-target/'+sdg_indicator,
+                        type: 'get',
+                        data: {'id_role':idrole,'id_goals':id_goals,'id_monper':idmonper},
+                        dataType: 'json',
+                        cache: false,
+                        async : false,
+                        success: function (result) {
+                        	for (var j = 0; j < result.content.length; j++) {
+                        		var nm_target;
+                        		var id_target=result.content[j][0];
+                        		var kode_target=result.content[j][3];
+                            	if($("#fs").is(':checked')){
+                            		nm_target = result.content[j][1];
+        						}else{
+        							nm_target = result.content[j][2];
+        						}
+                            	if(j>0){text += "<br/>";}
+                            	text += "<div style='font-size:90%;width:100%;text-align:left;'><h5>"+target+" : "+kode_goals+'.'+kode_target+". "+nm_target+"</h5></div>";
+                        		
+                            	var spansdg;
+                            	var colspan;
+                            	text += "<div style='overflow-x:auto;'><table class='table table-striped table-bordered tabel-sdg' width='100%'><thead>";
+                            	text += "<tr style='font-size:80%;'>";
+                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+code+"</b></td>";
+                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+nama+"</b></td>";
+                            	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+sumber+"</b></td>":'';
+                            	text += "<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+unit+"</b></td>";
+                            	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+baseline+"</b></td>":'';
+                            	
+								var xt = 0;
+                            	for(var l=0; l < hasilSts.content.length; l++){
+                            		var sts  = hasilSts.content[l][0];
+                            		var id_monper = hasilSts.content[l][1];
+                            		var start_year = hasilSts.content[l][2];
+                            		var end_year = hasilSts.content[l][3];
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
+                            			if(sts == 'yearly'){
+                            				colspan = 2;
+                                    	}else{
+                                    		if(sts == "semesterly"){
+                                    			colspan = 3;
+                                    		}else{
+                                    			colspan = 5;
+                                    		}
+                                    	}
+                            			text += "<td colspan='"+colspan+"' style='text-align:center;vertical-align:middle;border-style:ridge;' id='tahun" + xt + "'><b>"+tahun+"</b></td>";
+                            			text += "<span rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;display:none;'><b>TOTAL</b></span>";
+										xt++;
+                            		}
+                            		
+                            	}
+								xxt = xt;
+                            	text += (idmonper!="0")?"<td rowspan='3' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Status</b></td>":'';
+                            	text += "</tr><tr style='font-size:80%;'>";
+                            	for(var l=0; l < hasilSts.content.length; l++){
+                            		var sts  = hasilSts.content[l][0];
+                            		var id_monper = hasilSts.content[l][1];
+                            		var start_year = hasilSts.content[l][2];
+                            		var end_year = hasilSts.content[l][3];
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
+                            			if(sts == 'yearly'){
+                                    		spansdg = 2;
+                                    		colspan = 1;
+                                    	}else{
+                                    		spansdg = 3;
+                                    		if(sts == "semesterly"){
+                                    			colspan = 2;
+                                    		}else{
+                                    			colspan = 4;
+                                    		}
+                                    	}
+                            			text += "<td rowspan='2' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>Target</b></td>";
+                                    	text += "<td colspan='"+colspan+"' style='text-align:center;vertical-align:middle;border-style:ridge;'><b>"+sdg_ach+"</td>";
+                                    }
+                            	}
+                            	text += "</tr><tr style='font-size:80%;'>";
+                            	for(var l=0; l < hasilSts.content.length; l++){
+                            		var sts  = hasilSts.content[l][0];
+                            		var id_monper = hasilSts.content[l][1];
+                            		var start_year = hasilSts.content[l][2];
+                            		var end_year = hasilSts.content[l][3];
+                            		for(var tahun = start_year ; tahun <= end_year; tahun++){
+                            			if(sts == 'yearly'){
+                                    		text += "<td style='text-align:center;vertical-align:middle;border-style:ridge;'><b></b></td>";
+                                    	}else if(sts == 'semesterly'){
+                                    		text += "<td style='text-align:center;vertical-align:middle;border-style:ridge;'><b>1</b></td><td style='text-align:center;vertical-align:middle;border-style:ridge;'><b>2</b></td>";
+                                    	}
+                                		else if(sts == 'quarterly'){
+                                			text += "<td style='text-align:center;vertical-align:middle;border-style:ridge;'><b>1</b></td><td style='text-align:center;vertical-align:middle;border-style:ridge;'><b>2</b></td><td style='text-align:center;vertical-align:middle;border-style:ridge;'><b>3</b></td><td style='text-align:center;vertical-align:middle;border-style:ridge;'><b>4</b></td>";
+                                    	}
+                            		}
+                            	}
+                            	text += "</tr></thead><tbody>";
+                            	
+                            	$.ajax({
+                                    url: urls + 'get-sdg-indicator-utama/'+sdg_indicator,
+                                    type: 'get',
+                                    data: {'id_role':idrole,'id_goals':id_goals,'id_target':id_target,'id_monper':idmonper,'id_prov':idprov},
+                                    dataType: 'json',
+                                    cache: false,
+                                    async : false,
+                                    success: function (hasil) {
+										ks = hasil.content.length;
+                                    	for (var k = 0; k < hasil.content.length; k++) {
+                                    		var nm_indicator;
+                                    		var id_indicator=hasil.content[k][0];
+                                    		var kode_indicator=hasil.content[k][3];
+                                        	if($("#fs").is(':checked')){
+                                        		nm_indicator = hasil.content[k][1];
+                    						}else{
+                    							nm_indicator = hasil.content[k][2];
+                    						}
+                                    		text += "<tr style='border-style:ridge;'>";
+                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+kode_goals+'.'+kode_target+'.'+kode_indicator+"</td>";
+                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+nm_indicator+"</td>";
+                                    		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][7]?hasil.content[k][7]:'')+"</td>":'';
+                                    		text += "<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][5]?hasil.content[k][5]:'')+"</td>";
+                                    		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasil.content[k][6]?hasil.content[k][6]:'')+"</td>":'';
+                                    		
+                                    		for(var l=0; l < hasilSts.content.length; l++){
+                                        		var sts  = hasilSts.content[l][0];
+                                        		var id_monper = hasilSts.content[l][1];
+                                        		var start_year = hasilSts.content[l][2];
+                                        		var end_year = hasilSts.content[l][3];
+                                        		
+                                        		var cekSdg="";
+                                                $.ajax({
+                                        			url: urls + "getentryshowreport",
+                                                    type: 'get',
+                                                    data: { "id_monper":id_monper},
+                                                    dataType: 'json',
+                                                    async:false,
+                                                    success: function (result) {
+                                                    	cekSdg = result.sdg;
+                                                    }
+                                                });
+                                                var color_sts="";
+                                                var xyy = 0
+                                        		for(var year = start_year; year <= end_year; year++){
+                                        			$.ajax({
+                                                        url: urls + 'get-sdg-indicator-slave',
+                                                        type: 'get',
+                                                        data: {'id_role':idrole,'id_indicator':id_indicator,'year':year,'id_monper':id_monper,'id_prov':idprov},
+                                                        dataType: 'json',
+                                                        cache: false,
+                                                        async : false,
+                                                        success: function (hasilInd) {
+                                                        	var achive = 0;
+                                                            var achiveSum = 0;
+                                                            var achiveLast = 0;
+                                                            var achivehasil;
+															var xyz = 0;
+                                                        	for (var m = 0; m < hasilInd.content.length; m++) {
+                                                        		text += "<td style='font-size:80%;border-style:ridge;' id='tar_"+ year +"_" + xyy +"'>"+(hasilInd.content[m][7]?hasilInd.content[m][7]:'')+"</td>";
+                                                        		var nilai1=(hasilInd.content[m][12])?hasilInd.content[m][12]:hasilInd.content[m][8];
+                                                        		var nilai2=(hasilInd.content[m][13])?hasilInd.content[m][13]:hasilInd.content[m][9];
+                                                        		var nilai3=(hasilInd.content[m][14])?hasilInd.content[m][14]:hasilInd.content[m][10];
+                                                        		var nilai4=(hasilInd.content[m][15])?hasilInd.content[m][15]:hasilInd.content[m][11];
+                                                        		
+                                                        		var nilai1sdg="";
+                                                        		var nilai2sdg="";
+                                                        		var nilai3sdg="";
+                                                        		var nilai4sdg="";
+                                                        		for(var isdg=0;isdg<cekSdg.length;isdg++){
+                                                        			nilai1sdg = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==year)?nilai1:(nilai1sdg)?nilai1sdg:"";
+                                                        			nilai2sdg = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==year)?nilai2:(nilai2sdg)?nilai2sdg:"";
+                                                        			nilai3sdg = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==year)?nilai3:(nilai3sdg)?nilai3sdg:"";
+                                                        			nilai4sdg = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==year)?nilai4:(nilai4sdg)?nilai4sdg:"";
+                                                        		}
+                                                        		
+                                                        		
+                                                        		if(sts == 'yearly'){
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+																	xyz++;
+                                                       				if(nilai1sdg!=''){
+                                                           				achive = nilai1sdg;
+                                                           			}	
+                                                       				achiveLast = (achive!=0)?achive:achiveLast;
+                                                       				achiveSum += achive;
+                                                        		}else if(sts == 'semesterly'){
+                                                        			if(nilai1sdg!='' || nilai2sdg!=''){
+                                                        				if(hasilInd.content[m][16]=="2"){
+                                                               				achive = (nilai2sdg!='')?nilai2sdg:nilai1sdg;
+                                                               				achiveLast = (achive!=0)?achive:achiveLast;
+                                                            			}else{
+                                                               				achive = parseInt(nilai1sdg)+parseInt(nilai2sdg);
+                                                               				achiveSum += achive;
+                                                            			}
+                                                        			}
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+																	xyz++;
+                                                        			
+                                                            	}else if(sts == 'quarterly'){
+                                                        			if(nilai1sdg!='' || nilai2sdg!='' || nilai3sdg!='' || nilai4sdg!=''){
+                                                        				if(hasilInd.content[m][16]=="2"){
+                                                        					if(nilai4sdg!=''){
+                                                        						achive = nilai4sdg;
+                                                        					}else if(nilai3sdg!=''){
+                                                        						achive = nilai3sdg;
+                                                        					}else if(nilai2sdg!=''){
+                                                        						achive = nilai2sdg;
+                                                        					}else if(nilai1sdg!=''){
+                                                        						achive = nilai1sdg;
+                                                        					}
+                                                        					achiveLast = (achive!=0)?achive:achiveLast;
+                                                        				}else{
+                                                        					achive = parseInt(nilai1sdg?nilai1sdg:0)+parseInt(nilai2sdg?nilai2sdg:0)+parseInt(nilai3sdg?nilai3sdg:0)+parseInt(nilai4sdg?nilai4sdg:0);	
+                                                        					achiveSum += achive;
+                                                        				}
+                                                        			}
+                                                        			
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai1sdg!=null?nilai1sdg:'')+"</td>";
+																	xyz++;
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai2sdg!=null?nilai2sdg:'')+"</td>";
+																	xyz++;
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai3sdg!=null?nilai3sdg:'')+"</td>";
+																	xyz++;
+                                                        			text += "<td style='font-size:80%;border-style:ridge;' id='rel_"+ year +"_" + xyz +"'>"+(nilai4sdg!=null?nilai4sdg:'')+"</td>";
+																	xyz++;
+                                                        			
+                                                            	}
+                                                        		
+                                                        		if(hasilInd.content[m][16]=="2"){
+                                                        			achivehasil = achiveLast;
+                                                        		}else{
+                                                        			achivehasil = achiveSum;
+                                                        		}
+                                                        		if(achivehasil){
+                                                        			if(hasilInd.content[m][4] == 'Increment'){
+                                                                        if((achivehasil >= hasilInd.content[m][7])){
+                                                                            color_sts = '<span class="dotOk"></span>';
+                                                                        }else{
+                                                                            color_sts = '<span class="dotNok"></span>';
+                                                                        }
+                                                                    }else{
+                                                                        if((achivehasil <= hasilInd.content[m][7])){
+                                                                            color_sts = '<span class="dotOk"></span>';
+                                                                        }else{
+                                                                            color_sts = '<span class="dotNok"></span>';
+                                                                        }
+                                                                    }
+                                                        		}                                                        		
+                                                        	}
+                                                        	text += "<span style='font-size:80%;border-style:ridge;display:none;' id='res_"+ year +"_" + xyy +"'>"+achivehasil+"</span>";
+                                                        }
+                                        			});
+                                        		}
+                                        		
+                                        		
+                                        	}
+                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;'>"+color_sts+"</td></tr>":'</tr>';
+                                    		
+                                    		
+                                    		$.ajax({
+                                                url: urls + 'get-sdg-disaggre-utama',
+                                                type: 'get',
+                                                data: {'id_role':idrole,'id_goals':id_goals,'id_target':id_target,'year':year,'id_monper':id_monper,'id_indicator':id_indicator,'id_prov':idprov},
+                                                dataType: 'json',
+                                                cache: false,
+                                                async : false,
+                                                success: function (hasilnya) {
+                                                	if(hasilnya.content.length>0){
+														kl = hasilnya.content.length;
+                                                		for (var l = 0; l < hasilnya.content.length; l++) {
+                                                    		var nm_disaggre;
+															var nm_disaggre_detail;
+                                                        	if($("#fs").is(':checked')){
+                                                        		nm_disaggre = hasilnya.content[l][16];
+                                                        		nm_disaggre_detail = hasilnya.content[l][18];
+                                    						}else{
+                                    							nm_disaggre = hasilnya.content[l][17];
+                                    							nm_disaggre_detail = hasilnya.content[l][19];
+                                    						}
+                                                        	text += "<tr style='border-style:ridge;'>";
+                                                    		text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                    		text += "<td style='font-size:80%;border-style:ridge;'><div style='margin-left:20px'>Disaggregation "+nm_disaggre+" "+nm_disaggre_detail+"</div></td>";
+                                                    		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][23]?hasilnya.content[l][23]:'')+"</td>":'';
+                                                    		//text += "<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][5]?hasilnya.content[l][5]:'')+"</td>";
+                                                    		//text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'>"+(hasilnya.content[l][6]?hasilnya.content[l][6]:'')+"</td>":'';
+                                                    		
+                                                    		text += (idmonper!="0")?"<td style='font-size:80%;border-style:ridge;'></td>":'';
+                                                    		text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                    		
+                                                    		for(var z=0; z < hasilSts.content.length; z++){
+                                                        		var sts  = hasilSts.content[z][0];
+                                                        		var id_monper = hasilSts.content[z][1];
+                                                        		var start_year = hasilSts.content[z][2];
+                                                        		var end_year = hasilSts.content[z][3];
+                                                        		
+                                                        		var cekSdg="";
+                                                                $.ajax({
+                                                        			url: urls + "getentryshowreport",
+                                                                    type: 'get',
+                                                                    data: { "id_monper":id_monper},
+                                                                    dataType: 'json',
+                                                                    async:false,
+                                                                    success: function (result) {
+                                                                    	cekSdg = result.sdg;
+                                                                    }
+                                                                });
+
+                                                                var color_sts="";
+                                                                var achive = "";
+                                                        		for(var year = start_year; year <= end_year; year++){
+                                                        			$.ajax({
+                                                                        url: urls + 'get-sdg-disaggre-slave',
+                                                                        type: 'get',
+                                                                        data: {'id_role':idrole,'id_goals':id_goals,'id_target':id_target,'year':year,'id_monper':id_monper,'id_indicator':id_indicator,'id_dis':hasilnya.content[l][21],'id_dis_detail':hasilnya.content[l][22],'id_prov':idprov},
+                                                                        dataType: 'json',
+                                                                        cache: false,
+                                                                        async : false,
+                                                                        success: function (hasildis) {
+                                                                        	var achive = 0;
+                                                                            var achiveSum = 0;
+                                                                            var achiveLast = 0;
+                                                                            var achivehasil;
+                                                                        	if(hasildis.content.length>0){
+                                                                        		for (var n = 0; n < hasildis.content.length; n++) {
+                                                                            		//text += "<td>"+(hasildis.content[n][7]?hasildis.content[n][7]:'')+"</td>";
+                                                                            		text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                            		var nilai1Detail=(hasildis.content[n][12])?hasildis.content[n][12]:hasildis.content[n][8];
+                                                                            		var nilai2Detail=(hasildis.content[n][13])?hasildis.content[n][13]:hasildis.content[n][9];
+                                                                            		var nilai3Detail=(hasildis.content[n][14])?hasildis.content[n][14]:hasildis.content[n][10];
+                                                                            		var nilai4Detail=(hasildis.content[n][15])?hasildis.content[n][15]:hasildis.content[n][11];
+                                                                            		console.log(nilai1Detail)
+                                                                            		var nilai1sdgDetail="";
+                                                                            		var nilai2sdgDetail="";
+                                                                            		var nilai3sdgDetail="";
+                                                                            		var nilai4sdgDetail="";
+                                                                            		for(var isdg=0;isdg<cekSdg.length;isdg++){
+                                                                            			nilai1sdgDetail = (cekSdg[isdg][0]=="1" && cekSdg[isdg][1]==year)?nilai1Detail:(nilai1sdgDetail)?nilai1sdgDetail:"";
+                                                                            			nilai2sdgDetail = (cekSdg[isdg][0]=="2" && cekSdg[isdg][1]==year)?nilai2Detail:(nilai2sdgDetail)?nilai2sdgDetail:"";
+                                                                            			nilai3sdgDetail = (cekSdg[isdg][0]=="3" && cekSdg[isdg][1]==year)?nilai3Detail:(nilai3sdgDetail)?nilai3sdgDetail:"";
+                                                                            			nilai4sdgDetail = (cekSdg[isdg][0]=="4" && cekSdg[isdg][1]==year)?nilai4Detail:(nilai4sdgDetail)?nilai4sdgDetail:"";
+                                                                            		}
+                                                                            		
+                                                                            		if(sts == 'yearly'){
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			if(nilai1sdgDetail!=''){
+                                                                            				achive = nilai1sdgDetail?nilai1sdgDetail:0;
+                                                                            			}
+                                                                            			achiveLast = (achive!=0)?achive:achiveLast;
+                                                                            			achiveSum += achive;
+                                                                            		}else if(sts == 'semesterly'){
+                                                                            			
+                                                                            			if(nilai1sdgDetail!='' || nilai2sdgDetail!=''){
+                                                                            				if(hasildis.content[n][20]=="2"){
+                                                                                   				achive = (nilai2sdgDetail)?nilai2sdgDetail:nilai1sdgDetail;
+                                                                                   				achiveLast = (achive!=0)?achive:achiveLast;
+                                                                                			}else{
+                                                                                   				achive = parseInt(nilai1sdgDetail?nilai1sdgDetail:0)+parseInt(nilai2sdgDetail?nilai2sdgDetail:0);
+                                                                                   				achiveSum += achive;
+                                                                                			}
+                                                                            			}
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
+                                                                                	}
+                                                                            		else if(sts == 'quarterly'){
+                                                                            			if(nilai1sdgDetail!='' || nilai2sdgDetail!='' || nilai3sdgDetail!='' || nilai4sdgDetail!=''){
+                                                                            				if(hasildis.content[n][20]=="2"){
+                                                                            					if(nilai4sdgDetail!=''){
+                                                                            						achive = nilai4sdgDetail;
+                                                                            					}else if(nilai3sdgDetail!=''){
+                                                                            						achive = nilai3sdgDetail;
+                                                                            					}else if(nilai2sdgDetail!=''){
+                                                                            						achive = nilai2sdgDetail;
+                                                                            					}else if(nilai1sdgDetail!=''){
+                                                                            						achive = nilai1sdgDetail;
+                                                                            					}
+                                                                            					achiveLast = (achive!=0)?achive:achiveLast;
+                                                                            				}else{
+                                                                            					achive = parseInt(nilai1sdgDetail?nilai1sdgDetail:0)+parseInt(nilai2sdgDetail?nilai2sdgDetail:0)+parseInt(nilai3sdgDetail?nilai3sdgDetail:0)+parseInt(nilai4sdgDetail?nilai4sdgDetail:0);	
+                                                                            					achiveSum += achive;
+                                                                            				}
+                                                                            			}
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai1sdgDetail!=null?nilai1sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai2sdgDetail!=null?nilai2sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai3sdgDetail!=null?nilai3sdgDetail:'')+"</td>";
+                                                                            			text += "<td style='font-size:80%;border-style:ridge;'>"+(nilai4sdgDetail!=null?nilai4sdgDetail:'')+"</td>";
+                                                                                	}
+                                                                            		if(hasildis.content[n][20]=="2"){
+                                                                            			achivehasil = achiveLast;
+                                                                            		}else{
+                                                                            			achivehasil = achiveSum;
+                                                                            		}
+                                                                            		if(achivehasil){
+                                                                            			if(hasildis.content[n][4] == 'Increment'){
+                                                                                            if(achivehasil >= hasildis.content[n][7]){
+                                                                                                color_sts = '<span class="dotOk"></span>';
+                                                                                            }else{
+                                                                                                color_sts = '<span class="dotNok"></span>';
+                                                                                            }
+                                                                                        }else{
+                                                                                            if(achivehasil <= hasildis.content[n][7]){
+                                                                                                color_sts = '<span class="dotOk"></span>';
+                                                                                            }else{
+                                                                                                color_sts = '<span class="dotNok"></span>';
+                                                                                            }
+                                                                                        }
+                                                                            		}
+                                                                            	}
+                                                                        	}else{
+                                                                        		text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                        		if(sts == 'yearly'){
+                                                                        			text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                        		}else if(sts == 'semesterly'){
+                                                                        			text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                        			text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                            	}
+                                                                        		else if(sts == 'quarterly'){
+                                                                        			text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                        			text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                        			text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                        			text += "<td style='font-size:80%;border-style:ridge;'></td>";
+                                                                            	}
+                                                                        	}
+                                                                        	text += "<span style='font-size:80%;border-style:ridge;display:none;' id='ares_"+ year +"_" + l +"'>"+achivehasil+"</span>";
+                                                                        }
+                                                        			});
+                                                        			
+                                                        		}
+                                                    		}
+                                                    		text += (idmonper!="0")?"<td style='text-align:center;border-style:ridge;' ></td></tr>":'</tr>';
+                                                    	}
+                                                	}
+                                                }
+                                    		});
+                                    	}
+                                    }
+                            	}); 
+                            	text += "</tbody></table></div>";
+                        	}
+                        }
+                	});
+            	}
+            	$("#indi").html(text);
+				$("#dualaxes").html("");
+				$('#pilgrafik').prop('disabled', false);
+            }
+        });	
+	}
+
 	function b(ks, kl, hasilSts, pil_graf) {
-		console.log('b => ' + ks + ' ' + kl + ' ' + hasilSts.content[0][0]);
+		console.log('b => ' + ks + ' ' + kl + ' ' + hasilSts.content[0][0] + ' ' + xxt);
+		console.log('bb ' + tth['2021']);
 		var sts = hasilSts.content[0][0];
 		var ser = [];
-		var tahun = [$("#tahun0").text(),$("#tahun1").text(),$("#tahun2").text(),$("#tahun3").text(),$("#tahun4").text()];
+		var tahun = [];
+
+		for (i = 0; i < xxt; i++) {
+			tahun.push($('#tahun' + i).text());
+		}
+
 		console.log(tahun);
 
 		for (t = 0; t < ks; t++) {
+			/*
 			var tar = [
                             parseInt($("#tar_"+t + "_0").text(), 10),
                             parseInt($("#tar_"+t + "_1").text(), 10),
@@ -2456,19 +3003,61 @@
                             parseInt($("#tar_"+t + "_3").text(), 10),
                             parseInt($("#tar_"+t + "_4").text(), 10)
                         ];
+			*/
+			var tar = [];
+			var rel0 = [];
+			var rel1 = [];
+			var rel2 = [];
+			var rel3 = [];			
+			for (i = 0; i < xxt; i++) {
+				var yr = $('#tahun' + i).text();
+				var y = '#tar_' + yr + '_' + i;
+				tar[i] = parseInt($(y).text(), 10);
+			}
 			ser.push({
                         name: 'Target SDGS',
                         type: 'spline',
                         data: tar
 			});
 
-			var rel0 = [
-                            parseInt($("#rel_"+t + "_0").text(), 10),
-                            parseInt($("#rel_"+t + "_4").text(), 10),
-                            parseInt($("#rel_"+t + "_8").text(), 10),
-                            parseInt($("#rel_"+t + "_12").text(), 10),
-							parseInt($("#rel_"+t + "_16").text(), 10),
-                        ];
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#rel_' + yr + '_0';
+				var vl = $(y);
+				console.log('vl ' + vl + ' ' + y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					console.log('vl ' + parseInt($(y).text(), 10));
+					rel0[j] = parseInt($(y).text(), 10);
+				}
+			}
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#rel_' + yr + '_1';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel1[j] = parseInt($(y).text(), 10);
+				}
+			}			
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#rel_' + yr + '_2';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel2[j] = parseInt($(y).text(), 10);
+				}
+			}
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#rel_' + yr + '_3';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel3[j] = parseInt($(y).text(), 10);
+				}
+			}									
+
 			if (sts == 'yearly') {
 				if (pil_graf == 'graf1') {
 					ser.push({
@@ -2554,14 +3143,6 @@
 
 			}
 
-
-			var rel1 = [
-                            parseInt($("#rel_"+t + "_1").text(), 10),
-                            parseInt($("#rel_"+t + "_5").text(), 10),
-                            parseInt($("#rel_"+t + "_9").text(), 10),
-                            parseInt($("#rel_"+t + "_13").text(), 10),
-							parseInt($("#rel_"+t + "_17").text(), 10),
-                        ];
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 				if (pil_graf == 'graf1') {
@@ -2621,14 +3202,6 @@
 
 			}						
 
-			var rel2 = [
-                            parseInt($("#rel_"+t + "_2").text(), 10),
-                            parseInt($("#rel_"+t + "_6").text(), 10),
-                            parseInt($("#rel_"+t + "_10").text(), 10),
-                            parseInt($("#rel_"+t + "_14").text(), 10),
-							parseInt($("#rel_"+t + "_18").text(), 10),
-                        ];
-
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 			} else {
@@ -2660,14 +3233,6 @@
 				}
 			}						
 
-			var rel3 = [
-                            parseInt($("#rel_"+t + "_3").text(), 10),
-                            parseInt($("#rel_"+t + "_7").text(), 10),
-                            parseInt($("#rel_"+t + "_11").text(), 10),
-                            parseInt($("#rel_"+t + "_15").text(), 10),
-							parseInt($("#rel_"+t + "_19").text(), 10),
-                        ];
-			
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 			} else {
@@ -2703,8 +3268,13 @@
 
 		console.log(ser);
 
-
 		for (t = 0; t < kl; t++) {
+
+			tar = [];
+			rel0 = [];
+			rel1 = [];
+			rel2 = [];
+			rel3 = [];			
 			var tar = [
                             parseInt($("#tar_"+t + "_0").text(), 10),
                             parseInt($("#tar_"+t + "_1").text(), 10),
@@ -2718,13 +3288,43 @@
                         data: tar
 			});
 
-			var rel0 = [
-                            parseInt($("#arel_"+t + "_0").text(), 10),
-                            parseInt($("#arel_"+t + "_4").text(), 10),
-                            parseInt($("#arel_"+t + "_8").text(), 10),
-                            parseInt($("#arel_"+t + "_12").text(), 10),
-							parseInt($("#arel_"+t + "_16").text(), 10),
-                        ];
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#arel_' + yr + '_' + t + '_0';
+				var vl = $(y);
+				console.log('vl ' + vl + ' ' + y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					console.log('vl ' + parseInt($(y).text(), 10));
+					rel0[j] = parseInt($(y).text(), 10);
+				}
+			}
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#arel_' + yr + '_' + t + '_1';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel1[j] = parseInt($(y).text(), 10);
+				}
+			}			
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#arel_' + yr + '_' + t + '_2';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel2[j] = parseInt($(y).text(), 10);
+				}
+			}
+
+			for (j = 0; j < xxt; j++) {
+				var yr = $('#tahun' + j).text();
+				var y = '#arel_' + yr + '_' + t + '_3';
+				var vl = $(y);
+				if (vl != undefined && vl != NaN && vl != false) {
+					rel3[j] = parseInt($(y).text(), 10);
+				}
+			}									
 
 			if (sts == 'yearly') {
 				ser.push({
@@ -2745,13 +3345,6 @@
                         data: rel0,
 				});							
 			}						
-			var rel1 = [
-                            parseInt($("#arel_"+t + "_1").text(), 10),
-                            parseInt($("#arel_"+t + "_5").text(), 10),
-                            parseInt($("#arel_"+t + "_9").text(), 10),
-                            parseInt($("#arel_"+t + "_13").text(), 10),
-							parseInt($("#arel_"+t + "_17").text(), 10),
-                        ];
 
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
@@ -2768,14 +3361,6 @@
 				});							
 			}												
 
-			var rel2 = [
-                            parseInt($("#arel_"+t + "_2").text(), 10),
-                            parseInt($("#arel_"+t + "_6").text(), 10),
-                            parseInt($("#arel_"+t + "_10").text(), 10),
-                            parseInt($("#arel_"+t + "_14").text(), 10),
-							parseInt($("#arel_"+t + "_18").text(), 10),
-                        ];
-
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
 			} else {
@@ -2785,14 +3370,6 @@
                         data: rel2,
 				});							
 			}																		
-
-			var rel3 = [
-                            parseInt($("#arel_"+t + "_3").text(), 10),
-                            parseInt($("#arel_"+t + "_7").text(), 10),
-                            parseInt($("#arel_"+t + "_11").text(), 10),
-                            parseInt($("#arel_"+t + "_15").text(), 10),
-							parseInt($("#arel_"+t + "_19").text(), 10),
-                        ];
 
 			if (sts == 'yearly') {
 			} else if (sts == 'semesterly') {
@@ -2879,15 +3456,198 @@
             chart4=new Highcharts.Chart(options4);				
 	}
 
+
+	function c(ks, kl, hasilSts, pil_graf) {
+		console.log('c => ' + ks + ' ' + kl + ' ' + hasilSts.content[0][0] + ' ' + xxt);
+		var sts = hasilSts.content[0][0];
+		var ser = [];
+		var tahun = [];
+
+		for (i = 0; i < xxt; i++) {
+			tahun.push($('#tahun' + i).text());
+		}
+
+		console.log(tahun);
+
+		for (t = 0; t < ks; t++) {
+			var tar = [];
+			var rel0 = [];
+			var rel1 = [];
+			var rel2 = [];
+			var rel3 = [];			
+			for (i = 0; i < xxt; i++) {
+				var yr = $('#tahun' + i).text();
+				var y = '#tar_' + yr + '_0';
+				console.log(y);
+				tar[i] = parseInt($(y).text(), 10);
+
+				var rl = '#rel_' + yr + '_0';
+				console.log(rl);
+				rel0[i] = parseInt($(rl).text(), 10);			
+
+				var ts = '#res_' + yr + '_0';
+				console.log(ts);
+				rel1[i] = parseInt($(ts).text(), 10);							
+			}
+			ser.push({
+                        name: 'Target SDGS',
+                        type: 'spline',
+                        data: tar
+			});
+
+			if (pil_graf == 'graf1') {
+					ser.push({
+                        name: 'Realisasi SDGS',
+                        type: 'spline',
+                        data: rel1,
+					});								
+			} else if (pil_graf == 'graf4') {
+					ser.push({
+                        name: 'Realisasi SDGS',
+                        type: 'column',
+                        data: rel1,
+					});								
+			} else {
+					ser.push(
+						{
+                        name: 'Realisasi SDGS',
+                        type: 'column',
+                        data: rel1,
+						},
+						{
+                        name: 'Realisasi SDGS',
+                        type: 'spline',
+                        data: rel1,
+						},						
+					);								
+			}
+
+		}
+
+		console.log(ser);
+
+		for (t = 0; t < kl; t++) {
+
+			tar = [];
+			rel0 = [];
+			rel1 = [];
+			rel2 = [];
+			rel3 = [];			
+			for (i = 0; i < xxt; i++) {
+				var yr = $('#tahun' + i).text();
+				var y = '#tar_' + yr + '_' + t;
+				console.log(y);
+				tar[i] = parseInt($(y).text(), 10);
+
+				var rl = '#arel_' + yr + '_' + t;
+				console.log(rl);
+				rel0[i] = parseInt($(rl).text(), 10);			
+
+				var ts = '#ares_' + yr + '_' + t;
+				console.log(ts);
+				rel1[i] = parseInt($(ts).text(), 10);							
+			}
+			ser.push({
+                        name: 'Target Disagregasi ' + (t + 1),
+                        type: 'spline',
+                        data: tar
+			});
+
+			ser.push({
+                        name: 'Realisasi Disagregasi ' + (t + 1),
+                        type: 'spline',
+                        data: rel1,
+			});						
+
+		}
+
+		var sb = 'Combination Chart';
+                if (pil_graf == 'graf1') {
+                    sb = 'Line Chart';
+                } else if (pil_graf == 'graf4') {
+                    sb = 'Stack Chart';
+                }
+
+		var chart4;
+		var options4 ={
+			chart: {
+                        zoomType: 'xy',
+                        renderTo: 'dualaxes'
+            },
+
+            title: {
+                        text: 'Komparasi Target dan Realisasi '
+            },
+            credits: {
+                        enabled: false
+            },
+            subtitle: {
+                        text: sb
+        	},
+            xAxis: [{
+                        categories: tahun
+            }],
+            yAxis: [{ // Primary yAxis
+                        labels: {
+                            format: '{value}',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },
+                        min: 0,
+                        //max:100,
+                        title: {
+                            text: '',
+                            style: {
+                                color: Highcharts.getOptions().colors[1]
+                            }
+                        },opposite: false
+                    }],
+                    tooltip: {
+                        shared: true
+                    },
+                    legend: {
+                        layout: 'vertical',
+                        align: 'right',
+                        x: 0,
+                        verticalAlign: 'top',
+                        y: 55,
+                        floating: true,
+                        backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                    },
+                    plotOptions: {
+                        column: {
+                            stacking: 'normal',
+                            dataLabels: {
+                                enabled: true
+                            }
+                        }
+                    },
+                    series: ser,
+                    colors: Highcharts.map(Highcharts.getOptions().colors, function (color) {
+                            return {
+                                radialGradient: {cx: 0.5,cy: 0.3,r: 0.7},
+                                stops: [[0, color],[1, Highcharts.Color(color).brighten(-0.3).get('rgb')] ]
+                            };
+                        })
+            }
+            chart4=new Highcharts.Chart(options4);				
+	}	
+
 	$("#pilgrafik").on("change", function() {
 		var pil_graf = $("#pilgrafik").val();
-		console.log('me change ' + pil_graf + ' ' + xtype);
-		if (xtype == 2) {
-			a(xyear, pil_graf);
+		var per = $("#periode").val();
+		console.log('me change ' + pil_graf + ' ' + xtype + ' ' + per);
+		if (per == 'all') {
+			c(ks, kl, xhasilSts, pil_graf);
 		} else {
-			console.log(xhasilSts);
-			b(ks, kl, xhasilSts, pil_graf);
+			if (xtype == 2) {
+				a(xyear, pil_graf);
+			} else {
+				b(ks, kl, xhasilSts, pil_graf);
+			}
 		}
+
 	});
     
     var tableToExcel = (function() {
