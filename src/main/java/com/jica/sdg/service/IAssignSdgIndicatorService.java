@@ -17,5 +17,7 @@ public interface IAssignSdgIndicatorService {
     
     void deleteAssign(String id_monper, String id_prov);
     
+    void deleteAssign(String id_prov);
+    
     int idRole(String id_goals,String id_target, String id_indicator,String id_monper,String id_prov);
 }
