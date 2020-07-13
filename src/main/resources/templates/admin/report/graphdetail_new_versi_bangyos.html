@@ -13002,10 +13002,10 @@
                 
                 var valreal1 = [
                     parseInt($("#col7").text(), 10),
+                    parseInt($("#col8").text(), 10),
                     parseInt($("#col9").text(), 10),
-                    parseInt($("#col11").text(), 10),
-                    parseInt($("#col13").text(), 10),
-                    parseInt($("#col15").text(), 10)
+                    parseInt($("#col10").text(), 10),
+                    parseInt($("#col11").text(), 10)
                 ];
                 var valreal2 = [
                     parseInt($("#col8").text(), 10),
@@ -13014,6 +13014,22 @@
                     parseInt($("#col14").text(), 10),
                     parseInt($("#col16").text(), 10)
                 ];
+
+                var tahun1 = [ 
+                    parseInt($("#colsdg2").text(), 10)
+                    ,parseInt($("#colsdg3").text(), 10)
+                    ,parseInt($("#colsdg4").text(), 10)
+                    ,parseInt($("#colsdg5").text(), 10)
+                    ,parseInt($("#colsdg6").text(), 10)
+                ];               
+
+                var valtarget = [
+                    parseInt($("#col2").text(), 10),
+                    parseInt($("#col2").text(), 10),
+                    parseInt($("#col2").text(), 10),
+                    parseInt($("#col2").text(), 10),
+                    parseInt($("#col2").text(), 10)
+                ];                 
                 
                 var pnjg = $('#panjang_aggre').val();
                 var ser  = [];
@@ -13112,6 +13128,29 @@
     //                    var ser_aggre = "{name: 'Realisasi I SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre1+" , tooltip: {} }, {name: 'Realisasi II SDGS Aggregasi "+i+"', type: 'spline', yAxis: 1, data: "+valanggre2+" , tooltip: {} }"
 
                     }
+
+                    ser.push({
+                            name: 'Target '+nm_gov,
+                            type: 'spline',
+                            yAxis: 0,
+                            data: valtarget,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Semester I '+nm_gov,
+                            type: 'spline',
+
+                            yAxis: 0,
+                            data: valreal1,
+                            tooltip: {
+    //                            valueSuffix: ' %'
+                                }
+                        }
+                    );
+//                var seri = "series:[ser]";
+                     console.log(ser);                    
                     
                 }else if (monper_sdgs == "semesterly") {
                     var valreal_sdg1 = [
@@ -13129,6 +13168,13 @@
                         parseInt($("#colsdg16").text(), 10)
                     ];
                     
+                    var valreal1 = [
+                        parseInt($("#col7").text(), 10),
+                        parseInt($("#col9").text(), 10),
+                        parseInt($("#col11").text(), 10),
+                        parseInt($("#col13").text(), 10),
+                        parseInt($("#col15").text(), 10)
+                    ];                    
                     if(pil_graf == 'graf1'){
                         ser.push({
                                 name: 'Target SDGS',
@@ -13284,6 +13330,38 @@
 
                     }
                     
+                    ser.push({
+                            name: 'Target '+nm_gov,
+                            type: 'spline',
+                            yAxis: 0,
+                            data: valtarget,
+                            tooltip: {
+//                          valueSuffix: '%'
+                            }
+                        },
+                        {
+                            name: 'Semester I '+nm_gov,
+                            type: 'spline',
+
+                            yAxis: 0,
+                            data: valreal1,
+                            tooltip: {
+    //                            valueSuffix: ' %'
+                                }
+                        },
+                        {
+                          name: 'Semester II '+nm_gov,
+                          type: 'spline',
+                          yAxis: 0,
+                          data: valreal2,
+                          tooltip: {
+//                                 valueSuffix: ' %'
+                          },
+                          data: valreal2
+                        }
+                    );
+//                var seri = "series:[ser]";
+                console.log(ser);                    
                 }else if (monper_sdgs == "quarterly") {
                     var valreal_sdg1 = [
                         parseInt($("#colsdg7").text(), 10),
@@ -13445,9 +13523,7 @@
 
                     }
                     
-                }else{}
-                
-                ser.push({
+                    ser.push({
                             name: 'Target '+nm_gov,
                             type: 'spline',
                             yAxis: 0,
@@ -13478,7 +13554,10 @@
                         }
                     );
 //                var seri = "series:[ser]";
-                console.log(ser);
+                console.log(ser);                    
+                }else{}
+                
+
               var options4 ={
                     chart: {
                         zoomType: 'xy',
