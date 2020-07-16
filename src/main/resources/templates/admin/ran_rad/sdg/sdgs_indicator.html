@@ -141,12 +141,15 @@
 				  </div>
 				  <div class="control-group">
 				    <label class="lang_eng control-label" style="display:none">Increment/Decrement</label>
-				    <label class="lang_indo control-label">Increment/Decrement</label>
+				    <label class="lang_indo control-label">Penambahan/Pengurangan</label>
 				    <div class="controls">
-				    	<select id="increment_decrement" name="increment_decrement" class="input-xlarge input-block-level">
-				    		<option value="">select</option>
-					    	<option value="Increment">Increment</option>
-					    	<option value="Decrement">Decrement</option>
+				    	<select th:fragment="increment_decrement" id="increment_decrement" name="increment_decrement" class="input-xlarge input-block-level">
+				    		<option th:if="${session.bahasa == '1'}" value="">--select--</option>
+				    		<option th:if="${session.bahasa == '0'}" value="">--Pilih--</option>
+					    	<option th:if="${session.bahasa == '1'}" value="Increment">Increment</option>
+					    	<option th:if="${session.bahasa == '1'}" value="Decrement">Decrement</option>
+					    	<option th:if="${session.bahasa == '0'}" value="Increment">Kenaikan</option>
+					    	<option th:if="${session.bahasa == '0'}" value="Decrement">Penurunan</option>
 					    </select>
 					    <span class="help-block" id="error_increment_decrement"></span>
 				    </div>
@@ -217,6 +220,7 @@
 	    	        messDelBiasa = "Delete this data?";
 	    	        messCode = "Code already exist!";
 	        	}
+				
 	        }
 	        if(lang){
 	        	bhs(lang=="0");
@@ -226,6 +230,7 @@
 	        $('#fs').on('change', function(e){
 	        	bhs($(this).is(':checked'));
 	        	table.ajax.url(urls+'list-sdgIndicator/'+id_goals+'/'+id_target).load();
+	        	$('#increment_decrement').load(urls+'ran_rad/sdg/increment_decrement');
 	        	//table.ajax.reload( null, false );
 	        });
 	                    
@@ -378,6 +383,7 @@
 			
 			$('#tbody-indicator').on('click', '.update', function(){
 				var id = $(this).attr('data-id');
+				$('#increment_decrement').load(urls+'ran_rad/sdg/increment_decrement');
 				$.ajax({
 					type: "GET",
                     url: urls+'get-sdgIndicator/'+id,
@@ -397,6 +403,7 @@
                 })
              }).on('click', '.detail', function(){
 				var id = $(this).attr('data-id');
+				$('#increment_decrement').load(urls+'ran_rad/sdg/increment_decrement');
 				$.ajax({
 					type: "GET",
                     url: urls+'get-sdgIndicator/'+id,

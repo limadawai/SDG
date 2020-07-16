@@ -181,6 +181,11 @@ public class RanRadSdgController {
 	IBestMapService bestMapService;
 	
 	//*********************** SDG ***********************
+	@GetMapping("admin/ran_rad/sdg/increment_decrement")
+    public String replace(Model model, HttpSession session) {
+        return "admin/ran_rad/sdg/sdgs_indicator :: increment_decrement";
+    }
+	
 
     @GetMapping("admin/ran_rad/sdg/goals")
     public String goals(Model model, HttpSession session) {
